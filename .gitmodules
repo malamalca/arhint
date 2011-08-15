@@ -4,3 +4,6 @@
 [submodule "Lil"]
 	path = Plugin/Lil
 	url = http://miha.nahtigal:vuego3869@www.nahtigal.com/git/lil.git
+[submodule "LilTimeTrack"]
+	path = Plugin/LilTimeTrack
+	url = http://miha.nahtigal:vuego3869@www.nahtigal.com/git/lil_time_track.git
