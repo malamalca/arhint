@@ -1,0 +1,48 @@
+LC_TIME
+# This is the POSIX locale definition for
+# the LC_TIME category.
+#
+# Abbreviated weekday names (%a)
+abday      "<n><e><d>";"<p><o><n>";"<t><o><r>";"<s><r><e>";\
+           "<č><e><t>";"<p><e><t>";"<s><o><b>"
+#
+# Full weekday names (%A)
+day        "<n><e><d><e><l><j><a>";"<p><o><n><e><d><e><l><j><e><k>";\
+           "<t><o><r><e><k>";"<s><r><e><d><a>";\
+           "<č><e><t><r><t><e><k>";"<p><e><t><e><k>";\
+           "<s><o><b><o><t><a>"
+#
+# Abbreviated month names (%b)
+abmon      "<j><a><n>";"<f><e><b>";"<m><a><r>";\
+           "<a><p><r>";"<m><a><j>";"<j><u><n>";\
+           "<j><u><l>";"<a><u><g>";"<s><e><p>";\
+           "<o><k><t>";"<n><o><v>";"<d><e><c>"
+#
+# Full month names (%B)
+mon        "<j><a><n><u><a><r>";"<f><e><b><r><u><a><r>";\
+           "<m><a><r><e><c>";"<a><p><r><i><l>";\
+           "<m><a><j>";"<j><u><n><i><j>";\
+           "<j><u><l><i><j>";"<a><v><g><u><s><t>";\
+           "<s><e><p><t><e><m><b><e><r>";"<o><k><t><o><b><e><r>";\
+           "<n><o><v><e><m><b><e><r>";"<d><e><c><e><m><b><e><r>"
+#
+# Equivalent of AM/PM (%p)      "pop";"dop"
+am_pm      "<d><o><p>";"<p><o><p>"
+#
+# Appropriate date and time representation (%c)
+#    "%a., %e %b %H:%M:%S %Y"
+d_t_fmt    "<U0025><U0061><U002E><U002C><U0020><U0025><U0064><U002E><U0020>\
+<U0025><U0062><U002E><U0020>\
+<U0025><U0059><U0020><U006F><U0062><U0020>\
+<U0025><U0048><U003A><U0025><U004D><U003A><U0025><U0053>"
+#
+# Appropriate date representation (%x)   "%d.%m.%y"
+d_fmt      "<U0025><U0064><U002E><U0025><U006D><U002E><U0025><U0079>"
+#
+# Appropriate time representation (%X)   "%H:%M:%S"
+t_fmt      "<U0025><U0048><U003A><U0025><U004D><U003A><U0025><U0053>"
+#
+# Appropriate 12-hour time representation (%r) "%I:%M:%S %p"
+t_fmt_ampm "<U0025><U0049><U003A><U0025><U004D><U003A><U0025><U0053><U0020><U0025><U0070>"
+#
+END LC_TIME

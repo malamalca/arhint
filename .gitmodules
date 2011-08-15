@@ -1,0 +1,3 @@
+[submodule "plugins/aristo/webroot"]
+	path = plugins/aristo/webroot
+	url = git://github.com/taitems/Aristo-jQuery-UI-Theme.git

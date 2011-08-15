@@ -1,0 +1,170 @@
+# LANGUAGE translation of CakePHP Application
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"POT-Creation-Date: 2011-07-21 10:33+0200\n"
+"PO-Revision-Date: 2011-07-21 10:36+0100\n"
+"Last-Translator: MalaMalca <info@malamalca.com>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3;\n"
+
+#: Plugin\LilTasks\Controller\LilTasksPluginController.php:170
+msgid "Add Task"
+msgstr "Dodaj opravilo"
+
+#: Plugin\LilTasks\Controller\LilTasksPluginController.php:314
+msgid "Daily notification"
+msgstr "Dnevno obvestilo"
+
+#: Plugin\LilTasks\Controller\TasksController.php:68
+msgid "Task has been saved."
+msgstr "Opravilo je shranjeno."
+
+#: Plugin\LilTasks\Controller\TasksController.php:105
+#: Plugin\LilTasks\Lib\LilTasksFormInject.php:18
+msgid "Task"
+msgstr "Opravilo"
+
+#: Plugin\LilTasks\Controller\TasksController.php:125
+msgid "New Task"
+msgstr "Vpis opravila"
+
+#: Plugin\LilTasks\Controller\TasksController.php:135
+msgid "There are some errors in the form. Please correct all marked fields below."
+msgstr "Vpisani so napačni podatki. Popravite označena polja."
+
+#: Plugin\LilTasks\Controller\TasksController.php:192
+msgid "Task has been deleted."
+msgstr "Opravilo je izbrisano."
+
+#: Plugin\LilTasks\Lib\LilTasksFormInject.php:58
+#: Plugin\LilTasks\View\Tasks\admin_edit.ctp:19
+msgid "Title"
+msgstr "Naziv"
+
+#: Plugin\LilTasks\Lib\LilTasksFormInject.php:69
+msgid "Descript"
+msgstr "Opis"
+
+#: Plugin\LilTasks\Lib\LilTasksFormInject.php:80
+#: Plugin\LilTasks\View\Tasks\admin_edit.ctp:28
+msgid "Deadline"
+msgstr "Deadline"
+
+#: Plugin\LilTasks\Lib\LilTasksFormInject.php:95
+#: Plugin\LilTasks\View\Tasks\admin_edit.ctp:14
+msgid "User"
+msgstr "Uporabnik"
+
+#: Plugin\LilTasks\Lib\LilTasksFormInject.php:118
+msgid "Are you sure you want to clear task data?"
+msgstr "Ste prepričani, da želite odstraniti opravilo?"
+
+#: Plugin\LilTasks\Lib\LilTasksSidebar.php:4;25
+msgid "Tasks"
+msgstr "Opravila"
+
+#: Plugin\LilTasks\Lib\LilTasksSidebar.php:44
+msgid "Today"
+msgstr "Danes"
+
+#: Plugin\LilTasks\Lib\LilTasksSidebar.php:56
+msgid "Tomorrow"
+msgstr "Jutri"
+
+#: Plugin\LilTasks\Lib\LilTasksSidebar.php:68
+#: Plugin\LilTasks\View\Elements\tasks_admin_index.ctp:6
+msgid "Next 7 days"
+msgstr "Naslednjih 7 dni"
+
+#: Plugin\LilTasks\Lib\LilTasksSidebar.php:80
+#: Plugin\LilTasks\View\Elements\tasks_admin_index.ctp:17
+msgid "Next 30 days"
+msgstr "Naslednjih 30 dni"
+
+#: Plugin\LilTasks\View\Elements\tasks_admin_index.ctp:44
+msgid "<< prev"
+msgstr "<< nazaj"
+
+#: Plugin\LilTasks\View\Elements\tasks_admin_index.ctp:57
+msgid "next >>"
+msgstr "naprej >>"
+
+#: Plugin\LilTasks\View\Elements\tasks_admin_index.ctp:74
+msgid "To-do list for"
+msgstr "To-do seznam za"
+
+#: Plugin\LilTasks\View\Elements\tasks_admin_index.ctp:83
+msgid "Yeah! Nothing to do."
+msgstr "Super! Nobenega opravila za danes."
+
+#: Plugin\LilTasks\View\Elements\tasks_admin_index.ctp:105
+msgid "due"
+msgstr "rok"
+
+#: Plugin\LilTasks\View\Elements\tasks_admin_index.ctp:111
+msgid "details"
+msgstr "uredi"
+
+#: Plugin\LilTasks\View\Elements\tasks_admin_index.ctp:121
+msgid "Edit Task"
+msgstr "Uredi opravilo"
+
+#: Plugin\LilTasks\View\Elements\tasks_admin_index.ctp:124
+msgid "redate"
+msgstr "premakni"
+
+#: Plugin\LilTasks\View\Emails\text\notification_daily.ctp:2
+msgid "Hello"
+msgstr "Pozdravljeni"
+
+#: Plugin\LilTasks\View\Emails\text\notification_daily.ctp:23
+msgid "Today's tasks:"
+msgstr "Današnja opravila:"
+
+#: Plugin\LilTasks\View\Emails\text\notification_daily.ctp:27
+msgid "Overdue tasks:"
+msgstr "Pretekla opravila:"
+
+#: Plugin\LilTasks\View\Tasks\admin_edit.ctp:3
+msgid "Add or edit task"
+msgstr "Uredi ali dodaj opravilo"
+
+#: Plugin\LilTasks\View\Tasks\admin_edit.ctp:9
+msgid "Project"
+msgstr "Projekt"
+
+#: Plugin\LilTasks\View\Tasks\admin_edit.ctp:23
+msgid "Description"
+msgstr "Opis"
+
+#: Plugin\LilTasks\View\Tasks\admin_edit.ctp:32
+msgid "Completed"
+msgstr "Opravljeno"
+
+#: Plugin\LilTasks\View\Tasks\admin_edit.ctp:36
+msgid "Save"
+msgstr "Shrani"
+
+#: Plugin\LilTasks\View\Tasks\admin_index.ctp:4
+msgid "Add"
+msgstr "Dodaj"
+
+#: Plugin\LilTasks\View\Tasks\popups\admin_add.ctp:1
+msgid "Task has been successfuly added."
+msgstr "Opravilo je vpisano."
+
+#: Plugin\LilTasks\View\Tasks\popups\admin_edit.ctp:1
+msgid "Task has been successfuly saved."
+msgstr "Opravilo je shranjeno."
+
+#~ msgid "Income and Expenses"
+#~ msgstr "Prihodki in odhodki"
+
+#~ msgid "Payments"
+#~ msgstr "Plačila"

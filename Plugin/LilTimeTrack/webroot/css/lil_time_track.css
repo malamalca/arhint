@@ -1,0 +1,26 @@
+div#lil-tmtr-select h1 a#lil-tmtr-date-prev,
+div#lil-tmtr-select h1 a#lil-tmtr-date-next,
+div#lil-tmtr-view h1 a#lil-tmtr-date-prev,
+div#lil-tmtr-view h1 a#lil-tmtr-date-next {
+	font-size: 70%;
+	text-decoration: none;
+	color: #505050;
+}
+div#lil-tmtr-select h1 span a:hover,
+div#lil-tmtr-view h1 span a:hover {
+	text-decoration: underline;
+}
+
+div#lil-tmtr-view div {
+	font-family: Cambria, Georgia, serif;
+	font-size: 20px;
+	color: #606060;
+	margin-bottom: 5px;
+}
+div#lil-tmtr-view div span {
+	color: #000000;
+	margin-right: 10px;
+}
+tr.tmtr-wd-row {
+	border-bottom: solid 1px #c0c0c0;
+}

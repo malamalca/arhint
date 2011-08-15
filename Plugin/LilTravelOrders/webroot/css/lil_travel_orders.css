@@ -1,0 +1,47 @@
+.travel-orders-item-workdays,
+.travel-orders-item-workday_price,
+.travel-orders-item-km,
+.travel-orders-item-km_price  {
+	border: solid 1px red;
+	width: 70px !important;
+}
+
+div#edit-travel-order-location, div#edit-travel-order-dat_order {
+	float: left;
+	width: 250px;
+}
+div#edit-travel-order-location:after { 
+	content: " ,";
+}
+
+div#edit-travel-order-employee_id select {
+	width: 210px;
+}
+div#edit-travel-order-employee_id, div#edit-travel-order-tasker {
+	float: left;
+	width: 250px;
+}
+
+div#edit-travel-order-descript input {
+	width: 452px;
+}
+div#edit-travel-order-task, div#edit-travel-order-dat_task {
+	float: left;
+	width: 250px;
+}
+
+div#edit-travel-order-departure {
+	clear: left;
+}
+div#edit-travel-order-departure, div#edit-travel-order-arrival {
+	float: left;
+	width: 250px;
+}
+
+div#edit-travel-order-payer input {
+	width: 452px;
+}
+div#edit-travel-order-advance, div#edit-travel-order-dat_advance {
+	float: left;
+	width: 250px;
+}

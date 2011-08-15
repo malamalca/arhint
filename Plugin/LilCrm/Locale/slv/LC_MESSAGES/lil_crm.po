@@ -1,0 +1,300 @@
+# LANGUAGE translation of CakePHP Application
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"POT-Creation-Date: 2011-07-21 10:33+0200\n"
+"PO-Revision-Date: 2011-07-21 10:34+0100\n"
+"Last-Translator: MalaMalca <info@malamalca.com>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3;\n"
+
+#: Plugin\LilCrm\Controller\ContactsAddressesController.php:15
+msgid "Address has been successfully saved."
+msgstr "Naslov je shranjen."
+
+#: Plugin\LilCrm\Controller\ContactsAddressesController.php:25
+#: Plugin\LilCrm\Controller\ContactsController.php:83
+#: Plugin\LilCrm\Controller\ContactsEmailsController.php:26
+#: Plugin\LilCrm\Controller\ContactsPhonesController.php:25
+msgid "There are some errors in the form. Please correct all marked fields below."
+msgstr "Vpisani so napačni podatki. Popravite označena polja."
+
+#: Plugin\LilCrm\Controller\ContactsAddressesController.php:44
+msgid "Address has been successfully deleted."
+msgstr "Naslov je izbrisan."
+
+#: Plugin\LilCrm\Controller\ContactsController.php:80
+msgid "Contact has been successfully saved."
+msgstr "Kontakt je shranjen."
+
+#: Plugin\LilCrm\Controller\ContactsController.php:142
+msgid "Contact has been successfully deleted."
+msgstr "Kontakt je izbrisan."
+
+#: Plugin\LilCrm\Controller\ContactsEmailsController.php:16
+msgid "Email has been successfully saved."
+msgstr "Email naslov je shranjen."
+
+#: Plugin\LilCrm\Controller\ContactsEmailsController.php:50
+msgid "Email has been successfully deleted."
+msgstr "Email naslov je izbrisan."
+
+#: Plugin\LilCrm\Controller\ContactsPhonesController.php:15
+msgid "Phone number has been successfully saved."
+msgstr "Telefonska številka je shranjena."
+
+#: Plugin\LilCrm\Controller\ContactsPhonesController.php:43
+msgid "Phone has been successfully deleted."
+msgstr "Telefonska številka je izbrisana."
+
+#: Plugin\LilCrm\Controller\LilCrmPluginController.php:71
+msgid "Costumers"
+msgstr "Stranke in kontakti"
+
+#: Plugin\LilCrm\Controller\LilCrmPluginController.php:84
+msgid "Contacts"
+msgstr "Kontakti"
+
+#: Plugin\LilCrm\Controller\LilCrmPluginController.php:101
+msgid "Companies"
+msgstr "Podjetja"
+
+#: Plugin\LilCrm\View\Contacts\admin_edit.ctp:14
+msgid "Add a Company"
+msgstr "Vpis podjetja"
+
+#: Plugin\LilCrm\View\Contacts\admin_edit.ctp:16
+msgid "Add a Person"
+msgstr "Vpis kontakta"
+
+#: Plugin\LilCrm\View\Contacts\admin_edit.ctp:35
+msgid "Company Data"
+msgstr "Podatki podjetja"
+
+#: Plugin\LilCrm\View\Contacts\admin_edit.ctp:37
+#: Plugin\LilCrm\View\Contacts\admin_index.ctp:36
+msgid "Title"
+msgstr "Naziv"
+
+#: Plugin\LilCrm\View\Contacts\admin_edit.ctp:42
+msgid "Tax no."
+msgstr "Davčna št."
+
+#: Plugin\LilCrm\View\Contacts\admin_edit.ctp:47
+msgid "Tax status"
+msgstr "Zavezanec za DDV"
+
+#: Plugin\LilCrm\View\Contacts\admin_edit.ctp:53;70
+msgid "Description"
+msgstr "Opis"
+
+#: Plugin\LilCrm\View\Contacts\admin_edit.ctp:59
+msgid "Personal Data"
+msgstr "Osebni podatki"
+
+#: Plugin\LilCrm\View\Contacts\admin_edit.ctp:61
+#: Plugin\LilCrm\View\Contacts\admin_index.ctp:36
+msgid "Name"
+msgstr "Ime"
+
+#: Plugin\LilCrm\View\Contacts\admin_edit.ctp:65
+msgid "Surname"
+msgstr "Priimek"
+
+#: Plugin\LilCrm\View\Contacts\admin_edit.ctp:77
+msgid "Work Position"
+msgstr "Delavno mesto"
+
+#: Plugin\LilCrm\View\Contacts\admin_edit.ctp:81
+msgid "Company Name"
+msgstr "Naziv podjetja"
+
+#: Plugin\LilCrm\View\Contacts\admin_edit.ctp:89
+msgid "Job Description"
+msgstr "Delovno mesto"
+
+#: Plugin\LilCrm\View\Contacts\admin_edit.ctp:97
+msgid "Primary Address"
+msgstr "Glavni naslov"
+
+#: Plugin\LilCrm\View\Contacts\admin_edit.ctp:100
+#: Plugin\LilCrm\View\ContactsAddresses\admin_edit.ctp:16
+msgid "Street"
+msgstr "Ulica"
+
+#: Plugin\LilCrm\View\Contacts\admin_edit.ctp:105
+#: Plugin\LilCrm\View\ContactsAddresses\admin_edit.ctp:19
+msgid "ZIP"
+msgstr "Poštna št."
+
+#: Plugin\LilCrm\View\Contacts\admin_edit.ctp:109
+#: Plugin\LilCrm\View\ContactsAddresses\admin_edit.ctp:20
+msgid "City"
+msgstr "Kraj"
+
+#: Plugin\LilCrm\View\Contacts\admin_edit.ctp:114
+#: Plugin\LilCrm\View\ContactsAddresses\admin_edit.ctp:22
+msgid "State"
+msgstr "Država"
+
+#: Plugin\LilCrm\View\Contacts\admin_edit.ctp:121
+msgid "Save"
+msgstr "Shrani"
+
+#: Plugin\LilCrm\View\Contacts\admin_index.ctp:8
+msgid "Contact List"
+msgstr "Seznam kontaktov"
+
+#: Plugin\LilCrm\View\Contacts\admin_index.ctp:11
+msgid "Add"
+msgstr "Dodaj"
+
+#: Plugin\LilCrm\View\Contacts\admin_index.ctp:28
+msgid "Ups. No contacts found."
+msgstr "Ups. Ni vpisanih kontaktov."
+
+#: Plugin\LilCrm\View\Contacts\admin_index.ctp:37
+#: Plugin\LilCrm\View\ContactsEmails\admin_edit.ctp:11
+msgid "Email"
+msgstr "Email"
+
+#: Plugin\LilCrm\View\Contacts\admin_index.ctp:38
+msgid "Phone"
+msgstr "Telefon"
+
+#: Plugin\LilCrm\View\Contacts\admin_index.ctp:62
+#: Plugin\LilCrm\View\Elements\head.ctp:9
+msgid "employed"
+msgstr "zaposlen/a"
+
+#: Plugin\LilCrm\View\Contacts\admin_index.ctp:64
+#: Plugin\LilCrm\View\Elements\head.ctp:14
+msgid "at"
+msgstr " "
+
+#: Plugin\LilCrm\View\Contacts\admin_view.ctp:5
+msgid "Edit"
+msgstr "Uredi"
+
+#: Plugin\LilCrm\View\Contacts\admin_view.ctp:16
+msgid "Delete"
+msgstr "Briši"
+
+#: Plugin\LilCrm\View\Contacts\admin_view.ctp:26
+msgid "Are you sure you want to delete this contact?"
+msgstr "Ste prepričani, da želite izbrisati kontakt?"
+
+#: Plugin\LilCrm\View\Contacts\admin_view.ctp:37
+msgid "Addresses"
+msgstr "Naslovi"
+
+#: Plugin\LilCrm\View\Contacts\admin_view.ctp:40
+msgid "other"
+msgstr "ostalo"
+
+#: Plugin\LilCrm\View\Contacts\admin_view.ctp:71;111;151
+msgid "add"
+msgstr "dodaj"
+
+#: Plugin\LilCrm\View\Contacts\admin_view.ctp:82
+msgid "Emails"
+msgstr "Email naslovi"
+
+#: Plugin\LilCrm\View\Contacts\admin_view.ctp:122
+msgid "Phones"
+msgstr "Telefonske številke"
+
+#: Plugin\LilCrm\View\Contacts\admin_view.ctp:164
+msgid "Add a new Address"
+msgstr "Vpiši naslov"
+
+#: Plugin\LilCrm\View\Contacts\admin_view.ctp:165
+msgid "Add a new Email"
+msgstr "Vpis email naslova"
+
+#: Plugin\LilCrm\View\Contacts\admin_view.ctp:166
+msgid "Add a new Phone"
+msgstr "Vpis telefona"
+
+#: Plugin\LilCrm\View\Contacts\admin_view.ctp:168
+msgid "Edit Address"
+msgstr "Uredi naslov"
+
+#: Plugin\LilCrm\View\Contacts\admin_view.ctp:169
+msgid "Edit Email"
+msgstr "Uredi email"
+
+#: Plugin\LilCrm\View\Contacts\admin_view.ctp:170
+msgid "Edit Phone"
+msgstr "Urejanje telefona"
+
+#: Plugin\LilCrm\View\Contacts\popups\admin_add.ctp:1
+#: Plugin\LilCrm\View\Contacts\popups\admin_edit.ctp:1
+msgid "Company has been successfuly added."
+msgstr "Podjetje je vpisano."
+
+#: Plugin\LilCrm\View\ContactsAddresses\admin_edit.ctp:2
+msgid "Address"
+msgstr "Naslovi"
+
+#: Plugin\LilCrm\View\ContactsAddresses\admin_edit.ctp:13
+#: Plugin\LilCrm\View\ContactsEmails\admin_edit.ctp:10
+#: Plugin\LilCrm\View\ContactsPhones\admin_edit.ctp:12
+msgid "Kind"
+msgstr "Tip"
+
+#: Plugin\LilCrm\View\ContactsAddresses\admin_edit.ctp:24
+msgid "This is a primary address"
+msgstr "To je glavni naslov"
+
+#: Plugin\LilCrm\View\ContactsAddresses\admin_edit.ctp:26
+#: Plugin\LilCrm\View\ContactsEmails\admin_edit.ctp:13
+#: Plugin\LilCrm\View\ContactsPhones\admin_edit.ctp:15
+msgid "OK"
+msgstr "OK"
+
+#: Plugin\LilCrm\View\ContactsAddresses\popups\admin_add.ctp:1
+msgid "Address has been successfuly added."
+msgstr "Naslov je vpisan."
+
+#: Plugin\LilCrm\View\ContactsAddresses\popups\admin_edit.ctp:1
+msgid "Address has been successfuly saved."
+msgstr "Naslov je shranjen."
+
+#: Plugin\LilCrm\View\ContactsEmails\admin_edit.ctp:2
+msgid "Email for"
+msgstr "Email za"
+
+#: Plugin\LilCrm\View\ContactsEmails\admin_edit.ctp:12
+msgid "This is a primary email address"
+msgstr "To je glavni email naslov"
+
+#: Plugin\LilCrm\View\ContactsEmails\popups\admin_add.ctp:1
+msgid "Email has been successfuly added."
+msgstr "Email je vpisan."
+
+#: Plugin\LilCrm\View\ContactsEmails\popups\admin_edit.ctp:1
+msgid "Email has been successfuly saved."
+msgstr "Email je shranjen."
+
+#: Plugin\LilCrm\View\ContactsPhones\admin_edit.ctp:2
+msgid "Phone No. for"
+msgstr "Tel. št. za"
+
+#: Plugin\LilCrm\View\ContactsPhones\admin_edit.ctp:14
+msgid "Number"
+msgstr "Številka"
+
+#: Plugin\LilCrm\View\ContactsPhones\popups\admin_add.ctp:1
+msgid "Phone has been successfuly added."
+msgstr "Telefon je vpisan."
+
+#: Plugin\LilCrm\View\ContactsPhones\popups\admin_edit.ctp:1
+msgid "Phone has been successfuly saved."
+msgstr "Telefon je shranjen."
+

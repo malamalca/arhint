@@ -1,0 +1,357 @@
+# LANGUAGE translation of CakePHP Application
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"POT-Creation-Date: 2011-06-19 18:36+0200\n"
+"PO-Revision-Date: 2011-06-19 18:43+0100\n"
+"Last-Translator: Miha Nahtigal <miha.nahtigal@gmail.com>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3;\n"
+
+#: Controller\AppController.php:8;9
+msgid "personal"
+msgstr "osebno"
+
+#: Controller\AppController.php:8;9;10
+msgid "work"
+msgstr "služba"
+
+#: Controller\AppController.php:9
+msgid "mobile"
+msgstr "mobi"
+
+#: Controller\AppController.php:9
+msgid "fax"
+msgstr "faks"
+
+#: Controller\AppController.php:9;10
+msgid "home"
+msgstr "doma"
+
+#: Controller\AppPluginController.php:78
+msgid "Username must be unique."
+msgstr "Uporabniško ime mora biti enoznačno"
+
+#: Controller\AppPluginController.php:173;186
+msgid "Income and Expenses"
+msgstr "Prihodki in odhodki"
+
+#: Controller\AppPluginController.php:200
+#: View\Payments\admin_index.ctp:2
+msgid "Payments"
+msgstr "Plačila"
+
+#: Controller\AppPluginController.php:298
+msgid "Project no"
+msgstr "Projekt št."
+
+#: Controller\AppPluginController.php:311
+msgid "This is an active project"
+msgstr "Aktiven projekt"
+
+#: Controller\AppPluginController.php:315
+msgid "Login"
+msgstr "Prijava"
+
+#: Controller\AppPluginController.php:322
+msgid "Username"
+msgstr "Uporabniško ime"
+
+#: Controller\AppPluginController.php:334
+msgid "Password"
+msgstr "Geslo"
+
+#: Controller\AppPluginController.php:394
+msgid "No"
+msgstr "Št."
+
+#: Controller\ExpensesController.php:93
+msgid "Expense has been saved."
+msgstr "Prihodek/odhodek je shranjen."
+
+#: Controller\ExpensesController.php:96
+#: Controller\PaymentsController.php:84
+msgid "There are some errors in the form. Please correct all marked fields below."
+msgstr "Vpisani so napačni podatki. Popravite označena polja."
+
+#: Controller\ExpensesController.php:129
+msgid "Expense has been deleted."
+msgstr "Prihodek/odhodek je izbrisan."
+
+#: Controller\PaymentsController.php:81
+msgid "Payment has been saved."
+msgstr "Plačilo je shranjeno."
+
+#: Controller\PaymentsController.php:115
+msgid "Payment has been deleted."
+msgstr "Plačilo je izbrisano"
+
+#: View\AppPlugin\modify_dashboard.ctp:3
+msgid "Current Month's CashFlow"
+msgstr "Denarni tok tega meseca"
+
+#: View\AppPlugin\modify_dashboard.ctp:7
+#: View\Payments\admin_edit.ctp:30
+#: View\Payments\admin_index.ctp:20
+msgid "Source"
+msgstr "Vir"
+
+#: View\AppPlugin\modify_dashboard.ctp:8;63
+#: View\Expenses\admin_edit.ctp:22
+#: View\Expenses\admin_index.ctp:25
+#: View\Expenses\admin_view.ctp:6
+#: View\Payments\admin_edit.ctp:21
+#: View\Payments\admin_index.ctp:21
+msgid "Date"
+msgstr "Datum"
+
+#: View\AppPlugin\modify_dashboard.ctp:9
+msgid "Descript"
+msgstr "Opis"
+
+#: View\AppPlugin\modify_dashboard.ctp:10
+#: View\Payments\admin_edit.ctp:25
+#: View\Payments\admin_index.ctp:23
+msgid "Payment"
+msgstr "Plačilo"
+
+#: View\AppPlugin\modify_dashboard.ctp:11
+#: View\Payments\admin_index.ctp:24
+msgid "Saldo"
+msgstr "Slado"
+
+#: View\AppPlugin\modify_dashboard.ctp:17
+msgid "No payments found"
+msgstr "Ni plačil"
+
+#: View\AppPlugin\modify_dashboard.ctp:45
+#: View\Payments\admin_index.ctp:62
+msgid "Recapitulation"
+msgstr "Rekapitulacija"
+
+#: View\AppPlugin\modify_dashboard.ctp:56
+msgid "Recent Expenses"
+msgstr "Aktualni stroški"
+
+#: View\AppPlugin\modify_dashboard.ctp:60
+#: View\Expenses\admin_index.ctp:22
+#: View\Payments\admin_edit.ctp:40
+#: View\Payments\admin_index.ctp:22
+msgid "Description"
+msgstr "Opis"
+
+#: View\AppPlugin\modify_dashboard.ctp:61
+#: View\Expenses\admin_edit.ctp:11
+#: View\Expenses\admin_index.ctp:23
+msgid "Project"
+msgstr "Projekt"
+
+#: View\AppPlugin\modify_dashboard.ctp:62
+#: View\Expenses\admin_edit.ctp:17
+#: View\Expenses\admin_index.ctp:24
+msgid "User"
+msgstr "Uporabnik"
+
+#: View\AppPlugin\modify_dashboard.ctp:64;110
+#: View\Expenses\admin_edit.ctp:29
+#: View\Expenses\admin_index.ctp:84
+msgid "Total"
+msgstr "Skupaj"
+
+#: View\AppPlugin\modify_dashboard.ctp:71
+#: View\Expenses\admin_index.ctp:33
+msgid "No expenses found"
+msgstr "Ni vpisanih stroškov"
+
+#: View\AppPlugin\modify_dashboard.ctp:78
+msgid "invoice"
+msgstr "dokument"
+
+#: View\Expenses\admin_edit.ctp:1
+msgid "Add or Edit Expense"
+msgstr "Uredi ali dodaj prihodke/odhodke"
+
+#: View\Expenses\admin_edit.ctp:26
+msgid "Title"
+msgstr "Naziv"
+
+#: View\Expenses\admin_edit.ctp:33
+#: View\Payments\admin_edit.ctp:44
+msgid "Save"
+msgstr "Shrani"
+
+#: View\Expenses\admin_index.ctp:2
+msgid "Expenses and Income"
+msgstr "Strošek in dohodki"
+
+#: View\Expenses\admin_index.ctp:5
+msgid "Add"
+msgstr "Dodaj"
+
+#: View\Expenses\admin_index.ctp:20
+msgid "Kind"
+msgstr "Tip"
+
+#: View\Expenses\admin_index.ctp:21
+msgid "Link"
+msgstr "Povezava"
+
+#: View\Expenses\admin_index.ctp:26
+#: View\Expenses\admin_view.ctp:8
+msgid "Amount"
+msgstr "Količina"
+
+#: View\Expenses\admin_index.ctp:40;42
+msgid "%s"
+msgstr "%s"
+
+#: View\Expenses\admin_view.ctp:1
+msgid "Payments for: %s"
+msgstr "Plačila za: %s"
+
+#: View\Expenses\admin_view.ctp:7
+msgid "Account"
+msgstr "Račun"
+
+#: View\Expenses\admin_view.ctp:14
+msgid "company"
+msgstr "podjetje"
+
+#: View\Expenses\admin_view.ctp:14
+msgid "private"
+msgstr "osebno"
+
+#: View\Expenses\admin_view.ctp:14
+msgid "other"
+msgstr "ostalo"
+
+#: View\Expenses\admin_view.ctp:17
+msgid "No payments found."
+msgstr "Ni plačil."
+
+#: View\Expenses\admin_view.ctp:33
+msgid "Add new Payment"
+msgstr "Vpis plačila"
+
+#: View\Helper\arhim2.php:72;298
+msgid "Today"
+msgstr "Danes"
+
+#: View\Helper\arhim2.php:74;279
+msgid "Yesterday"
+msgstr "Včeraj"
+
+#: View\Helper\arhim2.php:256
+msgid "on %s"
+msgstr "v/na %s"
+
+#: View\Helper\arhim2.php:277
+msgid "Tomorow"
+msgstr "jutri"
+
+#: View\Helper\arhim2.php:303
+msgid "%s ago"
+msgstr "%s nazaj"
+
+#: View\Helper\arhim2.php:46;51
+msgid "1 hr"
+msgid_plural "%d hr"
+msgstr[0] "%d ur"
+msgstr[1] "%d uri"
+msgstr[2] "%d ure"
+msgstr[3] "%d ur"
+
+#: View\Helper\arhim2.php:47;54
+msgid "1 min"
+msgid_plural "%d min"
+msgstr[0] "%d min"
+msgstr[1] "%d min"
+msgstr[2] "%d min"
+msgstr[3] "%d min"
+
+#: View\Helper\arhim2.php:260
+msgid "year"
+msgid_plural "years"
+msgstr[0] "leto"
+msgstr[1] "leti"
+msgstr[2] "leta"
+msgstr[3] "let"
+
+#: View\Helper\arhim2.php:261;266
+msgid "month"
+msgid_plural "months"
+msgstr[0] "mesecev"
+msgstr[1] "mesec"
+msgstr[2] "meseca"
+msgstr[3] "mesecev"
+
+#: View\Helper\arhim2.php:262;267;271
+msgid "week"
+msgid_plural "weeks"
+msgstr[0] "teden"
+msgstr[1] "tedna"
+msgstr[2] "tedni"
+msgstr[3] "tednov"
+
+#: View\Helper\arhim2.php:263;268;272;282
+msgid "day"
+msgid_plural "days"
+msgstr[0] "dan"
+msgstr[1] "dni"
+msgstr[2] "dni"
+msgstr[3] "dni"
+
+#: View\Helper\arhim2.php:284;289
+msgid "hour"
+msgid_plural "hours"
+msgstr[0] "ura"
+msgstr[1] "uri"
+msgstr[2] "ure"
+msgstr[3] "ur"
+
+#: View\Helper\arhim2.php:290;293
+msgid "minute"
+msgid_plural "minutes"
+msgstr[0] "minuta"
+msgstr[1] "minuti"
+msgstr[2] "minute"
+msgstr[3] "minut"
+
+#: View\Helper\arhim2.php:296
+msgid "second"
+msgid_plural "seconds"
+msgstr[0] "sekunda"
+msgstr[1] "sekundi"
+msgstr[2] "sekunde"
+msgstr[3] "sekund"
+
+#: View\Payments\admin_edit.ctp:3
+msgid "Edit Payment"
+msgstr "Urejanje plačila"
+
+#: View\Payments\admin_edit.ctp:3
+msgid "Add Payment"
+msgstr "Vpis plačila"
+
+#: View\Payments\admin_edit.ctp:33
+msgid "Company Account"
+msgstr "Poslovni račun"
+
+#: View\Payments\admin_edit.ctp:34
+msgid "Private Account"
+msgstr "Osebni račun"
+
+#: View\Payments\admin_edit.ctp:35
+msgid "Other"
+msgstr "Ostalo"
+
+#: View\Payments\popups\admin_add.ctp:1
+#: View\Payments\popups\admin_edit.ctp:1
+msgid "Payment has been successfuly added."
+msgstr "Plačilo je vpisano."
+

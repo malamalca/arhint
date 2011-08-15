@@ -1,0 +1,186 @@
+html{color:#000;background:#FFF;}body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,code,form,fieldset,legend,input,textarea,p,blockquote,th,td{margin:0;padding:0;}table{border-collapse:collapse;border-spacing:0;}fieldset,img{border:0;}address,caption,cite,code,dfn,em,strong,th,var{font-style:normal;font-weight:normal;}li{list-style:none;}caption,th{text-align:left;}h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal;}q:before,q:after{content:'';}abbr,acronym{border:0;font-variant:normal;}sup{vertical-align:text-top;}sub{vertical-align:text-bottom;}input,textarea,select{font-family:inherit;font-size:inherit;font-weight:inherit;}input,textarea,select{*font-size:100%;}legend{color:#000;}
+
+html {
+}
+body {
+	background: transparent url(img/bg_phone.gif) no-repeat left top;
+}
+
+#content {
+	width: 355px;
+	height: 740px;
+	padding-top: 60px;
+	padding-left: 40px;
+	padding-right: 40px;
+}
+#main {
+	position: relative;
+	height: 590px;
+	overflow: scroll-y;
+}
+
+h1 {
+	font-family: "Segoe WP", Tahoma, helvetica, sans-serif;
+	font-size: 28px;
+	font-weight: bold;
+	color: #fff;
+	margin-top: 20px;
+}
+p {
+	font-family: "Segoe WP", Tahoma, helvetica, sans-serif;
+	font-size: 14px;
+	color: #fff;
+	margin-top: 5px;
+	margin-bottom: 20px;
+}
+label {
+	display: block;
+	font-family: "Segoe WP", Tahoma, helvetica, sans-serif;
+	font-size: 14px;
+	font-weight: bold;
+	color: #c0c0c0;
+}
+.ui-input input {
+	width: 350px;
+	font-family: "Segoe WP", Tahoma, helvetica, sans-serif;
+	font-size: 96px;
+	font-weight: bold;
+	
+	color: #000;
+	background-color: #CCCCCC;
+	border: solid 1px #606060;
+	
+	padding-top: 3px;
+	padding-bottom: 3px;
+}
+
+.ui-submit button {
+	position: absolute;
+	width: 350px;
+	bottom: 5px;
+	
+	font-family: "Segoe WP", Tahoma, helvetica, sans-serif;
+	font-size: 24px;
+	
+	text-transform:lowercase;
+	
+	color: #f0f0f0;
+	background-color: transparent;
+	border: solid 2px #f0f0f0;
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+
+.btn_panel {
+	text-align: center;
+}
+.btn_pin {
+	width: 110px;
+	
+	font-family: "Segoe WP", Tahoma, helvetica, sans-serif;
+	font-size: 24px;
+	
+	text-transform:lowercase;
+	
+	
+	color: #f0f0f0;
+	background-color: transparent;
+	border: solid 2px #f0f0f0;
+	
+	margin-top: 10px;
+	margin-left: 2px;
+	margin-right: 5px;
+	padding-top: 15px;
+	padding-bottom: 15px;
+}
+
+/* COSTUM */
+input#uid {
+	text-align: center;
+	margin-bottom: 20px;
+}
+input#uid {
+	
+}
+
+/* REGISTRATION MESSAGE */
+div#message {
+	text-align: center;
+	padding-top: 350px;
+	margin-top: 80px;
+	background: transparent url(img/bg_flash.png) no-repeat top center;
+}
+div#message a {
+	font-family: "Segoe WP", Tahoma, helvetica, sans-serif;
+	font-size: 28px;
+	text-decoration: none;
+	
+	color: #fff;
+}
+
+/* REGISTRATION PAGE */
+div#tmtr_register {
+	text-align: center;
+}
+div#tmtr_register .tmtr_button {
+	display: block;
+	position: relative;
+	float: left;
+	width: 165px;
+	height: 160px;
+	
+	text-align: center;
+	background-color: #36A3DB;
+	border: solid 1px #2879A2;
+	
+	margin-right: 10px;
+	margin-bottom: 10px;
+	
+	box-shadow: 2px 2px 2px #404040;
+}
+div#tmtr_register .tmtr_button a {
+	display: block;
+	position: relative;
+	
+	width: 163px;
+	height: 158px;
+	
+	font-family: "Segoe WP", Tahoma, helvetica, sans-serif;
+	font-size: 16px;
+	text-decoration: none;
+	text-align: left;
+	text-shadow: -1px -1px 0px #2879A2;
+	
+	color: #fff;
+}
+div#tmtr_register .tmtr_button span {
+	position: absolute;
+	bottom: 10px;
+	left: 10px;
+	width: 150px;
+}
+div#tmtr_register .tmtr_btn_disabled {
+	background-color: #000;
+	border: solid 1px #404040;
+	
+	box-shadow: none;
+}
+div#tmtr_register .tmtr_btn_disabled span {
+	font-family: "Segoe WP", Tahoma, helvetica, sans-serif;
+	font-size: 16px;
+	text-shadow: none;
+	text-align: left;
+	color: #808080;
+	
+}
+#tmtr-btn-workday-end {
+	background: transparent url(img/tmtr_end.png) no-repeat center;
+}
+
+#tmtr-btn-private-start {
+	background: transparent url(img/tmtr_private.png) no-repeat center;
+}
+
+#tmtr-btn-lunch-start {
+	background: transparent url(img/tmtr_lunch.png) no-repeat center;
+}

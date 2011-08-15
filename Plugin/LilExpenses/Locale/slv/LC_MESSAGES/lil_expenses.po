@@ -1,0 +1,250 @@
+# LANGUAGE translation of CakePHP Application
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"POT-Creation-Date: 2011-07-21 10:33+0200\n"
+"PO-Revision-Date: 2011-07-21 10:34+0100\n"
+"Last-Translator: MalaMalca <info@malamalca.com>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3;\n"
+
+#: Plugin\LilExpenses\Controller\ExpensesController.php:93
+msgid "Expense has been saved."
+msgstr "Prihodek/odhodek je shranjen."
+
+#: Plugin\LilExpenses\Controller\ExpensesController.php:96
+#: Plugin\LilExpenses\Controller\PaymentsController.php:84
+msgid "There are some errors in the form. Please correct all marked fields below."
+msgstr "Vpisani so napačni podatki. Popravite označena polja."
+
+#: Plugin\LilExpenses\Controller\ExpensesController.php:129
+msgid "Expense has been deleted."
+msgstr "Prihodek/odhodek je izbrisan."
+
+#: Plugin\LilExpenses\Controller\LilExpensesPluginController.php:252;364;377
+msgid "Income and Expenses"
+msgstr "Prihodki in odhodki"
+
+#: Plugin\LilExpenses\Controller\LilExpensesPluginController.php:290
+#: Plugin\LilExpenses\View\Elements\expenses_modify_dashboard.ctp:62
+#: Plugin\LilExpenses\View\Expenses\admin_edit.ctp:23
+#: Plugin\LilExpenses\View\Expenses\admin_index.ctp:22
+#: Plugin\LilExpenses\View\Expenses\admin_view.ctp:50
+msgid "Project"
+msgstr "Projekt"
+
+#: Plugin\LilExpenses\Controller\LilExpensesPluginController.php:292
+msgid "-- select project --"
+msgstr "-- izberite projekt --"
+
+#: Plugin\LilExpenses\Controller\LilExpensesPluginController.php:303
+#: Plugin\LilExpenses\View\Elements\expenses_modify_dashboard.ctp:10
+#: Plugin\LilExpenses\View\Payments\admin_edit.ctp:25
+#: Plugin\LilExpenses\View\Payments\admin_index.ctp:11
+msgid "Payment"
+msgstr "Plačilo"
+
+#: Plugin\LilExpenses\Controller\LilExpensesPluginController.php:305
+msgid "do not create payment"
+msgstr "ni še plačano"
+
+#: Plugin\LilExpenses\Controller\LilExpensesPluginController.php:307
+msgid "paid from company account"
+msgstr "plačano iz/na račun podjetja"
+
+#: Plugin\LilExpenses\Controller\LilExpensesPluginController.php:308
+msgid "paid from private account"
+msgstr "plačano iz/na osebni račun"
+
+#: Plugin\LilExpenses\Controller\LilExpensesPluginController.php:309
+msgid "paid from other source"
+msgstr "plačano iz drugih virov"
+
+#: Plugin\LilExpenses\Controller\LilExpensesPluginController.php:324
+#: Plugin\LilExpenses\View\Elements\expenses_modify_dashboard.ctp:63
+#: Plugin\LilExpenses\View\Expenses\admin_edit.ctp:29
+#: Plugin\LilExpenses\View\Expenses\admin_index.ctp:23
+#: Plugin\LilExpenses\View\Expenses\admin_view.ctp:56
+msgid "User"
+msgstr "Uporabnik"
+
+#: Plugin\LilExpenses\Controller\LilExpensesPluginController.php:391
+#: Plugin\LilExpenses\View\Payments\admin_index.ctp:2
+msgid "Payments"
+msgstr "Plačila"
+
+#: Plugin\LilExpenses\Controller\PaymentsController.php:81
+msgid "Payment has been saved."
+msgstr "Plačilo je shranjeno."
+
+#: Plugin\LilExpenses\Controller\PaymentsController.php:115
+msgid "Payment has been deleted."
+msgstr "Plačilo je izbrisano"
+
+#: Plugin\LilExpenses\View\Elements\expenses_modify_dashboard.ctp:3
+msgid "Current Month's CashFlow"
+msgstr "Denarni tok tega meseca"
+
+#: Plugin\LilExpenses\View\Elements\expenses_modify_dashboard.ctp:7
+#: Plugin\LilExpenses\View\Payments\admin_edit.ctp:30
+#: Plugin\LilExpenses\View\Payments\admin_index.ctp:8
+msgid "Source"
+msgstr "Vir"
+
+#: Plugin\LilExpenses\View\Elements\expenses_modify_dashboard.ctp:8;64
+#: Plugin\LilExpenses\View\Expenses\admin_edit.ctp:13
+#: Plugin\LilExpenses\View\Expenses\admin_index.ctp:24
+#: Plugin\LilExpenses\View\Expenses\admin_view.ctp:40;67
+#: Plugin\LilExpenses\View\Payments\admin_edit.ctp:21
+#: Plugin\LilExpenses\View\Payments\admin_index.ctp:9
+msgid "Date"
+msgstr "Datum"
+
+#: Plugin\LilExpenses\View\Elements\expenses_modify_dashboard.ctp:9
+msgid "Descript"
+msgstr "Opis"
+
+#: Plugin\LilExpenses\View\Elements\expenses_modify_dashboard.ctp:11
+#: Plugin\LilExpenses\View\Payments\admin_index.ctp:12
+msgid "Saldo"
+msgstr "Slado"
+
+#: Plugin\LilExpenses\View\Elements\expenses_modify_dashboard.ctp:17
+msgid "No payments found"
+msgstr "Ni plačil"
+
+#: Plugin\LilExpenses\View\Elements\expenses_modify_dashboard.ctp:45
+#: Plugin\LilExpenses\View\Payments\admin_index.ctp:55
+msgid "Recapitulation"
+msgstr "Rekapitulacija"
+
+#: Plugin\LilExpenses\View\Elements\expenses_modify_dashboard.ctp:56
+msgid "Recent Expenses"
+msgstr "Aktualni stroški"
+
+#: Plugin\LilExpenses\View\Elements\expenses_modify_dashboard.ctp:61
+#: Plugin\LilExpenses\View\Expenses\admin_index.ctp:21
+#: Plugin\LilExpenses\View\Payments\admin_edit.ctp:40
+#: Plugin\LilExpenses\View\Payments\admin_index.ctp:10
+msgid "Description"
+msgstr "Opis"
+
+#: Plugin\LilExpenses\View\Elements\expenses_modify_dashboard.ctp:65;127
+#: Plugin\LilExpenses\View\Expenses\admin_edit.ctp:18
+#: Plugin\LilExpenses\View\Expenses\admin_index.ctp:89
+#: Plugin\LilExpenses\View\Expenses\admin_view.ctp:45
+msgid "Total"
+msgstr "Skupaj"
+
+#: Plugin\LilExpenses\View\Elements\expenses_modify_dashboard.ctp:72
+#: Plugin\LilExpenses\View\Expenses\admin_index.ctp:32
+msgid "No expenses found"
+msgstr "Ni vpisanih stroškov"
+
+#: Plugin\LilExpenses\View\Expenses\admin_edit.ctp:1
+msgid "Add or Edit Expense"
+msgstr "Uredi ali dodaj prihodke/odhodke"
+
+#: Plugin\LilExpenses\View\Expenses\admin_edit.ctp:11
+#: Plugin\LilExpenses\View\Expenses\admin_view.ctp:35
+msgid "Title"
+msgstr "Naziv"
+
+#: Plugin\LilExpenses\View\Expenses\admin_edit.ctp:33
+#: Plugin\LilExpenses\View\Payments\admin_edit.ctp:44
+msgid "Save"
+msgstr "Shrani"
+
+#: Plugin\LilExpenses\View\Expenses\admin_index.ctp:2
+msgid "Expenses and Income"
+msgstr "Strošek in dohodki"
+
+#: Plugin\LilExpenses\View\Expenses\admin_index.ctp:5
+msgid "Add"
+msgstr "Dodaj"
+
+#: Plugin\LilExpenses\View\Expenses\admin_index.ctp:20
+msgid "Kind"
+msgstr "Tip"
+
+#: Plugin\LilExpenses\View\Expenses\admin_index.ctp:25
+#: Plugin\LilExpenses\View\Expenses\admin_view.ctp:69
+msgid "Amount"
+msgstr "Količina"
+
+#: Plugin\LilExpenses\View\Expenses\admin_view.ctp:3
+msgid "Income or Expense"
+msgstr "Prihodki in odhodki"
+
+#: Plugin\LilExpenses\View\Expenses\admin_view.ctp:6
+msgid "Edit"
+msgstr "Uredi"
+
+#: Plugin\LilExpenses\View\Expenses\admin_view.ctp:17
+msgid "Delete"
+msgstr "Briši"
+
+#: Plugin\LilExpenses\View\Expenses\admin_view.ctp:68
+msgid "Account"
+msgstr "Račun"
+
+#: Plugin\LilExpenses\View\Expenses\admin_view.ctp:75
+msgid "company"
+msgstr "podjetje"
+
+#: Plugin\LilExpenses\View\Expenses\admin_view.ctp:75
+msgid "private"
+msgstr "osebno"
+
+#: Plugin\LilExpenses\View\Expenses\admin_view.ctp:75
+msgid "other"
+msgstr "ostalo"
+
+#: Plugin\LilExpenses\View\Expenses\admin_view.ctp:78
+msgid "No payments found."
+msgstr "Ni plačil."
+
+#: Plugin\LilExpenses\View\Expenses\admin_view.ctp:94
+msgid "Add new Payment"
+msgstr "Vpis plačila"
+
+#: Plugin\LilExpenses\View\Payments\admin_edit.ctp:3
+msgid "Edit Payment"
+msgstr "Urejanje plačila"
+
+#: Plugin\LilExpenses\View\Payments\admin_edit.ctp:3
+msgid "Add Payment"
+msgstr "Vpis plačila"
+
+#: Plugin\LilExpenses\View\Payments\admin_edit.ctp:33
+msgid "Company Account"
+msgstr "Poslovni račun"
+
+#: Plugin\LilExpenses\View\Payments\admin_edit.ctp:34
+msgid "Private Account"
+msgstr "Osebni račun"
+
+#: Plugin\LilExpenses\View\Payments\admin_edit.ctp:35
+msgid "Other"
+msgstr "Ostalo"
+
+#: Plugin\LilExpenses\View\Payments\popups\admin_add.ctp:1
+#: Plugin\LilExpenses\View\Payments\popups\admin_edit.ctp:1
+msgid "Payment has been successfuly added."
+msgstr "Plačilo je vpisano."
+
+#: Plugin\LilTasks\Controller\LilTasksPluginController.php:181
+#: Plugin\LilTasks\View\Tasks\admin_index.ctp:13
+msgid "Add Task"
+msgstr "Dodaj opravilo"
+
+#~ msgid "Expense or income"
+#~ msgstr "Strošek in prihodki"
+
+#~ msgid "Edit Expense"
+#~ msgstr "Uredi prihodek/odhodek"

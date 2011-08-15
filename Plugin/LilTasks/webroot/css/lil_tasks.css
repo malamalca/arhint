@@ -1,0 +1,58 @@
+div#lil-tasks-index {
+	margin-bottom: 20px;
+}
+
+div#lil-tasks-index h1 a#lil-tasks-date-prev, div#lil-tasks-index h1 a#lil-tasks-date-next {
+	font-size: 70%;
+	text-decoration: none;
+	color: #505050;
+}
+div#lil-tasks-index h1 span a:hover {
+	text-decoration: underline;
+}
+
+div#lil-tasks-index fieldset {
+	padding-top: 10px;
+}
+div#lil-tasks-index .ui-checkbox {
+	margin: 0px !important;
+	margin-bottom: 5px !important;
+}
+div#lil-tasks-index .ui-checkbox label {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 16px;
+    font-weight: bold;
+}
+div#lil-tasks-index .ui-checkbox label.striked {
+	text-decoration: line-through;
+}
+
+
+div#lil-tasks-index .ui-checkbox div {
+	display: inline;
+	margin-left: 10px;
+}
+div#lil-tasks-index .ui-checkbox div * {
+	font-family: Cambria, Georgia, serif;
+	font-size: 13px;
+}
+div#lil-tasks-index .ui-checkbox div a {
+	text-decoration: none;
+}
+div#lil-tasks-index .ui-checkbox div a:hover {
+	text-decoration: underline;
+}
+div#lil-tasks-index .ui-checkbox span.lil-tasks-due {
+	margin-right: 10px;
+}
+div#lil-tasks-index .ui-checkbox span.lil-tasks-overdue {
+	color: #ff0000;
+}
+
+div#lil-tasks-index .ui-checkbox .lil-tasks-control {
+	display: none;
+}
+
+div#lil-tasks-index .ui-checkbox a.lil-tasks-redate-link {
+	color: #229E2C;
+}

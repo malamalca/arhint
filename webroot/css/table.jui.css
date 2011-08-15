@@ -1,0 +1,153 @@
+
+
+/********************************************************/
+.dataTables_wrapper {
+	/*width: 701px;*/
+}
+
+/*
+ * jQuery UI specific styling
+ */
+ 
+.dataTables_info {
+	padding-top: 3px;
+}
+
+table.index thead th {
+	font-family: Cambria, Georgia, serif;
+	font-size: 0.8em;
+	
+	padding: 3px 0px 3px 10px;
+	cursor: pointer;
+	* cursor: hand;
+}
+
+table.index tfoot th, table.index tfoot td {
+	font-family: Cambria, Georgia, serif;
+	font-size: 0.8em;
+}
+
+/*
+ * Sort arrow icon positioning
+ */
+table.index thead th div.DataTables_sort_wrapper {
+	position: relative;
+	padding-right: 20px;
+	padding-right: 20px;
+}
+
+table.index thead th div.DataTables_sort_wrapper span {
+	position: absolute;
+	top: 50%;
+	margin-top: -8px;
+	right: 0;
+}
+
+
+.dataTables_processing {
+	font-family: Cambria, Georgia, serif;
+	position: absolute;
+	top: 0px;
+	left: 50%;
+	width: 250px;
+	margin-left: -125px;
+	border: 1px solid #ddd;
+	text-align: center;
+	color: #999;
+	font-size: 11px;
+	padding: 2px 0;
+}
+
+
+.dataTables_filter {
+	font-family: Cambria, Georgia, serif;
+	float: right;
+	text-align: right;
+	font-weight: normal;
+}
+
+.dataTables_info {
+	float: left;
+	height: 20px;
+	font-family: Cambria, Georgia, serif;
+	font-size: .8em;
+	font-weight: normal;
+	
+	padding-left: 10px;
+}
+
+.dataTables_scrollBody {
+	border-left: solid 1px #aaa;
+	border-right: solid 1px #aaa;
+}
+
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * DataTables display
+ */
+table.index tfoot th {
+	padding: 3px 0px 3px 10px;
+	font-weight: bold;
+	font-weight: normal;
+}
+
+table.index td {
+	font-family: Cambria, Georgia, serif;
+    font-size: 13px;
+    
+	padding: 3px 10px;
+}
+
+table.index td.center, table.index td.actions {
+	text-align: center;
+}
+
+
+
+tr.odd {
+	background-color: #e0ecfa;
+}
+
+tr.even {
+	background-color: white;
+}
+
+
+
+
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * Misc
+ */
+
+
+.top, .bottom {
+	padding: 15px;
+	background-color: #F5F5F5;
+	border: 1px solid #CCCCCC;
+}
+
+.clear {
+	clear: both;
+}
+
+.dataTables_empty {
+	text-align: center;
+}
+.min-width {
+	width: 1px;
+}
+.negative {
+	color: #ff0000;
+}
+/*
+ * Sorting classes for columns
+ */
+/* For the standard odd/even */
+tr.odd td.sorting_1 {
+	background-color: #c5dbf0;
+}
+
+tr.even td.sorting_1 {
+	background-color: #e7f0fa;
+}
