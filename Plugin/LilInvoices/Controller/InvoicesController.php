@@ -132,7 +132,7 @@ class InvoicesController extends LilAppController {
 			// validate data
 			if ($d['data'] && $this->Invoice->saveAll($d['data'], array('validate' => 'only'))) {
 				// update counter for new invoices
-				if (empty($d['data']['Inovice']['id'])) {
+				if (empty($d['data']['Invoice']['id'])) {
 					$no = $this->Invoice->Counter->generateNo($counter, true);
 					if (empty($d['data']['Invoice']['no'])) $d['data']['Invoice']['no'] = $no;
 				}
