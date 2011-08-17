@@ -322,33 +322,6 @@ Cache::config('_cake_model_', array(
 ));
 
 /**************************************************************************************************/
-Configure::write('datepickerFormat', 'yy-mm-dd');
 
 // load Lil's default configuration
 Configure::write('Lil.plugins', array('Crm', 'Invoices', 'TravelOrders', 'Tasks', 'Expenses', 'TimeTrack'));
-require APP . 'Plugin' . DS . 'Lil' . DS . 'Config' . DS . 'core.php';
-
-Configure::write('Lil.languages', array('eng', 'slv'));
-
-//Configure::write('Lil.useAdminLayout', false);
-
-Configure::write('Lil.areasTable',       'projects');
-Configure::write('Lil.usersTable',       'contacts');
-Configure::write('Lil.areasUsersTable',  'projects_users');
-Configure::write('Lil.userDisplayField', 'title');
-Configure::write('Lil.areaSlugField',    'slug');
-
-Configure::write('Lil.userAssociation', array(
-	'className'             => 'Lil.User',
-	'foreignKey'            => 'user_id',
-	'associationForeignKey' => 'project_id',
-	'joinTable'             => 'projects_users',
-));
-
-/**
- * Other config
- */
-$user_config = dirname(__FILE__) . DS . 'config.php';
-if (file_exists($user_config)) {
-	include $user_config;
-}

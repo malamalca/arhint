@@ -22,20 +22,33 @@
  * @since         CakePHP(tm) v 0.10.8.2117
  * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
-
 // Setup a 'default' cache configuration for use in the application.
 Cache::config('default', array('engine' => 'File'));
 
-App::build(array(
-    'View' => array(dirname(dirname(__FILE__)) . DS . 'Plugin' . DS . 'Lil' . DS . 'View' . DS),
+CakePlugin::load('Lil', array('bootstrap' => array('core'), 'routes' => true));
+foreach ($plugins = Configure::read('Lil.plugins') as $plugin) {
+	CakePlugin::load('Lil' . $plugin, array('bootstrap' => array('core'), 'routes' => true));
+}
+
+Configure::write('datepickerFormat', 'yy-mm-dd');
+Configure::write('Lil.languages', array('eng', 'slv'));
+
+Configure::write('Lil.areasTable',       'projects');
+Configure::write('Lil.usersTable',       'contacts');
+Configure::write('Lil.areasUsersTable',  'projects_users');
+Configure::write('Lil.userDisplayField', 'title');
+Configure::write('Lil.areaSlugField',    'slug');
+
+Configure::write('Lil.userAssociation', array(
+	'className'             => 'Lil.User',
+	'foreignKey'            => 'user_id',
+	'associationForeignKey' => 'project_id',
+	'joinTable'             => 'projects_users',
 ));
-
-CakePlugin::loadAll();
-
 /**
- * Other config
+ * User config
  */
-$user_bootstrap = dirname(__FILE__) . DS . 'bootstrap_local.php';
-if (file_exists($user_bootstrap)) {
-	include $user_bootstrap;
+$user_config = dirname(__FILE__) . DS . 'config.php';
+if (file_exists($user_config)) {
+	include $user_config;
 }

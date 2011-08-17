@@ -1,6 +1,3 @@
-[submodule "Aristo"]
-	path = Plugin/aristo/webroot
-	url = git://github.com/taitems/Aristo-jQuery-UI-Theme.git
 [submodule "Lil"]
 	path = Plugin/Lil
 	url = http://miha.nahtigal:vuego3869@www.nahtigal.com/git/lil.git
