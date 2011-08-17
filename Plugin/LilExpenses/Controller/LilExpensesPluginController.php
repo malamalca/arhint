@@ -34,14 +34,12 @@ class LilExpensesPluginController extends LilPluginController {
 	public $handlers = array(
 		'before_construct_model' => array('function' => '_beforeConstructModel', 'params' => array()),
 		
-		//'after_save_model'       => array('function' => '_afterSaveModel', 'params' => array()),
 		'invoice_before_save'     => array('function' => '_beforeSaveInvoice', 'params' => array()),
 		'invoice_after_save'     => array('function' => '_afterSaveInvoice', 'params' => array()),
 		'form_edit_invoice'      => array('function' => '_modifyInvoiceForm', 'params' => array()),
 		
 		'admin_sidebar'          => array('function' => '_setAdminSidebar', 'params' => array()),
 		'admin_dashboard'        => array('function' => '_modifyDashboard', 'params' => array()),
-		//form_edit_invoice
 		
 		'view_invoice'       	 => array('function' => '_modifyInvoiceView', 'params' => array()),
 	);
@@ -64,9 +62,9 @@ class LilExpensesPluginController extends LilPluginController {
 		}
 		if ($model->name == 'TravelOrder') {
 			$model->hasOne['Expense'] = array(
-				'className' => 'LilExpenses.Expense',
+				'className'  => 'LilExpenses.Expense',
 				'foreignKey' => 'foreign_id',
-				'conditions'   => array('Expense.model' => 'TravelOrder'),
+				'conditions' => array('Expense.model' => 'TravelOrder'),
 			);
 		}
 		return true;
@@ -395,10 +393,30 @@ class LilExpensesPluginController extends LilPluginController {
 					'admin'      => true,
 				),
 				'params' => array(),
-				'active' => in_array($this->request->params['controller'], array('payments')),
-				'expand' => false,
+				'active' => in_array($this->request->params['controller'], array('payments')) && empty($this->request->query['filter']['source']),
+				'expand' => in_array($this->request->params['controller'], array('payments')),
+				'submenu' => array(
+					'c' => array(
+						'visible' => true,
+						'title' => __d('lil_expenses', 'Company account'),
+						'url' => array('action' => 'index', '?' => array('filter' => array('source' => 'c'))),
+						'active' => (!empty($this->request->query['filter']['source']) && $this->request->query['filter']['source']=='c')
+					),
+					'p' => array(
+						'visible' => true,
+						'title' => __d('lil_expenses', 'Personal account'),
+						'url' => array('action' => 'index', '?' => array('filter' => array('source' => 'p'))),
+						'active' => (!empty($this->request->query['filter']['source']) && $this->request->query['filter']['source']=='p')
+					),
+					'o' => array(
+						'visible' => true,
+						'title' => __d('lil_expenses', 'Other account'),
+						'url' => array('action' => 'index', '?' => array('filter' => array('source' => 'o'))),
+						'active' => (!empty($this->request->query['filter']['source']) && $this->request->query['filter']['source']=='o')
+					)
+					
+				)
 			),
-			
 		);
 		
 		// insert into sidebar right after welcome panel

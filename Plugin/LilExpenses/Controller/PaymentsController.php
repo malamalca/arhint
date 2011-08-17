@@ -88,10 +88,10 @@ class PaymentsController extends LilAppController {
 			)) {
 				// must redirect to index because of redirects from delete actions
 				$this->redirect(array(
-					'plugin' => 'lil_expenses',
+					'plugin'     => 'lil_expenses',
 					'controller' => 'payments',
-					'admin' => true,
-					'action' => 'index'
+					'admin'      => true,
+					'action'     => 'index'
 				));
 			}
 		} else if (!empty($this->request->params['named']['expense'])) {

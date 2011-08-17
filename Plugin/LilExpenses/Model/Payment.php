@@ -56,6 +56,9 @@ class Payment extends LilAppModel {
  */
 	function filter(&$filter) {
 		$ret = array();
+		if (isset($filter['source']) && in_array($filter['source'], array('p', 'o', 'c'))) {
+			$ret['conditions']['Payment.source'] = $filter['source'];
+		}
 		
 		return $ret;
 	}
