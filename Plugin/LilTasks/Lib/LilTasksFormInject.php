@@ -9,7 +9,7 @@
 		$task = array(
 			'fs_tasks_start' => '<fieldset>',
 			'fs_tasks_legend' => sprintf('<legend>%s</legend>', 
-				$view->Lil->input('Task.exists', array(
+				$view->LilForm->input('Task.exists', array(
 					'checked' => (bool)$view->Form->value('Task.exists') || (bool)$view->Form->value('Task.id'),
 					'id'      => 'task-toggle',
 					'label'   => false,
@@ -19,7 +19,7 @@
 			),
 			'fs_tasks_div_start'  => '<div id="task">',
 			'task_id' => array(
-				'class'      => $view->Lil,
+				'class'      => $view->LilForm,
 				'method'     => 'input',
 				'parameters' => array(
 					'field' => 'Task.id',
@@ -29,7 +29,7 @@
 				)
 			),
 			'task_foreign_id' => array(
-				'class'      => $view->Lil,
+				'class'      => $view->LilForm,
 				'method'     => 'input',
 				'parameters' => array(
 					'field' => 'Task.foreign_id',
@@ -39,7 +39,7 @@
 				)
 			),
 			'task_model' => array(
-				'class'      => $view->Lil,
+				'class'      => $view->LilForm,
 				'method'     => 'input',
 				'parameters' => array(
 					'field' => 'Task.model',
@@ -50,7 +50,7 @@
 				)
 			),
 			'task_title' => array(
-				'class'      => $view->Lil,
+				'class'      => $view->LilForm,
 				'method'     => 'input',
 				'parameters' => array(
 					'field' => 'Task.title',
@@ -60,7 +60,7 @@
 				)
 			),
 			'task_descript' => array(
-				'class'      => $view->Lil,
+				'class'      => $view->LilForm,
 				'method'     => 'input',
 				'parameters' => array(
 					'field' => 'Task.descript',
@@ -71,7 +71,7 @@
 				)
 			),
 			'task_deadline' => array(
-				'class'      => $view->Lil,
+				'class'      => $view->LilForm,
 				'method'     => 'input',
 				'parameters' => array(
 					'field' => 'Task.deadline',
@@ -85,7 +85,7 @@
 			'task_user_id' => 
 				($view->Lil->currentUser->role('admin') && (sizeof($users) > 1)) ?
 					array(
-						'class'      => $view->Lil,
+						'class'      => $view->LilForm,
 						'method'     => 'input',
 						'parameters' => array(
 							'field' => 'Task.user_id',
@@ -99,7 +99,7 @@
 					)
 				:
 					array(
-						'class'      => $view->Lil,
+						'class'      => $view->LilForm,
 						'method'     => 'input',
 						'parameters' => array(
 							'field' => 'Task.user_id',
