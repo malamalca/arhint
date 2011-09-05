@@ -128,7 +128,7 @@ class InvoicesController extends LilAppController {
 				'data'            => $data, 
 				'items_to_delete' => $items_to_delete
 			));
-			var_dump($d['data']);
+			
 			// validate data
 			if ($d['data'] && $this->Invoice->saveAll($d['data'], array('validate' => 'only'))) {
 				// update counter for new invoices
