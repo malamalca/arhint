@@ -172,7 +172,7 @@ class AppPluginController extends LilPluginController {
 	public function _areaForm($view, $form) {
 		$no = array(
 			'no' => array(
-				'class'      => $view->Lil,
+				'class'      => $view->LilForm,
 				'method'     => 'input',
 				'parameters' => array(
 					'field' => 'no',
@@ -185,7 +185,7 @@ class AppPluginController extends LilPluginController {
 		
 		$active = array(
 			'pph' => array(
-				'class'      => $view->Lil,
+				'class'      => $view->LilForm,
 				'method'     => 'input',
 				'parameters' => array(
 					'field' => 'active',
@@ -200,7 +200,7 @@ class AppPluginController extends LilPluginController {
 		$inputs = array(
 			'fieldset' => sprintf('<fieldset><legend>%s</legend>', __('Login')),
 			'username' => array(
-				'class'      => $view->Lil,
+				'class'      => $view->LilForm,
 				'method'     => 'input',
 				'parameters' => array(
 					'field' => 'username',
@@ -211,7 +211,7 @@ class AppPluginController extends LilPluginController {
 			),
 			
 			'passwd' => array(
-				'class'      => $view->Lil,
+				'class'      => $view->LilForm,
 				'method'     => 'input',
 				'parameters' => array(
 					'field' => 'passwd',
