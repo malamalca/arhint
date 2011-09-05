@@ -35,7 +35,7 @@ class PaymentsController extends LilAppController {
 		if (!empty($this->request->query['filter'])) $filter = $this->request->query['filter'];
 		
 		$params = array_merge(
-			array('order' => 'Payment.dat_happened, Payment.created', 'page' => 99999),
+			array('order' => 'Payment.dat_happened, Payment.created'),
 			$this->Payment->filter($filter)
 		);
 		$payments = $this->Payment->find('all', $params);

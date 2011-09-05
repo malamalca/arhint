@@ -56,7 +56,27 @@ class Payment extends LilAppModel {
  */
 	function filter(&$filter) {
 		$ret = array();
+		if (!isset($filter['start']) || !$this->LilDate->isSql($filter['start'])) {
+			$filter['start'] = $this->field('MIN(dat_happened) AS start', array('1'=>'1'));
+		}
+		if (!isset($filter['end']) || !$this->LilDate->isSql($filter['end'])) {
+			$filter['end'] = $this->LilDate->toSql(time(), false);
+		}
+		if (empty($filter['source']) || !in_array($filter['source'], array('c', 'p', 'o'))) {
+			$filter['source'] = null;
+		} else {
+			$ret['conditions']['Payment.source'] = $filter['source'];
+		}
 		
+		if (empty($filter['type']) || !in_array($filter['type'], array('from', 'to'))) {
+			$filter['type'] = null;
+		} else {
+			if ($filter['type'] == 'from') {
+				$ret['conditions']['Payment.amount <'] = 0;
+			} else {
+				$ret['conditions']['Payment.amount >'] = 0;
+			}
+		}
 		return $ret;
 	}
 }
