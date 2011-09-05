@@ -59,12 +59,12 @@ class Payment extends LilAppModel {
 		if (!isset($filter['start']) || !$this->LilDate->isSql($filter['start'])) {
 			$filter['start'] = $this->field('MIN(dat_happened) AS start', array('1'=>'1'));
 		}
-		$filter['conditions']['Payment.dat_happened >'] = $filter['start'];
+		$ret['conditions']['Payment.dat_happened >'] = $filter['start'];
 		
 		if (!isset($filter['end']) || !$this->LilDate->isSql($filter['end'])) {
 			$filter['end'] = $this->LilDate->toSql(time(), false);
 		}
-		$filter['conditions']['Payment.dat_happened <='] = $filter['end'];
+		$ret['conditions']['Payment.dat_happened <='] = $filter['end'];
 		
 		if (empty($filter['source']) || !in_array($filter['source'], array('c', 'p', 'o'))) {
 			$filter['source'] = null;
@@ -81,6 +81,7 @@ class Payment extends LilAppModel {
 				$ret['conditions']['Payment.amount >'] = 0;
 			}
 		}
+		
 		return $ret;
 	}
 }
