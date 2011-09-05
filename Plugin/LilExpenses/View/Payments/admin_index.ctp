@@ -260,14 +260,15 @@
 			return false;
 		});
 		
-		$('#table-index-payments').data(
+		$('#IndexPayments').data(
 			"settings",	{
-				"aaSorting" : [[1, 'desc']],
-				"aoColumnDefs": [
-					{ "sType": "lil_date", "aTargets": [ 1 ] },
-					{ "sType": "lil_float", "aTargets": [ 3, 4 ] },
-					{ "bVisible": false, "aTargets": [ 5 ] }, // hide created field
-				 ]
+				"bSort": false
+				//"aaSorting" : [[1, 'desc']],
+				//"aoColumnDefs": [
+				//	{ "bSortable": false, "aTargets": [2] },
+				//	{ "sType": "lil_date", "aTargets": [ 1 ] },
+				//	{ "sType": "lil_float", "aTargets": [ 3, 4 ] },
+				// ]
 			}
 		);
 	});
