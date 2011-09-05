@@ -267,7 +267,7 @@
 		)
 	);
 	
-	App::uses('LilPluginRegistry', 'Lil/Lib'); $registry = LilPluginRegistry::getInstance();
+	App::uses('LilPluginRegistry', 'Lil.Lil'); $registry = LilPluginRegistry::getInstance();
 	$invoice_edit = $registry->callPluginHandlers($this, 'form_edit_invoice', $invoice_edit);
 	$this->set('title_for_layout', $invoice_edit['title_for_layout']);
 	
