@@ -209,7 +209,7 @@
 		'controller' => 'payments',
 		'admin'      => true,
 		'action'     => 'index',
-		'?'          => array('filter' => array('start' => '[[start]]', 'end' => '[[end]]'))
+		'?'          => array_merge($filter, array('filter' => array('start' => '[[start]]', 'end' => '[[end]]')))
 	)); ?>";
 	
 	function filterByDate(dateText, startOrEnd) {
