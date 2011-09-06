@@ -11,7 +11,7 @@
 	$invoice_edit = array(
 		'title_for_layout' => sprintf(
 			($this->Form->value('Invoice.id')) ? __d('lil_invoices', 'Edit an Invoice #%s') : __d('lil_invoices', 'Add an Invoice #%s'),
-			($this->Form->value('Invoice.id')) ? $this->Form->value('Invoice.counter') : $counter['Counter']['counter'] + 1
+			($this->Form->value('Invoice.id')) ? $this->Form->value('Invoice.counter') : $counter['InvoicesCounter']['counter'] + 1
 		),
 		'form' => array(
 			'pre' => '<div class="form">',
@@ -26,7 +26,7 @@
 							'type' => 'file', 
 							'url' => array(
 								'action' => $this->Form->value('Invoice.id') ? 'edit' : 'add',
-								'?' => array('filter' => array('counter' => $counter['Counter']['id']))
+								'?' => array('filter' => array('counter' => $counter['InvoicesCounter']['id']))
 						)))
 				),
 				'referer' => array(
@@ -56,7 +56,7 @@
 						'counter',
 						'options' => array(
 							'type' => 'hidden',
-							'default'  => $counter['Counter']['counter'] + 1,
+							'default'  => $counter['InvoicesCounter']['counter'] + 1,
 						)
 					)
 				),
@@ -137,7 +137,7 @@
 						'options' => array(
 							'label' => __d('lil_invoices', 'Invoice no') . ':',
 							'default'  => isset($counter['invoice_no']) ? $counter['invoice_no'] : '',
-							'disabled' => !$this->Lil->currentUser->role('admin') && !empty($counter['Counter']['mask']),
+							'disabled' => !$this->Lil->currentUser->role('admin') && !empty($counter['InvoicesCounter']['mask']),
 						)
 					)
 				),
@@ -190,7 +190,7 @@
 				'fs_analytics_start' => '<fieldset>',
 				'fs_analytics_legend' => sprintf('<legend>%s</legend>', __d('lil_invoices', 'Analytics')),
 				'analytics' => 
-					(($counter['Counter']['kind'] == 'received') ?
+					(($counter['InvoicesCounter']['kind'] == 'received') ?
 					array(
 						'class'      => $this->LilForm,
 						'method'     => 'input',
@@ -207,9 +207,9 @@
 				'fs_analytics_end' => '</fieldset>',
 				
 				////////////////////////////////////////////////////////////////////////////////////
-				'fs_attachments_start' => (($counter['Counter']['kind'] == 'received') ? '<fieldset>' : ''),
-				'fs_attachments_legend' => ($counter['Counter']['kind'] == 'received') ? sprintf('<legend>%s</legend>', __d('lil_invoices', 'Archive')) : '',
-				'file.name.0' => ($counter['Counter']['kind'] != 'received') ? null : array(
+				'fs_attachments_start' => (($counter['InvoicesCounter']['kind'] == 'received') ? '<fieldset>' : ''),
+				'fs_attachments_legend' => ($counter['InvoicesCounter']['kind'] == 'received') ? sprintf('<legend>%s</legend>', __d('lil_invoices', 'Archive')) : '',
+				'file.name.0' => ($counter['InvoicesCounter']['kind'] != 'received') ? null : array(
 					'class'      => $this->LilForm,
 					'method'     => 'input',
 					'parameters' => array(
@@ -220,7 +220,7 @@
 						)
 					)
 				),
-				'file.model.0' => ($counter['Counter']['kind'] != 'received') ? null : array(
+				'file.model.0' => ($counter['InvoicesCounter']['kind'] != 'received') ? null : array(
 					'class'      => $this->LilForm,
 					'method'     => 'input',
 					'parameters' => array(
@@ -231,7 +231,7 @@
 						)
 					)
 				),
-				'fs_attachments_end' => (($counter['Counter']['kind'] == 'received') ? '</fieldset>' : ''),
+				'fs_attachments_end' => (($counter['InvoicesCounter']['kind'] == 'received') ? '</fieldset>' : ''),
 				
 				////////////////////////////////////////////////////////////////////////////////////
 				'fs_descript_start' => '<fieldset>',
@@ -244,7 +244,7 @@
 						'options' => array(
 							'type'    => 'textarea',
 							'label'   => false,
-							'default' => $counter['Counter']['template_descript']
+							'default' => $counter['InvoicesCounter']['template_descript']
 						)
 					)
 				),

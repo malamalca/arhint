@@ -1,5 +1,5 @@
 <?php
-/* Counter Fixture generated on: 2011-06-12 08:08:36 : 1307858916 */
+/* InvoicesCounter Fixture generated on: 2011-06-12 08:08:36 : 1307858916 */
 
 /**
  * CounterFixture

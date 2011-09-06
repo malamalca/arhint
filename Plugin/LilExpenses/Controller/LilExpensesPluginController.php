@@ -81,18 +81,18 @@ class LilExpensesPluginController extends LilPluginController {
 	public function _afterSaveModel($model, $created) {
 		if ($model->name == 'Invoice') {
 			$Invoice = ClassRegistry::init('LilInvoices.Invoice');
-			$Counter = ClassRegistry::init('LilInvoices.Counter');
+			$InvoicesCounter = ClassRegistry::init('LilInvoices.InvoicesCounter');
 			$Expense = ClassRegistry::init('LilExpenses.Expense');
 			
 			$counter_id = null;
 			if (!$counter_id = $Invoice->field('counter_id', array('Invoice.id' => $model->id))) return false;
 			
 			$counter = $Counter->find('first', array(
-				'conditions' => array('Counter.id' => $counter_id),
+				'conditions' => array('InvoicesCounter.id' => $counter_id),
 				'recursive'  => -1,
 				'fields'     => array('expense', 'kind')
 			));
-			if (!$counter['Counter']['expense']) return true; // if invoice is not expense, we're finished
+			if (!$counter['InvoicesCounter']['expense']) return true; // if invoice is not expense, we're finished
 			
 			if (!$expense_data = $Expense->find('first', array(
 				'conditions' => array('Expense.model' => 'Invoice', 'Expense.foreign_id' => $model->id),
@@ -112,7 +112,7 @@ class LilExpensesPluginController extends LilPluginController {
 			}
 			if (isset($model->data['Invoice']['total'])) {
 				// multiply by 1 so we get float format
-				if ($counter['Counter']['kind'] == 'received') {
+				if ($counter['InvoicesCounter']['kind'] == 'received') {
 					$expense_data['Expense']['total'] = $model->data['Invoice']['total'] * -1;
 				} else {
 					$expense_data['Expense']['total'] = $model->data['Invoice']['total'] * 1;
@@ -132,13 +132,13 @@ class LilExpensesPluginController extends LilPluginController {
  * @return bool
  */
 	public function _beforeSaveInvoice($controller, $data) {
-		$Counter = ClassRegistry::init('LilInvoices.Counter');
+		$InvoicesCounter = ClassRegistry::init('LilInvoices.InvoicesCounter');
 		$c = $Counter->find('first', array(
-			'conditions' => array('Counter.id' => $data['data']['Invoice']['counter_id']),
+			'conditions' => array('InvoicesCounter.id' => $data['data']['Invoice']['counter_id']),
 			'recursive'  => -1,
 			'fields'     => array('expense', 'kind')
 		));
-		if ($c['Counter']['expense']) {
+		if ($c['InvoicesCounter']['expense']) {
 			if (isset($data['data']['Invoice']['title'])) {
 				$data['data']['Expense']['title'] = $data['data']['Invoice']['title'];
 			}
@@ -148,7 +148,7 @@ class LilExpensesPluginController extends LilPluginController {
 			if (isset($data['data']['Invoice']['total'])) {	
 				$Expense = ClassRegistry::init('LilExpenses.Expense');
 				// multiply by 1 so we get float format
-				if ($c['Counter']['kind'] == 'received') {
+				if ($c['InvoicesCounter']['kind'] == 'received') {
 					$data['data']['Expense']['total'] = $Expense->delocalize($data['data']['Invoice']['total']) * -1;
 				} else {
 					$data['data']['Expense']['total'] = $Expense->delocalize($data['data']['Invoice']['total']) * 1;
@@ -237,7 +237,7 @@ class LilExpensesPluginController extends LilPluginController {
  * @return array
  */
 	public function _modifyInvoiceForm($view, $form) {
-		if (!empty($view->viewVars['counter']['Counter']['expense'])) {
+		if (!empty($view->viewVars['counter']['InvoicesCounter']['expense'])) {
 			$User = ClassRegistry::init('Lil.User');
 			$Area = ClassRegistry::init('Lil.Area');
 			$users = $User->find('list');

@@ -78,7 +78,7 @@
 
 <div id="invoice-body">
 <h1><?php
-	echo strtr($data['Counter']['layout_title'], array(
+	echo strtr($data['InvoicesCounter']['layout_title'], array(
 		'[[no]]' => $this->Html->clean($data['Invoice']['no'])
 	));
 ?></h1>

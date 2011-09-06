@@ -13,8 +13,8 @@ class Invoice extends LilAppModel {
 			'foreignKey' => 'contact_id',
 			'type'       => 'INNER'
 		),
-		'Counter' => array(
-			'className'  => 'LilInvoices.Counter',
+		'InvoicesCounter' => array(
+			'className'  => 'LilInvoices.InvoicesCounter',
 			'foreignKey' => 'counter_id'
 		),
 		'User' => array(
@@ -95,7 +95,7 @@ class Invoice extends LilAppModel {
 			}
 		}
 		
-		$ret['contain'] = array('Client', 'Counter');
+		$ret['contain'] = array('Client', 'InvoicesCounter');
 		
 		return $ret;
 	}
@@ -115,9 +115,9 @@ class Invoice extends LilAppModel {
 				'fields'     => array(
 					'Invoice.total', 'Invoice.dat_issue', 'Invoice.title', 
 					'Invoice.project_id', 'Invoice.expense_id', 'Invoice.user_id',
-					'Counter.kind'
+					'InvoicesCounter.kind'
 				),
-				'contain'    => array('Counter')
+				'contain'    => array('InvoicesCounter')
 			))) {
 				
 				$data['Expense'] = $data['Invoice']; unset($data['Invoice']);
@@ -129,7 +129,7 @@ class Invoice extends LilAppModel {
 				$data['Expense']['foreign_id'] = $this->id;
 				
 				// multiply by 1 so we get float format
-				if ($data['Counter']['kind'] == 'received') {
+				if ($data['InvoicesCounter']['kind'] == 'received') {
 					$data['Expense']['total'] = $this->delocalize($data['Expense']['total'] * -1);
 				} else {
 					$data['Expense']['total'] = $this->delocalize($data['Expense']['total'] * 1);

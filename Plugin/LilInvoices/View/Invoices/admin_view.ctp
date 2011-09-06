@@ -2,7 +2,7 @@
 	$invoice_view = array(
 		'title' => sprintf(__d('lil_invoices', 'Invoice #%1$s <span class="light">(%2$s)</span>'),
 			$this->Html->clean($data['Invoice']['no']),
-			$this->Html->clean($data['Counter']['title'])
+			$this->Html->clean($data['InvoicesCounter']['title'])
 		),
 		'menu' => array(
 			'add' => array(
@@ -33,7 +33,7 @@
 			),
 			'print' => array(
 				'title' => __d('lil_invoices', 'Print', true),
-				'visible' => !empty($data['Counter']['layout']),
+				'visible' => !empty($data['InvoicesCounter']['layout']),
 				'url'   => array(
 					'admin'      => true,
 					'plugin'     => 'lil_invoices',

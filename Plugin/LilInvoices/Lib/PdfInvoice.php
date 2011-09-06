@@ -24,8 +24,8 @@ class TcPdfInvoice extends TCPDF {
 		
 		$this->Line(0, 28, 300, 28);
 		$this->Ln(10);*/
-		if (!empty($this->invoice['Counter']['header'])) {
-			$this->Image(APP . 'uploads' . DS . $this->invoice['Counter']['header'], 15, 0, 190);
+		if (!empty($this->invoice['InvoicesCounter']['header'])) {
+			$this->Image(APP . 'uploads' . DS . $this->invoice['InvoicesCounter']['header'], 15, 0, 190);
 		}
 	}
 
@@ -37,8 +37,8 @@ class TcPdfInvoice extends TCPDF {
 		//$this->SetFont('helvetica', 'I', 8);
 		// Page number
 		//$this->Cell(0, 10, 'stran '.$this->getAliasNumPage().'/'.$this->getAliasNbPages(), 0, false, 'C', 0, '', 0, false, 'T', 'M');
-		if (!empty($this->invoice['Counter']['footer'])) {
-			$this->Image(APP . 'uploads' . DS . $this->invoice['Counter']['footer'], 15, $this->y, 190);
+		if (!empty($this->invoice['InvoicesCounter']['footer'])) {
+			$this->Image(APP . 'uploads' . DS . $this->invoice['InvoicesCounter']['footer'], 15, $this->y, 190);
 		}
 	}
 }

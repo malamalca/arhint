@@ -94,7 +94,7 @@ class InvoicesControllerTestCase extends ControllerTestCase {
 		
 		$Invoices->Session->expects($this->once())->method('setFlash');
 		
-		$Counter = ClassRegistry::init('LilInvoices.Counter');
+		$InvoicesCounter = ClassRegistry::init('LilInvoices.InvoicesCounter');
 		
 		// this is regular received invoice
 		$counter_id = '4cf29d0e-1300-4e47-afa2-60bb025da8b9';
@@ -141,7 +141,7 @@ class InvoicesControllerTestCase extends ControllerTestCase {
 		
 		$Invoices->Session->expects($this->once())->method('setFlash');
 		
-		$Counter = ClassRegistry::init('LilInvoices.Counter');
+		$InvoicesCounter = ClassRegistry::init('LilInvoices.InvoicesCounter');
 		$InvoicesItem = ClassRegistry::init('LilInvoices.InvoicesItem');
 		
 		$invoices_item_count_before = $InvoicesItem->find('count');
@@ -149,7 +149,7 @@ class InvoicesControllerTestCase extends ControllerTestCase {
 		// this is regular issued invoice which is treated like expense
 		$counter_id = '4cf29d0e-a834-4bdd-9ab1-60bb025da8b9';
 		$counter_data = $Counter->find('first', array(
-			'conditions' => array('Counter.id' => $counter_id),
+			'conditions' => array('InvoicesCounter.id' => $counter_id),
 			'recursive'  => -1
 		));
 		
@@ -159,7 +159,7 @@ class InvoicesControllerTestCase extends ControllerTestCase {
 					'id'           => '',
 					'kind'         => 'issued',
 					'counter_id'   => $counter_id,
-					'counter'      => $Counter->field('counter', array('Counter.id' => $counter_id)) + 1,
+					'counter'      => $Counter->field('counter', array('InvoicesCounter.id' => $counter_id)) + 1,
 					'title'        => 'My first issued test invoice',
 					'client'       => '4cd5966d-b7e0-4255-a830-17b0025da8b9',
 					'contact_id'   => '4c36f77a-53a2-4623-b2e0-1370b6e71bbb',
@@ -201,7 +201,7 @@ class InvoicesControllerTestCase extends ControllerTestCase {
 		
 		$data = $this->controller->Invoice->find('first', array('conditions' => array('Invoice.id' => $lastInvoice)));
 		$this->assertFalse(empty($data['Invoice']['id']));
-		$this->assertEquals($data['Invoice']['counter'], $counter_data['Counter']['counter']+1);
+		$this->assertEquals($data['Invoice']['counter'], $counter_data['InvoicesCounter']['counter']+1);
 		$this->assertEquals($data['Invoice']['no'], $Counter->generateNo($counter_data));
 		//$this->assertFalse(empty($data['Invoice']['expense_id']));
 		

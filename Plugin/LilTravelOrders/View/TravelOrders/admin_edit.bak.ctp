@@ -26,7 +26,7 @@
 		echo $this->LilForm->input('no', array(
 			'label'    => __d('lil_travel_orders', 'Travel Order no', true) . ':',
 			'default'  => isset($counter['order_no']) ? $counter['order_no'] : '',
-			'disabled' => !$this->Lil->currentUser->role('admin') && !empty($counter['Counter']['mask']),
+			'disabled' => !$this->Lil->currentUser->role('admin') && !empty($counter['InvoicesCounter']['mask']),
 			'class'    => 'big'
 		));
 		

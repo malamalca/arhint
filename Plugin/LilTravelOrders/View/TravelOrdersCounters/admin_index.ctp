@@ -18,7 +18,7 @@
 		<thead>
 			<tr>
 				<th class="left"><?php echo __d('lil_travel_orders', 'Title'); ?></th>
-				<th class="right"><?php echo __d('lil_travel_orders', 'Counter Status'); ?></th>
+				<th class="right"><?php echo __d('lil_travel_orders', 'InvoicesCounter Status'); ?></th>
 				<th class="left"><?php echo __d('lil_travel_orders', 'Mask'); ?></th>
 				<th class="left"><?php echo __d('lil_travel_orders', 'Template'); ?></th>
 			</tr>

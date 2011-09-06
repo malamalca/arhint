@@ -21,11 +21,11 @@ $(document).ready(function() {
 			dataType: 'json',
 			success:  function(data) {
 				$('#TravelOrderNo').val(data.no);
-				$('#TravelOrderCounter').val(data.Counter.counter);
+				$('#TravelOrderCounter').val(data.InvoicesCounter.counter);
 				
 				// change attributes of 'no'
 				if (!isUserAdmin) {
-					if (data.Counter.mask.trim() === '') {
+					if (data.InvoicesCounter.mask.trim() === '') {
 						$('#TravelOrderNo').attr('disabled', '');
 					} else {
 						$('#TravelOrderNo').attr('disabled', 'disabled');

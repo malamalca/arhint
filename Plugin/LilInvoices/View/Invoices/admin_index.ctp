@@ -1,15 +1,15 @@
 <?php
-	$this->set('title_for_layout', $this->Html->clean($counter['Counter']['title']));
+	$this->set('title_for_layout', $this->Html->clean($counter['InvoicesCounter']['title']));
 	$this->set('main_menu', array(
 		'add' => array(
 			'title' => __d('lil_invoices', 'Add', true),
-			'visible' => $counter['Counter']['active'],
+			'visible' => $counter['InvoicesCounter']['active'],
 			'url'   => array(
 				'admin'      => true,
 				'plugin'     => 'lil_invoices',
 				'controller' => 'invoices',
 				'action'     => 'add',
-				'?'          => array('filter' => array('counter' => $counter['Counter']['id']))
+				'?'          => array('filter' => array('counter' => $counter['InvoicesCounter']['id']))
 			)
 		)
 	));

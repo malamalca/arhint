@@ -21,7 +21,7 @@ class InvoicesController extends LilAppController {
  */
 	public $name = 'Invoices';
 	
-	public $uses = array('LilInvoices.Invoice', 'LilInvoices.Counter');
+	public $uses = array('LilInvoices.Invoice', 'LilInvoices.InvoicesCounter');
 /**
  * admin_index method
  *
@@ -39,10 +39,10 @@ class InvoicesController extends LilAppController {
 		}
 		
 		// fetch current counter
-		if (!$counter = $this->Counter->find('first', $counter_params)) return $this->error404();
+		if (!$counter = $this->InvoicesCounter->find('first', $counter_params)) return $this->error404();
 		
-		$this->request->query['filter']['counter'] = $counter['Counter']['id']; // needed for sidebar
-		$this->request->query['filter']['kind'] = $counter['Counter']['kind'];
+		$this->request->query['filter']['counter'] = $counter['InvoicesCounter']['id']; // needed for sidebar
+		$this->request->query['filter']['kind'] = $counter['InvoicesCounter']['kind'];
 		
 		// fetch invoices
 		$filter = $this->Invoice->filter($this->request->query['filter']);
@@ -65,12 +65,12 @@ class InvoicesController extends LilAppController {
 			'conditions' => array('Invoice.id' => $id),
 			'contain' => array(
 				'InvoicesItem',
-				'Counter',
+				'InvoicesCounter',
 				'Client' => 'PrimaryAddress',
 				'Attachment'
 			)
 		))) {
-			$this->request->query['filter']['counter'] = $data['Counter']['id']; // sidebar
+			$this->request->query['filter']['counter'] = $data['InvoicesCounter']['id']; // sidebar
 			$this->set(compact('data'));
 		} else $this->error404();
 	}
@@ -86,7 +86,7 @@ class InvoicesController extends LilAppController {
 			'conditions' => array('Invoice.id' => $id),
 			'contain' => array(
 				'InvoicesItem',
-				'Counter',
+				'InvoicesCounter',
 				'Client' => 'PrimaryAddress',
 				'Attachment'
 			)
@@ -94,7 +94,7 @@ class InvoicesController extends LilAppController {
 			$this->response->type('pdf');
 			$this->set(compact('data'));
 			$this->autoRender = false;
-			$html = $this->render('layouts' . DS . $data['Counter']['layout']);
+			$html = $this->render('layouts' . DS . $data['InvoicesCounter']['layout']);
 		} else $this->error404();
 	}
 /**
@@ -114,7 +114,7 @@ class InvoicesController extends LilAppController {
  */
 	public function admin_edit($id = null) {
 		if (empty($this->request->query['filter']['counter'])) return $this->error404();
-		if (!$counter = $this->Invoice->Counter->find('first', array(
+		if (!$counter = $this->Invoice->InvoicesCounter->find('first', array(
 			'fields'     => array('id', 'counter', 'kind', 'mask', 'template_descript', 'expense'),
 			'conditions' => array('id' => $this->request->query['filter']['counter'], 'active' => true),
 			'recursive'  => -1
@@ -133,7 +133,7 @@ class InvoicesController extends LilAppController {
 			if ($d['data'] && $this->Invoice->saveAll($d['data'], array('validate' => 'only'))) {
 				// update counter for new invoices
 				if (empty($d['data']['Invoice']['id'])) {
-					$no = $this->Invoice->Counter->generateNo($counter, true);
+					$no = $this->Invoice->InvoicesCounter->generateNo($counter, true);
 					if (empty($d['data']['Invoice']['no'])) $d['data']['Invoice']['no'] = $no;
 				}
 				
@@ -170,10 +170,10 @@ class InvoicesController extends LilAppController {
 				}
 			} else {
 				// generate counter
-				$counter['invoice_no'] = $this->Invoice->Counter->generateNo($counter);
+				$counter['invoice_no'] = $this->Invoice->InvoicesCounter->generateNo($counter);
 				
-				$this->request->data['Invoice']['kind'] = $counter['Counter']['kind'];
-				$this->request->data['Invoice']['counter_id'] = $counter['Counter']['id'];
+				$this->request->data['Invoice']['kind'] = $counter['InvoicesCounter']['kind'];
+				$this->request->data['Invoice']['counter_id'] = $counter['InvoicesCounter']['id'];
 			}
 		}
 		

@@ -108,10 +108,10 @@ class LilInvoicesPluginController extends LilPluginController {
 			'invoices_counter' => array(
 				'visible' => $this->currentUser->role('admin'),
 				'title' => __d('lil_invoices', 'Counters'),
-				'url'   => array('controller' => 'counters', 'action' => 'index'),
+				'url'   => array('controller' => 'invoices_counters', 'action' => 'index'),
 				'expandable' => true,
 				'params' => array(),
-				'active' => $this->request->controller == 'counters',
+				'active' => $this->request->controller == 'invoices_counters',
 				'expand' => null,
 				'submenu' => array()
 			),
@@ -119,8 +119,8 @@ class LilInvoicesPluginController extends LilPluginController {
 		
 		if ($invoices['active']) {
 			// fetch counters
-			$Counter = ClassRegistry::init('LilInvoices.Counter');
-			$counters = $Counter->find('all', array(
+			$InvoicesCounter = ClassRegistry::init('LilInvoices.InvoicesCounter');
+			$counters = $InvoicesCounter->find('all', array(
 				'conditions' => array(
 					'kind' => array('issued', 'received')
 				),
@@ -131,29 +131,29 @@ class LilInvoicesPluginController extends LilPluginController {
 			// build submenus
 			$archived_counters = array(); $first_counter = null;
 			foreach ($counters as $c) {
-				if ($c['Counter']['active']) {
-					$target = 'invoices_' . $c['Counter']['kind'];
-					if (empty($first_counter)) $first_counter = $c['Counter']['id'];
+				if ($c['InvoicesCounter']['active']) {
+					$target = 'invoices_' . $c['InvoicesCounter']['kind'];
+					if (empty($first_counter)) $first_counter = $c['InvoicesCounter']['id'];
 				} else {
 					$target = 'invoices_archive';
-					$archived_counters[] = $c['Counter']['id'];
+					$archived_counters[] = $c['InvoicesCounter']['id'];
 				}
-				$invoices['items'][$target]['submenu'][$c['Counter']['id']] = array(
+				$invoices['items'][$target]['submenu'][$c['InvoicesCounter']['id']] = array(
 					'visible' => true,
-					'title'   => $c['Counter']['title'],
+					'title'   => $c['InvoicesCounter']['title'],
 					'url'   => array(
 						'plugin'     => 'lil_invoices',
 						'controller' => 'invoices',
 						'action'     => 'index',
 						'admin'      => true,
-						'?'          => array('filter' => array('counter' => $c['Counter']['id']))
+						'?'          => array('filter' => array('counter' => $c['InvoicesCounter']['id']))
 					),
 					'active' =>
 						in_array($this->request->params['controller'], array('invoices')) &&
 						(
-							(isset($this->request->query['filter']['counter']) && ($this->request->query['filter']['counter'] == $c['Counter']['id']))
+							(isset($this->request->query['filter']['counter']) && ($this->request->query['filter']['counter'] == $c['InvoicesCounter']['id']))
 							||
-							(empty($this->request->query['filter']['counter']) && ($first_counter == $c['Counter']['id']))
+							(empty($this->request->query['filter']['counter']) && ($first_counter == $c['InvoicesCounter']['id']))
 						)
 				);
 			}

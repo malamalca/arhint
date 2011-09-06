@@ -100,7 +100,7 @@ class LilTravelOrdersPluginController extends LilPluginController {
 		
 		if ($orders['active']) {
 			// fetch counters
-			$Counter = ClassRegistry::init('LilTravelOrders.TravelOrdersCounter');
+			$InvoicesCounter = ClassRegistry::init('LilTravelOrders.TravelOrdersCounter');
 			$counters = $Counter->find('all', array(
 				'conditions' => array('kind' => array('travel')),
 				'order' => array('active', 'kind DESC'),
