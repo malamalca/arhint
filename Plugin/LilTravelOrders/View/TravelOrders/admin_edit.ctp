@@ -348,7 +348,7 @@
 		)
 	);
 	
-	App::uses('LilPluginRegistry', 'Lil/Lib'); $registry = LilPluginRegistry::getInstance();
+	App::uses('LilPluginRegistry', 'Lil.Lil'); $registry = LilPluginRegistry::getInstance();
 	$travel_edit = $registry->callPluginHandlers($this, 'form_edit_travel_order', $travel_edit);
 	$this->set('title_for_layout', $travel_edit['title_for_layout']);
 	

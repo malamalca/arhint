@@ -128,7 +128,7 @@ class TravelOrdersController extends LilAppController {
 			$items_to_delete = array();
 			$data = $this->_prepareData($this->request->data, $items_to_delete);
 			
-			App::uses('LilPluginRegistry', 'Lil/Lib'); $registry = LilPluginRegistry::getInstance();
+			App::uses('LilPluginRegistry', 'Lil.Lil'); $registry = LilPluginRegistry::getInstance();
 			$d = $registry->callPluginHandlers($this, 'travel_order_before_save', array(
 				'data'            => $data, 
 				'items_to_delete' => $items_to_delete

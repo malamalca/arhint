@@ -228,7 +228,9 @@ class LilTasksPluginController extends LilPluginController {
 				}
 				unset($data['data']['Task']);
 			} else {
-				$data['data']['Task']['project_id'] = $data['data'][$model_name]['project_id'];
+				if (!empty($data['data'][$model_name]['project_id'])) {
+					$data['data']['Task']['project_id'] = $data['data'][$model_name]['project_id'];
+				}
 				if (empty($data['data']['Task']['deadline'])) {
 					$data['data']['Task']['deadline'] = $data['data'][$model_name][$date_field];
 				}

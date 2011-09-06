@@ -228,7 +228,7 @@
 		$invoice_view['panels']['items_title_after'] = '<br />';
 	}
 	
-	App::uses('LilPluginRegistry', 'Lil/Lib'); $registry = LilPluginRegistry::getInstance();
+	App::uses('LilPluginRegistry', 'Lil.Lil'); $registry = LilPluginRegistry::getInstance();
 	
 	$invoice_view = $registry->callPluginHandlers($this, 'view_invoice', array('data' => $data, 'contents' => $invoice_view));
 	

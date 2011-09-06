@@ -43,7 +43,7 @@ class AppPluginController extends LilPluginController {
 		'before_construct_model' => array('function' => '_beforeConstructModel', 'params' => array()),
 		'before_save_model' => array('function' => '_savePassword', 'params' => array()),
 		
-		//'admin_sidebar'   => array('function' => '_setAdminSidebar', 'params' => array()),
+		'admin_sidebar'   => array('function' => '_setAdminSidebar', 'params' => array()),
 		'admin_dashboard' => array('function' => '_modifyDashboard', 'params' => array()),
 		
 		'form_edit_area' => array('function' => '_areaForm', 'params' => array()),
@@ -147,16 +147,7 @@ class AppPluginController extends LilPluginController {
 		$Html = new HtmlHelper($view);
 		
 		$view->addScript($Html->css('arhim.css'));
-		//$view->addScript($Html->css('/aristo/css/Aristo/jquery-ui-1.8.7.custom'));
 		$view->addScript($Html->css('table.jui'));
-		
-		//$view->addScript($Html->script('jquery-1.5.1.min'));
-		//$view->addScript($Html->script('jquery-ui-1.8.12.custom.min'));
-		//$view->addScript($Html->script('jquery.dataTables.min'));
-		
-		//$view->addScript($Html->script('app.popups'));
-		
-		//$view->addScript($Html->script('/lil_float/js/lil_float.js'));
 		
 		return true;
 	}
@@ -172,7 +163,7 @@ class AppPluginController extends LilPluginController {
 	public function _areaForm($view, $form) {
 		$no = array(
 			'no' => array(
-				'class'      => $view->Lil,
+				'class'      => $view->LilForm,
 				'method'     => 'input',
 				'parameters' => array(
 					'field' => 'no',
@@ -185,7 +176,7 @@ class AppPluginController extends LilPluginController {
 		
 		$active = array(
 			'pph' => array(
-				'class'      => $view->Lil,
+				'class'      => $view->LilForm,
 				'method'     => 'input',
 				'parameters' => array(
 					'field' => 'active',
@@ -200,7 +191,7 @@ class AppPluginController extends LilPluginController {
 		$inputs = array(
 			'fieldset' => sprintf('<fieldset><legend>%s</legend>', __('Login')),
 			'username' => array(
-				'class'      => $view->Lil,
+				'class'      => $view->LilForm,
 				'method'     => 'input',
 				'parameters' => array(
 					'field' => 'username',
@@ -211,7 +202,7 @@ class AppPluginController extends LilPluginController {
 			),
 			
 			'passwd' => array(
-				'class'      => $view->Lil,
+				'class'      => $view->LilForm,
 				'method'     => 'input',
 				'parameters' => array(
 					'field' => 'passwd',
@@ -292,6 +283,57 @@ class AppPluginController extends LilPluginController {
 		return $index;
 	}
 /**
+ * _setAdminSidebar method
+ *
+ * Add dashboard panel with latest expenses
+ *
+ * @param mixed $view
+ * @param mixed $dashboard
+ * @return array
+ */
+	public function _setAdminSidebar($view, $sidebar) {
+		$sidebar['admin']['items']['areas']['title'] = __('Projects');
+		$sidebar['admin']['items']['areas']['url'] = array(
+			'admin'      => true,
+			'plugin'     => 'lil',
+			'controller' => 'areas',
+			'action'     => 'index',
+			'?' => array('filter' => array('active' => true))
+		);
+		$sidebar['admin']['items']['areas']['active'] = false;
+		$sidebar['admin']['items']['areas']['expand'] = ($this->request->params['plugin']=='lil') &&
+					in_array($this->request->params['controller'], array('areas'));
+		
+		$sidebar['admin']['items']['areas']['submenu'] = array(
+			'active' => array(
+				'visible' => true,
+				'title' => __('Active', true),
+				'url'   => array(
+					'admin'      => true,
+					'plugin'     => 'lil',
+					'controller' => 'areas',
+					'action'     => 'index',
+					'?' => array('filter' => array('active' => true))
+				),
+				'active' => !empty($this->params->query['filter']['active'])
+			),
+			'archive' => array(
+				'visible' => true,
+				'title' => __('Archived', true),
+				'url'   => array(
+					'admin'      => true,
+					'plugin'     => 'lil',
+					'controller' => 'areas',
+					'action'     => 'index',
+					'?' => array('filter' => array('active' => false))
+				),
+				'active' => empty($this->params->query['filter']['active'])
+			)
+		);
+		
+		return $sidebar;
+	}
+/**
  * _modifyDashboard method
  *
  * Add dashboard panel with latest expenses
@@ -302,6 +344,7 @@ class AppPluginController extends LilPluginController {
  */
 	public function _modifyDashboard($view, $dashboard) {
 		unset($dashboard['panels']['welcome']);
+		
 		$dashboard['head_for_layout'] = false;
 		return $dashboard;
 	}

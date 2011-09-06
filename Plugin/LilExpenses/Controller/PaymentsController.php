@@ -35,7 +35,7 @@ class PaymentsController extends LilAppController {
 		if (!empty($this->request->query['filter'])) $filter = $this->request->query['filter'];
 		
 		$params = array_merge(
-			array('order' => 'Payment.dat_happened, Payment.created', 'page' => 99999),
+			array('order' => 'Payment.dat_happened, Payment.created', 'recursive' => -1),
 			$this->Payment->filter($filter)
 		);
 		$payments = $this->Payment->find('all', $params);
@@ -56,7 +56,7 @@ class PaymentsController extends LilAppController {
 		));
 		$saldo = $saldo[0]['saldo'];
 		
-		$this->set(compact('payments', 'filter', 'total_sum', 'saldo'));
+		$this->set(compact('payments', 'filter', 'saldo'));
 	}
 	
 /**

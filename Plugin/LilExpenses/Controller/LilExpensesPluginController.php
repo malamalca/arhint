@@ -247,7 +247,7 @@ class LilExpensesPluginController extends LilPluginController {
 				'fs_expense_start' => '<fieldset>',
 				'fs_expense_legend' => sprintf('<legend>%s</legend>', __d('lil_expenses', 'Income and Expenses')),
 				'expense_id' => array(
-					'class'      => $view->Lil,
+					'class'      => $view->LilForm,
 					'method'     => 'input',
 					'parameters' => array(
 						'field' => 'Expense.id',
@@ -257,7 +257,7 @@ class LilExpensesPluginController extends LilPluginController {
 					)
 				),
 				'expense_foreign_id' => array(
-					'class'      => $view->Lil,
+					'class'      => $view->LilForm,
 					'method'     => 'input',
 					'parameters' => array(
 						'field' => 'Expense.foreign_id',
@@ -267,7 +267,7 @@ class LilExpensesPluginController extends LilPluginController {
 					)
 				),
 				'expense_model' => array(
-					'class'      => $view->Lil,
+					'class'      => $view->LilForm,
 					'method'     => 'input',
 					'parameters' => array(
 						'field' => 'Expense.model',
@@ -278,7 +278,7 @@ class LilExpensesPluginController extends LilPluginController {
 					)
 				),
 				'expense_project_id' => array(
-					'class'      => $view->Lil,
+					'class'      => $view->LilForm,
 					'method'     => 'input',
 					'parameters' => array(
 						'field' => 'Expense.project_id',
@@ -292,7 +292,7 @@ class LilExpensesPluginController extends LilPluginController {
 				),
 				// show payment dropdown only when adding an invoice
 				'payment' => $view->Form->value('Invoice.id') ? null : array(
-					'class'      => $view->Lil,
+					'class'      => $view->LilForm,
 					'method'     => 'input',
 					'parameters' => array(
 						'field' => 'Invoice.payment',
@@ -311,7 +311,7 @@ class LilExpensesPluginController extends LilPluginController {
 				'user_id' => 
 					($this->currentUser->role('admin') && (sizeof($users) > 1)) ?
 						array(
-							'class'      => $view->Lil,
+							'class'      => $view->LilForm,
 							'method'     => 'input',
 							'parameters' => array(
 								'field' => 'Expense.user_id',
@@ -325,7 +325,7 @@ class LilExpensesPluginController extends LilPluginController {
 						)
 					:
 						array(
-							'class'      => $view->Lil,
+							'class'      => $view->LilForm,
 							'method'     => 'input',
 							'parameters' => array(
 								'field' => 'Expense.user_id',

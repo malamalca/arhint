@@ -123,7 +123,7 @@ class InvoicesController extends LilAppController {
 		if (!empty($this->request->data)) {
 			$items_to_delete = array();
 			$data = $this->_prepareData($this->request->data, $items_to_delete);
-			App::uses('LilPluginRegistry', 'Lil/Lib'); $registry = LilPluginRegistry::getInstance();
+			App::uses('LilPluginRegistry', 'Lil.Lil'); $registry = LilPluginRegistry::getInstance();
 			$d = $registry->callPluginHandlers($this, 'invoice_before_save', array(
 				'data'            => $data, 
 				'items_to_delete' => $items_to_delete
@@ -246,6 +246,8 @@ class InvoicesController extends LilAppController {
 				if (empty($atch['filename']['name'])) unset($data['Attachment'][$k]);
 			}
 		}
+		if (empty($data['Attachment'])) unset($data['Attachment']);
+		
 		// calculate total price
 		if (!empty($data['InvoicesItem']) && ($data['Invoice']['kind'] == 'issued')) {
 			$data['Invoice']['total'] = 0;
@@ -267,7 +269,7 @@ class InvoicesController extends LilAppController {
 			$items_to_delete['InvoicesItem'] = (array)$data['Invoice']['items_to_delete'];
 		}
 		
-		App::uses('LilPluginRegistry', 'Lil/Lib'); $registry = LilPluginRegistry::getInstance();
+		App::uses('LilPluginRegistry', 'Lil.Lil'); $registry = LilPluginRegistry::getInstance();
 		$ret = $registry->callPluginHandlers($this, 'invoice_prepare_data', array(
 			'data' => $data, 'items_to_delete' => $items_to_delete
 		));

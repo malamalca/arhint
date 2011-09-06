@@ -18,7 +18,7 @@
 			'post' => '</div>',
 			'lines' => array(
 				'form_start' => array(
-					'class'      => $this->Lil,
+					'class'      => $this->LilForm,
 					'method'     => 'create',
 					'parameters' => array(
 						'Invoice',
@@ -30,27 +30,27 @@
 						)))
 				),
 				'referer' => array(
-					'class'      => $this->Lil,
+					'class'      => $this->LilForm,
 					'method'     => 'input',
 					'parameters' => array('referer', 'options' => array('type' => 'hidden'))
 				),
 				'id' => array(
-					'class'      => $this->Lil,
+					'class'      => $this->LilForm,
 					'method'     => 'input',
 					'parameters' => array('id', 'options' => array('type' => 'hidden'))
 				),
 				'counter_id' => array(
-					'class'      => $this->Lil,
+					'class'      => $this->LilForm,
 					'method'     => 'input',
 					'parameters' => array('counter_id', 'options' => array('type' => 'hidden'))
 				),
 				'kind' => array(
-					'class'      => $this->Lil,
+					'class'      => $this->LilForm,
 					'method'     => 'input',
 					'parameters' => array('kind', 'options' => array('type' => 'hidden'))
 				),
 				'counter' => array(
-					'class'      => $this->Lil,
+					'class'      => $this->LilForm,
 					'method'     => 'input',
 					'parameters' => array(
 						'counter',
@@ -64,7 +64,7 @@
 				'fs_basic_start' => '<fieldset>',
 				'fs_basic_legend' => sprintf('<legend>%s</legend>', __d('lil_invoices', 'Basics')),
 				'contact_id' => array(
-					'class'      => $this->Lil,
+					'class'      => $this->LilForm,
 					'method'     => 'input',
 					'parameters' => array(
 						'Invoice.contact_id',
@@ -72,7 +72,7 @@
 					)
 				),
 				'title' => array(
-					'class'      => $this->Lil,
+					'class'      => $this->LilForm,
 					'method'     => 'input',
 					'parameters' => array(
 						'field' => 'title',
@@ -82,7 +82,7 @@
 					)
 				),
 				'client' => array(
-					'class'      => $this->Lil,
+					'class'      => $this->LilForm,
 					'method'     => 'input',
 					'parameters' => array(
 						'field' => 'client',
@@ -130,7 +130,7 @@
 					)
 				),
 				'no' => array(
-					'class'      => $this->Lil,
+					'class'      => $this->LilForm,
 					'method'     => 'input',
 					'parameters' => array(
 						'field' => 'no',
@@ -148,7 +148,7 @@
 				'fs_dates_legend' => sprintf('<legend>%s</legend>', __d('lil_invoices', 'Dates')),
 				'fs_dates_table_start' => '<table id="InvoiceDates"><tr><td>',
 				'dat_issue' => array(
-					'class'      => $this->Lil,
+					'class'      => $this->LilForm,
 					'method'     => 'input',
 					'parameters' => array(
 						'dat_issue',
@@ -161,7 +161,7 @@
 				),
 				'fs_dates_col1' => '</td><td>',
 				'dat_service' => array(
-					'class'      => $this->Lil,
+					'class'      => $this->LilForm,
 					'method'     => 'input',
 					'parameters' => array(
 						'field' => 'dat_service',
@@ -173,7 +173,7 @@
 				),
 				'fs_dates_col2' => '</td><td>',
 				'dat_expire' => array(
-					'class'      => $this->Lil,
+					'class'      => $this->LilForm,
 					'method'     => 'input',
 					'parameters' => array(
 						'field' => 'dat_expire',
@@ -192,7 +192,7 @@
 				'analytics' => 
 					(($counter['Counter']['kind'] == 'received') ?
 					array(
-						'class'      => $this->Lil,
+						'class'      => $this->LilForm,
 						'method'     => 'input',
 						'parameters' => array(
 							'total',
@@ -210,7 +210,7 @@
 				'fs_attachments_start' => (($counter['Counter']['kind'] == 'received') ? '<fieldset>' : ''),
 				'fs_attachments_legend' => ($counter['Counter']['kind'] == 'received') ? sprintf('<legend>%s</legend>', __d('lil_invoices', 'Archive')) : '',
 				'file.name.0' => ($counter['Counter']['kind'] != 'received') ? null : array(
-					'class'      => $this->Lil,
+					'class'      => $this->LilForm,
 					'method'     => 'input',
 					'parameters' => array(
 						'field' => 'Attachment.0.filename',
@@ -221,7 +221,7 @@
 					)
 				),
 				'file.model.0' => ($counter['Counter']['kind'] != 'received') ? null : array(
-					'class'      => $this->Lil,
+					'class'      => $this->LilForm,
 					'method'     => 'input',
 					'parameters' => array(
 						'field' => 'Attachment.0.model',
@@ -237,7 +237,7 @@
 				'fs_descript_start' => '<fieldset>',
 				'fs_descript_legend' => sprintf('<legend>%s</legend>', __d('lil_invoices', 'Description')),
 				'description' => array(
-					'class'      => $this->Lil,
+					'class'      => $this->LilForm,
 					'method'     => 'input',
 					'parameters' => array(
 						'descript',
@@ -252,14 +252,14 @@
 				
 				
 				'submit' => array(
-					'class'      => $this->Lil,
+					'class'      => $this->LilForm,
 					'method'     => 'submit',
 					'parameters' => array(
 						'label' => __d('lil_invoices', 'Save')
 					)
 				),
 				'form_end' => array(
-					'class'      => $this->Lil,
+					'class'      => $this->LilForm,
 					'method'     => 'end',
 					'parameters' => array()
 				),
@@ -267,7 +267,7 @@
 		)
 	);
 	
-	App::uses('LilPluginRegistry', 'Lil/Lib'); $registry = LilPluginRegistry::getInstance();
+	App::uses('LilPluginRegistry', 'Lil.Lil'); $registry = LilPluginRegistry::getInstance();
 	$invoice_edit = $registry->callPluginHandlers($this, 'form_edit_invoice', $invoice_edit);
 	$this->set('title_for_layout', $invoice_edit['title_for_layout']);
 	
