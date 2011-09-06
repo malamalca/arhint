@@ -87,7 +87,7 @@ class LilExpensesPluginController extends LilPluginController {
 			$counter_id = null;
 			if (!$counter_id = $Invoice->field('counter_id', array('Invoice.id' => $model->id))) return false;
 			
-			$counter = $Counter->find('first', array(
+			$counter = $InvoicesCounter->find('first', array(
 				'conditions' => array('InvoicesCounter.id' => $counter_id),
 				'recursive'  => -1,
 				'fields'     => array('expense', 'kind')
@@ -133,7 +133,7 @@ class LilExpensesPluginController extends LilPluginController {
  */
 	public function _beforeSaveInvoice($controller, $data) {
 		$InvoicesCounter = ClassRegistry::init('LilInvoices.InvoicesCounter');
-		$c = $Counter->find('first', array(
+		$c = $InvoicesCounter->find('first', array(
 			'conditions' => array('InvoicesCounter.id' => $data['data']['Invoice']['counter_id']),
 			'recursive'  => -1,
 			'fields'     => array('expense', 'kind')

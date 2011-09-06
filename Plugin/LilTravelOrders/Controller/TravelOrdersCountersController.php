@@ -52,7 +52,7 @@ class TravelOrdersCountersController extends LilAppController {
 		
 		if (!empty($this->data)) {
 			if ($this->TravelOrdersCounter->save($this->data)) {
-				$this->setFlash(__d('lil_travel_orders', 'InvoicesCounter has been saved.'));
+				$this->setFlash(__d('lil_travel_orders', 'Counter has been saved.'));
 				$this->doRedirect(array('action' => 'index'));
 			} else {
 				$this->setFlash(__d('lil_travel_orders', 'Please verify that the information is correct.'), 'error');
@@ -73,7 +73,7 @@ class TravelOrdersCountersController extends LilAppController {
 		$this->TravelOrdersCounter->recursive = -1;
 		if (!empty($id) && $data = $this->TravelOrdersCounter->findById($id)) {
 			$this->TravelOrdersCounter->delete($id);
-			$this->setFlash(__d('lil_travel_orders', 'InvoicesCounter has been deleted.'));
+			$this->setFlash(__d('lil_travel_orders', 'Counter has been deleted.'));
 			$this->redirect(array('controller' => 'travel_orders_counters', 'action' => 'index'));
 		} else {
 			$this->error404();

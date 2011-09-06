@@ -38,7 +38,7 @@
 	));
 	
 	echo $this->LilForm->input('counter', array(
-		'label' => __d('lil_travel_orders', 'InvoicesCounter Status', true) . ':',
+		'label' => __d('lil_travel_orders', 'Counter Status', true) . ':',
 	));
 	echo $this->LilForm->input('expense', array(
 		'type'  => 'checkbox',
@@ -64,12 +64,12 @@
 	
 	echo $this->LilForm->input('header', array(
 		'label'   => __d('lil_travel_orders', 'Header image', true) . ':',
-		'type'    => $this->Form->value('InvoicesCounter.header') ? 'text' : 'file'
+		'type'    => $this->Form->value('Counter.header') ? 'text' : 'file'
 	));
 	
 	echo $this->LilForm->input('footer', array(
 		'label' => __d('lil_travel_orders', 'Footer Image', true) . ':',
-		'type'    => $this->Form->value('InvoicesCounter.footer') ? 'text' : 'file'
+		'type'    => $this->Form->value('Counter.footer') ? 'text' : 'file'
 	));
 	echo '</fieldset>';
 

@@ -74,7 +74,7 @@ class InjectInvoicesControllerTestCase extends ControllerTestCase {
 					'id'         => '',
 					'kind'       => 'received',
 					'counter_id' => $counter_id,
-					'counter'    => $Counter->generateNo($counter_id),
+					'counter'    => $InvoicesCounter->generateNo($counter_id),
 					'title'      => 'My first received test invoice',
 					'client'     => '4cd5966d-b7e0-4255-a830-17b0025da8b9',
 					'contact_id' => '4c36f77a-53a2-4623-b2e0-1370b6e71bbb',
@@ -170,7 +170,7 @@ class InjectInvoicesControllerTestCase extends ControllerTestCase {
 					'id'         => '',
 					'kind'       => 'received',
 					'counter_id' => $counter_id,
-					'counter'    => $Counter->generateNo($counter_id),
+					'counter'    => $InvoicesCounter->generateNo($counter_id),
 					'title'      => 'My first received test invoice',
 					'client'     => '4cd5966d-b7e0-4255-a830-17b0025da8b9',
 					'contact_id' => '4c36f77a-53a2-4623-b2e0-1370b6e71bbb',
@@ -240,7 +240,7 @@ class InjectInvoicesControllerTestCase extends ControllerTestCase {
 		
 		// this is regular issued invoice which is treated like expense
 		$counter_id = '4cf29d0e-a834-4bdd-9ab1-60bb025da8b9';
-		$counter_data = $Counter->find('first', array(
+		$counter_data = $InvoicesCounter->find('first', array(
 			'conditions' => array('InvoicesCounter.id' => $counter_id),
 			'recursive'  => -1
 		));
@@ -251,11 +251,11 @@ class InjectInvoicesControllerTestCase extends ControllerTestCase {
 					'id'         => '',
 					'kind'       => 'issued',
 					'counter_id' => $counter_id,
-					'counter'    => $Counter->field('counter', array('InvoicesCounter.id' => $counter_id)) + 1,
+					'counter'    => $InvoicesCounter->field('counter', array('InvoicesCounter.id' => $counter_id)) + 1,
 					'title'      => 'My first issued test invoice',
 					'client'     => '4cd5966d-b7e0-4255-a830-17b0025da8b9',
 					'contact_id' => '4c36f77a-53a2-4623-b2e0-1370b6e71bbb',
-					'no'         => $Counter->generateNo($counter_id),
+					'no'         => $InvoicesCounter->generateNo($counter_id),
 					'dat_issue'  => '2011-05-16',
 					'dat_service' => '2011-05-15',
 					'dat_expire'  => '2011-05-17',
@@ -300,7 +300,7 @@ class InjectInvoicesControllerTestCase extends ControllerTestCase {
 		$data = $this->controller->Invoice->find('first', array('conditions' => array('Invoice.id' => $lastInvoice)));
 		$this->assertFalse(empty($data['Invoice']['id']));
 		$this->assertEquals($data['Invoice']['counter'], $counter_data['InvoicesCounter']['counter']+1);
-		$this->assertEquals($data['Invoice']['no'], $Counter->generateNo($counter_data));
+		$this->assertEquals($data['Invoice']['no'], $InvoicesCounter->generateNo($counter_data));
 		//$this->assertFalse(empty($data['Invoice']['expense_id']));
 		
 		// check if expense gets added properly

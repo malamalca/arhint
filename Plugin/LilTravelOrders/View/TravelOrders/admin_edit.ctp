@@ -18,7 +18,7 @@
 			'post' => '</div>',
 			'lines' => array(
 				'form_start' => array(
-					'class'      => $this->Lil,
+					'class'      => $this->LilForm,
 					'method'     => 'create',
 					'parameters' => array(
 						'TravelOrder',
@@ -30,22 +30,22 @@
 						)))
 				),
 				'referer' => array(
-					'class'      => $this->Lil,
+					'class'      => $this->LilForm,
 					'method'     => 'input',
 					'parameters' => array('referer', 'options' => array('type' => 'hidden'))
 				),
 				'id' => array(
-					'class'      => $this->Lil,
+					'class'      => $this->LilForm,
 					'method'     => 'input',
 					'parameters' => array('id', 'options' => array('type' => 'hidden'))
 				),
 				'counter_id' => array(
-					'class'      => $this->Lil,
+					'class'      => $this->LilForm,
 					'method'     => 'input',
 					'parameters' => array('counter_id', 'options' => array('type' => 'hidden'))
 				),
 				'counter' => array(
-					'class'      => $this->Lil,
+					'class'      => $this->LilForm,
 					'method'     => 'input',
 					'parameters' => array(
 						'counter',
@@ -59,7 +59,7 @@
 				'tror_basic_start' => '<fieldset>',
 				'tror_basic_legend' => sprintf('<legend>%s</legend>', __d('lil_travel_orders', 'Basics')),
 				'no' => array(
-					'class'      => $this->Lil,
+					'class'      => $this->LilForm,
 					'method'     => 'input',
 					'parameters' => array(
 						'field' => 'no',
@@ -71,7 +71,7 @@
 					)
 				),
 				'location' => array(
-					'class'      => $this->Lil,
+					'class'      => $this->LilForm,
 					'method'     => 'input',
 					'parameters' => array(
 						'field' => 'location',
@@ -82,7 +82,7 @@
 					)
 				),
 				'dat_order' => array(
-					'class'      => $this->Lil,
+					'class'      => $this->LilForm,
 					'method'     => 'input',
 					'parameters' => array(
 						'field' => 'dat_order',
@@ -100,7 +100,7 @@
 				'tror_travel_legend' => sprintf('<legend>%s</legend>', __d('lil_travel_orders', 'Travel Details')),
 				
 				'employee_id' => array(
-					'class'      => $this->Lil,
+					'class'      => $this->LilForm,
 					'method'     => 'input',
 					'parameters' => array(
 						'field' => 'employee_id',
@@ -120,7 +120,7 @@
 					)
 				),
 				'taskee' => array(
-					'class'      => $this->Lil,
+					'class'      => $this->LilForm,
 					'method'     => 'input',
 					'parameters' => array(
 						'field' => 'taskee',
@@ -131,7 +131,7 @@
 					)
 				),
 				'descript' => array(
-					'class'      => $this->Lil,
+					'class'      => $this->LilForm,
 					'method'     => 'input',
 					'parameters' => array(
 						'field' => 'descript',
@@ -145,7 +145,7 @@
 				'description_hint' =>
 					sprintf('<div class="hint">%s</div>', __d('lil_travel_orders', 'Enter travel route (eg. New York - Jersey - New York)')),
 				'task' => array(
-					'class'      => $this->Lil,
+					'class'      => $this->LilForm,
 					'method'     => 'input',
 					'parameters' => array(
 						'field' => 'task',
@@ -156,7 +156,7 @@
 					)
 				),
 				'dat_task' => array(
-					'class'      => $this->Lil,
+					'class'      => $this->LilForm,
 					'method'     => 'input',
 					'parameters' => array(
 						'field' => 'dat_task',
@@ -168,7 +168,7 @@
 					)
 				),
 				'departure' => array(
-					'class'      => $this->Lil,
+					'class'      => $this->LilForm,
 					'method'     => 'input',
 					'parameters' => array(
 						'field' => 'departure',
@@ -181,7 +181,7 @@
 					)
 				),
 				'arrival' => array(
-					'class'      => $this->Lil,
+					'class'      => $this->LilForm,
 					'method'     => 'input',
 					'parameters' => array(
 						'field' => 'arrival',
@@ -199,7 +199,7 @@
 				'tror_vehicle_start' => '<fieldset>',
 				'tror_vehicle_legend' => sprintf('<legend>%s</legend>', __d('lil_travel_orders', 'Vehicle')),
 				'vehicle_title' => array(
-					'class'      => $this->Lil,
+					'class'      => $this->LilForm,
 					'method'     => 'input',
 					'parameters' => array(
 						'field' => 'vehicle_title',
@@ -209,7 +209,7 @@
 					)
 				),
 				'vehicle_registration' => array(
-					'class'      => $this->Lil,
+					'class'      => $this->LilForm,
 					'method'     => 'input',
 					'parameters' => array(
 						'field' => 'vehicle_registration',
@@ -219,7 +219,7 @@
 					)
 				),
 				'vehicle_owner' => array(
-					'class'      => $this->Lil,
+					'class'      => $this->LilForm,
 					'method'     => 'input',
 					'parameters' => array(
 						'field' => 'vehicle_owner',
@@ -234,7 +234,7 @@
 				'tror_expenses_start' => '<fieldset>',
 				'tror_expenses_legend' => sprintf('<legend>%s</legend>', __d('lil_travel_orders', 'Travel Advance')),
 				'payer_id' => array(
-					'class'      => $this->Lil,
+					'class'      => $this->LilForm,
 					'method'     => 'input',
 					'parameters' => array(
 						'payer_id',
@@ -242,7 +242,7 @@
 					)
 				),
 				'payer' => array(
-					'class'      => $this->Lil,
+					'class'      => $this->LilForm,
 					'method'     => 'input',
 					'parameters' => array(
 						'field' => 'payer',
@@ -295,7 +295,7 @@
 				),
 				
 				'advance' => array(
-					'class'      => $this->Lil,
+					'class'      => $this->LilForm,
 					'method'     => 'input',
 					'parameters' => array(
 						'field' => 'advance',
@@ -307,7 +307,7 @@
 					)
 				),
 				'dat_advance' => array(
-					'class'      => $this->Lil,
+					'class'      => $this->LilForm,
 					'method'     => 'input',
 					'parameters' => array(
 						'field' => 'dat_advance',
@@ -333,14 +333,14 @@
 				
 				
 				'submit' => array(
-					'class'      => $this->Lil,
+					'class'      => $this->LilForm,
 					'method'     => 'submit',
 					'parameters' => array(
 						'label' => __d('lil_travel_orders', 'Save')
 					)
 				),
 				'form_end' => array(
-					'class'      => $this->Lil,
+					'class'      => $this->LilForm,
 					'method'     => 'end',
 					'parameters' => array()
 				),

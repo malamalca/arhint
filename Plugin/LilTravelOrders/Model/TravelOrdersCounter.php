@@ -42,7 +42,7 @@ class TravelOrdersCounter extends LilAppModel {
 		if (is_string($id)) {
 			$data = $this->find('first', array(
 				'fields'     => array('id', 'counter', 'mask'),
-				'conditions' => array('InvoicesCounter.id' => $id),
+				'conditions' => array('Counter.id' => $id),
 				'recursive'  => -1
 			));
 		} else if (is_array($id)) {

@@ -24,8 +24,8 @@ class TcPdfTravelOrder extends TCPDF {
 		
 		$this->Line(0, 28, 300, 28);
 		$this->Ln(10);*/
-		if (!empty($this->order['InvoicesCounter']['header'])) {
-			$this->Image(APP . 'uploads' . DS . $this->order['InvoicesCounter']['header'], 14, 0, 190);
+		if (!empty($this->order['Counter']['header'])) {
+			$this->Image(APP . 'uploads' . DS . $this->order['Counter']['header'], 14, 0, 190);
 		}
 	}
 
@@ -37,8 +37,8 @@ class TcPdfTravelOrder extends TCPDF {
 		//$this->SetFont('helvetica', 'I', 8);
 		// Page number
 		//$this->Cell(0, 10, 'stran '.$this->getAliasNumPage().'/'.$this->getAliasNbPages(), 0, false, 'C', 0, '', 0, false, 'T', 'M');
-		if (!empty($this->order['InvoicesCounter']['footer'])) {
-			$this->Image(APP . 'uploads' . DS . $this->order['InvoicesCounter']['footer'], 14, $this->y, 190);
+		if (!empty($this->order['Counter']['footer'])) {
+			$this->Image(APP . 'uploads' . DS . $this->order['Counter']['footer'], 14, $this->y, 190);
 		}
 	}
 }
