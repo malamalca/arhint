@@ -34,14 +34,14 @@ class ExpensesController extends LilAppController {
 		$filter = array();
 		if (!empty($this->params['url']['filter'])) $filter = $this->params['url']['filter'];
 		
-		$this->paginate = array_merge(
+		$params = array_merge(
 			array('order' => 'Expense.dat_happened DESC, Expense.created DESC',),
 			$this->Expense->filter($filter)
 		);
-		$expenses = $this->paginate('Expense');
+		$expenses = $this->Expense->find('all', $params);
 		
 		// get total sum regardless of pagiantion
-		$total_sum = $this->Expense->find('first', array_merge($this->paginate, array(
+		$total_sum = $this->Expense->find('first', array_merge($params, array(
 			'fields' => array('SUM(Expense.total) as total_sum'),
 		)));
 		$total_sum = $total_sum[0]['total_sum'];
