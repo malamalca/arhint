@@ -23,14 +23,18 @@ class ContactsController extends LilAppController {
 		$params['kind'] = strtoupper(@$this->request->params['named']['kind']) == 'C' ? 'C' : 'T';
 		
 		if (!empty($this->data['search'])) $params['search'] = $this->data['search'];
-		$params = array_merge($this->params['named'], $params);
+		$filter = array_merge($this->params['named'], $params);
 		
-		$this->paginate = array(
-			'contain'    => array('ContactsEmail', 'ContactsPhone', 'PrimaryAddress', 'Company'),
-			'conditions' => $this->Contact->filter($params),
-			'order'      => 'Contact.title',
+		$params = array_merge(
+			array(
+				'contain'    => array('ContactsEmail', 'ContactsPhone', 'PrimaryAddress', 'Company'),
+				'conditions' => array(),
+				'order'      => 'Contact.title',
+			),
+			$this->Contact->filter($filter)
 		);
-		$contacts = $this->paginate('Contact');
+		
+		$contacts = $this->Contact->find('all', $params);
 		
 		// redirect when only single contact found
 		if (sizeof($contacts) == 1 && !empty($params['search'])) {

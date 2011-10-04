@@ -229,7 +229,6 @@
 	}
 	
 	App::uses('LilPluginRegistry', 'Lil.Lil'); $registry = LilPluginRegistry::getInstance();
-	
 	$invoice_view = $registry->callPluginHandlers($this, 'view_invoice', array('data' => $data, 'contents' => $invoice_view));
 	
 	$this->set('title_for_layout', $invoice_view['contents']['title']);
