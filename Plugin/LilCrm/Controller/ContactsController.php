@@ -71,8 +71,10 @@ class ContactsController extends LilAppController {
 			}
 						
 			if ($this->Contact->saveAll($this->request->data)) {
-				// add id to array for popups
+				// add id and title to array for popups
 				$this->request->data['Contact']['id'] = $this->Contact->id;
+				$this->request->data['Contact']['title'] = $this->Contact->field('title');
+				
 				$this->setFlash(__d('lil_crm', 'Contact has been successfully saved.'));
 				return $this->doRedirect(array('action' => 'view', $this->Contact->id));
 			} else {
@@ -104,7 +106,6 @@ class ContactsController extends LilAppController {
 		}
 		
 		$this->setupRedirect();
-		
 		$this->set('contact', $this->request->data);
 	}
 

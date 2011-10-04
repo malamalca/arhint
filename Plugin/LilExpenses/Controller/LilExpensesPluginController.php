@@ -208,17 +208,18 @@ class LilExpensesPluginController extends LilPluginController {
 		$PaymentsExpense = ClassRegistry::init('LilExpenses.PaymentsExpense');
 		$Expense = ClassRegistry::init('LilExpenses.Expense');
 		
-		$expense_id = $Expense->field('id', array(
-			'Expense.model' => 'Invoice',
-			'Expense.foreign_id' => $data['data']['Invoice']['id']
+		$expense = $Expense->find('first', array(
+			'conditions' => array(
+				'Expense.model' => 'Invoice',
+				'Expense.foreign_id' => $data['data']['Invoice']['id']
+			),
+			'recursive' => -1
 		));
 		$payments = $PaymentsExpense->find('all', array(
-			'conditions' => array(
-				'PaymentsExpense.expense_id' => $expense_id,
-			),
+			'conditions' => array('PaymentsExpense.expense_id' => $expense['Expense']['id']),
 			'contain' => array('Payment')
 		));
-		$view->set(compact('payments', 'expense_id'));
+		$view->set(compact('payments', 'expense'));
 		
 		$data['contents']['panels'][] = $view->element('expenses_view_invoice', array(), array('plugin' => 'LilExpenses'));
 		$data['contents']['panels'][] = $view->element('js' . DS . 'popup_payment');
