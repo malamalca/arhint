@@ -125,17 +125,20 @@
 						'html' => __d('lil_expenses', 'Description')
 					),
 					'payment' => array(
+						'parameters' => array('class' => 'right'),
 						'html' => __d('lil_expenses', 'Payment')
 					),
 					'saldo' => array(
+						'parameters' => array('class' => 'right'),
 						'html' => __d('lil_expenses', 'Saldo')
 					),
+					'i' => '',
 				)
 			)
 		)
 	);
 	
-	$total_positive = 0; $total_negative = 0; $saldo = 0;
+	$total_positive = 0; $total_negative = 0; $saldo = 0; $i = 0;
 	if (!empty($payments)) foreach ($payments as $p) {
 		if ($p['Payment']['amount'] < 0) {
 			$total_negative += $p['Payment']['amount'];
@@ -169,10 +172,10 @@
 					'parameters' => ($p['Payment']['amount'] < 0) ? array('class' => 'negative') : array('class' => 'positive'),
 					'html' => $this->LilFloat->format($saldo)
 				),
+				'i' => array('html' => $i)
 			)
 		);
-		
-
+		$i++;
 	}
 	
 	$admin_index['table']['element']['foot'] = array(
@@ -262,13 +265,20 @@
 		
 		$('#IndexPayments').data(
 			"settings",	{
-				"bSort": false
+				////"bSort": false
 				//"aaSorting" : [[1, 'desc']],
 				//"aoColumnDefs": [
 				//	{ "bSortable": false, "aTargets": [2] },
 				//	{ "sType": "lil_date", "aTargets": [ 1 ] },
 				//	{ "sType": "lil_float", "aTargets": [ 3, 4 ] },
 				// ]
+				"aaSorting" : [[1, 'desc']],
+				"aoColumnDefs": [
+					{ "asSorting": [ "asc", "desc"	 ], "aTargets": [ 1 ] },
+					{ "bSortable": false, "aTargets": [ 0, 2, 3, 4 ] },
+					{ "bVisible": false, "aTargets": [ 5 ] },
+					{ "iDataSort": 5, "aTargets": [ 1 ] }
+				]
 			}
 		);
 	});

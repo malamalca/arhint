@@ -1,4 +1,4 @@
-/* EDIT INVOICE FIELDS */
+/* EDIT INVOICE */
 #InvoiceTitle, #InvoiceClient, #InvoiceProjectId, #InvoiceUserId, #InvoicePayment {
 	width: 400px;
 }
@@ -11,37 +11,16 @@ table#InvoiceDates {
 	margin-top: -0.5em;
 }
 
+
 /* VIEW INVOICE */
-.invoice-view-panel {
-	display: block;
-	margin-left: 150px;
-	
-	font-family: Arial, Helvetica, sans-serif;
-    font-size: 16px;
-    font-weight: bold;
-}
-.invoice-view-panel span.label {
-	display: block;
-	float: left;
-	width: 150px;
-	margin-left: -150px;
-	
-	font-family: Cambria, Georgia, serif;
-	font-size: 1em;
-	font-weight: normal
-}
-
-#invoice-foot {
-	font-family: Arial, Helvetica, sans-serif;
-    font-size: 16px;
-    font-weight: bold;
-}
-
 #invoice-view-items-table {
 	margin-left: 0px;
 	font-weight: normal;
 }
+#invoice-analytics-table, #view-invoice-payments {
+	width: 600px !important;
+}
 
-.invoice-view-panel table {
-	width: 600px;
+#invoice-foot {
+	width: 460px !important;
 }

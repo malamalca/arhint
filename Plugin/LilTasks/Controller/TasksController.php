@@ -28,9 +28,11 @@ class TasksController extends LilAppController {
 		$filter = array();
 		if (!empty($this->request->query['filter'])) $filter = $this->request->query['filter'];
 		
-		if (!isset($filter['date']) && !$filter['date']=$this->Cookie->read('lil_tasks_index')) {
+		if (!isset($filter['date']) && !$filter['date'] = $this->Cookie->read('lil_tasks_index')) {
 			$filter['date'] = strftime('%Y-%m-%d');
 		}
+		$this->Cookie->delete('lil_tasks_index'); // delete cookie to prevent duplicates
+		
 		$date = $filter['date'];
 		$this->request->query['filter']['date'] = $date;
 		

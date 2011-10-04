@@ -147,7 +147,6 @@ class AppPluginController extends LilPluginController {
 		$Html = new HtmlHelper($view);
 		
 		$view->addScript($Html->css('arhim.css'));
-		$view->addScript($Html->css('table.jui'));
 		
 		return true;
 	}

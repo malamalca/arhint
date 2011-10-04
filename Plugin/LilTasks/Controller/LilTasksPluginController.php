@@ -153,39 +153,28 @@ class LilTasksPluginController extends LilPluginController {
 			'html' => $view->element('tasks_admin_index', array(), array('plugin' => 'LilTasks'))
 		);
 		$dashboard['panels']['tasks'] = $tsk;
+		
+		// modify main menu
+		$dashboard['menu']['lil_tasks_add'] =  array(
+			'title' => __d('lil_tasks', 'Add Task', true),
+			'visible' => true,
+			'url'   => array(
+				'admin'      => true,
+				'plugin'     => 'lil_tasks',
+				'controller' => 'tasks',
+				'action'     => 'add',
+			),
+			'params' => array(
+				'onclick' => sprintf(
+					'popup("%s", $(this).attr("href"), 580); return false;',
+					__d('lil_expenses', 'Add Task')
+				)
+			)
+		);
+		
 		return $dashboard;
 	}
-/**
- * _modifyMainMenu method
- *
- * Add actions to main menu
- *
- * @param mixed $view
- * @param mixed $menu
- * @return array
- */
-	public function _modifyMainMenu($view, $menu) {
-		if ($this->params->action == 'admin_dashboard') {
-			$menu['lil_tasks_add'] = array(
-				'title' => __d('lil_tasks', 'Add Task', true),
-				'visible' => true,
-				'url'   => array(
-					'admin'      => true,
-					'plugin'     => 'lil_tasks',
-					'controller' => 'tasks',
-					'action'     => 'add',
-				),
-				'params' => array(
-					'onclick' => sprintf(
-						'popup("%s", $(this).attr("href"), 580); return false;',
-						__d('lil_expenses', 'Add Task')
-					)
-				)
-			);
-		}
-		
-		return $menu;
-	}
+
 /**
  * _beforeSaveInvoice method
  *
