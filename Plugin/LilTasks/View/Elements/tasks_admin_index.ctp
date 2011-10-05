@@ -98,9 +98,9 @@
 					),
 					'div'   => array('id' => 'lil-tasks-div-'.$tsk['Task']['id']),
 					'after' => 
-					sprintf('<div>%1$s<span class="lil-tasks-control">%2$s | %3$s</span></div>',
+					sprintf('%4$s<div>%1$s<span class="lil-tasks-control">%2$s | %3$s</span></div>',
 						
-						($this->LilDate->isToday($date) && $this->LilDate->isToday($tsk['Task']['deadline'])) ? '' :
+						(empty($tsk['Task']['deadline']) || ($this->LilDate->isToday($date) && $this->LilDate->isToday($tsk['Task']['deadline']))) ? '' :
 							sprintf('<span class="lil-tasks-due%3$s">(%1$s %2$s)</span>',
 								__d('lil_tasks', 'due'),
 								$this->LilDate->niceShortDate($tsk['Task']['deadline']),
@@ -126,7 +126,10 @@
 								'class' => 'lil-tasks-redate-link',
 								'onclick' => sprintf('redateClick("%s"); return false', $tsk['Task']['id'])
 							)
-						)
+						),
+						
+						// attachment
+						empty($tsk['Attachment']) ? '' : ' ' . $this->Html->image('/lil_tasks/img/attachment.png')
 					)
 				)
 			);

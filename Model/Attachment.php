@@ -8,7 +8,7 @@ class Attachment extends LilAppModel {
 		'Lil.LilUpload' => array(
 			'allowedMime'       => '*',
 			'allowedExt'        => '*',
-			'dirFormat'         => '',
+			'dirFormat'         => '{$model}',
 			'fileFormat'        => '{HASH}',
 			'titleField'        => 'original',
 			'titleFormat'       => '{$full_name}',

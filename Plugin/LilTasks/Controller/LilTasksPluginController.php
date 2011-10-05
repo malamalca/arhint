@@ -52,6 +52,7 @@ class LilTasksPluginController extends LilPluginController {
 		'form_edit_travel_order'   => array('function' => '_modifyTravelOrderForm', 'params' => array()),
 		
 		'heartbeat_daily'          => array('function' => '_HeartbeatDaily', 'params' => array()),
+		'heartbeat_10min'          => array('function' => '_Heartbeat10min', 'params' => array()),
 	);
 /**
  * _beforeConstructModel method
@@ -283,14 +284,29 @@ class LilTasksPluginController extends LilPluginController {
  * @return array
  */
 	function _HeartbeatDaily($console) {
-		$this->__HeartbeatImport($console);
 		$this->__HeartbeatNotifications($console);
+	}
+	
+	function _Heartbeat10min($console) {
+		$this->__HeartbeatImport($console);
 	}
 	
 	function __HeartbeatImport($console)
 	{
 		App::uses('LilTasksParseEmail', 'LilTasks.Lib');
-		if ($emails = LilTasksParseEmail::fetch(array('server' => 'www.nahtigal.com', 'port' => 110, 'user' => 'info@malamalca.com', 'pass' => 'vuego3869'))) {
+		if ($emails = LilTasksParseEmail::fetch(array(
+			//'server' => 'www.nahtigal.com',
+			//'port' => 110,
+			//'settings' => array('pop3', 'novalidate-cert'),
+			//'user' => 'info@malamalca.com',
+			//'pass' => 'vuego3869'
+			
+			'server' => 'pop.gmail.com',
+			'port' => 995,
+			'settings' => array('imap', 'ssl', 'novalidate-cert'),
+			'user' => 'tmn@arhim.si',
+			'pass' => 'miha3869'
+		))) {
 			$Task = ClassRegistry::init('LilTasks.Task');
 			$Task->Attachment->setSafeUpload(false);
 			foreach ($emails as $data) {

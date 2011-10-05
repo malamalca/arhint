@@ -1,7 +1,7 @@
 <?php
 	class LilTasksParseEmail {
 		static function fetch($options) {
-			if ($mbox = imap_open(sprintf('{%1$s:%2$s/pop3/novalidate-cert}INBOX', $options['server'], $options['port']), $options['user'], $options['pass'])) {
+			if ($mbox = imap_open(sprintf('{%1$s:%2$s/%3$s}INBOX', $options['server'], $options['port'], implode('/', $options['settings'])), $options['user'], $options['pass'])) {
 				$ret = array();
 				if (($messages=imap_num_msg($mbox))>0) {
 					for ($message=1; $message < $messages+1; $message++) {
@@ -12,6 +12,16 @@
 						
 						$data['Task']['title'] = $email_data['subject'];
 						$data['Task']['happened'] = strftime('%Y-%m-%d', strtotime($email_data['date']));
+						
+						list($sender, $domain) = explode('@', $email_data['from']);
+						if ($sender == 'today') {
+							$data['Task']['deadline'] = strftime('%Y-%m-%d');
+						} else if ($sender == 'tomorrow') {
+							$data['Task']['deadline'] = strftime('%Y-%m-%d', time()+24*60*60);
+						} else if (in_array(strtolower($sender), array('monday', 'tuesday', 'wednesday', 'thursday', 'saturday', 'sunday'))) {
+							$data['Task']['deadline'] = strftime('%Y-%m-%d', strtotime('next ' . ucfirst($sender)));
+						}
+						
 						$hash = sha1($data['Task']['happened'] . '_' . $email_data['subject']);
 						
 						$parts = array();
@@ -42,10 +52,12 @@
 						}
 						
 						$ret[$message] = $data;
+						
+						imap_delete($mbox, $message);
 					}
 				}
 				return $ret;
-				imap_close($mbox);
+				imap_close($mbox, CL_EXPUNGE);
 			} else var_dump(imap_errors());
 		}
 		
