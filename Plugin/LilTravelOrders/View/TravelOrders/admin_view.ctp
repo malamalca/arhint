@@ -48,7 +48,6 @@
 		__d('lil_travel_orders', 'Travel Date'),
 		$this->LilDate->format($data['TravelOrder']['dat_order'])
 	);
-	print ('<br />');
 	
 	print ('<div class="view-panel" id="travel-order-employee">');
 	printf('<span class="label">%1$s: </span>%2$s<br />',
@@ -75,7 +74,6 @@
 		$this->Html->clean($data['Employee']['job'])
 	);
 	print ('</div>');
-	print ('<br />');
 	
 	print ('<div class="view-panel" id="travel-order-travel">');
 	printf('<span class="label">%1$s: </span>%2$s<br />',
@@ -99,7 +97,6 @@
 		$this->LilDate->dateTimeFormat($data['TravelOrder']['arrival'])
 	);
 	print ('</div>');
-	print ('<br />');
 	
 	print ('<div class="view-panel" id="travel-order-vehicle">');
 	printf('<span class="label">%1$s: </span>%2$s<br />',
@@ -115,7 +112,6 @@
 		$this->Html->clean($data['TravelOrder']['vehicle_owner'])
 	);
 	print ('</div>');
-	print ('<br />');
 	
 	print ('<div class="view-panel" id="travel-order-expenses">');
 	printf('<span class="label">%1$s: </span>%2$s<br />',
@@ -144,7 +140,6 @@
 			$this->LilDate->format($data['TravelOrder']['dat_advance'])
 	);
 	print ('</div>');
-	print ('<br />');
 	
 	print ('<div class="view-panel" id="travel-order-foot">');
 	printf('<span class="label">%1$s: </span>%2$s<br />',
@@ -156,9 +151,6 @@
 		$this->LilDate->format($data['TravelOrder']['dat_order'])
 	);
 	print ('</div>');
-	print ('<br />');
-
-
 
 	$total_workdays = 0;
 	$total_km = 0;

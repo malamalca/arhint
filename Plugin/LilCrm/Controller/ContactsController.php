@@ -67,10 +67,10 @@ class ContactsController extends LilAppController {
 			$this->Contact->create();
 			
 			// find company if it already exists
+			if (empty($this->request->data['Company']['title'])) {
+				unset($this->request->data['Company']);
+			}
 			if (empty($this->request->data['Contact']['id'])) {
-				if (empty($this->request->data['Company']['title'])) {
-					unset($this->request->data['Company']);
-				}
 				$address = @$this->request->data['ContactsAddress'][0];
 				if (empty($address['street']) && empty($address['zip']) && empty($address['city']) &&
 					empty($address['country'])) unset($this->request->data['ContactsAddress']);

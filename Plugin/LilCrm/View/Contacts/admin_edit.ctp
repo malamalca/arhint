@@ -15,8 +15,8 @@
 		} else {
 			$title_for_layout = __d('lil_crm', 'Add a Person');
 		}
-		$this->set(compact('title_for_layout'));
-	} 
+	}
+	$this->set(compact('title_for_layout'));
 ?>
 <div class="contacts form">
 <?php 
