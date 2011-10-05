@@ -45,6 +45,21 @@ class Task extends LilAppModel {
 		)
 	);
 /**
+ * hasMany property
+ *
+ * @var array
+ * @access public
+ */
+	public $hasMany = array(
+		'Attachment' => array(
+			'className'  => 'Attachment',
+			'conditions' => array('Attachment.model' => 'Task'),
+			'foreignKey' => 'foreign_id',
+			'order'      => 'Attachment.created',
+			'dependent'  => true
+		),
+	);
+/**
  * filter
  *
  * @access public
@@ -62,6 +77,9 @@ class Task extends LilAppModel {
 					array(
 						'Task.completed' => null,
 						'Task.deadline <=' => strftime('%Y-%m-%d', time()+7*24*60*60)
+					),
+					array(
+						'Task.deadline' => null
 					)
 				);
 			} else if ($filter['date'] == '30d') {
@@ -73,14 +91,22 @@ class Task extends LilAppModel {
 					array(
 						'Task.completed' => null,
 						'Task.deadline <=' => strftime('%Y-%m-%d', time()+30*24*60*60)
+					),
+					array(
+						'Task.deadline' => null
 					)
 				);
 			} else {
 				$ret['conditions']['OR'] = array(
-					'Task.completed' => $filter['date'],
+					array(
+						'Task.completed' => $filter['date'],
+					),
 					array(
 						'Task.completed' => null,
 						'Task.deadline <=' => $filter['date']
+					),
+					array(
+						'Task.deadline' => null
 					)
 				);
 			}

@@ -283,6 +283,24 @@ class LilTasksPluginController extends LilPluginController {
  * @return array
  */
 	function _HeartbeatDaily($console) {
+		$this->__HeartbeatImport($console);
+		$this->__HeartbeatNotifications($console);
+	}
+	
+	function __HeartbeatImport($console)
+	{
+		App::uses('LilTasksParseEmail', 'LilTasks.Lib');
+		if ($emails = LilTasksParseEmail::fetch(array('server' => 'www.nahtigal.com', 'port' => 110, 'user' => 'info@malamalca.com', 'pass' => 'vuego3869'))) {
+			$Task = ClassRegistry::init('LilTasks.Task');
+			$Task->Attachment->setSafeUpload(false);
+			foreach ($emails as $data) {
+				$Task->create();
+				$Task->saveAll($data);
+			}
+		}
+	}
+	
+	function __HeartbeatNotifications($console) {
 		$User = ClassRegistry::init('Lil.User');
 		$User->bindModel(
 			array('hasOne' => array(
@@ -296,6 +314,7 @@ class LilTasksPluginController extends LilPluginController {
 		$users = $User->find('all', array(
 			'contain' => 'PrimaryEmail',
 		));
+		
 		if (!empty($users)) {
 			App::uses('CakeEmail', 'Network/Email');
 			$email = new CakeEmail();

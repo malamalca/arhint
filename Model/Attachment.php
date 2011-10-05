@@ -5,7 +5,7 @@ class Attachment extends LilAppModel {
 	var $name = 'Attachment';
 
 	var $actsAs = array(
-		'LilUpload.LilUpload' => array(
+		'Lil.LilUpload' => array(
 			'allowedMime'       => '*',
 			'allowedExt'        => '*',
 			'dirFormat'         => '',
@@ -28,7 +28,7 @@ class Attachment extends LilAppModel {
  * @return void
  */
 	function __construct($id = false, $table = null, $ds = null)	{
-		$this->actsAs['LilUpload.Lilupload']['baseDir'] = $this->getTargetFolder('uploads');
+		$this->actsAs['Lil.Lilupload']['baseDir'] = $this->getTargetFolder('uploads');
 		parent::__construct($id, $table, $ds);
 	}
 /**
