@@ -1,13 +1,4 @@
 <?php
-/**
- * This is invoices_edit template file. 
- *
- * @copyright     Copyright 2008-2010, LilCake.net
- * @link          http://lilcake.net LilCake.net
- * @package       lil
- * @subpackage    lil.views.areas
- * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
- */
 	$invoice_edit = array(
 		'title_for_layout' => sprintf(
 			($this->Form->value('Invoice.id')) ? __d('lil_invoices', 'Edit an Invoice #%s') : __d('lil_invoices', 'Add an Invoice #%s'),
@@ -267,29 +258,8 @@
 		)
 	);
 	
-	App::uses('LilPluginRegistry', 'Lil.Lil'); $registry = LilPluginRegistry::getInstance();
-	$invoice_edit = $registry->callPluginHandlers($this, 'form_edit_invoice', $invoice_edit);
-	$this->set('title_for_layout', $invoice_edit['title_for_layout']);
-	
-	// form display begins
-	echo $invoice_edit['form']['pre']; 
-	foreach ($invoice_edit['form']['lines'] as $name => $line) {
-		if (is_string($line)) {
-			echo $line;
-		} else if (!empty($line['class'])) {
-			$parameters = array();
-			if (!empty($line['parameters'])) {
-				$parameters = (array)$line['parameters'];
-			}
-			if (is_object($line['class'])) {
-				$use_object =& $line['class'];
-			} else {
-				$use_object =& ${$line['class']};
-			}
-			echo call_user_func_array(array($use_object, $line['method']), $parameters);
-		}
-	}
-	echo $invoice_edit['form']['post']; 
+	$invoice_edit = $this->callPluginHandlers('form_edit_invoice', $invoice_edit);
+	$this->Lil->form($invoice_edit);
 ?>
 
 <div id="dialog-form"></div>

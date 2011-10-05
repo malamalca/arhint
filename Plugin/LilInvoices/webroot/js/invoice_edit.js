@@ -55,10 +55,9 @@ $(document).ready(function() {
 	$('.image-item-check').each(function() { $(this).click(invoicesItemLinkClick); });
 	
 	// WATCH FUNCTIONALITY FOR QTY AND PRICE FIELDS
-	$('#InvoiceTotal').LilFloat({empty: true});
-	$('.invoices-item-price').each(function() { $(this).LilFloat(); $(this).blur(onNumbersChange); } );
-	$('.invoices-item-qty').each(function() { $(this).LilFloat(); $(this).blur(onNumbersChange);  } );
-	$('.invoices-item-tax').each(function() { $(this).LilFloat(); $(this).blur(onNumbersChange);  } );
+	$('.invoices-item-price').each(function() { $(this).blur(onNumbersChange); } );
+	$('.invoices-item-qty').each(function() { $(this).blur(onNumbersChange);  } );
+	$('.invoices-item-tax').each(function() { $(this).blur(onNumbersChange);  } );
 	
 	contactsFormSubmit = function(event) {
 		event.preventDefault();
@@ -79,7 +78,7 @@ function openAddContactForm(kind) {
 		title: (kind == "T") ? popupPersonTitle : popupCompanyTitle,
 		autoOpen: true,
 		height: 550,
-		width: 400,
+		width: 440,
 		modal: true,
 		open: function(event, ui) {
 			popupClientUrl = (kind == "T") ? popupPersonUrl : popupCompanyUrl;
@@ -140,9 +139,9 @@ function addInvoiceAnalyticsRow() {
 	while ($('#InvoicesItem' + i + 'Id').size() > 0) i++;
 	renumberInvoiceAnalyticsRow(rowClone, 0, i);
 	
-	$('.invoices-item-price', rowClone).each(function() { $(this).LilFloat(); $(this).blur(onNumbersChange); });
-	$('.invoices-item-qty', rowClone).each(function() { $(this).LilFloat(); $(this).blur(onNumbersChange); });
-	$('.invoices-item-tax', rowClone).each(function() { $(this).LilFloat(); $(this).blur(onNumbersChange); });
+	$('.invoices-item-price', rowClone).each(function() { $(this).LilFloat({'empty': true}); $(this).blur(onNumbersChange); });
+	$('.invoices-item-qty', rowClone).each(function() { $(this).LilFloat({'empty': true, 'places': 1}); $(this).blur(onNumbersChange); });
+	$('.invoices-item-tax', rowClone).each(function() { $(this).LilFloat({'empty': true, 'places': 1}); $(this).blur(onNumbersChange); });
 	
 	$('.invoices-item-descript', rowClone).each(function() { $(this).autocomplete(invoicesItemAutocomplete).keyup(invoicesItemKeyup); });
 	$('.image-item-check', rowClone).each(function() { $(this).click(invoicesItemLinkClick); });

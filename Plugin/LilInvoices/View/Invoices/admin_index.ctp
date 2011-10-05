@@ -1,69 +1,99 @@
 <?php
-	$this->set('title_for_layout', $this->Html->clean($counter['InvoicesCounter']['title']));
-	$this->set('main_menu', array(
-		'add' => array(
-			'title' => __d('lil_invoices', 'Add', true),
-			'visible' => $counter['InvoicesCounter']['active'],
-			'url'   => array(
-				'admin'      => true,
-				'plugin'     => 'lil_invoices',
-				'controller' => 'invoices',
-				'action'     => 'add',
-				'?'          => array('filter' => array('counter' => $counter['InvoicesCounter']['id']))
+	$invoices_index = array(
+		'title_for_layout' => $this->Html->clean($counter['InvoicesCounter']['title']),
+		'menu' => array(
+			'add' => array(
+				'title' => __d('lil_invoices', 'Add', true),
+				'visible' => $counter['InvoicesCounter']['active'],
+				'url'   => array(
+					'admin'      => true,
+					'plugin'     => 'lil_invoices',
+					'controller' => 'invoices',
+					'action'     => 'add',
+					'?'          => array('filter' => array('counter' => $counter['InvoicesCounter']['id']))
+				)
+			)
+		),
+		'table' => array(
+			'element' => array(
+				'parameters' => array(
+					'width' => '100%', 'cellspacing' => 0, 'cellpadding' => 0, 
+					'id' => 'AdminInvoicesIndex', 'class' => 'index'
+				),
+				'head' => array('rows' => array(0 => array('columns' => array(
+					'cnt' => array(
+						'parameters' => array('class' => 'center'),
+						'html' => __d('lil_invoices', 'Cnt')
+					),
+					'no' => array(
+						'html' => __d('lil_invoices', 'No')
+					),
+					'date' => array(
+						'parameters' => array('class' => 'center'),
+						'html' => __d('lil_invoices', 'Issued')
+					),
+					'title' => array(
+						'html' => __d('lil_invoices', 'Title')
+					),
+					'client' => array(
+						'html' => __d('lil_invoices', 'Client')
+					),
+					'total' => array(
+						'parameters' => array('class' => 'right'),
+						'html' => __d('lil_invoices', 'Total')
+					),
+				)))),
+				'foot' => array('rows' => array(0 => array('columns' => array(
+					0 => array(
+						'parameters' => array('class' => 'right', 'colspan' => 5),
+						'html' => __d('lil_invoices', 'Total Sum') . ': '
+					),
+					'total' => array(
+						'parameters' => array('class' => 'right'),
+						'html' => '&nbsp;'
+					),
+				))))
 			)
 		)
-	));
-?>
-<div class="invoices index">
-<?php
-if (empty($data)) {
-	echo __d('lil_invoices', 'No invoices found.');
-} else {
-?>
-<table width="100%" cellpadding="0" cellspacing="0" class="index" id="table-index-invoices">
-	<thead>
-		<tr>
-			<th class="center"><?php echo __d('lil_invoices', 'Cnt'); ?></th>
-			<th class="left"><?php echo __d('lil_invoices', 'No'); ?></th>
-			<th class="center"><?php echo __d('lil_invoices', 'Issued'); ?></th>
-			<th class="left"><?php echo __d('lil_invoices', 'Title'); ?></th>
-			<th class="left"><?php echo __d('lil_invoices', 'Client'); ?></th>
-			<th class="right"><?php echo __d('lil_invoices', 'Total'); ?></th>
-		</tr>
-	</thead>
-	<tbody>
-<?php
+	);
+	
+	$total = 0;
 	foreach ($data as $invoice) {
-?>
-		<tr>
-			<td class="center nowrap small"><?php echo $this->Html->clean($invoice['Invoice']['counter']); ?></td>
-			<td class="left nowrap strong"><?php echo $this->Html->link($invoice['Invoice']['no'], array('action' => 'view', $invoice['Invoice']['id'])); ?></td>
-			<td class="center nowrap"><?php echo $this->LilDate->format($invoice['Invoice']['dat_issue']); ?></td>
-			<td class="left small"><?php echo $this->Html->clean($invoice['Invoice']['title']); ?></td>
-	        <td class="left small"><?php echo $this->Text->truncate($this->Html->clean($invoice['Client']['title']), 30); ?></td>
-			<td class="right strong nowrap"><?php echo $this->LilFloat->money($invoice['Invoice']['total'], 2); ?></td>
-		</tr>
-<?php
+		$invoices_index['table']['element']['body']['rows'][]['columns'] = array(
+			'cnt' => array(
+				'parameters' => array('class' => 'center'),
+				'html' => $this->Html->clean($invoice['Invoice']['counter'])
+			),
+			'no' => array(
+				'html' => $this->Html->link($invoice['Invoice']['no'], array('action' => 'view', $invoice['Invoice']['id']))
+			),
+			'date' => array(
+				'parameters' => array('class' => 'center nowrap'),
+				'html' => $this->LilDate->format($invoice['Invoice']['dat_issue'])
+			),
+			'title' => array(
+				'html' => $this->Html->clean($invoice['Invoice']['title'])
+			),
+			'client' => array(
+				'html' => $this->Text->truncate($this->Html->clean($invoice['Client']['title']), 30)
+			),
+			'total' => array(
+				'parameters' => array('class' => 'right'),
+				'html' => $this->LilFloat->money($invoice['Invoice']['total'], 2)
+			),
+		);
+		$total += $invoice['Invoice']['total'];
 	}
-?>
-	</tbody>
-	<tfoot>
-		<tr>
-			<td colspan="5" class="right strong"><?php echo __d('lil_invoices', 'Total Sum'); ?>:</td>
-			<td class="right strong"><?php echo $this->LilFloat->money($total_sum); ?></td>
-		</tr>
-	</tfoot>
-</table>
-<?php
-	}
+	$invoices_index['table']['element']['foot']['rows'][0]['columns']['total']['html'] = $this->LilFloat->money($total);
+	
+	$this->Lil->index($this->callPluginHandlers('lil_invoices_index_invoices', $invoices_index));
 ?>
 <script type="text/javascript">
 	$(document).ready(function() {
-		$('#table-index-invoices').data(
+		$('#AdminInvoicesIndex').data(
 			"settings",	{
 				"aaSorting" : [[0, 'desc']],
 				"aoColumnDefs": [
-					//{ "bSortable": false, "aTargets": [ -1, -2, -3 ] }
 					{ "sType": "lil_date", "aTargets": [ 2 ] },
 					{ "sType": "lil_float", "aTargets": [ 5 ] },
 				]
@@ -71,4 +101,3 @@ if (empty($data)) {
 		);
 	});
 </script>
-</div>

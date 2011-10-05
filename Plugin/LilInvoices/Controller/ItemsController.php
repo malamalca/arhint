@@ -47,15 +47,15 @@ class ItemsController extends LilAppController {
 	public function admin_edit($id = null) {
 		$this->Item->recursive = -1;
 		
-		if (!empty($this->data)) {
-			if ($this->Item->save($this->data)) {
+		if (!empty($this->request->data)) {
+			if ($this->Item->save($this->request->data)) {
 				$this->setFlash(__d('lil_invoices', 'Item has been saved.'));
 				$this->doRedirect(array('action' => 'index'));
 			} else {
 				$this->setFlash(__d('lil_invoices', 'Please verify that the information is correct.'), 'error');
 			}
 		} else if (!empty($id)) {
-			$this->data = $this->Item->read(null, $id);
+			$this->request->data = $this->Item->read(null, $id);
 		}
 		
 		$this->setupRedirect();
@@ -68,9 +68,9 @@ class ItemsController extends LilAppController {
  */
 	public function admin_delete($id=null) {
 		$this->Item->recursive = -1;
-		if (!empty($id) && $data = $this->Item->findById($id)) {
+		if (!empty($id) && $data = $this->Item->hasAny(array('Item.id' => $id))) {
 			$this->Item->delete($id);
-			$this->Session->setFlash(__d('lil_invoices', 'Item has been deleted.'));
+			$this->setFlash(__d('lil_invoices', 'Item has been deleted.'));
 			$this->redirect($this->referer());
 		} else {
 			$this->error404();

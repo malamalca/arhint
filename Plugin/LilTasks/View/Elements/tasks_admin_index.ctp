@@ -165,7 +165,8 @@ var redateTaskUrl = "<?php echo $this->Html->url(array(
 )); ?>";
 
 $(document).ready(function() {
-	document.cookie = 'CakeCookie[lil_tasks_index]=<?php echo $date; ?>';
+	// 2011-05-10: added path; cookie gets duplicated on different paths so we must include it
+	document.cookie = 'CakeCookie[lil_tasks_index]=<?php echo $date; ?>; path=<?php echo Router::url('/'); ?>';
 	
 	// hover on widget shows control links
 	$('div#lil-tasks-index .ui-checkbox').hover(

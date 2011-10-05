@@ -59,18 +59,20 @@ class Contact extends AppModel {
 		return parent::beforeSave();
 	}
 	
-	function filter($params) {
-		$conditions = array();
-		$conditions['Contact.kind'] = $params['kind'];
-		if (!empty($params['search'])) {
-			$conditions['OR'] = array(
-				'Contact.title LIKE'	=> '%'.$params['search'].'%',
-				'Contact.name LIKE'	=> '%'.$params['search'].'%',
-				"CONCAT(Contact.title, ' ', Contact.name)" => $params['search'],
-				"CONCAT(Contact.name, ' ', Contact.title)" => $params['search'],
+	function filter(&$filter) {
+		$ret = array();
+		if (empty($filter['kind'])) $filter['kind'] = 'C';
+		
+		$ret['conditions']['Contact.kind'] = $filter['kind'];
+		if (!empty($filter['search'])) {
+			$ret['conditions']['OR'] = array(
+				'Contact.title LIKE'	=> '%'.$filter['search'].'%',
+				'Contact.name LIKE'	=> '%'.$filter['search'].'%',
+				"CONCAT(Contact.title, ' ', Contact.name)" => $filter['search'],
+				"CONCAT(Contact.name, ' ', Contact.title)" => $filter['search'],
 			);
 		}
-		return $conditions;
+		return $ret;
 	}
 	
 	function getTitle($id) {

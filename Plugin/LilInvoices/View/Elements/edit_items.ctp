@@ -46,10 +46,10 @@
 		printf('<td>%s</td>', $this->LilForm->input(
 			'InvoicesItem.' . $k . '.qty',
 			array(
+				'type'  => 'decimal', 'places' => 1, 'empty' => true,
 				'label' => false,
 				'size'  => 4,
 				'class' => 'right invoices-item-qty',
-				'value' => $this->LilFloat->format($this->Form->value('InvoicesItem.' . $k . '.qty')),
 				'error' => __d('lil_invoices', 'Blank')
 			)
 		));
@@ -65,12 +65,10 @@
 		printf('<td class="right">%s</td>', $this->LilForm->input(
 			'InvoicesItem.' . $k . '.price',
 			array(
+				'type'  => 'decimal', 'places' => 2, 'empty' => true,
 				'label' => false,
 				'size'  => 12,
 				'class' => 'right invoices-item-price',
-				'value' => $this->LilFloat->format(
-					$this->Form->value('InvoicesItem.' . $k . '.price')
-				),
 				'error' => __d('lil_invoices', 'Blank')
 			)
 		));
@@ -89,10 +87,10 @@
 		printf('<td class="right">%s</td>', $this->LilForm->input(
 			'InvoicesItem.' . $k . '.tax',
 			array(
+				'type'  => 'decimal', 'places' => 1, 'empty' => true,
 				'label' => false,
 				'size'  => 6,
 				'class' => 'right invoices-item-tax',
-				'value' => $this->LilFloat->format($this->Form->value('InvoicesItem.' . $k . '.tax'), 1),
 				'error' => __d('lil_invoices', 'Blank')
 			)
 		));

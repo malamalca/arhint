@@ -36,7 +36,8 @@
 		<?php
 			foreach ($data as $item) {
 				printf('<tr>');
-				printf('<td class="left">%s</td>', $this->Html->clean($item['Item']['descript']));
+				printf('<td class="left">%s</td>', $this->Html->link(
+					$item['Item']['descript'], array('action' => 'edit', $item['Item']['id'])));
 				printf('<td class="right">%s</td>', $this->LilFloat->format($item['Item']['qty'], 2));
 				printf('<td class="left">%s</td>', $this->Html->clean($item['Item']['unit']));
 				printf('<td class="right">%s</td>', $this->LilFloat->money($item['Item']['price'], 2));

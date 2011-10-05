@@ -19,13 +19,16 @@ class ContactsController extends LilAppController {
  * @return void
  */
 	public function admin_index() {
-		$params = array();
-		$params['kind'] = strtoupper(@$this->request->params['named']['kind']) == 'C' ? 'C' : 'T';
+		$filter = array();
+		$filter['kind'] = 'T';
+		if (!empty($this->request->params['named']['kind']) && strtoupper($this->request->params['named']['kind']) == 'C') {
+			$filter['kind'] = 'C';
+		}
 		
-		if (!empty($this->data['search'])) $params['search'] = $this->data['search'];
-		$filter = array_merge($this->params['named'], $params);
+		if (!empty($this->data['search'])) $filter['search'] = $this->data['search'];
+		$filter = array_merge($this->params['named'], $filter);
 		
-		$params = array_merge(
+		$params = array_merge_recursive(
 			array(
 				'contain'    => array('ContactsEmail', 'ContactsPhone', 'PrimaryAddress', 'Company'),
 				'conditions' => array(),
@@ -33,15 +36,14 @@ class ContactsController extends LilAppController {
 			),
 			$this->Contact->filter($filter)
 		);
-		
 		$contacts = $this->Contact->find('all', $params);
 		
 		// redirect when only single contact found
-		if (sizeof($contacts) == 1 && !empty($params['search'])) {
+		if (sizeof($contacts) == 1 && !empty($filter['search'])) {
 			$this->redirect(array('action'=>'view', $contacts[0]['Contact']['id']));
 		}
 		
-		$this->set(compact('contacts', 'params'));
+		$this->set(compact('contacts', 'filter'));
 	}
 	
 /**

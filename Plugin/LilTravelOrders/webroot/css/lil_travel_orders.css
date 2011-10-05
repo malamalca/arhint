@@ -9,6 +9,7 @@
 div#edit-travel-order-location, div#edit-travel-order-dat_order {
 	float: left;
 	width: 250px;
+	clear: none;
 }
 div#edit-travel-order-location:after { 
 	content: " ,";
@@ -17,25 +18,30 @@ div#edit-travel-order-location:after {
 div#edit-travel-order-employee_id select {
 	width: 210px;
 }
-div#edit-travel-order-employee_id, div#edit-travel-order-tasker {
+div#edit-travel-order-employee_id, div#edit-travel-order-taskee {
 	float: left;
 	width: 250px;
+	clear: none;
 }
 
-div#edit-travel-order-descript input {
+div#edit-travel-order-descript textarea {
 	width: 452px;
 }
 div#edit-travel-order-task, div#edit-travel-order-dat_task {
 	float: left;
 	width: 250px;
+	clear: none;
 }
-
-div#edit-travel-order-departure {
-	clear: left;
+div#edit-travel-order-dat_task {
+	clear: right;
 }
 div#edit-travel-order-departure, div#edit-travel-order-arrival {
 	float: left;
 	width: 250px;
+	clear: left;
+}
+div#edit-travel-order-arrival {
+	clear: right;
 }
 
 div#edit-travel-order-payer input {
@@ -44,4 +50,5 @@ div#edit-travel-order-payer input {
 div#edit-travel-order-advance, div#edit-travel-order-dat_advance {
 	float: left;
 	width: 250px;
+	clear: none;
 }

@@ -1,44 +1,45 @@
+var popupContacts = null;
+var popupClientUrl = null;
+
 $(document).ready(function() {
-	// WATCH FUNCTIONALITY FOR ADVANCE
-	$('#TravelOrderAdvance').LilFloat({empty: true});
+	// WATCH FUNCTIONALITY FOR NUMERIC FIELDS
+	$('.travel-orders-item-workdays').each(function() { $(this).blur(onTravelOrdersItemsNumbersChange); });
+	$('.travel-orders-item-workday_price').each(function() { $(this).blur(onTravelOrdersItemsNumbersChange); });
+	$('.travel-orders-item-km').each(function() { $(this).blur(onTravelOrdersItemsNumbersChange); });
+	$('.travel-orders-item-km_price').each(function() { $(this).blur(onTravelOrdersItemsNumbersChange); });
+	$('.travel-orders-expense-price').each(function() { $(this).blur(onTravelOrdersExpensesNumbersChange); });
 	
-	// WATCH FUNCTIONALITY FOR NUMERIC
-	$('.travel-orders-item-workdays').each(function() { $(this).LilFloat({places:0, empty:true}); $(this).blur(onTravelOrdersItemsNumbersChange); });
-	$('.travel-orders-item-workday_price').each(function() { $(this).LilFloat({empty:true}); $(this).blur(onTravelOrdersItemsNumbersChange); });
-	$('.travel-orders-item-km').each(function() { $(this).LilFloat({empty:true}); $(this).blur(onTravelOrdersItemsNumbersChange); });
-	$('.travel-orders-item-km_price').each(function() { $(this).LilFloat({empty:true}); $(this).blur(onTravelOrdersItemsNumbersChange); });
-	$('.travel-orders-expense-price').each(function() { $(this).LilFloat({empty:true}); $(this).blur(onTravelOrdersExpensesNumbersChange); });
-	
-	// DATE PICKER
-	$('.travel-orders-item-dat_travel').datepicker({dateFormat: "dd.mm."});
-	$('.travel-orders-expense-dat_expense').datepicker({dateFormat: "dd.mm."});
-	
-	// AJAX CHANGE OF COUNTER
-	$('#TravelOrderCounterId').change(function() {
-		$('#TravelOrderCounterIdLoader').parent().show();
-		$.ajax({
-			url: counterUrl.replace(/\%d/, $(this).val()),
-			dataType: 'json',
-			success:  function(data) {
-				$('#TravelOrderNo').val(data.no);
-				$('#TravelOrderCounter').val(data.Counter.counter);
-				
-				// change attributes of 'no'
-				if (!isUserAdmin) {
-					if (data.Counter.mask.trim() === '') {
-						$('#TravelOrderNo').attr('disabled', '');
-					} else {
-						$('#TravelOrderNo').attr('disabled', 'disabled');
-					}
-				}
-			},
-			complete: function(data, status) {
-				if (status != 'success') alert('Call Failed');
-				$('#TravelOrderCounterIdLoader').parent().hide();
+	contactsFormSubmit = function(event) {
+		event.preventDefault();
+		$.post(
+			popupClientUrl,
+			$('form', popupContacts).serialize(),
+			function(data) {
+				$(popupContacts).html(data);
+				$('form', popupContacts).submit(contactsFormSubmit);
 			}
-		});
-	});
+		);
+		return false;
+	} 
 });
+
+function openAddContactForm(kind) {
+	$("#dialog-form").dialog({
+		title: (kind == "T") ? popupPersonTitle : popupCompanyTitle,
+		autoOpen: true,
+		height: 550,
+		width: 440,
+		modal: true,
+		open: function(event, ui) {
+			popupClientUrl = (kind == "T") ? popupPersonUrl : popupCompanyUrl;
+			$(this).html('');
+			$(this).load(popupClientUrl, function() {
+				popupContacts = $(this);
+				$('form', popupContacts).submit(contactsFormSubmit);
+			});
+		}
+	});
+};
 
 var onTravelOrdersItemsNumbersChange = function() {
 	var row = $(this).closest('tr');

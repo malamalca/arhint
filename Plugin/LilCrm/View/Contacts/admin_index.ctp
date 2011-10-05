@@ -15,7 +15,7 @@
 				'plugin'     => 'lil_crm',
 				'controller' => 'contacts',
 				'action'     => 'add',
-				'kind'       => $params['kind']
+				'kind'       => $filter['kind']
 			)
 		)
 	));
@@ -33,7 +33,7 @@
 	<table class="index" width="100%" cellpadding="0" cellspacing="0" id="ContactsIndexTable">
 		<thead>
 			<tr>
-				<th class="left"><?php echo ($params['kind'] == 'T') ? __d('lil_crm', 'Name') : __d('lil_crm', 'Title');?></th>
+				<th class="left"><?php echo ($filter['kind'] == 'T') ? __d('lil_crm', 'Name') : __d('lil_crm', 'Title');?></th>
 				<th class="left"><?php echo __d('lil_crm', 'Email'); ?></th>
 				<th class="left"><?php echo __d('lil_crm', 'Phone'); ?></th>
 			</tr>

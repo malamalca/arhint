@@ -8,7 +8,7 @@
 ?>
 <?php
 	if ($this->Form->value('Contact.id')) {
-		echo $this->element('head');
+		$title_for_layout = __d('lil_crm', 'Edit Contact');
 	} else {
 		if ($this->Form->value('Contact.kind') == 'C') {
 			$title_for_layout = __d('lil_crm', 'Add a Company');

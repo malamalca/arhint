@@ -2,8 +2,12 @@
 #InvoiceTitle, #InvoiceClient, #InvoiceProjectId, #InvoiceUserId, #InvoicePayment {
 	width: 400px;
 }
+
+#invoice-analytics-table {
+	width: 600px;
+}
 #InvoiceDescript {
-	width: 100%;
+	width: 600px;
 }
 
 table#InvoiceDates {
@@ -18,7 +22,7 @@ table#InvoiceDates {
 	font-weight: normal;
 }
 #invoice-analytics-table, #view-invoice-payments {
-	width: 600px !important;
+	width: 700px !important;
 }
 
 #invoice-foot {

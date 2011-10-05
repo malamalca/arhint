@@ -42,6 +42,8 @@ class LilExpensesPluginController extends LilPluginController {
 		'admin_dashboard'        => array('function' => '_modifyDashboard', 'params' => array()),
 		
 		'view_invoice'       	 => array('function' => '_modifyInvoiceView', 'params' => array()),
+		'lil_crm_view_contact'   => array('function' => '_modifyContactView', 'params' => array()),
+		'lil_view_area'          => array('function' => '_modifyAreaView', 'params' => array()),
 	);
 /**
  * _beforeConstructModel method
@@ -55,9 +57,10 @@ class LilExpensesPluginController extends LilPluginController {
 	public function _beforeConstructModel($model) {
 		if ($model->name == 'Invoice') {
 			$model->hasOne['Expense'] = array(
-				'className' => 'LilExpenses.Expense',
+				'className'  => 'LilExpenses.Expense',
 				'foreignKey' => 'foreign_id',
-				'conditions'   => array('Expense.model' => 'Invoice'),
+				'conditions' => array('Expense.model' => 'Invoice'),
+				'type'       => 'INNER'
 			);
 		}
 		if ($model->name == 'TravelOrder') {
@@ -65,6 +68,7 @@ class LilExpensesPluginController extends LilPluginController {
 				'className'  => 'LilExpenses.Expense',
 				'foreignKey' => 'foreign_id',
 				'conditions' => array('Expense.model' => 'TravelOrder'),
+				'type'       => 'INNER'
 			);
 		}
 		return true;
@@ -195,12 +199,64 @@ class LilExpensesPluginController extends LilPluginController {
 		return $d;
 	}
 /**
- * _modifyInvoiceForm method
+ * _modifyAreaView method
+ *
+ * Adds expenses to area
+ *
+ * @param mixed $view
+ * @param mixed $data
+ * @return array
+ */	
+	public function _modifyAreaView($view, $data) {
+		$Expense = ClassRegistry::init('LilExpenses.Expense');
+		$expenses = $Expense->find('all', array(
+			'conditions' => array('Expense.project_id' => $data['data']['Area']['id']),
+			'recursive' => -1
+		));
+		
+		$data['contents']['panels'][] = $view->element(
+			'expenses_view_area',
+			array('data' => $expenses),
+			array('plugin' => 'LilExpenses')
+		);
+		return $data;
+	}	
+/**
+ * _modifyContactView method
+ *
+ * Adds invoices to contact
+ *
+ * @param mixed $view
+ * @param mixed $data
+ * @return array
+ */	
+	public function _modifyContactView($view, $data) {
+		// do nothing if invoices plugin does not exist
+		if (!App::pluginPath('LilInvoices')) return $data;
+		
+		$Expense = ClassRegistry::init('LilExpenses.Expense');
+		$invoices = $Expense->find('all', array(
+			'conditions' => array(
+				'Expense.model' => 'Invoice',
+				'Invoice.contact_id' => $data['data']['Contact']['id']
+			),
+			'contain' => array('Invoice')
+		));
+		
+		$data['contents']['panels'][] = $view->element(
+			'expenses_view_contact',
+			array('data' => $invoices),
+			array('plugin' => 'LilExpenses')
+		);
+		return $data;
+	}	
+/**
+ * _modifyInvoiceView method
  *
  * Adds payments to invoice
  *
  * @param mixed $view
- * @param mixed $panels
+ * @param mixed $data
  * @return array
  */	
 	public function _modifyInvoiceView($view, $data) {
@@ -223,9 +279,6 @@ class LilExpensesPluginController extends LilPluginController {
 		
 		$data['contents']['panels'][] = $view->element('expenses_view_invoice', array(), array('plugin' => 'LilExpenses'));
 		$data['contents']['panels'][] = $view->element('js' . DS . 'popup_payment');
-		
-
-	
 		return $data;
 	}
 /**
@@ -477,8 +530,7 @@ class LilExpensesPluginController extends LilPluginController {
 		$view->set(compact('expenses', 'payments', 'saldo'));
 		
 		$exp = array(
-			'pre'  => '',
-			'post' => '',
+			'params' => array('class' => 'no-margin'),
 			'html' => $view->element('expenses_modify_dashboard', array(), array('plugin' => 'LilExpenses'))
 		);
 		$dashboard['panels']['expenses'] = $exp;

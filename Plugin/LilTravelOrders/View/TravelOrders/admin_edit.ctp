@@ -348,29 +348,8 @@
 		)
 	);
 	
-	App::uses('LilPluginRegistry', 'Lil.Lil'); $registry = LilPluginRegistry::getInstance();
-	$travel_edit = $registry->callPluginHandlers($this, 'form_edit_travel_order', $travel_edit);
-	$this->set('title_for_layout', $travel_edit['title_for_layout']);
-	
-	// form display begins
-	echo $travel_edit['form']['pre']; 
-	foreach ($travel_edit['form']['lines'] as $name => $line) {
-		if (is_string($line)) {
-			echo $line;
-		} else if (!empty($line['class'])) {
-			$parameters = array();
-			if (!empty($line['parameters'])) {
-				$parameters = (array)$line['parameters'];
-			}
-			if (is_object($line['class'])) {
-				$use_object =& $line['class'];
-			} else {
-				$use_object =& ${$line['class']};
-			}
-			echo call_user_func_array(array($use_object, $line['method']), $parameters);
-		}
-	}
-	echo $travel_edit['form']['post']; 
+	$travel_edit = $this->callPluginHandlers('form_edit_travel_order', $travel_edit);
+	$this->Lil->form($travel_edit);
 ?>
 
 <div id="dialog-form"></div>
@@ -379,7 +358,6 @@
 
 <script type="text/javascript">
 	// constants for scripts
-	<?php App::uses('Sanitize', 'Utility'); ?>
 	var isUserAdmin = <?php echo $this->Lil->currentUser->role('admin') ? 'true' : 'false'; ?>;
 	
 	var popupCompanyTitle = '<?php echo __d('lil_travel_orders', 'Add a Company'); ?>';

@@ -148,8 +148,7 @@ class LilTasksPluginController extends LilPluginController {
 		
 		
 		$tsk = array(
-			'pre'  => '',
-			'post' => '',
+			'params' => array('class' => 'no-margin'),
 			'html' => $view->element('tasks_admin_index', array(), array('plugin' => 'LilTasks'))
 		);
 		$dashboard['panels']['tasks'] = $tsk;
