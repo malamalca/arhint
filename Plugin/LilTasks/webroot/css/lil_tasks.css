@@ -1,3 +1,15 @@
+/* VIEW action */
+#TaskTitle {
+	width: 300px;
+}
+#TaskDescript {
+	width: 300px;
+}
+#TaskUserId, #TaskProjectId {
+	width: 310px;
+}
+
+/* INDEX acton */
 div#lil-tasks-index {
 	margin-bottom: 20px;
 }

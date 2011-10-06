@@ -39,7 +39,6 @@ class AppPluginController extends LilPluginController {
  * @var array
  */
 	public $handlers = array(
-		'after_construct_view' => array('function' => '_addScripts', 'params' => array()),
 		'before_construct_model' => array('function' => '_beforeConstructModel', 'params' => array()),
 		'before_save_model' => array('function' => '_savePassword', 'params' => array()),
 		
@@ -133,22 +132,6 @@ class AppPluginController extends LilPluginController {
 		}
 		
 		return $params;
-	}
-/**
- * _addScripts method
- *
- * Adds properties
- *
- * @param mixed $view
- * @return boolean
- */
-	public function _addScripts($view) {
-		App::uses('HtmlHelper', 'View/Helper');
-		$Html = new HtmlHelper($view);
-		
-		$view->addScript($Html->css('arhim.css'));
-		
-		return true;
 	}
 /**
  * _areaForm method
