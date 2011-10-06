@@ -1,12 +1,12 @@
 /* VIEW action */
 #TaskTitle {
-	width: 300px;
+	width: 290px;
 }
 #TaskDescript {
-	width: 300px;
+	width: 290px;
 }
 #TaskUserId, #TaskProjectId {
-	width: 310px;
+	width: 300px;
 }
 
 /* INDEX acton */
