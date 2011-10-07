@@ -14,10 +14,15 @@ App::uses('LilAppModel', 'Lil.Model');
  */
 class Payment extends LilAppModel {
 /**
+ * name property
+ *
+ * @var string
+ */
+	public $name = 'Payment';
+/**
  * order property
  *
  * @var string
- * @access public
  */
 	public $order = 'Payment.dat_happened DESC';
 /**
@@ -30,13 +35,24 @@ class Payment extends LilAppModel {
 		'Lil.LilFloat', 'Lil.LilDate'
 	);
 /**
+ * belongsTo property
+ *
+ * @var array
+ */
+	public $belongsTo = array(
+		'PaymentsAccount' => array(
+			'className' => 'LilExpenses.PaymentsAccount',
+			'foreignKey' => 'account_id'
+		)
+	);
+/**
  * hasAndBelongsToMany property
  *
  * @var array
- * @access public
  */
 	public $hasAndBelongsToMany = array(
 		'Expense' => array(
+			'className' => 'LilExpenses.Expense',
 			'joinTable' => 'payments_expenses',
 		)
 	);
@@ -44,17 +60,17 @@ class Payment extends LilAppModel {
  * hasMany property
  *
  * @var array
- * @access public
  */
 	public $hasMany = array(
-		'PaymentsExpense'
+		'PaymentsExpense' => array(
+			'className' => 'LilExpenses.PaymentsExpense'
+		)
 	);
 /**
  * filter
  *
- * @access public
  */
-	function filter(&$filter) {
+	public function filter(&$filter) {
 		$ret = array();
 		if (!isset($filter['start']) || !$this->LilDate->isSql($filter['start'])) {
 			$filter['start'] = $this->field('MIN(dat_happened) AS start', array('1'=>'1'));
@@ -66,10 +82,10 @@ class Payment extends LilAppModel {
 		}
 		$ret['conditions']['Payment.dat_happened <='] = $filter['end'];
 		
-		if (empty($filter['source']) || !in_array($filter['source'], array('c', 'p', 'o'))) {
-			$filter['source'] = null;
+		if (empty($filter['account']) || !in_array($filter['account'], array_keys($this->PaymentsAccount->find('list')))) {
+			$filter['account'] = null;
 		} else {
-			$ret['conditions']['Payment.source'] = $filter['source'];
+			$ret['conditions']['Payment.account_id'] = $filter['account'];
 		}
 		
 		if (empty($filter['type']) || !in_array($filter['type'], array('from', 'to'))) {

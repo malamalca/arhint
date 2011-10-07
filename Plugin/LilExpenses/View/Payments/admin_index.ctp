@@ -1,10 +1,4 @@
 <?php
-	$sources = array(
-			'c' => __d('lil_expenses', 'Company Account'),
-			'p' => __d('lil_expenses', 'Private Account'),
-			'o' => __d('lil_expenses', 'Other')
-	);
-	
 	$start_link = $this->Html->link(
 		isset($filter['month']) ? $this->LilDate->format($filter['start']) : $this->LilDate->format($filter['start']),
 		array('action' => 'filter'),
@@ -16,10 +10,10 @@
 		array('id' => 'lil-payments-link-date-end')
 	);
 	
-	$source_link = $this->Html->link(
-		!empty($filter['source']) ? $sources[$filter['source']] : __d('lil_expenses', 'all sources'),
+	$accounts_link = $this->Html->link(
+		!empty($filter['account']) ? $accounts[$filter['account']] : __d('lil_expenses', 'all accounts'),
 		array('action' => 'filter'),
-		array('class' => 'popup_link', 'id' => 'popup_sources')
+		array('class' => 'popup_link', 'id' => 'popup_accounts')
 	);
 	
 	$fromto = array('from' => __d('lil_expenses', 'From'), 'to' => __d('lil_expenses', 'To'));
@@ -31,7 +25,7 @@
 	
 	$title = sprintf('<h1>%1$s</h1>',
 		__d('lil_expenses', 'Payments %4$s %3$s from %1$s to %2$s', 
-			$start_link, $end_link, $source_link, $fromto_link
+			$start_link, $end_link, $accounts_link, $fromto_link
 		)
 	);
 	
@@ -62,26 +56,26 @@
 		);
 	$popup_fromto .= '</ul></div>';
 	
-	$popup_sources = '<div class="popup_sources popup ui-widget ui-widget-content ui-helper-clearfix ui-corner-all"><ul>';
-	$popup_sources .= sprintf('<li%2$s>%1$s</li><li><hr /></li>',
-			$this->Html->link(__d('lil_expenses', 'All sources'), array(
+	$popup_accounts = '<div class="popup_accounts popup ui-widget ui-widget-content ui-helper-clearfix ui-corner-all"><ul>';
+	$popup_accounts .= sprintf('<li%2$s>%1$s</li><li><hr /></li>',
+			$this->Html->link(__d('lil_expenses', 'All accounts'), array(
 				'?' => array('filter' => array_merge($filter, array(
-					'source' => null,
+					'account' => null,
 				)))
 			)),
-			empty($filter['source']) ? ' class="active"' : ''
+			empty($filter['account']) ? ' class="active"' : ''
 		);
-	foreach ($sources as $src => $src_name) {
-		$popup_sources .= sprintf('<li%2$s>%1$s</li>',
-			$this->Html->link($src_name, array(
+	foreach ($accounts as $acc => $acc_name) {
+		$popup_accounts .= sprintf('<li%2$s>%1$s</li>',
+			$this->Html->link($acc_name, array(
 				'?' => array('filter' => array_merge($filter, array(
-					'source' => $src,
+					'account' => $acc,
 				)))
 			)),
-			$src == $filter['source'] ? ' class="active"' : ''
+			$acc == $filter['account'] ? ' class="active"' : ''
 		);
 	}
-	$popup_sources .= '</ul></div>';
+	$popup_accounts .= '</ul></div>';
 
 	$admin_index = array(
 		'title_for_layout' => strip_tags($title),
@@ -91,7 +85,7 @@
 			'post' => '',
 			'lines' => array(
 				$title,
-				$popup_sources, $popup_fromto,
+				$popup_accounts, $popup_fromto,
 				sprintf('<input type="hidden" value="%s" id="lil-payments-input-date-start" />', $filter['start']),
 				sprintf('<input type="hidden" value="%s" id="lil-payments-input-date-end" />', $filter['end']),
 			)
@@ -113,9 +107,9 @@
 			0 => array(
 				'parameters' => array('class' => null),
 				'columns' => array(
-					'source' => array(
+					'account' => array(
 						'parameters' => array('class' => 'center'),
-						'html' => __d('lil_expenses', 'Source'),
+						'html' => __d('lil_expenses', 'Account'),
 					),
 					'date' => array(
 						'parameters' => array('class' => 'center'),
@@ -150,9 +144,9 @@
 		$admin_index['table']['element']['body']['rows'][] = array(
 			'data'       => $p,
 			'columns'    => array(
-				'source' => array(
+				'account' => array(
 					'parameters' => array('class' => 'center'),
-					'html' => $p['Payment']['source']
+					'html' => $p['PaymentsAccount']['title']
 				),
 				'date' => array(
 					'parameters' => array('class' => 'center'),

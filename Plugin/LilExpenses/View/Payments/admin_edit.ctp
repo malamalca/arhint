@@ -42,14 +42,10 @@
 		'type'  => 'money',
 	));
 	
-	echo $this->LilForm->input('source', array(
-		'label' => __d('lil_expenses', 'Source') . ':',
+	echo $this->LilForm->input('account_id', array(
+		'label' => __d('lil_expenses', 'From/To Account') . ':',
 		'type'  => 'select',
-		'options' => array(
-			'c' => __d('lil_expenses', 'Company Account'),
-			'p' => __d('lil_expenses', 'Private Account'),
-			'o' => __d('lil_expenses', 'Other')
-		),
+		'options' => $accounts,
 	));
 	
 	echo $this->LilForm->input('descript', array(

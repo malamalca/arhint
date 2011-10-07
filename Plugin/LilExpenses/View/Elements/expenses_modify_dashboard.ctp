@@ -4,7 +4,7 @@
 <table class="index-static" width="100%" cellspacing="0" cellpadding="0">
 	<thead>
 		<tr class="ui-toolbar ui-widget-header ui-corner-tl ui-corner-tr">
-			<th class="center"><?php echo __d('lil_expenses', 'Source'); ?></th>
+			<th class="center"><?php echo __d('lil_expenses', 'Account'); ?></th>
 			<th class="center"><?php echo __d('lil_expenses', 'Date'); ?></th>
 			<th class="left"><?php echo __d('lil_expenses', 'Descript'); ?></th>
 			<th class="right"><?php echo __d('lil_expenses', 'Payment'); ?></th>
@@ -20,7 +20,7 @@
 			foreach ($payments as $p) {
 				echo '<tr>';
 					
-					echo '<td class="center">' . $p['Payment']['source'] . '</td>';
+					echo '<td class="center">' . $accounts[$p['Payment']['account_id']] . '</td>';
 					echo '<td class="center">' . $this->LilDate->format($p['Payment']['dat_happened']) . '</td>';
 					echo '<td class="left">' . $this->Html->clean($p['Payment']['descript']) . '</td>';
 

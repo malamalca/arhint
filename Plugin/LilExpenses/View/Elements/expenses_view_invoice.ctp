@@ -19,16 +19,10 @@
 		if (empty($payments)) {
 			printf('<tr><td colspan="5" class="light">%s</td></tr>', __d('lil_invoices', 'No payments found.'));
 		} else {
-			$sources = array(
-				'c' => __d('lil_invoices', 'company'),
-				'p' => __d('lil_invoices', 'private'),
-				'o' => __d('lil_invoices', 'other')
-			);
-			
 			foreach ($payments as $p) {
 				printf('<tr>');
 				printf('<td class="center">%s</td>', $this->LilDate->format($p['Payment']['dat_happened']));
-				printf('<td class="center">%s</td>', $sources[$p['Payment']['source']]);
+				printf('<td class="center">%s</td>', $accounts[$p['Payment']['account_id']]);
 				printf('<td class="right">%s</td>', $this->LilFloat->money($p['Payment']['amount']));
 				printf('<td class="center">%s</td>', $this->Lil->editLink(
 					array('plugin' => 'lil_expenses', 'controller' => 'payments', 'action' => 'edit', $p['Payment']['id']),

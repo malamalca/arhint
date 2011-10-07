@@ -24,7 +24,7 @@ class PaymentsController extends LilAppController {
  *
  * @var array
  */
-	public $uses = array('LilExpenses.Payment');
+	public $uses = array('LilExpenses.Payment', 'LilExpenses.PaymentsAccount');
 /**
  * admin_index method
  *
@@ -35,7 +35,10 @@ class PaymentsController extends LilAppController {
 		if (!empty($this->request->query['filter'])) $filter = $this->request->query['filter'];
 		
 		$params = array_merge(
-			array('order' => 'Payment.dat_happened, Payment.created', 'recursive' => -1),
+			array(
+				'order' => 'Payment.dat_happened, Payment.created',
+				'contain' => array('PaymentsAccount')
+			),
 			$this->Payment->filter($filter)
 		);
 		$payments = $this->Payment->find('all', $params);
@@ -56,7 +59,8 @@ class PaymentsController extends LilAppController {
 		));
 		$saldo = $saldo[0]['saldo'];
 		
-		$this->set(compact('payments', 'filter', 'saldo'));
+		$accounts = $this->PaymentsAccount->find('list');
+		$this->set(compact('payments', 'filter', 'saldo', 'accounts'));
 	}
 	
 /**
@@ -106,6 +110,7 @@ class PaymentsController extends LilAppController {
 			$this->request->data['PaymentsExpense'][0]['expense_id'] = $this->request->params['named']['expense'];
 		}
 		
+		$this->set('accounts', $accounts = $this->PaymentsAccount->find('list'));
 		$this->setupRedirect();
 	}
 	

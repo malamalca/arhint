@@ -184,7 +184,7 @@ class LilExpensesPluginController extends LilPluginController {
 				$p_data = array('Payment' => array(
 					'amount'       => $expense_data['Expense']['total'] * 1,
 					'dat_happened' => $expense_data['Expense']['dat_happened'],
-					'source'       => $d['data']['Invoice']['payment'],
+					'account_id'   => $d['data']['Invoice']['payment'],
 					'descript'     => $expense_data['Expense']['title']
 				));
 				if ($p = $Payment->save($p_data)) {
@@ -263,6 +263,8 @@ class LilExpensesPluginController extends LilPluginController {
 		$Payment = ClassRegistry::init('LilExpenses.Payment');
 		$PaymentsExpense = ClassRegistry::init('LilExpenses.PaymentsExpense');
 		$Expense = ClassRegistry::init('LilExpenses.Expense');
+		$PaymentsAccount = ClassRegistry::init('LilExpenses.PaymentsAccount');
+		$accounts = $PaymentsAccount->find('list');
 		
 		$expense = $Expense->find('first', array(
 			'conditions' => array(
@@ -275,7 +277,7 @@ class LilExpensesPluginController extends LilPluginController {
 			'conditions' => array('PaymentsExpense.expense_id' => $expense['Expense']['id']),
 			'contain' => array('Payment')
 		));
-		$view->set(compact('payments', 'expense'));
+		$view->set(compact('payments', 'expense', 'accounts'));
 		
 		$data['contents']['panels'][] = $view->element('expenses_view_invoice', array(), array('plugin' => 'LilExpenses'));
 		$data['contents']['panels'][] = $view->element('js' . DS . 'popup_payment');
@@ -296,6 +298,9 @@ class LilExpensesPluginController extends LilPluginController {
 			$Area = ClassRegistry::init('Lil.Area');
 			$users = $User->find('list');
 			$projects = $Area->findForUser(null, 'list');
+			
+			$PaymentsAccount = ClassRegistry::init('LilExpenses.PaymentsAccount');
+			$accounts = $PaymentsAccount->find('list');
 		
 			$e = array(
 				'fs_expense_start' => '<fieldset>',
@@ -354,11 +359,7 @@ class LilExpensesPluginController extends LilPluginController {
 							'label' => __d('lil_expenses', 'Payment') . ':',
 							'type' => 'select',
 							'empty' => '-- ' . __d('lil_expenses', 'do not create payment') . ' --',
-							'options' => array(
-								'c' => __d('lil_expenses', 'paid from company account'),
-								'p' => __d('lil_expenses', 'paid from private account'),
-								'o' => __d('lil_expenses', 'paid from other source')
-							)
+							'options' => $accounts
 						)
 					)
 				),
@@ -447,31 +448,25 @@ class LilExpensesPluginController extends LilPluginController {
 					'admin'      => true,
 				),
 				'params' => array(),
-				'active' => in_array($this->request->params['controller'], array('payments')) && empty($this->request->query['filter']['source']),
+				'active' => in_array($this->request->params['controller'], array('payments')) && empty($this->request->query['filter']['account']),
 				'expand' => in_array($this->request->params['controller'], array('payments')),
-				'submenu' => array(
-					'c' => array(
-						'visible' => true,
-						'title' => __d('lil_expenses', 'Company account'),
-						'url' => array('action' => 'index', '?' => array('filter' => array('source' => 'c'))),
-						'active' => (!empty($this->request->query['filter']['source']) && $this->request->query['filter']['source']=='c')
-					),
-					'p' => array(
-						'visible' => true,
-						'title' => __d('lil_expenses', 'Personal account'),
-						'url' => array('action' => 'index', '?' => array('filter' => array('source' => 'p'))),
-						'active' => (!empty($this->request->query['filter']['source']) && $this->request->query['filter']['source']=='p')
-					),
-					'o' => array(
-						'visible' => true,
-						'title' => __d('lil_expenses', 'Other account'),
-						'url' => array('action' => 'index', '?' => array('filter' => array('source' => 'o'))),
-						'active' => (!empty($this->request->query['filter']['source']) && $this->request->query['filter']['source']=='o')
-					)
-					
-				)
+				'submenu' => array()
 			),
 		);
+		
+		if ($app['items']['app_payments']['expand']) {
+			App::uses('Sanitize', 'Utility');
+			$PaymentsAccount = ClassRegistry::init('LilExpenses.PaymentsAccount');
+			$accounts = $PaymentsAccount->find('list');
+			foreach ($accounts as $acc_id => $acc_title) {
+				$app['items']['app_payments']['submenu'][$acc_id] = array(
+					'visible' => true,
+					'title' => Sanitize::html($acc_title),
+					'url' => array('action' => 'index', '?' => array('filter' => array('account' => $acc_id))),
+					'active' => (!empty($this->request->query['filter']['account']) && $this->request->query['filter']['account']==$acc_id)
+				);
+			}
+		}
 		
 		// insert into sidebar right after welcome panel
 		$this->sidebarInsertPanel($sidebar, array('after' => 'welcome'), array('app' => $app));
@@ -492,6 +487,8 @@ class LilExpensesPluginController extends LilPluginController {
 		$this->autoLayout = false;
 		
 		$Expense = ClassRegistry::init('LilExpenses.Expense');
+		$PaymentsAccount = ClassRegistry::init('LilExpenses.PaymentsAccount');
+		$accounts = $PaymentsAccount->find('list');
 		
 		$expense_filter = array();
 		if ($area_id = $this->currentArea->get('id')) $expense_filter['Project'] = $area_id;
@@ -521,13 +518,14 @@ class LilExpensesPluginController extends LilPluginController {
 						)
 					)
 				),
-				'fields' => array('SUM(amount) AS saldo')
+				'fields' => array('SUM(amount) AS saldo'),
+				'contain' => array('PaymentsAccount')
 			));
 			$saldo = $saldo[0]['saldo'];
 		}
 		
 		
-		$view->set(compact('expenses', 'payments', 'saldo'));
+		$view->set(compact('expenses', 'payments', 'saldo', 'accounts'));
 		
 		$exp = array(
 			'params' => array('class' => 'no-margin'),
