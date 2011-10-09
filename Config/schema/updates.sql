@@ -39,6 +39,7 @@ ALTER TABLE  `payments` DROP  `source`;
 ALTER TABLE  `invoices` DROP  `expense`;
 ALTER TABLE  `invoices` DROP  `era`;
 ALTER TABLE  `invoices` DROP  `expense_id`;
+ALTER TABLE  `invoices` DROP  `project_id`;
 ALTER TABLE  `invoices` DROP  `kind`;
 
 ALTER TABLE  `invoices` ADD  `invoices_attachment_count` INT NOT NULL DEFAULT  '0' AFTER  `project_id`;

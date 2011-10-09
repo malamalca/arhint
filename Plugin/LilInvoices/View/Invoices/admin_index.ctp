@@ -72,7 +72,10 @@
 				'html' => $this->LilDate->format($invoice['Invoice']['dat_issue'])
 			),
 			'title' => array(
-				'html' => $this->Html->clean($invoice['Invoice']['title'])
+				'html' => $this->Html->clean($invoice['Invoice']['title']) . 
+					// attachment
+					($invoice['Invoice']['invoices_attachment_count'] == 0 ? '' : 
+						' ' . $this->Html->image('/lil_invoices/img/attachment.png'))
 			),
 			'client' => array(
 				'html' => $this->Text->truncate($this->Html->clean($invoice['Client']['title']), 30)
