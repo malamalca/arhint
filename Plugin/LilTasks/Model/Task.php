@@ -26,7 +26,7 @@ class Task extends LilAppModel {
  * @access public
  */
 	public $actsAs = array(
-		'Lil.LilDate'
+		'Lil.LilDate', 'Lil.LilAttachment'
 	);
 /**
  * belongsTo property
@@ -43,21 +43,6 @@ class Task extends LilAppModel {
 			'className' => 'Lil.User',
 			'foreignKey' => 'user_id'
 		)
-	);
-/**
- * hasMany property
- *
- * @var array
- * @access public
- */
-	public $hasMany = array(
-		'Attachment' => array(
-			'className'  => 'Attachment',
-			'conditions' => array('Attachment.model' => 'Task'),
-			'foreignKey' => 'foreign_id',
-			'order'      => 'Attachment.created',
-			'dependent'  => true
-		),
 	);
 /**
  * filter

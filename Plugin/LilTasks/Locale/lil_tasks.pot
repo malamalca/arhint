@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2011-07-21 10:33+0200\n"
+"POT-Creation-Date: 2011-10-09 11:39+0200\n"
 "PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
 "Last-Translator: NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
@@ -14,37 +14,33 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: Plugin\LilTasks\Controller\LilTasksPluginController.php:170
+#: Plugin\LilTasks\Controller\LilTasksPluginController.php:159
+#: Plugin\LilTasks\View\Tasks\admin_edit.ctp:3
 msgid "Add Task"
 msgstr ""
 
-#: Plugin\LilTasks\Controller\LilTasksPluginController.php:314
+#: Plugin\LilTasks\Controller\LilTasksPluginController.php:339
 msgid "Daily notification"
 msgstr ""
 
-#: Plugin\LilTasks\Controller\TasksController.php:68
+#: Plugin\LilTasks\Controller\TasksController.php:73
 msgid "Task has been saved."
 msgstr ""
 
-#: Plugin\LilTasks\Controller\TasksController.php:105
+#: Plugin\LilTasks\Controller\TasksController.php:140
+msgid "There are some errors in the form. Please correct all marked fields below."
+msgstr ""
+
+#: Plugin\LilTasks\Controller\TasksController.php:197
+msgid "Task has been deleted."
+msgstr ""
+
 #: Plugin\LilTasks\Lib\LilTasksFormInject.php:18
 msgid "Task"
 msgstr ""
 
-#: Plugin\LilTasks\Controller\TasksController.php:125
-msgid "New Task"
-msgstr ""
-
-#: Plugin\LilTasks\Controller\TasksController.php:135
-msgid "There are some errors in the form. Please correct all marked fields below."
-msgstr ""
-
-#: Plugin\LilTasks\Controller\TasksController.php:192
-msgid "Task has been deleted."
-msgstr ""
-
 #: Plugin\LilTasks\Lib\LilTasksFormInject.php:58
-#: Plugin\LilTasks\View\Tasks\admin_edit.ctp:19
+#: Plugin\LilTasks\View\Tasks\admin_edit.ctp:44
 msgid "Title"
 msgstr ""
 
@@ -53,12 +49,12 @@ msgid "Descript"
 msgstr ""
 
 #: Plugin\LilTasks\Lib\LilTasksFormInject.php:80
-#: Plugin\LilTasks\View\Tasks\admin_edit.ctp:28
+#: Plugin\LilTasks\View\Tasks\admin_edit.ctp:53
 msgid "Deadline"
 msgstr ""
 
 #: Plugin\LilTasks\Lib\LilTasksFormInject.php:95
-#: Plugin\LilTasks\View\Tasks\admin_edit.ctp:14
+#: Plugin\LilTasks\View\Tasks\admin_edit.ctp:39
 msgid "User"
 msgstr ""
 
@@ -104,20 +100,30 @@ msgstr ""
 msgid "Yeah! Nothing to do."
 msgstr ""
 
-#: Plugin\LilTasks\View\Elements\tasks_admin_index.ctp:105
+#: Plugin\LilTasks\View\Elements\tasks_admin_index.ctp:107
 msgid "due"
 msgstr ""
 
-#: Plugin\LilTasks\View\Elements\tasks_admin_index.ctp:111
+#: Plugin\LilTasks\View\Elements\tasks_admin_index.ctp:113
 msgid "details"
 msgstr ""
 
-#: Plugin\LilTasks\View\Elements\tasks_admin_index.ctp:121
+#: Plugin\LilTasks\View\Elements\tasks_admin_index.ctp:123
+#: Plugin\LilTasks\View\Tasks\admin_edit.ctp:3
 msgid "Edit Task"
 msgstr ""
 
-#: Plugin\LilTasks\View\Elements\tasks_admin_index.ctp:124
+#: Plugin\LilTasks\View\Elements\tasks_admin_index.ctp:126
 msgid "redate"
+msgstr ""
+
+#: Plugin\LilTasks\View\Elements\tasks_admin_index.ctp:134
+msgid "delete"
+msgstr ""
+
+#: Plugin\LilTasks\View\Elements\tasks_admin_index.ctp:144
+#: Plugin\LilTasks\View\Tasks\admin_edit.ctp:20
+msgid "Are you sure you want to delete this task?"
 msgstr ""
 
 #: Plugin\LilTasks\View\Emails\text\notification_daily.ctp:2
@@ -132,23 +138,23 @@ msgstr ""
 msgid "Overdue tasks:"
 msgstr ""
 
-#: Plugin\LilTasks\View\Tasks\admin_edit.ctp:3
-msgid "Add or edit task"
+#: Plugin\LilTasks\View\Tasks\admin_edit.ctp:10
+msgid "Delete"
 msgstr ""
 
-#: Plugin\LilTasks\View\Tasks\admin_edit.ctp:9
+#: Plugin\LilTasks\View\Tasks\admin_edit.ctp:34
 msgid "Project"
 msgstr ""
 
-#: Plugin\LilTasks\View\Tasks\admin_edit.ctp:23
+#: Plugin\LilTasks\View\Tasks\admin_edit.ctp:48
 msgid "Description"
 msgstr ""
 
-#: Plugin\LilTasks\View\Tasks\admin_edit.ctp:32
+#: Plugin\LilTasks\View\Tasks\admin_edit.ctp:57
 msgid "Completed"
 msgstr ""
 
-#: Plugin\LilTasks\View\Tasks\admin_edit.ctp:36
+#: Plugin\LilTasks\View\Tasks\admin_edit.ctp:61
 msgid "Save"
 msgstr ""
 

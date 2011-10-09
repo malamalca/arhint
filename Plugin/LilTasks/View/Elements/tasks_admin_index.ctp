@@ -83,6 +83,8 @@
 			__d('lil_tasks', 'Yeah! Nothing to do.', true)
 		);
 	} else {
+		printf('<input type="hidden" value="%s", id="lil-tasks-redate-date" />', $date);
+		print ('<input type="hidden" value="", id="lil-tasks-redate-id" />'); // temporary storage for ids
 		printf('<fieldset>');
 		foreach ($tasks as $tsk) {
 			echo $this->LilForm->input(
@@ -98,7 +100,7 @@
 					),
 					'div'   => array('id' => 'lil-tasks-div-'.$tsk['Task']['id']),
 					'after' => 
-					sprintf('%4$s<div>%1$s<span class="lil-tasks-control">%2$s | %3$s</span></div>',
+					sprintf('%5$s<div>%1$s<span class="lil-tasks-control">%2$s | %3$s%4$s</span></div>',
 						
 						(empty($tsk['Task']['deadline']) || ($this->LilDate->isToday($date) && $this->LilDate->isToday($tsk['Task']['deadline']))) ? '' :
 							sprintf('<span class="lil-tasks-due%3$s">(%1$s %2$s)</span>',
@@ -124,22 +126,32 @@
 						$this->Html->link(__d('lil_tasks', 'redate'), '#',
 							array(
 								'class' => 'lil-tasks-redate-link',
+								'id' => 'lil-tasks-redate-link-' . $tsk['Task']['id'],
 								'onclick' => sprintf('redateClick("%s"); return false', $tsk['Task']['id'])
 							)
 						),
-						
+						!$this->Lil->currentUser->role('admin') ? '' :
+						' | ' . $this->Html->link(__d('lil_tasks', 'delete'),
+							array(
+								'admin' => true,
+								'plugin' => 'lil_tasks',
+								'controller' => 'tasks',
+								'action' => 'delete',
+								$tsk['Task']['id']
+							),
+							array(
+								'class' => 'lil-tasks-delete-link',
+								'confirm' => __d('lil_tasks', 'Are you sure you want to delete this task?')
+							)
+						),
 						// attachment
-						empty($tsk['Attachment']) ? '' : ' ' . $this->Html->image('/lil_tasks/img/attachment.png')
+						empty($tsk['TasksAttachment']) ? '' : ' ' . $this->Html->image('/lil_tasks/img/attachment.png')
 					)
 				)
 			);
 		}
 		printf('</fieldset>');
 	}
-	
-	printf('<input type="hidden" value="%s", id="lil-tasks-redate-date" />', $date);
-	print ('<input type="hidden" value="", id="lil-tasks-redate-id" />'); // temporary storage for ids
-	printf($this->element('js' . DS . 'popup_dialog'));
 ?>
 <script type="text/javascript">
 var tasksUrl = "<?php echo $this->Html->url(array(
@@ -166,6 +178,7 @@ var redateTaskUrl = "<?php echo $this->Html->url(array(
 	'date'       => '[[date]]',
 	'?'          => array('filter' => array('date' => $date))
 )); ?>";
+var redateLinkElement = null;
 
 $(document).ready(function() {
 	// 2011-05-10: added path; cookie gets duplicated on different paths so we must include it
@@ -229,6 +242,12 @@ $(document).ready(function() {
 		dateFormat: 'yy-mm-dd',
 		onSelect: function(dateString, inst) {
 			redate($("#lil-tasks-redate-id").val(), dateString);
+		},
+		beforeShow: function(input, inst) {
+			if (typeof redateLinkElement != "undefined") {
+				var pos_end = $(redateLinkElement).position();
+				inst.dpDiv.css({'marginLeft': pos_end.left - 20, 'marginTop': pos_end.top - 50});
+			}
 		}
 	});
 });
@@ -240,6 +259,7 @@ function gotoDate(dateText) {
 }
 function redateClick(id) {
 	$("#lil-tasks-redate-id").val(id);
+	redateLinkElement = $("#lil-tasks-redate-link-"+id);
 	$("#lil-tasks-redate-date").datepicker('show');
 	return false;
 }

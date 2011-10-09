@@ -40,7 +40,10 @@ class TasksController extends LilAppController {
 		$date_prev = strftime('%Y-%m-%d', strtotime($date) - 24*60*60);
 		
 		$params = array_merge(
-			array('order' => 'Task.completed, Task.deadline DESC, Task.modified DESC', 'recursive' => -1),
+			array(
+				'order' => 'Task.completed, Task.deadline DESC, Task.modified DESC',
+				'contain' => array('TasksAttachment')
+			),
 			$this->Task->filter($filter)
 		);
 		$tasks = $this->Task->find('all', $params);

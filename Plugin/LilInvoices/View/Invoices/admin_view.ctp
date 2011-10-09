@@ -214,7 +214,7 @@
 		)
 	);
 	
-	if ($data['Invoice']['kind'] == 'issued') {
+	if ($data['InvoicesCounter']['kind'] == 'issued') {
 		$invoice_view['panels']['items_title'] = sprintf('<h2>%s</h2>', __d('lil_invoices', 'Analytics'));
 		$invoice_view['panels']['items']['id'] = 'invoice-view-items-table';
 		$invoice_view['panels']['items']['table'] = $items;
@@ -225,12 +225,12 @@
 ?>
 
 <?php
-	if (!empty($data['Attachment'])) {
+	if (!empty($data['InvoicesAttachment'])) {
 ?>
 <div id="invoice-attachments">
 	<h2><?php echo __d('lil_invoices', 'Attachments'); ?></h2>
 	<?php
-		foreach ($data['Attachment'] as $atch) {
+		foreach ($data['InvoicesAttachment'] as $atch) {
 			echo '<div>';
 			printf('%1$s (%2$s)',
 				$this->Html->link($atch['original'], array(

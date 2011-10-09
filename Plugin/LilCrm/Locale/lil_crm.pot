@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2011-07-21 10:33+0200\n"
+"POT-Creation-Date: 2011-10-09 11:39+0200\n"
 "PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
 "Last-Translator: NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
@@ -19,7 +19,7 @@ msgid "Address has been successfully saved."
 msgstr ""
 
 #: Plugin\LilCrm\Controller\ContactsAddressesController.php:25
-#: Plugin\LilCrm\Controller\ContactsController.php:83
+#: Plugin\LilCrm\Controller\ContactsController.php:87
 #: Plugin\LilCrm\Controller\ContactsEmailsController.php:26
 #: Plugin\LilCrm\Controller\ContactsPhonesController.php:25
 msgid "There are some errors in the form. Please correct all marked fields below."
@@ -29,11 +29,11 @@ msgstr ""
 msgid "Address has been successfully deleted."
 msgstr ""
 
-#: Plugin\LilCrm\Controller\ContactsController.php:80
+#: Plugin\LilCrm\Controller\ContactsController.php:84
 msgid "Contact has been successfully saved."
 msgstr ""
 
-#: Plugin\LilCrm\Controller\ContactsController.php:142
+#: Plugin\LilCrm\Controller\ContactsController.php:147
 msgid "Contact has been successfully deleted."
 msgstr ""
 
@@ -63,6 +63,10 @@ msgstr ""
 
 #: Plugin\LilCrm\Controller\LilCrmPluginController.php:101
 msgid "Companies"
+msgstr ""
+
+#: Plugin\LilCrm\View\Contacts\admin_edit.ctp:11
+msgid "Edit Contact"
 msgstr ""
 
 #: Plugin\LilCrm\View\Contacts\admin_edit.ctp:14
@@ -160,87 +164,98 @@ msgid "Ups. No contacts found."
 msgstr ""
 
 #: Plugin\LilCrm\View\Contacts\admin_index.ctp:37
+#: Plugin\LilCrm\View\Contacts\admin_view.ctp:161
 #: Plugin\LilCrm\View\ContactsEmails\admin_edit.ctp:11
 msgid "Email"
 msgstr ""
 
 #: Plugin\LilCrm\View\Contacts\admin_index.ctp:38
+#: Plugin\LilCrm\View\Contacts\admin_view.ctp:201
 msgid "Phone"
 msgstr ""
 
-#: Plugin\LilCrm\View\Contacts\admin_index.ctp:62
-#: Plugin\LilCrm\View\Elements\head.ctp:9
+#: Plugin\LilCrm\View\Contacts\admin_index.ctp:63
+#: Plugin\LilCrm\View\Contacts\admin_view.ctp:9
 msgid "employed"
 msgstr ""
 
-#: Plugin\LilCrm\View\Contacts\admin_index.ctp:64
-#: Plugin\LilCrm\View\Elements\head.ctp:14
+#: Plugin\LilCrm\View\Contacts\admin_index.ctp:65
+#: Plugin\LilCrm\View\Contacts\admin_view.ctp:14
 msgid "at"
 msgstr ""
 
-#: Plugin\LilCrm\View\Contacts\admin_view.ctp:5
+#: Plugin\LilCrm\View\Contacts\admin_view.ctp:28
 msgid "Edit"
 msgstr ""
 
-#: Plugin\LilCrm\View\Contacts\admin_view.ctp:16
+#: Plugin\LilCrm\View\Contacts\admin_view.ctp:39
 msgid "Delete"
 msgstr ""
 
-#: Plugin\LilCrm\View\Contacts\admin_view.ctp:26
+#: Plugin\LilCrm\View\Contacts\admin_view.ctp:49
 msgid "Are you sure you want to delete this contact?"
 msgstr ""
 
-#: Plugin\LilCrm\View\Contacts\admin_view.ctp:37
-msgid "Addresses"
+#: Plugin\LilCrm\View\Contacts\admin_view.ctp:54
+msgid "Add Adress"
 msgstr ""
 
-#: Plugin\LilCrm\View\Contacts\admin_view.ctp:40
+#: Plugin\LilCrm\View\Contacts\admin_view.ctp:64
+msgid "Add Address"
+msgstr ""
+
+#: Plugin\LilCrm\View\Contacts\admin_view.ctp:69;79
+msgid "Add Email"
+msgstr ""
+
+#: Plugin\LilCrm\View\Contacts\admin_view.ctp:84;94
+msgid "Add Phone"
+msgstr ""
+
+#: Plugin\LilCrm\View\Contacts\admin_view.ctp:106
+msgid "TAX payee no."
+msgstr ""
+
+#: Plugin\LilCrm\View\Contacts\admin_view.ctp:106
+msgid "TAX no."
+msgstr ""
+
+#: Plugin\LilCrm\View\Contacts\admin_view.ctp:117
+#: Plugin\LilCrm\View\ContactsAddresses\admin_edit.ctp:2
+msgid "Address"
+msgstr ""
+
+#: Plugin\LilCrm\View\Contacts\admin_view.ctp:117
 msgid "other"
 msgstr ""
 
-#: Plugin\LilCrm\View\Contacts\admin_view.ctp:71;111;151
-msgid "add"
-msgstr ""
-
-#: Plugin\LilCrm\View\Contacts\admin_view.ctp:82
-msgid "Emails"
-msgstr ""
-
-#: Plugin\LilCrm\View\Contacts\admin_view.ctp:122
-msgid "Phones"
-msgstr ""
-
-#: Plugin\LilCrm\View\Contacts\admin_view.ctp:164
+#: Plugin\LilCrm\View\Contacts\admin_view.ctp:242
 msgid "Add a new Address"
 msgstr ""
 
-#: Plugin\LilCrm\View\Contacts\admin_view.ctp:165
+#: Plugin\LilCrm\View\Contacts\admin_view.ctp:243
 msgid "Add a new Email"
 msgstr ""
 
-#: Plugin\LilCrm\View\Contacts\admin_view.ctp:166
+#: Plugin\LilCrm\View\Contacts\admin_view.ctp:244
 msgid "Add a new Phone"
 msgstr ""
 
-#: Plugin\LilCrm\View\Contacts\admin_view.ctp:168
+#: Plugin\LilCrm\View\Contacts\admin_view.ctp:246
 msgid "Edit Address"
 msgstr ""
 
-#: Plugin\LilCrm\View\Contacts\admin_view.ctp:169
+#: Plugin\LilCrm\View\Contacts\admin_view.ctp:247
 msgid "Edit Email"
 msgstr ""
 
-#: Plugin\LilCrm\View\Contacts\admin_view.ctp:170
+#: Plugin\LilCrm\View\Contacts\admin_view.ctp:248
 msgid "Edit Phone"
 msgstr ""
 
 #: Plugin\LilCrm\View\Contacts\popups\admin_add.ctp:1
 #: Plugin\LilCrm\View\Contacts\popups\admin_edit.ctp:1
-msgid "Company has been successfuly added."
-msgstr ""
-
-#: Plugin\LilCrm\View\ContactsAddresses\admin_edit.ctp:2
-msgid "Address"
+msgid "Contact has been successfuly added."
 msgstr ""
 
 #: Plugin\LilCrm\View\ContactsAddresses\admin_edit.ctp:13

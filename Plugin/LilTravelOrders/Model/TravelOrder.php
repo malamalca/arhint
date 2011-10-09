@@ -68,7 +68,7 @@ class TravelOrder extends LilAppModel {
  * @access public
  */
 	var $actsAs = array(
-		'Containable', 'Lil.LilFloat'
+		'Containable', 'Lil.LilFloat', 'Lil.LilDate'
 	);
 /**
  * filter

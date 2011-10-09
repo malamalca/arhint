@@ -42,14 +42,10 @@ class InvoicesController extends LilAppController {
 		if (!$counter = $this->InvoicesCounter->find('first', $counter_params)) return $this->error404();
 		
 		$this->request->query['filter']['counter'] = $counter['InvoicesCounter']['id']; // needed for sidebar
-		$this->request->query['filter']['kind'] = $counter['InvoicesCounter']['kind'];
 		
 		// fetch invoices
 		$filter = $this->Invoice->filter($this->request->query['filter']);
 		$data = $this->Invoice->find('all', $filter);
-		
-		// get total sum regardless of pagiantion
-		$total_sum = $this->Invoice->field('SUM(Invoice.total) as total_sum', $filter['conditions']);
 		
 		$this->set(compact('data', 'filter', 'counter', 'total_sum'));
 	}
@@ -67,7 +63,7 @@ class InvoicesController extends LilAppController {
 				'InvoicesItem',
 				'InvoicesCounter',
 				'Client' => 'PrimaryAddress',
-				'Attachment'
+				'InvoicesAttachment'
 			)
 		))) {
 			$this->request->query['filter']['counter'] = $data['InvoicesCounter']['id']; // sidebar
@@ -88,7 +84,7 @@ class InvoicesController extends LilAppController {
 				'InvoicesItem',
 				'InvoicesCounter',
 				'Client' => 'PrimaryAddress',
-				'Attachment'
+				'InvoicesAttachment'
 			)
 		))) {
 			$this->response->type('pdf');
@@ -152,7 +148,7 @@ class InvoicesController extends LilAppController {
 					$this->setFlash(__d('lil_invoices', 'Invoice has been successfully saved.'));
 					return $this->doRedirect(array(
 						'action' => 'index',
-						'?'      => array('filter' => array('kind' => $d['data']['Invoice']['kind']))
+						'?'      => array('filter' => array('counter' => $d['data']['Invoice']['counter_id']))
 					));
 				}
 			}
@@ -199,20 +195,20 @@ class InvoicesController extends LilAppController {
  * @return void
  */
 	public function admin_attachment($id = null, $name = null) {
-		if (!empty($id) && ($atch = $this->Invoice->Attachment->find('first', array(
-			'conditions' => array('Attachment.id' => $id)
+		if (!empty($id) && ($atch = $this->Invoice->InvoicesAttachment->find('first', array(
+			'conditions' => array('InvoicesAttachment.id' => $id)
 		)))) {
 			$this->viewClass = 'Media';
 			
 			$data = array(
-				'id'   => $atch['Attachment']['filename'],
-				'path' => APP . 'uploads' . DS,
+				'id'   => $atch['InvoicesAttachment']['filename'],
+				'path' => APP . 'uploads' . DS . 'Invoice' . DS,
 				'name' => substr(
-					$atch['Attachment']['original'],
+					$atch['InvoicesAttachment']['original'],
 					0,
-					strlen($atch['Attachment']['original']) - strlen($atch['Attachment']['ext']) - 1
+					strlen($atch['InvoicesAttachment']['original']) - strlen($atch['InvoicesAttachment']['ext']) - 1
 				),
-				'extension' => $atch['Attachment']['ext']
+				'extension' => $atch['InvoicesAttachment']['ext']
 			);
 			
 			$this->set($data);
@@ -226,7 +222,7 @@ class InvoicesController extends LilAppController {
  * @return void
  */
 	public function admin_attachment_delete($id = null) {
-		if (!empty($id) && $this->Invoice->Attachment->delete($id)) {
+		if (!empty($id) && $this->Invoice->InvoicesAttachment->delete($id)) {
 			$this->setFlash(__d('lil_invoices', 'Attachment has been successfully deleted.'));
 			$this->redirect($this->referer());
 		} else $this->error404();
@@ -241,12 +237,12 @@ class InvoicesController extends LilAppController {
  */
 	private function _prepareData($data, &$items_to_delete) {
 		// remove empty attachments
-		if (!empty($data['Attachment']) && is_array($data['Attachment'])) {
-			foreach ($data['Attachment'] as $k => $atch) {
-				if (empty($atch['filename']['name'])) unset($data['Attachment'][$k]);
+		if (!empty($data['InvoicesAttachment']) && is_array($data['InvoicesAttachment'])) {
+			foreach ($data['InvoicesAttachment'] as $k => $atch) {
+				if (empty($atch['filename']['name'])) unset($data['InvoicesAttachment'][$k]);
 			}
 		}
-		if (empty($data['Attachment'])) unset($data['Attachment']);
+		if (empty($data['InvoicesAttachment'])) unset($data['InvoicesAttachment']);
 		
 		// calculate total price
 		if (!empty($data['InvoicesItem']) && ($data['Invoice']['kind'] == 'issued')) {
@@ -269,8 +265,7 @@ class InvoicesController extends LilAppController {
 			$items_to_delete['InvoicesItem'] = (array)$data['Invoice']['items_to_delete'];
 		}
 		
-		App::uses('LilPluginRegistry', 'Lil.Lil'); $registry = LilPluginRegistry::getInstance();
-		$ret = $registry->callPluginHandlers($this, 'invoice_prepare_data', array(
+		$ret = $this->callPluginHandlers('invoice_prepare_data', array(
 			'data' => $data, 'items_to_delete' => $items_to_delete
 		));
 		$data = $ret['data']; $items_to_delete = $ret['items_to_delete'];

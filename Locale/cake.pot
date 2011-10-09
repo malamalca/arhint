@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2011-08-14 09:32+0200\n"
+"POT-Creation-Date: 2011-10-09 11:39+0200\n"
 "PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
 "Last-Translator: NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
@@ -13,42 +13,6 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
-
-#: Plugin\Lil\Lib\LilDateEngine.php:408
-msgid "abday"
-msgstr ""
-
-#: Plugin\Lil\Lib\LilDateEngine.php:414
-msgid "day"
-msgstr ""
-
-#: Plugin\Lil\Lib\LilDateEngine.php:420
-msgid "d_t_fmt"
-msgstr ""
-
-#: Plugin\Lil\Lib\LilDateEngine.php:442
-msgid "abmon"
-msgstr ""
-
-#: Plugin\Lil\Lib\LilDateEngine.php:448
-msgid "mon"
-msgstr ""
-
-#: Plugin\Lil\Lib\LilDateEngine.php:459
-msgid "am_pm"
-msgstr ""
-
-#: Plugin\Lil\Lib\LilDateEngine.php:466
-msgid "t_fmt_ampm"
-msgstr ""
-
-#: Plugin\Lil\Lib\LilDateEngine.php:480
-msgid "d_fmt"
-msgstr ""
-
-#: Plugin\Lil\Lib\LilDateEngine.php:486
-msgid "t_fmt"
-msgstr ""
 
 #: webroot\test.php:80
 msgid "Debug setting does not allow access to this url."

@@ -35,11 +35,6 @@
 					'method'     => 'input',
 					'parameters' => array('counter_id', 'options' => array('type' => 'hidden'))
 				),
-				'kind' => array(
-					'class'      => $this->LilForm,
-					'method'     => 'input',
-					'parameters' => array('kind', 'options' => array('type' => 'hidden'))
-				),
 				'counter' => array(
 					'class'      => $this->LilForm,
 					'method'     => 'input',
@@ -204,7 +199,7 @@
 					'class'      => $this->LilForm,
 					'method'     => 'input',
 					'parameters' => array(
-						'field' => 'Attachment.0.filename',
+						'field' => 'InvoicesAttachment.0.filename',
 						'options' => array(
 							'type'  => 'file',
 							'label'	=> false,
@@ -215,7 +210,7 @@
 					'class'      => $this->LilForm,
 					'method'     => 'input',
 					'parameters' => array(
-						'field' => 'Attachment.0.model',
+						'field' => 'InvoicesAttachment.0.model',
 						'options' => array(
 							'type'  => 'hidden',
 							'value'	=> 'Invoice',

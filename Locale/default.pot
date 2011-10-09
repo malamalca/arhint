@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2011-08-14 09:32+0200\n"
+"POT-Creation-Date: 2011-10-09 11:39+0200\n"
 "PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
 "Last-Translator: NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
@@ -34,31 +34,43 @@ msgstr ""
 msgid "home"
 msgstr ""
 
-#: Controller\AppPluginController.php:78
+#: Controller\AppPluginController.php:77
 msgid "Username must be unique."
 msgstr ""
 
-#: Controller\AppPluginController.php:180
+#: Controller\AppPluginController.php:153
 msgid "Project no"
 msgstr ""
 
-#: Controller\AppPluginController.php:194
+#: Controller\AppPluginController.php:167
 msgid "This is an active project"
 msgstr ""
 
-#: Controller\AppPluginController.php:201
+#: Controller\AppPluginController.php:174
 msgid "Login"
 msgstr ""
 
-#: Controller\AppPluginController.php:208
+#: Controller\AppPluginController.php:181
 msgid "Username"
 msgstr ""
 
-#: Controller\AppPluginController.php:220
+#: Controller\AppPluginController.php:193
 msgid "Password"
 msgstr ""
 
-#: Controller\AppPluginController.php:284
+#: Controller\AppPluginController.php:257
 msgid "No"
+msgstr ""
+
+#: Controller\AppPluginController.php:277
+msgid "Projects"
+msgstr ""
+
+#: Controller\AppPluginController.php:292
+msgid "Active"
+msgstr ""
+
+#: Controller\AppPluginController.php:304
+msgid "Archived"
 msgstr ""
 

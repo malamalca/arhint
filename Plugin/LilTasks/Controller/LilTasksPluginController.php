@@ -308,7 +308,7 @@ class LilTasksPluginController extends LilPluginController {
 			'pass' => 'miha3869'
 		))) {
 			$Task = ClassRegistry::init('LilTasks.Task');
-			$Task->Attachment->setSafeUpload(false);
+			$Task->TasksAttachment->setSafeUpload(false);
 			foreach ($emails as $data) {
 				$Task->create();
 				$Task->saveAll($data);

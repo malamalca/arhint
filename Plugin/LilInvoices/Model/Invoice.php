@@ -5,7 +5,12 @@ class Invoice extends LilAppModel {
 	
 	var $recursive = -1;
 	
-	var $actsAs = array('Lil.LilFloat', 'Lil.LilDate', 'Containable');
+	var $actsAs = array(
+		'Lil.LilFloat', 'Lil.LilDate', 'Containable',
+		'Lil.LilAttachment' => array(
+			'counterCache' => true
+		)
+	);
 	
 	var $belongsTo = array(
 		'Client' => array(
@@ -15,7 +20,8 @@ class Invoice extends LilAppModel {
 		),
 		'InvoicesCounter' => array(
 			'className'  => 'LilInvoices.InvoicesCounter',
-			'foreignKey' => 'counter_id'
+			'foreignKey' => 'counter_id',
+			'type'       => 'INNER'
 		),
 		'User' => array(
 			'className'  => 'Lil.User',
@@ -31,12 +37,6 @@ class Invoice extends LilAppModel {
 		'InvoicesItem' => array(
 			'className'  => 'LilInvoices.InvoicesItem',
 			'dependent' => true
-		),
-		'Attachment' => array(
-			'conditions' => array('Attachment.model' => 'Invoice'),
-			'foreignKey' => 'foreign_id',
-			'order'      => 'Attachment.created',
-			'dependent'  => true
 		),
 	);
 	
@@ -69,10 +69,6 @@ class Invoice extends LilAppModel {
 	public function filter(&$filter) {
 		$ret = array();
 		
-		if (isset($filter['kind'])) {
-			$ret['conditions']['Invoice.kind'] = $filter['kind'];
-		}
-
 		if (isset($filter['expense'])) {
 			$ret['conditions']['Invoice.expense_id'] = $filter['expense'];
 		}
@@ -95,7 +91,7 @@ class Invoice extends LilAppModel {
 			}
 		}
 		
-		$ret['contain'] = array('Client', 'InvoicesCounter');
+		$ret['contain'] = array('Client');
 		
 		return $ret;
 	}
