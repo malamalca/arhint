@@ -72,15 +72,13 @@
 			</tr>
 		</thead>
 	<?php
-		$sources = array('c' => __d('lil_expenses', 'company'), 'p' => __d('lil_expenses', 'private'), 'o' => __d('lil_expenses', 'other'));
-		
 		if (empty($data['Payment'])) {
 			printf('<tr><td colspan="5" class="light">%s</td></tr>', __d('lil_expenses', 'No payments found.'));
 		} else {
 			foreach ($data['Payment'] as $p) {
 				printf('<tr>');
 				printf('<td class="center">%s</td>', $this->LilDate->format($p['dat_happened']));
-				printf('<td class="center">%s</td>', $sources[$p['source']]);
+				printf('<td class="center">%s</td>', $accounts[$p['account_id']]);
 				printf('<td class="right">%s</td>', $this->LilFloat->format($p['amount']));
 				printf('<td class="center">%s</td>', $this->Lil->editLink(array('controller' => 'payments', 'action' => 'edit', $p['id'])));
 				printf('<td class="center">%s</td>', $this->Lil->deleteLink(array('controller' => 'payments', 'action' => 'delete', $p['id'])));

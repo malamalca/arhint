@@ -130,7 +130,6 @@
 	$this->layout = false;
 	$html = ob_get_contents();
 	ob_clean();
-		
 	App::uses('PdfInvoice', 'LilInvoices.Lib');
 	$a = new PdfInvoice($html, $data, $this->Lil->currentUser());
 ?>

@@ -68,7 +68,8 @@ class ExpensesController extends LilAppController {
 				'Payment', 'User', 'Project'
 			)
 		))) {
-			$this->set(compact('data'));
+			$accounts = $this->PaymentsAccount->find('list');
+			$this->set(compact('data', 'accounts'));
 		} else $this->error404();
 	}
 /**
