@@ -97,7 +97,7 @@
 								$exp['Expense']['title'],
 								array(
 									'admin'      => true,
-									'plugin'     => null,
+									'plugin'     => 'lil_expenses',
 									'controller' => 'expenses',
 									'action'     => 'view',
 									$exp['Expense']['id'],

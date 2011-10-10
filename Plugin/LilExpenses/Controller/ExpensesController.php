@@ -24,7 +24,7 @@ class ExpensesController extends LilAppController {
  *
  * @var array
  */
-	public $uses = array('LilExpenses.Expense', 'LilExpenses.Payment');
+	public $uses = array('LilExpenses.Expense', 'LilExpenses.Payment', 'LilExpenses.PaymentsAccount');
 /**
  * admin_index method
  *
