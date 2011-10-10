@@ -49,7 +49,7 @@ if (empty($data)) {
 ?>
 	<tfoot>
 		<tr>
-			<td colspan="5" class="right strong"><?php __d('lil_travel_orders', 'Total Expense'); ?>:</td>
+			<td colspan="5" class="right strong"><?php echo __d('lil_travel_orders', 'Total Expense'); ?>:</td>
 			<td class="right strong"><?php echo $this->LilFloat->money($total_sum); ?></td>
 		</tr>
 	</tfoot>

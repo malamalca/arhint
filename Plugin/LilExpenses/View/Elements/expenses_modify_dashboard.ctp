@@ -44,7 +44,7 @@
 		<tr class="ui-toolbar ui-widget-header ui-corner-bl ui-corner-br">
 			<th colspan="3" class="right"><?php echo __d('lil_expenses', 'Recapitulation'); ?> :</th>
 			<th class="right nowrap"><?php echo '<span>' . $this->LilFloat->format($total_positive) . '</span><span> / </span><span class="negative">' . $this->LilFloat->format($total_negative) . '</span>'; ?></th>
-			<th colspan="2">&nbsp;</th>
+			<th colspan="1">&nbsp;</th>
 		</tr>
 	</tfoot>
 </table>

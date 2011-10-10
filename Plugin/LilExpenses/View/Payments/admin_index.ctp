@@ -159,11 +159,11 @@
 					))
 				),
 				'payment' => array(
-					'parameters' => ($p['Payment']['amount'] < 0) ? array('class' => 'negative') : array('class' => 'positive'),
+					'parameters' => ($p['Payment']['amount'] < 0) ? array('class' => 'right negative') : array('class' => 'right positive'),
 					'html' => $this->LilFloat->format($p['Payment']['amount'])
 				),
 				'saldo' => array(
-					'parameters' => ($p['Payment']['amount'] < 0) ? array('class' => 'negative') : array('class' => 'positive'),
+					'parameters' => ($p['Payment']['amount'] < 0) ? array('class' => 'right negative') : array('class' => 'right positive'),
 					'html' => $this->LilFloat->format($saldo)
 				),
 				'i' => array('html' => $i)
