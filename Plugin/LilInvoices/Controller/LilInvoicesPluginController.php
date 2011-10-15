@@ -128,6 +128,14 @@ class LilInvoicesPluginController extends LilPluginController {
 				'recursive' => -1
 			));
 			
+			// determine counter_id for sidebar
+			if (empty($this->request->query['filter']['counter'])) {
+				if ($this->request->params['controller'] == 'invoices' && $this->request->params['action'] == 'admin_view') {
+					$Invoice = ClassRegistry::init('LilInvoices.Invoice');
+					$this->request->query['filter']['counter'] = $Invoice->field('counter_id', array('Invoice.id' => $this->request->params['pass'][0]));
+				}
+			}
+			
 			// build submenus
 			$archived_counters = array(); $first_counter = null;
 			foreach ($counters as $c) {

@@ -1,0 +1,17 @@
+	.center {
+		text-align: center;
+	}
+	
+	.right {
+		text-align: right;
+	}
+	
+	.label {
+		font-weight: bold;
+		color: #404040;
+	}
+	
+	th {
+		font-weight: bold;
+		background-color: #c0c0c0;
+	}

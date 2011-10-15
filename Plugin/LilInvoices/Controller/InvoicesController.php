@@ -66,7 +66,7 @@ class InvoicesController extends LilAppController {
 				'InvoicesAttachment'
 			)
 		))) {
-			$this->request->query['filter']['counter'] = $data['InvoicesCounter']['id']; // sidebar
+			//$this->request->query['filter']['counter'] = $data['InvoicesCounter']['id']; // sidebar
 			$this->set(compact('data'));
 		} else $this->error404();
 	}
@@ -87,10 +87,19 @@ class InvoicesController extends LilAppController {
 				'InvoicesAttachment'
 			)
 		))) {
-			$this->response->type('pdf');
-			$this->set(compact('data'));
 			$this->autoRender = false;
-			$html = $this->render('layouts' . DS . $data['InvoicesCounter']['layout']);
+			$this->response->type('pdf');
+			
+			App::uses('LilReport', 'Lil.Lib');
+			$report = new LilReport();
+			$report->template('LilInvoices.' . $data['InvoicesCounter']['layout'], 'LilInvoices.lil_invoices_pdf');
+			$report->helpers(array('Lil.Lil', 'Lil.LilDate', 'Lil.LilFloat', 'Html'));
+			$report->set(compact('data'));
+			
+			App::uses('Sanitize', 'Utility');
+			$filename = Sanitize::paranoid(__d('lil_invoices', 'invoice') . '_' . $data['Invoice']['no'], array('-', '_'));
+			
+			$report->render($filename);
 		} else $this->error404();
 	}
 /**
