@@ -1,44 +1,4 @@
-<style type="text/css">
-	.center {
-		text-align: center;
-	}
-	
-	.right {
-		text-align: right;
-	}
-	
-	.label {
-		font-weight: bold;
-		color: #404040;
-		width: 40%;
-	}
-	
-	.big {
-		font-size: 150%;
-		background-color: #ffffff;
-	}
-	
-	.strong {
-		font-size: 120%;
-		font-weight: bold;
-	}
-	
-	.small {
-		font-size: 70%;
-	}
-	
-	th {
-		font-weight: bold;
-		background-color: #c0c0c0;
-	}
-	
-	td {
-		font-size: 85%;
-	}
-</style>
-<div class="head">
-	<h1><?php echo __d('lil_travel_orders', 'Travel Order'); ?></h1>
-</div>
+<h1><?php echo __d('lil_travel_orders', 'Travel Order'); ?></h1>
 
 <h3 id="travel-order-title"><?php printf(__d('lil_travel_orders', 'Travel Order no: %s', $this->Html->clean($data['TravelOrder']['no']))); ?></h3>
 
@@ -103,7 +63,7 @@
 		<?php
 			echo $this->Html->clean($data['TravelOrder']['task']);
 			printf(' <span class="label">%s: </span>', __d('lil_travel_orders', 'task date'));
-			echo $this->Time->i18nFormat($data['TravelOrder']['dat_task']);
+			echo $this->LilDate->format($data['TravelOrder']['dat_task']);
 		?>
 		</td>
 	</tr>
@@ -176,8 +136,8 @@
 	if (!empty($data['TravelOrdersItem'])) {
 ?>
 	<div id="travel-order-expenses">
+	<h2><?php echo __d('lil_travel_orders', 'Travel Analytics'); ?></h2>
 	<table>
-		<tr><th colspan="10" class="big"><?php echo __d('lil_travel_orders', 'Travel Analytics'); ?></th></tr>
 		<tr>
 			<th class="small"><?php echo __d('lil_travel_orders', 'Date'); ?></th>
 			<th class="center small"><?php echo __d('lil_travel_orders', 'Origin'); ?>/<br /><?php echo __d('lil_travel_orders', 'Destination'); ?></th>
@@ -233,9 +193,8 @@
 <?php
 	if (!empty($data['TravelOrdersExpense'])) {
 ?>
-	<br />
+	<h2><?php echo __d('lil_travel_orders', 'Travel Expenses'); ?></h2>
 	<table>
-		<tr><th colspan="3" class="big"><?php echo __d('lil_travel_orders', 'Travel Expenses'); ?></th></tr>
 		<tr>
 			<th><?php echo __d('lil_travel_orders', 'Date'); ?></th>
 			<th><?php echo __d('lil_travel_orders', 'Description'); ?></th>
@@ -267,8 +226,6 @@
 	}
 ?>
 
-<div id="travel-order-recap">
-	<br />
 	<table width="60%">
 		<tr><th colspan="3" class="big"><?php echo __d('lil_travel_orders', 'Travel Order Recap'); ?></th></tr>
 		<tr>
@@ -303,14 +260,5 @@
 		</tr>
 	</table>
 <?php
-	printf('<p>%1$s, %2$s</p>', $this->Html->clean($data['TravelOrder']['location']), $this->Time->i18nFormat($data['TravelOrder']['dat_order']));
+	printf('<p>%1$s, %2$s</p>', $this->Html->clean($data['TravelOrder']['location']), $this->LilDate->format($data['TravelOrder']['dat_order']));
 ?>
-</div>
-
-<?php
-	$this->layout = false;
-	$html = ob_get_contents();
-	ob_clean();
-		
-	App::uses('PdfTravelOrder', 'LilTravelOrders.Lib');
-	$a = new PdfTravelOrder($html, $data, $this->Lil->currentUser->get());

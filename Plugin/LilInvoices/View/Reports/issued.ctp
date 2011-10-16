@@ -1,58 +1,3 @@
-<div id="invoice-client">
-<table>
-	<tr>
-		<td class="label"><?php echo __d('lil_invoices', 'Client'); ?>:</td>
-	</tr>
-	<tr>
-		<td><?php
-			if (empty($data['Client']['id'])) {
-				echo __d('lil_invoices', 'Business to Client', true);
-			} else {
-				echo $this->Html->clean($data['Client']['title']);
-			}
-		?></td>
-	</tr>
-<?php
-	if (!empty($data['Client']['PrimaryAddress'])) {
-?>
-	<tr>
-		<td><?php echo $this->Html->clean($data['Client']['PrimaryAddress']['street']); ?></td>
-	</tr>
-	<tr><td>&nbsp;</td></tr>
-	<tr>
-		<td>
-		<?php
-			echo $this->Html->clean(implode(
-				' ', 
-				array(
-					$data['Client']['PrimaryAddress']['zip'],
-					$data['Client']['PrimaryAddress']['city']
-				)
-			));
-		?>
-		</td>
-	</tr>
-	<tr>
-		<td><?php echo $this->Html->clean($data['Client']['PrimaryAddress']['country']); ?></td>
-	</tr>
-<?php
-	}
-?>
-</table>
-</div>
-
-<div id="invoice-client-taxno">
-<?php
-	if (!empty($data['Client']['tax_no'])) {
-		printf('<span class="label">%1$s:</span> %2$s',
-			($data['Client']['tax_status']) ? __d('lil_invoices', 'TAX payee no.') : __d('lil_invoices', 'TAX no.'),
-			$this->Html->clean($data['Client']['tax_no'])
-		);
-	}
-?>
-</div>
-
-<div id="invoice-body">
 <h1><?php
 	echo strtr($data['InvoicesCounter']['layout_title'], array(
 		'[[no]]' => $this->Html->clean($data['Invoice']['no'])
@@ -104,5 +49,3 @@
 </table>
 
 <div id="invoice-foot"><?php echo $this->Lil->autop($data['Invoice']['descript']); ?></div>
-
-</div>

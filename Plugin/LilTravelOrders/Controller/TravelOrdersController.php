@@ -95,8 +95,20 @@ class TravelOrdersController extends LilAppController {
 				'TravelOrdersCounter'
 			)
 		))) {
+			$this->autoRender = false;
 			$this->response->type('pdf');
-			$this->set(compact('data'));
+			
+			App::uses('LilReport', 'Lil.Lib');
+			$report = new LilReport();
+			$report->template('LilTravelOrders.travel_order', 'LilTravelOrders.lil_travel_orders_pdf');
+			$report->helpers(array('Lil.Lil', 'Lil.LilDate', 'Lil.LilFloat', 'Html'));
+			$report->set(compact('data'));
+			
+			App::uses('Sanitize', 'Utility');
+			$filename = Sanitize::paranoid(__d('lil_travel_orders', 'travel_order') . '_' . $data['TravelOrder']['no'], array('-', '_'));
+			
+			$report->render($filename);
+			
 		} else $this->error404();
 	}
 /**

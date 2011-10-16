@@ -1,0 +1,36 @@
+	.center {
+		text-align: center;
+	}
+	
+	.right {
+		text-align: right;
+	}
+	
+	.label {
+		font-weight: bold;
+		color: #404040;
+		width: 40%;
+	}
+	
+	.big {
+		font-size: 150%;
+		background-color: #ffffff;
+	}
+	
+	.strong {
+		font-size: 120%;
+		font-weight: bold;
+	}
+	
+	.small {
+		font-size: 70%;
+	}
+	
+	th {
+		font-weight: bold;
+		background-color: #c0c0c0;
+	}
+	
+	td {
+		font-size: 85%;
+	}
