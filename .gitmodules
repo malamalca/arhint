@@ -4,3 +4,18 @@
 [submodule "LilTimeTrack"]
 	path = Plugin/LilTimeTrack
 	url = http://miha.nahtigal:vuego3869@www.nahtigal.com/git/lil_time_track.git
+[submodule "Plugin/LilCrm"]
+	path = Plugin/LilCrm
+	url = http://miha.nahtigal:vuego3869@www.nahtigal.com/git/lil_crm.git
+[submodule "Plugin/LilExpenses"]
+	path = Plugin/LilExpenses
+	url = http://miha.nahtigal:vuego3869@www.nahtigal.com/git/lil_expenses.git
+[submodule "Plugin/LilInvoices"]
+	path = Plugin/LilInvoices
+	url = http://miha.nahtigal:vuego3869@www.nahtigal.com/git/lil_invoices.git
+[submodule "Plugin/LilTasks"]
+	path = Plugin/LilTasks
+	url = http://miha.nahtigal:vuego3869@www.nahtigal.com/git/lil_tasks.git
+[submodule "Plugin/LilTravelOrders"]
+	path = Plugin/LilTravelOrders
+	url = http://miha.nahtigal:vuego3869@www.nahtigal.com/git/lil_travel_orders.git
