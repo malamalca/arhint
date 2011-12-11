@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2011-11-30 20:54+0100\n"
-"PO-Revision-Date: 2011-11-30 20:59+0100\n"
+"POT-Creation-Date: 2011-12-11 19:32+0100\n"
+"PO-Revision-Date: 2011-12-11 19:33+0100\n"
 "Last-Translator: Malamalca <info@malamalca.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -13,65 +13,60 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3;\n"
 
-#: Controller\AppController.php:8;9
-msgid "personal"
-msgstr "osebno"
-
-#: Controller\AppController.php:8;9;10
-msgid "work"
-msgstr "služba"
-
-#: Controller\AppController.php:9
-msgid "mobile"
-msgstr "mobi"
-
-#: Controller\AppController.php:9
-msgid "fax"
-msgstr "faks"
-
-#: Controller\AppController.php:9;10
-msgid "home"
-msgstr "doma"
-
-#: Controller\AppPluginController.php:77
+#: Controller\AppPluginController.php:94
 msgid "Username must be unique."
 msgstr "Uporabniško ime mora biti enoznačno"
 
-#: Controller\AppPluginController.php:153
+#: Controller\AppPluginController.php:170
 msgid "Project no"
 msgstr "Projekt št."
 
-#: Controller\AppPluginController.php:167
+#: Controller\AppPluginController.php:184
 msgid "This is an active project"
 msgstr "Aktiven projekt"
 
-#: Controller\AppPluginController.php:174
+#: Controller\AppPluginController.php:191
 msgid "Login"
 msgstr "Prijava"
 
-#: Controller\AppPluginController.php:181
+#: Controller\AppPluginController.php:198
 msgid "Username"
 msgstr "Uporabniško ime"
 
-#: Controller\AppPluginController.php:193
+#: Controller\AppPluginController.php:210
 msgid "Password"
 msgstr "Geslo"
 
-#: Controller\AppPluginController.php:257
+#: Controller\AppPluginController.php:274
 msgid "No"
 msgstr "Št."
 
-#: Controller\AppPluginController.php:277
+#: Controller\AppPluginController.php:294
 msgid "Projects"
 msgstr "Projekti"
 
-#: Controller\AppPluginController.php:292
+#: Controller\AppPluginController.php:309
 msgid "Active"
 msgstr "Aktivni"
 
-#: Controller\AppPluginController.php:304
+#: Controller\AppPluginController.php:321
 msgid "Archived"
 msgstr "Arhiv"
+
+#~ msgid "personal"
+#~ msgstr "osebno"
+
+#~ msgid "work"
+#~ msgstr "služba"
+
+#~ msgid "mobile"
+#~ msgstr "mobi"
+
+#~ msgid "fax"
+#~ msgstr "faks"
+
+#~ msgid "home"
+#~ msgstr "doma"
 
 #~ msgid "Income and Expenses"
 #~ msgstr "Prihodki in odhodki"

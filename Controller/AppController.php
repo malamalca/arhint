@@ -5,9 +5,6 @@
  * @copyright     Copyright 2010, MalaMalca (http://malamalca.com)
  * @license       http://www.malamalca.com/licenses/lil_intranet.php
  */
-$GLOBALS['email_types'] = array('P' => __('personal', true), 'W' => __('work', true)); 
-$GLOBALS['phone_types'] = array('P' => __('personal', true), 'M' => __('mobile', true), 'W' => __('work', true), 'F' => __('fax', true), 'H' => __('home', true));
-$GLOBALS['address_types'] = array('H' => __('home', true), 'W' => __('work', true));
 /**
  * Application Controller
  *
@@ -51,10 +48,5 @@ class AppController extends Controller {
 		$this->Auth->loginAction	= '/lil/login';
 		$this->Auth->logoutRedirect	= '/';
 		$this->Auth->sessionKey		= 'Auth.User';
-		
-		/*$this->Auth->loginError		= __('Wrong username or password. Please try again.', true);
-		$this->Auth->authError		= __('User must be logged in.', true);*/
-		
-		//$this->set('Auth', $this->Auth->user());	
 	}
 }

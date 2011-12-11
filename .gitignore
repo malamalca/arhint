@@ -1,3 +1,4 @@
+*.mo
 Config/config.php
 Config/bootstrap_local.php
 Config/database.php

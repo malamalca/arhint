@@ -39,6 +39,8 @@ class AppPluginController extends LilPluginController {
  * @var array
  */
 	public $handlers = array(
+		'after_login' => array('function' => '_afterLogin', 'params' => array()),
+		
 		'before_construct_model' => array('function' => '_beforeConstructModel', 'params' => array()),
 		'before_save_model' => array('function' => '_savePassword', 'params' => array()),
 		
@@ -54,6 +56,21 @@ class AppPluginController extends LilPluginController {
 		'before_area_admin_list_params' => array('function' => '_filterAreas', 'params' => array()),
 		'before_area_admin_index_params' => array('function' => '_filterAreasIndex', 'params' => array()),
 	);
+/**
+ * _afterLogin method
+ *
+ * Read company data after login
+ *
+ * @param mixed $controller
+ * @return bool
+ */
+	public function _afterLogin($controller) {
+		if ($company_id = $this->currentUser->get('company_id')) {
+			$Contact = ClassRegistry::init('LilCrm.Contact');
+			$this->Session->write('AuthCompany', $Contact->read(null, $company_id));
+		}
+		return true;
+	}
 /**
  * _beforeConstructModel method
  *
