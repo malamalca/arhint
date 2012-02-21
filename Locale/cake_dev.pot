@@ -14,7 +14,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: webroot\test.php:80
-msgid "Debug setting does not allow access to this url."
+#: Plugin\Arhim\View\Layouts\default.ctp:2
+msgid "ARHIM d.o.o. :: seznam računov"
 msgstr ""
 

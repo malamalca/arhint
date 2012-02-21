@@ -29,6 +29,7 @@ CakePlugin::load('Lil', array('bootstrap' => array('core'), 'routes' => true));
 foreach ($plugins = Configure::read('Lil.plugins') as $plugin) {
 	CakePlugin::load('Lil' . $plugin, array('bootstrap' => array('core'), 'routes' => true));
 }
+CakePlugin::load('Arhim', array('routes' => true));
 
 Configure::write('datepickerFormat', 'yy-mm-dd');
 Configure::write('Lil.languages', array('eng', 'slv'));

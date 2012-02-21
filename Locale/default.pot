@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2011-12-11 19:32+0100\n"
+"POT-Creation-Date: 2012-02-12 09:26+0100\n"
 "PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
 "Last-Translator: NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
@@ -52,5 +52,13 @@ msgstr ""
 
 #: Controller\AppPluginController.php:321
 msgid "Archived"
+msgstr ""
+
+#: Plugin\Arhim\Controller\RacuniController.php:36
+msgid "Napacno uporabnisko ime ali geslo"
+msgstr ""
+
+#: Plugin\Arhim\Controller\RacuniController.php:42
+msgid "Napačno uporabnisko ime ali geslo"
 msgstr ""
 
