@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2012-02-12 09:50+0100\n"
+"POT-Creation-Date: 2012-03-13 18:41+0100\n"
 "PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
 "Last-Translator: NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
@@ -28,23 +28,24 @@ msgstr ""
 msgid "Expense has been deleted."
 msgstr ""
 
-#: Plugin\LilExpenses\Controller\LilExpensesPluginController.php:311;420;435
+#: Plugin\LilExpenses\Controller\LilExpensesPluginController.php:333;447;462
+#: Plugin\LilExpenses\Lib\LilExpensesSidebar.php:52
 msgid "Income and Expenses"
 msgstr ""
 
-#: Plugin\LilExpenses\Controller\LilExpensesPluginController.php:349
-#: Plugin\LilExpenses\View\Elements\expenses_modify_dashboard.ctp:62
+#: Plugin\LilExpenses\Controller\LilExpensesPluginController.php:371
+#: Plugin\LilExpenses\View\Elements\expenses_modify_dashboard.ctp:68
 #: Plugin\LilExpenses\View\Expenses\admin_edit.ctp:125
 #: Plugin\LilExpenses\View\Expenses\admin_index.ctp:98
 #: Plugin\LilExpenses\View\Expenses\admin_view.ctp:51
 msgid "Project"
 msgstr ""
 
-#: Plugin\LilExpenses\Controller\LilExpensesPluginController.php:351
+#: Plugin\LilExpenses\Controller\LilExpensesPluginController.php:373
 msgid "-- select project --"
 msgstr ""
 
-#: Plugin\LilExpenses\Controller\LilExpensesPluginController.php:363
+#: Plugin\LilExpenses\Controller\LilExpensesPluginController.php:385
 #: Plugin\LilExpenses\View\Elements\expenses_modify_dashboard.ctp:10
 #: Plugin\LilExpenses\View\Expenses\admin_edit.ctp:95;105
 #: Plugin\LilExpenses\View\Payments\admin_edit.ctp:71
@@ -52,43 +53,48 @@ msgstr ""
 msgid "Payment"
 msgstr ""
 
-#: Plugin\LilExpenses\Controller\LilExpensesPluginController.php:365
+#: Plugin\LilExpenses\Controller\LilExpensesPluginController.php:387
 #: Plugin\LilExpenses\View\Expenses\admin_edit.ctp:107
 msgid "do not create payment"
 msgstr ""
 
-#: Plugin\LilExpenses\Controller\LilExpensesPluginController.php:380
-#: Plugin\LilExpenses\View\Elements\expenses_modify_dashboard.ctp:63
+#: Plugin\LilExpenses\Controller\LilExpensesPluginController.php:402
+#: Plugin\LilExpenses\View\Elements\expenses_modify_dashboard.ctp:69
 #: Plugin\LilExpenses\View\Expenses\admin_edit.ctp:139
 #: Plugin\LilExpenses\View\Expenses\admin_index.ctp:101
 #: Plugin\LilExpenses\View\Expenses\admin_view.ctp:57
 msgid "User"
 msgstr ""
 
-#: Plugin\LilExpenses\Controller\LilExpensesPluginController.php:450
+#: Plugin\LilExpenses\Controller\LilExpensesPluginController.php:477
+#: Plugin\LilExpenses\Lib\LilExpensesSidebar.php:72
 #: Plugin\LilExpenses\View\Expenses\admin_index.ctp:14;46
 msgid "Income"
 msgstr ""
 
-#: Plugin\LilExpenses\Controller\LilExpensesPluginController.php:456
+#: Plugin\LilExpenses\Controller\LilExpensesPluginController.php:483
+#: Plugin\LilExpenses\Lib\LilExpensesSidebar.php:85
 #: Plugin\LilExpenses\View\Expenses\admin_index.ctp:14;38
 msgid "Expenses"
 msgstr ""
 
-#: Plugin\LilExpenses\Controller\LilExpensesPluginController.php:465
+#: Plugin\LilExpenses\Controller\LilExpensesPluginController.php:492
+#: Plugin\LilExpenses\Lib\LilExpensesSidebar.php:100
 msgid "Payments"
 msgstr ""
 
-#: Plugin\LilExpenses\Controller\LilExpensesPluginController.php:479
+#: Plugin\LilExpenses\Controller\LilExpensesPluginController.php:506
+#: Plugin\LilExpenses\Lib\LilExpensesSidebar.php:139
 msgid "Accounts"
 msgstr ""
 
-#: Plugin\LilExpenses\Controller\LilExpensesPluginController.php:515
-#: Plugin\LilExpenses\View\Reports\unpaid_invoices.ctp:26
+#: Plugin\LilExpenses\Controller\LilExpensesPluginController.php:542
+#: Plugin\LilExpenses\Lib\LilExpensesSidebar.php:171
+#: Plugin\LilExpenses\View\Reports\unpaid_invoices.ctp:23;26
 msgid "Unpaid Invoices"
 msgstr ""
 
-#: Plugin\LilExpenses\Controller\LilExpensesPluginController.php:618
+#: Plugin\LilExpenses\Controller\LilExpensesPluginController.php:645
 msgid "This counter creates income/expense"
 msgstr ""
 
@@ -108,6 +114,18 @@ msgstr ""
 msgid "Payment has been deleted."
 msgstr ""
 
+#: Plugin\LilExpenses\Lib\LilExpensesSidebar.php:14
+msgid "Accounting"
+msgstr ""
+
+#: Plugin\LilExpenses\Lib\LilExpensesSidebar.php:37
+msgid "Reports"
+msgstr ""
+
+#: Plugin\LilExpenses\Lib\LilExpensesSidebar.php:122
+msgid "Lookups"
+msgstr ""
+
 #: Plugin\LilExpenses\View\Elements\expenses_modify_dashboard.ctp:3
 msgid "Current Month's CashFlow"
 msgstr ""
@@ -118,7 +136,7 @@ msgstr ""
 msgid "Account"
 msgstr ""
 
-#: Plugin\LilExpenses\View\Elements\expenses_modify_dashboard.ctp:8;64
+#: Plugin\LilExpenses\View\Elements\expenses_modify_dashboard.ctp:8;70
 #: Plugin\LilExpenses\View\Elements\expenses_view_area.ctp:11
 #: Plugin\LilExpenses\View\Elements\expenses_view_contact.ctp:11
 #: Plugin\LilExpenses\View\Expenses\admin_edit.ctp:83
@@ -147,18 +165,22 @@ msgstr ""
 msgid "Recapitulation"
 msgstr ""
 
-#: Plugin\LilExpenses\View\Elements\expenses_modify_dashboard.ctp:56
+#: Plugin\LilExpenses\View\Elements\expenses_modify_dashboard.ctp:58
+msgid "Recent Expenses for selected Area"
+msgstr ""
+
+#: Plugin\LilExpenses\View\Elements\expenses_modify_dashboard.ctp:60
 msgid "Recent Expenses"
 msgstr ""
 
-#: Plugin\LilExpenses\View\Elements\expenses_modify_dashboard.ctp:61
+#: Plugin\LilExpenses\View\Elements\expenses_modify_dashboard.ctp:67
 #: Plugin\LilExpenses\View\Expenses\admin_index.ctp:95
 #: Plugin\LilExpenses\View\Payments\admin_edit.ctp:95
 #: Plugin\LilExpenses\View\Payments\admin_index.ctp:119
 msgid "Description"
 msgstr ""
 
-#: Plugin\LilExpenses\View\Elements\expenses_modify_dashboard.ctp:65;96
+#: Plugin\LilExpenses\View\Elements\expenses_modify_dashboard.ctp:71;102
 #: Plugin\LilExpenses\View\Elements\expenses_view_area.ctp:13;20
 #: Plugin\LilExpenses\View\Elements\expenses_view_contact.ctp:13;20
 #: Plugin\LilExpenses\View\Expenses\admin_index.ctp:109
@@ -166,7 +188,7 @@ msgstr ""
 msgid "Total"
 msgstr ""
 
-#: Plugin\LilExpenses\View\Elements\expenses_modify_dashboard.ctp:72
+#: Plugin\LilExpenses\View\Elements\expenses_modify_dashboard.ctp:78
 msgid "No expenses found"
 msgstr ""
 
@@ -412,15 +434,11 @@ msgstr ""
 msgid "For specified counters: %s"
 msgstr ""
 
-#: Plugin\LilExpenses\View\Reports\unpaid_invoices.ctp:23
-msgid "Workdays analytics"
-msgstr ""
-
 #: Plugin\LilExpenses\View\Reports\unpaid_invoices.ctp:97
 msgid "No invoices found"
 msgstr ""
 
-#: Plugin\LilTasks\Controller\LilTasksPluginController.php:173
+#: Plugin\LilTasks\Controller\LilTasksPluginController.php:178
 #: Plugin\LilTasks\View\Tasks\admin_index.ctp:13
 msgid "Add Task"
 msgstr ""

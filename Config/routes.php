@@ -33,15 +33,10 @@
 	));
 	
 /**
- * Connect Lil routes.
+ * Load all plugin routes.  See the CakePlugin documentation on 
+ * how to customize the loading of plugin routes.
  */
-	require APP . 'Plugin' . DS . 'Lil' . DS . 'Config' . DS . 'routes.php';
-	
-/**
- * ...and connect the rest of 'Pages' controller's urls.
- */
-	Router::connect('/pages/*', array('controller' => 'pages', 'action' => 'display'));
-	
+	CakePlugin::routes();
 
 /**
  * Load the CakePHP default routes. Remove this if you do not want to use

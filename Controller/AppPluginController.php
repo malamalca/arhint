@@ -121,7 +121,7 @@ class AppPluginController extends LilPluginController {
  * @return array
  */
 	public function _filterAreas($modelOrController, $params) {
-		if (get_parent_class($modelOrController) == 'LilAppController') {
+		if (get_class($modelOrController) != 'Area') {
 			$Area = ClassRegistry::init('Lil.Area');
 		} else {
 			$Area = $modelOrController;

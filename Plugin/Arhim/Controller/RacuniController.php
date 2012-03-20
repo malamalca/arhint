@@ -67,8 +67,9 @@ class RacuniController extends LilAppController {
 		$filter['counter'] = $counter['InvoicesCounter']['id'];
 		$params = array_merge(array('order' => 'Invoice.counter DESC'), $this->Invoice->filter($filter));
 		$data = $this->Invoice->find('all', $params);
+		$dateSpan = $this->Invoice->maxSpan($filter['counter']);
 		
-		$this->set(compact('data', 'filter', 'counter', 'counters'));
+		$this->set(compact('data', 'filter', 'counter', 'counters', 'dateSpan'));
 	}
 /**
  * admin_view method
@@ -80,16 +81,13 @@ class RacuniController extends LilAppController {
 		if ($data = $this->Invoice->find('first', array(
 			'conditions' => array('Invoice.id' => $id),
 			'contain' => array(
-				'InvoicesItem', 'InvoicesTax' => 'Vat',
+				'InvoicesItem',
 				'InvoicesCounter',
 				'Client' => 'PrimaryAddress',
 				'InvoicesAttachment'
 			)
 		))) {
-			$Vat = ClassRegistry::init('LilInvoices.Vat');
-			$vats = $Vat->findList();
-		
-			$this->set(compact('data', 'vats'));
+			$this->set(compact('data'));
 		} else $this->error404();
 	}
 /**

@@ -146,8 +146,7 @@
 		$item_discount = round($itm['price'] * (100-$itm['discount'])/100, 2);
 		$item_total = round($item_discount * $itm['qty'], 2);
 		
-		$vat_id = $itm['vat_id']; $vat_percent = 0;
-		if (!empty($vats[$vat_id])) $vat_percent = $vats[$vat_id]['percent'];
+		$vat_percent = $itm['tax'];
 		
 		$line_total = $item_total + round($item_total * $vat_percent / 100, 2);
 		$grand_total += $line_total;

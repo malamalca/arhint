@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2012-02-12 09:50+0100\n"
+"POT-Creation-Date: 2012-03-13 18:41+0100\n"
 "PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
 "Last-Translator: NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
@@ -28,53 +28,53 @@ msgstr ""
 msgid "please select group"
 msgstr ""
 
-#: Plugin\LilTimeTrack\Controller\LilTimeTrackPluginController.php:148
+#: Plugin\LilTimeTrack\Controller\LilTimeTrackPluginController.php:163
 msgid "UID"
 msgstr ""
 
-#: Plugin\LilTimeTrack\Controller\LilTimeTrackPluginController.php:152
+#: Plugin\LilTimeTrack\Controller\LilTimeTrackPluginController.php:167
 msgid "UID is used as a PIN code for auto user sign in."
 msgstr ""
 
-#: Plugin\LilTimeTrack\Controller\LilTimeTrackPluginController.php:159
+#: Plugin\LilTimeTrack\Controller\LilTimeTrackPluginController.php:174
 msgid "Card No"
 msgstr ""
 
-#: Plugin\LilTimeTrack\Controller\LilTimeTrackPluginController.php:169
+#: Plugin\LilTimeTrack\Controller\LilTimeTrackPluginController.php:184
 msgid "Privileges"
 msgstr ""
 
-#: Plugin\LilTimeTrack\Controller\LilTimeTrackPluginController.php:172
+#: Plugin\LilTimeTrack\Controller\LilTimeTrackPluginController.php:187
 msgid "Common User"
 msgstr ""
 
-#: Plugin\LilTimeTrack\Controller\LilTimeTrackPluginController.php:173
+#: Plugin\LilTimeTrack\Controller\LilTimeTrackPluginController.php:188
 msgid "Enroller"
 msgstr ""
 
-#: Plugin\LilTimeTrack\Controller\LilTimeTrackPluginController.php:174
+#: Plugin\LilTimeTrack\Controller\LilTimeTrackPluginController.php:189
 msgid "Administrator"
 msgstr ""
 
-#: Plugin\LilTimeTrack\Controller\LilTimeTrackPluginController.php:175
+#: Plugin\LilTimeTrack\Controller\LilTimeTrackPluginController.php:190
 msgid "Super Administrator"
 msgstr ""
 
 #: Plugin\LilTimeTrack\Controller\TmtrAbsencesController.php:98
-#: Plugin\LilTimeTrack\Controller\TmtrAbsencesUsersController.php:58
+#: Plugin\LilTimeTrack\Controller\TmtrAbsencesUsersController.php:74
 msgid "Absence has been saved."
 msgstr ""
 
 #: Plugin\LilTimeTrack\Controller\TmtrAbsencesController.php:101
-#: Plugin\LilTimeTrack\Controller\TmtrAbsencesUsersController.php:61
+#: Plugin\LilTimeTrack\Controller\TmtrAbsencesUsersController.php:77
 #: Plugin\LilTimeTrack\Controller\TmtrEventsController.php:117;155
 #: Plugin\LilTimeTrack\Controller\TmtrGroupsController.php:75
 #: Plugin\LilTimeTrack\Controller\TmtrHolidaysController.php:83
-#: Plugin\LilTimeTrack\Controller\TmtrWorkdaysController.php:164
+#: Plugin\LilTimeTrack\Controller\TmtrWorkdaysController.php:167
 msgid "There are some errors in the form. Please correct all marked fields below."
 msgstr ""
 
-#: Plugin\LilTimeTrack\Controller\TmtrAbsencesController.php:145
+#: Plugin\LilTimeTrack\Controller\TmtrAbsencesController.php:153
 msgid "Absence has been deleted."
 msgstr ""
 
@@ -124,7 +124,7 @@ msgid "Event started."
 msgstr ""
 
 #: Plugin\LilTimeTrack\Controller\TmtrEventsController.php:226
-#: Plugin\LilTimeTrack\Controller\TmtrWorkdaysController.php:198
+#: Plugin\LilTimeTrack\Controller\TmtrWorkdaysController.php:201
 msgid "Sth bad happened"
 msgstr ""
 
@@ -140,19 +140,19 @@ msgstr ""
 msgid "Holiday has been deleted."
 msgstr ""
 
-#: Plugin\LilTimeTrack\Controller\TmtrWorkdaysController.php:161
+#: Plugin\LilTimeTrack\Controller\TmtrWorkdaysController.php:164
 msgid "Workday has been saved."
 msgstr ""
 
-#: Plugin\LilTimeTrack\Controller\TmtrWorkdaysController.php:197
+#: Plugin\LilTimeTrack\Controller\TmtrWorkdaysController.php:200
 msgid "Workday stopped."
 msgstr ""
 
-#: Plugin\LilTimeTrack\Controller\TmtrWorkdaysController.php:216
+#: Plugin\LilTimeTrack\Controller\TmtrWorkdaysController.php:219
 msgid "Workday has been deleted."
 msgstr ""
 
-#: Plugin\LilTimeTrack\Controller\TmtrWorkdaysController.php:230
+#: Plugin\LilTimeTrack\Controller\TmtrWorkdaysController.php:233
 msgid "Last registration has been deleted."
 msgstr ""
 
@@ -160,7 +160,8 @@ msgstr ""
 msgid "Index by day"
 msgstr ""
 
-#: Plugin\LilTimeTrack\Lib\LilTimeTrackSidebar.php:45
+#: Plugin\LilTimeTrack\Lib\LilTimeTrackSidebar.php:45;172
+#: Plugin\LilTimeTrack\View\TmtrWorkdays\admin_view.ctp:170
 msgid "Absence"
 msgstr ""
 
@@ -180,43 +181,40 @@ msgstr ""
 msgid "Administration"
 msgstr ""
 
-#: Plugin\LilTimeTrack\Lib\LilTimeTrackSidebar.php:148
+#: Plugin\LilTimeTrack\Lib\LilTimeTrackSidebar.php:150
 msgid "Employees"
 msgstr ""
 
-#: Plugin\LilTimeTrack\Lib\LilTimeTrackSidebar.php:170
-msgid "Leave"
-msgstr ""
-
-#: Plugin\LilTimeTrack\Lib\LilTimeTrackSidebar.php:182
-msgid "Groups"
+#: Plugin\LilTimeTrack\Lib\LilTimeTrackSidebar.php:183
+#: Plugin\LilTimeTrack\Model\TmtrAbsence.php:203
+#: Plugin\LilTimeTrack\View\TmtrAbsences\admin_edit.ctp:8;111
+msgid "Regular Absence"
 msgstr ""
 
 #: Plugin\LilTimeTrack\Lib\LilTimeTrackSidebar.php:194
-msgid "Holidays"
+msgid "Groups"
 msgstr ""
 
 #: Plugin\LilTimeTrack\Lib\LilTimeTrackSidebar.php:206
-msgid "Registrations"
+msgid "Holidays"
 msgstr ""
 
 #: Plugin\LilTimeTrack\Lib\LilTimeTrackSidebar.php:218
+msgid "Registrations"
+msgstr ""
+
+#: Plugin\LilTimeTrack\Lib\LilTimeTrackSidebar.php:230
 #: Plugin\LilTimeTrack\View\TmtrConsoles\admin_index.ctp:6
 msgid "Consoles"
 msgstr ""
 
-#: Plugin\LilTimeTrack\Model\TmtrAbsence.php:111
-#: Plugin\LilTimeTrack\View\TmtrAbsences\admin_edit.ctp:8;106
-msgid "Regular Absence"
-msgstr ""
-
-#: Plugin\LilTimeTrack\Model\TmtrAbsence.php:112
+#: Plugin\LilTimeTrack\Model\TmtrAbsence.php:204
 #: Plugin\LilTimeTrack\View\TmtrAbsences\admin_edit.ctp:5
 #: Plugin\LilTimeTrack\View\TmtrAbsences\admin_index.ctp:3
 msgid "Irregular Absence"
 msgstr ""
 
-#: Plugin\LilTimeTrack\Model\TmtrAbsence.php:113
+#: Plugin\LilTimeTrack\Model\TmtrAbsence.php:205
 #: Plugin\LilTimeTrack\View\TmtrAbsences\admin_edit.ctp:6
 #: Plugin\LilTimeTrack\View\TmtrAbsences\admin_index.ctp:4
 msgid "Sick Leave"
@@ -293,7 +291,7 @@ msgid "Total Work Duration"
 msgstr ""
 
 #: Plugin\LilTimeTrack\View\Reports\analytics.ctp:99
-#: Plugin\LilTimeTrack\View\TmtrAbsences\admin_index.ctp:160
+#: Plugin\LilTimeTrack\View\TmtrAbsences\admin_index.ctp:174
 #: Plugin\LilTimeTrack\View\TmtrWorkdays\admin_index.ctp:226
 msgid "Total"
 msgstr ""
@@ -308,16 +306,18 @@ msgid "Workdays summary"
 msgstr ""
 
 #: Plugin\LilTimeTrack\View\Reports\summary.ctp:34
-#: Plugin\LilTimeTrack\View\TmtrAbsences\admin_edit.ctp:120
+#: Plugin\LilTimeTrack\View\TmtrAbsences\admin_edit.ctp:128
 #: Plugin\LilTimeTrack\View\TmtrAbsencesUsers\admin_edit.ctp:68
+#: Plugin\LilTimeTrack\View\TmtrAbsencesUsers\admin_view.ctp:111
 #: Plugin\LilTimeTrack\View\TmtrHolidays\admin_edit.ctp:64
 #: Plugin\LilTimeTrack\View\TmtrHolidays\admin_index.ctp:62
 msgid "Description"
 msgstr ""
 
 #: Plugin\LilTimeTrack\View\Reports\summary.ctp:35
-#: Plugin\LilTimeTrack\View\TmtrAbsences\admin_edit.ctp:135
-#: Plugin\LilTimeTrack\View\TmtrAbsences\admin_index.ctp:126
+#: Plugin\LilTimeTrack\View\TmtrAbsences\admin_edit.ctp:143
+#: Plugin\LilTimeTrack\View\TmtrAbsences\admin_index.ctp:129
+#: Plugin\LilTimeTrack\View\TmtrAbsencesUsers\admin_view.ctp:112
 msgid "Duration"
 msgstr ""
 
@@ -338,12 +338,14 @@ msgid "Edit Absence"
 msgstr ""
 
 #: Plugin\LilTimeTrack\View\TmtrAbsences\admin_edit.ctp:12
-#: Plugin\LilTimeTrack\View\TmtrAbsences\admin_index.ctp:86
+#: Plugin\LilTimeTrack\View\TmtrAbsences\admin_index.ctp:89
+#: Plugin\LilTimeTrack\View\TmtrAbsencesUsers\admin_view.ctp:36
 msgid "Add Absence"
 msgstr ""
 
 #: Plugin\LilTimeTrack\View\TmtrAbsences\admin_edit.ctp:15
 #: Plugin\LilTimeTrack\View\TmtrAbsencesUsers\admin_edit.ctp:7
+#: Plugin\LilTimeTrack\View\TmtrAbsencesUsers\admin_view.ctp:22
 #: Plugin\LilTimeTrack\View\TmtrConsoles\admin_edit.ctp:7
 #: Plugin\LilTimeTrack\View\TmtrGroups\admin_edit.ctp:10
 #: Plugin\LilTimeTrack\View\TmtrHolidays\admin_edit.ctp:10
@@ -351,51 +353,73 @@ msgstr ""
 msgid "Delete"
 msgstr ""
 
-#: Plugin\LilTimeTrack\View\TmtrAbsences\admin_edit.ctp:25
+#: Plugin\LilTimeTrack\View\TmtrAbsences\admin_edit.ctp:26
+#: Plugin\LilTimeTrack\View\TmtrAbsencesUsers\admin_view.ctp:32
 msgid "Are you sure you want to delete this absence?"
 msgstr ""
 
-#: Plugin\LilTimeTrack\View\TmtrAbsences\admin_edit.ctp:58
+#: Plugin\LilTimeTrack\View\TmtrAbsences\admin_edit.ctp:59
 #: Plugin\LilTimeTrack\View\TmtrAbsencesUsers\admin_edit.ctp:50
 #: Plugin\LilTimeTrack\View\TmtrGroups\admin_edit.ctp:43
 #: Plugin\LilTimeTrack\View\TmtrHolidays\admin_edit.ctp:43
 msgid "Basics"
 msgstr ""
 
-#: Plugin\LilTimeTrack\View\TmtrAbsences\admin_edit.ctp:81
-#: Plugin\LilTimeTrack\View\TmtrAbsences\admin_index.ctp:118
+#: Plugin\LilTimeTrack\View\TmtrAbsences\admin_edit.ctp:82
+#: Plugin\LilTimeTrack\View\TmtrAbsences\admin_index.ctp:121
+#: Plugin\LilTimeTrack\View\TmtrAbsencesUsers\admin_view.ctp:110
 #: Plugin\LilTimeTrack\View\TmtrHolidays\admin_edit.ctp:51
 #: Plugin\LilTimeTrack\View\TmtrHolidays\admin_index.ctp:58
 #: Plugin\LilTimeTrack\View\TmtrRegistrations\admin_index.ctp:72
 msgid "Date"
 msgstr ""
 
-#: Plugin\LilTimeTrack\View\TmtrAbsences\admin_edit.ctp:82
+#: Plugin\LilTimeTrack\View\TmtrAbsences\admin_edit.ctp:84
 #: Plugin\LilTimeTrack\View\TmtrAbsencesUsers\admin_edit.ctp:85
 #: Plugin\LilTimeTrack\View\TmtrHolidays\admin_edit.ctp:52
 msgid "Date is required."
 msgstr ""
 
-#: Plugin\LilTimeTrack\View\TmtrAbsences\admin_edit.ctp:94;108
-#: Plugin\LilTimeTrack\View\TmtrAbsences\admin_index.ctp:122
+#: Plugin\LilTimeTrack\View\TmtrAbsences\admin_edit.ctp:85
+msgid "Invalid date format."
+msgstr ""
+
+#: Plugin\LilTimeTrack\View\TmtrAbsences\admin_edit.ctp:86
+msgid "Absence of specified type is already saved for selected date."
+msgstr ""
+
+#: Plugin\LilTimeTrack\View\TmtrAbsences\admin_edit.ctp:99
+#: Plugin\LilTimeTrack\View\TmtrAbsences\admin_index.ctp:125
 #: Plugin\LilTimeTrack\View\TmtrGroups\admin_index.ctp:56
 msgid "Kind"
 msgstr ""
 
-#: Plugin\LilTimeTrack\View\TmtrAbsences\admin_edit.ctp:121
+#: Plugin\LilTimeTrack\View\TmtrAbsences\admin_edit.ctp:113
+msgid "kind"
+msgstr ""
+
+#: Plugin\LilTimeTrack\View\TmtrAbsences\admin_edit.ctp:116
+msgid "Please select regular absence."
+msgstr ""
+
+#: Plugin\LilTimeTrack\View\TmtrAbsences\admin_edit.ctp:129
 #: Plugin\LilTimeTrack\View\TmtrAbsencesUsers\admin_edit.ctp:69
 #: Plugin\LilTimeTrack\View\TmtrHolidays\admin_edit.ctp:65
 msgid "Description is required."
 msgstr ""
 
-#: Plugin\LilTimeTrack\View\TmtrAbsences\admin_edit.ctp:146
-#: Plugin\LilTimeTrack\View\TmtrAbsencesUsers\admin_edit.ctp:134
+#: Plugin\LilTimeTrack\View\TmtrAbsences\admin_edit.ctp:145
+msgid "Total duration exceedes allowed duration of specified absence."
+msgstr ""
+
+#: Plugin\LilTimeTrack\View\TmtrAbsences\admin_edit.ctp:157
+#: Plugin\LilTimeTrack\View\TmtrAbsencesUsers\admin_edit.ctp:153
 #: Plugin\LilTimeTrack\View\TmtrConsoles\admin_edit.ctp:118
 #: Plugin\LilTimeTrack\View\TmtrEvents\admin_end.ctp:57
 #: Plugin\LilTimeTrack\View\TmtrEvents\admin_start.ctp:64
 #: Plugin\LilTimeTrack\View\TmtrGroups\admin_edit.ctp:214
 #: Plugin\LilTimeTrack\View\TmtrHolidays\admin_edit.ctp:75
-#: Plugin\LilTimeTrack\View\TmtrWorkdays\admin_edit.ctp:51
+#: Plugin\LilTimeTrack\View\TmtrWorkdays\admin_edit.ctp:46
 msgid "Save"
 msgstr ""
 
@@ -403,22 +427,27 @@ msgstr ""
 msgid "entire year"
 msgstr ""
 
-#: Plugin\LilTimeTrack\View\TmtrAbsences\admin_index.ctp:64
+#: Plugin\LilTimeTrack\View\TmtrAbsences\admin_index.ctp:67
 msgid "Absence Overview in %1$s %2$s"
 msgstr ""
 
-#: Plugin\LilTimeTrack\View\TmtrAbsences\admin_index.ctp:66
+#: Plugin\LilTimeTrack\View\TmtrAbsences\admin_index.ctp:69
 msgid "Absence Overview in %2$s %3$s for %1$s"
 msgstr ""
 
-#: Plugin\LilTimeTrack\View\TmtrAbsences\admin_index.ctp:74
+#: Plugin\LilTimeTrack\View\TmtrAbsences\admin_index.ctp:77
+#: Plugin\LilTimeTrack\View\TmtrAbsencesUsers\admin_index.ctp:24
 #: Plugin\LilTimeTrack\View\TmtrConsoles\admin_index.ctp:9
 #: Plugin\LilTimeTrack\View\TmtrGroups\admin_index.ctp:14
 #: Plugin\LilTimeTrack\View\TmtrHolidays\admin_index.ctp:20
 msgid "Add"
 msgstr ""
 
-#: Plugin\LilTimeTrack\View\TmtrAbsences\admin_index.ctp:138
+#: Plugin\LilTimeTrack\View\TmtrAbsences\admin_index.ctp:142
+msgid "No absences found"
+msgstr ""
+
+#: Plugin\LilTimeTrack\View\TmtrAbsences\admin_index.ctp:146
 msgid "Unknown"
 msgstr ""
 
@@ -434,16 +463,22 @@ msgstr ""
 msgid "User"
 msgstr ""
 
+#: Plugin\LilTimeTrack\View\TmtrAbsences\popups\admin_add.ctp:1
+#: Plugin\LilTimeTrack\View\TmtrAbsences\popups\admin_edit.ctp:1
+msgid "Absence has been successfuly saved."
+msgstr ""
+
 #: Plugin\LilTimeTrack\View\TmtrAbsencesUsers\admin_edit.ctp:4
 msgid "Edit Absence Group"
 msgstr ""
 
 #: Plugin\LilTimeTrack\View\TmtrAbsencesUsers\admin_edit.ctp:4
-msgid "Add Absence Group"
+#: Plugin\LilTimeTrack\View\TmtrAbsencesUsers\admin_index.ctp:36
+msgid "Add Regular Absence"
 msgstr ""
 
 #: Plugin\LilTimeTrack\View\TmtrAbsencesUsers\admin_edit.ctp:17
-msgid "Are you sure you want to delete this absence group?"
+msgid "Are you sure you want to delete this regular absence?"
 msgstr ""
 
 #: Plugin\LilTimeTrack\View\TmtrAbsencesUsers\admin_edit.ctp:76
@@ -451,10 +486,14 @@ msgid "Valid Span"
 msgstr ""
 
 #: Plugin\LilTimeTrack\View\TmtrAbsencesUsers\admin_edit.ctp:84
+#: Plugin\LilTimeTrack\View\TmtrAbsencesUsers\admin_index.ctp:72
+#: Plugin\LilTimeTrack\View\TmtrAbsencesUsers\admin_view.ctp:52
 msgid "Valid from"
 msgstr ""
 
 #: Plugin\LilTimeTrack\View\TmtrAbsencesUsers\admin_edit.ctp:96
+#: Plugin\LilTimeTrack\View\TmtrAbsencesUsers\admin_index.ctp:76
+#: Plugin\LilTimeTrack\View\TmtrAbsencesUsers\admin_view.ctp:56
 msgid "Valid to"
 msgstr ""
 
@@ -463,11 +502,53 @@ msgid "Hours"
 msgstr ""
 
 #: Plugin\LilTimeTrack\View\TmtrAbsencesUsers\admin_edit.ctp:111
+#: Plugin\LilTimeTrack\View\TmtrAbsencesUsers\admin_view.ctp:65
+msgid "Available hours"
+msgstr ""
+
+#: Plugin\LilTimeTrack\View\TmtrAbsencesUsers\admin_edit.ctp:115
+msgid "Must be more or equal then sum of already used hours."
+msgstr ""
+
+#: Plugin\LilTimeTrack\View\TmtrAbsencesUsers\admin_edit.ctp:129
+#: Plugin\LilTimeTrack\View\TmtrAbsencesUsers\admin_view.ctp:69
+msgid "Used hours"
+msgstr ""
+
+#: Plugin\LilTimeTrack\View\TmtrAbsencesUsers\admin_index.ctp:17
+msgid "Regular Absence for %1$s"
+msgstr ""
+
+#: Plugin\LilTimeTrack\View\TmtrAbsencesUsers\admin_index.ctp:68
+msgid "Descript"
+msgstr ""
+
+#: Plugin\LilTimeTrack\View\TmtrAbsencesUsers\admin_index.ctp:80
 msgid "Available hours/days"
 msgstr ""
 
-#: Plugin\LilTimeTrack\View\TmtrAbsencesUsers\admin_edit.ctp:123
+#: Plugin\LilTimeTrack\View\TmtrAbsencesUsers\admin_index.ctp:84
 msgid "Used hours/days"
+msgstr ""
+
+#: Plugin\LilTimeTrack\View\TmtrAbsencesUsers\admin_index.ctp:97
+msgid "No regular absences found"
+msgstr ""
+
+#: Plugin\LilTimeTrack\View\TmtrAbsencesUsers\admin_view.ctp:5
+msgid "%1$s for %2$s"
+msgstr ""
+
+#: Plugin\LilTimeTrack\View\TmtrAbsencesUsers\admin_view.ctp:11
+msgid "Edit"
+msgstr ""
+
+#: Plugin\LilTimeTrack\View\TmtrAbsencesUsers\admin_view.ctp:124
+msgid "Total Duration"
+msgstr ""
+
+#: Plugin\LilTimeTrack\View\TmtrAbsencesUsers\admin_view.ctp:137
+msgid "Absences Analytics"
 msgstr ""
 
 #: Plugin\LilTimeTrack\View\TmtrConsoles\admin_edit.ctp:4
@@ -948,12 +1029,12 @@ msgid "Work days for %1$s, from %2$s to %3$s"
 msgstr ""
 
 #: Plugin\LilTimeTrack\View\TmtrWorkdays\admin_overview.ctp:22
-#: Plugin\LilTimeTrack\View\TmtrWorkdays\admin_view.ctp:119
+#: Plugin\LilTimeTrack\View\TmtrWorkdays\admin_view.ctp:118
 msgid "<< prev"
 msgstr ""
 
 #: Plugin\LilTimeTrack\View\TmtrWorkdays\admin_overview.ctp:35
-#: Plugin\LilTimeTrack\View\TmtrWorkdays\admin_view.ctp:133
+#: Plugin\LilTimeTrack\View\TmtrWorkdays\admin_view.ctp:132
 msgid "next >>"
 msgstr ""
 
@@ -1005,59 +1086,59 @@ msgstr ""
 msgid "Are you sure you want to delete last registration?"
 msgstr ""
 
-#: Plugin\LilTimeTrack\View\TmtrWorkdays\admin_view.ctp:93
+#: Plugin\LilTimeTrack\View\TmtrWorkdays\admin_view.ctp:92
 msgid "Workday %1$s for %2$s"
 msgstr ""
 
-#: Plugin\LilTimeTrack\View\TmtrWorkdays\admin_view.ctp:98
+#: Plugin\LilTimeTrack\View\TmtrWorkdays\admin_view.ctp:97
 msgid "Workday %s"
 msgstr ""
 
-#: Plugin\LilTimeTrack\View\TmtrWorkdays\admin_view.ctp:151
+#: Plugin\LilTimeTrack\View\TmtrWorkdays\admin_view.ctp:150
 msgid "Workday's events for %s"
 msgstr ""
 
-#: Plugin\LilTimeTrack\View\TmtrWorkdays\admin_view.ctp:153
+#: Plugin\LilTimeTrack\View\TmtrWorkdays\admin_view.ctp:152
 msgid "Workday's events"
 msgstr ""
 
-#: Plugin\LilTimeTrack\View\TmtrWorkdays\admin_view.ctp:165
+#: Plugin\LilTimeTrack\View\TmtrWorkdays\admin_view.ctp:181
 msgid "Workday started (accepted at %s)"
 msgstr ""
 
-#: Plugin\LilTimeTrack\View\TmtrWorkdays\admin_view.ctp:170
+#: Plugin\LilTimeTrack\View\TmtrWorkdays\admin_view.ctp:186
 msgid "Workday started"
 msgstr ""
 
-#: Plugin\LilTimeTrack\View\TmtrWorkdays\admin_view.ctp:178
+#: Plugin\LilTimeTrack\View\TmtrWorkdays\admin_view.ctp:194
 msgid "Private exit started"
 msgstr ""
 
-#: Plugin\LilTimeTrack\View\TmtrWorkdays\admin_view.ctp:183
+#: Plugin\LilTimeTrack\View\TmtrWorkdays\admin_view.ctp:199
 msgid "Private exit ended (duration %s)"
 msgstr ""
 
-#: Plugin\LilTimeTrack\View\TmtrWorkdays\admin_view.ctp:191
+#: Plugin\LilTimeTrack\View\TmtrWorkdays\admin_view.ctp:207
 msgid "Lunch break started"
 msgstr ""
 
-#: Plugin\LilTimeTrack\View\TmtrWorkdays\admin_view.ctp:197
+#: Plugin\LilTimeTrack\View\TmtrWorkdays\admin_view.ctp:213
 msgid "Lunch break ended (duration %s)"
 msgstr ""
 
-#: Plugin\LilTimeTrack\View\TmtrWorkdays\admin_view.ctp:205
+#: Plugin\LilTimeTrack\View\TmtrWorkdays\admin_view.ctp:221
 msgid "Work started"
 msgstr ""
 
-#: Plugin\LilTimeTrack\View\TmtrWorkdays\admin_view.ctp:210
+#: Plugin\LilTimeTrack\View\TmtrWorkdays\admin_view.ctp:226
 msgid "Work ended (duration %s)"
 msgstr ""
 
-#: Plugin\LilTimeTrack\View\TmtrWorkdays\admin_view.ctp:223
+#: Plugin\LilTimeTrack\View\TmtrWorkdays\admin_view.ctp:239
 msgid "Workday ended (accepted at %1$s, duration %2$s)"
 msgstr ""
 
-#: Plugin\LilTimeTrack\View\TmtrWorkdays\admin_view.ctp:232
+#: Plugin\LilTimeTrack\View\TmtrWorkdays\admin_view.ctp:248
 msgid "end of registration block"
 msgstr ""
 

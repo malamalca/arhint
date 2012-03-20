@@ -68,25 +68,28 @@
 	if (!defined('WWW_ROOT')) {
 		define('WWW_ROOT', dirname(__FILE__) . DS);
 	}
-	if (!defined('CORE_PATH')) {
-		define('APP_PATH', ROOT . DS . APP_DIR . DS);
-		define('CORE_PATH', CAKE_CORE_INCLUDE_PATH . DS);
+
+	if (!defined('CAKE_CORE_INCLUDE_PATH')) {
+		if (function_exists('ini_set')) {
+			ini_set('include_path', ROOT . DS . 'lib' . PATH_SEPARATOR . ini_get('include_path'));
+		}
+		if (!include('Cake' . DS . 'bootstrap.php')) {
+			$failed = true;
+		}
+	} else {
+		if (!include(CAKE_CORE_INCLUDE_PATH . DS . 'Cake' . DS . 'bootstrap.php')) {
+			$failed = true;
+		}
 	}
-	if (!include(CORE_PATH . 'Cake' . DS . 'bootstrap.php')) {
+	if (!empty($failed)) {
 		trigger_error("CakePHP core could not be found.  Check the value of CAKE_CORE_INCLUDE_PATH in APP/webroot/index.php.  It should point to the directory containing your " . DS . "cake core directory and your " . DS . "vendors root directory.", E_USER_ERROR);
 	}
 
 	if (isset($_SERVER['PATH_INFO']) && $_SERVER['PATH_INFO'] == '/favicon.ico') {
 		return;
 	}
-	/*uses('model' . DS . 'connection_manager');
-	$db = ConnectionManager::getInstance();
-	@$connected = $db->getDataSource('default');
-	if (!$connected || !$connected->isConnected()) {
-		die('Application is NOT able to connect to your database. Please check your database.php configuration in APP/config/database.php');
-		trigger_error("Database connect error.", E_USER_ERROR);
-	}*/
-	
+
 	App::uses('Dispatcher', 'Routing');
+
 	$Dispatcher = new Dispatcher();
 	$Dispatcher->dispatch(new CakeRequest(), new CakeResponse(array('charset' => Configure::read('App.encoding'))));

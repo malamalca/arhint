@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2012-02-12 09:50+0100\n"
+"POT-Creation-Date: 2012-03-13 18:41+0100\n"
 "PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
 "Last-Translator: NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
@@ -15,23 +15,23 @@ msgstr ""
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
 #: Plugin\Lil\Controller\AreasController.php:210
-msgid "Area has been selected."
-msgstr ""
-
-#: Plugin\Lil\Controller\AreasController.php:214
 msgid "Area has been cleared."
 msgstr ""
 
-#: Plugin\Lil\Controller\AreasController.php:238
+#: Plugin\Lil\Controller\AreasController.php:213
+msgid "Area has been selected."
+msgstr ""
+
+#: Plugin\Lil\Controller\AreasController.php:237
 msgid "Area has been saved."
 msgstr ""
 
-#: Plugin\Lil\Controller\AreasController.php:241
+#: Plugin\Lil\Controller\AreasController.php:240
 #: Plugin\Lil\Controller\UsersController.php:166;218
 msgid "Please verify that the information is correct."
 msgstr ""
 
-#: Plugin\Lil\Controller\AreasController.php:279
+#: Plugin\Lil\Controller\AreasController.php:278
 msgid "Area has been deleted."
 msgstr ""
 
@@ -75,8 +75,12 @@ msgid "abday"
 msgstr ""
 
 #: Plugin\Lil\Lib\LilDateEngine.php:509
+#: Plugin\Lil\View\Helper\LilDateHelper.php:196;201;205;215
+#: Plugin\Lil\View\Helper\LilFormHelper.php:174
 msgid "day"
-msgstr ""
+msgid_plural "days"
+msgstr[0] ""
+msgstr[1] ""
 
 #: Plugin\Lil\Lib\LilDateEngine.php:515
 msgid "d_t_fmt"
@@ -121,7 +125,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: Plugin\Lil\Lib\LilSidebar.php:18
-#: Plugin\Lil\View\Layouts\lil_admin.ctp:48
+#: Plugin\Lil\View\Layouts\lil_admin.ctp:50
 msgid "Welcome"
 msgstr ""
 
@@ -144,12 +148,12 @@ msgstr ""
 
 #: Plugin\Lil\Lib\LilSidebar.php:98
 #: Plugin\Lil\View\Areas\admin_dashboard.ctp:50
-#: Plugin\Lil\View\Layouts\lil_admin.ctp:103
+#: Plugin\Lil\View\Layouts\lil_admin.ctp:105
 msgid "Logout"
 msgstr ""
 
 #: Plugin\Lil\Lib\LilSidebar.php:114
-#: Plugin\Lil\View\Layouts\lil_admin.ctp:96
+#: Plugin\Lil\View\Layouts\lil_admin.ctp:98
 msgid "Settings"
 msgstr ""
 
@@ -345,13 +349,6 @@ msgid_plural "weeks"
 msgstr[0] ""
 msgstr[1] ""
 
-#: Plugin\Lil\View\Helper\LilDateHelper.php:196;201;205;215
-#: Plugin\Lil\View\Helper\LilFormHelper.php:174
-msgid "day"
-msgid_plural "days"
-msgstr[0] ""
-msgstr[1] ""
-
 #: Plugin\Lil\View\Helper\LilDateHelper.php:220;232
 #: Plugin\Lil\View\Helper\LilFormHelper.php:160
 msgid "hour"
@@ -390,11 +387,11 @@ msgstr ""
 msgid "LilIntranet"
 msgstr ""
 
-#: Plugin\Lil\View\Layouts\lil_admin.ctp:51
+#: Plugin\Lil\View\Layouts\lil_admin.ctp:53
 msgid "-- no area selected --"
 msgstr ""
 
-#: Plugin\Lil\View\Layouts\lil_admin.ctp:89
+#: Plugin\Lil\View\Layouts\lil_admin.ctp:91
 msgid "Change Area"
 msgstr ""
 

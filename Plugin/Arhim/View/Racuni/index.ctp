@@ -1,11 +1,14 @@
 <?php
+	$start_span = empty($filter['start']) ? $dateSpan['start'] : $filter['start'];
+	$end_span = empty($filter['end']) ? $dateSpan['end'] : $filter['end'];
+	
 	$start_link = $this->Html->link(
-		isset($filter['month']) ? $this->LilDate->format($filter['start']) : $this->LilDate->format($filter['start']),
+		isset($filter['month']) ? $this->LilDate->format($start_span) : $this->LilDate->format($start_span),
 		array('action' => 'filter'),
 		array('id' => 'lil-invoices-link-date-start')
 	);
 	$end_link = $this->Html->link(
-		isset($filter['month']) ? $this->LilDate->format($filter['end']) : $this->LilDate->format($filter['end']),
+		isset($filter['month']) ? $this->LilDate->format($end_span) : $this->LilDate->format($end_span),
 		array('action' => 'filter'),
 		array('id' => 'lil-invoices-link-date-end')
 	);
@@ -26,9 +29,9 @@
 		$popup_counters['items'][] = array(
 			'title' => $cntr['InvoicesCounter']['title'],
 			'url'   => array(
-				'?' => array('filter' => array_merge($filter, array(
+				'?' => array('filter' => array(
 					'counter' => $cntr['InvoicesCounter']['id'],
-				)))
+				))
 			)
 		);
 	}
@@ -44,8 +47,8 @@
 			'post' => '',
 			'lines' => array(
 				$title, 
-				sprintf('<input type="hidden" value="%s" id="lil-invoices-input-date-start" />', $filter['start']),
-				sprintf('<input type="hidden" value="%s" id="lil-invoices-input-date-end" />', $filter['end']),
+				sprintf('<input type="hidden" value="%s" id="lil-invoices-input-date-start" />', $start_span),
+				sprintf('<input type="hidden" value="%s" id="lil-invoices-input-date-end" />', $end_span),
 			)
 		),
 		'table' => array(

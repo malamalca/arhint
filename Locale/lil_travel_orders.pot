@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2012-02-12 09:50+0100\n"
+"POT-Creation-Date: 2012-03-13 18:41+0100\n"
 "PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
 "Last-Translator: NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
@@ -13,19 +13,6 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
-
-#: Plugin\LilTravelOrders\Controller\LilTravelOrdersPluginController.php:59;72
-msgid "Travel Orders"
-msgstr ""
-
-#: Plugin\LilTravelOrders\Controller\LilTravelOrdersPluginController.php:81
-msgid "Archived Orders"
-msgstr ""
-
-#: Plugin\LilTravelOrders\Controller\LilTravelOrdersPluginController.php:91
-#: Plugin\LilTravelOrders\View\TravelOrdersCounters\admin_index.ctp:2
-msgid "Counters"
-msgstr ""
 
 #: Plugin\LilTravelOrders\Controller\TravelOrdersController.php:103
 msgid "travel_order"
@@ -53,6 +40,30 @@ msgstr ""
 
 #: Plugin\LilTravelOrders\Controller\TravelOrdersCountersController.php:76
 msgid "Counter has been deleted."
+msgstr ""
+
+#: Plugin\LilTravelOrders\Lib\LilTravelOrdersSidebar.php:14
+msgid "Accounting"
+msgstr ""
+
+#: Plugin\LilTravelOrders\Lib\LilTravelOrdersSidebar.php:34
+msgid "Reports"
+msgstr ""
+
+#: Plugin\LilTravelOrders\Lib\LilTravelOrdersSidebar.php:49
+msgid "Travel Orders"
+msgstr ""
+
+#: Plugin\LilTravelOrders\Lib\LilTravelOrdersSidebar.php:68
+msgid "Archive"
+msgstr ""
+
+#: Plugin\LilTravelOrders\Lib\LilTravelOrdersSidebar.php:88
+msgid "Lookups"
+msgstr ""
+
+#: Plugin\LilTravelOrders\Lib\LilTravelOrdersSidebar.php:105
+msgid "Travel Order Counters"
 msgstr ""
 
 #: Plugin\LilTravelOrders\Lib\_PdfTravelOrder.php:125
@@ -509,6 +520,10 @@ msgstr ""
 
 #: Plugin\LilTravelOrders\View\TravelOrdersCounters\admin_edit.ctp:110
 msgid "Use [[no]], [[no.2]], [[year]] templates."
+msgstr ""
+
+#: Plugin\LilTravelOrders\View\TravelOrdersCounters\admin_index.ctp:2
+msgid "Counters"
 msgstr ""
 
 #: Plugin\LilTravelOrders\View\TravelOrdersCounters\admin_index.ctp:22
