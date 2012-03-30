@@ -1,9 +1,9 @@
 <?php
 	$invoice_view = array(
 		'title_for_layout' => sprintf(__d('lil_invoices', 'Invoice #%1$s <span class="light">(%2$s :: #%3$s)</span>'),
-			$this->Html->clean($data['Invoice']['no']),
-			$this->Html->clean($data['InvoicesCounter']['title']),
-			$this->Html->clean($data['Invoice']['title'])
+			h($data['Invoice']['no']),
+			h($data['InvoicesCounter']['title']),
+			h($data['Invoice']['title'])
 		),
 		'panels' => array(
 			'h' => '<h2>Podrobnosti</h2>',
@@ -12,7 +12,7 @@
 				'lines' => array(
 					0 => array(
 						'label' => __d('lil_invoices', 'Title') . ':',
-						'text'  => $this->Html->clean($data['Invoice']['title'])
+						'text'  => h($data['Invoice']['title'])
 					),
 					
 				)
@@ -23,7 +23,7 @@
 					0 => array(
 						'label' => __d('lil_invoices', 'Client') . ':',
 						'text'  =>
-							$this->Html->clean($data['Client']['title']) . ' ' .
+							h($data['Client']['title']) . ' ' .
 							$this->Html->link($this->Html->image('/lil_invoices/img/goto.gif'),
 								array(
 									'plugin'     => 'lil_crm',
@@ -37,15 +37,15 @@
 					1 => empty($data['Client']['PrimaryAddress']) ? null : array(
 						'text'  =>
 							implode(',', Set::filter(array(
-								$this->Html->clean($data['Client']['PrimaryAddress']['street']),
-								$this->Html->clean(implode(
+								h($data['Client']['PrimaryAddress']['street']),
+								h(implode(
 									' ', 
 									array(
 										$data['Client']['PrimaryAddress']['zip'],
 										$data['Client']['PrimaryAddress']['city']
 									)
 								)),
-								$this->Html->clean($data['Client']['PrimaryAddress']['country'])
+								h($data['Client']['PrimaryAddress']['country'])
 							)))
 					),
 				)
@@ -55,7 +55,7 @@
 				'lines' => array(
 					0 => array(
 						'label' => (($data['Client']['tax_status']) ? __d('lil_invoices', 'TAX payee no.') : __d('lil_invoices', 'TAX no.')) . ':',
-						'text'  => $this->Html->clean($data['Client']['tax_no'])
+						'text'  => h($data['Client']['tax_no'])
 					),
 				)
 			),
@@ -152,13 +152,13 @@
 		$grand_total += $line_total;
 		
 		$items_body['rows'][] = array('columns' => array(
-			'descript' => $this->Html->clean($itm['descript']),
+			'descript' => h($itm['descript']),
 			'qty' => array(
 				'parameters' => array('class' => 'right'),
 				'html' => $this->LilFloat->format($itm['qty'])
 			),
 			'unit' => array(
-				'html' => $this->Html->clean($itm['unit'])
+				'html' => h($itm['unit'])
 			),
 			'price' => array(
 				'parameters' => array('class' => 'right'),

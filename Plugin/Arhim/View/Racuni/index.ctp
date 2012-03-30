@@ -37,10 +37,10 @@
 	}
 	
 	$this->Lil->popup('counter', $popup_counters);
-	$this->set('title_for_layout', $this->Html->clean($counter['InvoicesCounter']['title']));
+	$this->set('title_for_layout', h($counter['InvoicesCounter']['title']));
 	
 	$invoices_index = array(
-		'title_for_layout' => $this->Html->clean($counter['InvoicesCounter']['title']),
+		'title_for_layout' => h($counter['InvoicesCounter']['title']),
 		'head_for_layout' => false,
 		'actions' => array(
 			'pre' => '<div>',
@@ -99,7 +99,7 @@
 		$invoices_index['table']['element']['body']['rows'][]['columns'] = array(
 			'cnt' => array(
 				'parameters' => array('class' => 'center'),
-				'html' => $this->Html->clean($invoice['Invoice']['counter'])
+				'html' => h($invoice['Invoice']['counter'])
 			),
 			'no' => array(
 				'html' => $this->Html->link($invoice['Invoice']['no'], array('action' => 'view', $invoice['Invoice']['id']))
@@ -109,13 +109,13 @@
 				'html' => $this->LilDate->format($invoice['Invoice']['dat_issue'])
 			),
 			'title' => array(
-				'html' => $this->Html->clean($invoice['Invoice']['title']) . 
+				'html' => h($invoice['Invoice']['title']) . 
 					// attachment
 					($invoice['Invoice']['invoices_attachment_count'] == 0 ? '' : 
 						' ' . $this->Html->image('/lil_invoices/img/attachment.png'))
 			),
 			'client' => array(
-				'html' => $this->Text->truncate($this->Html->clean($invoice['Client']['title']), 30)
+				'html' => $this->Text->truncate(h($invoice['Client']['title']), 30)
 			),
 			'total' => array(
 				'parameters' => array('class' => 'right'),
