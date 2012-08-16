@@ -31,6 +31,25 @@ foreach ($plugins = Configure::read('Lil.plugins') as $plugin) {
 }
 CakePlugin::load('Arhim', array('routes' => true));
 
+// Enable the Dispatcher filters for plugin assets, and
+// CacheHelper.
+Configure::write('Dispatcher.filters', array(
+    'AssetDispatcher',
+    'CacheDispatcher'
+));
+
+// Add logging configuration.
+CakeLog::config('debug', array(
+    'engine' => 'FileLog',
+    'types' => array('notice', 'info', 'debug'),
+    'file' => 'debug',
+));
+CakeLog::config('error', array(
+    'engine' => 'FileLog',
+    'types' => array('warning', 'error', 'critical', 'alert', 'emergency'),
+    'file' => 'error',
+));
+
 Configure::write('datepickerFormat', 'yy-mm-dd');
 Configure::write('Lil.languages', array('eng', 'slv'));
 
