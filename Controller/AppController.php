@@ -47,6 +47,6 @@ class AppController extends Controller {
 		$this->Auth->loginRedirect	= '/admin';
 		$this->Auth->loginAction	= '/lil/login';
 		$this->Auth->logoutRedirect	= '/';
-		$this->Auth->sessionKey		= 'Auth.User';
+		//$this->Auth->sessionKey		= 'Auth.User';
 	}
 }
