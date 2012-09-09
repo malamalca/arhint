@@ -39,7 +39,7 @@ class AppPluginController extends LilPluginController {
  * @var array
  */
 	public $handlers = array(
-		'after_login' => array('function' => '_afterLogin', 'params' => array()),
+		//'after_login' => array('function' => '_afterLogin', 'params' => array()),
 		
 		'before_construct_model' => array('function' => '_beforeConstructModel', 'params' => array()),
 		'before_save_model' => array('function' => '_savePassword', 'params' => array()),
@@ -64,13 +64,13 @@ class AppPluginController extends LilPluginController {
  * @param mixed $controller
  * @return bool
  */
-	public function _afterLogin($controller) {
+/*	public function _afterLogin($controller) {
 		if ($company_id = $this->currentUser->get('company_id')) {
 			$Contact = ClassRegistry::init('LilCrm.Contact');
 			$this->Session->write('AuthCompany', $Contact->read(null, $company_id));
 		}
 		return true;
-	}
+	}*/
 /**
  * _beforeConstructModel method
  *
