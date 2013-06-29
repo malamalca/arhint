@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2012-03-13 18:41+0100\n"
+"POT-Creation-Date: 2012-11-29 14:54+0100\n"
 "PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
 "Last-Translator: NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
@@ -14,546 +14,547 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: Plugin\Lil\Controller\AreasController.php:210
+#: Plugin/Lil/Controller/AreasController.php:206
 msgid "Area has been cleared."
 msgstr ""
 
-#: Plugin\Lil\Controller\AreasController.php:213
+#: Plugin/Lil/Controller/AreasController.php:209
 msgid "Area has been selected."
 msgstr ""
 
-#: Plugin\Lil\Controller\AreasController.php:237
+#: Plugin/Lil/Controller/AreasController.php:233
 msgid "Area has been saved."
 msgstr ""
 
-#: Plugin\Lil\Controller\AreasController.php:240
-#: Plugin\Lil\Controller\UsersController.php:166;218
+#: Plugin/Lil/Controller/AreasController.php:236
+#: Plugin/Lil/Controller/UsersController.php:168;220
 msgid "Please verify that the information is correct."
 msgstr ""
 
-#: Plugin\Lil\Controller\AreasController.php:278
+#: Plugin/Lil/Controller/AreasController.php:274
 msgid "Area has been deleted."
 msgstr ""
 
-#: Plugin\Lil\Controller\UsersController.php:97
+#: Plugin/Lil/Controller/UsersController.php:96
 msgid "Username or password is incorrect"
 msgstr ""
 
-#: Plugin\Lil\Controller\UsersController.php:122
+#: Plugin/Lil/Controller/UsersController.php:121
 msgid "You've been logged out."
 msgstr ""
 
-#: Plugin\Lil\Controller\UsersController.php:163
+#: Plugin/Lil/Controller/UsersController.php:165
 msgid "User has been saved."
 msgstr ""
 
-#: Plugin\Lil\Controller\UsersController.php:199
+#: Plugin/Lil/Controller/UsersController.php:201
 msgid "User has been deleted."
 msgstr ""
 
-#: Plugin\Lil\Controller\UsersController.php:215
+#: Plugin/Lil/Controller/UsersController.php:217
 msgid "Properties have been saved."
 msgstr ""
 
-#: Plugin\Lil\Lib\LilDateEngine.php:233
-#: Plugin\Lil\View\Helper\LilDateHelper.php:254
+#: Plugin/Lil/Lib/LilDateEngine.php:234
+#: Plugin/Lil/View/Helper/LilDateHelper.php:254
 msgid "Today"
 msgstr ""
 
-#: Plugin\Lil\Lib\LilDateEngine.php:235
-#: Plugin\Lil\View\Helper\LilDateHelper.php:212
+#: Plugin/Lil/Lib/LilDateEngine.php:236
+#: Plugin/Lil/View/Helper/LilDateHelper.php:212
 msgid "Yesterday"
 msgstr ""
 
-#: Plugin\Lil\Lib\LilDateEngine.php:237
-#: Plugin\Lil\View\Helper\LilDateHelper.php:210
+#: Plugin/Lil/Lib/LilDateEngine.php:238
+#: Plugin/Lil/View/Helper/LilDateHelper.php:210
 msgid "Tomorrow"
 msgstr ""
 
-#: Plugin\Lil\Lib\LilDateEngine.php:503
+#: Plugin/Lil/Lib/LilDateEngine.php:524
 msgid "abday"
 msgstr ""
 
-#: Plugin\Lil\Lib\LilDateEngine.php:509
-#: Plugin\Lil\View\Helper\LilDateHelper.php:196;201;205;215
-#: Plugin\Lil\View\Helper\LilFormHelper.php:174
+#: Plugin/Lil/Lib/LilDateEngine.php:530
+#: Plugin/Lil/View/Helper/LilDateHelper.php:196;201;205;215
+#: Plugin/Lil/View/Helper/LilFormHelper.php:187
 msgid "day"
 msgid_plural "days"
 msgstr[0] ""
 msgstr[1] ""
 
-#: Plugin\Lil\Lib\LilDateEngine.php:515
+#: Plugin/Lil/Lib/LilDateEngine.php:536
 msgid "d_t_fmt"
 msgstr ""
 
-#: Plugin\Lil\Lib\LilDateEngine.php:537
+#: Plugin/Lil/Lib/LilDateEngine.php:558
 msgid "abmon"
 msgstr ""
 
-#: Plugin\Lil\Lib\LilDateEngine.php:543
+#: Plugin/Lil/Lib/LilDateEngine.php:564
 msgid "mon"
 msgstr ""
 
-#: Plugin\Lil\Lib\LilDateEngine.php:554
+#: Plugin/Lil/Lib/LilDateEngine.php:575
 msgid "am_pm"
 msgstr ""
 
-#: Plugin\Lil\Lib\LilDateEngine.php:561
+#: Plugin/Lil/Lib/LilDateEngine.php:582
 msgid "t_fmt_ampm"
 msgstr ""
 
-#: Plugin\Lil\Lib\LilDateEngine.php:575
+#: Plugin/Lil/Lib/LilDateEngine.php:596
 msgid "d_fmt"
 msgstr ""
 
-#: Plugin\Lil\Lib\LilDateEngine.php:581
+#: Plugin/Lil/Lib/LilDateEngine.php:602
 msgid "t_fmt"
 msgstr ""
 
-#: Plugin\Lil\Lib\LilDateEngine.php:288;293;306
-#: Plugin\Lil\View\Helper\LilDateHelper.php:218;229
+#: Plugin/Lil/Lib/LilDateEngine.php:292;301;326
+#: Plugin/Lil/View/Helper/LilDateHelper.php:218;229
 msgid "hr"
 msgid_plural "hrs"
 msgstr[0] ""
 msgstr[1] ""
 
-#: Plugin\Lil\Lib\LilDateEngine.php:291;299;304
-#: Plugin\Lil\View\Helper\LilDateHelper.php:230;240
+#: Plugin/Lil/Lib/LilDateEngine.php:295;311;320
+#: Plugin/Lil/View/Helper/LilDateHelper.php:230;240
 msgid "min"
 msgid_plural "mins"
 msgstr[0] ""
 msgstr[1] ""
 
-#: Plugin\Lil\Lib\LilSidebar.php:18
-#: Plugin\Lil\View\Layouts\lil_admin.ctp:50
+#: Plugin/Lil/Lib/LilSidebar.php:18
+#: Plugin/Lil/View/Layouts/lil_admin.ctp:58
 msgid "Welcome"
 msgstr ""
 
-#: Plugin\Lil\Lib\LilSidebar.php:37
+#: Plugin/Lil/Lib/LilSidebar.php:37
 msgid "Welcome, %s"
 msgstr ""
 
-#: Plugin\Lil\Lib\LilSidebar.php:56
+#: Plugin/Lil/Lib/LilSidebar.php:56
 msgid "Dashboard"
 msgstr ""
 
-#: Plugin\Lil\Lib\LilSidebar.php:70
-#: Plugin\Lil\View\Areas\admin_dashboard.ctp:22
+#: Plugin/Lil/Lib/LilSidebar.php:70
+#: Plugin/Lil/View/Areas/admin_dashboard.ctp:23
 msgid "Change admin area"
 msgstr ""
 
-#: Plugin\Lil\Lib\LilSidebar.php:84
+#: Plugin/Lil/Lib/LilSidebar.php:84
 msgid "Edit user profile"
 msgstr ""
 
-#: Plugin\Lil\Lib\LilSidebar.php:98
-#: Plugin\Lil\View\Areas\admin_dashboard.ctp:50
-#: Plugin\Lil\View\Layouts\lil_admin.ctp:105
+#: Plugin/Lil/Lib/LilSidebar.php:98
+#: Plugin/Lil/View/Areas/admin_dashboard.ctp:51
+#: Plugin/Lil/View/Layouts/lil_admin.ctp:118
 msgid "Logout"
 msgstr ""
 
-#: Plugin\Lil\Lib\LilSidebar.php:114
-#: Plugin\Lil\View\Layouts\lil_admin.ctp:98
+#: Plugin/Lil/Lib/LilSidebar.php:114
+#: Plugin/Lil/View/Layouts/lil_admin.ctp:109
 msgid "Settings"
 msgstr ""
 
-#: Plugin\Lil\Lib\LilSidebar.php:123
+#: Plugin/Lil/Lib/LilSidebar.php:123
 msgid "Users"
 msgstr ""
 
-#: Plugin\Lil\Lib\LilSidebar.php:138
-#: Plugin\Lil\View\Areas\admin_index.ctp:12
+#: Plugin/Lil/Lib/LilSidebar.php:138
+#: Plugin/Lil/View/Areas/admin_index.ctp:12
 msgid "Areas"
 msgstr ""
 
-#: Plugin\Lil\Model\Behavior\LilUploadBehavior.php:290
+#: Plugin/Lil/Model/Behavior/LilUploadBehavior.php:298
 msgid "Upload not possible. There is a problem with the setup on the server, more info available in the logs."
 msgstr ""
 
-#: Plugin\Lil\Model\Behavior\LilUploadBehavior.php:294
+#: Plugin/Lil/Model/Behavior/LilUploadBehavior.php:302
 msgid "An error was generated during the upload."
 msgstr ""
 
-#: Plugin\Lil\Model\Behavior\LilUploadBehavior.php:305
+#: Plugin/Lil/Model/Behavior/LilUploadBehavior.php:313
 msgid "The submitted mime type is not permitted, only %s permitted."
 msgstr ""
 
-#: Plugin\Lil\Model\Behavior\LilUploadBehavior.php:317
+#: Plugin/Lil/Model/Behavior/LilUploadBehavior.php:325
 msgid "The submitted file extension is not permitted, only %s permitted."
 msgstr ""
 
-#: Plugin\Lil\Model\Behavior\LilUploadBehavior.php:324
+#: Plugin/Lil/Model/Behavior/LilUploadBehavior.php:332
 msgid "File was not uploaded."
 msgstr ""
 
-#: Plugin\Lil\Model\Behavior\LilUploadBehavior.php:329
+#: Plugin/Lil/Model/Behavior/LilUploadBehavior.php:337
 msgid "The file uploaded is too big, only files less than %1$s %2$s permitted."
 msgstr ""
 
-#: Plugin\Lil\Model\Behavior\LilUploadBehavior.php:364
+#: Plugin/Lil/Model/Behavior/LilUploadBehavior.php:372
 msgid "The method processUpload has been explicitly called but the filename field (%s) is not present in the submitted data. "
 msgstr ""
 
-#: Plugin\Lil\Model\Behavior\LilUploadBehavior.php:421
+#: Plugin/Lil/Model/Behavior/LilUploadBehavior.php:429
 msgid "The file %s already exists and cannot be deleted."
 msgstr ""
 
-#: Plugin\Lil\View\Areas\admin_dashboard.ctp:12
+#: Plugin/Lil/View/Areas/admin_dashboard.ctp:12
 msgid "Welcome. What would you like to do?"
 msgstr ""
 
-#: Plugin\Lil\View\Areas\admin_dashboard.ctp:36
+#: Plugin/Lil/View/Areas/admin_dashboard.ctp:37
 msgid "Edit user profile and password"
 msgstr ""
 
-#: Plugin\Lil\View\Areas\admin_edit.ctp:13
+#: Plugin/Lil/View/Areas/admin_edit.ctp:13
 msgid "Edit Area"
 msgstr ""
 
-#: Plugin\Lil\View\Areas\admin_edit.ctp:13
+#: Plugin/Lil/View/Areas/admin_edit.ctp:13
 msgid "Add an Area"
 msgstr ""
 
-#: Plugin\Lil\View\Areas\admin_edit.ctp:40
+#: Plugin/Lil/View/Areas/admin_edit.ctp:40
 msgid "Basic data"
 msgstr ""
 
-#: Plugin\Lil\View\Areas\admin_edit.ctp:47
-#: Plugin\Lil\View\Areas\admin_index.ctp:56
-#: Plugin\Lil\View\Areas\admin_list.ctp:53
-#: Plugin\Lil\View\Users\admin_edit.ctp:57
-#: Plugin\Lil\View\Users\admin_index.ctp:56
-#: Plugin\Lil\View\Users\admin_properties.ctp:40
+#: Plugin/Lil/View/Areas/admin_edit.ctp:47
+#: Plugin/Lil/View/Areas/admin_index.ctp:56
+#: Plugin/Lil/View/Areas/admin_list.ctp:53
+#: Plugin/Lil/View/Users/admin_edit.ctp:57
+#: Plugin/Lil/View/Users/admin_index.ctp:56
+#: Plugin/Lil/View/Users/admin_properties.ctp:40
 msgid "Name"
 msgstr ""
 
-#: Plugin\Lil\View\Areas\admin_edit.ctp:48
+#: Plugin/Lil/View/Areas/admin_edit.ctp:48
 msgid "Area name is required."
 msgstr ""
 
-#: Plugin\Lil\View\Areas\admin_edit.ctp:61
-#: Plugin\Lil\View\Areas\admin_index.ctp:60
-#: Plugin\Lil\View\Areas\admin_list.ctp:57
+#: Plugin/Lil/View/Areas/admin_edit.ctp:61
+#: Plugin/Lil/View/Areas/admin_index.ctp:60
+#: Plugin/Lil/View/Areas/admin_list.ctp:57
 msgid "Slug"
 msgstr ""
 
-#: Plugin\Lil\View\Areas\admin_edit.ctp:62
+#: Plugin/Lil/View/Areas/admin_edit.ctp:62
 msgid "Slug must only use letters, numbers, underscores or hyphens."
 msgstr ""
 
-#: Plugin\Lil\View\Areas\admin_edit.ctp:72
-#: Plugin\Lil\View\Areas\admin_index.ctp:64
-#: Plugin\Lil\View\Areas\admin_view.ctp:42
+#: Plugin/Lil/View/Areas/admin_edit.ctp:73
+#: Plugin/Lil/View/Areas/admin_index.ctp:64
+#: Plugin/Lil/View/Areas/admin_view.ctp:42
 msgid "Description"
 msgstr ""
 
-#: Plugin\Lil\View\Areas\admin_edit.ctp:73
+#: Plugin/Lil/View/Areas/admin_edit.ctp:74
 msgid "Area description is required."
 msgstr ""
 
-#: Plugin\Lil\View\Areas\admin_edit.ctp:83
+#: Plugin/Lil/View/Areas/admin_edit.ctp:84
 msgid "User"
 msgstr ""
 
-#: Plugin\Lil\View\Areas\admin_edit.ctp:93
-#: Plugin\Lil\View\Users\admin_edit.ctp:117
-#: Plugin\Lil\View\Users\admin_properties.ctp:77
-#: Plugin\LilExpenses\View\Expenses\admin_edit.ctp:151
-#: Plugin\LilExpenses\View\Payments\admin_edit.ctp:126
-#: Plugin\LilExpenses\View\PaymentsAccounts\admin_edit.ctp:65
+#: Plugin/Lil/View/Areas/admin_edit.ctp:94
+#: Plugin/Lil/View/Users/admin_edit.ctp:117
+#: Plugin/Lil/View/Users/admin_properties.ctp:77
+#: Plugin/LilExpenses/View/Expenses/admin_edit.ctp:151
+#: Plugin/LilExpenses/View/Payments/admin_edit.ctp:131
+#: Plugin/LilExpenses/View/PaymentsAccounts/admin_edit.ctp:65
+#: Plugin/LilTasks/View/Tasks/admin_edit.ctp:132
 msgid "Save"
 msgstr ""
 
-#: Plugin\Lil\View\Areas\admin_index.ctp:15
-#: Plugin\Lil\View\Users\admin_index.ctp:15
+#: Plugin/Lil/View/Areas/admin_index.ctp:15
+#: Plugin/Lil/View/Users/admin_index.ctp:15
 msgid "Add"
 msgstr ""
 
-#: Plugin\Lil\View\Areas\admin_index.ctp:52
-#: Plugin\Lil\View\Users\admin_index.ctp:52
+#: Plugin/Lil/View/Areas/admin_index.ctp:52
+#: Plugin/Lil/View/Users/admin_index.ctp:52
 msgid "ID"
 msgstr ""
 
-#: Plugin\Lil\View\Areas\admin_list.ctp:14
+#: Plugin/Lil/View/Areas/admin_list.ctp:14
 msgid "Select your Area"
 msgstr ""
 
-#: Plugin\Lil\View\Areas\admin_list.ctp:20
+#: Plugin/Lil/View/Areas/admin_list.ctp:20
 msgid "Clear current Area"
 msgstr ""
 
-#: Plugin\Lil\View\Areas\admin_list.ctp:72
+#: Plugin/Lil/View/Areas/admin_list.ctp:72
 msgid "No areas that match your criteria."
 msgstr ""
 
-#: Plugin\Lil\View\Areas\admin_view.ctp:3
+#: Plugin/Lil/View/Areas/admin_view.ctp:3
 msgid "Area \"%1$s\""
 msgstr ""
 
-#: Plugin\Lil\View\Areas\admin_view.ctp:8
-#: Plugin\Lil\View\Scaffolds\index.ctp:51
-#: Plugin\Lil\View\Scaffolds\view.ctp:137
+#: Plugin/Lil/View/Areas/admin_view.ctp:8
+#: Plugin/Lil/View/Scaffolds/index.ctp:51
+#: Plugin/Lil/View/Scaffolds/view.ctp:137
 msgid "Edit"
 msgstr ""
 
-#: Plugin\Lil\View\Areas\admin_view.ctp:19
-#: Plugin\Lil\View\Scaffolds\index.ctp:52
-#: Plugin\Lil\View\Scaffolds\view.ctp:138
-#: Plugin\Lil\View\Users\admin_edit.ctp:16
+#: Plugin/Lil/View/Areas/admin_view.ctp:19
+#: Plugin/Lil/View/Scaffolds/index.ctp:52
+#: Plugin/Lil/View/Scaffolds/view.ctp:138
+#: Plugin/Lil/View/Users/admin_edit.ctp:16
 msgid "Delete"
 msgstr ""
 
-#: Plugin\Lil\View\Areas\admin_view.ctp:29
+#: Plugin/Lil/View/Areas/admin_view.ctp:29
 msgid "Are you sure you want to delete this area?"
 msgstr ""
 
-#: Plugin\Lil\View\Areas\admin_view.ctp:38
+#: Plugin/Lil/View/Areas/admin_view.ctp:38
 msgid "Title"
 msgstr ""
 
-#: Plugin\Lil\View\Areas\index.ctp:12
+#: Plugin/Lil/View/Areas/index.ctp:12
 msgid "Lil List"
 msgstr ""
 
-#: Plugin\Lil\View\Areas\index.ctp:21
+#: Plugin/Lil/View/Areas/index.ctp:21
 msgid "Read more"
 msgstr ""
 
-#: Plugin\Lil\View\Areas\view.ctp:11
+#: Plugin/Lil/View/Areas/view.ctp:11
 msgid "Area"
 msgstr ""
 
-#: Plugin\Lil\View\Helper\LilDateHelper.php:189
+#: Plugin/Lil/View/Helper/LilDateHelper.php:189
 msgid "on %s"
 msgstr ""
 
-#: Plugin\Lil\View\Helper\LilDateHelper.php:259
+#: Plugin/Lil/View/Helper/LilDateHelper.php:259
 msgid "%s ago"
 msgstr ""
 
-#: Plugin\Lil\View\Helper\LilDateHelper.php:193
+#: Plugin/Lil/View/Helper/LilDateHelper.php:193
 msgid "year"
 msgid_plural "years"
 msgstr[0] ""
 msgstr[1] ""
 
-#: Plugin\Lil\View\Helper\LilDateHelper.php:194;199
+#: Plugin/Lil/View/Helper/LilDateHelper.php:194;199
 msgid "month"
 msgid_plural "months"
 msgstr[0] ""
 msgstr[1] ""
 
-#: Plugin\Lil\View\Helper\LilDateHelper.php:195;200;204
+#: Plugin/Lil/View/Helper/LilDateHelper.php:195;200;204
 msgid "week"
 msgid_plural "weeks"
 msgstr[0] ""
 msgstr[1] ""
 
-#: Plugin\Lil\View\Helper\LilDateHelper.php:220;232
-#: Plugin\Lil\View\Helper\LilFormHelper.php:160
+#: Plugin/Lil/View/Helper/LilDateHelper.php:220;232
+#: Plugin/Lil/View/Helper/LilFormHelper.php:173
 msgid "hour"
 msgid_plural "hours"
 msgstr[0] ""
 msgstr[1] ""
 
-#: Plugin\Lil\View\Helper\LilDateHelper.php:233;242
-#: Plugin\Lil\View\Helper\LilFormHelper.php:187
+#: Plugin/Lil/View/Helper/LilDateHelper.php:233;242
+#: Plugin/Lil/View/Helper/LilFormHelper.php:200
 msgid "minute"
 msgid_plural "minutes"
 msgstr[0] ""
 msgstr[1] ""
 
-#: Plugin\Lil\View\Helper\LilDateHelper.php:248
+#: Plugin/Lil/View/Helper/LilDateHelper.php:248
 msgid "sec"
 msgid_plural "secs"
 msgstr[0] ""
 msgstr[1] ""
 
-#: Plugin\Lil\View\Helper\LilDateHelper.php:250
+#: Plugin/Lil/View/Helper/LilDateHelper.php:250
 msgid "second"
 msgid_plural "seconds"
 msgstr[0] ""
 msgstr[1] ""
 
-#: Plugin\Lil\View\Helper\LilHelper.php:157
+#: Plugin/Lil/View/Helper/LilHelper.php:157
 msgid "Are you sure you want to delete this record?"
 msgstr ""
 
-#: Plugin\Lil\View\Helper\LilHelper.php:462
+#: Plugin/Lil/View/Helper/LilHelper.php:517
 msgid "No records found."
 msgstr ""
 
-#: Plugin\Lil\View\Layouts\lil_admin.ctp:9
+#: Plugin/Lil/View/Layouts/lil_admin.ctp:9
 msgid "LilIntranet"
 msgstr ""
 
-#: Plugin\Lil\View\Layouts\lil_admin.ctp:53
+#: Plugin/Lil/View/Layouts/lil_admin.ctp:61
 msgid "-- no area selected --"
 msgstr ""
 
-#: Plugin\Lil\View\Layouts\lil_admin.ctp:91
+#: Plugin/Lil/View/Layouts/lil_admin.ctp:100
 msgid "Change Area"
 msgstr ""
 
-#: Plugin\Lil\View\Scaffolds\edit.ctp:13
+#: Plugin/Lil/View/Scaffolds/edit.ctp:13
 msgid "Add or Edit %s"
 msgstr ""
 
-#: Plugin\Lil\View\Scaffolds\edit.ctp:19
+#: Plugin/Lil/View/Scaffolds/edit.ctp:19
 msgid "Submit"
 msgstr ""
 
-#: Plugin\Lil\View\Scaffolds\index.ctp:22
-#: Plugin\Lil\View\Scaffolds\view.ctp:42
+#: Plugin/Lil/View/Scaffolds/index.ctp:22
+#: Plugin/Lil/View/Scaffolds/view.ctp:42
 msgid "Actions"
 msgstr ""
 
-#: Plugin\Lil\View\Scaffolds\index.ctp:50
-#: Plugin\Lil\View\Scaffolds\view.ctp:136
+#: Plugin/Lil/View/Scaffolds/index.ctp:50
+#: Plugin/Lil/View/Scaffolds/view.ctp:136
 msgid "View"
 msgstr ""
 
-#: Plugin\Lil\View\Scaffolds\index.ctp:52
-#: Plugin\Lil\View\Scaffolds\view.ctp:46;138
+#: Plugin/Lil/View/Scaffolds/index.ctp:52
+#: Plugin/Lil/View/Scaffolds/view.ctp:46;138
 msgid "Are you sure you want to delete"
 msgstr ""
 
-#: Plugin\Lil\View\Scaffolds\index.ctp:63
+#: Plugin/Lil/View/Scaffolds/index.ctp:63
 msgid "previous"
 msgstr ""
 
-#: Plugin\Lil\View\Scaffolds\index.ctp:64
+#: Plugin/Lil/View/Scaffolds/index.ctp:64
 msgid "next"
 msgstr ""
 
-#: Plugin\Lil\View\Scaffolds\index.ctp:66
+#: Plugin/Lil/View/Scaffolds/index.ctp:66
 msgid "Page <b>%page%</b> of <b>%pages%</b>, total <b>%count%</b> records."
 msgstr ""
 
-#: Plugin\Lil\View\Scaffolds\index.ctp:76;83
-#: Plugin\Lil\View\Scaffolds\view.ctp:48;55;147
+#: Plugin/Lil/View/Scaffolds/index.ctp:76;83
+#: Plugin/Lil/View/Scaffolds/view.ctp:48;55;147
 msgid "New %s"
 msgstr ""
 
-#: Plugin\Lil\View\Scaffolds\index.ctp:82
-#: Plugin\Lil\View\Scaffolds\view.ctp:47;54
+#: Plugin/Lil/View/Scaffolds/index.ctp:82
+#: Plugin/Lil/View/Scaffolds/view.ctp:47;54
 msgid "List %s"
 msgstr ""
 
-#: Plugin\Lil\View\Scaffolds\view.ctp:13
+#: Plugin/Lil/View/Scaffolds/view.ctp:13
 msgid "View %s"
 msgstr ""
 
-#: Plugin\Lil\View\Scaffolds\view.ctp:45;86
+#: Plugin/Lil/View/Scaffolds/view.ctp:45;86
 msgid "Edit %s"
 msgstr ""
 
-#: Plugin\Lil\View\Scaffolds\view.ctp:46
+#: Plugin/Lil/View/Scaffolds/view.ctp:46
 msgid "Delete %s"
 msgstr ""
 
-#: Plugin\Lil\View\Scaffolds\view.ctp:67;106
+#: Plugin/Lil/View/Scaffolds/view.ctp:67;106
 msgid "Related %s"
 msgstr ""
 
-#: Plugin\Lil\View\Users\admin_edit.ctp:13
+#: Plugin/Lil/View/Users/admin_edit.ctp:13
 msgid "Edit User"
 msgstr ""
 
-#: Plugin\Lil\View\Users\admin_edit.ctp:13
+#: Plugin/Lil/View/Users/admin_edit.ctp:13
 msgid "Add User"
 msgstr ""
 
-#: Plugin\Lil\View\Users\admin_edit.ctp:26
+#: Plugin/Lil/View/Users/admin_edit.ctp:26
 msgid "Are you sure you want to delete this user?"
 msgstr ""
 
-#: Plugin\Lil\View\Users\admin_edit.ctp:50
-#: Plugin\Lil\View\Users\admin_properties.ctp:33
+#: Plugin/Lil/View/Users/admin_edit.ctp:50
+#: Plugin/Lil/View/Users/admin_properties.ctp:33
 msgid "Basics"
 msgstr ""
 
-#: Plugin\Lil\View\Users\admin_edit.ctp:58
-#: Plugin\Lil\View\Users\admin_properties.ctp:41
+#: Plugin/Lil/View/Users/admin_edit.ctp:58
+#: Plugin/Lil/View/Users/admin_properties.ctp:41
 msgid "User's name is required."
 msgstr ""
 
-#: Plugin\Lil\View\Users\admin_edit.ctp:69
-#: Plugin\Lil\View\Users\login.ctp:40
+#: Plugin/Lil/View/Users/admin_edit.ctp:69
+#: Plugin/Lil/View/Users/login.ctp:40
 msgid "Username"
 msgstr ""
 
-#: Plugin\Lil\View\Users\admin_edit.ctp:70
+#: Plugin/Lil/View/Users/admin_edit.ctp:70
 msgid "Username is required, format must be valid."
 msgstr ""
 
-#: Plugin\Lil\View\Users\admin_edit.ctp:81
-#: Plugin\Lil\View\Users\admin_properties.ctp:52
+#: Plugin/Lil/View/Users/admin_edit.ctp:81
+#: Plugin/Lil/View/Users/admin_properties.ctp:52
 msgid "Change password"
 msgstr ""
 
-#: Plugin\Lil\View\Users\admin_edit.ctp:83
-#: Plugin\Lil\View\Users\admin_properties.ctp:61
+#: Plugin/Lil/View/Users/admin_edit.ctp:83
+#: Plugin/Lil/View/Users/admin_properties.ctp:61
 msgid "New password"
 msgstr ""
 
-#: Plugin\Lil\View\Users\admin_edit.ctp:84
-#: Plugin\Lil\View\Users\admin_properties.ctp:62
+#: Plugin/Lil/View/Users/admin_edit.ctp:84
+#: Plugin/Lil/View/Users/admin_properties.ctp:62
 msgid "Password is required, format must be valid."
 msgstr ""
 
-#: Plugin\Lil\View\Users\admin_edit.ctp:88
-#: Plugin\Lil\View\Users\admin_properties.ctp:66
+#: Plugin/Lil/View/Users/admin_edit.ctp:88
+#: Plugin/Lil/View/Users/admin_properties.ctp:66
 msgid "Repeat password"
 msgstr ""
 
-#: Plugin\Lil\View\Users\admin_edit.ctp:89
-#: Plugin\Lil\View\Users\admin_properties.ctp:67
+#: Plugin/Lil/View/Users/admin_edit.ctp:89
+#: Plugin/Lil/View/Users/admin_properties.ctp:67
 msgid "Passwords do not match."
 msgstr ""
 
-#: Plugin\Lil\View\Users\admin_edit.ctp:106
+#: Plugin/Lil/View/Users/admin_edit.ctp:106
 msgid "User Areas"
 msgstr ""
 
-#: Plugin\Lil\View\Users\admin_edit.ctp:108
+#: Plugin/Lil/View/Users/admin_edit.ctp:108
 msgid "Select areas"
 msgstr ""
 
-#: Plugin\Lil\View\Users\admin_index.ctp:12
+#: Plugin/Lil/View/Users/admin_index.ctp:12
 msgid "User List"
 msgstr ""
 
-#: Plugin\Lil\View\Users\admin_properties.ctp:12
+#: Plugin/Lil/View/Users/admin_properties.ctp:12
 msgid "User Properties"
 msgstr ""
 
-#: Plugin\Lil\View\Users\admin_properties.ctp:55
+#: Plugin/Lil/View/Users/admin_properties.ctp:55
 msgid "Old password"
 msgstr ""
 
-#: Plugin\Lil\View\Users\admin_properties.ctp:56
+#: Plugin/Lil/View/Users/admin_properties.ctp:56
 msgid "Invalid old password."
 msgstr ""
 
-#: Plugin\Lil\View\Users\login.ctp:14
+#: Plugin/Lil/View/Users/login.ctp:14
 msgid "Login"
 msgstr ""
 
-#: Plugin\Lil\View\Users\login.ctp:51
+#: Plugin/Lil/View/Users/login.ctp:51
 msgid "Password"
 msgstr ""
 
-#: Plugin\Lil\View\Users\login.ctp:63
+#: Plugin/Lil/View/Users/login.ctp:63
 msgid "Remember me on this computer"
 msgstr ""
 
-#: Plugin\Lil\View\Users\login.ctp:70
+#: Plugin/Lil/View/Users/login.ctp:70
 msgid "OK"
 msgstr ""
 
-#: Plugin\Lil\View\Users\popups\admin_add.ctp:1
-#: Plugin\Lil\View\Users\popups\admin_edit.ctp:1
+#: Plugin/Lil/View/Users/popups/admin_add.ctp:1
+#: Plugin/Lil/View/Users/popups/admin_edit.ctp:1
 msgid "User has been successfully saved."
 msgstr ""
 

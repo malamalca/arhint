@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2012-03-13 18:41+0100\n"
+"POT-Creation-Date: 2012-11-29 14:54+0100\n"
 "PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
 "Last-Translator: NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
@@ -14,1385 +14,1391 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: Plugin\Arhim\Controller\RacuniController.php:61
-#: Plugin\LilInvoices\Controller\InvoicesController.php:53
-msgid "Counter does not exist"
-msgstr ""
-
-#: Plugin\Arhim\Controller\RacuniController.php:105
-#: Plugin\LilInvoices\Controller\InvoicesController.php:145
-msgid "Invalid export type"
-msgstr ""
-
-#: Plugin\Arhim\View\Racuni\index.ctp:19
-msgid "%3$s from %1$s to %2$s"
-msgstr ""
-
-#: Plugin\Arhim\View\Racuni\index.ctp:60
-#: Plugin\LilExpenses\View\Reports\unpaid_invoices.ctp:44
-#: Plugin\LilInvoices\View\Invoices\admin_index.ctp:127
-msgid "Cnt"
-msgstr ""
-
-#: Plugin\Arhim\View\Racuni\index.ctp:63
-#: Plugin\LilExpenses\View\Reports\unpaid_invoices.ctp:48
-#: Plugin\LilInvoices\View\Invoices\admin_index.ctp:130
-msgid "No"
-msgstr ""
-
-#: Plugin\Arhim\View\Racuni\index.ctp:67
-#: Plugin\LilExpenses\View\Reports\unpaid_invoices.ctp:52
-#: Plugin\LilInvoices\View\Invoices\admin_index.ctp:134
-msgid "Issued"
-msgstr ""
-
-#: Plugin\Arhim\View\Racuni\index.ctp:70
-#: Plugin\Arhim\View\Racuni\view.ctp:14
-#: Plugin\LilExpenses\View\Reports\unpaid_invoices.ctp:56
-#: Plugin\LilInvoices\View\Invoices\admin_edit.ctp:67
-#: Plugin\LilInvoices\View\Invoices\admin_index.ctp:137
-#: Plugin\LilInvoices\View\Invoices\admin_view.ctp:159
-#: Plugin\LilInvoices\View\InvoicesCounters\admin_edit.ctp:74
-#: Plugin\LilInvoices\View\InvoicesCounters\admin_index.ctp:23
-msgid "Title"
-msgstr ""
-
-#: Plugin\Arhim\View\Racuni\index.ctp:73
-#: Plugin\Arhim\View\Racuni\view.ctp:24
-#: Plugin\LilExpenses\View\Reports\unpaid_invoices.ctp:60
-#: Plugin\LilInvoices\View\Invoices\admin_edit.ctp:80
-#: Plugin\LilInvoices\View\Invoices\admin_index.ctp:140
-#: Plugin\LilInvoices\View\Invoices\admin_view.ctp:169
-msgid "Client"
-msgstr ""
-
-#: Plugin\Arhim\View\Racuni\index.ctp:77
-#: Plugin\Arhim\View\Racuni\view.ctp:87
-#: Plugin\LilExpenses\View\Elements\expenses_view_invoice.ctp:52
-#: Plugin\LilExpenses\View\Reports\unpaid_invoices.ctp:64;82
-#: Plugin\LilInvoices\View\Invoices\admin_edit.ctp:215
-#: Plugin\LilInvoices\View\Invoices\admin_index.ctp:144
-#: Plugin\LilInvoices\View\Invoices\admin_view.ctp:232;412
-msgid "Total"
-msgstr ""
-
-#: Plugin\Arhim\View\Racuni\index.ctp:83
-#: Plugin\LilInvoices\View\Invoices\admin_index.ctp:150
-msgid "Total Sum"
-msgstr ""
-
-#: Plugin\Arhim\View\Racuni\view.ctp:3
-#: Plugin\LilInvoices\View\Invoices\admin_view.ctp:3
-msgid "Invoice #%1$s <span class=\"light\">(%2$s :: #%3$s)</span>"
-msgstr ""
-
-#: Plugin\Arhim\View\Racuni\view.ctp:57
-#: Plugin\LilInvoices\View\Invoices\admin_view.ctp:202
-#: Plugin\LilInvoices\View\Layouts\Reports\lil_invoices_pdf.ctp:30
-msgid "TAX payee no."
-msgstr ""
-
-#: Plugin\Arhim\View\Racuni\view.ctp:57
-#: Plugin\LilInvoices\View\Invoices\admin_view.ctp:202
-#: Plugin\LilInvoices\View\Layouts\Reports\lil_invoices_pdf.ctp:30
-msgid "TAX no."
-msgstr ""
-
-#: Plugin\Arhim\View\Racuni\view.ctp:66
-#: Plugin\LilInvoices\View\Invoices\admin_edit.ctp:149
-#: Plugin\LilInvoices\View\Invoices\admin_view.ctp:211
-#: Plugin\LilInvoices\View\Reports\advance.ctp:8
-#: Plugin\LilInvoices\View\Reports\estimate.ctp:8
-#: Plugin\LilInvoices\View\Reports\issued.ctp:8
-#: Plugin\LilInvoices\View\Reports\issued_w_tax.ctp:8
-#: Plugin\LilInvoices\View\Reports\received.ctp:8
-msgid "Date of issue"
-msgstr ""
-
-#: Plugin\Arhim\View\Racuni\view.ctp:70
-#: Plugin\LilInvoices\View\Invoices\admin_edit.ctp:165
-#: Plugin\LilInvoices\View\Invoices\admin_view.ctp:215
-#: Plugin\LilInvoices\View\Reports\issued.ctp:12
-#: Plugin\LilInvoices\View\Reports\issued_w_tax.ctp:12
-#: Plugin\LilInvoices\View\Reports\received.ctp:12
-msgid "Service date"
-msgstr ""
-
-#: Plugin\Arhim\View\Racuni\view.ctp:74
-#: Plugin\LilInvoices\View\Invoices\admin_edit.ctp:180
-#: Plugin\LilInvoices\View\Invoices\admin_view.ctp:219
-#: Plugin\LilInvoices\View\Reports\estimate.ctp:16
-#: Plugin\LilInvoices\View\Reports\issued.ctp:16
-#: Plugin\LilInvoices\View\Reports\issued_w_tax.ctp:16
-#: Plugin\LilInvoices\View\Reports\received.ctp:16
-msgid "Expiration date"
-msgstr ""
-
-#: Plugin\Arhim\View\Racuni\view.ctp:78
-#: Plugin\LilInvoices\View\Invoices\admin_edit.ctp:195
-#: Plugin\LilInvoices\View\Invoices\admin_view.ctp:223
-msgid "Approval date"
-msgstr ""
-
-#: Plugin\Arhim\View\Racuni\view.ctp:195
-#: Plugin\LilInvoices\View\Elements\edit_items.ctp:6
-#: Plugin\LilInvoices\View\Elements\edit_tax.ctp:6
-#: Plugin\LilInvoices\View\Invoices\admin_edit.ctp:323
-#: Plugin\LilInvoices\View\Invoices\admin_view.ctp:325;408
-#: Plugin\LilInvoices\View\Items\admin_edit.ctp:46
-#: Plugin\LilInvoices\View\Items\admin_index.ctp:28
-#: Plugin\LilInvoices\View\Vats\admin_edit.ctp:46
-#: Plugin\LilInvoices\View\Vats\admin_index.ctp:28
-msgid "Description"
-msgstr ""
-
-#: Plugin\Arhim\View\Racuni\view.ctp:196
-#: Plugin\LilInvoices\View\Elements\edit_items.ctp:7
-#: Plugin\LilInvoices\View\Invoices\admin_view.ctp:326
-#: Plugin\LilInvoices\View\Items\admin_edit.ctp:58
-msgid "Quantity"
-msgstr ""
-
-#: Plugin\Arhim\View\Racuni\view.ctp:197
-#: Plugin\LilInvoices\View\Elements\edit_items.ctp:8
-#: Plugin\LilInvoices\View\Invoices\admin_view.ctp:327
-#: Plugin\LilInvoices\View\Items\admin_edit.ctp:68
-#: Plugin\LilInvoices\View\Items\admin_index.ctp:30
-#: Plugin\LilInvoices\View\Reports\advance.ctp:25
-#: Plugin\LilInvoices\View\Reports\estimate.ctp:25
-#: Plugin\LilInvoices\View\Reports\issued.ctp:25
-#: Plugin\LilInvoices\View\Reports\issued_w_tax.ctp:28
-msgid "Unit"
-msgstr ""
-
-#: Plugin\Arhim\View\Racuni\view.ctp:198
-#: Plugin\LilInvoices\View\Elements\edit_items.ctp:9
-#: Plugin\LilInvoices\View\Invoices\admin_view.ctp:328
-msgid "Price per Unit"
-msgstr ""
-
-#: Plugin\Arhim\View\Racuni\view.ctp:199
-#: Plugin\LilInvoices\View\Elements\edit_items.ctp:10
-#: Plugin\LilInvoices\View\Invoices\admin_view.ctp:329
-#: Plugin\LilInvoices\View\Items\admin_edit.ctp:90
-#: Plugin\LilInvoices\View\Reports\issued_w_tax.ctp:30
-msgid "Discount [%]"
-msgstr ""
-
-#: Plugin\Arhim\View\Racuni\view.ctp:200
-#: Plugin\LilInvoices\View\Elements\edit_items.ctp:11
-#: Plugin\LilInvoices\View\Invoices\admin_view.ctp:330
-msgid "Unit Total"
-msgstr ""
-
-#: Plugin\Arhim\View\Racuni\view.ctp:201
-#: Plugin\LilInvoices\View\Elements\edit_items.ctp:12
-#: Plugin\LilInvoices\View\Invoices\admin_view.ctp:331
-#: Plugin\LilInvoices\View\Items\admin_edit.ctp:102
-#: Plugin\LilInvoices\View\Reports\issued_w_tax.ctp:31
-msgid "Tax [%]"
-msgstr ""
-
-#: Plugin\Arhim\View\Racuni\view.ctp:202
-#: Plugin\LilInvoices\View\Elements\edit_items.ctp:13
-#: Plugin\LilInvoices\View\Elements\edit_tax.ctp:10
-#: Plugin\LilInvoices\View\Invoices\admin_view.ctp:332
-msgid "Total with Tax"
-msgstr ""
-
-#: Plugin\Arhim\View\Racuni\view.ctp:214
-#: Plugin\LilInvoices\View\Elements\edit_items.ctp:169
-#: Plugin\LilInvoices\View\Elements\edit_tax.ctp:121
-#: Plugin\LilInvoices\View\Invoices\admin_view.ctp:344;424
-msgid "Grand Total"
-msgstr ""
-
-#: Plugin\Arhim\View\Racuni\view.ctp:235
-#: Plugin\LilInvoices\View\Invoices\admin_edit.ctp:205
-#: Plugin\LilInvoices\View\Invoices\admin_view.ctp:365
-msgid "Analytics"
-msgstr ""
-
-#: Plugin\Arhim\View\Racuni\view.ctp:245
-#: Plugin\LilInvoices\View\Invoices\admin_email.ctp:97
-#: Plugin\LilInvoices\View\Invoices\admin_view.ctp:452
-#: Plugin\LilInvoices\View\Reports\received.ctp:37
-msgid "Attachments"
-msgstr ""
-
-#: Plugin\Arhim\View\Racuni\view.ctp:247
-#: Plugin\LilInvoices\View\Invoices\admin_view.ctp:454
-msgid "No attachments found."
-msgstr ""
-
-#: Plugin\Arhim\View\Racuni\view.ctp:262
-#: Plugin\LilInvoices\View\Invoices\admin_view.ctp:469
-msgid "Are you sure you want to delete this attachment"
-msgstr ""
-
-#: Plugin\LilExpenses\View\Elements\expenses_view_invoice.ctp:5
-msgid "Payments"
-msgstr ""
-
-#: Plugin\LilExpenses\View\Elements\expenses_view_invoice.ctp:10
-msgid "Date"
-msgstr ""
-
-#: Plugin\LilExpenses\View\Elements\expenses_view_invoice.ctp:11
-msgid "Account"
-msgstr ""
-
-#: Plugin\LilExpenses\View\Elements\expenses_view_invoice.ctp:12
-#: Plugin\LilInvoices\View\Reports\advance.ctp:24
-#: Plugin\LilInvoices\View\Reports\estimate.ctp:24
-#: Plugin\LilInvoices\View\Reports\issued.ctp:24
-msgid "Amount"
-msgstr ""
-
-#: Plugin\LilExpenses\View\Elements\expenses_view_invoice.ctp:20
-msgid "No payments found."
-msgstr ""
-
-#: Plugin\LilExpenses\View\Elements\expenses_view_invoice.ctp:41
-msgid "Add new Payment"
-msgstr ""
-
-#: Plugin\LilExpenses\View\Elements\expenses_view_invoice.ctp:56
-msgid "Saldo"
-msgstr ""
-
-#: Plugin\LilExpenses\View\Elements\expenses_view_invoice.ctp:67
-msgid "Add a new Payment"
-msgstr ""
-
-#: Plugin\LilExpenses\View\Elements\expenses_view_invoice.ctp:68
-msgid "Edit Payment"
-msgstr ""
-
-#: Plugin\LilExpenses\View\Expenses\admin_view.ctp:26
-#: Plugin\LilInvoices\View\Invoices\admin_view.ctp:86
-msgid "Are you sure you want to delete this invoice?"
-msgstr ""
-
-#: Plugin\LilExpenses\View\Expenses\admin_view.ctp:105
-#: Plugin\LilInvoices\View\Invoices\admin_attachment_add.ctp:3
-#: Plugin\LilInvoices\View\Invoices\admin_view.ctp:53
-msgid "Add Attachment"
-msgstr ""
-
-#: Plugin\LilExpenses\View\Reports\unpaid_invoices.ctp:68
-msgid "Delta"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:34
-msgid "Advance payment"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:35
-msgid "Transaction in agricultural domain"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:36
-msgid "Annuity payment of credit/insurance"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:37
-msgid "Collection of funds via CT/DD"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:38
-msgid "Foreign exchange operation"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:39
-msgid "Transfer on acc. with other bank"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:40
-msgid "Hedging operation"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:41
-msgid "Information/entertainment sevices"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:42
-msgid "Intra-company payment within group"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:43
-msgid "Netting operation"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:44
-msgid "Other payment purpose"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:45
-msgid "Other telecom related bill"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:46
-msgid "Air transport settlement"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:47
-msgid "Payment for anesthesia services"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:48
-msgid "Payment for bus transport business"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:49
-msgid "Payment for charity reasons"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:50
-msgid "Payment for convalescence care"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:51
-msgid "Payment for dental services"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:52
-msgid "Payment for ferry related business"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:53
-msgid "Payment for home health care"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:54
-msgid "Payment for hospital care services"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:55
-msgid "Payment for intermediate care"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:56
-msgid "Payment for long-term care services"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:57
-msgid "Payment for medical care services"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:58
-msgid "Payment for multiple service types"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:59
-msgid "Payment for railway transport"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:60
-msgid "Payment for unemployed/disabled"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:61
-msgid "Payment for vision care services"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:62
-msgid "Payment of a license fee"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:63
-msgid "Payment of a precious metal oper."
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:64
-msgid "Payment of a trust fund"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:65
-msgid "Payment of alimony"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:66
-msgid "Payment of an installment"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:67
-msgid "Payment of an insurance premium"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:68
-msgid "Payment of bonus"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:69
-msgid "Payment of business expenses"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:70
-msgid "Payment of cable TV bill "
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:71
-msgid "Payment of cancellation fee"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:72
-msgid "Payment of car loan"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:73
-msgid "Payment of commercial credit"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:74
-msgid "Payment of commission"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:75
-msgid "Payment of commodities"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:76
-msgid "Payment of copyright"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:77
-msgid "Payment of costs"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:78
-msgid "Payment of credit card accout"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:79
-msgid "Payment of debit card"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:80
-msgid "Payment of dividends"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:81
-msgid "Payment of electricity bill"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:82
-msgid "Payment of estate tax"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:83
-msgid "Payment of gas bill"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:84
-msgid "Payment of gov.social subvetion"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:85
-msgid "Payment of government insurance"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:86
-msgid "Payment of health insurance"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:87
-msgid "Payment for hire-purchase agreement"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:88
-msgid "Payment of housing loan"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:89
-msgid "Payment of housing tax"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:90
-msgid "Payment of income tax"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:91
-msgid "Payment of indefinable service"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:92
-msgid "Payment of interest"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:93
-msgid "Payment of labor insurance"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:94
-msgid "Payment of life insurance"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:95
-msgid "Payment of medical equipment"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:96
-msgid "Payment of network charges"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:97
-msgid "Payment of network communication"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:98
-msgid "Payment of opening fee"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:99
-msgid "Payment of pension"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:100
-msgid "Payment of expenses/outgoings"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:101
-msgid "Payment of property insurance"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:102
-msgid "Payment of receipt"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:103
-msgid "Payment of rent"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:104
-msgid "Payment of royalties"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:105
-msgid "Payment of salaries"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:106
-msgid "Payment of securities"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:107
-msgid "Payment of study/school fees"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:108
-msgid "Payment of taxes"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:109
-msgid "Payment of telephone bill"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:110
-msgid "Payment of terms specifications"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:111
-msgid "Payment of third party for consumer"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:112
-msgid "Payment of value added tax"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:113
-msgid "Payment of water bill"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:114
-msgid "Payment to/from a gov. department"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:115
-msgid "Purchase and sale of goods"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:116
-msgid "Purchase and sale of services"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:117
-msgid "Recurring installment"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:118
-msgid "Payment of debit claim"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:119
-msgid "Settlement of derivatives"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:120
-msgid "Payment to a supplier"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:121
-msgid "Repayment of loan"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:122
-msgid "Subvention for child support"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:123
-msgid "Payment of trade services operation"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:124
-msgid "Transaction for utility operation"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:125
-msgid "Transfer funds between holders acc."
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:126
-msgid "Transfer of loan"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:127
-msgid "Transfer to savings account"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:128
-msgid "Treasury operations"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:129
-msgid "Zero target balance management"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:130
-msgid "ATM Cash withdrawal at PIO/counter"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:131
-msgid "Purchase with cashback"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:132
-msgid "Purchase of cash equivalent"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:133
-msgid "Credit to cardholders' account"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:134
-msgid "Cash disbursment"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:135
-msgid "Payment of deposit"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:136
-msgid "Payment of account receivable entry"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:137
-msgid "Payment of back office conversion"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:138
-msgid "Purchase/sale of goods or services"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:139
-msgid "Purchase/sale with cash back"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:140
-msgid "Payment of point of purchase entry"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:141
-msgid "Funds collection via debit transfer"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:142
-msgid "Payment of car insurance premium"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:143
-msgid "Capital building fringe fortune"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:144
-msgid "Payment of credit card bill"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:145
-msgid "Reimburs. of credit card payment"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:146
-msgid "Reimbursement of debit card payment"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:147
-msgid "Payment of represented check entry"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:148
-msgid "Payment of a refund"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:149
-msgid "Payment initiated via telephone"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:150
-msgid "Payment initiated via internet"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:151
-msgid "Payment of social loan to bank"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:152
-msgid "Payment to A Austrian gov.empl."
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:153
-msgid "Payment to B Austrian gov.empl."
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:154
-msgid "Payment to C Austrian gov.empl."
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:155
-msgid "Payment to D Austrian gov.empl."
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:156
-msgid "Payment of payroll"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:157
-msgid "Payment of net income tax"
-msgstr ""
-
-#: Plugin\LilInvoices\Config\core.php:158
-msgid "Payment of withholding tax"
-msgstr ""
-
-#: Plugin\LilInvoices\Controller\InvoicesController.php:100
-msgid "Email has been successfully sent"
-msgstr ""
-
-#: Plugin\LilInvoices\Controller\InvoicesController.php:103;219;346
-msgid "There are some errors in the form. Please correct all marked fields below."
-msgstr ""
-
-#: Plugin\LilInvoices\Controller\InvoicesController.php:211
-msgid "Invoice has been successfully saved."
-msgstr ""
-
-#: Plugin\LilInvoices\Controller\InvoicesController.php:279
-msgid "Invoice has been successfully deleted."
-msgstr ""
-
-#: Plugin\LilInvoices\Controller\InvoicesController.php:342
+#: Plugin/Arhim/Controller/DatotekeController.php:81
+#: Plugin/LilInvoices/Controller/InvoicesController.php:344
 msgid "Attachment has been successfully added."
 msgstr ""
 
-#: Plugin\LilInvoices\Controller\InvoicesController.php:368
-msgid "Attachment has been successfully deleted."
+#: Plugin/Arhim/Controller/DatotekeController.php:85
+#: Plugin/LilInvoices/Controller/InvoicesController.php:105;221;348
+msgid "There are some errors in the form. Please correct all marked fields below."
 msgstr ""
 
-#: Plugin\LilInvoices\Controller\InvoicesCountersController.php:61
-msgid "Counter has been saved."
+#: Plugin/Arhim/Controller/RacuniController.php:61
+#: Plugin/LilInvoices/Controller/InvoicesController.php:55
+msgid "Counter does not exist"
 msgstr ""
 
-#: Plugin\LilInvoices\Controller\InvoicesCountersController.php:64
-#: Plugin\LilInvoices\Controller\ItemsController.php:55
-#: Plugin\LilInvoices\Controller\VatsController.php:55
-msgid "Please verify that the information is correct."
+#: Plugin/Arhim/Controller/RacuniController.php:103
+#: Plugin/LilInvoices/Controller/InvoicesController.php:147
+msgid "Invalid export type"
 msgstr ""
 
-#: Plugin\LilInvoices\Controller\InvoicesCountersController.php:91
-msgid "Counter has been deleted."
-msgstr ""
-
-#: Plugin\LilInvoices\Controller\InvoicesItemsController.php:31
-msgid "InvoicesItems has been successfully deleted."
-msgstr ""
-
-#: Plugin\LilInvoices\Controller\ItemsController.php:52
-msgid "Item has been saved."
-msgstr ""
-
-#: Plugin\LilInvoices\Controller\ItemsController.php:73
-#: Plugin\LilInvoices\Controller\VatsController.php:73
-msgid "Item has been deleted."
-msgstr ""
-
-#: Plugin\LilInvoices\Controller\VatsController.php:52
-msgid "Vat has been saved."
-msgstr ""
-
-#: Plugin\LilInvoices\Lib\LilInvoicesExport.php:32
-msgid "invoice"
-msgstr ""
-
-#: Plugin\LilInvoices\Lib\LilInvoicesExport.php:34
-msgid "invoices"
-msgstr ""
-
-#: Plugin\LilInvoices\Lib\LilInvoicesExport.php:65
-msgid "Cannot fetch your employer!"
-msgstr ""
-
-#: Plugin\LilInvoices\Lib\LilInvoicesExport.php:68
-msgid "Please provide your employer!"
-msgstr ""
-
-#: Plugin\LilInvoices\Lib\LilInvoicesExport.php:72
-msgid "Please provide your default account!"
-msgstr ""
-
-#: Plugin\LilInvoices\Lib\LilInvoicesExport.php:73
-msgid "Please provide your address!"
-msgstr ""
-
-#: Plugin\LilInvoices\Lib\LilInvoicesExport.php:74
-msgid "Please provide your tax no!"
-msgstr ""
-
-#: Plugin\LilInvoices\Lib\LilInvoicesExport.php:77
-msgid "Please provide client's \"%s\" default account!"
-msgstr ""
-
-#: Plugin\LilInvoices\Lib\LilInvoicesExport.php:78
-msgid "Please provide client's \"%s\" default address!"
-msgstr ""
-
-#: Plugin\LilInvoices\Lib\LilInvoicesExport.php:80
-msgid "Please provide client's \"%s\" tax no!"
-msgstr ""
-
-#: Plugin\LilInvoices\Lib\LilInvoicesExport.php:83
-msgid "Please provide payment details for invoice \"%1$s - %2$s\""
-msgstr ""
-
-#: Plugin\LilInvoices\Lib\LilInvoicesExport.php:96
-msgid "EXPORT ERROR(s):"
-msgstr ""
-
-#: Plugin\LilInvoices\Lib\LilInvoicesExport.php:102
-msgid "Export error: No invoices found."
-msgstr ""
-
-#: Plugin\LilInvoices\Lib\LilInvoicesSidebar.php:14
-msgid "Accounting"
-msgstr ""
-
-#: Plugin\LilInvoices\Lib\LilInvoicesSidebar.php:34
-msgid "Reports"
-msgstr ""
-
-#: Plugin\LilInvoices\Lib\LilInvoicesSidebar.php:48
-msgid "Invoices"
-msgstr ""
-
-#: Plugin\LilInvoices\Lib\LilInvoicesSidebar.php:69
-#: Plugin\LilInvoices\View\Invoices\admin_edit.ctp:296
-msgid "Archive"
-msgstr ""
-
-#: Plugin\LilInvoices\Lib\LilInvoicesSidebar.php:83
-msgid "Lookups"
-msgstr ""
-
-#: Plugin\LilInvoices\Lib\LilInvoicesSidebar.php:100
-#: Plugin\LilInvoices\View\Items\admin_index.ctp:2;17
-msgid "Items"
-msgstr ""
-
-#: Plugin\LilInvoices\Lib\LilInvoicesSidebar.php:111
-msgid "Invoices Counters"
-msgstr ""
-
-#: Plugin\LilInvoices\Lib\LilInvoicesSidebar.php:122
-msgid "VAT levels"
-msgstr ""
-
-#: Plugin\LilInvoices\View\Elements\edit_items.ctp:54;63;73;83
-#: Plugin\LilInvoices\View\Elements\edit_tax.ctp:73
-#: Plugin\LilInvoices\View\Invoices\admin_edit.ctp:69;152;167;182;272;287
-msgid "Blank"
-msgstr ""
-
-#: Plugin\LilInvoices\View\Elements\edit_items.ctp:119
-#: Plugin\LilInvoices\View\Elements\edit_tax.ctp:54
-msgid "Please choose a VAT level."
-msgstr ""
-
-#: Plugin\LilInvoices\View\Elements\edit_items.ctp:140
-#: Plugin\LilInvoices\View\Elements\edit_tax.ctp:92
-msgid "Remove Item"
-msgstr ""
-
-#: Plugin\LilInvoices\View\Elements\edit_items.ctp:164
-msgid "Add new Item"
-msgstr ""
-
-#: Plugin\LilInvoices\View\Elements\edit_tax.ctp:7
-#: Plugin\LilInvoices\View\Invoices\admin_view.ctp:409
-msgid "VAT [%]"
-msgstr ""
-
-#: Plugin\LilInvoices\View\Elements\edit_tax.ctp:8
-#: Plugin\LilInvoices\View\Invoices\admin_view.ctp:410
-msgid "Base"
-msgstr ""
-
-#: Plugin\LilInvoices\View\Elements\edit_tax.ctp:9
-#: Plugin\LilInvoices\View\Invoices\admin_view.ctp:411
-msgid "Tax"
-msgstr ""
-
-#: Plugin\LilInvoices\View\Elements\edit_tax.ctp:116
-msgid "Add new Tax"
-msgstr ""
-
-#: Plugin\LilInvoices\View\Invoices\admin_attachment_acquire.ctp:2
+#: Plugin/Arhim/View/Datoteke/index.ctp:15
+#: Plugin/LilInvoices/View/Invoices/admin_attachment_acquire.ctp:2
 msgid "Acquire"
 msgstr ""
 
-#: Plugin\LilInvoices\View\Invoices\admin_attachment_acquire.ctp:3
+#: Plugin/Arhim/View/Datoteke/index.ctp:16
+#: Plugin/LilInvoices/View/Invoices/admin_attachment_acquire.ctp:3
 msgid "Select Source"
 msgstr ""
 
-#: Plugin\LilInvoices\View\Invoices\admin_attachment_add.ctp:40
+#: Plugin/Arhim/View/Racuni/index.ctp:22
+msgid "%3$s from %1$s to %2$s"
+msgstr ""
+
+#: Plugin/Arhim/View/Racuni/index.ctp:63
+#: Plugin/LilExpenses/View/Reports/unpaid_invoices.ctp:44
+#: Plugin/LilInvoices/View/Invoices/admin_index.ctp:127
+msgid "Cnt"
+msgstr ""
+
+#: Plugin/Arhim/View/Racuni/index.ctp:66
+#: Plugin/LilExpenses/View/Reports/unpaid_invoices.ctp:48
+#: Plugin/LilInvoices/View/Invoices/admin_index.ctp:130
+msgid "No"
+msgstr ""
+
+#: Plugin/Arhim/View/Racuni/index.ctp:70
+#: Plugin/LilExpenses/View/Reports/unpaid_invoices.ctp:52
+#: Plugin/LilInvoices/View/Invoices/admin_index.ctp:134
+msgid "Issued"
+msgstr ""
+
+#: Plugin/Arhim/View/Racuni/index.ctp:73
+#: Plugin/Arhim/View/Racuni/view.ctp:14
+#: Plugin/LilExpenses/View/Reports/unpaid_invoices.ctp:56
+#: Plugin/LilInvoices/View/Invoices/admin_edit.ctp:67
+#: Plugin/LilInvoices/View/Invoices/admin_index.ctp:137
+#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:159
+#: Plugin/LilInvoices/View/InvoicesCounters/admin_edit.ctp:74
+#: Plugin/LilInvoices/View/InvoicesCounters/admin_index.ctp:23
+msgid "Title"
+msgstr ""
+
+#: Plugin/Arhim/View/Racuni/index.ctp:76
+#: Plugin/Arhim/View/Racuni/view.ctp:24
+#: Plugin/LilExpenses/View/Reports/unpaid_invoices.ctp:60
+#: Plugin/LilInvoices/View/Invoices/admin_edit.ctp:80
+#: Plugin/LilInvoices/View/Invoices/admin_index.ctp:140
+#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:169
+msgid "Client"
+msgstr ""
+
+#: Plugin/Arhim/View/Racuni/index.ctp:80
+#: Plugin/Arhim/View/Racuni/view.ctp:87
+#: Plugin/LilExpenses/View/Elements/expenses_view_invoice.ctp:52
+#: Plugin/LilExpenses/View/Reports/unpaid_invoices.ctp:64;82
+#: Plugin/LilInvoices/View/Invoices/admin_edit.ctp:215
+#: Plugin/LilInvoices/View/Invoices/admin_index.ctp:144
+#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:232;412
+msgid "Total"
+msgstr ""
+
+#: Plugin/Arhim/View/Racuni/index.ctp:86
+#: Plugin/LilInvoices/View/Invoices/admin_index.ctp:150
+msgid "Total Sum"
+msgstr ""
+
+#: Plugin/Arhim/View/Racuni/view.ctp:3
+#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:3
+msgid "Invoice #%1$s <span class=\"light\">(%2$s :: #%3$s)</span>"
+msgstr ""
+
+#: Plugin/Arhim/View/Racuni/view.ctp:57
+#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:202
+#: Plugin/LilInvoices/View/Layouts/Reports/lil_invoices_pdf.ctp:30
+msgid "TAX payee no."
+msgstr ""
+
+#: Plugin/Arhim/View/Racuni/view.ctp:57
+#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:202
+#: Plugin/LilInvoices/View/Layouts/Reports/lil_invoices_pdf.ctp:30
+msgid "TAX no."
+msgstr ""
+
+#: Plugin/Arhim/View/Racuni/view.ctp:66
+#: Plugin/LilInvoices/View/Invoices/admin_edit.ctp:149
+#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:211
+#: Plugin/LilInvoices/View/Reports/advance.ctp:8
+#: Plugin/LilInvoices/View/Reports/estimate.ctp:8
+#: Plugin/LilInvoices/View/Reports/issued.ctp:8
+#: Plugin/LilInvoices/View/Reports/issued_w_tax.ctp:8
+#: Plugin/LilInvoices/View/Reports/received.ctp:8
+msgid "Date of issue"
+msgstr ""
+
+#: Plugin/Arhim/View/Racuni/view.ctp:70
+#: Plugin/LilInvoices/View/Invoices/admin_edit.ctp:165
+#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:215
+#: Plugin/LilInvoices/View/Reports/issued.ctp:12
+#: Plugin/LilInvoices/View/Reports/issued_w_tax.ctp:12
+#: Plugin/LilInvoices/View/Reports/received.ctp:12
+msgid "Service date"
+msgstr ""
+
+#: Plugin/Arhim/View/Racuni/view.ctp:74
+#: Plugin/LilInvoices/View/Invoices/admin_edit.ctp:180
+#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:219
+#: Plugin/LilInvoices/View/Reports/estimate.ctp:16
+#: Plugin/LilInvoices/View/Reports/issued.ctp:16
+#: Plugin/LilInvoices/View/Reports/issued_w_tax.ctp:16
+#: Plugin/LilInvoices/View/Reports/received.ctp:16
+msgid "Expiration date"
+msgstr ""
+
+#: Plugin/Arhim/View/Racuni/view.ctp:78
+#: Plugin/LilInvoices/View/Invoices/admin_edit.ctp:195
+#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:223
+msgid "Approval date"
+msgstr ""
+
+#: Plugin/Arhim/View/Racuni/view.ctp:194
+#: Plugin/LilInvoices/View/Elements/edit_items.ctp:6
+#: Plugin/LilInvoices/View/Invoices/admin_edit.ctp:323
+#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:325;408
+#: Plugin/LilInvoices/View/Items/admin_edit.ctp:46
+#: Plugin/LilInvoices/View/Items/admin_index.ctp:28
+#: Plugin/LilInvoices/View/Vats/admin_edit.ctp:46
+#: Plugin/LilInvoices/View/Vats/admin_index.ctp:28
+msgid "Description"
+msgstr ""
+
+#: Plugin/Arhim/View/Racuni/view.ctp:195
+#: Plugin/LilInvoices/View/Elements/edit_items.ctp:7
+#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:326
+#: Plugin/LilInvoices/View/Items/admin_edit.ctp:58
+msgid "Quantity"
+msgstr ""
+
+#: Plugin/Arhim/View/Racuni/view.ctp:196
+#: Plugin/LilInvoices/View/Elements/edit_items.ctp:8
+#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:327
+#: Plugin/LilInvoices/View/Items/admin_edit.ctp:68
+#: Plugin/LilInvoices/View/Items/admin_index.ctp:30
+#: Plugin/LilInvoices/View/Reports/advance.ctp:25
+#: Plugin/LilInvoices/View/Reports/estimate.ctp:25
+#: Plugin/LilInvoices/View/Reports/issued.ctp:25
+#: Plugin/LilInvoices/View/Reports/issued_w_tax.ctp:28
+msgid "Unit"
+msgstr ""
+
+#: Plugin/Arhim/View/Racuni/view.ctp:197
+#: Plugin/LilInvoices/View/Elements/edit_items.ctp:9
+#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:328
+msgid "Price per Unit"
+msgstr ""
+
+#: Plugin/Arhim/View/Racuni/view.ctp:198
+#: Plugin/LilInvoices/View/Elements/edit_items.ctp:10
+#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:329
+#: Plugin/LilInvoices/View/Items/admin_edit.ctp:90
+#: Plugin/LilInvoices/View/Reports/issued_w_tax.ctp:30
+msgid "Discount [%]"
+msgstr ""
+
+#: Plugin/Arhim/View/Racuni/view.ctp:199
+#: Plugin/LilInvoices/View/Elements/edit_items.ctp:11
+#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:330
+msgid "Unit Total"
+msgstr ""
+
+#: Plugin/Arhim/View/Racuni/view.ctp:200
+#: Plugin/LilInvoices/View/Elements/edit_items.ctp:12
+#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:331
+#: Plugin/LilInvoices/View/Items/admin_edit.ctp:102
+#: Plugin/LilInvoices/View/Reports/issued_w_tax.ctp:31
+msgid "Tax [%]"
+msgstr ""
+
+#: Plugin/Arhim/View/Racuni/view.ctp:201
+#: Plugin/LilInvoices/View/Elements/edit_items.ctp:13
+#: Plugin/LilInvoices/View/Elements/edit_tax.ctp:10
+#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:332
+msgid "Total with Tax"
+msgstr ""
+
+#: Plugin/Arhim/View/Racuni/view.ctp:213
+#: Plugin/LilInvoices/View/Elements/edit_items.ctp:169
+#: Plugin/LilInvoices/View/Elements/edit_tax.ctp:138
+#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:344;424
+msgid "Grand Total"
+msgstr ""
+
+#: Plugin/Arhim/View/Racuni/view.ctp:234
+#: Plugin/LilInvoices/View/Invoices/admin_edit.ctp:205
+#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:365
+msgid "Analytics"
+msgstr ""
+
+#: Plugin/Arhim/View/Racuni/view.ctp:244
+#: Plugin/LilInvoices/View/Invoices/admin_email.ctp:97
+#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:452
+#: Plugin/LilInvoices/View/Reports/received.ctp:37
+msgid "Attachments"
+msgstr ""
+
+#: Plugin/Arhim/View/Racuni/view.ctp:246
+#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:454
+msgid "No attachments found."
+msgstr ""
+
+#: Plugin/Arhim/View/Racuni/view.ctp:261
+#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:469
+msgid "Are you sure you want to delete this attachment"
+msgstr ""
+
+#: Plugin/LilExpenses/View/Elements/expenses_view_invoice.ctp:5
+msgid "Payments"
+msgstr ""
+
+#: Plugin/LilExpenses/View/Elements/expenses_view_invoice.ctp:10
+msgid "Date"
+msgstr ""
+
+#: Plugin/LilExpenses/View/Elements/expenses_view_invoice.ctp:11
+msgid "Account"
+msgstr ""
+
+#: Plugin/LilExpenses/View/Elements/expenses_view_invoice.ctp:12
+#: Plugin/LilInvoices/View/Reports/advance.ctp:24
+#: Plugin/LilInvoices/View/Reports/estimate.ctp:24
+#: Plugin/LilInvoices/View/Reports/issued.ctp:24
+msgid "Amount"
+msgstr ""
+
+#: Plugin/LilExpenses/View/Elements/expenses_view_invoice.ctp:20
+msgid "No payments found."
+msgstr ""
+
+#: Plugin/LilExpenses/View/Elements/expenses_view_invoice.ctp:41
+msgid "Add new Payment"
+msgstr ""
+
+#: Plugin/LilExpenses/View/Elements/expenses_view_invoice.ctp:56
+msgid "Saldo"
+msgstr ""
+
+#: Plugin/LilExpenses/View/Elements/expenses_view_invoice.ctp:67
+msgid "Add a new Payment"
+msgstr ""
+
+#: Plugin/LilExpenses/View/Elements/expenses_view_invoice.ctp:68
+msgid "Edit Payment"
+msgstr ""
+
+#: Plugin/LilExpenses/View/Expenses/admin_view.ctp:26
+#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:86
+msgid "Are you sure you want to delete this invoice?"
+msgstr ""
+
+#: Plugin/LilExpenses/View/Expenses/admin_view.ctp:105
+#: Plugin/LilInvoices/View/Invoices/admin_attachment_add.ctp:3
+#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:53
+msgid "Add Attachment"
+msgstr ""
+
+#: Plugin/LilExpenses/View/Reports/unpaid_invoices.ctp:68
+msgid "Delta"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:34
+msgid "Advance payment"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:35
+msgid "Transaction in agricultural domain"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:36
+msgid "Annuity payment of credit/insurance"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:37
+msgid "Collection of funds via CT/DD"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:38
+msgid "Foreign exchange operation"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:39
+msgid "Transfer on acc. with other bank"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:40
+msgid "Hedging operation"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:41
+msgid "Information/entertainment sevices"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:42
+msgid "Intra-company payment within group"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:43
+msgid "Netting operation"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:44
+msgid "Other payment purpose"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:45
+msgid "Other telecom related bill"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:46
+msgid "Air transport settlement"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:47
+msgid "Payment for anesthesia services"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:48
+msgid "Payment for bus transport business"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:49
+msgid "Payment for charity reasons"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:50
+msgid "Payment for convalescence care"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:51
+msgid "Payment for dental services"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:52
+msgid "Payment for ferry related business"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:53
+msgid "Payment for home health care"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:54
+msgid "Payment for hospital care services"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:55
+msgid "Payment for intermediate care"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:56
+msgid "Payment for long-term care services"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:57
+msgid "Payment for medical care services"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:58
+msgid "Payment for multiple service types"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:59
+msgid "Payment for railway transport"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:60
+msgid "Payment for unemployed/disabled"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:61
+msgid "Payment for vision care services"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:62
+msgid "Payment of a license fee"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:63
+msgid "Payment of a precious metal oper."
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:64
+msgid "Payment of a trust fund"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:65
+msgid "Payment of alimony"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:66
+msgid "Payment of an installment"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:67
+msgid "Payment of an insurance premium"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:68
+msgid "Payment of bonus"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:69
+msgid "Payment of business expenses"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:70
+msgid "Payment of cable TV bill "
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:71
+msgid "Payment of cancellation fee"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:72
+msgid "Payment of car loan"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:73
+msgid "Payment of commercial credit"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:74
+msgid "Payment of commission"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:75
+msgid "Payment of commodities"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:76
+msgid "Payment of copyright"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:77
+msgid "Payment of costs"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:78
+msgid "Payment of credit card accout"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:79
+msgid "Payment of debit card"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:80
+msgid "Payment of dividends"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:81
+msgid "Payment of electricity bill"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:82
+msgid "Payment of estate tax"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:83
+msgid "Payment of gas bill"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:84
+msgid "Payment of gov.social subvetion"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:85
+msgid "Payment of government insurance"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:86
+msgid "Payment of health insurance"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:87
+msgid "Payment for hire-purchase agreement"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:88
+msgid "Payment of housing loan"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:89
+msgid "Payment of housing tax"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:90
+msgid "Payment of income tax"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:91
+msgid "Payment of indefinable service"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:92
+msgid "Payment of interest"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:93
+msgid "Payment of labor insurance"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:94
+msgid "Payment of life insurance"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:95
+msgid "Payment of medical equipment"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:96
+msgid "Payment of network charges"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:97
+msgid "Payment of network communication"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:98
+msgid "Payment of opening fee"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:99
+msgid "Payment of pension"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:100
+msgid "Payment of expenses/outgoings"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:101
+msgid "Payment of property insurance"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:102
+msgid "Payment of receipt"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:103
+msgid "Payment of rent"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:104
+msgid "Payment of royalties"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:105
+msgid "Payment of salaries"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:106
+msgid "Payment of securities"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:107
+msgid "Payment of study/school fees"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:108
+msgid "Payment of taxes"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:109
+msgid "Payment of telephone bill"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:110
+msgid "Payment of terms specifications"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:111
+msgid "Payment of third party for consumer"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:112
+msgid "Payment of value added tax"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:113
+msgid "Payment of water bill"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:114
+msgid "Payment to/from a gov. department"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:115
+msgid "Purchase and sale of goods"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:116
+msgid "Purchase and sale of services"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:117
+msgid "Recurring installment"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:118
+msgid "Payment of debit claim"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:119
+msgid "Settlement of derivatives"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:120
+msgid "Payment to a supplier"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:121
+msgid "Repayment of loan"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:122
+msgid "Subvention for child support"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:123
+msgid "Payment of trade services operation"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:124
+msgid "Transaction for utility operation"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:125
+msgid "Transfer funds between holders acc."
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:126
+msgid "Transfer of loan"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:127
+msgid "Transfer to savings account"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:128
+msgid "Treasury operations"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:129
+msgid "Zero target balance management"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:130
+msgid "ATM Cash withdrawal at PIO/counter"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:131
+msgid "Purchase with cashback"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:132
+msgid "Purchase of cash equivalent"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:133
+msgid "Credit to cardholders' account"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:134
+msgid "Cash disbursment"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:135
+msgid "Payment of deposit"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:136
+msgid "Payment of account receivable entry"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:137
+msgid "Payment of back office conversion"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:138
+msgid "Purchase/sale of goods or services"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:139
+msgid "Purchase/sale with cash back"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:140
+msgid "Payment of point of purchase entry"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:141
+msgid "Funds collection via debit transfer"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:142
+msgid "Payment of car insurance premium"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:143
+msgid "Capital building fringe fortune"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:144
+msgid "Payment of credit card bill"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:145
+msgid "Reimburs. of credit card payment"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:146
+msgid "Reimbursement of debit card payment"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:147
+msgid "Payment of represented check entry"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:148
+msgid "Payment of a refund"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:149
+msgid "Payment initiated via telephone"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:150
+msgid "Payment initiated via internet"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:151
+msgid "Payment of social loan to bank"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:152
+msgid "Payment to A Austrian gov.empl."
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:153
+msgid "Payment to B Austrian gov.empl."
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:154
+msgid "Payment to C Austrian gov.empl."
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:155
+msgid "Payment to D Austrian gov.empl."
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:156
+msgid "Payment of payroll"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:157
+msgid "Payment of net income tax"
+msgstr ""
+
+#: Plugin/LilInvoices/Config/core.php:158
+msgid "Payment of withholding tax"
+msgstr ""
+
+#: Plugin/LilInvoices/Controller/InvoicesController.php:102
+msgid "Email has been successfully sent"
+msgstr ""
+
+#: Plugin/LilInvoices/Controller/InvoicesController.php:213
+msgid "Invoice has been successfully saved."
+msgstr ""
+
+#: Plugin/LilInvoices/Controller/InvoicesController.php:281
+msgid "Invoice has been successfully deleted."
+msgstr ""
+
+#: Plugin/LilInvoices/Controller/InvoicesController.php:370
+msgid "Attachment has been successfully deleted."
+msgstr ""
+
+#: Plugin/LilInvoices/Controller/InvoicesCountersController.php:62
+msgid "Counter has been saved."
+msgstr ""
+
+#: Plugin/LilInvoices/Controller/InvoicesCountersController.php:65
+#: Plugin/LilInvoices/Controller/ItemsController.php:55
+#: Plugin/LilInvoices/Controller/VatsController.php:55
+msgid "Please verify that the information is correct."
+msgstr ""
+
+#: Plugin/LilInvoices/Controller/InvoicesCountersController.php:93
+msgid "Counter has been deleted."
+msgstr ""
+
+#: Plugin/LilInvoices/Controller/InvoicesItemsController.php:31
+msgid "InvoicesItems has been successfully deleted."
+msgstr ""
+
+#: Plugin/LilInvoices/Controller/ItemsController.php:52
+msgid "Item has been saved."
+msgstr ""
+
+#: Plugin/LilInvoices/Controller/ItemsController.php:73
+#: Plugin/LilInvoices/Controller/VatsController.php:73
+msgid "Item has been deleted."
+msgstr ""
+
+#: Plugin/LilInvoices/Controller/VatsController.php:52
+msgid "Vat has been saved."
+msgstr ""
+
+#: Plugin/LilInvoices/Lib/LilInvoicesExport.php:32
+msgid "invoice"
+msgstr ""
+
+#: Plugin/LilInvoices/Lib/LilInvoicesExport.php:34
+msgid "invoices"
+msgstr ""
+
+#: Plugin/LilInvoices/Lib/LilInvoicesExport.php:65
+msgid "Cannot fetch your employer!"
+msgstr ""
+
+#: Plugin/LilInvoices/Lib/LilInvoicesExport.php:68
+msgid "Please provide your employer!"
+msgstr ""
+
+#: Plugin/LilInvoices/Lib/LilInvoicesExport.php:72
+msgid "Please provide your default account!"
+msgstr ""
+
+#: Plugin/LilInvoices/Lib/LilInvoicesExport.php:73
+msgid "Please provide your address!"
+msgstr ""
+
+#: Plugin/LilInvoices/Lib/LilInvoicesExport.php:74
+msgid "Please provide your tax no!"
+msgstr ""
+
+#: Plugin/LilInvoices/Lib/LilInvoicesExport.php:77
+msgid "Please provide client's \"%s\" default account!"
+msgstr ""
+
+#: Plugin/LilInvoices/Lib/LilInvoicesExport.php:78
+msgid "Please provide client's \"%s\" default address!"
+msgstr ""
+
+#: Plugin/LilInvoices/Lib/LilInvoicesExport.php:80
+msgid "Please provide client's \"%s\" tax no!"
+msgstr ""
+
+#: Plugin/LilInvoices/Lib/LilInvoicesExport.php:83
+msgid "Please provide payment details for invoice \"%1$s - %2$s\""
+msgstr ""
+
+#: Plugin/LilInvoices/Lib/LilInvoicesExport.php:96
+msgid "EXPORT ERROR(s):"
+msgstr ""
+
+#: Plugin/LilInvoices/Lib/LilInvoicesExport.php:102
+msgid "Export error: No invoices found."
+msgstr ""
+
+#: Plugin/LilInvoices/Lib/LilInvoicesSidebar.php:14
+msgid "Accounting"
+msgstr ""
+
+#: Plugin/LilInvoices/Lib/LilInvoicesSidebar.php:34
+msgid "Reports"
+msgstr ""
+
+#: Plugin/LilInvoices/Lib/LilInvoicesSidebar.php:48
+msgid "Invoices"
+msgstr ""
+
+#: Plugin/LilInvoices/Lib/LilInvoicesSidebar.php:69
+#: Plugin/LilInvoices/View/Invoices/admin_edit.ctp:296
+msgid "Archive"
+msgstr ""
+
+#: Plugin/LilInvoices/Lib/LilInvoicesSidebar.php:83
+msgid "Lookups"
+msgstr ""
+
+#: Plugin/LilInvoices/Lib/LilInvoicesSidebar.php:100
+#: Plugin/LilInvoices/View/Items/admin_index.ctp:2;17
+msgid "Items"
+msgstr ""
+
+#: Plugin/LilInvoices/Lib/LilInvoicesSidebar.php:111
+msgid "Invoices Counters"
+msgstr ""
+
+#: Plugin/LilInvoices/Lib/LilInvoicesSidebar.php:122
+msgid "VAT levels"
+msgstr ""
+
+#: Plugin/LilInvoices/View/Elements/edit_items.ctp:54;63;73;83
+#: Plugin/LilInvoices/View/Elements/edit_tax.ctp:77
+#: Plugin/LilInvoices/View/Invoices/admin_edit.ctp:69;152;167;182;272;287
+msgid "Blank"
+msgstr ""
+
+#: Plugin/LilInvoices/View/Elements/edit_items.ctp:119
+#: Plugin/LilInvoices/View/Elements/edit_tax.ctp:58
+msgid "Please choose a VAT level."
+msgstr ""
+
+#: Plugin/LilInvoices/View/Elements/edit_items.ctp:140
+#: Plugin/LilInvoices/View/Elements/edit_tax.ctp:96
+msgid "Remove Item"
+msgstr ""
+
+#: Plugin/LilInvoices/View/Elements/edit_items.ctp:164
+msgid "Add new Item"
+msgstr ""
+
+#: Plugin/LilInvoices/View/Elements/edit_tax.ctp:6
+msgid "VAT Description"
+msgstr ""
+
+#: Plugin/LilInvoices/View/Elements/edit_tax.ctp:7
+#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:409
+msgid "VAT [%]"
+msgstr ""
+
+#: Plugin/LilInvoices/View/Elements/edit_tax.ctp:8
+#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:410
+msgid "Base"
+msgstr ""
+
+#: Plugin/LilInvoices/View/Elements/edit_tax.ctp:9
+#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:411
+msgid "Tax"
+msgstr ""
+
+#: Plugin/LilInvoices/View/Elements/edit_tax.ctp:133
+msgid "Add new Tax"
+msgstr ""
+
+#: Plugin/LilInvoices/View/Invoices/admin_attachment_add.ctp:40
 msgid "Select file"
 msgstr ""
 
-#: Plugin\LilInvoices\View\Invoices\admin_attachment_add.ctp:42
+#: Plugin/LilInvoices/View/Invoices/admin_attachment_add.ctp:42
 msgid "A file must be selected for upload."
 msgstr ""
 
-#: Plugin\LilInvoices\View\Invoices\admin_attachment_add.ctp:51
-#: Plugin\LilInvoices\View\Invoices\admin_edit.ctp:343
-#: Plugin\LilInvoices\View\InvoicesCounters\admin_edit.ctp:158
-#: Plugin\LilInvoices\View\Items\admin_edit.ctp:110
-#: Plugin\LilInvoices\View\Vats\admin_edit.ctp:66
+#: Plugin/LilInvoices/View/Invoices/admin_attachment_add.ctp:51
+#: Plugin/LilInvoices/View/Invoices/admin_edit.ctp:343
+#: Plugin/LilInvoices/View/InvoicesCounters/admin_edit.ctp:158
+#: Plugin/LilInvoices/View/Items/admin_edit.ctp:110
+#: Plugin/LilInvoices/View/Vats/admin_edit.ctp:66
 msgid "Save"
 msgstr ""
 
-#: Plugin\LilInvoices\View\Invoices\admin_edit.ctp:4
+#: Plugin/LilInvoices/View/Invoices/admin_edit.ctp:4
 msgid "Edit an Invoice #%1$s <span class=\"light\">(%2$s)</span>"
 msgstr ""
 
-#: Plugin\LilInvoices\View\Invoices\admin_edit.ctp:4
+#: Plugin/LilInvoices/View/Invoices/admin_edit.ctp:4
 msgid "Add an Invoice #%1$s <span class=\"light\">(%2$s)</span>"
 msgstr ""
 
-#: Plugin\LilInvoices\View\Invoices\admin_edit.ctp:52
-#: Plugin\LilInvoices\View\InvoicesCounters\admin_edit.ctp:50
+#: Plugin/LilInvoices/View/Invoices/admin_edit.ctp:52
+#: Plugin/LilInvoices/View/InvoicesCounters/admin_edit.ctp:50
 msgid "Basics"
 msgstr ""
 
-#: Plugin\LilInvoices\View\Invoices\admin_edit.ctp:91
+#: Plugin/LilInvoices/View/Invoices/admin_edit.ctp:91
 msgid "Please choose a client."
 msgstr ""
 
-#: Plugin\LilInvoices\View\Invoices\admin_edit.ctp:95
+#: Plugin/LilInvoices/View/Invoices/admin_edit.ctp:95
 msgid "Start typing to select client. You can also add a [$1new company] or [$2new person]."
 msgstr ""
 
-#: Plugin\LilInvoices\View\Invoices\admin_edit.ctp:128
+#: Plugin/LilInvoices/View/Invoices/admin_edit.ctp:128
 msgid "Invoice no"
 msgstr ""
 
-#: Plugin\LilInvoices\View\Invoices\admin_edit.ctp:140
+#: Plugin/LilInvoices/View/Invoices/admin_edit.ctp:140
 msgid "Dates"
 msgstr ""
 
-#: Plugin\LilInvoices\View\Invoices\admin_edit.ctp:224
+#: Plugin/LilInvoices/View/Invoices/admin_edit.ctp:224
 msgid "Taxes Analytics"
 msgstr ""
 
-#: Plugin\LilInvoices\View\Invoices\admin_edit.ctp:231
+#: Plugin/LilInvoices/View/Invoices/admin_edit.ctp:231
 msgid "Payment"
 msgstr ""
 
-#: Plugin\LilInvoices\View\Invoices\admin_edit.ctp:240
+#: Plugin/LilInvoices/View/Invoices/admin_edit.ctp:240
 msgid "Payment Type"
 msgstr ""
 
-#: Plugin\LilInvoices\View\Invoices\admin_edit.ctp:242
+#: Plugin/LilInvoices/View/Invoices/admin_edit.ctp:242
 msgid "Invalid type"
 msgstr ""
 
-#: Plugin\LilInvoices\View\Invoices\admin_edit.ctp:255
+#: Plugin/LilInvoices/View/Invoices/admin_edit.ctp:255
 msgid "MOD"
 msgstr ""
 
-#: Plugin\LilInvoices\View\Invoices\admin_edit.ctp:257
+#: Plugin/LilInvoices/View/Invoices/admin_edit.ctp:257
 msgid "Invalid format"
 msgstr ""
 
-#: Plugin\LilInvoices\View\Invoices\admin_edit.ctp:270
+#: Plugin/LilInvoices/View/Invoices/admin_edit.ctp:270
 msgid "Reference"
 msgstr ""
 
-#: Plugin\LilInvoices\View\Invoices\admin_edit.ctp:278
+#: Plugin/LilInvoices/View/Invoices/admin_edit.ctp:278
 msgid "Use 'OTHR' for unknown payment type. Use prefix and two numers for module (eg SI00)."
 msgstr ""
 
-#: Plugin\LilInvoices\View\Invoices\admin_edit.ctp:285
+#: Plugin/LilInvoices/View/Invoices/admin_edit.ctp:285
 msgid "Payment Description"
 msgstr ""
 
-#: Plugin\LilInvoices\View\Invoices\admin_edit.ctp:369
+#: Plugin/LilInvoices/View/Invoices/admin_edit.ctp:369
 msgid "Are you sure you want to unlink item?"
 msgstr ""
 
-#: Plugin\LilInvoices\View\Invoices\admin_edit.ctp:371
+#: Plugin/LilInvoices/View/Invoices/admin_edit.ctp:371
 msgid "Add a Company"
 msgstr ""
 
-#: Plugin\LilInvoices\View\Invoices\admin_edit.ctp:373
+#: Plugin/LilInvoices/View/Invoices/admin_edit.ctp:373
 msgid "Add a Person"
 msgstr ""
 
-#: Plugin\LilInvoices\View\Invoices\admin_email.ctp:3
+#: Plugin/LilInvoices/View/Invoices/admin_email.ctp:3
 msgid "Email Invoice"
 msgstr ""
 
-#: Plugin\LilInvoices\View\Invoices\admin_email.ctp:25
+#: Plugin/LilInvoices/View/Invoices/admin_email.ctp:25
 msgid "To"
 msgstr ""
 
-#: Plugin\LilInvoices\View\Invoices\admin_email.ctp:37
+#: Plugin/LilInvoices/View/Invoices/admin_email.ctp:37
 msgid "CC"
 msgstr ""
 
-#: Plugin\LilInvoices\View\Invoices\admin_email.ctp:49
+#: Plugin/LilInvoices/View/Invoices/admin_email.ctp:49
 msgid "Send CC to me"
 msgstr ""
 
-#: Plugin\LilInvoices\View\Invoices\admin_email.ctp:61
+#: Plugin/LilInvoices/View/Invoices/admin_email.ctp:61
 msgid "Subject"
 msgstr ""
 
-#: Plugin\LilInvoices\View\Invoices\admin_email.ctp:73
+#: Plugin/LilInvoices/View/Invoices/admin_email.ctp:73
 msgid "Body"
 msgstr ""
 
-#: Plugin\LilInvoices\View\Invoices\admin_email.ctp:82
-#: Plugin\LilInvoices\View\Invoices\admin_view.ctp:101
+#: Plugin/LilInvoices/View/Invoices/admin_email.ctp:82
+#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:101
 msgid "Send"
 msgstr ""
 
-#: Plugin\LilInvoices\View\Invoices\admin_index.ctp:17;24
+#: Plugin/LilInvoices/View/Invoices/admin_index.ctp:17;24
 msgid "All"
 msgstr ""
 
-#: Plugin\LilInvoices\View\Invoices\admin_index.ctp:17;23
+#: Plugin/LilInvoices/View/Invoices/admin_index.ctp:17;23
 msgid "Expired"
 msgstr ""
 
-#: Plugin\LilInvoices\View\Invoices\admin_index.ctp:30
+#: Plugin/LilInvoices/View/Invoices/admin_index.ctp:30
 msgid "%4$s \"%3$s\" from %1$s to %2$s"
 msgstr ""
 
-#: Plugin\LilInvoices\View\Invoices\admin_index.ctp:51
-#: Plugin\LilInvoices\View\InvoicesCounters\admin_index.ctp:5
-#: Plugin\LilInvoices\View\Items\admin_index.ctp:5
-#: Plugin\LilInvoices\View\Vats\admin_index.ctp:5
+#: Plugin/LilInvoices/View/Invoices/admin_index.ctp:51
+#: Plugin/LilInvoices/View/InvoicesCounters/admin_index.ctp:5
+#: Plugin/LilInvoices/View/Items/admin_index.ctp:5
+#: Plugin/LilInvoices/View/Vats/admin_index.ctp:5
 msgid "Add"
 msgstr ""
 
-#: Plugin\LilInvoices\View\Invoices\admin_index.ctp:62
-#: Plugin\LilInvoices\View\Invoices\admin_view.ctp:90
-#: Plugin\LilTravelOrders\View\TravelOrders\admin_view.ctp:34
+#: Plugin/LilInvoices/View/Invoices/admin_index.ctp:62
+#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:90
 msgid "Print"
 msgstr ""
 
-#: Plugin\LilInvoices\View\Invoices\admin_index.ctp:74
+#: Plugin/LilInvoices/View/Invoices/admin_index.ctp:74
 msgid "Email"
 msgstr ""
 
-#: Plugin\LilInvoices\View\Invoices\admin_index.ctp:86
-#: Plugin\LilInvoices\View\Invoices\admin_view.ctp:118
+#: Plugin/LilInvoices/View/Invoices/admin_index.ctp:86
+#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:118
 msgid "Export"
 msgstr ""
 
-#: Plugin\LilInvoices\View\Invoices\admin_index.ctp:90
-#: Plugin\LilInvoices\View\Invoices\admin_view.ctp:122
+#: Plugin/LilInvoices/View/Invoices/admin_index.ctp:90
+#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:122
 msgid "PDF"
 msgstr ""
 
-#: Plugin\LilInvoices\View\Invoices\admin_index.ctp:103
-#: Plugin\LilInvoices\View\Invoices\admin_view.ctp:137
+#: Plugin/LilInvoices/View/Invoices/admin_index.ctp:103
+#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:137
 msgid "Sepa XML"
 msgstr ""
 
-#: Plugin\LilInvoices\View\Invoices\admin_index.ctp:169
-#: Plugin\LilInvoices\View\Reports\issued_w_tax.ctp:99
+#: Plugin/LilInvoices/View/Invoices/admin_index.ctp:174
+#: Plugin/LilInvoices/View/Reports/issued_w_tax.ctp:99
 msgid "n/a"
 msgstr ""
 
-#: Plugin\LilInvoices\View\Invoices\admin_view.ctp:10
+#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:10
 msgid "Edit"
 msgstr ""
 
-#: Plugin\LilInvoices\View\Invoices\admin_view.ctp:22
+#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:22
 msgid "Duplicate"
 msgstr ""
 
-#: Plugin\LilInvoices\View\Invoices\admin_view.ctp:36
+#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:36
 msgid "Attach"
 msgstr ""
 
-#: Plugin\LilInvoices\View\Invoices\admin_view.ctp:40
+#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:40
 msgid "File"
 msgstr ""
 
-#: Plugin\LilInvoices\View\Invoices\admin_view.ctp:57
+#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:57
 msgid "Scan"
 msgstr ""
 
-#: Plugin\LilInvoices\View\Invoices\admin_view.ctp:70
+#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:70
 msgid "Acquire Attachment"
 msgstr ""
 
-#: Plugin\LilInvoices\View\Invoices\admin_view.ctp:76
-#: Plugin\LilInvoices\View\InvoicesCounters\admin_edit.ctp:16
-#: Plugin\LilInvoices\View\Items\admin_edit.ctp:7
-#: Plugin\LilInvoices\View\Vats\admin_edit.ctp:7
+#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:76
+#: Plugin/LilInvoices/View/InvoicesCounters/admin_edit.ctp:16
+#: Plugin/LilInvoices/View/Items/admin_edit.ctp:7
+#: Plugin/LilInvoices/View/Vats/admin_edit.ctp:7
 msgid "Delete"
 msgstr ""
 
-#: Plugin\LilInvoices\View\Invoices\admin_view.ctp:114
+#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:114
 msgid "Send via Email"
 msgstr ""
 
-#: Plugin\LilInvoices\View\Invoices\admin_view.ctp:445
+#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:445
 msgid "VAT Analytics"
 msgstr ""
 
-#: Plugin\LilInvoices\View\Invoices\popups\admin_attachment_add.ctp:1
+#: Plugin/LilInvoices/View/Invoices/popups/admin_attachment_add.ctp:1
 msgid "Attachment has been successfully saved."
 msgstr ""
 
-#: Plugin\LilInvoices\View\Invoices\popups\admin_email.ctp:3
+#: Plugin/LilInvoices/View/Invoices/popups/admin_email.ctp:3
 msgid "Sending email has failed."
 msgstr ""
 
-#: Plugin\LilInvoices\View\Invoices\popups\admin_email.ctp:5
+#: Plugin/LilInvoices/View/Invoices/popups/admin_email.ctp:5
 msgid "Email has been successfully sent."
 msgstr ""
 
-#: Plugin\LilInvoices\View\InvoicesCounters\admin_edit.ctp:13
+#: Plugin/LilInvoices/View/InvoicesCounters/admin_edit.ctp:13
 msgid "Edit Counter"
 msgstr ""
 
-#: Plugin\LilInvoices\View\InvoicesCounters\admin_edit.ctp:13
+#: Plugin/LilInvoices/View/InvoicesCounters/admin_edit.ctp:13
 msgid "Add Counter"
 msgstr ""
 
-#: Plugin\LilInvoices\View\InvoicesCounters\admin_edit.ctp:26
+#: Plugin/LilInvoices/View/InvoicesCounters/admin_edit.ctp:26
 msgid "Are you sure you want to delete this counter?"
 msgstr ""
 
-#: Plugin\LilInvoices\View\InvoicesCounters\admin_edit.ctp:59
+#: Plugin/LilInvoices/View/InvoicesCounters/admin_edit.ctp:59
 msgid "Kind"
 msgstr ""
 
-#: Plugin\LilInvoices\View\InvoicesCounters\admin_edit.ctp:61
+#: Plugin/LilInvoices/View/InvoicesCounters/admin_edit.ctp:61
 msgid "Issued Invoices"
 msgstr ""
 
-#: Plugin\LilInvoices\View\InvoicesCounters\admin_edit.ctp:62
+#: Plugin/LilInvoices/View/InvoicesCounters/admin_edit.ctp:62
 msgid "Received Invoices"
 msgstr ""
 
-#: Plugin\LilInvoices\View\InvoicesCounters\admin_edit.ctp:84
+#: Plugin/LilInvoices/View/InvoicesCounters/admin_edit.ctp:84
 msgid "Counter Status"
 msgstr ""
 
-#: Plugin\LilInvoices\View\InvoicesCounters\admin_edit.ctp:95
+#: Plugin/LilInvoices/View/InvoicesCounters/admin_edit.ctp:95
 msgid "This counter is active"
 msgstr ""
 
-#: Plugin\LilInvoices\View\InvoicesCounters\admin_edit.ctp:102
+#: Plugin/LilInvoices/View/InvoicesCounters/admin_edit.ctp:102
 msgid "Templates"
 msgstr ""
 
-#: Plugin\LilInvoices\View\InvoicesCounters\admin_edit.ctp:111
+#: Plugin/LilInvoices/View/InvoicesCounters/admin_edit.ctp:111
 msgid "Layout"
 msgstr ""
 
-#: Plugin\LilInvoices\View\InvoicesCounters\admin_edit.ctp:122
+#: Plugin/LilInvoices/View/InvoicesCounters/admin_edit.ctp:122
 msgid "Layout title Template"
 msgstr ""
 
-#: Plugin\LilInvoices\View\InvoicesCounters\admin_edit.ctp:134
+#: Plugin/LilInvoices/View/InvoicesCounters/admin_edit.ctp:134
 msgid "Invoice no. Template"
 msgstr ""
 
-#: Plugin\LilInvoices\View\InvoicesCounters\admin_edit.ctp:138
+#: Plugin/LilInvoices/View/InvoicesCounters/admin_edit.ctp:138
 msgid "Use [[no]], [[no.2]], [[year]] templates."
 msgstr ""
 
-#: Plugin\LilInvoices\View\InvoicesCounters\admin_edit.ctp:147
+#: Plugin/LilInvoices/View/InvoicesCounters/admin_edit.ctp:147
 msgid "Invoice description Template"
 msgstr ""
 
-#: Plugin\LilInvoices\View\InvoicesCounters\admin_index.ctp:2;17
+#: Plugin/LilInvoices/View/InvoicesCounters/admin_index.ctp:2;17
 msgid "Counters"
 msgstr ""
 
-#: Plugin\LilInvoices\View\InvoicesCounters\admin_index.ctp:24
+#: Plugin/LilInvoices/View/InvoicesCounters/admin_index.ctp:24
 msgid "InvoicesCounter Status"
 msgstr ""
 
-#: Plugin\LilInvoices\View\InvoicesCounters\admin_index.ctp:25
+#: Plugin/LilInvoices/View/InvoicesCounters/admin_index.ctp:25
 msgid "Mask"
 msgstr ""
 
-#: Plugin\LilInvoices\View\InvoicesCounters\admin_index.ctp:26
+#: Plugin/LilInvoices/View/InvoicesCounters/admin_index.ctp:26
 msgid "Template"
 msgstr ""
 
-#: Plugin\LilInvoices\View\InvoicesCounters\admin_index.ctp:32
+#: Plugin/LilInvoices/View/InvoicesCounters/admin_index.ctp:32
 msgid "No counters found"
 msgstr ""
 
-#: Plugin\LilInvoices\View\Items\admin_edit.ctp:4
+#: Plugin/LilInvoices/View/Items/admin_edit.ctp:4
 msgid "Edit Item"
 msgstr ""
 
-#: Plugin\LilInvoices\View\Items\admin_edit.ctp:4
+#: Plugin/LilInvoices/View/Items/admin_edit.ctp:4
 msgid "Add Item"
 msgstr ""
 
-#: Plugin\LilInvoices\View\Items\admin_edit.ctp:17
+#: Plugin/LilInvoices/View/Items/admin_edit.ctp:17
 msgid "Are you sure you want to delete this item?"
 msgstr ""
 
-#: Plugin\LilInvoices\View\Items\admin_edit.ctp:47
-#: Plugin\LilInvoices\View\Vats\admin_edit.ctp:47
+#: Plugin/LilInvoices/View/Items/admin_edit.ctp:47
+#: Plugin/LilInvoices/View/Vats/admin_edit.ctp:47
 msgid "Description is required."
 msgstr ""
 
-#: Plugin\LilInvoices\View\Items\admin_edit.ctp:79
-#: Plugin\LilInvoices\View\Items\admin_index.ctp:31
+#: Plugin/LilInvoices/View/Items/admin_edit.ctp:79
+#: Plugin/LilInvoices/View/Items/admin_index.ctp:31
 msgid "Price"
 msgstr ""
 
-#: Plugin\LilInvoices\View\Items\admin_index.ctp:22
+#: Plugin/LilInvoices/View/Items/admin_index.ctp:22
 msgid "No items found"
 msgstr ""
 
-#: Plugin\LilInvoices\View\Items\admin_index.ctp:29
-#: Plugin\LilInvoices\View\Reports\issued_w_tax.ctp:27
+#: Plugin/LilInvoices/View/Items/admin_index.ctp:29
+#: Plugin/LilInvoices/View/Reports/issued_w_tax.ctp:27
 msgid "Qty"
 msgstr ""
 
-#: Plugin\LilInvoices\View\Items\admin_index.ctp:32
-#: Plugin\LilInvoices\View\Reports\advance.ctp:27
-#: Plugin\LilInvoices\View\Reports\estimate.ctp:27
-#: Plugin\LilInvoices\View\Reports\issued.ctp:27
+#: Plugin/LilInvoices/View/Items/admin_index.ctp:32
+#: Plugin/LilInvoices/View/Reports/advance.ctp:27
+#: Plugin/LilInvoices/View/Reports/estimate.ctp:27
+#: Plugin/LilInvoices/View/Reports/issued.ctp:27
 msgid "Discount"
 msgstr ""
 
-#: Plugin\LilInvoices\View\Items\admin_index.ctp:33
-#: Plugin\LilInvoices\View\Reports\issued_w_tax.ctp:92
+#: Plugin/LilInvoices/View/Items/admin_index.ctp:33
+#: Plugin/LilInvoices/View/Reports/issued_w_tax.ctp:92
 msgid "Tax %"
 msgstr ""
 
-#: Plugin\LilInvoices\View\Reports\advance.ctp:12
-#: Plugin\LilInvoices\View\Reports\estimate.ctp:12
+#: Plugin/LilInvoices/View/Reports/advance.ctp:12
+#: Plugin/LilInvoices/View/Reports/estimate.ctp:12
 msgid "Predicted service date"
 msgstr ""
 
-#: Plugin\LilInvoices\View\Reports\advance.ctp:16
+#: Plugin/LilInvoices/View/Reports/advance.ctp:16
 msgid "Payment date"
 msgstr ""
 
-#: Plugin\LilInvoices\View\Reports\advance.ctp:23
-#: Plugin\LilInvoices\View\Reports\estimate.ctp:23
-#: Plugin\LilInvoices\View\Reports\issued.ctp:23
-#: Plugin\LilInvoices\View\Reports\issued_w_tax.ctp:26
+#: Plugin/LilInvoices/View/Reports/advance.ctp:23
+#: Plugin/LilInvoices/View/Reports/estimate.ctp:23
+#: Plugin/LilInvoices/View/Reports/issued.ctp:23
+#: Plugin/LilInvoices/View/Reports/issued_w_tax.ctp:26
 msgid "Item description"
 msgstr ""
 
-#: Plugin\LilInvoices\View\Reports\advance.ctp:26
-#: Plugin\LilInvoices\View\Reports\estimate.ctp:26
-#: Plugin\LilInvoices\View\Reports\issued.ctp:26
-#: Plugin\LilInvoices\View\Reports\issued_w_tax.ctp:29
+#: Plugin/LilInvoices/View/Reports/advance.ctp:26
+#: Plugin/LilInvoices/View/Reports/estimate.ctp:26
+#: Plugin/LilInvoices/View/Reports/issued.ctp:26
+#: Plugin/LilInvoices/View/Reports/issued_w_tax.ctp:29
 msgid "PPU"
 msgstr ""
 
-#: Plugin\LilInvoices\View\Reports\advance.ctp:28
-#: Plugin\LilInvoices\View\Reports\estimate.ctp:28
-#: Plugin\LilInvoices\View\Reports\issued.ctp:28
-#: Plugin\LilInvoices\View\Reports\issued_w_tax.ctp:33
+#: Plugin/LilInvoices/View/Reports/advance.ctp:28
+#: Plugin/LilInvoices/View/Reports/estimate.ctp:28
+#: Plugin/LilInvoices/View/Reports/issued.ctp:28
+#: Plugin/LilInvoices/View/Reports/issued_w_tax.ctp:33
 msgid "Total price"
 msgstr ""
 
-#: Plugin\LilInvoices\View\Reports\advance.ctp:47
-#: Plugin\LilInvoices\View\Reports\estimate.ctp:47
-#: Plugin\LilInvoices\View\Reports\issued.ctp:47
-#: Plugin\LilInvoices\View\Reports\issued_w_tax.ctp:80
-#: Plugin\LilInvoices\View\Reports\received.ctp:22
+#: Plugin/LilInvoices/View/Reports/advance.ctp:47
+#: Plugin/LilInvoices/View/Reports/estimate.ctp:47
+#: Plugin/LilInvoices/View/Reports/issued.ctp:47
+#: Plugin/LilInvoices/View/Reports/issued_w_tax.ctp:80
+#: Plugin/LilInvoices/View/Reports/received.ctp:22
 msgid "Grand total"
 msgstr ""
 
-#: Plugin\LilInvoices\View\Reports\issued_w_tax.ctp:23
+#: Plugin/LilInvoices/View/Reports/issued_w_tax.ctp:23
 msgid "Invoice Specification"
 msgstr ""
 
-#: Plugin\LilInvoices\View\Reports\issued_w_tax.ctp:32;94
+#: Plugin/LilInvoices/View/Reports/issued_w_tax.ctp:32;94
 msgid "Tax Amount"
 msgstr ""
 
-#: Plugin\LilInvoices\View\Reports\issued_w_tax.ctp:70;93
+#: Plugin/LilInvoices/View/Reports/issued_w_tax.ctp:70;93
 msgid "Tax Base"
 msgstr ""
 
-#: Plugin\LilInvoices\View\Reports\issued_w_tax.ctp:75;111
+#: Plugin/LilInvoices/View/Reports/issued_w_tax.ctp:75;111
 msgid "Tax Total"
 msgstr ""
 
-#: Plugin\LilInvoices\View\Reports\issued_w_tax.ctp:89
+#: Plugin/LilInvoices/View/Reports/issued_w_tax.ctp:89
 msgid "Tax Specification"
 msgstr ""
 
-#: Plugin\LilInvoices\View\Vats\admin_edit.ctp:4
+#: Plugin/LilInvoices/View/Vats/admin_edit.ctp:4
 msgid "Edit Vat"
 msgstr ""
 
-#: Plugin\LilInvoices\View\Vats\admin_edit.ctp:4
+#: Plugin/LilInvoices/View/Vats/admin_edit.ctp:4
 msgid "Add Vat"
 msgstr ""
 
-#: Plugin\LilInvoices\View\Vats\admin_edit.ctp:17
+#: Plugin/LilInvoices/View/Vats/admin_edit.ctp:17
 msgid "Are you sure you want to delete this vat?"
 msgstr ""
 
-#: Plugin\LilInvoices\View\Vats\admin_edit.ctp:58
-#: Plugin\LilInvoices\View\Vats\admin_index.ctp:29
+#: Plugin/LilInvoices/View/Vats/admin_edit.ctp:58
+#: Plugin/LilInvoices/View/Vats/admin_index.ctp:29
 msgid "Percent"
 msgstr ""
 
-#: Plugin\LilInvoices\View\Vats\admin_index.ctp:2;17
+#: Plugin/LilInvoices/View/Vats/admin_index.ctp:2;17
 msgid "Vats"
 msgstr ""
 
-#: Plugin\LilInvoices\View\Vats\admin_index.ctp:22
+#: Plugin/LilInvoices/View/Vats/admin_index.ctp:22
 msgid "No vats found"
 msgstr ""
 

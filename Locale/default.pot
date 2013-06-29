@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2012-03-13 18:41+0100\n"
+"POT-Creation-Date: 2012-11-29 14:54+0100\n"
 "PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
 "Last-Translator: NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
@@ -14,51 +14,57 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: Controller\AppPluginController.php:94
+#: Controller/AppPluginController.php:94
 msgid "Username must be unique."
 msgstr ""
 
-#: Controller\AppPluginController.php:170
+#: Controller/AppPluginController.php:170
 msgid "Project no"
 msgstr ""
 
-#: Controller\AppPluginController.php:184
+#: Controller/AppPluginController.php:184
 msgid "This is an active project"
 msgstr ""
 
-#: Controller\AppPluginController.php:191
+#: Controller/AppPluginController.php:191
 msgid "Login"
 msgstr ""
 
-#: Controller\AppPluginController.php:198
+#: Controller/AppPluginController.php:198
 msgid "Username"
 msgstr ""
 
-#: Controller\AppPluginController.php:210
+#: Controller/AppPluginController.php:210
 msgid "Password"
 msgstr ""
 
-#: Controller\AppPluginController.php:274
+#: Controller/AppPluginController.php:274
 msgid "No"
 msgstr ""
 
-#: Controller\AppPluginController.php:294
+#: Controller/AppPluginController.php:294
 msgid "Projects"
 msgstr ""
 
-#: Controller\AppPluginController.php:309
+#: Controller/AppPluginController.php:309
 msgid "Active"
 msgstr ""
 
-#: Controller\AppPluginController.php:321
+#: Controller/AppPluginController.php:321
 msgid "Archived"
 msgstr ""
 
-#: Plugin\Arhim\Controller\RacuniController.php:36
+#: Plugin/Arhim/Controller/DatotekeController.php:36
+#: Plugin/Arhim/Controller/RacuniController.php:36
 msgid "Napacno uporabnisko ime ali geslo"
 msgstr ""
 
-#: Plugin\Arhim\Controller\RacuniController.php:42
+#: Plugin/Arhim/Controller/DatotekeController.php:42
+#: Plugin/Arhim/Controller/RacuniController.php:42
 msgid "Napačno uporabnisko ime ali geslo"
+msgstr ""
+
+#: Plugin/LilTasks/View/Tasks/admin_edit.ctp:135
+msgid "Cancel"
 msgstr ""
 
