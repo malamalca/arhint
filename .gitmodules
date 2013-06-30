@@ -19,6 +19,6 @@
 [submodule "Plugin/LilTravelOrders"]
 	path = Plugin/LilTravelOrders
 	url = http://miha.nahtigal:vuego3869@www.nahtigal.com/git/lil_travel_orders.git
-[submodule "Plugin/LilNotes"]
-	path = Plugin/LilNotes
-	url = http://miha.nahtigal:vuego3869@www.nahtigal.com/git/lil_notes.git
+[submodule "Plugin/LilEvents"]
+	path = Plugin/LilEvents
+	url = http://miha.nahtigal:vuego3869@www.nahtigal.com/git/lil_events.git
