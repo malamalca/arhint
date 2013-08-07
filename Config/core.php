@@ -280,4 +280,4 @@ Cache::config('_cake_model_', array(
 
 
 // load Lil's default configuration
-Configure::write('Lil.plugins', array('Crm', 'Invoices', 'TravelOrders', 'Tasks', 'Expenses'));
+Configure::write('Lil.plugins', array('Crm', 'Invoices', 'TravelOrders', 'Tasks', 'Expenses', 'Events'));
