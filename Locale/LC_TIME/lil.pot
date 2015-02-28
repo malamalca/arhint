@@ -1,0 +1,52 @@
+# LANGUAGE translation of CakePHP Application
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"POT-Creation-Date: 2014-04-24 08:57+0200\n"
+"PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
+"Last-Translator: NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+
+#: Plugin/Lil/Lib/LilDateEngine.php:578
+msgid "abday"
+msgstr ""
+
+#: Plugin/Lil/Lib/LilDateEngine.php:584
+msgid "day"
+msgstr ""
+
+#: Plugin/Lil/Lib/LilDateEngine.php:590
+msgid "d_t_fmt"
+msgstr ""
+
+#: Plugin/Lil/Lib/LilDateEngine.php:612
+msgid "abmon"
+msgstr ""
+
+#: Plugin/Lil/Lib/LilDateEngine.php:618
+msgid "mon"
+msgstr ""
+
+#: Plugin/Lil/Lib/LilDateEngine.php:629
+msgid "am_pm"
+msgstr ""
+
+#: Plugin/Lil/Lib/LilDateEngine.php:636
+msgid "t_fmt_ampm"
+msgstr ""
+
+#: Plugin/Lil/Lib/LilDateEngine.php:650
+msgid "d_fmt"
+msgstr ""
+
+#: Plugin/Lil/Lib/LilDateEngine.php:656
+msgid "t_fmt"
+msgstr ""
+

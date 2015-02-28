@@ -1,0 +1,97 @@
+# LANGUAGE translation of CakePHP Application
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"POT-Creation-Date: 2014-04-24 08:57+0200\n"
+"PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
+"Last-Translator: NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+
+#: Plugin/LilEvents/Controller/EventsController.php:51
+msgid "Event has been saved."
+msgstr ""
+
+#: Plugin/LilEvents/Controller/EventsController.php:54
+msgid "There are some errors in the form. Please correct all marked fields below."
+msgstr ""
+
+#: Plugin/LilEvents/Controller/EventsController.php:115
+msgid "Event has been deleted."
+msgstr ""
+
+#: Plugin/LilEvents/Controller/LilEventsPluginController.php:171
+msgid "Add Event"
+msgstr ""
+
+#: Plugin/LilEvents/Controller/LilEventsPluginController.php:185
+msgid "Note"
+msgstr ""
+
+#: Plugin/LilEvents/Controller/LilEventsPluginController.php:199
+msgid "Add Note"
+msgstr ""
+
+#: Plugin/LilEvents/Controller/LilEventsPluginController.php:204
+msgid "Phone Call"
+msgstr ""
+
+#: Plugin/LilEvents/Controller/LilEventsPluginController.php:218
+msgid "Add Phone Call"
+msgstr ""
+
+#: Plugin/LilEvents/View/Elements/lil_events.ctp:2
+msgid "Events"
+msgstr ""
+
+#: Plugin/LilEvents/View/Elements/lil_events.ctp:7
+msgid "Nothing happened yet."
+msgstr ""
+
+#: Plugin/LilEvents/View/Elements/lil_events.ctp:44
+msgid "commented on %s"
+msgstr ""
+
+#: Plugin/LilEvents/View/Elements/lil_events.ctp:50;71
+msgid "Somebody"
+msgstr ""
+
+#: Plugin/LilEvents/View/Elements/lil_events.ctp:59
+msgid "I"
+msgstr ""
+
+#: Plugin/LilEvents/View/Elements/lil_events.ctp:79
+msgid "Me"
+msgstr ""
+
+#: Plugin/LilEvents/View/Elements/lil_events.ctp:91
+msgid "%1$s called %2$s"
+msgstr ""
+
+#: Plugin/LilEvents/View/Elements/lil_events.ctp:103
+msgid "edit"
+msgstr ""
+
+#: Plugin/LilEvents/View/Elements/lil_events.ctp:111
+#: Plugin/LilEvents/View/Events/admin_edit.ctp:79
+msgid "Edit Event"
+msgstr ""
+
+#: Plugin/LilEvents/View/Elements/lil_events.ctp:117
+msgid "delete"
+msgstr ""
+
+#: Plugin/LilEvents/View/Elements/lil_events.ctp:124
+msgid "Are you sure you want to delete this event?"
+msgstr ""
+
+#: Plugin/LilEvents/View/Events/popups/admin_edit.ctp:1
+msgid "Event has been successfuly added."
+msgstr ""
+

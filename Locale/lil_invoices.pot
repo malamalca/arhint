@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2012-11-29 14:54+0100\n"
+"POT-Creation-Date: 2014-04-24 08:57+0200\n"
 "PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
 "Last-Translator: NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
@@ -15,12 +15,12 @@ msgstr ""
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
 #: Plugin/Arhim/Controller/DatotekeController.php:81
-#: Plugin/LilInvoices/Controller/InvoicesController.php:344
+#: Plugin/LilInvoices/Controller/InvoicesController.php:379
 msgid "Attachment has been successfully added."
 msgstr ""
 
 #: Plugin/Arhim/Controller/DatotekeController.php:85
-#: Plugin/LilInvoices/Controller/InvoicesController.php:105;221;348
+#: Plugin/LilInvoices/Controller/InvoicesController.php:114;245;384
 msgid "There are some errors in the form. Please correct all marked fields below."
 msgstr ""
 
@@ -30,7 +30,7 @@ msgid "Counter does not exist"
 msgstr ""
 
 #: Plugin/Arhim/Controller/RacuniController.php:103
-#: Plugin/LilInvoices/Controller/InvoicesController.php:147
+#: Plugin/LilInvoices/Controller/InvoicesController.php:156
 msgid "Invalid export type"
 msgstr ""
 
@@ -50,39 +50,41 @@ msgstr ""
 
 #: Plugin/Arhim/View/Racuni/index.ctp:63
 #: Plugin/LilExpenses/View/Reports/unpaid_invoices.ctp:44
-#: Plugin/LilInvoices/View/Invoices/admin_index.ctp:127
+#: Plugin/LilInvoices/View/Invoices/admin_index.ctp:140
 msgid "Cnt"
 msgstr ""
 
 #: Plugin/Arhim/View/Racuni/index.ctp:66
 #: Plugin/LilExpenses/View/Reports/unpaid_invoices.ctp:48
-#: Plugin/LilInvoices/View/Invoices/admin_index.ctp:130
+#: Plugin/LilInvoices/View/Invoices/admin_index.ctp:143
+#: Plugin/LilInvoices/View/Reports/vats_analytics.ctp:12;67
 msgid "No"
 msgstr ""
 
 #: Plugin/Arhim/View/Racuni/index.ctp:70
 #: Plugin/LilExpenses/View/Reports/unpaid_invoices.ctp:52
-#: Plugin/LilInvoices/View/Invoices/admin_index.ctp:134
+#: Plugin/LilInvoices/View/Invoices/admin_index.ctp:147
 msgid "Issued"
 msgstr ""
 
 #: Plugin/Arhim/View/Racuni/index.ctp:73
 #: Plugin/Arhim/View/Racuni/view.ctp:14
 #: Plugin/LilExpenses/View/Reports/unpaid_invoices.ctp:56
-#: Plugin/LilInvoices/View/Invoices/admin_edit.ctp:67
-#: Plugin/LilInvoices/View/Invoices/admin_index.ctp:137
-#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:159
-#: Plugin/LilInvoices/View/InvoicesCounters/admin_edit.ctp:74
+#: Plugin/LilInvoices/View/Invoices/admin_edit.ctp:72
+#: Plugin/LilInvoices/View/Invoices/admin_index.ctp:150
+#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:188
+#: Plugin/LilInvoices/View/InvoicesCounters/admin_edit.ctp:75
 #: Plugin/LilInvoices/View/InvoicesCounters/admin_index.ctp:23
+#: Plugin/LilInvoices/View/Reports/vats_analytics.ctp:13;68
 msgid "Title"
 msgstr ""
 
 #: Plugin/Arhim/View/Racuni/index.ctp:76
 #: Plugin/Arhim/View/Racuni/view.ctp:24
 #: Plugin/LilExpenses/View/Reports/unpaid_invoices.ctp:60
-#: Plugin/LilInvoices/View/Invoices/admin_edit.ctp:80
-#: Plugin/LilInvoices/View/Invoices/admin_index.ctp:140
-#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:169
+#: Plugin/LilInvoices/View/Invoices/admin_edit.ctp:85
+#: Plugin/LilInvoices/View/Invoices/admin_index.ctp:153
+#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:198
 msgid "Client"
 msgstr ""
 
@@ -90,14 +92,14 @@ msgstr ""
 #: Plugin/Arhim/View/Racuni/view.ctp:87
 #: Plugin/LilExpenses/View/Elements/expenses_view_invoice.ctp:52
 #: Plugin/LilExpenses/View/Reports/unpaid_invoices.ctp:64;82
-#: Plugin/LilInvoices/View/Invoices/admin_edit.ctp:215
-#: Plugin/LilInvoices/View/Invoices/admin_index.ctp:144
-#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:232;412
+#: Plugin/LilInvoices/View/Invoices/admin_edit.ctp:305
+#: Plugin/LilInvoices/View/Invoices/admin_index.ctp:161
+#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:261;433
 msgid "Total"
 msgstr ""
 
 #: Plugin/Arhim/View/Racuni/index.ctp:86
-#: Plugin/LilInvoices/View/Invoices/admin_index.ctp:150
+#: Plugin/LilInvoices/View/Invoices/admin_index.ctp:167
 msgid "Total Sum"
 msgstr ""
 
@@ -107,20 +109,20 @@ msgid "Invoice #%1$s <span class=\"light\">(%2$s :: #%3$s)</span>"
 msgstr ""
 
 #: Plugin/Arhim/View/Racuni/view.ctp:57
-#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:202
+#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:231
 #: Plugin/LilInvoices/View/Layouts/Reports/lil_invoices_pdf.ctp:30
 msgid "TAX payee no."
 msgstr ""
 
 #: Plugin/Arhim/View/Racuni/view.ctp:57
-#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:202
+#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:231
 #: Plugin/LilInvoices/View/Layouts/Reports/lil_invoices_pdf.ctp:30
 msgid "TAX no."
 msgstr ""
 
 #: Plugin/Arhim/View/Racuni/view.ctp:66
-#: Plugin/LilInvoices/View/Invoices/admin_edit.ctp:149
-#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:211
+#: Plugin/LilInvoices/View/Invoices/admin_edit.ctp:156
+#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:240
 #: Plugin/LilInvoices/View/Reports/advance.ctp:8
 #: Plugin/LilInvoices/View/Reports/estimate.ctp:8
 #: Plugin/LilInvoices/View/Reports/issued.ctp:8
@@ -130,8 +132,8 @@ msgid "Date of issue"
 msgstr ""
 
 #: Plugin/Arhim/View/Racuni/view.ctp:70
-#: Plugin/LilInvoices/View/Invoices/admin_edit.ctp:165
-#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:215
+#: Plugin/LilInvoices/View/Invoices/admin_edit.ctp:174
+#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:244
 #: Plugin/LilInvoices/View/Reports/issued.ctp:12
 #: Plugin/LilInvoices/View/Reports/issued_w_tax.ctp:12
 #: Plugin/LilInvoices/View/Reports/received.ctp:12
@@ -139,8 +141,8 @@ msgid "Service date"
 msgstr ""
 
 #: Plugin/Arhim/View/Racuni/view.ctp:74
-#: Plugin/LilInvoices/View/Invoices/admin_edit.ctp:180
-#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:219
+#: Plugin/LilInvoices/View/Invoices/admin_edit.ctp:191
+#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:248
 #: Plugin/LilInvoices/View/Reports/estimate.ctp:16
 #: Plugin/LilInvoices/View/Reports/issued.ctp:16
 #: Plugin/LilInvoices/View/Reports/issued_w_tax.ctp:16
@@ -149,16 +151,16 @@ msgid "Expiration date"
 msgstr ""
 
 #: Plugin/Arhim/View/Racuni/view.ctp:78
-#: Plugin/LilInvoices/View/Invoices/admin_edit.ctp:195
-#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:223
+#: Plugin/LilInvoices/View/Invoices/admin_edit.ctp:208
+#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:252
 msgid "Approval date"
 msgstr ""
 
 #: Plugin/Arhim/View/Racuni/view.ctp:194
 #: Plugin/LilInvoices/View/Elements/edit_items.ctp:6
-#: Plugin/LilInvoices/View/Invoices/admin_edit.ctp:323
-#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:325;408
-#: Plugin/LilInvoices/View/Items/admin_edit.ctp:46
+#: Plugin/LilInvoices/View/Invoices/admin_edit.ctp:247
+#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:346;429
+#: Plugin/LilInvoices/View/Items/admin_edit.ctp:52
 #: Plugin/LilInvoices/View/Items/admin_index.ctp:28
 #: Plugin/LilInvoices/View/Vats/admin_edit.ctp:46
 #: Plugin/LilInvoices/View/Vats/admin_index.ctp:28
@@ -167,15 +169,15 @@ msgstr ""
 
 #: Plugin/Arhim/View/Racuni/view.ctp:195
 #: Plugin/LilInvoices/View/Elements/edit_items.ctp:7
-#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:326
-#: Plugin/LilInvoices/View/Items/admin_edit.ctp:58
+#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:347
+#: Plugin/LilInvoices/View/Items/admin_edit.ctp:64
 msgid "Quantity"
 msgstr ""
 
 #: Plugin/Arhim/View/Racuni/view.ctp:196
 #: Plugin/LilInvoices/View/Elements/edit_items.ctp:8
-#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:327
-#: Plugin/LilInvoices/View/Items/admin_edit.ctp:68
+#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:348
+#: Plugin/LilInvoices/View/Items/admin_edit.ctp:74
 #: Plugin/LilInvoices/View/Items/admin_index.ctp:30
 #: Plugin/LilInvoices/View/Reports/advance.ctp:25
 #: Plugin/LilInvoices/View/Reports/estimate.ctp:25
@@ -186,28 +188,27 @@ msgstr ""
 
 #: Plugin/Arhim/View/Racuni/view.ctp:197
 #: Plugin/LilInvoices/View/Elements/edit_items.ctp:9
-#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:328
+#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:349
 msgid "Price per Unit"
 msgstr ""
 
 #: Plugin/Arhim/View/Racuni/view.ctp:198
 #: Plugin/LilInvoices/View/Elements/edit_items.ctp:10
-#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:329
-#: Plugin/LilInvoices/View/Items/admin_edit.ctp:90
+#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:350
+#: Plugin/LilInvoices/View/Items/admin_edit.ctp:96
 #: Plugin/LilInvoices/View/Reports/issued_w_tax.ctp:30
 msgid "Discount [%]"
 msgstr ""
 
 #: Plugin/Arhim/View/Racuni/view.ctp:199
 #: Plugin/LilInvoices/View/Elements/edit_items.ctp:11
-#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:330
+#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:351
 msgid "Unit Total"
 msgstr ""
 
 #: Plugin/Arhim/View/Racuni/view.ctp:200
 #: Plugin/LilInvoices/View/Elements/edit_items.ctp:12
-#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:331
-#: Plugin/LilInvoices/View/Items/admin_edit.ctp:102
+#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:352
 #: Plugin/LilInvoices/View/Reports/issued_w_tax.ctp:31
 msgid "Tax [%]"
 msgstr ""
@@ -215,37 +216,37 @@ msgstr ""
 #: Plugin/Arhim/View/Racuni/view.ctp:201
 #: Plugin/LilInvoices/View/Elements/edit_items.ctp:13
 #: Plugin/LilInvoices/View/Elements/edit_tax.ctp:10
-#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:332
+#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:353
 msgid "Total with Tax"
 msgstr ""
 
 #: Plugin/Arhim/View/Racuni/view.ctp:213
-#: Plugin/LilInvoices/View/Elements/edit_items.ctp:169
+#: Plugin/LilInvoices/View/Elements/edit_items.ctp:173
 #: Plugin/LilInvoices/View/Elements/edit_tax.ctp:138
-#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:344;424
+#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:365;445
 msgid "Grand Total"
 msgstr ""
 
 #: Plugin/Arhim/View/Racuni/view.ctp:234
-#: Plugin/LilInvoices/View/Invoices/admin_edit.ctp:205
-#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:365
+#: Plugin/LilInvoices/View/Invoices/admin_edit.ctp:297;312
+#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:386
 msgid "Analytics"
 msgstr ""
 
 #: Plugin/Arhim/View/Racuni/view.ctp:244
 #: Plugin/LilInvoices/View/Invoices/admin_email.ctp:97
-#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:452
+#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:473
 #: Plugin/LilInvoices/View/Reports/received.ctp:37
 msgid "Attachments"
 msgstr ""
 
 #: Plugin/Arhim/View/Racuni/view.ctp:246
-#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:454
+#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:475
 msgid "No attachments found."
 msgstr ""
 
 #: Plugin/Arhim/View/Racuni/view.ctp:261
-#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:469
+#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:490
 msgid "Are you sure you want to delete this attachment"
 msgstr ""
 
@@ -289,7 +290,7 @@ msgid "Edit Payment"
 msgstr ""
 
 #: Plugin/LilExpenses/View/Expenses/admin_view.ctp:26
-#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:86
+#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:100
 msgid "Are you sure you want to delete this invoice?"
 msgstr ""
 
@@ -803,33 +804,33 @@ msgstr ""
 msgid "Payment of withholding tax"
 msgstr ""
 
-#: Plugin/LilInvoices/Controller/InvoicesController.php:102
+#: Plugin/LilInvoices/Controller/InvoicesController.php:111
 msgid "Email has been successfully sent"
 msgstr ""
 
-#: Plugin/LilInvoices/Controller/InvoicesController.php:213
+#: Plugin/LilInvoices/Controller/InvoicesController.php:227
 msgid "Invoice has been successfully saved."
 msgstr ""
 
-#: Plugin/LilInvoices/Controller/InvoicesController.php:281
+#: Plugin/LilInvoices/Controller/InvoicesController.php:306
 msgid "Invoice has been successfully deleted."
 msgstr ""
 
-#: Plugin/LilInvoices/Controller/InvoicesController.php:370
+#: Plugin/LilInvoices/Controller/InvoicesController.php:406
 msgid "Attachment has been successfully deleted."
 msgstr ""
 
-#: Plugin/LilInvoices/Controller/InvoicesCountersController.php:62
+#: Plugin/LilInvoices/Controller/InvoicesCountersController.php:63
 msgid "Counter has been saved."
 msgstr ""
 
-#: Plugin/LilInvoices/Controller/InvoicesCountersController.php:65
-#: Plugin/LilInvoices/Controller/ItemsController.php:55
+#: Plugin/LilInvoices/Controller/InvoicesCountersController.php:66
+#: Plugin/LilInvoices/Controller/ItemsController.php:60
 #: Plugin/LilInvoices/Controller/VatsController.php:55
 msgid "Please verify that the information is correct."
 msgstr ""
 
-#: Plugin/LilInvoices/Controller/InvoicesCountersController.php:93
+#: Plugin/LilInvoices/Controller/InvoicesCountersController.php:94
 msgid "Counter has been deleted."
 msgstr ""
 
@@ -837,68 +838,81 @@ msgstr ""
 msgid "InvoicesItems has been successfully deleted."
 msgstr ""
 
-#: Plugin/LilInvoices/Controller/ItemsController.php:52
+#: Plugin/LilInvoices/Controller/InvoicesLinksController.php:30
+#: Plugin/LilInvoices/View/InvoicesLinks/popups/admin_link.ctp:1
+msgid "Invoices have been successfully linked."
+msgstr ""
+
+#: Plugin/LilInvoices/Controller/InvoicesLinksController.php:44
+msgid "Invoices have been successfully unlinked."
+msgstr ""
+
+#: Plugin/LilInvoices/Controller/ItemsController.php:57
 msgid "Item has been saved."
 msgstr ""
 
-#: Plugin/LilInvoices/Controller/ItemsController.php:73
+#: Plugin/LilInvoices/Controller/ItemsController.php:83
 #: Plugin/LilInvoices/Controller/VatsController.php:73
 msgid "Item has been deleted."
+msgstr ""
+
+#: Plugin/LilInvoices/Controller/LilInvoicesPluginController.php:88
+msgid "Due invoices"
 msgstr ""
 
 #: Plugin/LilInvoices/Controller/VatsController.php:52
 msgid "Vat has been saved."
 msgstr ""
 
-#: Plugin/LilInvoices/Lib/LilInvoicesExport.php:32
+#: Plugin/LilInvoices/Lib/LilInvoicesExport.php:33
 msgid "invoice"
 msgstr ""
 
-#: Plugin/LilInvoices/Lib/LilInvoicesExport.php:34
+#: Plugin/LilInvoices/Lib/LilInvoicesExport.php:35
 msgid "invoices"
 msgstr ""
 
-#: Plugin/LilInvoices/Lib/LilInvoicesExport.php:65
+#: Plugin/LilInvoices/Lib/LilInvoicesExport.php:67
 msgid "Cannot fetch your employer!"
 msgstr ""
 
-#: Plugin/LilInvoices/Lib/LilInvoicesExport.php:68
+#: Plugin/LilInvoices/Lib/LilInvoicesExport.php:70
 msgid "Please provide your employer!"
 msgstr ""
 
-#: Plugin/LilInvoices/Lib/LilInvoicesExport.php:72
+#: Plugin/LilInvoices/Lib/LilInvoicesExport.php:78
 msgid "Please provide your default account!"
 msgstr ""
 
-#: Plugin/LilInvoices/Lib/LilInvoicesExport.php:73
+#: Plugin/LilInvoices/Lib/LilInvoicesExport.php:79
 msgid "Please provide your address!"
 msgstr ""
 
-#: Plugin/LilInvoices/Lib/LilInvoicesExport.php:74
+#: Plugin/LilInvoices/Lib/LilInvoicesExport.php:80
 msgid "Please provide your tax no!"
 msgstr ""
 
-#: Plugin/LilInvoices/Lib/LilInvoicesExport.php:77
+#: Plugin/LilInvoices/Lib/LilInvoicesExport.php:84
 msgid "Please provide client's \"%s\" default account!"
 msgstr ""
 
-#: Plugin/LilInvoices/Lib/LilInvoicesExport.php:78
+#: Plugin/LilInvoices/Lib/LilInvoicesExport.php:87
 msgid "Please provide client's \"%s\" default address!"
 msgstr ""
 
-#: Plugin/LilInvoices/Lib/LilInvoicesExport.php:80
+#: Plugin/LilInvoices/Lib/LilInvoicesExport.php:90
 msgid "Please provide client's \"%s\" tax no!"
 msgstr ""
 
-#: Plugin/LilInvoices/Lib/LilInvoicesExport.php:83
+#: Plugin/LilInvoices/Lib/LilInvoicesExport.php:93
 msgid "Please provide payment details for invoice \"%1$s - %2$s\""
 msgstr ""
 
-#: Plugin/LilInvoices/Lib/LilInvoicesExport.php:96
+#: Plugin/LilInvoices/Lib/LilInvoicesExport.php:107
 msgid "EXPORT ERROR(s):"
 msgstr ""
 
-#: Plugin/LilInvoices/Lib/LilInvoicesExport.php:102
+#: Plugin/LilInvoices/Lib/LilInvoicesExport.php:113
 msgid "Export error: No invoices found."
 msgstr ""
 
@@ -910,49 +924,53 @@ msgstr ""
 msgid "Reports"
 msgstr ""
 
-#: Plugin/LilInvoices/Lib/LilInvoicesSidebar.php:48
+#: Plugin/LilInvoices/Lib/LilInvoicesSidebar.php:43
+msgid "VAT"
+msgstr ""
+
+#: Plugin/LilInvoices/Lib/LilInvoicesSidebar.php:60
 msgid "Invoices"
 msgstr ""
 
-#: Plugin/LilInvoices/Lib/LilInvoicesSidebar.php:69
-#: Plugin/LilInvoices/View/Invoices/admin_edit.ctp:296
+#: Plugin/LilInvoices/Lib/LilInvoicesSidebar.php:81
+#: Plugin/LilInvoices/View/Invoices/admin_edit.ctp:219
 msgid "Archive"
 msgstr ""
 
-#: Plugin/LilInvoices/Lib/LilInvoicesSidebar.php:83
+#: Plugin/LilInvoices/Lib/LilInvoicesSidebar.php:95
 msgid "Lookups"
 msgstr ""
 
-#: Plugin/LilInvoices/Lib/LilInvoicesSidebar.php:100
+#: Plugin/LilInvoices/Lib/LilInvoicesSidebar.php:115
 #: Plugin/LilInvoices/View/Items/admin_index.ctp:2;17
 msgid "Items"
 msgstr ""
 
-#: Plugin/LilInvoices/Lib/LilInvoicesSidebar.php:111
+#: Plugin/LilInvoices/Lib/LilInvoicesSidebar.php:126
 msgid "Invoices Counters"
 msgstr ""
 
-#: Plugin/LilInvoices/Lib/LilInvoicesSidebar.php:122
+#: Plugin/LilInvoices/Lib/LilInvoicesSidebar.php:137
 msgid "VAT levels"
 msgstr ""
 
 #: Plugin/LilInvoices/View/Elements/edit_items.ctp:54;63;73;83
 #: Plugin/LilInvoices/View/Elements/edit_tax.ctp:77
-#: Plugin/LilInvoices/View/Invoices/admin_edit.ctp:69;152;167;182;272;287
+#: Plugin/LilInvoices/View/Invoices/admin_edit.ctp:74;159;176;193;370;385
 msgid "Blank"
 msgstr ""
 
-#: Plugin/LilInvoices/View/Elements/edit_items.ctp:119
+#: Plugin/LilInvoices/View/Elements/edit_items.ctp:123
 #: Plugin/LilInvoices/View/Elements/edit_tax.ctp:58
 msgid "Please choose a VAT level."
 msgstr ""
 
-#: Plugin/LilInvoices/View/Elements/edit_items.ctp:140
+#: Plugin/LilInvoices/View/Elements/edit_items.ctp:144
 #: Plugin/LilInvoices/View/Elements/edit_tax.ctp:96
 msgid "Remove Item"
 msgstr ""
 
-#: Plugin/LilInvoices/View/Elements/edit_items.ctp:164
+#: Plugin/LilInvoices/View/Elements/edit_items.ctp:168
 msgid "Add new Item"
 msgstr ""
 
@@ -961,17 +979,19 @@ msgid "VAT Description"
 msgstr ""
 
 #: Plugin/LilInvoices/View/Elements/edit_tax.ctp:7
-#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:409
+#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:430
 msgid "VAT [%]"
 msgstr ""
 
 #: Plugin/LilInvoices/View/Elements/edit_tax.ctp:8
-#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:410
+#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:431
+#: Plugin/LilInvoices/View/Reports/vats_analytics.ctp:14;69
 msgid "Base"
 msgstr ""
 
 #: Plugin/LilInvoices/View/Elements/edit_tax.ctp:9
-#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:411
+#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:432
+#: Plugin/LilInvoices/View/Items/admin_edit.ctp:109
 msgid "Tax"
 msgstr ""
 
@@ -979,18 +999,19 @@ msgstr ""
 msgid "Add new Tax"
 msgstr ""
 
-#: Plugin/LilInvoices/View/Invoices/admin_attachment_add.ctp:40
+#: Plugin/LilInvoices/View/Invoices/admin_attachment_add.ctp:41
 msgid "Select file"
 msgstr ""
 
-#: Plugin/LilInvoices/View/Invoices/admin_attachment_add.ctp:42
+#: Plugin/LilInvoices/View/Invoices/admin_attachment_add.ctp:43
 msgid "A file must be selected for upload."
 msgstr ""
 
-#: Plugin/LilInvoices/View/Invoices/admin_attachment_add.ctp:51
-#: Plugin/LilInvoices/View/Invoices/admin_edit.ctp:343
-#: Plugin/LilInvoices/View/InvoicesCounters/admin_edit.ctp:158
-#: Plugin/LilInvoices/View/Items/admin_edit.ctp:110
+#: Plugin/LilInvoices/View/Invoices/admin_attachment_add.ctp:52
+#: Plugin/LilInvoices/View/Invoices/admin_edit.ctp:267
+#: Plugin/LilInvoices/View/InvoicesCounters/admin_edit.ctp:159
+#: Plugin/LilInvoices/View/InvoicesLinks/admin_link.ctp:53
+#: Plugin/LilInvoices/View/Items/admin_edit.ctp:117
 #: Plugin/LilInvoices/View/Vats/admin_edit.ctp:66
 msgid "Save"
 msgstr ""
@@ -1003,72 +1024,76 @@ msgstr ""
 msgid "Add an Invoice #%1$s <span class=\"light\">(%2$s)</span>"
 msgstr ""
 
-#: Plugin/LilInvoices/View/Invoices/admin_edit.ctp:52
+#: Plugin/LilInvoices/View/Invoices/admin_edit.ctp:57
 #: Plugin/LilInvoices/View/InvoicesCounters/admin_edit.ctp:50
 msgid "Basics"
 msgstr ""
 
-#: Plugin/LilInvoices/View/Invoices/admin_edit.ctp:91
+#: Plugin/LilInvoices/View/Invoices/admin_edit.ctp:96
 msgid "Please choose a client."
 msgstr ""
 
-#: Plugin/LilInvoices/View/Invoices/admin_edit.ctp:95
+#: Plugin/LilInvoices/View/Invoices/admin_edit.ctp:100
 msgid "Start typing to select client. You can also add a [$1new company] or [$2new person]."
 msgstr ""
 
-#: Plugin/LilInvoices/View/Invoices/admin_edit.ctp:128
+#: Plugin/LilInvoices/View/Invoices/admin_edit.ctp:135
 msgid "Invoice no"
 msgstr ""
 
-#: Plugin/LilInvoices/View/Invoices/admin_edit.ctp:140
+#: Plugin/LilInvoices/View/Invoices/admin_edit.ctp:147
 msgid "Dates"
 msgstr ""
 
-#: Plugin/LilInvoices/View/Invoices/admin_edit.ctp:224
+#: Plugin/LilInvoices/View/Invoices/admin_edit.ctp:278
+msgid "Add another invoice after saving this one"
+msgstr ""
+
+#: Plugin/LilInvoices/View/Invoices/admin_edit.ctp:318
 msgid "Taxes Analytics"
 msgstr ""
 
-#: Plugin/LilInvoices/View/Invoices/admin_edit.ctp:231
+#: Plugin/LilInvoices/View/Invoices/admin_edit.ctp:329
 msgid "Payment"
 msgstr ""
 
-#: Plugin/LilInvoices/View/Invoices/admin_edit.ctp:240
+#: Plugin/LilInvoices/View/Invoices/admin_edit.ctp:338
 msgid "Payment Type"
 msgstr ""
 
-#: Plugin/LilInvoices/View/Invoices/admin_edit.ctp:242
+#: Plugin/LilInvoices/View/Invoices/admin_edit.ctp:340
 msgid "Invalid type"
 msgstr ""
 
-#: Plugin/LilInvoices/View/Invoices/admin_edit.ctp:255
+#: Plugin/LilInvoices/View/Invoices/admin_edit.ctp:353
 msgid "MOD"
 msgstr ""
 
-#: Plugin/LilInvoices/View/Invoices/admin_edit.ctp:257
+#: Plugin/LilInvoices/View/Invoices/admin_edit.ctp:355
 msgid "Invalid format"
 msgstr ""
 
-#: Plugin/LilInvoices/View/Invoices/admin_edit.ctp:270
+#: Plugin/LilInvoices/View/Invoices/admin_edit.ctp:368
 msgid "Reference"
 msgstr ""
 
-#: Plugin/LilInvoices/View/Invoices/admin_edit.ctp:278
+#: Plugin/LilInvoices/View/Invoices/admin_edit.ctp:376
 msgid "Use 'OTHR' for unknown payment type. Use prefix and two numers for module (eg SI00)."
 msgstr ""
 
-#: Plugin/LilInvoices/View/Invoices/admin_edit.ctp:285
+#: Plugin/LilInvoices/View/Invoices/admin_edit.ctp:383
 msgid "Payment Description"
 msgstr ""
 
-#: Plugin/LilInvoices/View/Invoices/admin_edit.ctp:369
+#: Plugin/LilInvoices/View/Invoices/admin_edit.ctp:410
 msgid "Are you sure you want to unlink item?"
 msgstr ""
 
-#: Plugin/LilInvoices/View/Invoices/admin_edit.ctp:371
+#: Plugin/LilInvoices/View/Invoices/admin_edit.ctp:412
 msgid "Add a Company"
 msgstr ""
 
-#: Plugin/LilInvoices/View/Invoices/admin_edit.ctp:373
+#: Plugin/LilInvoices/View/Invoices/admin_edit.ctp:414
 msgid "Add a Person"
 msgstr ""
 
@@ -1097,7 +1122,7 @@ msgid "Body"
 msgstr ""
 
 #: Plugin/LilInvoices/View/Invoices/admin_email.ctp:82
-#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:101
+#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:115
 msgid "Send"
 msgstr ""
 
@@ -1121,7 +1146,7 @@ msgid "Add"
 msgstr ""
 
 #: Plugin/LilInvoices/View/Invoices/admin_index.ctp:62
-#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:90
+#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:104
 msgid "Print"
 msgstr ""
 
@@ -1130,21 +1155,30 @@ msgid "Email"
 msgstr ""
 
 #: Plugin/LilInvoices/View/Invoices/admin_index.ctp:86
-#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:118
+#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:132
 msgid "Export"
 msgstr ""
 
 #: Plugin/LilInvoices/View/Invoices/admin_index.ctp:90
-#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:122
+#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:136
 msgid "PDF"
 msgstr ""
 
 #: Plugin/LilInvoices/View/Invoices/admin_index.ctp:103
-#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:137
+#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:151
 msgid "Sepa XML"
 msgstr ""
 
-#: Plugin/LilInvoices/View/Invoices/admin_index.ctp:174
+#: Plugin/LilInvoices/View/Invoices/admin_index.ctp:116
+#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:166
+msgid "eSlog"
+msgstr ""
+
+#: Plugin/LilInvoices/View/Invoices/admin_index.ctp:157
+msgid "Net Total"
+msgstr ""
+
+#: Plugin/LilInvoices/View/Invoices/admin_index.ctp:196
 #: Plugin/LilInvoices/View/Reports/issued_w_tax.ctp:99
 msgid "n/a"
 msgstr ""
@@ -1173,19 +1207,41 @@ msgstr ""
 msgid "Acquire Attachment"
 msgstr ""
 
-#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:76
+#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:74
+msgid "Linked Invoice"
+msgstr ""
+
+#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:84
+#: Plugin/LilInvoices/View/InvoicesLinks/admin_link.ctp:4
+msgid "Link Invoices"
+msgstr ""
+
+#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:90
 #: Plugin/LilInvoices/View/InvoicesCounters/admin_edit.ctp:16
-#: Plugin/LilInvoices/View/Items/admin_edit.ctp:7
+#: Plugin/LilInvoices/View/Items/admin_edit.ctp:13
 #: Plugin/LilInvoices/View/Vats/admin_edit.ctp:7
 msgid "Delete"
 msgstr ""
 
-#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:114
+#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:128
 msgid "Send via Email"
 msgstr ""
 
-#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:445
+#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:466
+#: Plugin/LilInvoices/View/Reports/vats_analytics.ctp:2
 msgid "VAT Analytics"
+msgstr ""
+
+#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:497
+msgid "Linked Invoices"
+msgstr ""
+
+#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:499
+msgid "No linked invoices found."
+msgstr ""
+
+#: Plugin/LilInvoices/View/Invoices/admin_view.ctp:516
+msgid "Are you sure you want to delete this link?"
 msgstr ""
 
 #: Plugin/LilInvoices/View/Invoices/popups/admin_attachment_add.ctp:1
@@ -1217,42 +1273,48 @@ msgid "Kind"
 msgstr ""
 
 #: Plugin/LilInvoices/View/InvoicesCounters/admin_edit.ctp:61
+#: Plugin/LilInvoices/View/Reports/vats_analytics.ctp:63
 msgid "Issued Invoices"
 msgstr ""
 
 #: Plugin/LilInvoices/View/InvoicesCounters/admin_edit.ctp:62
+#: Plugin/LilInvoices/View/Reports/vats_analytics.ctp:8
 msgid "Received Invoices"
 msgstr ""
 
-#: Plugin/LilInvoices/View/InvoicesCounters/admin_edit.ctp:84
+#: Plugin/LilInvoices/View/InvoicesCounters/admin_edit.ctp:63
+msgid "Other Documents"
+msgstr ""
+
+#: Plugin/LilInvoices/View/InvoicesCounters/admin_edit.ctp:85
 msgid "Counter Status"
 msgstr ""
 
-#: Plugin/LilInvoices/View/InvoicesCounters/admin_edit.ctp:95
+#: Plugin/LilInvoices/View/InvoicesCounters/admin_edit.ctp:96
 msgid "This counter is active"
 msgstr ""
 
-#: Plugin/LilInvoices/View/InvoicesCounters/admin_edit.ctp:102
+#: Plugin/LilInvoices/View/InvoicesCounters/admin_edit.ctp:103
 msgid "Templates"
 msgstr ""
 
-#: Plugin/LilInvoices/View/InvoicesCounters/admin_edit.ctp:111
+#: Plugin/LilInvoices/View/InvoicesCounters/admin_edit.ctp:112
 msgid "Layout"
 msgstr ""
 
-#: Plugin/LilInvoices/View/InvoicesCounters/admin_edit.ctp:122
+#: Plugin/LilInvoices/View/InvoicesCounters/admin_edit.ctp:123
 msgid "Layout title Template"
 msgstr ""
 
-#: Plugin/LilInvoices/View/InvoicesCounters/admin_edit.ctp:134
+#: Plugin/LilInvoices/View/InvoicesCounters/admin_edit.ctp:135
 msgid "Invoice no. Template"
 msgstr ""
 
-#: Plugin/LilInvoices/View/InvoicesCounters/admin_edit.ctp:138
+#: Plugin/LilInvoices/View/InvoicesCounters/admin_edit.ctp:139
 msgid "Use [[no]], [[no.2]], [[year]] templates."
 msgstr ""
 
-#: Plugin/LilInvoices/View/InvoicesCounters/admin_edit.ctp:147
+#: Plugin/LilInvoices/View/InvoicesCounters/admin_edit.ctp:148
 msgid "Invoice description Template"
 msgstr ""
 
@@ -1276,24 +1338,32 @@ msgstr ""
 msgid "No counters found"
 msgstr ""
 
-#: Plugin/LilInvoices/View/Items/admin_edit.ctp:4
+#: Plugin/LilInvoices/View/InvoicesLinks/admin_link.ctp:40
+msgid "Invoice"
+msgstr ""
+
+#: Plugin/LilInvoices/View/InvoicesLinks/admin_link.ctp:41
+msgid "Invoice is required."
+msgstr ""
+
+#: Plugin/LilInvoices/View/Items/admin_edit.ctp:10
 msgid "Edit Item"
 msgstr ""
 
-#: Plugin/LilInvoices/View/Items/admin_edit.ctp:4
+#: Plugin/LilInvoices/View/Items/admin_edit.ctp:10
 msgid "Add Item"
 msgstr ""
 
-#: Plugin/LilInvoices/View/Items/admin_edit.ctp:17
+#: Plugin/LilInvoices/View/Items/admin_edit.ctp:23
 msgid "Are you sure you want to delete this item?"
 msgstr ""
 
-#: Plugin/LilInvoices/View/Items/admin_edit.ctp:47
+#: Plugin/LilInvoices/View/Items/admin_edit.ctp:53
 #: Plugin/LilInvoices/View/Vats/admin_edit.ctp:47
 msgid "Description is required."
 msgstr ""
 
-#: Plugin/LilInvoices/View/Items/admin_edit.ctp:79
+#: Plugin/LilInvoices/View/Items/admin_edit.ctp:85
 #: Plugin/LilInvoices/View/Items/admin_index.ctp:31
 msgid "Price"
 msgstr ""
@@ -1375,6 +1445,18 @@ msgstr ""
 
 #: Plugin/LilInvoices/View/Reports/issued_w_tax.ctp:89
 msgid "Tax Specification"
+msgstr ""
+
+#: Plugin/LilInvoices/View/Reports/vats_analytics.ctp:15;70
+msgid "Vat"
+msgstr ""
+
+#: Plugin/LilInvoices/View/Reports/vats_analytics.ctp:53;106
+msgid "GRAND TOTAL"
+msgstr ""
+
+#: Plugin/LilInvoices/View/Reports/vats_analytics.ctp:114
+msgid "VAT total"
 msgstr ""
 
 #: Plugin/LilInvoices/View/Vats/admin_edit.ctp:4

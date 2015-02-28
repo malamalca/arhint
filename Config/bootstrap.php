@@ -25,11 +25,13 @@
 // Setup a 'default' cache configuration for use in the application.
 Cache::config('default', array('engine' => 'File'));
 
-CakePlugin::load('Lil', array('bootstrap' => array('core'), 'routes' => true));
+/*CakePlugin::load('Lil', array('bootstrap' => array('core'), 'routes' => true));
 foreach ($plugins = Configure::read('Lil.plugins') as $plugin) {
 	CakePlugin::load('Lil' . $plugin, array('bootstrap' => array('core'), 'routes' => true));
 }
-CakePlugin::load('Arhim', array('routes' => true));
+CakePlugin::load('Arhim', array('routes' => true));*/
+
+CakePlugin::loadAll(array(array('bootstrap' => array('core'), 'routes' => true)));
 
 // Enable the Dispatcher filters for plugin assets, and
 // CacheHelper.

@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2012-11-29 14:54+0100\n"
+"POT-Creation-Date: 2014-04-24 08:57+0200\n"
 "PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
 "Last-Translator: NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
@@ -38,36 +38,45 @@ msgstr ""
 msgid "business"
 msgstr ""
 
-#: Plugin/LilCrm/Controller/ContactsAccountsController.php:35
-msgid "Account number has been successfully saved."
+#: Plugin/LilCrm/Controller/AdremasController.php:60
+msgid "New adrema has been created."
 msgstr ""
 
+#: Plugin/LilCrm/Controller/AdremasController.php:69
 #: Plugin/LilCrm/Controller/ContactsAccountsController.php:45
-#: Plugin/LilCrm/Controller/ContactsAddressesController.php:25
-#: Plugin/LilCrm/Controller/ContactsController.php:89
+#: Plugin/LilCrm/Controller/ContactsAddressesController.php:47
+#: Plugin/LilCrm/Controller/ContactsController.php:97
 #: Plugin/LilCrm/Controller/ContactsEmailsController.php:26
 #: Plugin/LilCrm/Controller/ContactsPhonesController.php:25
-#: Plugin/LilCrm/Controller/LabelsController.php:100
+#: Plugin/LilCrm/Controller/LabelsController.php:121
 msgid "There are some errors in the form. Please correct all marked fields below."
+msgstr ""
+
+#: Plugin/LilCrm/Controller/AdremasController.php:97
+msgid "Adrema has been successfully deleted."
+msgstr ""
+
+#: Plugin/LilCrm/Controller/ContactsAccountsController.php:35
+msgid "Account number has been successfully saved."
 msgstr ""
 
 #: Plugin/LilCrm/Controller/ContactsAccountsController.php:68
 msgid "Account has been successfully deleted."
 msgstr ""
 
-#: Plugin/LilCrm/Controller/ContactsAddressesController.php:15
+#: Plugin/LilCrm/Controller/ContactsAddressesController.php:37
 msgid "Address has been successfully saved."
 msgstr ""
 
-#: Plugin/LilCrm/Controller/ContactsAddressesController.php:44
+#: Plugin/LilCrm/Controller/ContactsAddressesController.php:73
 msgid "Address has been successfully deleted."
 msgstr ""
 
-#: Plugin/LilCrm/Controller/ContactsController.php:86
+#: Plugin/LilCrm/Controller/ContactsController.php:91
 msgid "Contact has been successfully saved."
 msgstr ""
 
-#: Plugin/LilCrm/Controller/ContactsController.php:149
+#: Plugin/LilCrm/Controller/ContactsController.php:167
 msgid "Contact has been successfully deleted."
 msgstr ""
 
@@ -87,28 +96,55 @@ msgstr ""
 msgid "Phone has been successfully deleted."
 msgstr ""
 
-#: Plugin/LilCrm/Controller/LabelsController.php:92
+#: Plugin/LilCrm/Controller/LabelsController.php:113
 msgid "Address has been successfully added to adrema."
 msgstr ""
 
-#: Plugin/LilCrm/Controller/LabelsController.php:123
+#: Plugin/LilCrm/Controller/LabelsController.php:147
 msgid "Address has been successfully removed from adrema."
 msgstr ""
 
-#: Plugin/LilCrm/Controller/LilCrmPluginController.php:68
+#: Plugin/LilCrm/Controller/LilCrmPluginController.php:70
 msgid "Costumers"
 msgstr ""
 
-#: Plugin/LilCrm/Controller/LilCrmPluginController.php:81
+#: Plugin/LilCrm/Controller/LilCrmPluginController.php:83
 msgid "Contacts"
 msgstr ""
 
-#: Plugin/LilCrm/Controller/LilCrmPluginController.php:98
+#: Plugin/LilCrm/Controller/LilCrmPluginController.php:100
 msgid "Companies"
 msgstr ""
 
-#: Plugin/LilCrm/Controller/LilCrmPluginController.php:115
+#: Plugin/LilCrm/Controller/LilCrmPluginController.php:117
 msgid "Labels"
+msgstr ""
+
+#: Plugin/LilCrm/View/Adremas/admin_edit.ctp:4
+msgid "Edit Adrema"
+msgstr ""
+
+#: Plugin/LilCrm/View/Adremas/admin_edit.ctp:4
+msgid "Add Adrema"
+msgstr ""
+
+#: Plugin/LilCrm/View/Adremas/admin_edit.ctp:45
+#: Plugin/LilCrm/View/Contacts/admin_edit.ctp:37
+#: Plugin/LilCrm/View/Contacts/admin_index.ctp:36
+#: Plugin/LilCrm/View/Labels/admin_adrema.ctp:78
+#: Plugin/LilCrm/View/Labels/admin_edit_address.ctp:70
+msgid "Title"
+msgstr ""
+
+#: Plugin/LilCrm/View/Adremas/admin_edit.ctp:47
+msgid "Adrema title is required."
+msgstr ""
+
+#: Plugin/LilCrm/View/Adremas/admin_edit.ctp:56
+#: Plugin/LilCrm/View/Contacts/admin_edit.ctp:136
+#: Plugin/LilCrm/View/ContactsAccounts/admin_edit.ctp:98
+#: Plugin/LilCrm/View/Labels/admin_edit_address.ctp:146
+msgid "Save"
 msgstr ""
 
 #: Plugin/LilCrm/View/Contacts/admin_edit.ctp:11
@@ -127,84 +163,81 @@ msgstr ""
 msgid "Company Data"
 msgstr ""
 
-#: Plugin/LilCrm/View/Contacts/admin_edit.ctp:37
-#: Plugin/LilCrm/View/Contacts/admin_index.ctp:36
-#: Plugin/LilCrm/View/Labels/admin_adrema.ctp:39
-#: Plugin/LilCrm/View/Labels/admin_edit_address.ctp:63
-msgid "Title"
-msgstr ""
-
 #: Plugin/LilCrm/View/Contacts/admin_edit.ctp:42
-msgid "Tax no."
+#: Plugin/LilCrm/View/Contacts/admin_view.ctp:130
+msgid "Mat no."
 msgstr ""
 
 #: Plugin/LilCrm/View/Contacts/admin_edit.ctp:47
+msgid "Tax no."
+msgstr ""
+
+#: Plugin/LilCrm/View/Contacts/admin_edit.ctp:53
 msgid "Tax status"
 msgstr ""
 
-#: Plugin/LilCrm/View/Contacts/admin_edit.ctp:53;70
+#: Plugin/LilCrm/View/Contacts/admin_edit.ctp:59;76
 msgid "Description"
 msgstr ""
 
-#: Plugin/LilCrm/View/Contacts/admin_edit.ctp:59
+#: Plugin/LilCrm/View/Contacts/admin_edit.ctp:65
 msgid "Personal Data"
 msgstr ""
 
-#: Plugin/LilCrm/View/Contacts/admin_edit.ctp:61
+#: Plugin/LilCrm/View/Contacts/admin_edit.ctp:67
 #: Plugin/LilCrm/View/Contacts/admin_index.ctp:36
+#: Plugin/LilCrm/View/Contacts/admin_view.ctp:284
 msgid "Name"
 msgstr ""
 
-#: Plugin/LilCrm/View/Contacts/admin_edit.ctp:65
+#: Plugin/LilCrm/View/Contacts/admin_edit.ctp:71
 msgid "Surname"
 msgstr ""
 
-#: Plugin/LilCrm/View/Contacts/admin_edit.ctp:77
+#: Plugin/LilCrm/View/Contacts/admin_edit.ctp:81
+msgid "Sync-able Contact"
+msgstr ""
+
+#: Plugin/LilCrm/View/Contacts/admin_edit.ctp:88
 msgid "Work Position"
 msgstr ""
 
-#: Plugin/LilCrm/View/Contacts/admin_edit.ctp:81
+#: Plugin/LilCrm/View/Contacts/admin_edit.ctp:93
 msgid "Company Name"
 msgstr ""
 
-#: Plugin/LilCrm/View/Contacts/admin_edit.ctp:89
+#: Plugin/LilCrm/View/Contacts/admin_edit.ctp:101
 msgid "Job Description"
 msgstr ""
 
-#: Plugin/LilCrm/View/Contacts/admin_edit.ctp:97
+#: Plugin/LilCrm/View/Contacts/admin_edit.ctp:109
 msgid "Primary Address"
 msgstr ""
 
-#: Plugin/LilCrm/View/Contacts/admin_edit.ctp:100
+#: Plugin/LilCrm/View/Contacts/admin_edit.ctp:112
 #: Plugin/LilCrm/View/ContactsAddresses/admin_edit.ctp:16
-#: Plugin/LilCrm/View/Labels/admin_adrema.ctp:40
-#: Plugin/LilCrm/View/Labels/admin_edit_address.ctp:78
+#: Plugin/LilCrm/View/Labels/admin_adrema.ctp:79
+#: Plugin/LilCrm/View/Labels/admin_edit_address.ctp:88
 msgid "Street"
 msgstr ""
 
-#: Plugin/LilCrm/View/Contacts/admin_edit.ctp:105
+#: Plugin/LilCrm/View/Contacts/admin_edit.ctp:117
 #: Plugin/LilCrm/View/ContactsAddresses/admin_edit.ctp:19
-#: Plugin/LilCrm/View/Labels/admin_adrema.ctp:42
-#: Plugin/LilCrm/View/Labels/admin_edit_address.ctp:89
+#: Plugin/LilCrm/View/Labels/admin_adrema.ctp:81
+#: Plugin/LilCrm/View/Labels/admin_edit_address.ctp:102
 msgid "ZIP"
 msgstr ""
 
-#: Plugin/LilCrm/View/Contacts/admin_edit.ctp:109
-#: Plugin/LilCrm/View/ContactsAddresses/admin_edit.ctp:20
-#: Plugin/LilCrm/View/Labels/admin_adrema.ctp:41
-#: Plugin/LilCrm/View/Labels/admin_edit_address.ctp:100
+#: Plugin/LilCrm/View/Contacts/admin_edit.ctp:121
+#: Plugin/LilCrm/View/ContactsAddresses/admin_edit.ctp:24
+#: Plugin/LilCrm/View/Labels/admin_adrema.ctp:80
+#: Plugin/LilCrm/View/Labels/admin_edit_address.ctp:116
 msgid "City"
 msgstr ""
 
-#: Plugin/LilCrm/View/Contacts/admin_edit.ctp:114
-#: Plugin/LilCrm/View/ContactsAddresses/admin_edit.ctp:22
+#: Plugin/LilCrm/View/Contacts/admin_edit.ctp:126
+#: Plugin/LilCrm/View/ContactsAddresses/admin_edit.ctp:31
 msgid "State"
-msgstr ""
-
-#: Plugin/LilCrm/View/Contacts/admin_edit.ctp:121
-#: Plugin/LilCrm/View/ContactsAccounts/admin_edit.ctp:98
-#: Plugin/LilCrm/View/Labels/admin_edit_address.ctp:120
-msgid "Save"
 msgstr ""
 
 #: Plugin/LilCrm/View/Contacts/admin_index.ctp:8
@@ -221,13 +254,13 @@ msgid "Ups. No contacts found."
 msgstr ""
 
 #: Plugin/LilCrm/View/Contacts/admin_index.ctp:37
-#: Plugin/LilCrm/View/Contacts/admin_view.ctp:176
+#: Plugin/LilCrm/View/Contacts/admin_view.ctp:183;285
 #: Plugin/LilCrm/View/ContactsEmails/admin_edit.ctp:11
 msgid "Email"
 msgstr ""
 
 #: Plugin/LilCrm/View/Contacts/admin_index.ctp:38
-#: Plugin/LilCrm/View/Contacts/admin_view.ctp:207
+#: Plugin/LilCrm/View/Contacts/admin_view.ctp:214;286
 msgid "Phone"
 msgstr ""
 
@@ -242,10 +275,12 @@ msgid "at"
 msgstr ""
 
 #: Plugin/LilCrm/View/Contacts/admin_view.ctp:28
+#: Plugin/LilCrm/View/Labels/admin_adrema.ctp:17
 msgid "Edit"
 msgstr ""
 
 #: Plugin/LilCrm/View/Contacts/admin_view.ctp:39
+#: Plugin/LilCrm/View/Labels/admin_adrema.ctp:28
 #: Plugin/LilCrm/View/Labels/admin_edit_address.ctp:7
 msgid "Delete"
 msgstr ""
@@ -280,45 +315,49 @@ msgstr ""
 msgid "Add Account"
 msgstr ""
 
-#: Plugin/LilCrm/View/Contacts/admin_view.ctp:130
+#: Plugin/LilCrm/View/Contacts/admin_view.ctp:137
 msgid "TAX payee no."
 msgstr ""
 
-#: Plugin/LilCrm/View/Contacts/admin_view.ctp:130
+#: Plugin/LilCrm/View/Contacts/admin_view.ctp:137
 msgid "TAX no."
 msgstr ""
 
-#: Plugin/LilCrm/View/Contacts/admin_view.ctp:141
+#: Plugin/LilCrm/View/Contacts/admin_view.ctp:148
 #: Plugin/LilCrm/View/ContactsAddresses/admin_edit.ctp:2
 msgid "Address"
 msgstr ""
 
-#: Plugin/LilCrm/View/Contacts/admin_view.ctp:141
+#: Plugin/LilCrm/View/Contacts/admin_view.ctp:148
 msgid "other"
 msgstr ""
 
-#: Plugin/LilCrm/View/Contacts/admin_view.ctp:236
+#: Plugin/LilCrm/View/Contacts/admin_view.ctp:243
 msgid "Unknown"
 msgstr ""
 
-#: Plugin/LilCrm/View/Contacts/admin_view.ctp:242
+#: Plugin/LilCrm/View/Contacts/admin_view.ctp:249
 msgid "Account"
 msgstr ""
 
-#: Plugin/LilCrm/View/Contacts/admin_view.ctp:274
+#: Plugin/LilCrm/View/Contacts/admin_view.ctp:277
+msgid "Employees"
+msgstr ""
+
+#: Plugin/LilCrm/View/Contacts/admin_view.ctp:325
 #: Plugin/LilCrm/View/Labels/admin_edit_address.ctp:4
 msgid "Edit Address"
 msgstr ""
 
-#: Plugin/LilCrm/View/Contacts/admin_view.ctp:275
+#: Plugin/LilCrm/View/Contacts/admin_view.ctp:326
 msgid "Edit Email"
 msgstr ""
 
-#: Plugin/LilCrm/View/Contacts/admin_view.ctp:276
+#: Plugin/LilCrm/View/Contacts/admin_view.ctp:327
 msgid "Edit Phone"
 msgstr ""
 
-#: Plugin/LilCrm/View/Contacts/admin_view.ctp:277
+#: Plugin/LilCrm/View/Contacts/admin_view.ctp:328
 #: Plugin/LilCrm/View/ContactsAccounts/admin_edit.ctp:4
 msgid "Edit Account"
 msgstr ""
@@ -370,13 +409,13 @@ msgstr ""
 msgid "Account has been successfuly saved."
 msgstr ""
 
-#: Plugin/LilCrm/View/ContactsAddresses/admin_edit.ctp:24
+#: Plugin/LilCrm/View/ContactsAddresses/admin_edit.ctp:36
 msgid "This is a primary address"
 msgstr ""
 
-#: Plugin/LilCrm/View/ContactsAddresses/admin_edit.ctp:26
+#: Plugin/LilCrm/View/ContactsAddresses/admin_edit.ctp:38
 #: Plugin/LilCrm/View/ContactsEmails/admin_edit.ctp:13
-#: Plugin/LilCrm/View/ContactsPhones/admin_edit.ctp:15
+#: Plugin/LilCrm/View/ContactsPhones/admin_edit.ctp:17
 msgid "OK"
 msgstr ""
 
@@ -408,8 +447,12 @@ msgstr ""
 msgid "Phone No. for"
 msgstr ""
 
-#: Plugin/LilCrm/View/ContactsPhones/admin_edit.ctp:14
+#: Plugin/LilCrm/View/ContactsPhones/admin_edit.ctp:15
 msgid "Number"
+msgstr ""
+
+#: Plugin/LilCrm/View/ContactsPhones/admin_edit.ctp:16
+msgid "This is a primary phone"
 msgstr ""
 
 #: Plugin/LilCrm/View/ContactsPhones/popups/admin_add.ctp:1
@@ -424,29 +467,37 @@ msgstr ""
 msgid "Select and Edit Adrema"
 msgstr ""
 
-#: Plugin/LilCrm/View/Labels/admin_adrema.ctp:28
+#: Plugin/LilCrm/View/Labels/admin_adrema.ctp:6
+msgid "Save As"
+msgstr ""
+
+#: Plugin/LilCrm/View/Labels/admin_adrema.ctp:38
+msgid "Are you sure you want to delete current adrema and all of its contacts?"
+msgstr ""
+
+#: Plugin/LilCrm/View/Labels/admin_adrema.ctp:66
 msgid "Adrema"
 msgstr ""
 
-#: Plugin/LilCrm/View/Labels/admin_adrema.ctp:30
+#: Plugin/LilCrm/View/Labels/admin_adrema.ctp:69
 msgid "Costum Adrema"
 msgstr ""
 
-#: Plugin/LilCrm/View/Labels/admin_adrema.ctp:43
-#: Plugin/LilCrm/View/Labels/admin_edit_address.ctp:111
+#: Plugin/LilCrm/View/Labels/admin_adrema.ctp:82
+#: Plugin/LilCrm/View/Labels/admin_edit_address.ctp:131
 msgid "Country"
 msgstr ""
 
-#: Plugin/LilCrm/View/Labels/admin_adrema.ctp:50
+#: Plugin/LilCrm/View/Labels/admin_adrema.ctp:89
 msgid "Add new address"
 msgstr ""
 
-#: Plugin/LilCrm/View/Labels/admin_adrema.ctp:65
-#: Plugin/LilCrm/View/Labels/admin_label.ctp:47
+#: Plugin/LilCrm/View/Labels/admin_adrema.ctp:105
+#: Plugin/LilCrm/View/Labels/admin_label.ctp:48
 msgid "Next"
 msgstr ""
 
-#: Plugin/LilCrm/View/Labels/admin_adrema.ctp:97
+#: Plugin/LilCrm/View/Labels/admin_adrema.ctp:137
 msgid "Are you sure you want to remove this contact from adrema?"
 msgstr ""
 
@@ -454,7 +505,7 @@ msgstr ""
 msgid "Are you sure you want to delete this item?"
 msgstr ""
 
-#: Plugin/LilCrm/View/Labels/admin_edit_address.ctp:64
+#: Plugin/LilCrm/View/Labels/admin_edit_address.ctp:71
 msgid "Title is required."
 msgstr ""
 
@@ -462,7 +513,11 @@ msgstr ""
 msgid "Select Label"
 msgstr ""
 
-#: Plugin/LilCrm/View/Labels/admin_label.ctp:36
+#: Plugin/LilCrm/View/Labels/admin_label.ctp:37
 msgid "Label"
+msgstr ""
+
+#: Plugin/LilEvents/View/Events/admin_edit.ctp:79
+msgid "Add Event"
 msgstr ""
 

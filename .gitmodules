@@ -22,3 +22,6 @@
 [submodule "Plugin/LilEvents"]
 	path = Plugin/LilEvents
 	url = http://miha.nahtigal:vuego3869@www.nahtigal.com/git/lil_events.git
+[submodule "Plugin/LilProjects"]
+	path = Plugin/LilProjects
+	url = http://miha.nahtigal:vuego3869@git.nahtigal.com/lil_projects.git

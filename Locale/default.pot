@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2012-11-29 14:54+0100\n"
+"POT-Creation-Date: 2014-04-24 08:57+0200\n"
 "PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
 "Last-Translator: NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
@@ -64,7 +64,47 @@ msgstr ""
 msgid "Napačno uporabnisko ime ali geslo"
 msgstr ""
 
-#: Plugin/LilTasks/View/Tasks/admin_edit.ctp:135
+#: Plugin/LilTasks/View/Tasks/admin_edit.ctp:150
 msgid "Cancel"
+msgstr ""
+
+#: Plugin/Lil/Model/Area.php:validation for field name
+#: Plugin/Lil/Model/User.php:validation for field name
+#: Plugin/LilCrm/Model/Contact.php:validation for field title
+#: Plugin/LilCrm/Model/ContactsPhone.php:validation for field no
+#: Plugin/LilInvoices/Model/InvoiceEmail.php:validation for field to;validation for field subject;validation for field body
+#: Plugin/LilInvoices/Model/InvoicesItem.php:validation for field descript;validation for field unit
+#: Plugin/LilTasks/Model/Task.php:validation for field title
+#: Plugin/LilTravelOrders/Model/TravelOrderEmail.php:validation for field to;validation for field subject;validation for field body
+msgid "rule"
+msgstr ""
+
+#: Plugin/Lil/Model/Area.php:validation for field name
+#: Plugin/Lil/Model/User.php:validation for field name
+msgid "required"
+msgstr ""
+
+#: Plugin/LilCrm/Model/ContactsAccount.php:validation for field bban;validation for field bic
+#: Plugin/LilInvoices/Model/Invoice.php:validation for field title;validation for field dat_issue;validation for field dat_service;validation for field dat_expire
+msgid "empty"
+msgstr ""
+
+#: Plugin/LilCrm/Model/ContactsAccount.php:validation for field bban
+msgid "bban"
+msgstr ""
+
+#: Plugin/LilInvoices/Model/Invoice.php:validation for field contact_id;validation for field total;validation for field pmt_type;validation for field pmt_module
+#: Plugin/LilInvoices/Model/InvoicesItem.php:validation for field amount;validation for field price
+#: Plugin/LilInvoices/Model/InvoicesTax.php:validation for field base
+msgid "format"
+msgstr ""
+
+#: Plugin/LilInvoices/Model/InvoicesItem.php:validation for field descript;validation for field unit
+msgid "allowEmpty"
+msgstr ""
+
+#: Plugin/LilInvoices/Model/InvoicesItem.php:validation for field vat_id
+#: Plugin/LilInvoices/Model/InvoicesTax.php:validation for field vat_id
+msgid "exists"
 msgstr ""
 
