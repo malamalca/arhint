@@ -1,15 +1,43 @@
-*.mo
-Config/config.php
-Config/bootstrap_local.php
-Config/database.php
-webroot/paths.php
-tmp/*
-tmp/cache/*
-tmp/cache/models/*
-tmp/cache/persistent/*
-tmp/cache/views/*
-tmp/cache/sessions/*
-tmp/cache/tests/*
-tmp/logs/*
-uploads/*
-!empty
+# CakePHP specific files #
+##########################
+/config/app_local.php
+/config/.env
+/logs/*
+/tmp/*
+/vendor/*
+
+# OS generated files #
+######################
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Icon?
+ehthumbs.db
+Thumbs.db
+.directory
+
+# Tool specific files #
+#######################
+# PHPUnit
+.phpunit.result.cache
+# vim
+*~
+*.swp
+*.swo
+# sublime text & textmate
+*.sublime-*
+*.stTheme.cache
+*.tmlanguage.cache
+*.tmPreferences.cache
+# Eclipse
+.settings/*
+# JetBrains, aka PHPStorm, IntelliJ IDEA
+.idea/*
+# NetBeans
+nbproject/*
+# Visual Studio Code
+.vscode
+# Sass preprocessor
+.sass-cache/
