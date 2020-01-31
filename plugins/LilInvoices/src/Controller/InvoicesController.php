@@ -328,7 +328,7 @@ class InvoicesController extends AppController
 
                 return $this->redirect($this->getRequest()->getData('referer') ?? ['action' => 'index']);
             } else {
-                $this->Flash->error(__d('lil_invoices', 'There are some errors in the form. Please correct all marked fields below.'));
+                $this->Flash->error(__d('lil_invoices', 'Please correct all marked fields below.'));
             }
         }
 
@@ -593,8 +593,9 @@ class InvoicesController extends AppController
             }
 
             // patch invoice and existing sub elements
+            $assocModels = ['InvoicesTaxes', 'InvoicesItems', 'InvoicesAttachments', 'Issuers', 'Buyers', 'Receivers'];
             $invoice = $this->Invoices->patchEntity($invoice, $this->getRequest()->getData(), [
-                'associated' => ['InvoicesTaxes', 'InvoicesItems', 'InvoicesAttachments', 'Issuers', 'Buyers', 'Receivers'],
+                'associated' => $assocModels,
             ]);
 
             // always recalculate net total sum

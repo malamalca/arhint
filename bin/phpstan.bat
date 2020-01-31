@@ -1,1 +1,1 @@
-vendor\bin\phpstan analyse --level 7 %1
+vendor\bin\phpstan analyse --level 6 %1

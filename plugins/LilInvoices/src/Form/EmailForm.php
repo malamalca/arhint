@@ -11,12 +11,13 @@ use LilInvoices\Lib\LilInvoicesExport;
 
 class EmailForm extends Form
 {
+    /** @var \Cake\Http\ServerRequest $request */
     private $request = null;
 
     /**
      * Form constructor.
      *
-     * @param object $request Request object.
+     * @param \Cake\Http\ServerRequest $request Request object.
      * @return void
      */
     public function __construct($request)
@@ -85,8 +86,8 @@ class EmailForm extends Form
                 $attachmentName = 'invoices.pdf';
                 if (count($invoices) == 1) {
                     $attachmentName = $invoices[0]->title;
-                    $attachmentName = mb_ereg_replace("([^\w\s\d\-_~,;\[\]\(\).])", '', $attachmentName);
-                    $attachmentName = mb_ereg_replace("([\.]{2,})", '', $attachmentName);
+                    $attachmentName = (string)mb_ereg_replace("([^\w\s\d\-_~,;\[\]\(\).])", '', $attachmentName);
+                    $attachmentName = (string)mb_ereg_replace("([\.]{2,})", '', $attachmentName);
                 }
 
                 $email->setAttachments([
@@ -96,7 +97,7 @@ class EmailForm extends Form
                     ],
                 ]);
 
-                $result = $email->deliver($this->request->getBody('body'));
+                $result = $email->deliver((string)$this->request->getBody());
 
                 return (bool)$result;
             }

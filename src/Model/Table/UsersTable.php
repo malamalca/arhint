@@ -9,6 +9,7 @@ use Cake\Mailer\Mailer;
 use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
+use Cake\ORM\TableRegistry;
 use Cake\Validation\Validator;
 
 /**
@@ -187,11 +188,15 @@ class UsersTable extends Table
             ->notEmptyString('old_passwd')
             ->add('repeat_passwd', 'match', [
                     'rule' => function ($value, $context) {
-                        /** @var \App\Controller\AppController $this */
-                        $user = $this->get($context['data']['id']);
+                        /** @var \App\Controller\UsersController $controller */
+                        $controller = $this;
+
+                        /** @var \App\Model\Table\UsersTable $UsersTable */
+                        $UsersTable = TableRegistry::getTableLocator()->get('Users');
+                        $user = $UsersTable->get($context['data']['id']);
 
                         /** @var \Authentication\Identifier\PasswordIdentifier $identifier */
-                        $identifier = $this->Authentication->getIdentity()->getIdentifier();
+                        $identifier = $controller->Authentication->getIdentity()->getIdentifier();
 
                         $passwordHasher = $identifier->getPasswordHasher();
 

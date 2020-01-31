@@ -16,7 +16,7 @@ class LilInvoicesExport
     /**
      * @var string $lastError
      */
-    private $lastError = null;
+    public $lastError = null;
     /**
      * @var \Cake\View\View $view
      */
@@ -109,7 +109,6 @@ class LilInvoicesExport
                     $this->view->setTemplate('LilInvoices.eslog');
                 }
 
-                $this->view->hasRendered = false;
                 $outputHtml = $this->view->render();
 
                 if (in_array($ext, ['html', 'xml', 'eslog'])) {
