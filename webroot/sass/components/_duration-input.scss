@@ -1,0 +1,14 @@
+.duration {
+    .duration-hours,
+    .duration-minutes {
+        @extend .center-align;
+        width: 100px !important;
+        text-align: center !important;
+        margin-right: 20px;
+    }
+
+    input.duration-minutes {
+        margin-left: 20px;
+    }
+
+}

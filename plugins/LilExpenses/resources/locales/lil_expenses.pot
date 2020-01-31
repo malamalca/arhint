@@ -1,0 +1,511 @@
+# LANGUAGE translation of CakePHP Application
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"POT-Creation-Date: 2016-06-19 17:17+0000\n"
+"PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
+"Last-Translator: NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Controller/ExpensesController.php:101
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Controller/PaymentsController.php:173
+msgid "Invalid ajax call."
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Controller/ExpensesController.php:165
+msgid "The expense has been saved."
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Controller/ExpensesController.php:168;316
+msgid "The expense could not be saved. Please, try again."
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Controller/ExpensesController.php:188
+msgid "The expense has been deleted."
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Controller/ExpensesController.php:190
+msgid "The expense could not be deleted. Please, try again."
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Controller/ExpensesController.php:265
+msgid "Error creating PDF."
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Controller/ExpensesController.php:313
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Controller/PaymentsController.php:129
+msgid "The payment has been saved."
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Controller/PaymentsAccountsController.php:103
+msgid "The payments account has been saved."
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Controller/PaymentsAccountsController.php:106
+msgid "The payments account could not be saved. Please, try again."
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Controller/PaymentsAccountsController.php:123
+msgid "The payments account has been deleted."
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Controller/PaymentsAccountsController.php:125
+msgid "The payments account could not be deleted. Please, try again."
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Controller/PaymentsController.php:132
+msgid "The payment could not be saved. Please, try again."
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Controller/PaymentsController.php:151
+msgid "The payment has been deleted."
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Controller/PaymentsController.php:153
+msgid "The payment could not be deleted. Please, try again."
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Event/LilExpensesEvents.php:32
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/index.ctp:12;16
+msgid "Income and Expenses"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Event/LilExpensesEvents.php:53
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Lib/LilExpensesSidebar.php:21
+msgid "Accounting"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Event/LilExpensesEvents.php:57
+msgid "Income/Expense"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Event/LilExpensesEvents.php:60
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/index.ctp:10;20
+msgid "Income"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Event/LilExpensesEvents.php:61
+msgid "Expense"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Event/LilExpensesEvents.php:63
+msgid "Neither expense nor income"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Event/LilExpensesEvents.php:103
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Lib/LilExpensesSidebar.php:31
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/view.ctp:51
+msgid "Payments"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Lib/LilExpensesSidebar.php:41
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/index.ctp:10;24
+msgid "Expenses"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Lib/LilExpensesSidebar.php:53
+msgid "Reports"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Lib/LilExpensesSidebar.php:63
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/pdf/report_unpaid.ctp:23;26
+msgid "Unpaid Invoices"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Lib/LilExpensesSidebar.php:77
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/import_sepa.ctp:26
+msgid "Import"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Lib/LilExpensesSidebar.php:87
+msgid "Sepa XML"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Lib/LilExpensesSidebar.php:101
+msgid "Lookups"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Lib/LilExpensesSidebar.php:109
+msgid "Accounts"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Element/payments_list.ctp:12
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/edit.ctp:56
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/import_sepa_step2.ctp:28
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/index.ctp:120
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/view.ctp:31
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Payments/edit.ctp:53
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Payments/index.ctp:134
+msgid "Date"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Element/payments_list.ctp:16
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Payments/index.ctp:130
+msgid "Account"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Element/payments_list.ctp:20
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/import_sepa_step2.ctp:32
+msgid "Amount"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Element/payments_list.ctp:28;90
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Payments/edit.ctp:7
+msgid "Add Payment"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Element/payments_list.ctp:35
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/edit.ctp:73
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/index.ctp:128
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/view.ctp:43
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/pdf/report_unpaid.ctp:64;82
+msgid "Total"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Element/payments_list.ctp:57
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Payments/index.ctp:169;174
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Payments/json/index.ctp:18
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/View/Helper/LilExpenseHelper.php:44;65;90;100
+msgid "N/A"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Element/payments_list.ctp:65
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/view.ctp:14
+msgid "Edit"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Element/payments_list.ctp:72
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/edit.ctp:10
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/view.ctp:19
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Payments/edit.ctp:10
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/PaymentsAccounts/edit.ctp:12
+msgid "Delete"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Element/payments_list.ctp:76
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Payments/edit.ctp:19
+msgid "Are you sure you want to delete this payment?"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Element/payments_list.ctp:89
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Payments/edit.ctp:7
+msgid "Edit Payment"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Element/payments_list.ctp:92
+msgid "No expense for this item found."
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/edit.ctp:7
+msgid "Edit Expense"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/edit.ctp:7
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Payments/edit.ctp:103
+msgid "Add Expense"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/edit.ctp:19
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/view.ctp:23
+msgid "Are you sure you want to delete this expense?"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/edit.ctp:41
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Payments/edit.ctp:47
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/PaymentsAccounts/edit.ctp:43
+msgid "Basics"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/edit.ctp:47
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/import_sepa_link.ctp:33
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Payments/edit.ctp:79
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Payments/index.ctp:137
+msgid "Description"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/edit.ctp:57
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Payments/edit.ctp:54
+msgid "Date is required."
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/edit.ctp:65
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/index.ctp:124
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/view.ctp:39
+msgid "Net Total"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/edit.ctp:82
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Payments/edit.ctp:62
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Payments/index.ctp:141
+msgid "Payment"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/edit.ctp:83
+msgid "do not create payment"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/edit.ctp:100
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/import_sepa_link.ctp:41
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Payments/edit.ctp:110
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/PaymentsAccounts/edit.ctp:78
+msgid "Save"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/import_sepa.ctp:3
+msgid "IMPORT: SepaXML"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/import_sepa.ctp:18
+msgid "Upload a XML"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/import_sepa_link.ctp:7
+msgid "Link with Sepa Payment"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/import_sepa_step2.ctp:6
+msgid "IMPORT: SepaXML - Step2"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/import_sepa_step2.ctp:9
+msgid "Upload file"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/import_sepa_step2.ctp:37
+msgid "Descript"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/import_sepa_step2.ctp:42
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/pdf/report_unpaid.ctp:60
+msgid "Client"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/import_sepa_step2.ctp:47
+msgid "Ref"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/import_sepa_step2.ctp:52
+msgid "Action"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/import_sepa_step2.ctp:62
+msgid "Link with Existing Payment"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/import_sepa_step2.ctp:65
+msgid "Pay an Existing Expense"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/import_sepa_step2.ctp:68
+msgid "Create a New Expense"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/import_sepa_step2.ctp:130
+msgid "Link with existing Payment"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/import_sepa_step2.ctp:145
+msgid "Add Payment to Existing Expense"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/import_sepa_step2.ctp:159
+msgid "Add new Expense"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/index.ctp:32
+msgid "{0}"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/index.ctp:47
+msgid "Expenses {0} from {1} to {2}"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/index.ctp:53;67
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Payments/index.ctp:71;85
+msgid "Entire Year"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/index.ctp:85
+msgid "{0} for {1} {2}"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/index.ctp:98
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Payments/index.ctp:116
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/PaymentsAccounts/index.ctp:6
+msgid "Add"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/index.ctp:112
+msgid "Kind"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/index.ctp:116
+msgid "Decription"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/index.ctp:134
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Payments/index.ctp:147
+msgid "Recapitulation"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/report_unpaid.ctp:3
+msgid "REPORT: Unpaid Invoices"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/report_unpaid.ctp:16
+msgid "Filter by Counter"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/report_unpaid.ctp:35
+msgid "Filters"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/report_unpaid.ctp:40
+msgid "Issued from"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/report_unpaid.ctp:47
+msgid "Issued to"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/report_unpaid.ctp:54
+msgid "Only overdue invoices"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/report_unpaid.ctp:62
+msgid "Print"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/pdf/report_unpaid.ctp:3
+msgid "from %1$s to %2$s"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/pdf/report_unpaid.ctp:6
+msgid "to %s"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/pdf/report_unpaid.ctp:8
+msgid "from %s"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/pdf/report_unpaid.ctp:12
+msgid "For all counters."
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/pdf/report_unpaid.ctp:14
+msgid "For specified counters: %s"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/pdf/report_unpaid.ctp:44
+msgid "Cnt"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/pdf/report_unpaid.ctp:48
+msgid "No"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/pdf/report_unpaid.ctp:52
+msgid "Issued"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/pdf/report_unpaid.ctp:56
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/PaymentsAccounts/edit.ctp:50
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/PaymentsAccounts/index.ctp:21
+msgid "Title"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/pdf/report_unpaid.ctp:68
+msgid "Delta"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/pdf/report_unpaid.ctp:98
+msgid "No invoices found"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Payments/edit.ctp:70
+msgid "From/To Account"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Payments/edit.ctp:87
+msgid "Links to Expenses"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Payments/edit.ctp:96
+msgid "Cancel"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Payments/edit.ctp:177
+msgid "Expense already exists."
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Payments/index.ctp:9
+msgid "all accounts"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Payments/index.ctp:13
+msgid "All Accounts"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Payments/index.ctp:28;38
+msgid "From"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Payments/index.ctp:28;42
+msgid "To"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Payments/index.ctp:30
+msgid "from+to"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Payments/index.ctp:34
+msgid "From + To"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Payments/index.ctp:50
+msgid "Payments {0} {1}"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Payments/index.ctp:65
+msgid "Payments {0} {1} from {2} to {3}"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Payments/index.ctp:103
+msgid "Payments {0} {1} for {2} {3}"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/PaymentsAccounts/edit.ctp:9
+msgid "Edit Account"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/PaymentsAccounts/edit.ctp:9
+msgid "Add Account"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/PaymentsAccounts/edit.ctp:21
+msgid "Are you sure you want to delete this account?"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/PaymentsAccounts/edit.ctp:59
+msgid "Primary Account"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/PaymentsAccounts/edit.ctp:68
+msgid "Active Account"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/PaymentsAccounts/index.ctp:3
+msgid "Account List"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/PaymentsAccounts/index.ctp:24
+msgid "Active"
+msgstr ""
+

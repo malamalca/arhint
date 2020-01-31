@@ -1,0 +1,112 @@
+<?php
+declare(strict_types=1);
+
+namespace LilCrm\Test\TestCase\Controller;
+
+use Cake\ORM\TableRegistry;
+use Cake\TestSuite\IntegrationTestTrait;
+use Cake\TestSuite\TestCase;
+
+/**
+ * LilCrm\Controller\AdremasController Test Case
+ */
+class AdremasControllerTest extends TestCase
+{
+    use IntegrationTestTrait;
+
+    /**
+     * Fixtures
+     *
+     * @var array
+     */
+    public $fixtures = [
+        'Adremas' => 'plugin.LilCrm.Adremas',
+        'Users' => 'app.Users'
+    ];
+
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->configRequest([
+            'environment' => [
+                'SERVER_NAME' => 'localhost',
+            ]
+        ]);
+    }
+
+    protected function login($userId)
+    {
+        $user = TableRegistry::getTableLocator()->get('Users')->get($userId);
+        $this->session(['Auth' => $user]);
+    }
+
+    /**
+     * Test index method
+     *
+     * @return void
+     */
+    /*public function testIndex()
+    {
+        $this->disableErrorHandlerMiddleware();
+
+        $this->get('/lil_crm/adremas/index');
+        $this->assertRedirect();
+
+        $this->login(USER_ADMIN);
+        $this->get('/lil_crm/adremas/index');
+        $this->assertResponseOk();
+    }*/
+
+    /**
+     * Test add method
+     *
+     * @return void
+     */
+    public function testAdd()
+    {
+        $data = [
+            'id' => '',
+            'owner_id' => COMPANY_FIRST,
+            'title' => 'Test Add Adrema'
+        ];
+
+        //$this->disableErrorHandlerMiddleware();
+
+        //$this->get('/lil_crm/adremas/add');
+        //$this->assertRedirect();
+
+        $this->post('/lil_crm/adremas/add', $data);
+        $this->assertResponseError();
+
+        $this->login(USER_ADMIN);
+
+        $this->get('/lil_crm/adremas/add');
+        $this->assertResponseOk();
+
+        $this->enableCsrfToken();
+        $this->enableSecurityToken();
+
+        $this->post(['plugin' => 'LilCrm', 'controller' => 'Adremas', 'action' => 'add'], $data);
+        $this->assertRedirectContains('/lil_crm/labels/adrema/');
+    }
+
+    /**
+     * Test edit method
+     *
+     * @return void
+     */
+    public function testEdit()
+    {
+        $this->markTestIncomplete('Not implemented yet.');
+    }
+
+    /**
+     * Test delete method
+     *
+     * @return void
+     */
+    public function testDelete()
+    {
+        $this->markTestIncomplete('Not implemented yet.');
+    }
+}

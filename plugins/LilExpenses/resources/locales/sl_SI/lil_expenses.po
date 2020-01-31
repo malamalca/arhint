@@ -1,0 +1,654 @@
+# LANGUAGE translation of CakePHP Application
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: LilExpenses\n"
+"POT-Creation-Date: 2016-06-19 19:17+0200\n"
+"PO-Revision-Date: 2016-06-19 19:20+0200\n"
+"Last-Translator: Malamalca <info@malamalca.com>\n"
+"Language-Team: \n"
+"Language: sl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n"
+"%100==4 ? 2 : 3;\n"
+"X-Generator: Poedit 1.8.4\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Controller/ExpensesController.php:101
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Controller/PaymentsController.php:173
+msgid "Invalid ajax call."
+msgstr "Napaka pri povezavi ajax."
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Controller/ExpensesController.php:165
+msgid "The expense has been saved."
+msgstr "Prihodek/odhodek je shranjen."
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Controller/ExpensesController.php:168;316
+msgid "The expense could not be saved. Please, try again."
+msgstr ""
+"Prihodka/odhodka ni bilo mogoče shraniti. Preverite polja in poizkusite "
+"ponovno."
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Controller/ExpensesController.php:188
+msgid "The expense has been deleted."
+msgstr "Prihodek/odhodek je bil izbrisan."
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Controller/ExpensesController.php:190
+msgid "The expense could not be deleted. Please, try again."
+msgstr "Prihodka/odhodka ni bilo mogoče izbrisati."
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Controller/ExpensesController.php:265
+msgid "Error creating PDF."
+msgstr "Napaka pri generiranju PDF datoteke."
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Controller/ExpensesController.php:313
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Controller/PaymentsController.php:129
+msgid "The payment has been saved."
+msgstr "Plačilo je shranjeno."
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Controller/PaymentsAccountsController.php:103
+msgid "The payments account has been saved."
+msgstr "Računa ni mogoče shraniti."
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Controller/PaymentsAccountsController.php:106
+msgid "The payments account could not be saved. Please, try again."
+msgstr "Računa ni mogoče shraniti. Preverite vpisana polja."
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Controller/PaymentsAccountsController.php:123
+msgid "The payments account has been deleted."
+msgstr "Račun je bil izbrisan."
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Controller/PaymentsAccountsController.php:125
+msgid "The payments account could not be deleted. Please, try again."
+msgstr "Računa ni mogoče izbrisati. Poizkusite ponovno."
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Controller/PaymentsController.php:132
+msgid "The payment could not be saved. Please, try again."
+msgstr "Plačila ni mogoče shraniti. Preverite vpisana polja."
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Controller/PaymentsController.php:151
+msgid "The payment has been deleted."
+msgstr "Plačilo je izbrisano."
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Controller/PaymentsController.php:153
+msgid "The payment could not be deleted. Please, try again."
+msgstr "Plačila ni mogoče izbrisati. Poizkusite ponovno."
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Event/LilExpensesEvents.php:32
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/index.ctp:12;16
+msgid "Income and Expenses"
+msgstr "Prihodki in odhodki"
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Event/LilExpensesEvents.php:53
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Lib/LilExpensesSidebar.php:21
+msgid "Accounting"
+msgstr "Prihodki in odhodki"
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Event/LilExpensesEvents.php:57
+msgid "Income/Expense"
+msgstr "Prihodki/Odhodki"
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Event/LilExpensesEvents.php:60
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/index.ctp:10;20
+msgid "Income"
+msgstr "Prihodek"
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Event/LilExpensesEvents.php:61
+msgid "Expense"
+msgstr "Odhodek"
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Event/LilExpensesEvents.php:63
+msgid "Neither expense nor income"
+msgstr "Ni ne prihodek, ne odhodek."
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Event/LilExpensesEvents.php:103
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Lib/LilExpensesSidebar.php:31
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/view.ctp:51
+msgid "Payments"
+msgstr "Plačila"
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Lib/LilExpensesSidebar.php:41
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/index.ctp:10;24
+msgid "Expenses"
+msgstr "Odhodki"
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Lib/LilExpensesSidebar.php:53
+msgid "Reports"
+msgstr "Izpisi"
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Lib/LilExpensesSidebar.php:63
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/pdf/report_unpaid.ctp:23;26
+msgid "Unpaid Invoices"
+msgstr "Odprte postavke"
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Lib/LilExpensesSidebar.php:77
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/import_sepa.ctp:26
+msgid "Import"
+msgstr "Uvoz"
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Lib/LilExpensesSidebar.php:87
+msgid "Sepa XML"
+msgstr "Sepa XML"
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Lib/LilExpensesSidebar.php:101
+msgid "Lookups"
+msgstr "Šifranti"
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Lib/LilExpensesSidebar.php:109
+msgid "Accounts"
+msgstr "Računi"
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Element/payments_list.ctp:12
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/edit.ctp:56
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/import_sepa_step2.ctp:28
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/index.ctp:120
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/view.ctp:31
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Payments/edit.ctp:53
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Payments/index.ctp:134
+msgid "Date"
+msgstr "Datum"
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Element/payments_list.ctp:16
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Payments/index.ctp:130
+msgid "Account"
+msgstr "Račun"
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Element/payments_list.ctp:20
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/import_sepa_step2.ctp:32
+msgid "Amount"
+msgstr "Količina"
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Element/payments_list.ctp:28;90
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Payments/edit.ctp:7
+msgid "Add Payment"
+msgstr "Vpis plačila"
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Element/payments_list.ctp:35
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/edit.ctp:73
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/index.ctp:128
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/view.ctp:43
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/pdf/report_unpaid.ctp:64;82
+msgid "Total"
+msgstr "Skupaj"
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Element/payments_list.ctp:57
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Payments/index.ctp:169;174
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Payments/json/index.ctp:18
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/View/Helper/LilExpenseHelper.php:44;65;90;100
+msgid "N/A"
+msgstr "N/A"
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Element/payments_list.ctp:65
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/view.ctp:14
+msgid "Edit"
+msgstr "Uredi"
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Element/payments_list.ctp:72
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/edit.ctp:10
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/view.ctp:19
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Payments/edit.ctp:10
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/PaymentsAccounts/edit.ctp:12
+msgid "Delete"
+msgstr "Briši"
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Element/payments_list.ctp:76
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Payments/edit.ctp:19
+msgid "Are you sure you want to delete this payment?"
+msgstr "Ste prepričani, da želite izbrisati plačilo?"
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Element/payments_list.ctp:89
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Payments/edit.ctp:7
+msgid "Edit Payment"
+msgstr "Urejanje plačila"
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Element/payments_list.ctp:92
+msgid "No expense for this item found."
+msgstr "Plačilo nima prihodka/odhodka."
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/edit.ctp:7
+msgid "Edit Expense"
+msgstr "Uredi prihodek/odhodek"
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/edit.ctp:7
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Payments/edit.ctp:103
+msgid "Add Expense"
+msgstr "Dodaj prihodek/odhodek"
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/edit.ctp:19
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/view.ctp:23
+msgid "Are you sure you want to delete this expense?"
+msgstr "Ste prepričani, da želite izbrisati prihodek/odhodek?"
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/edit.ctp:41
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Payments/edit.ctp:47
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/PaymentsAccounts/edit.ctp:43
+msgid "Basics"
+msgstr "Osnovni podatki"
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/edit.ctp:47
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/import_sepa_link.ctp:33
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Payments/edit.ctp:79
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Payments/index.ctp:137
+msgid "Description"
+msgstr "Opis"
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/edit.ctp:57
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Payments/edit.ctp:54
+msgid "Date is required."
+msgstr "Vpišite datum."
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/edit.ctp:65
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/index.ctp:124
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/view.ctp:39
+msgid "Net Total"
+msgstr "Neto"
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/edit.ctp:82
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Payments/edit.ctp:62
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Payments/index.ctp:141
+msgid "Payment"
+msgstr "Plačilo"
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/edit.ctp:83
+msgid "do not create payment"
+msgstr "ni še plačano"
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/edit.ctp:100
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/import_sepa_link.ctp:41
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Payments/edit.ctp:110
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/PaymentsAccounts/edit.ctp:78
+msgid "Save"
+msgstr "Shrani"
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/import_sepa.ctp:3
+msgid "IMPORT: SepaXML"
+msgstr "UVOZ: Sepa XML - 1. korak"
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/import_sepa.ctp:18
+msgid "Upload a XML"
+msgstr "Prenos XML datoteke"
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/import_sepa_link.ctp:7
+msgid "Link with Sepa Payment"
+msgstr "Poveži s plačilom"
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/import_sepa_step2.ctp:6
+msgid "IMPORT: SepaXML - Step2"
+msgstr "UVOZ: Sepa XML - 2. korak"
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/import_sepa_step2.ctp:9
+msgid "Upload file"
+msgstr "Prenos datoteke"
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/import_sepa_step2.ctp:37
+msgid "Descript"
+msgstr "Opis"
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/import_sepa_step2.ctp:42
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/pdf/report_unpaid.ctp:60
+msgid "Client"
+msgstr "Klient"
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/import_sepa_step2.ctp:47
+msgid "Ref"
+msgstr "Ref."
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/import_sepa_step2.ctp:52
+msgid "Action"
+msgstr "Akcija"
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/import_sepa_step2.ctp:62
+msgid "Link with Existing Payment"
+msgstr "Poveži z obstoječim plačilom"
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/import_sepa_step2.ctp:65
+msgid "Pay an Existing Expense"
+msgstr "Plačilo obstoječega prihodka/odhodka"
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/import_sepa_step2.ctp:68
+msgid "Create a New Expense"
+msgstr "Vpis novega prihodka/odhodka"
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/import_sepa_step2.ctp:130
+msgid "Link with existing Payment"
+msgstr "Poveži z obstoječim plačilom"
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/import_sepa_step2.ctp:145
+msgid "Add Payment to Existing Expense"
+msgstr "Plačilo obstoječega prihodka/odhodka"
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/import_sepa_step2.ctp:159
+msgid "Add new Expense"
+msgstr "Dodaj prihodek/odhodek"
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/index.ctp:32
+msgid "{0}"
+msgstr "{0}"
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/index.ctp:47
+msgid "Expenses {0} from {1} to {2}"
+msgstr "Prihodki/odhodki {0} od {1} do {2}"
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/index.ctp:53;67
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Payments/index.ctp:71;85
+msgid "Entire Year"
+msgstr "celo leto"
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/index.ctp:85
+msgid "{0} for {1} {2}"
+msgstr "{0} za {1} {2}"
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/index.ctp:98
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Payments/index.ctp:116
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/PaymentsAccounts/index.ctp:6
+msgid "Add"
+msgstr "Dodaj"
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/index.ctp:112
+msgid "Kind"
+msgstr "Tip"
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/index.ctp:116
+msgid "Decription"
+msgstr "Opis"
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/index.ctp:134
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Payments/index.ctp:147
+msgid "Recapitulation"
+msgstr "Rekapitulacija"
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/report_unpaid.ctp:3
+msgid "REPORT: Unpaid Invoices"
+msgstr "IZPIS: Odprte postavke"
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/report_unpaid.ctp:16
+msgid "Filter by Counter"
+msgstr "Filter po števcu"
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/report_unpaid.ctp:35
+msgid "Filters"
+msgstr "Filter"
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/report_unpaid.ctp:40
+msgid "Issued from"
+msgstr "Dat. dokumenta od"
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/report_unpaid.ctp:47
+msgid "Issued to"
+msgstr "Dat. dokumenta do"
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/report_unpaid.ctp:54
+msgid "Only overdue invoices"
+msgstr "Samo zapadli neplačani dokumenti"
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/report_unpaid.ctp:62
+msgid "Print"
+msgstr "Izpis"
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/pdf/report_unpaid.ctp:3
+msgid "from %1$s to %2$s"
+msgstr "Od %1$s do %2$s"
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/pdf/report_unpaid.ctp:6
+msgid "to %s"
+msgstr "Do %s"
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/pdf/report_unpaid.ctp:8
+msgid "from %s"
+msgstr "Od %s"
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/pdf/report_unpaid.ctp:12
+msgid "For all counters."
+msgstr "Za vse števce"
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/pdf/report_unpaid.ctp:14
+msgid "For specified counters: %s"
+msgstr "Za izbrane števce: %s"
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/pdf/report_unpaid.ctp:44
+msgid "Cnt"
+msgstr "Z.št."
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/pdf/report_unpaid.ctp:48
+msgid "No"
+msgstr "Št."
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/pdf/report_unpaid.ctp:52
+msgid "Issued"
+msgstr "Izdan"
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/pdf/report_unpaid.ctp:56
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/PaymentsAccounts/edit.ctp:50
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/PaymentsAccounts/index.ctp:21
+msgid "Title"
+msgstr "Naziv"
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/pdf/report_unpaid.ctp:68
+msgid "Delta"
+msgstr "Razlika"
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Expenses/pdf/report_unpaid.ctp:98
+msgid "No invoices found"
+msgstr "Ni vpisanih dokumentov."
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Payments/edit.ctp:70
+msgid "From/To Account"
+msgstr "Iz/na račun"
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Payments/edit.ctp:87
+msgid "Links to Expenses"
+msgstr "Povezave s prihodki/odhodki"
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Payments/edit.ctp:96
+msgid "Cancel"
+msgstr "Prekliči"
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Payments/edit.ctp:177
+msgid "Expense already exists."
+msgstr "Prihodek ali odhodek pri plačilu je podvojen."
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Payments/index.ctp:9
+msgid "all accounts"
+msgstr "vsi računi"
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Payments/index.ctp:13
+msgid "All Accounts"
+msgstr "Vsi računi"
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Payments/index.ctp:28;38
+msgid "From"
+msgstr "iz"
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Payments/index.ctp:28;42
+msgid "To"
+msgstr "na"
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Payments/index.ctp:30
+msgid "from+to"
+msgstr "iz+na"
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Payments/index.ctp:34
+msgid "From + To"
+msgstr "Iz + na"
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Payments/index.ctp:50
+msgid "Payments {0} {1}"
+msgstr "Plačila {0} {1}"
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Payments/index.ctp:65
+msgid "Payments {0} {1} from {2} to {3}"
+msgstr "Plačila  {0} {1} od {2} do {3}"
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/Payments/index.ctp:103
+msgid "Payments {0} {1} for {2} {3}"
+msgstr "Plačila {0} {1} za {2} {3}"
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/PaymentsAccounts/edit.ctp:9
+msgid "Edit Account"
+msgstr "Urejanje računa"
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/PaymentsAccounts/edit.ctp:9
+msgid "Add Account"
+msgstr "Vpis računa"
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/PaymentsAccounts/edit.ctp:21
+msgid "Are you sure you want to delete this account?"
+msgstr "Ste prepričani, da želite izbrisati račun?"
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/PaymentsAccounts/edit.ctp:59
+msgid "Primary Account"
+msgstr "Primarni račun"
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/PaymentsAccounts/edit.ctp:68
+msgid "Active Account"
+msgstr "Aktiven račun"
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/PaymentsAccounts/index.ctp:3
+msgid "Account List"
+msgstr "Seznam računov"
+
+#: C:/xampp/htdocs/arhint/plugins/LilExpenses/src/Template/PaymentsAccounts/index.ctp:24
+msgid "Active"
+msgstr "Aktiven"
+
+#~ msgid "Expense has been saved."
+#~ msgstr "Prihodek/odhodek je shranjen."
+
+#~ msgid ""
+#~ "There are some errors in the form. Please correct all marked fields below."
+#~ msgstr "Vpisani so napačni podatki. Popravite označena polja."
+
+#~ msgid "Expense has been deleted."
+#~ msgstr "Prihodek/odhodek je izbrisan."
+
+#~ msgid "Project"
+#~ msgstr "Projekt"
+
+#~ msgid "-- select project --"
+#~ msgstr "-- izberite projekt --"
+
+#~ msgid "User"
+#~ msgstr "Uporabnik"
+
+#~ msgid "This counter creates income/expense"
+#~ msgstr "Števec ustvari prihodke/odhodke"
+
+#~ msgid "Account has been saved."
+#~ msgstr "Račun je shranjen."
+
+#~ msgid "Account has been deleted."
+#~ msgstr "Račun je izbrisan."
+
+#~ msgid "Payment has been saved."
+#~ msgstr "Plačilo je shranjeno."
+
+#~ msgid "Payment has been deleted."
+#~ msgstr "Plačilo je izbrisano"
+
+#~ msgid "Current Month's CashFlow"
+#~ msgstr "Denarni tok tega meseca"
+
+#~ msgid "Saldo"
+#~ msgstr "Slado"
+
+#~ msgid "No payments found"
+#~ msgstr "Ni plačil"
+
+#~ msgid "Recent Expenses for selected Area"
+#~ msgstr "Aktualni prihodki in odhodki za izbran projekt"
+
+#~ msgid "Recent Expenses"
+#~ msgstr "Aktualni prihodki in odhodki"
+
+#~ msgid "No expenses found"
+#~ msgstr "Ni vpisanih prihodkov ali odhodkov"
+
+#~ msgid "Area's Expenses and Income"
+#~ msgstr "Prihodki in odhodki projekta"
+
+#~ msgid "Contact's Expenses and Income"
+#~ msgstr "Prihodki in odhodki kontakta"
+
+#~ msgid "Details"
+#~ msgstr "Podrobnosti"
+
+#~ msgid "Income and expenses"
+#~ msgstr "Prihodki in odhodki"
+
+#~ msgid "%3$s from %1$s to %2$s"
+#~ msgstr "%3$s od %1$s do %2$s"
+
+#~ msgid "Expenses and Income"
+#~ msgstr "Prihodki in odhodki"
+
+#~ msgid "Total Sum"
+#~ msgstr "Skupaj"
+
+#~ msgid "Income or Expense"
+#~ msgstr "Prihodki in odhodki"
+
+#~ msgid "No payments found."
+#~ msgstr "Ni plačil."
+
+#~ msgid "n/a"
+#~ msgstr "n/a"
+
+#~ msgid "Add new Payment"
+#~ msgstr "Vpis plačila"
+
+#~ msgid "No payments present!"
+#~ msgstr "Ni vpisanih plačil!"
+
+#~ msgid "At least one expense should exist."
+#~ msgstr "Plačilo potrebuje vsaj en prihodek/odhodek."
+
+#~ msgid "Payments %4$s %3$s from %1$s to %2$s"
+#~ msgstr "Plačila %4$s %3$s od %1$s do %2$s"
+
+#~ msgid "From and To"
+#~ msgstr "Izplačila in vplačila"
+
+#~ msgid "All accounts"
+#~ msgstr "Vsi računi"
+
+#~ msgid "Payment has been successfuly saved."
+#~ msgstr "Plačilo je shranjeno."
+
+#~ msgid "ID"
+#~ msgstr "ID"
+
+#~ msgid "Add Task"
+#~ msgstr "Dodaj opravilo"
+
+#~ msgid "Add or Edit Expense"
+#~ msgstr "Uredi ali dodaj prihodke/odhodke"
+
+#~ msgid "paid from company account"
+#~ msgstr "plačano iz/na račun podjetja"
+
+#~ msgid "paid from private account"
+#~ msgstr "plačano iz/na osebni račun"
+
+#~ msgid "paid from other source"
+#~ msgstr "plačano iz drugih virov"
+
+#~ msgid "company"
+#~ msgstr "podjetje"
+
+#~ msgid "private"
+#~ msgstr "osebno"
+
+#~ msgid "other"
+#~ msgstr "ostalo"
+
+#~ msgid "Source"
+#~ msgstr "Vir"
+
+#~ msgid "Other"
+#~ msgstr "Ostalo"
+
+#~ msgid "Expense or income"
+#~ msgstr "Strošek in prihodki"

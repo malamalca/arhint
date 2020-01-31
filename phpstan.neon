@@ -1,0 +1,9 @@
+parameters:
+    level: 7
+    checkMissingIterableValueType: false
+    checkGenericClassInNonGenericObjectType: false
+    excludes_analyse:
+        - src/Console/Installer.php
+        - src/App/Controller/ErrorController.php
+        - src/App/Command/ConsoleCommand.php
+        - src/App/Controller/PagesController.php

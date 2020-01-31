@@ -1,0 +1,15 @@
+div.view-panel {
+    margin-bottom: 10px;
+
+    .view-panel-line {
+        font-weight: bold;
+        
+        .label {
+            display: block;
+            float: left;
+            line-height: 20px;
+            width: 150px;
+            font-weight: normal;
+        }
+    }
+}

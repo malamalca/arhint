@@ -1,0 +1,93 @@
+/*#dat-happened, #amount {
+    width:200px;
+}
+
+#account-id, #descript {
+    width: 400px;
+}
+
+#add-expense-link {
+    margin-top: 10px;
+}
+#add-expense-link a {
+    font-family: Arial, helvetica, sans-serif;
+    font-size: 11px;
+    text-decoration: none;
+}
+#add-expense-link a:hover {
+    text-decoration: underline;
+}*/
+
+.negative {
+    color: #ff0000;
+}
+
+#add-expense-table td {
+    font-family: Arial, helvetica, sans-serif;
+    padding: 3px;
+    margin: 0;
+    width: auto !important;
+}
+#add-expense-table td.expense_icon {
+    padding-left: 10px;
+    width: 5% !important;
+}
+#add-expense-table td.expense_title span {
+    padding-right: 10px;
+}
+
+/* AUTOCOMPLETE PAYMENT */
+.ac-payment-descript {
+    display: block;
+    float: left;
+    width: 200px;
+}
+.ac-payment-date {
+    display: block;
+    float: left;
+    width: 100px;
+}
+.ac-payment-amount {
+    display: block;
+    float: left;
+    text-align: right;
+    width: 100px;
+    clear: right;
+}
+
+
+/* AUTOCOMPLETE EXPENSE */
+.ac-expense-icon {
+    display: block;
+    float: left;
+    height: 20px;
+    width: 20px;
+    text-align: center;
+}
+.ac-expense-icon img {
+    width: auto !important;
+    height: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+.ac-expense-title {
+    display: block;
+    float: left;
+    width: 200px;
+    height: 20px;
+    overflow: hidden;
+}
+.ac-expense-date {
+    display: block;
+    float: left;
+    width: 90px;
+    height: 20px;
+}
+.ac-expense-total {
+    display: block;
+    float: left;
+    text-align: right;
+    width: 90px;
+    height: 20px;
+    clear: right;
+}

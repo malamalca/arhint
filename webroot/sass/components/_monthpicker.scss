@@ -1,0 +1,161 @@
+/* Modal */
+.monthpicker-modal {
+    max-width: 325px;
+    max-height: none;
+  }
+
+  .monthpicker-container.modal-content {
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+  }
+
+  .monthpicker-controls {
+    display: flex;
+    justify-content: space-between;
+    /*width: 280px;*/
+    margin: 0 auto;
+
+    .selects-container {
+      display: flex;
+    }
+
+    .select-wrapper {
+      input {
+        &:focus {
+          border-bottom: none;
+        }
+        border-bottom: none;
+        text-align: center;
+        margin: 0;
+      }
+
+      .caret {
+        display: none;
+      }
+    }
+
+    .select-year input {
+      width: 120px;
+    }
+  }
+
+  .year-prev, .year-next {
+    margin-top: 4px;
+    cursor: pointer;
+    background-color: transparent;
+    border: none;
+  }
+
+  /* Calendar */
+  .monthpicker-calendar-container {
+    flex: 2.5 auto;
+  }
+
+  .monthpicker-table {
+    /*width: 280px;*/
+    font-size: 1rem;
+    margin: 0 auto;
+
+    thead {
+      border-bottom: none;
+    }
+
+    th {
+      padding: 10px 5px;
+      text-align: center;
+    }
+
+    tr {
+      border: none;
+    }
+
+    abbr {
+      text-decoration: none;
+      color: $datepicker-calendar-header-color;
+    }
+
+    td {
+      &.is-today {
+        color: $secondary-color;
+      }
+
+      &.is-selected {
+        background-color: $secondary-color;
+        color: #fff;
+      }
+
+      &.is-outside-current-month,
+      &.is-disabled {
+        color: $datepicker-disabled-day-color;
+        pointer-events: none;
+      }
+
+      border-radius: 50%;
+      padding: 0;
+    }
+  }
+
+  .monthpicker-month-button {
+    &:focus {
+      background-color: $datepicker-day-focus;
+    }
+
+    background-color: transparent;
+    border: none;
+    line-height: 38px;
+    display: block;
+    width: 100%;
+    border-radius: 50%;
+    padding: 0 5px;
+    cursor: pointer;
+    color: inherit;
+  }
+
+
+  /* Footer */
+  .monthpicker-footer {
+    /*width: 280px;*/
+    margin: 0 auto;
+    padding-bottom: 5px;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .monthpicker-cancel,
+  .monthpicker-clear,
+  .monthpicker-today,
+  .monthpicker-done {
+    color: $secondary-color;
+    padding: 0 1rem;
+  }
+
+  .monthpicker-clear {
+    color: $error-color;
+  }
+
+
+  /* Media Queries */
+  @media #{$medium-and-up} {
+    .monthpicker-modal {
+      max-width: 625px;
+    }
+
+    .monthpicker-container.modal-content {
+      flex-direction: row;
+    }
+
+    .monthpicker-date-display {
+      flex: 0 1 270px;
+    }
+
+    /*.monthpicker-controls,
+    .monthpicker-table,
+    .monthpicker-footer {
+      width: 320px;
+    }*/
+
+    .monthpicker-month-button {
+      line-height: 44px;
+    }
+  }

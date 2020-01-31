@@ -158,6 +158,9 @@ if ($fullBaseUrl) {
 }
 unset($fullBaseUrl);
 
+Router::extensions(['json', 'xml', 'pdf']);
+
+
 Cache::setConfig(Configure::consume('Cache'));
 ConnectionManager::setConfig(Configure::consume('Datasources'));
 TransportFactory::setConfig(Configure::consume('EmailTransport'));
@@ -178,6 +181,8 @@ ServerRequest::addDetector('tablet', function ($request) {
 
     return $detector->isTablet();
 });
+
+ServerRequest::addDetector('pdf', ['param' => '_ext', 'options' => ['pdf']]);
 
 /*
  * You can set whether the ORM uses immutable or mutable Time types.

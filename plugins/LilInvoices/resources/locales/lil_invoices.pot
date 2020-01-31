@@ -1,0 +1,973 @@
+# LANGUAGE translation of CakePHP Application
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"POT-Creation-Date: 2017-07-08 11:19+0000\n"
+"PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
+"Last-Translator: NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Controller/InvoicesAttachmentsController.php:64;68
+msgid "Attachment does not exist."
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Controller/InvoicesAttachmentsController.php:89
+msgid "Target folder is not writeable!"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Controller/InvoicesAttachmentsController.php:115
+msgid "The invoices attachment has been saved."
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Controller/InvoicesAttachmentsController.php:120
+msgid "The invoices attachment could not be saved. Please, try again."
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Controller/InvoicesAttachmentsController.php:150
+msgid "The invoices attachment has been deleted."
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Controller/InvoicesAttachmentsController.php:152
+msgid "The invoices attachment could not be deleted. Please, try again."
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Controller/InvoicesController.php:82;144
+msgid "Counter does not exist."
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Controller/InvoicesController.php:87
+msgid "No counters found. Please activate an archived counter or add a new one."
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Controller/InvoicesController.php:159
+msgid "No data to sign."
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Controller/InvoicesController.php:205;269
+msgid "The invoice has been saved."
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Controller/InvoicesController.php:224
+msgid "The invoice could not be saved. Please, try again."
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Controller/InvoicesController.php:279;467
+msgid "Not found."
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Controller/InvoicesController.php:294
+msgid "The invoice has been deleted."
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Controller/InvoicesController.php:296
+msgid "The invoice could not be deleted. Please, try again."
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Controller/InvoicesController.php:313
+msgid "The invoice(s) has been sent."
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Controller/InvoicesController.php:317
+msgid "There are some errors in the form. Please correct all marked fields below."
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Controller/InvoicesController.php:386
+msgid "Error exporting to specified format."
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Controller/InvoicesCountersController.php:93
+msgid "The invoices counter has been saved."
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Controller/InvoicesCountersController.php:97
+msgid "The invoices counter could not be saved. Please, try again."
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Controller/InvoicesCountersController.php:115
+msgid "The invoices counter has been deleted."
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Controller/InvoicesCountersController.php:117
+msgid "The invoices counter could not be deleted. Please, try again."
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Controller/InvoicesLinksController.php:40
+msgid "Invoices have been successfully linked."
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Controller/InvoicesLinksController.php:60
+msgid "The invoices link has been deleted."
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Controller/InvoicesLinksController.php:62
+msgid "The invoices link could not be deleted. Please, try again."
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Controller/InvoicesTemplatesController.php:77
+msgid "The invoices template has been saved."
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Controller/InvoicesTemplatesController.php:80
+msgid "The invoices template could not be saved. Please, try again."
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Controller/InvoicesTemplatesController.php:98
+msgid "The invoices template has been deleted."
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Controller/InvoicesTemplatesController.php:100
+msgid "The invoices template could not be deleted. Please, try again."
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Controller/ItemsController.php:89
+msgid "The item has been saved."
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Controller/ItemsController.php:92
+msgid "The item could not be saved. Please, try again."
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Controller/ItemsController.php:118
+msgid "The item has been deleted."
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Controller/ItemsController.php:120
+msgid "The item could not be deleted. Please, try again."
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Controller/ItemsController.php:141
+msgid "Invalid ajax call."
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Controller/VatsController.php:78
+msgid "The vat has been saved."
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Controller/VatsController.php:81
+msgid "The vat could not be saved. Please, try again."
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Controller/VatsController.php:98
+msgid "The vat has been deleted."
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Controller/VatsController.php:100
+msgid "The vat could not be deleted. Please, try again."
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Event/LilInvoicesEvents.php:29;54
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Lib/LilInvoicesSidebar.php:27
+msgid "Invoices"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Lib/LilInvoicesSidebar.php:47
+msgid "Reports"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Lib/LilInvoicesSidebar.php:62
+msgid "List"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Lib/LilInvoicesSidebar.php:77
+msgid "Received Documents"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Lib/LilInvoicesSidebar.php:89
+msgid "Issued Documents"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Lib/LilInvoicesSidebar.php:109
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/edit.ctp:192
+msgid "Archive"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Lib/LilInvoicesSidebar.php:123
+msgid "Lookups"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Lib/LilInvoicesSidebar.php:147
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Items/index.ctp:4
+msgid "Items"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Lib/LilInvoicesSidebar.php:157
+msgid "Invoices Counters"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Lib/LilInvoicesSidebar.php:167
+msgid "VAT levels"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Lib/LilInvoicesSidebar.php:178
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/view.ctp:163
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/InvoicesCounters/edit.ctp:109
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/InvoicesTemplates/index.ctp:4
+msgid "Templates"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Element/edit_items.ctp:8
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/edit.ctp:175
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/view.ctp:325;411
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Items/edit.ctp:45
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Items/index.ctp:22
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Vats/edit.ctp:45
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Vats/index.ctp:22
+msgid "Description"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Element/edit_items.ctp:9
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/view.ctp:326
+msgid "Quantity"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Element/edit_items.ctp:10
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/view.ctp:327
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Items/edit.ctp:67
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Items/index.ctp:28
+msgid "Unit"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Element/edit_items.ctp:11
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/view.ctp:328
+msgid "Price per Unit"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Element/edit_items.ctp:12
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/view.ctp:329
+msgid "Discount [%]"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Element/edit_items.ctp:13
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/view.ctp:330
+msgid "Unit Total"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Element/edit_items.ctp:14
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/view.ctp:331
+msgid "Tax [%]"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Element/edit_items.ctp:15
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Element/edit_tax.ctp:12
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/view.ctp:332
+msgid "Total with Tax"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Element/edit_items.ctp:65;83;98;114;130;179
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Element/edit_tax.ctp:90
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/edit.ctp:163;300;314;435
+msgid "Blank"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Element/edit_items.ctp:192
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Element/edit_tax.ctp:120
+msgid "Remove Item"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Element/edit_items.ctp:215
+msgid "Add new Item"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Element/edit_items.ctp:220
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Element/edit_tax.ctp:142
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/view.ctp:344;427
+msgid "Grand Total"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Element/edit_tax.ctp:8
+msgid "VAT Description"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Element/edit_tax.ctp:9
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/view.ctp:412
+msgid "VAT [%]"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Element/edit_tax.ctp:10
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/view.ctp:413
+msgid "Base"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Element/edit_tax.ctp:11
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/view.ctp:414
+msgid "Tax"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Element/edit_tax.ctp:29
+msgid "select VAT"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Element/edit_tax.ctp:137
+msgid "Add new Tax"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Element/invoices_list.ctp:12
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/index.ctp:145
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/pdf/report.ctp:17
+msgid "No"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Element/invoices_list.ctp:16
+msgid "Date"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Element/invoices_list.ctp:20
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/edit.ctp:109
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/index.ctp:152
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/view.ctp:181
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/pdf/report.ctp:19
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/InvoicesCounters/edit.ctp:83
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/InvoicesCounters/index.ctp:59
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/InvoicesTemplates/edit.ctp:46
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/InvoicesTemplates/index.ctp:22
+msgid "Title"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Element/invoices_list.ctp:24
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/index.ctp:159
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/pdf/report.ctp:21
+msgid "Net Total"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Element/invoices_list.ctp:28;38
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/edit.ctp:333
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/index.ctp:163
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/view.ctp:248;415
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/pdf/report.ctp:22
+msgid "Total"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Element/invoices_list.ctp:94
+msgid "Edit Payment"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Element/invoices_list.ctp:95
+msgid "Add Payment"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Element/invoices_list.ctp:97
+msgid "No invoices for this Contact found."
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/edit.ctp:9
+msgid "Add an Invoice #{0} <span class=\"light\">({1})</span>"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/edit.ctp:16
+msgid "Edit an Invoice #{0} <span class=\"light\">({1})</span>"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/edit.ctp:28
+msgid "Preview"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/edit.ctp:103
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/InvoicesCounters/edit.ctp:49
+msgid "Basics"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/edit.ctp:111
+msgid "Please enter invoice's title."
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/edit.ctp:120
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/view.ctp:189
+msgid "Receiver"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/edit.ctp:120
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/view.ctp:189
+msgid "Issuer"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/edit.ctp:125;129
+msgid "Please choose a client"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/edit.ctp:135
+msgid "Invoice no"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/edit.ctp:135
+msgid "Document no"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/edit.ctp:144
+msgid "Location"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/edit.ctp:153
+msgid "Dates"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/edit.ctp:161
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/view.ctp:228
+msgid "Date of issue"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/edit.ctp:231
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/templates.ctp:71
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/InvoicesAttachments/add.ctp:52
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/InvoicesCounters/edit.ctp:177
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/InvoicesLinks/link.ctp:57
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/InvoicesTemplates/edit.ctp:124
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Items/edit.ctp:109
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Vats/edit.ctp:65
+msgid "Save"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/edit.ctp:241
+msgid "Add another invoice after saving this one"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/edit.ctp:271
+msgid "Buyer"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/edit.ctp:282
+msgid "Use different client for buyer."
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/edit.ctp:299
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/view.ctp:232
+msgid "Service date"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/edit.ctp:313
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/view.ctp:236
+msgid "Expiration date"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/edit.ctp:327;340
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/view.ctp:365
+msgid "Analytics"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/edit.ctp:352
+msgid "Taxes Analytics"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/edit.ctp:362
+msgid "Payment"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/edit.ctp:369
+msgid "Invoice must be payed."
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/edit.ctp:370
+msgid "Auto transaction. No payment needed."
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/edit.ctp:371
+msgid "Invoice payed in full."
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/edit.ctp:372
+msgid "Other. No payment needed."
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/edit.ctp:375
+msgid "Payment Kind"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/edit.ctp:387
+msgid "Sepa Type"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/edit.ctp:389
+msgid "Invalid type"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/edit.ctp:403
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/InvoicesCounters/edit.ctp:71
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/InvoicesCounters/index.ctp:60
+msgid "Type"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/edit.ctp:405;420
+msgid "Invalid format"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/edit.ctp:418
+msgid "MOD"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/edit.ctp:433
+msgid "Reference"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/edit.ctp:441
+msgid "Use 'OTHR' for unknown payment type. Use prefix and two numers for module (eg SI00)."
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/edit.ctp:474
+msgid "Are you sure you want to unlink item?"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/edit.ctp:483
+msgid "Add a Company"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/edit.ctp:484
+msgid "Add a Person"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/edit.ctp:516
+msgid "Edit Preview"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/email.ctp:6
+msgid "Email Invoice"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/email.ctp:26
+msgid "To"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/email.ctp:37
+msgid "CC"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/email.ctp:48
+msgid "Send CC to me ({0})"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/email.ctp:58
+msgid "Subject"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/email.ctp:69
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/InvoicesCounters/edit.ctp:153
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/InvoicesTemplates/edit.ctp:64;74
+msgid "Body"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/email.ctp:77
+msgid "Send"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/email.ctp:91
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/view.ctp:456
+msgid "Attachments"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/index.ctp:22;29
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/InvoicesCounters/index.ctp:8;14;25
+msgid "All"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/index.ctp:22;28
+msgid "Expired"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/index.ctp:35
+msgid "{3} \"{2}\" from {0} to {1}"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/index.ctp:56
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/InvoicesCounters/index.ctp:44
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/InvoicesTemplates/index.ctp:7
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Items/index.ctp:7
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Vats/index.ctp:7
+msgid "Add"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/index.ctp:66
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/report.ctp:108
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/view.ctp:98
+msgid "Print"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/index.ctp:142
+msgid "Cnt"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/index.ctp:149
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/pdf/report.ctp:18
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/InvoicesCounters/edit.ctp:59
+msgid "Issued"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/index.ctp:155
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/pdf/report.ctp:20
+msgid "Client"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/index.ctp:169
+msgid "Total Sum"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/index.ctp:200
+msgid "n/a"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/preview.ctp:16
+msgid "Invoice #%1$s"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/preview.ctp:19
+msgid "Back"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/report.ctp:15
+msgid "REPORT: VATs"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/report.ctp:30
+msgid "Specify Month"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/report.ctp:73
+msgid "From - to Date"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/report.ctp:86
+msgid "Start"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/report.ctp:97
+msgid "End"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/templates.ctp:6
+msgid "Edit Templates for Invoice #{0}"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/templates.ctp:42
+msgid "Page Header"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/templates.ctp:43;62
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/InvoicesCounters/edit.ctp:143;167
+msgid "none"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/templates.ctp:52
+msgid "Page Body"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/templates.ctp:53
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/InvoicesCounters/edit.ctp:155
+msgid "default"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/templates.ctp:61
+msgid "Page Footer"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/view.ctp:13
+msgid "{3} #{0} <span class=\"light nowrap\">({1} :: {2})</span>"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/view.ctp:23
+msgid "Edit"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/view.ctp:32
+msgid "Duplicate"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/view.ctp:41
+msgid "Attach"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/view.ctp:45
+msgid "File"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/view.ctp:55
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/InvoicesAttachments/add.ctp:3
+msgid "Add Attachment"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/view.ctp:59
+msgid "Scan"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/view.ctp:68
+msgid "Acquire Attachment"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/view.ctp:72
+msgid "Linked Invoice"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/view.ctp:81
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/InvoicesLinks/link.ctp:7
+msgid "Link Invoices"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/view.ctp:87
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/InvoicesCounters/edit.ctp:18
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/InvoicesTemplates/edit.ctp:13
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Items/edit.ctp:7
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Vats/edit.ctp:7
+msgid "Delete"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/view.ctp:94
+msgid "Are you sure you want to delete this invoice?"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/view.ctp:123
+msgid "Export"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/view.ctp:127
+msgid "PDF"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/view.ctp:137
+msgid "Sepa XML"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/view.ctp:147
+msgid "eSlog"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/view.ctp:159
+msgid "Settings"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/view.ctp:170
+msgid "Invoices Templates"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/view.ctp:218
+msgid "TAX payee no."
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/view.ctp:218
+msgid "TAX no."
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/view.ctp:240
+msgid "Approval date"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/view.ctp:448
+msgid "VAT Analytics"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/view.ctp:458
+msgid "No attachments found."
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/view.ctp:478
+msgid "Are you sure you want to delete this attachment"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/view.ctp:486
+msgid "Linked Invoices"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/view.ctp:488
+msgid "No linked invoices found."
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/view.ctp:510
+msgid "Are you sure you want to delete this link?"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/pdf/report.ctp:11
+msgid "Invoices List"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Invoices/pdf/report.ctp:29
+msgid "TOTAL"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/InvoicesAttachments/acquire.ctp:5
+msgid "Acquire"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/InvoicesAttachments/acquire.ctp:6
+msgid "Select Source"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/InvoicesAttachments/add.ctp:41
+msgid "Select file"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/InvoicesAttachments/add.ctp:43
+msgid "A file must be selected for upload."
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/InvoicesCounters/edit.ctp:15
+msgid "Edit Counter"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/InvoicesCounters/edit.ctp:15
+msgid "Add Counter"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/InvoicesCounters/edit.ctp:27
+msgid "Are you sure you want to delete this counter?"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/InvoicesCounters/edit.ctp:57
+msgid "Kind"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/InvoicesCounters/edit.ctp:60
+msgid "Received"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/InvoicesCounters/edit.ctp:73
+msgid "unspecified"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/InvoicesCounters/edit.ctp:92
+msgid "Counter Status"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/InvoicesCounters/edit.ctp:102
+msgid "This counter is active"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/InvoicesCounters/edit.ctp:115
+msgid "Invoice no. Template"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/InvoicesCounters/edit.ctp:120
+msgid "Use [[no]], [[no.2]], [[year]] templates."
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/InvoicesCounters/edit.ctp:127
+msgid "Invoice description Template"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/InvoicesCounters/edit.ctp:134
+msgid "Default Layouts"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/InvoicesCounters/edit.ctp:141
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/InvoicesTemplates/edit.ctp:65
+msgid "Header"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/InvoicesCounters/edit.ctp:165
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/InvoicesTemplates/edit.ctp:66
+msgid "Footer"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/InvoicesCounters/index.ctp:8;13
+msgid "Active"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/InvoicesCounters/index.ctp:19
+msgid "all types"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/InvoicesCounters/index.ctp:36
+msgid "{0} counters of {1}"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/InvoicesCounters/index.ctp:63
+msgid "Last no"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/InvoicesCounters/index.ctp:76
+msgid "N/A"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/InvoicesLinks/link.ctp:44
+msgid "Invoice"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/InvoicesLinks/link.ctp:45
+msgid "Invoice is required."
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/InvoicesTemplates/edit.ctp:10
+msgid "Edit Template"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/InvoicesTemplates/edit.ctp:10
+msgid "Add Template"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/InvoicesTemplates/edit.ctp:17
+msgid "Are you sure you want to delete this template?"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/InvoicesTemplates/edit.ctp:47
+msgid "Title is required."
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/InvoicesTemplates/edit.ctp:94
+msgid "Remove image"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/InvoicesTemplates/edit.ctp:115
+msgid "This is default template"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Items/edit.ctp:4
+msgid "Edit Item"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Items/edit.ctp:4
+msgid "Add Item"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Items/edit.ctp:16
+msgid "Are you sure you want to delete this item?"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Items/edit.ctp:46
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Vats/edit.ctp:46
+msgid "Description is required."
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Items/edit.ctp:57
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Items/index.ctp:25
+msgid "Qty"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Items/edit.ctp:78
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Items/index.ctp:32
+msgid "Discount"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Items/edit.ctp:89
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Items/index.ctp:36
+msgid "Price"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Items/edit.ctp:101
+msgid "Vat"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Vats/edit.ctp:4
+msgid "Edit Vat"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Vats/edit.ctp:4
+msgid "Add Vat"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Vats/edit.ctp:16
+msgid "Are you sure you want to delete this vat?"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Vats/edit.ctp:57
+msgid "Percent"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Vats/index.ctp:4
+msgid "Vats"
+msgstr ""
+
+#: C:/xampp/htdocs/arhint/plugins/LilInvoices/src/Template/Vats/index.ctp:25
+msgid "Level"
+msgstr ""
+
