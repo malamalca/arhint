@@ -56,7 +56,7 @@ $templateEdit = [
             ],
 
             ////////////////////////////////////////////////////////////////////////////////////////
-            'fs_layout_body_div_start' => '<div class="input ui-widget ui-textarea textarea">',
+            'fs_layout_body_div_start' => '<div>',
             'fs_layout_body_label' => sprintf('<label for="template-body">%s:</label>', __d('lil_invoices', 'Body')),
             'body' => [
                 'class' => $this->Form,

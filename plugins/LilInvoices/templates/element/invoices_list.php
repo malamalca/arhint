@@ -3,8 +3,7 @@
 if (!$invoices->isEmpty()) {
     $paymentsTable = [
         'parameters' => [
-            'width' => '100%', 'cellspacing' => 0, 'cellpadding' => 0,
-            'id' => 'PaymentsList', 'class' => 'index-static', 'width' => '700',
+            'width' => '100%', 'cellspacing' => 0, 'cellpadding' => 0, 'id' => 'PaymentsList', 'width' => '700'
         ],
         'head' => ['rows' => [['columns' => [
             'no' => [

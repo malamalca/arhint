@@ -221,6 +221,12 @@ echo $this->Lil->index($contactsIndex, 'LilCrm.Contacts.index');
                 $.get(ajaxSearchUrl.replace(rx_term, encodeURIComponent($(this).val())), function(response) {
                     let tBody = response.substring(response.indexOf("<tbody>")+7, response.indexOf("</tbody>"));
                     $("#ContactsIndexTable tbody").html(tBody);
+
+                    let paginator = response.substring(
+                        response.indexOf("<ul class=\"paginator\">")+22,
+                        response.indexOf("</ul>", response.indexOf("<ul class=\"paginator\">"))
+                    );
+                    $("#ContactsIndexTable ul.paginator").html(paginator);
                 });
             }
         });

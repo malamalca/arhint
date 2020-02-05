@@ -152,6 +152,10 @@ class PaymentsTable extends Table
             }
         }
 
+        if (!empty($filter['search'])) {
+            $ret['conditions']['Payments.descript LIKE'] = '%' . $filter['search'] . '%';
+        }
+
         $validAccounts = array_keys($this->PaymentsAccounts->listForOwner($ownerId));
         if (empty($filter['account']) || !in_array($filter['account'], $validAccounts)) {
             $filter['account'] = null;

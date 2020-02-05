@@ -139,26 +139,43 @@ $admin_index = [
     'actions' => ['lines' => [$hiddenControls, $popupAccounts, $popupFromto, $popupYears, $popupMonths]],
     'table' => [
         'parameters' => [
-            'width' => '100%', 'cellspacing' => 0, 'cellpadding' => 0,
-            'id' => 'PaymentsIndex', 'class' => 'index',
+            'width' => '100%', 'cellspacing' => 0, 'cellpadding' => 0, 'id' => 'PaymentsIndex',
         ],
-        'head' => ['rows' => [['columns' => [
-            'account' => [
-                'parameters' => ['class' => 'left-align'],
-                'html' => __d('lil_expenses', 'Account'),
+        'head' => ['rows' => [
+            0 => [
+                'columns' => [
+                    'search' => [
+                        'params' => ['colspan' => 1, 'class' => 'input-field'],
+                        'html' => sprintf('<input placeholder="%s" id="SearchBox" />', __d('lil_invoices', 'Search')),
+                    ],
+                    'pagination' => [
+                        'params' => ['colspan' => 4, 'class' => 'right-align'],
+                        'html' => '<ul class="paginator">' . $this->Paginator->numbers([
+                            'first' => '<<',
+                            'last' => '>>',
+                            'modulus' => 3]) . '</ul>'],
+                ],
             ],
-            'date' => [
-                'parameters' => ['class' => 'center-align'],
-                'html' => __d('lil_expenses', 'Date'),
-            ],
-            'descript' => [
-                'html' => __d('lil_expenses', 'Description'),
-            ],
-            'payment' => [
-                'parameters' => ['class' => 'right-align'],
-                'html' => __d('lil_expenses', 'Payment'),
-            ],
-        ]]]],
+            1 => [
+                'columns' => [
+                    'account' => [
+                        'parameters' => ['class' => 'left-align'],
+                        'html' => __d('lil_expenses', 'Account'),
+                    ],
+                    'date' => [
+                        'parameters' => ['class' => 'center-align'],
+                        'html' => $this->Paginator->sort('dat_happened', __d('lil_expenses', 'Date')),
+                    ],
+                    'descript' => [
+                        'html' => __d('lil_expenses', 'Description'),
+                    ],
+                    'payment' => [
+                        'parameters' => ['class' => 'right-align'],
+                        'html' => $this->Paginator->sort('amount', __d('lil_expenses', 'Payment')),
+                    ],
+                ]
+            ]
+        ]],
         'foot' => ['rows' => [['columns' => [
             'title' => [
                 'parameters' => ['colspan' => '3', 'class' => 'right-align'],
@@ -212,14 +229,21 @@ echo $this->Lil->index($admin_index, 'LilExpenses.Payments.index');
 ?>
 
 <script type="text/javascript">
-    var tmtrUrlStartEnd = "<?php echo Router::url([
+    var startEndUrl = "<?php echo Router::url([
         'action' => 'index',
-        'filter' => array_replace_recursive($filter, ['start' => '[[start]]', 'end' => '[[end]]']),
+        'filter' => array_replace_recursive($filter, ['start' => '__start__', 'end' => '__end__']),
+    ]); ?>";
+
+    var searchUrl = "<?php echo Router::url([
+        'plugin' => 'LilExpenses',
+        'controller' => 'payments',
+        'action' => 'index',
+        '?' => array_merge($this->request->getQuery(), ['search' => '__term__']),
     ]); ?>";
 
     function filterByDate(dateText, startOrEnd) {
-        var rx_start = new RegExp("(\\%5B){2}start(\\%5D){2}", "i");
-        var rx_end = new RegExp("(\\%5B){2}end(\\%5D){2}", "i");
+        var rx_start = new RegExp("__start__", "i");
+        var rx_end = new RegExp("__end__", "i");
         if (startOrEnd == 'start') {
             rpl_start = dateText;
             rpl_end = $('#lil-payments-input-date-end').val();
@@ -227,10 +251,29 @@ echo $this->Lil->index($admin_index, 'LilExpenses.Payments.index');
             rpl_start = $('#lil-payments-input-date-start').val();
             rpl_end = dateText;
         }
-        document.location.href = tmtrUrlStartEnd.replace(rx_start, rpl_start).replace(rx_end, rpl_end);
+        document.location.href = startEndUrl.replace(rx_start, rpl_start).replace(rx_end, rpl_end);
     }
 
     $(document).ready(function() {
+        ////////////////////////////////////////////////////////////////////////////////////////////
+        // Filter for invoices
+        $("#SearchBox").on("input", function(e) {
+            var rx_term = new RegExp("__term__", "i");
+            $.get(searchUrl.replace(rx_term, encodeURIComponent($(this).val())), function(response) {
+                let tBody = response.substring(response.indexOf("<tbody>")+7, response.indexOf("</tbody>"));
+                $("#PaymentsIndex tbody").html(tBody);
+
+                let tFoot = response.substring(response.indexOf("<tfoot>")+7, response.indexOf("</tfoot>"));
+                $("#PaymentsIndex tfoot").html(tFoot);
+
+                let paginator = response.substring(
+                    response.indexOf("<ul class=\"paginator\">")+22,
+                    response.indexOf("</ul>", response.indexOf("<ul class=\"paginator\">"))
+                );
+                $("#PaymentsIndex ul.paginator").html(paginator);
+            });
+        });
+
         // dates picker
         $("#lil-payments-input-date-start").datepicker({
             dateFormat: 'yy-mm-dd',

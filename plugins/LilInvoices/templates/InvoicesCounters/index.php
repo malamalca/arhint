@@ -51,8 +51,7 @@ $countersIndex = [
     'actions' => ['lines' => [$popupActive, $popupType]],
     'table' => [
         'parameters' => [
-            'width' => '100%', 'cellspacing' => 0, 'cellpadding' => 0,
-            'id' => 'AdminInvoicesCountersIndex', 'class' => 'index',
+            'width' => '100%', 'cellspacing' => 0, 'cellpadding' => 0, 'id' => 'AdminInvoicesCountersIndex'
         ],
         'head' => ['rows' => [['columns' => [
             'title' => __d('lil_invoices', 'Title'),

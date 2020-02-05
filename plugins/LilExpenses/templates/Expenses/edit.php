@@ -36,8 +36,8 @@ $payment_edit = [
                 'method' => 'hidden',
                 'parameters' => ['referrer'],
             ],
-            'fs_basics_start' => '<fieldset>',
-            'lg_basics' => sprintf('<legend>%s</legend>', __d('lil_expenses', 'Basics')),
+            //'fs_basics_start' => '<fieldset>',
+            //'lg_basics' => sprintf('<legend>%s</legend>', __d('lil_expenses', 'Basics')),
 
             'title' => [
                 'method' => 'control',
@@ -96,7 +96,7 @@ $payment_edit = [
                 ]],
             ],
 
-            'fs_basics_end' => '</fieldset>',
+            //'fs_basics_end' => '</fieldset>',
 
             'submit' => [
                 'method' => 'submit',

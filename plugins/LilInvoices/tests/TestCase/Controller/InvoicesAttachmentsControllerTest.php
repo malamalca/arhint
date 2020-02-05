@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace LilInvoices\Test\TestCase\Controller;
 
+use Cake\Core\Configure;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\IntegrationTestCase;
 
@@ -90,8 +91,11 @@ class InvoicesAttachmentsControllerTest extends IntegrationTestCase
         $this->assertRedirect(['controller' => 'Invoices', 'action' => 'view', 'd0d59a31-6de7-4eb4-8230-ca09113a7fe5']);
 
         $invoices = TableRegistry::get('LilInvoices.Invoices');
-        $invoice = $invoices->get('d0d59a31-6de7-4eb4-8230-ca09113a7fe5');
+        $invoice = $invoices->get('d0d59a31-6de7-4eb4-8230-ca09113a7fe5', ['contain' => ['InvoicesAttachments']]);
         $this->assertEquals($invoice->invoices_attachment_count, 1);
+
+        $uploadFolder = Configure::read('LilInvoices.uploadFolder');
+        $this->assertTrue(file_exists($uploadFolder . DS . $invoice->invoices_attachments[0]->filename));
     }
 
     /**
@@ -110,7 +114,12 @@ class InvoicesAttachmentsControllerTest extends IntegrationTestCase
 
         $this->assertEquals($attachments->count(), 1);
 
+        $uploadFolder = Configure::read('LilInvoices.uploadFolder');
+        $this->assertTrue(file_exists($uploadFolder . DS . $attachments->first()->filename));
+
         $this->get('lil_invoices/invoices-attachments/delete/' . $attachments->first()->id);
         $this->assertRedirect(['controller' => 'Invoices', 'action' => 'view', $attachments->first()->foreign_id]);
+
+        $this->assertFalse(file_exists($uploadFolder . DS . $attachments->first()->filename));
     }
 }

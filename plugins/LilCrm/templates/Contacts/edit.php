@@ -70,7 +70,7 @@ if ($contact->id) {
                 'options' => ['label' => __d('lil_crm', 'Mat no.') . ':'],
             ],
         ],
-        'tax_no_div' => '<div class="input ui-widget ui-text">',
+        'tax_no_div' => '<div>',
         'tax_no_labek' => '<label for="contact-tax-no">' . __d('lil_crm', 'Tax no.') . ':</label>',
         'tax_no' => [
             'method' => 'text',

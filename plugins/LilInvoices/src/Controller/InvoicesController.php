@@ -332,24 +332,13 @@ class InvoicesController extends AppController
             }
         }
 
-        $filter = (array)$this->getRequest()->getQuery(null, []);
+        $filter = (array)$this->getRequest()->getQuery();
+        $params = $this->Invoices->filter($filter);
 
-        $params = array_merge_recursive(
-            ['conditions' => [
-                'Invoices.owner_id' => $this->getCurrentUser()->get('company_id')],
-            ],
-            $this->Invoices->filter($filter)
-        );
-
-        $selectedInvoices = $this->getRequest()->getQuery('invoices');
-        if (!empty($selectedInvoices)) {
-            $params['conditions'] = ['Invoices.id IN' => (array)$selectedInvoices];
-        }
-
-        $attachments = $this->Invoices
-            ->find('list')
+        $attachments = $this->Authorization->applyScope($this->Invoices->find('list'), 'index')
             ->where($params['conditions'])
             ->contain($params['contain'])
+            ->limit(20)
             ->toArray();
 
         $this->set(compact('email', 'attachments'));
@@ -367,7 +356,11 @@ class InvoicesController extends AppController
     public function preview($id = null, $name = null)
     {
         $this->Authorization->skipAuthorization();
-        $this->set(compact('id', 'name'));
+        if (empty($id)) {
+            $this->set('filter', $this->getRequest()->getQuery());
+        } else {
+            $this->set(compact('id', 'name'));
+        }
 
         return null;
     }
@@ -383,14 +376,17 @@ class InvoicesController extends AppController
     public function export($id = null, $name = null)
     {
         $filter = (array)$this->getRequest()->getQuery();
+        if (!empty($id) && ($id !== 'invoices')) {
+            $filter = array_merge($filter, ['id' => $id]);
+        }
 
         $Exporter = new LilInvoicesExport();
-        $invoices = $Exporter->find(array_merge($filter, ['id' => $id]));
+        $invoices = $Exporter->find($filter);
         $this->Authorization->applyScope($invoices, 'index');
         $invoices = $invoices->toArray();
 
         $ext = $this->getRequest()->getParam('_ext');
-        if (substr($name, -4) == 'sepa') {
+        if (!empty($name) && substr($name, -4) == 'sepa') {
             $ext = 'sepa';
         }
 
@@ -405,7 +401,11 @@ class InvoicesController extends AppController
             return $Exporter->response($ext, $data, $options);
         } else {
             $this->Flash->error(__d('lil_invoices', 'Error exporting to specified format.'));
-            $this->redirect(['action' => 'view', $id]);
+            if (empty($id)) {
+                $this->redirect(['action' => 'index', '?' => $filter]);
+            } else {
+                $this->redirect(['action' => 'view', $id]);
+            }
         }
 
         return null;

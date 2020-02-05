@@ -87,23 +87,14 @@ $invoiceView = [
                 $invoice->no,
             ],
         ],
-        /*'email' => array(
-            'title' => __d('lil_invoices', 'Send', true),
+        'email' => [
+            'title' => __d('lil_invoices', 'Send'),
             'visible' => true,
-            'url'   => array(
-                'admin'      => true,
-                'plugin'     => 'lil_invoices',
-                'controller' => 'invoices',
-                'action'     => 'email',
-                '?' => array(
-                    'filter' => array('counter' => $data['Invoice']['counter_id']),
-                    'invoices' => array($data['Invoice']['id'])
-                ),
-            ),
-            'params' => array(
-                'onclick' => sprintf('popup("%s", $(this).attr("href"), 555); return false;', __d('lil_invoices', 'Send via Email'))
-            )
-        ),*/
+            'url' => [
+                'action' => 'email',
+                '?' => ['id' => $invoice->id],
+            ]
+        ],
         'export' => [
             'title' => __d('lil_invoices', 'Export'),
             'visible' => true,

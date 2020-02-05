@@ -15,8 +15,7 @@ $itemsIndex = [
     ],
     'table' => [
         'parameters' => [
-            'width' => '100%', 'cellspacing' => 0, 'cellpadding' => 0,
-            'id' => 'AdminItemsIndex', 'class' => 'index',
+            'width' => '100%', 'cellspacing' => 0, 'cellpadding' => 0, 'id' => 'AdminItemsIndex',
         ],
         'head' => ['rows' => [['columns' => [
             'descript' => __d('lil_invoices', 'Description'),

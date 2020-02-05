@@ -35,7 +35,7 @@ $report = [
     'actions' => ['lines' => [$popupUnfinished]],
     'panels' => [
         'payments' => ['table' => [
-            'parameters' => ['class' => 'index-static', 'id' => 'import-sepa-step2'],
+            'parameters' => ['class' => 'striped', 'id' => 'import-sepa-step2'],
             'head' => ['rows' => [['columns' => [
                 'date' => [
                     'parameters' => ['class' => 'center-align'],
@@ -76,17 +76,20 @@ $report = [
     ],
 ];
 
-$popupAction = ['items' => [[
-        'title' => __d('lil_expenses', 'Link with Existing Payment'),
-        'params' => ['id' => 'popupItem-LinkPayment'],
-    ], [
-        'title' => __d('lil_expenses', 'Pay an Existing Expense'),
-        'params' => ['id' => 'popupItem-PayExpense'],
-    ], [
-        'title' => __d('lil_expenses', 'Create a New Expense'),
-        'params' => ['id' => 'popupItem-AddExpense'],
-    ],
-]];
+$popupAction = [
+    'items' => [
+        [
+            'title' => __d('lil_expenses', 'Link with Existing Payment'),
+            'params' => ['id' => 'popupItem-LinkPayment', 'class' => 'nowrap'],
+        ], [
+            'title' => __d('lil_expenses', 'Pay an Existing Expense'),
+            'params' => ['id' => 'popupItem-PayExpense', 'class' => 'nowrap'],
+        ], [
+            'title' => __d('lil_expenses', 'Create a New Expense'),
+            'params' => ['id' => 'popupItem-AddExpense', 'class' => 'nowrap'],
+        ],
+    ]
+];
 echo $this->Lil->popup('action', $popupAction, true);
 
 $jsPaymentData = '';
@@ -100,7 +103,7 @@ foreach ($importedPayments as $p) {
             $total_positive += $p['amount'];
         }
 
-        $pAction = '<button class="sepa-import-action btn-small dropdown-trigger" ' .
+        $pAction = '<button class="sepa-import-action btn-small dropdown-trigger" type="button" ' .
             'data-target="dropdown-action" data-payment="p%s">▼</button>';
 
         if (!empty($p['payment_id'])) {

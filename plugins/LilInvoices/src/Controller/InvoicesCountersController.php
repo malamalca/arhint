@@ -70,7 +70,7 @@ class InvoicesCountersController extends AppController
 
         if ($this->getRequest()->is(['patch', 'post', 'put'])) {
             $counter = $this->InvoicesCounters->patchEntity($counter, $this->getRequest()->getData());
-            $counter->owner_id = $this->getCurrentUser()->get('company_id');
+
             if (!$counter->getErrors()) {
                 if ($this->InvoicesCounters->save($counter)) {
                     $this->Flash->success(__d('lil_invoices', 'The invoices counter has been saved.'));

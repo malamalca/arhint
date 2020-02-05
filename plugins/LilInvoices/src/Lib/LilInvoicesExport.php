@@ -47,7 +47,7 @@ class LilInvoicesExport
     {
         $conditions = [];
         if (!empty($filter['id'])) {
-            $conditions['Invoices.id'] = $filter['id'];
+            $conditions['Invoices.id IN'] = (array)$filter['id'];
         }
 
         /** @var \LilInvoices\Model\Table\InvoicesTable $Invoices */

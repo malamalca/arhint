@@ -116,6 +116,22 @@ class InvoicesAttachmentsTable extends Table
     }
 
     /**
+     * afterDelete method
+     *
+     * @param \Cake\Event\Event $event Event object.
+     * @param \LilInvoices\Model\Entity\InvoicesAttachment $entity Entity object.
+     * @param \ArrayObject $options Array object.
+     * @return void
+     */
+    public function afterDelete(Event $event, Entity $entity, ArrayObject $options)
+    {
+        $fileName = (string)Configure::read('LilInvoices.uploadFolder') . DS . $entity->filename;
+        if (file_exists($fileName)) {
+            unlink($fileName);
+        }
+    }
+
+    /**
      * Checks if entity belongs to user.
      *
      * @param string $entityId Entity Id.

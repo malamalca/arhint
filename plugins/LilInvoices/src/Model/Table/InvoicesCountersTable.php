@@ -41,22 +41,22 @@ class InvoicesCountersTable extends Table
     {
         $validator
             ->add('id', 'valid', ['rule' => 'uuid'])
-            ->allowEmpty('id', 'create')
-            ->allowEmpty('kind')
+            ->allowEmptyString('id', 'create')
+            ->allowEmptyString('kind')
             ->add('counter', 'valid', ['rule' => 'numeric'])
             ->requirePresence('counter', 'create')
-            ->notEmpty('counter')
-            ->allowEmpty('title')
-            ->allowEmpty('mask')
+            ->notEmptyString('counter')
+            ->allowEmptyString('title')
+            ->allowEmptyString('mask')
 
-            ->allowEmpty('template_descript')
-            ->allowEmpty('tpl_title')
-            ->allowEmpty('tpl_header_id')
-            ->allowEmpty('tpl_body_id')
-            ->allowEmpty('tpl_footer_id')
+            ->allowEmptyString('template_descript')
+            ->allowEmptyString('tpl_title')
+            ->allowEmptyString('tpl_header_id')
+            ->allowEmptyString('tpl_body_id')
+            ->allowEmptyString('tpl_footer_id')
             ->add('active', 'valid', ['rule' => 'boolean'])
             ->requirePresence('active', 'create')
-            ->notEmpty('active');
+            ->notEmptyString('active');
 
         return $validator;
     }

@@ -118,8 +118,7 @@ $admin_index = [
     'actions' => ['lines' => [$hiddenControls, $popupFromto, $popupMonths, $popupYears]],
     'table' => [
         'parameters' => [
-            'width' => '100%', 'cellspacing' => 0, 'cellpadding' => 0,
-            'id' => 'ExpensesIndex', 'class' => 'index',
+            'width' => '100%', 'cellspacing' => 0, 'cellpadding' => 0, 'id' => 'ExpensesIndex'
         ],
         'head' => ['rows' => [['columns' => [
             'icon' => [

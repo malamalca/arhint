@@ -266,7 +266,7 @@ if (!empty($job)) {
         $contact_view['panels']['employees']['lines'][] = sprintf('<h2>%s</h2>', __d('lil_crm', 'Employees'));
 
         $employees_table = [
-            'parameters' => ['cellspacing' => 0, 'cellpadding' => 0, 'class' => 'index-static', 'width' => '600'],
+            'parameters' => ['cellspacing' => 0, 'cellpadding' => 0, 'width' => '600'],
             'head' => [
                 'rows' => [0 => ['columns' => [
                     'title' => __d('lil_crm', 'Name'),

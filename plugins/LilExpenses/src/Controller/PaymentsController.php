@@ -31,7 +31,6 @@ class PaymentsController extends AppController
 
         $params = array_merge_recursive([
                 'contain' => ['PaymentsAccounts'],
-                'conditions' => ['Payments.owner_id' => $ownerId],
             ], $this->Payments->filter($filter, $ownerId));
 
         $query = $this->Authorization->applyScope($this->Payments->find())
@@ -39,7 +38,7 @@ class PaymentsController extends AppController
             ->contain($params['contain'])
             ->order($params['order']);
 
-        $payments = $query->all();
+        $payments = $this->paginate($query);
 
         $minYear = $this->Payments->minYear($ownerId);
         $accounts = $this->Payments->PaymentsAccounts->listForOwner($ownerId, true);

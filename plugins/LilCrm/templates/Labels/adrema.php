@@ -69,7 +69,7 @@
                 'fs_adrema_start' => '<fieldset>',
                 'fs_adrema_legend' => sprintf('<legend>%s</legend>', 'Adrema'),
                 'fs_table_header' => '<table cellpadding="0" cellspacing="0" class="index-static" id="crm-adrema">' .
-                    '<thead class="ui-toolbar ui-widget-header ui-corner-top"><tr>' .
+                    '<thead><tr>' .
                     sprintf('<th class="td-adrema-link">&nbsp;</th>') .
                     sprintf('<th class="td-adrema-title">%s</th>', __d('lil_crm', 'Title')) .
                     sprintf('<th class="td-adrema-street">%s</th>', __d('lil_crm', 'Street')) .

@@ -87,32 +87,23 @@ $send_invoice = [
 
 // add invoices to be send
 $invoices_display = [];
-$invoices_display[] = '<div class="ui-widget ui-text">';
+$invoices_display[] = '<div>';
 $invoices_display[] = sprintf('<label>%1$s:</label>', __d('lil_invoices', 'Attachments'));
+
 foreach ($attachments as $invoice_id => $invoice_title) {
     $invoices_display[] = sprintf(
-        '<div class="email-attachment" id="email-attachment-%5$s">%2$s %1$s %3$s %4$s</div>',
+        '<div class="email-attachment" id="email-attachment-%3$s">%2$s %1$s</div>',
         $invoice_title,
         $this->Html->image('/lil_invoices/img/attachment.png'),
-        $this->Html->image('/lil_invoices/img/remove.gif', ['class' => 'remove-attachment']),
-        $this->Form->hidden('invoices[]', [
-            'value' => $invoice_id,
-            'id' => 'attachment-' . $invoice_id,
-        ]),
         $invoice_id
     );
+    $invoices_display[] = [
+        'method' => 'hidden',
+        'parameters' => ['invoices', ['value' => $invoice_id, 'id' => 'attachment-' . $invoice_id]]
+    ];
 }
 $invoices_display[] = '</div>';
 
 $this->Lil->insertIntoArray($send_invoice['form']['lines'], $invoices_display, ['after' => 'subject']);
 
 echo $this->Lil->form($send_invoice, 'Invoices.email');
-
-?>
-<script type="text/javascript">
-    $(document).ready(function() {
-        $('.remove-attachment').click(function() {
-            $('#email-attachment-' + $(this).siblings('input').val()).remove();
-        });
-    });
-</script>

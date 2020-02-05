@@ -1,8 +1,6 @@
 <?php
 use Cake\Routing\Router;
 
-//$this->set('currentCounter', $filter['counter']);
-
 $start_span = empty($filter['start']) ? $dateSpan['start'] : $filter['start'];
 $end_span = empty($filter['end']) ? $dateSpan['end'] : $filter['end'];
 
@@ -54,15 +52,14 @@ $invoices_index = [
                 'plugin' => 'LilInvoices',
                 'controller' => 'invoices',
                 'action' => 'preview',
-                'filter' => array_merge($filter, ['search' => '[[search]]']),
+                '?' => array_merge($filter, ['search' => '__term__']),
             ],
             'params' => ['id' => 'MenuItemPrint'],
         ],
     ],
     'table' => [
         'parameters' => [
-            'width' => '100%', 'cellspacing' => 0, 'cellpadding' => 0,
-            'id' => 'AdminInvoicesIndex', 'class' => 'index',
+            'width' => '100%', 'cellspacing' => 0, 'cellpadding' => 0, 'id' => 'AdminInvoicesIndex'
         ],
         'head' => ['rows' => [
             0 => [
@@ -185,7 +182,7 @@ echo $this->Lil->index($invoices_index, 'LilInvoices.Invoices.index');
         '?' => array_merge($this->request->getQuery(), ['start' => '__start__', 'end' => '__end__']),
     ]); ?>";
 
-    var ajaxSearchUrl = "<?php echo Router::url([
+    var searchUrl = "<?php echo Router::url([
         'plugin' => 'LilInvoices',
         'controller' => 'Invoices',
         'action' => 'index',
@@ -211,16 +208,20 @@ echo $this->Lil->index($invoices_index, 'LilInvoices.Invoices.index');
         ////////////////////////////////////////////////////////////////////////////////////////////
         // Filter for invoices
         $("#SearchBox").on("input", function(e) {
-            if (($(this).val().length > 1) || ($(this).val().lenght == 0)) {
-                var rx_term = new RegExp("__term__", "i");
-                $.get(ajaxSearchUrl.replace(rx_term, encodeURIComponent($(this).val())), function(response) {
-                    let tBody = response.substring(response.indexOf("<tbody>")+7, response.indexOf("</tbody>"));
-                    $("#AdminInvoicesIndex tbody").html(tBody);
+            var rx_term = new RegExp("__term__", "i");
+            $.get(searchUrl.replace(rx_term, encodeURIComponent($(this).val())), function(response) {
+                let tBody = response.substring(response.indexOf("<tbody>")+7, response.indexOf("</tbody>"));
+                $("#AdminInvoicesIndex tbody").html(tBody);
 
-                    let paginator = response.substring(response.indexOf("<ul class=\"paginator\">")+22, response.indexOf("</ul>"));
-                    $("#AdminInvoicesIndex ul.paginator").html(paginator);
-                });
-            }
+                let tFoot = response.substring(response.indexOf("<tfoot>")+7, response.indexOf("</tfoot>"));
+                $("#AdminInvoicesIndex tfoot").html(tFoot);
+
+                let paginator = response.substring(
+                    response.indexOf("<ul class=\"paginator\">")+22,
+                    response.indexOf("</ul>", response.indexOf("<ul class=\"paginator\">"))
+                );
+                $("#AdminInvoicesIndex ul.paginator").html(paginator);
+            });
         });
 
 
@@ -257,15 +258,15 @@ echo $this->Lil->index($invoices_index, 'LilInvoices.Invoices.index');
         });
 
         ////////////////////////////////////////////////////////////////////////////////////////////
-        $('#MenuItemExportSepaXml, #MenuItemExportPdf, #MenuItemEmail, #MenuItemPrint').click(function() {
-            var rx_filter = new RegExp("(\\%5B){2}search(\\%5D){2}", "i");
+        $('#MenuItemExportSepaXml, #MenuItemExportPdf, #MenuItemEmail, #MenuItemPrint').click(function(e) {
+            let rx_term = new RegExp("__term__", "i");
+            let searchTerm = $("#SearchBox").val();
+            let url = $(this).prop("href").replace(rx_term, encodeURIComponent(searchTerm));
 
-            var oTable = $('#AdminInvoicesIndex').dataTable();
-            if (typeof oTable != 'undefined') {
-                var search = oTable.fnSettings().oPreviousSearch.sSearch;
-                document.location.href = $(this).attr('href').replace(rx_filter, search);
-                return false;
-            }
+            document.location.href = url;
+
+            e.preventDefault();
+            return false;
         });
 
     });

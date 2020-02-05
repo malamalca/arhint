@@ -4,8 +4,7 @@ if ($expense) {
         'pre' => '<div class="row"><div class="col l8 m12">',
         'post' => '</div></div>',
         'parameters' => [
-            'width' => '700', 'cellspacing' => 0, 'cellpadding' => 0,
-            'id' => 'PaymentsList', 'class' => 'index-static',
+            'width' => '700', 'cellspacing' => 0, 'cellpadding' => 0, 'id' => 'PaymentsList'
         ],
         'head' => ['rows' => [['columns' => [
             'date' => [

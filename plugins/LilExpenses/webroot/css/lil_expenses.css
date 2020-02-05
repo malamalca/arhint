@@ -55,6 +55,11 @@
     clear: right;
 }
 
+#dropdown-unfinished,
+#dropdown-action {
+    width: auto !important;
+}
+
 
 /* AUTOCOMPLETE EXPENSE */
 .ac-expense-icon {

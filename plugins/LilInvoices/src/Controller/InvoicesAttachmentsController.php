@@ -91,17 +91,6 @@ class InvoicesAttachmentsController extends AppController
     }
 
     /**
-     * acquire method
-     *
-     * @param  mixed $id Invoice id
-     * @return void
-     */
-    public function acquire($id = null)
-    {
-        $this->set('invoice_id', $id);
-    }
-
-    /**
      * Delete method
      *
      * @param  string|null $id Invoices Attachment id.

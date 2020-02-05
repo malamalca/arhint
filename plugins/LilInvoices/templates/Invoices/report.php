@@ -47,7 +47,7 @@ $report = [
                     'label' => false,
                 ])
             ),
-            '<div class="input ui-widget ui-select">',
+            '<div>',
             'month2' => [
                 'class' => $this->Form,
                 'method' => 'control',

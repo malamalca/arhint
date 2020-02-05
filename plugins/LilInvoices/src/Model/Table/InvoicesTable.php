@@ -262,6 +262,9 @@ class InvoicesTable extends Table
         if (!empty($filter['invoice'])) {
             $ret['conditions'] = ['Invoices.id' => $filter['invoice']];
         }
+        if (!empty($filter['id'])) {
+            $ret['conditions'] = ['Invoices.id' => $filter['id']];
+        }
 
         // manual search
         if (!empty($filter['search']) && ($filter['search'] != '[[search]]')) {

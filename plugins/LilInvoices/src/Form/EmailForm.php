@@ -11,7 +11,9 @@ use LilInvoices\Lib\LilInvoicesExport;
 
 class EmailForm extends Form
 {
-    /** @var \Cake\Http\ServerRequest $request */
+    /**
+     * @var \Cake\Http\ServerRequest $request
+     */
     private $request = null;
 
     /**
@@ -61,12 +63,14 @@ class EmailForm extends Form
      */
     protected function _execute(array $data): bool
     {
-        $filter = (array)$this->request->getQuery('filter');
+        $filter = (array)$this->request->getQuery();
+
         $Exporter = new LilInvoicesExport();
         $invoices = $Exporter->find($filter)->toArray();
 
         if (count($invoices) > 0) {
             $data = $Exporter->export('pdf', $invoices);
+
             if (!empty($data)) {
                 $email = new Mailer('default');
 
