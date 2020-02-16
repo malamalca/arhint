@@ -14,7 +14,9 @@
         "malamalca/lil": "dev-4.x-dev",
         "mikehaertl/phpwkhtmltopdf": "2.0.*@dev",
         "mobiledetect/mobiledetectlib": "2.*",
-        "tecnickcom/tcpdf": "dev-master"
+        "tecnickcom/tcpdf": "dev-master",
+        "syncroton/syncroton": "dev-master",
+        "zendframework/zendframework1": "1.12.*"
     },
     "require-dev": {
         "cakephp/bake": "^2.0",
@@ -25,11 +27,26 @@
         "phpunit/phpunit": "^8.0",
         "psy/psysh": "@stable"
     },
+    "repositories": [{
+        "type": "package",
+        "package": {
+            "version": "dev-master",
+            "name": "syncroton/syncroton",
+            "source": {
+                "url": "https://github.com/tine20/syncroton.git",
+                "type": "git",
+                "reference": "master"
+            }
+        }
+    }],
     "suggest": {
         "markstory/asset_compress": "An asset compression plugin which provides file concatenation and a flexible filter system for preprocessing and minification.",
         "dereuromark/cakephp-ide-helper": "After baking your code, this keeps your annotations in sync with the code evolving from there on for maximum IDE and PHPStan/Psalm compatibility."
     },
     "autoload": {
+        "psr-0": {
+            "Syncroton": ["./vendor/syncroton/syncroton/lib/", "./vendor/syncroton/syncroton/tests/"]
+        },
         "psr-4": {
             "App\\": "src/",
             "Lil\\": "vendor/malamalca/Lil/src/",
