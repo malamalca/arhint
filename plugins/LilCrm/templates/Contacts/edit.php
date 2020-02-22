@@ -70,7 +70,7 @@ if ($contact->id) {
                 'options' => ['label' => __d('lil_crm', 'Mat no.') . ':'],
             ],
         ],
-        'tax_no_div' => '<div>',
+        'tax_no_div' => '<div class="input-field">',
         'tax_no_labek' => '<label for="contact-tax-no">' . __d('lil_crm', 'Tax no.') . ':</label>',
         'tax_no' => [
             'method' => 'text',
@@ -478,6 +478,8 @@ if ($contact->id) {
                 $('#contact-account-iban', parentForm).val(data.iban);
                 $('#contact-account-bic', parentForm).val(data.bic);
                 $('#contact-account-bank', parentForm).val(data.bank);
+
+                M.updateTextFields()
             })
             .fail(function() { alert("INETIS request failed."); });
         });
@@ -509,4 +511,3 @@ if ($contact->id) {
         });
     });
 </script>
-</div>

@@ -15,6 +15,15 @@ jQuery.fn.InvoiceEditClient = function (options) {
     };
     var $this = this;
 
+    var modalTemplate = [
+        '<div class="modal">',
+        '   <div class="modal-content">',
+        '   <h4>Modal Header</h4>',
+        '   <p></p>',
+        '   </div>',
+        '</div>'
+    ];
+
     this.fillClientData = function (target, client) {
         var kinds = {"buyer":"BY", "receiver":"IV", "issuer":"II"};
         $("#invoice-" + target + "-kind", $this).val(kinds[target]);
@@ -87,24 +96,46 @@ jQuery.fn.InvoiceEditClient = function (options) {
                         $this.fillClientData("buyer", item);
                     }
                     $("#image-" + target + "-checked", $this).show();
+
+                    if (options.mode == "received") {
+                        if ($("#invoice-location").val().trim() == "") {
+                            $("#invoice-location").val(item.city);
+                            M.updateTextFields()
+                        }
+                    }
                 },
                 onOpenEnd: function (el) {
                     var li = $(
-                        "<li>" +
-                        "<a href=\"#\" class=\"btn\" style=\"width: 50%\" class=\"AutocompleteAddPerson\">" +
+                        "<li style=\"line-height: inherit; min-height: 0;\">" +
+                        "<button href=\"#\" class=\"\" style=\"width: 50%; min-height: 30px; float: left; \" id=\"AutocompleteAddPerson\">" +
                             options.addPersonDialogTitle +
-                        "</a>" +
-                        "<a href=\"#\" class=\"btn\" style=\"width: 50%\" class=\"AutocompleteAddCompany\">" +
+                        "</button>" +
+                        "<button href=\"#\" class=\"\" style=\"width: 50%; min-height: 30px; float: left;\" id=\"AutocompleteAddCompany\">" +
                             options.addCompanyDialogTitle +
-                        "</a>" +
+                        "</button>" +
                         "</li>"
                     );
 
                     $(el).prepend(li);
 
+                    $(el).css({"padding-top": "30px"});
                     $(el).on('scroll', function () {
                         $(li).css({'top': $(el).scrollTop()}); });
                     $(li).css({'position': 'absolute', 'top': 0, 'background-color:': '#ff0000'});
+
+                    $("#AutocompleteAddPerson", el).on("click", function(e) {
+                        instance.close();
+                        $this.addClientDialog("T", options.target);
+                        e.preventDefault();
+                        return false;
+                    });
+
+                    $("#AutocompleteAddCompany", el).on("click", function(e) {
+                        instance.close();
+                        $this.addClientDialog("C", options.target);
+                        e.preventDefault();
+                        return false;
+                    });
                 }
             });
 
@@ -179,30 +210,30 @@ jQuery.fn.InvoiceEditClient = function (options) {
     }
 
     this.addClientDialog = function (contactKind, target) {
-        popup({
-            title: contactKind == 'C' ? options.addCompanyDialogTitle : options.addPersonDialogTitle,
-            url: options.addContactDialogUrl.replace("__kind__", contactKind),
-            w: 780,
-            h: 'auto',
-            onClose: function (e) {
-                return false;
-            },
-            onData: function (client) {
-                $this.fillClientData(target, client);
-                if (target == "receiver" && !$(options.cbSameClientId, $this).prop("checked")) {
-                    $this.fillClientData("buyer", client);
-                }
-                $("#image-" + target + "-checked", $this).show();
-                $("#dialog-form").dialog("close");
+        let url = options.addContactDialogUrl.replace("__kind__", contactKind);
 
-                return false;
-            }
-        });
+        var jqxhr = $.ajax(url)
+            .done(function(html) {
+                $("p", $this.popup).html(html);
+                $("h4", $this.popup).html(contactKind == 'C' ? options.addCompanyDialogTitle : options.addPersonDialogTitle);
+
+                // update text fields for label placement
+                M.updateTextFields();
+
+                $this.popupInstance.open();
+            })
+            .fail(function() {
+                alert("Request Failed");
+            });
     }
 
 
     // initialization
     options = jQuery().extend(true, {}, default_options, options);
+
+    $this.popup = $(modalTemplate.join("\n")).appendTo(document.body);
+    $this.popup.modal();
+    $this.popupInstance = M.Modal.getInstance($this.popup);
 
     if (options.mode == "received") {
         this.addCheckIconAfterClientTitleField("issuer");

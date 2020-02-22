@@ -7,7 +7,6 @@
         'submitContainer' => '<div class="input-field submit">{{content}}</div>',
         'inputSubmit' => '<button class="btn waves-effect waves-light" type="submit">Submit</button>',
 
-
         //'label' => '<label class="active"{{attrs}}>{{text}}</label>',
         'nestingLabel' => '<p>{{hidden}}<label{{attrs}}>{{input}}<span>{{text}}</span></label></p>',
         'textarea' => '<textarea name="{{name}}" class="materialize-textarea"{{attrs}}>{{value}}</textarea>',

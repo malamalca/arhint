@@ -264,10 +264,11 @@ class ContactsController extends AppController
                     }
                 } else {
                     $result = $this->Authorization->applyScope($this->Contacts->find(), 'index')
+                        ->select()
                         ->where($conditions)
                         ->order('title')
-                        ->combine('id', 'title')
                         ->limit(50)
+                        ->combine('id', 'title')
                         ->toArray();
 
                     foreach ($result as $k => $c) {
