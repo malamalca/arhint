@@ -58,8 +58,8 @@ class LilInvoicesEvents implements EventListenerInterface
      * Add invoices list to Contact view page.
      *
      * @param \Cake\Event\Event $event Event object.
-     * @param \ArrayObject $panels Panels object.
-     * @return \ArrayObject
+     * @param \Lil\Lib\LilPanels $panels Panels object.
+     * @return \Lil\Lib\LilPanels
      */
     public function showInvoicesTable($event, $panels)
     {
@@ -70,8 +70,8 @@ class LilInvoicesEvents implements EventListenerInterface
         $invoices = $Invoices->find()
             ->where([
                 'OR' => [
-                    'Buyers.contact_id' => $panels['entity']->id,
-                    'Issuers.contact_id' => $panels['entity']->id,
+                    'Buyers.contact_id' => $panels->entity->id,
+                    'Issuers.contact_id' => $panels->entity->id,
                 ],
                 // II - izdajatelj; IV - prejemnik; BY - naročnik
             ])
@@ -90,13 +90,13 @@ class LilInvoicesEvents implements EventListenerInterface
         ));
 
         $invoicesPanels = [
-            'payments_title' => '<h2>' . __d('lil_invoices', 'Invoices') . '</h2>',
+            'payments_title' => '<h3>' . __d('lil_invoices', 'Invoices') . '</h3>',
             'payments_table' => $view->element('LilInvoices.invoices_list', [
                 'invoices' => $invoices->take(10, ($page - 1 ) * 10),
             ]),
         ];
 
-        $view->Lil->insertIntoArray($panels['panels'], $invoicesPanels);
+        $view->Lil->insertIntoArray($panels->panels, $invoicesPanels);
 
         return $panels;
     }

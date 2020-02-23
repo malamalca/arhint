@@ -65,7 +65,10 @@ class UsersController extends AppController
             $auditLogin->ip = $this->getRequest()->clientIp();
             $this->AuditLogins->save($auditLogin);*/
 
-            $redirect = $this->getRequest()->getQuery('redirect', ['controller' => 'Pages', 'action' => 'index']);
+            $redirect = $this->Authentication->getLoginRedirect();
+            if (empty($redirect)) {
+                $redirect = $this->getRequest()->getQuery('redirect', '/');
+            }
 
             return $this->redirect($redirect);
         }

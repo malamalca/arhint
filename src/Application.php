@@ -193,7 +193,7 @@ class Application extends BaseApplication implements
     {
         $service = new AuthenticationService([
             'unauthenticatedRedirect' => Configure::read('loginPath', 'users/login'),
-            //'queryParam' => 'redirect',
+            'queryParam' => 'redirect',
         ]);
 
         $fields = [
