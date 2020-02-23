@@ -51,7 +51,7 @@ class InvoicesAttachmentsControllerTest extends IntegrationTestCase
         $InvoicesAttachments = TableRegistry::get('LilInvoices.InvoicesAttachments');
         $attachments = $InvoicesAttachments->find()
             ->select()
-            ->where(['model' => 'Invoice', 'foreign_id' => 'd0d59a31-6de7-4eb4-8230-ca09113a7fe5'])
+            ->where(['invoice_id' => 'd0d59a31-6de7-4eb4-8230-ca09113a7fe5'])
             ->all();
 
         $this->assertEquals($attachments->count(), 1);
@@ -73,8 +73,7 @@ class InvoicesAttachmentsControllerTest extends IntegrationTestCase
 
         $data = [
             'id' => null,
-            'model' => 'Invoice',
-            'foreign_id' => 'd0d59a31-6de7-4eb4-8230-ca09113a7fe5',
+            'invoice_id' => 'd0d59a31-6de7-4eb4-8230-ca09113a7fe5',
             'filename' => [
                 'name' => 'sunset.jpg',
                 'type' => 'image/jpg',
@@ -109,7 +108,7 @@ class InvoicesAttachmentsControllerTest extends IntegrationTestCase
         $InvoicesAttachments = TableRegistry::get('LilInvoices.InvoicesAttachments');
         $attachments = $InvoicesAttachments->find()
             ->select()
-            ->where(['model' => 'Invoice', 'foreign_id' => 'd0d59a31-6de7-4eb4-8230-ca09113a7fe5'])
+            ->where(['invoice_id' => 'd0d59a31-6de7-4eb4-8230-ca09113a7fe5'])
             ->all();
 
         $this->assertEquals($attachments->count(), 1);
@@ -118,7 +117,7 @@ class InvoicesAttachmentsControllerTest extends IntegrationTestCase
         $this->assertTrue(file_exists($uploadFolder . DS . $attachments->first()->filename));
 
         $this->get('lil_invoices/invoices-attachments/delete/' . $attachments->first()->id);
-        $this->assertRedirect(['controller' => 'Invoices', 'action' => 'view', $attachments->first()->foreign_id]);
+        $this->assertRedirect(['controller' => 'Invoices', 'action' => 'view', $attachments->first()->invoice_id]);
 
         $this->assertFalse(file_exists($uploadFolder . DS . $attachments->first()->filename));
     }

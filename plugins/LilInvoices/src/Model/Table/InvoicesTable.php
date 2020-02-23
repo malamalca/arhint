@@ -75,8 +75,7 @@ class InvoicesTable extends Table
             'dependant' => true,
         ]);
         $this->hasMany('InvoicesAttachments', [
-            'foreignKey' => 'foreign_id',
-            'conditions' => ['InvoicesAttachments.model' => 'Invoice'],
+            'foreignKey' => 'invoice_id',
             'className' => 'LilInvoices\Model\Table\InvoicesAttachmentsTable',
             'dependant' => true,
         ]);
@@ -281,8 +280,11 @@ class InvoicesTable extends Table
 
         $ret['contain'] = ['Issuers', 'Receivers', 'Buyers'];
 
-        $ret['order'] = [];
-        //$ret['order'] = 'Invoices.counter DESC';
+        if (isset($filter['sort'])) {
+            $ret['order'] = [];
+        } else {
+            $ret['order'] = $filter['order'] ?? [];
+        }
 
         return $ret;
     }

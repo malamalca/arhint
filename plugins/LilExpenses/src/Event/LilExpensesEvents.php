@@ -156,7 +156,7 @@ class LilExpensesEvents implements EventListenerInterface
                 if (!$invoice->isNew()) {
                     /** @var \LilExpenses\Model\Entity\Expense $expense */
                     $expense = $Expenses->find()
-                        ->where(['Model' => 'Invoice', 'foreign_id' => $invoice->id])
+                        ->where(['foreign_id' => $invoice->id])
                         ->first();
                 }
 

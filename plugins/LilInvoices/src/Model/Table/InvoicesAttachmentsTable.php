@@ -45,9 +45,8 @@ class InvoicesAttachmentsTable extends Table
     {
         $validator
             ->allowEmptyString('id', 'create')
-            ->allowEmptyString('model')
-            ->add('foreign_id', 'valid', ['rule' => 'uuid'])
-            ->allowEmptyString('foreign_id')
+            ->add('invoice_id', 'valid', ['rule' => 'uuid'])
+            ->allowEmptyString('invoice_id')
             ->allowEmptyString('filename')
             ->allowEmptyString('original')
             ->allowEmptyString('ext')
@@ -106,8 +105,8 @@ class InvoicesAttachmentsTable extends Table
     public function afterSave(Event $event, Entity $entity, ArrayObject $options)
     {
         $invoices = TableRegistry::get('LilInvoices.Invoices');
-        $attachmentCount = $this->find()->where(['foreign_id' => $entity->foreign_id])->count();
-        $invoices->updateAll(['invoices_attachment_count' => $attachmentCount], ['id' => $entity->foreign_id]);
+        $attachmentCount = $this->find()->where(['invoice_id' => $entity->invoice_id])->count();
+        $invoices->updateAll(['invoices_attachment_count' => $attachmentCount], ['id' => $entity->invoice_id]);
 
         if (!empty($options['uploadedFilename'])) {
             $fileDest = Configure::read('LilInvoices.uploadFolder') . DS . $entity->filename;
@@ -141,13 +140,11 @@ class InvoicesAttachmentsTable extends Table
     public function isOwnedBy($entityId, $ownerId)
     {
         /** @var \LilInvoices\Model\Entity\InvoicesAttachment $entity */
-        $entity = $this->find()
-            ->where(['model' => 'Invoice'])
-            ->first();
+        $entity = $this->get($entityId);
 
         /** @var \LilInvoices\Model\Table\InvoicesTable $InvoicesTable */
         $InvoicesTable = TableRegistry::getTableLocator()->get('LilInvoices.Invoices');
 
-        return $InvoicesTable->isOwnedBy($entity->foreign_id, $ownerId);
+        return $InvoicesTable->isOwnedBy($entity->invoice_id, $ownerId);
     }
 }

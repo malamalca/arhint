@@ -244,8 +244,8 @@ class LilInvoicesSidebar
             if (!$currentCounter) {
                 $currentCounter = $request->getQuery('filter.counter');
             }
-            if (!$currentCounter && !empty($view->viewVars['currentCounter'])) {
-                $currentCounter = $view->viewVars['currentCounter'];
+            if (!$currentCounter) {
+                $currentCounter = $event->getSubject()->viewBuilder()->getVar('currentCounter');
             }
 
             if ($currentCounter) {

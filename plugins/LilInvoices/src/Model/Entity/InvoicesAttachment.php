@@ -9,8 +9,7 @@ use Cake\ORM\Entity;
  * InvoicesAttachment Entity.
  *
  * @property string $id
- * @property string|null $model
- * @property string|null $foreign_id
+ * @property string|null $invoice_id
  * @property string|null $filename
  * @property string|null $original
  * @property string|null $ext

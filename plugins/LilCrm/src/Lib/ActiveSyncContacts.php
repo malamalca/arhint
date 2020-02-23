@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace LilCrm\Lib;
 
 use Cake\Log\Log;
@@ -20,7 +22,7 @@ class ActiveSyncContacts implements Syncroton_Data_IData
 {
     protected $_supportedFolderTypes = [
         Syncroton_Command_FolderSync::FOLDERTYPE_CONTACT,
-        Syncroton_Command_FolderSync::FOLDERTYPE_CONTACT_USER_CREATED
+        Syncroton_Command_FolderSync::FOLDERTYPE_CONTACT_USER_CREATED,
     ];
 
     protected $_phoneTrans = [
@@ -28,27 +30,27 @@ class ActiveSyncContacts implements Syncroton_Data_IData
         'M' => 'mobilePhoneNumber',
         'W' => 'businessPhoneNumber',
         'F' => 'businessFaxNumber',
-        'P' => 'home2PhoneNumber'
+        'P' => 'home2PhoneNumber',
     ];
 
     protected $_addressTrans = [
         'H' => 'home',
         'W' => 'business',
-        'O' => 'other'
+        'O' => 'other',
     ];
 
     /**
-     * @var DateTime
+     * @var \DateTime
      */
     protected $_timeStamp;
 
     /**
      * the constructor
      *
-     * @param Syncroton_Model_IDevice $_device Device.
-     * @param DateTime $_timeStamp Timestamp.
+     * @param \Syncroton_Model_IDevice $_device Device.
+     * @param \DateTime $_timeStamp Timestamp.
      */
-    public function __construct(Syncroton_Model_IDevice $_device = null, DateTime $_timeStamp = null)
+    public function __construct(?Syncroton_Model_IDevice $_device = null, ?DateTime $_timeStamp = null)
     {
         $this->_device = $_device;
         $this->_timeStamp = $_timeStamp;
@@ -56,7 +58,9 @@ class ActiveSyncContacts implements Syncroton_Data_IData
         $this->_tablePrefix = 'Syncroton_';
 
         $this->_ownerId = null;
-        if ($user = Syncroton_Registry::get('user')) {
+
+        $user = Syncroton_Registry::get('user');
+        if (!empty($user)) {
             $this->_ownerId = $user->company_id;
         }
     }
@@ -65,8 +69,8 @@ class ActiveSyncContacts implements Syncroton_Data_IData
      * return one folder identified by id
      *
      * @param  string  $id Folder id.
-     * @throws Syncroton_Exception_NotFound
-     * @return Syncroton_Model_Folder
+     * @throws \LilCrm\Lib\Syncroton_Exception_NotFound
+     * @return \Syncroton_Model_Folder
      */
     public function getFolder($id)
     {
@@ -75,7 +79,7 @@ class ActiveSyncContacts implements Syncroton_Data_IData
                 'serverId' => 'contacts',
                 'displayName' => 'All Contacts',
                 'type' => Syncroton_Command_FolderSync::FOLDERTYPE_CONTACT,
-                'parentId' => '0'
+                'parentId' => '0',
             ]);
         /*} else {
             return new Syncroton_Model_Folder(array(
@@ -88,8 +92,10 @@ class ActiveSyncContacts implements Syncroton_Data_IData
     }
 
     /**
-     * (non-PHPdoc)
-     * @see Syncroton_Data_IData::createFolder()
+     * Create Folder
+     *
+     * @param \Syncroton_Model_IFolder $folder Folder model
+     * @return \Syncroton_Model_Folder
      */
     public function createFolder(Syncroton_Model_IFolder $folder)
     {
@@ -103,8 +109,11 @@ class ActiveSyncContacts implements Syncroton_Data_IData
     }
 
     /**
-     * (non-PHPdoc)
-     * @see Syncroton_Data_IData::createEntry()
+     * createEntry
+     *
+     * @param string $_folderId Folder id.
+     * @param \Syncroton_Model_IEntry $_entry Entry
+     * @return string
      */
     public function createEntry($_folderId, Syncroton_Model_IEntry $_entry)
     {
@@ -121,23 +130,40 @@ class ActiveSyncContacts implements Syncroton_Data_IData
         $c->contacts_phones = [];
         $c->contacts_addresses = [];
         if (!empty($_entry->email1Address)) {
-            $c->contacts_emails[] = $Contacts->ContactsEmails->newEntity(['email' => $_entry->email1Address, 'kind' => 'P']);
+            $c->contacts_emails[] = $Contacts->ContactsEmails->newEntity([
+                'email' => $_entry->email1Address,
+                'kind' => 'P',
+            ]);
         }
         if (!empty($_entry->email2Address)) {
-            $c->contacts_emails[] = $Contacts->ContactsEmails->newEntity(['email' => $_entry->email2Address, 'kind' => 'W']);
+            $c->contacts_emails[] = $Contacts->ContactsEmails->newEntity([
+                'email' => $_entry->email2Address,
+                'kind' => 'W',
+            ]);
         }
         if (!empty($_entry->email3Address)) {
-            $c->contacts_emails[] = $Contacts->ContactsEmails->newEntity(['email' => $_entry->email3Address, 'kind' => null]);
+            $c->contacts_emails[] = $Contacts->ContactsEmails->newEntity([
+                'email' => $_entry->email3Address,
+                'kind' => null,
+            ]);
         }
 
         foreach ($this->_phoneTrans as $kind => $propName) {
             if (!empty($_entry->{$propName})) {
-                $c->contacts_phones[] = $Contacts->ContactsPhones->newEntity(['no' => $_entry->{$propName}, 'kind' => $kind]);
+                $c->contacts_phones[] = $Contacts->ContactsPhones->newEntity([
+                    'no' => $_entry->{$propName},
+                    'kind' => $kind,
+                ]);
             }
         }
 
         foreach ($this->_addressTrans as $kind => $root) {
-            if (!empty($_entry->{$root . 'AddressCity'}) || !empty($_entry->{$root . 'AddressCountry'}) || !empty($_entry->{$root . 'AddressPostalCode'}) || !empty($_entry->{$root . 'AddressStreet'})) {
+            if (
+                !empty($_entry->{$root . 'AddressCity'}) ||
+                !empty($_entry->{$root . 'AddressCountry'}) ||
+                !empty($_entry->{$root . 'AddressPostalCode'}) ||
+                !empty($_entry->{$root . 'AddressStreet'})
+            ) {
                 $a = $Contacts->ContactsAddresses->newEntity(['kind' => $kind]);
                 if (!empty($_entry->{$root . 'AddressStreet'})) {
                     $a->street = $_entry->{$root . 'AddressStreet'};
@@ -161,8 +187,12 @@ class ActiveSyncContacts implements Syncroton_Data_IData
     }
 
     /**
-     * (non-PHPdoc)
-     * @see Syncroton_Data_IData::deleteEntry()
+     * deleteEntry
+     *
+     * @param string $_folderId Folder id
+     * @param string $_serverId Server id
+     * @param mixed $_collectionData Collection data
+     * @return bool
      */
     public function deleteEntry($_folderId, $_serverId, $_collectionData)
     {
@@ -174,8 +204,10 @@ class ActiveSyncContacts implements Syncroton_Data_IData
     }
 
     /**
-     * (non-PHPdoc)
-     * @see Syncroton_Data_IData::deleteFolder()
+     * deleteFolder
+     *
+     * @param string $_folderId Folder id
+     * @return bool
      */
     public function deleteFolder($_folderId)
     {
@@ -183,8 +215,11 @@ class ActiveSyncContacts implements Syncroton_Data_IData
     }
 
     /**
-     * (non-PHPdoc)
-     * @see Syncroton_Data_IData::emptyFolderContents()
+     * emptyFolderContents
+     *
+     * @param string $folderId Folder id
+     * @param array $options Options
+     * @return bool
      */
     public function emptyFolderContents($folderId, $options)
     {
@@ -192,8 +227,9 @@ class ActiveSyncContacts implements Syncroton_Data_IData
     }
 
     /**
-     * (non-PHPdoc)
-     * @see Syncroton_Data_IData::getAllFolders()
+     * getAllFolders
+     *
+     * @return array
      */
     public function getAllFolders()
     {
@@ -202,7 +238,7 @@ class ActiveSyncContacts implements Syncroton_Data_IData
                 'serverId' => 'contacts',
                 'displayName' => 'All Contacts',
                 'type' => Syncroton_Command_FolderSync::FOLDERTYPE_CONTACT,
-                'parentId' => '0'
+                'parentId' => '0',
             ]),
             /*'usercontacts' => new Syncroton_Model_Folder([
                 'serverId'    => 'usercontacts',
@@ -216,11 +252,20 @@ class ActiveSyncContacts implements Syncroton_Data_IData
     }
 
     /**
-     * (non-PHPdoc)
-     * @see Syncroton_Data_IData::getChangedEntries()
+     * getChangedEntries
+     *
+     * @param string $_folderId Folder id
+     * @param \DateTime $_startTimeStamp Start datetime
+     * @param \DateTime|null $_endTimeStamp End datetime
+     * @param string|null $filterType Filter type
+     * @return array
      */
-    public function getChangedEntries($_folderId, DateTime $_startTimeStamp, DateTime $_endTimeStamp = null, $filterType = null)
-    {
+    public function getChangedEntries(
+        $_folderId,
+        DateTime $_startTimeStamp,
+        ?DateTime $_endTimeStamp = null,
+        $filterType = null
+    ) {
         $folderId = $_folderId instanceof Syncroton_Model_IFolder ? $_folderId->id : $_folderId;
 
         $Contacts = TableRegistry::get('LilCrm.Contacts');
@@ -232,7 +277,7 @@ class ActiveSyncContacts implements Syncroton_Data_IData
                 'owner_id' => $this->_ownerId,
                 'kind' => 'T',
                 'syncable' => true,
-                'modified >' => $_startTimeStamp->format("Y-m-d H:i:s")
+                'modified >' => $_startTimeStamp->format("Y-m-d H:i:s"),
             ]);
 
         if ($_endTimeStamp instanceof DateTime) {
@@ -245,10 +290,10 @@ class ActiveSyncContacts implements Syncroton_Data_IData
     }
 
     /**
-     * retrieve folders which were modified since last sync
+     * Retrieve folders which were modified since last sync
      *
-     * @param  DateTime  $startTimeStamp Start date time.
-     * @param  DateTime  $endTimeStamp Ent date time.
+     * @param \DateTime $startTimeStamp Start date time.
+     * @param \DateTime $endTimeStamp Ent date time.
      * @return array list of Syncroton_Model_Folder
      */
     public function getChangedFolders(DateTime $startTimeStamp, DateTime $endTimeStamp)
@@ -258,7 +303,7 @@ class ActiveSyncContacts implements Syncroton_Data_IData
                 'serverId' => 'contacts',
                 'displayName' => 'All Contacts',
                 'type' => Syncroton_Command_FolderSync::FOLDERTYPE_CONTACT,
-                'parentId' => '0'
+                'parentId' => '0',
             ]),
             /*'usercontacts' => new Syncroton_Model_Folder([
                 'serverId'    => 'usercontacts',
@@ -272,8 +317,10 @@ class ActiveSyncContacts implements Syncroton_Data_IData
     }
 
     /**
-     * @param  Syncroton_Model_IFolder|string  $_folderId Folder id.
-     * @param  string                          $_filter Filter string
+     * getServerEntries
+     *
+     * @param \Syncroton_Model_IFolder|string $_folderId Folder id.
+     * @param string $_filter Filter string
      * @return array
      */
     public function getServerEntries($_folderId, $_filter)
@@ -286,7 +333,7 @@ class ActiveSyncContacts implements Syncroton_Data_IData
             ->where([
                 'owner_id' => $this->_ownerId,
                 'kind' => 'T',
-                'syncable' => true
+                'syncable' => true,
             ])
             ->toArray());
 
@@ -294,24 +341,39 @@ class ActiveSyncContacts implements Syncroton_Data_IData
     }
 
     /**
-     * (non-PHPdoc)
-     * @see Syncroton_Data_IData::getCountOfChanges()
+     * getCountOfChanges
+     *
+     * @param \Syncroton_Backend_IContent $contentBackend Content backend
+     * @param \Syncroton_Model_IFolder $folder Folder
+     * @param \Syncroton_Model_ISyncState $syncState Sync state
+     * @return int
      */
-    public function getCountOfChanges(Syncroton_Backend_IContent $contentBackend, Syncroton_Model_IFolder $folder, Syncroton_Model_ISyncState $syncState)
-    {
+    public function getCountOfChanges(
+        Syncroton_Backend_IContent $contentBackend,
+        Syncroton_Model_IFolder $folder,
+        Syncroton_Model_ISyncState $syncState
+    ) {
         $allClientEntries = $contentBackend->getFolderState($this->_device, $folder);
         $allServerEntries = $this->getServerEntries($folder->serverId, $folder->lastfiltertype);
 
         $addedEntries = array_diff($allServerEntries, $allClientEntries);
         $deletedEntries = array_diff($allClientEntries, $allServerEntries);
-        $changedEntries = $this->getChangedEntries($folder->serverId, $syncState->lastsync, null, $folder->lastfiltertype);
+        $changedEntries = $this->getChangedEntries(
+            $folder->serverId,
+            $syncState->lastsync,
+            null,
+            $folder->lastfiltertype
+        );
 
         return count($addedEntries) + count($deletedEntries) + count($changedEntries);
     }
 
     /**
-     * (non-PHPdoc)
-     * @see Syncroton_Data_IData::getFileReference()
+     * getFileReference
+     *
+     * @param string $fileReference File reference
+     * @return void
+     * @throw \Syncroton_Exception_NotFound
      */
     public function getFileReference($fileReference)
     {
@@ -319,13 +381,19 @@ class ActiveSyncContacts implements Syncroton_Data_IData
     }
 
     /**
-     * (non-PHPdoc)
-     * @see Syncroton_Data_IData::getEntry()
+     * getEntry
+     *
+     * @param \Syncroton_Model_SyncCollection $collection Collection
+     * @param string $serverId Server id
+     * @return \Syncroton_Model_IEntry
      */
     public function getEntry(Syncroton_Model_SyncCollection $collection, $serverId)
     {
         $Contacts = TableRegistry::get('LilCrm.Contacts');
-        $c = $Contacts->get($serverId, ['contain' => ['Companies', 'ContactsPhones', 'ContactsAddresses', 'ContactsEmails']]);
+        $c = $Contacts->get(
+            $serverId,
+            ['contain' => ['Companies', 'ContactsPhones', 'ContactsAddresses', 'ContactsEmails']]
+        );
         if (!$c->owner_id == $this->_ownerId) {
             return false;
         }
@@ -370,17 +438,28 @@ class ActiveSyncContacts implements Syncroton_Data_IData
     }
 
     /**
-     * (non-PHPdoc)
-     * @see Syncroton_Data_IData::hasChanges()
+     * hasChanges
+     *
+     * @param \Syncroton_Backend_IContent $contentBackend Content backend
+     * @param \Syncroton_Model_IFolder $folder Folder
+     * @param \Syncroton_Model_ISyncState $syncState Sync state
+     * @return bool
      */
-    public function hasChanges(Syncroton_Backend_IContent $contentBackend, Syncroton_Model_IFolder $folder, Syncroton_Model_ISyncState $syncState)
-    {
+    public function hasChanges(
+        Syncroton_Backend_IContent $contentBackend,
+        Syncroton_Model_IFolder $folder,
+        Syncroton_Model_ISyncState $syncState
+    ) {
         return (bool)$this->getCountOfChanges($contentBackend, $folder, $syncState);
     }
 
     /**
-     * (non-PHPdoc)
-     * @see Syncroton_Data_IData::moveItem()
+     * moveItem
+     *
+     * @param string $_srcFolderId Source folder id
+     * @param string $_serverId Server id
+     * @param string $_dstFolderId Destination folder id
+     * @return string
      */
     public function moveItem($_srcFolderId, $_serverId, $_dstFolderId)
     {
@@ -388,13 +467,18 @@ class ActiveSyncContacts implements Syncroton_Data_IData
     }
 
     /**
-     * (non-PHPdoc)
-     * @see Syncroton_Data_IData::updateEntry()
+     * updateEntry
+     *
+     * @param string $_folderId Folder id
+     * @param string $_serverId Server id
+     * @param \Syncroton_Model_IEntry $_entry Entry
+     * @return bool|string
      */
     public function updateEntry($_folderId, $_serverId, Syncroton_Model_IEntry $_entry)
     {
         $Contacts = TableRegistry::get('LilCrm.Contacts');
-        if (!$c = $Contacts->get($_serverId, ['contain' => ['ContactsPhones', 'ContactsAddresses', 'ContactsEmails']])) {
+        $c = $Contacts->get($_serverId, ['contain' => ['ContactsPhones', 'ContactsAddresses', 'ContactsEmails']]);
+        if (empty($c)) {
             $c = $Contacts->newEntity();
             $c->id = $_serverId;
             $c->owner_id = $this->_ownerId;
@@ -480,7 +564,7 @@ class ActiveSyncContacts implements Syncroton_Data_IData
                     'street' => $_entry->{$entryProperty . 'AddressStreet'},
                     'city' => $_entry->{$entryProperty . 'AddressCity'},
                     'country' => $_entry->{$entryProperty . 'AddressCountry'},
-                    'zip' => $_entry->{$entryProperty . 'AddressPostalCode'}
+                    'zip' => $_entry->{$entryProperty . 'AddressPostalCode'},
                 ];
             }
         }
@@ -534,8 +618,10 @@ class ActiveSyncContacts implements Syncroton_Data_IData
     }
 
     /**
-     * (non-PHPdoc)
-     * @see Syncroton_Data_IData::updateFolder()
+     * updateFolder
+     *
+     * @param \Syncroton_Model_IFolder $folder Folder
+     * @return \Syncroton_Model_IFolder
      */
     public function updateFolder(Syncroton_Model_IFolder $folder)
     {

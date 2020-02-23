@@ -143,7 +143,7 @@ class InvoicesControllerTest extends IntegrationTestCase
 
         $this->enableSecurityToken();
         $this->enableCsrfToken();
-        $this->setUnlockedFields(['invoices_items']);
+        $this->setUnlockedFields(['invoices_items', 'buyer', 'receiver']);
 
         $this->post('lil_invoices/invoices/add?counter=1d53bc5b-de2d-4e85-b13b-81b39a97fc89', $data);
 

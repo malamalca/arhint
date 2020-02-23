@@ -26,7 +26,10 @@ jQuery.fn.modalPopup = function(p_options) {
         let url = $this.options.url;
 
         if ($this.options.onBeforeRequest instanceof Function) {
-            url = $this.options.onBeforeRequest(url);
+            let result = $this.options.onBeforeRequest(url);
+            if (result) {
+                url = result;
+            }
         }
         var jqxhr = $.ajax(url)
             .done(function(html) {

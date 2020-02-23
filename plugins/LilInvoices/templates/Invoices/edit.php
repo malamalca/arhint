@@ -203,20 +203,10 @@ $invoiceEdit = [
                     ],
                 ],
             ],
-            'file.model.0' => [
+            'file.invoice_id.0' => [
                 'method' => 'control',
                 'parameters' => [
-                    'field' => 'invoices_attachments.0.model',
-                    'options' => [
-                        'type' => 'hidden',
-                        'value' => 'Invoice',
-                    ],
-                ],
-            ],
-            'file.foreign_id.0' => [
-                'method' => 'control',
-                'parameters' => [
-                    'field' => 'invoices_attachments.0.foreign_id',
+                    'field' => 'invoices_attachments.0.invoice_id',
                     'options' => [
                         'type' => 'hidden',
                     ],

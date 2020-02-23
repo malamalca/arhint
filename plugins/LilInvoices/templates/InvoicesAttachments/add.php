@@ -15,20 +15,15 @@ $attachment_add = [
                 'method' => 'hidden',
                 'parameters' => ['field' => 'referer'],
             ],
-            'model' => [
-                'class' => $this->Form,
-                'method' => 'hidden',
-                'parameters' => ['field' => 'model', ['default' => 'Invoice']],
-            ],
             'id' => [
                 'class' => $this->Form,
                 'method' => 'hidden',
                 'parameters' => ['field' => 'id'],
             ],
-            'foreign_id' => [
+            'invoice_id' => [
                 'class' => $this->Form,
                 'method' => 'hidden',
-                'parameters' => ['field' => 'foreign_id', ['default' => $attachment->id]],
+                'parameters' => ['field' => 'invoice_id', ['default' => $attachment->id]],
             ],
             'filename' => [
                 'class' => $this->Form,

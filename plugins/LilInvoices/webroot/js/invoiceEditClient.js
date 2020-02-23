@@ -77,6 +77,21 @@ jQuery.fn.InvoiceEditClient = function (options) {
         }
     }
 
+    this.selectClient = function (target, item) {
+        $this.fillClientData(target, item);
+        if (target == "receiver" && !$(options.cbSameClientId, $this).prop("checked")) {
+            $this.fillClientData("buyer", item);
+        }
+        $("#image-" + target + "-checked", $this).show();
+
+        if (options.mode == "received") {
+            if ($("#invoice-location").val().trim() == "") {
+                $("#invoice-location").val(item.city);
+                M.updateTextFields()
+            }
+        }
+    }
+
     this.setAutocompleteTitleField = function (target) {
         var elem = document.querySelector("#invoice-" + target + "-title");
 
@@ -91,18 +106,7 @@ jQuery.fn.InvoiceEditClient = function (options) {
                     $("#image-" + target + "-checked", $this).hide();
                 },
                 onSelect: function (item) {
-                    $this.fillClientData(target, item);
-                    if (target == "receiver" && !$(options.cbSameClientId, $this).prop("checked")) {
-                        $this.fillClientData("buyer", item);
-                    }
-                    $("#image-" + target + "-checked", $this).show();
-
-                    if (options.mode == "received") {
-                        if ($("#invoice-location").val().trim() == "") {
-                            $("#invoice-location").val(item.city);
-                            M.updateTextFields()
-                        }
-                    }
+                    $this.selectClient(target, item);
                 },
                 onOpenEnd: function (el) {
                     var li = $(
@@ -123,18 +127,28 @@ jQuery.fn.InvoiceEditClient = function (options) {
                         $(li).css({'top': $(el).scrollTop()}); });
                     $(li).css({'position': 'absolute', 'top': 0, 'background-color:': '#ff0000'});
 
-                    $("#AutocompleteAddPerson", el).on("click", function(e) {
-                        instance.close();
-                        $this.addClientDialog("T", options.target);
-                        e.preventDefault();
-                        return false;
+                    $("#AutocompleteAddPerson", el).modalPopup({
+                        url: options.addContactDialogUrl.replace("__kind__", "T"),
+                        title: options.addPersonDialogTitle,
+                        processSubmit: true,
+                        onBeforeRequest: function() {
+                            instance.close();
+                        },
+                        onJson: function(item) {
+                            $this.selectClient(target, item);
+                        }
                     });
 
-                    $("#AutocompleteAddCompany", el).on("click", function(e) {
-                        instance.close();
-                        $this.addClientDialog("C", options.target);
-                        e.preventDefault();
-                        return false;
+                    $("#AutocompleteAddCompany", el).modalPopup({
+                        url: options.addContactDialogUrl.replace("__kind__", "C"),
+                        title: options.addCompanyDialogTitle,
+                        processSubmit: true,
+                        onBeforeRequest: function() {
+                            instance.close();
+                        },
+                        onJson: function(item) {
+                            $this.selectClient(target, item);
+                        }
                     });
                 }
             });
@@ -151,49 +165,6 @@ jQuery.fn.InvoiceEditClient = function (options) {
                         instance.open();
                     }
                 });
-
-            return;
-
-            $("#invoice-" + target + "-title").autocompleteAjax({
-                target: target,
-                autoFocus: false,
-                minLength: 0,
-                source: options.clientAutoCompleteUrl,
-                search: function () {
-                    var title = $("#invoice-" + target + "-title", $this).val();
-                    $("input[id^='invoice-" + target + "-'").val("");
-                    $("#invoice-" + target + "-title", $this).val(title);
-                    $("#image-" + target + "-checked", $this).hide();
-                },
-                response: function (event, ui) {
-                    if (ui.content.length === 0) {
-                        var noResultsMessage = $(this).val().length == 0 ? options.messageStartTyping : options.messageNoClientsFound;
-
-                        var noResult = {value: '', label: noResultsMessage, systemMessage: true};
-                        ui.content.push(noResult);
-                    }
-                },
-                select: function (event, ui) {
-                    if (ui.item) {
-                        $this.fillClientData(target, ui.item);
-                        if (target == "receiver" && !$(options.cbSameClientId, $this).prop("checked")) {
-                            $this.fillClientData("buyer", ui.item);
-                        }
-                        $("#image-" + target + "-checked", $this).show();
-                    }
-                },
-            })
-            .keyup(function () {
-                if ($(this).val() === "") {
-                    $("input[id^='invoice-" + target + "-'").val("");
-                    $("#image-" + target + "-checked", $this).hide();
-                }
-            })
-            .focus(function () {
-                if (!$("#invoice-" + target + "-contact-id", $this).val()) {
-                    $(this).autocompleteheader("search");
-                }
-            });
         }
     }
 
@@ -208,25 +179,6 @@ jQuery.fn.InvoiceEditClient = function (options) {
             $('#image-' + target + '-checked', $this).show();
         }
     }
-
-    this.addClientDialog = function (contactKind, target) {
-        let url = options.addContactDialogUrl.replace("__kind__", contactKind);
-
-        var jqxhr = $.ajax(url)
-            .done(function(html) {
-                $("p", $this.popup).html(html);
-                $("h4", $this.popup).html(contactKind == 'C' ? options.addCompanyDialogTitle : options.addPersonDialogTitle);
-
-                // update text fields for label placement
-                M.updateTextFields();
-
-                $this.popupInstance.open();
-            })
-            .fail(function() {
-                alert("Request Failed");
-            });
-    }
-
 
     // initialization
     options = jQuery().extend(true, {}, default_options, options);

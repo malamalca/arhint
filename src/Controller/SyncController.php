@@ -1,10 +1,9 @@
 <?php
+declare(strict_types=1);
+
 namespace App\Controller;
 
-use Cake\Core\Configure;
 use Cake\Datasource\ConnectionManager;
-use Cake\ORM\TableRegistry;
-use LilCrm\Lib\ActiveSyncContacts;
 use Syncroton_Registry;
 use Zend_Db;
 use Zend_Log;

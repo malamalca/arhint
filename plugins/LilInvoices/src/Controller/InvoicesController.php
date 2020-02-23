@@ -32,7 +32,10 @@ class InvoicesController extends AppController
 
         if (!empty($this->Security)) {
             if (in_array($this->getRequest()->getParam('action'), ['add', 'edit', 'editPreview'])) {
-                $this->Security->setConfig('unlockedFields', ['invoices_taxes', 'invoices_items']);
+                $this->Security->setConfig(
+                    'unlockedFields',
+                    ['invoices_taxes', 'invoices_items', 'receiver', 'buyer', 'issuer']
+                );
             }
 
             if (in_array($this->getRequest()->getParam('action'), ['editPreview'])) {
@@ -71,6 +74,7 @@ class InvoicesController extends AppController
 
         // fetch invoices
         $filter['counter'] = $counter->id;
+        $filter['order'] = 'Invoices.counter DESC';
         $params = $this->Invoices->filter($filter);
 
         $query = $this->Authorization->applyScope($this->Invoices->find())

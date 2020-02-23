@@ -58,8 +58,7 @@ class InvoicesAttachmentsController extends AppController
         $InvoicesAttachments = TableRegistry::get('LilInvoices.InvoicesAttachments');
 
         $attachment = $InvoicesAttachments->newEmptyEntity();
-        $attachment->model = 'Invoice';
-        $attachment->foreign_id = $invoiceId;
+        $attachment->invoice_id = $invoiceId;
 
         $this->Authorization->authorize($attachment, 'edit');
 
@@ -79,7 +78,7 @@ class InvoicesAttachmentsController extends AppController
                 if ($InvoicesAttachments->save($attachment, ['uploadedFilename' => $tmpName])) {
                     $this->Flash->success(__d('lil_invoices', 'The invoices attachment has been saved.'));
 
-                    return $this->redirect(['controller' => 'Invoices', 'action' => 'view', $attachment->foreign_id]);
+                    return $this->redirect(['controller' => 'Invoices', 'action' => 'view', $attachment->invoice_id]);
                 } else {
                     $this->Flash->error(__d('lil_invoices', 'The attachment could not be saved. Please, try again.'));
                 }
@@ -111,6 +110,6 @@ class InvoicesAttachmentsController extends AppController
             $this->Flash->error(__d('lil_invoices', 'The attachment could not be deleted. Please, try again.'));
         }
 
-        return $this->redirect(['controller' => 'invoices', 'action' => 'view', $attachment->foreign_id]);
+        return $this->redirect(['controller' => 'Invoices', 'action' => 'view', $attachment->invoice_id]);
     }
 }
