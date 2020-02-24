@@ -22,8 +22,8 @@ class LilExpensesEvents implements EventListenerInterface
         return [
             'View.beforeRender' => 'addScripts',
             'Lil.Sidebar.beforeRender' => 'modifySidebar',
-            //'Lil.Form.LilInvoices.InvoicesCounters.edit' => 'modifyCountersForm',
-            //'Lil.Panels.LilInvoices.Invoices.view' => 'modifyInvoicesView',
+            'Lil.Form.LilInvoices.InvoicesCounters.edit' => 'modifyCountersForm',
+            'Lil.Panels.LilInvoices.Invoices.view' => 'modifyInvoicesView',
             'Model.afterSave' => 'createExpenseOnSave',
         ];
     }
@@ -63,10 +63,10 @@ class LilExpensesEvents implements EventListenerInterface
      * Adds income/expense field to invoices counters form.
      *
      * @param \LilExpenses\Event\Cake\Event\Event $event Event object
-     * @param \LilExpenses\Event\Lil\View\Helper\LilForm $form Form array
-     * @return \LilExpenses\Event\Lil\View\Helper\LilForm
+     * @param \LilExpenses\Event\Lil\Lib\LilForm $form Form array
+     * @return \LilExpenses\Event\Lil\Lib\LilForm
      */
-    /*public function modifyCountersForm(Event $event, $form)
+    public function modifyCountersForm(Event $event, $form)
     {
         $view = $event->getSubject();
         $expenseFieldset = [
@@ -90,21 +90,22 @@ class LilExpensesEvents implements EventListenerInterface
         $view->Lil->insertIntoArray($form->form['lines'], $expenseFieldset, ['after' => 'fs_basics_end']);
 
         return $form;
-    }*/
+    }
 
     /**
      * Add payments table to Invoices View action
      *
      * @param \LilExpenses\Event\Cake\Event\Event $event Event object
-     * @param \ArrayObject $panels Panels array
-     * @return \ArrayObject
+     * @param \LilExpenses\Event\Lil\Lib\LilPanels $panels Panels array
+     * @return \LilExpenses\Event\Lil\Lib\LilPanels
      */
-    /*public function modifyInvoicesView(Event $event, $panels)
+    public function modifyInvoicesView(Event $event, $panels)
     {
         $view = $event->getSubject();
 
         $invoice = $panels->entity;
         $view->loadHelper('LilInvoices.LilDocument');
+
         if ($view->LilDocument->isInvoice($invoice)) {
             $InvoicesCounters = TableRegistry::get('LilInvoices.InvoicesCounters');
             $counter = $InvoicesCounters->get($invoice->counter_id);
@@ -117,7 +118,7 @@ class LilExpensesEvents implements EventListenerInterface
                 $accounts = TableRegistry::get('LilExpenses.PaymentsAccounts')->listForOwner($invoice->owner_id);
 
                 $paymentsPanels = [
-                    'payments_title' => '<h2>' . __d('lil_expenses', 'Payments') . '</h2>',
+                    'payments_title' => '<h3>' . __d('lil_expenses', 'Payments') . '</h3>',
                     'payments_table' => $view->element('LilExpenses.payments_list', [
                         'expense' => $expenses->first(),
                         'accounts' => $accounts,
@@ -136,7 +137,7 @@ class LilExpensesEvents implements EventListenerInterface
         }
 
         return $panels;
-    }*/
+    }
 
     /**
      * Create Expense on InvoicesCounter "expense" field set to "expense" or "income"
