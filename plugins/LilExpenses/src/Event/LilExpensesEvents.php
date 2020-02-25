@@ -62,9 +62,9 @@ class LilExpensesEvents implements EventListenerInterface
     /**
      * Adds income/expense field to invoices counters form.
      *
-     * @param \LilExpenses\Event\Cake\Event\Event $event Event object
-     * @param \LilExpenses\Event\Lil\Lib\LilForm $form Form array
-     * @return \LilExpenses\Event\Lil\Lib\LilForm
+     * @param \Cake\Event\Event $event Event object
+     * @param \Lil\Lib\LilForm $form Form array
+     * @return \Lil\Lib\LilForm
      */
     public function modifyCountersForm(Event $event, $form)
     {
@@ -78,11 +78,11 @@ class LilExpensesEvents implements EventListenerInterface
                     'label' => __d('lil_expenses', 'Income/Expense') . ':',
                     'type' => 'select',
                     'options' => [
-                        LILEXPENSES_COUNTER_INCOME => __d('lil_expenses', 'Income'),
-                        LILEXPENSES_COUNTER_EXPENSE => __d('lil_expenses', 'Expense')
+                        constant('LILEXPENSES_COUNTER_INCOME') => __d('lil_expenses', 'Income'),
+                        constant('LILEXPENSES_COUNTER_EXPENSE') => __d('lil_expenses', 'Expense'),
                     ],
-                    'empty' => __d('lil_expenses', 'Neither expense nor income')
-                ]]
+                    'empty' => __d('lil_expenses', 'Neither expense nor income'),
+                ]],
             ],
             'fs_expense_end' => '</fieldset>',
         ];
@@ -95,9 +95,9 @@ class LilExpensesEvents implements EventListenerInterface
     /**
      * Add payments table to Invoices View action
      *
-     * @param \LilExpenses\Event\Cake\Event\Event $event Event object
-     * @param \LilExpenses\Event\Lil\Lib\LilPanels $panels Panels array
-     * @return \LilExpenses\Event\Lil\Lib\LilPanels
+     * @param \Cake\Event\Event $event Event object
+     * @param \Lil\Lib\LilPanels $panels Panels array
+     * @return \Lil\Lib\LilPanels
      */
     public function modifyInvoicesView(Event $event, $panels)
     {
@@ -107,6 +107,7 @@ class LilExpensesEvents implements EventListenerInterface
         $view->loadHelper('LilInvoices.LilDocument');
 
         if ($view->LilDocument->isInvoice($invoice)) {
+            /** @var \LilInvoices\Model\Table\InvoicesCountersTable $InvoicesCounters */
             $InvoicesCounters = TableRegistry::get('LilInvoices.InvoicesCounters');
             $counter = $InvoicesCounters->get($invoice->counter_id);
 
@@ -115,14 +116,17 @@ class LilExpensesEvents implements EventListenerInterface
                     ->where(['model' => 'Invoice', 'foreign_id' => $invoice->id])
                     ->contain(['Payments'])
                     ->all();
-                $accounts = TableRegistry::get('LilExpenses.PaymentsAccounts')->listForOwner($invoice->owner_id);
+
+                /** @var \LilExpenses\Model\Table\PaymentsAccountsTable $PaymentsAccountsTable */
+                $PaymentsAccountsTable = TableRegistry::get('LilExpenses.PaymentsAccounts');
+                $accounts = $PaymentsAccountsTable->listForOwner($invoice->owner_id);
 
                 $paymentsPanels = [
                     'payments_title' => '<h3>' . __d('lil_expenses', 'Payments') . '</h3>',
                     'payments_table' => $view->element('LilExpenses.payments_list', [
                         'expense' => $expenses->first(),
                         'accounts' => $accounts,
-                    ])
+                    ]),
                 ];
 
                 if ($expenses->count() > 1) {

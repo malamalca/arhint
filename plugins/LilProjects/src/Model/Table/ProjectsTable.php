@@ -1,0 +1,105 @@
+<?php
+declare(strict_types=1);
+
+namespace LilProjects\Model\Table;
+
+use Cake\ORM\RulesChecker;
+use Cake\ORM\Table;
+use Cake\Validation\Validator;
+
+/**
+ * Projects Model
+ *
+ * @property \LilProjects\Model\Table\OwnersTable|\Cake\ORM\Association\BelongsTo $Owners
+ *
+ * @method \LilProjects\Model\Entity\Project get($primaryKey, $options = [])
+ * @method \LilProjects\Model\Entity\Project newEntity($data = null, array $options = [])
+ * @method \LilProjects\Model\Entity\Project newEmptyEntity(array $options = [])
+ * @method \LilProjects\Model\Entity\Project[] newEntities(array $data, array $options = [])
+ * @method \LilProjects\Model\Entity\Project|bool save(\Cake\Datasource\EntityInterface $entity, $options = [])
+ * @method \LilProjects\Model\Entity\Project patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
+ * @method \LilProjects\Model\Entity\Project[] patchEntities($entities, array $data, array $options = [])
+ * @method \LilProjects\Model\Entity\Project findOrCreate($search, callable $callback = null, $options = [])
+ *
+ * @mixin \Cake\ORM\Behavior\TimestampBehavior
+ */
+class ProjectsTable extends Table
+{
+    /**
+     * Initialize method
+     *
+     * @param array $config The configuration for the Table.
+     * @return void
+     */
+    public function initialize(array $config): void
+    {
+        parent::initialize($config);
+
+        $this->setTable('projects');
+        $this->setDisplayField('title');
+        $this->setPrimaryKey('id');
+
+        $this->addBehavior('Timestamp');
+
+        $this->hasMany('ProjectsWorkhours', [
+            'foreignKey' => 'project_id',
+            'className' => 'LilProjects.ProjectsWorkhours',
+        ]);
+
+        $this->hasMany('ProjectsLogs', [
+            'foreignKey' => 'project_id',
+            'className' => 'LilProjects.ProjectsLogs',
+        ]);
+    }
+
+    /**
+     * Default validation rules.
+     *
+     * @param \Cake\Validation\Validator $validator Validator instance.
+     * @return \Cake\Validation\Validator
+     */
+    public function validationDefault(Validator $validator): Validator
+    {
+        $validator
+            ->uuid('id')
+            ->allowEmpty('id', 'create');
+
+        $validator
+            ->maxLength('no', 50)
+            ->notEmpty('no');
+
+        $validator
+            ->maxLength('title', 250)
+            ->notEmpty('title');
+
+        $validator
+            ->allowEmpty('ico')
+            ->uploadedFile('ico', ['types' => ['image/png'], 'maxSize' => 1000000, 'optional' => true]);
+
+        return $validator;
+    }
+
+    /**
+     * Returns a rules checker object that will be used for validating
+     * application integrity.
+     *
+     * @param \Cake\ORM\RulesChecker $rules The rules object to be modified.
+     * @return \Cake\ORM\RulesChecker
+     */
+    public function buildRules(RulesChecker $rules): RulesChecker
+    {
+        return $rules;
+    }
+
+    /**
+     * Checks if entity belongs to user.
+     *
+     * @param string $entityId Entity Id.
+     * @param string $ownerId User Id.
+     * @return bool
+     */
+    public function isOwnedBy($entityId, $ownerId)
+    {
+        return $this->exists(['id' => $entityId, 'owner_id' => $ownerId]);
+    }
+}

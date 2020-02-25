@@ -1,0 +1,57 @@
+<?php
+/**
+ * This is admin_edit template file.
+ *
+ */
+
+$editForm = [
+    'title_for_layout' =>
+        h($project->getName()) . ' :: ' .
+        ($projectsLog->id ? __d('lil_projects', 'Edit Log') : __d('lil_projects', 'Add Log')),
+    'form' => [
+        'defaultHelper' => $this->Form,
+        'pre' => '<div class="form">',
+        'post' => '</div>',
+        'lines' => [
+            'form_start' => [
+                'method' => 'create',
+                'parameters' => ['model' => $projectsLog, ['idPrefix' => 'projects-logs', 'type' => 'file']]
+            ],
+            'id' => [
+                'method' => 'hidden',
+                'parameters' => ['id']
+            ],
+            'project_id' => [
+                'method' => 'hidden',
+                'parameters' => ['project_id']
+            ],
+            'user_id' => [
+                'method' => 'hidden',
+                'parameters' => ['user_id']
+            ],
+
+            'descript' => [
+                'method' => 'control',
+                'parameters' => [
+                    'descript',
+                    [
+                        'type' => 'textarea',
+                        'label' => __d('lil_projects', 'Title') . ':',
+                    ]
+                ]
+            ],
+
+            'submit' => [
+                'method' => 'submit',
+                'parameters' => [
+                    'label' => __d('lil_projects', 'Save')
+                ]
+            ],
+            'form_end' => [
+                'method' => 'end',
+            ],
+        ]
+    ]
+];
+$this->Lil->jsReady('$("#descript").focus();');
+echo $this->Lil->form($editForm, 'LilProjects.ProjectsLogs.edit');

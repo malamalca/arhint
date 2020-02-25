@@ -1,13 +1,13 @@
 <?php
-namespace LilExpenses\Test\Fixture;
+namespace LilProjects\Test\Fixture;
 
 use Cake\TestSuite\Fixture\TestFixture;
 
 /**
- * PaymentsAccountsFixture
+ * ProjectsFixture
  *
  */
-class PaymentsAccountsFixture extends TestFixture
+class ProjectsFixture extends TestFixture
 {
     /**
      * Fields
@@ -16,18 +16,16 @@ class PaymentsAccountsFixture extends TestFixture
      */
     // @codingStandardsIgnoreStart
     public $fields = [
-        'id' => ['type' => 'string', 'length' => 36, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null, 'fixed' => null],
+        'id' => ['type' => 'uuid', 'length' => null, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null],
         'owner_id' => ['type' => 'uuid', 'length' => null, 'null' => true, 'default' => null, 'comment' => '', 'precision' => null],
-        'title' => ['type' => 'string', 'length' => 200, 'null' => true, 'default' => null, 'comment' => '', 'precision' => null, 'fixed' => null],
-        'primary' => ['type' => 'boolean', 'length' => null, 'null' => false, 'default' => '0', 'comment' => '', 'precision' => null],
-        'active' => ['type' => 'boolean', 'length' => null, 'null' => false, 'default' => '1', 'comment' => '', 'precision' => null],
+        'title' => ['type' => 'string', 'length' => 250, 'null' => true, 'default' => null, 'collate' => 'utf8_unicode_ci', 'comment' => '', 'precision' => null, 'fixed' => null],
         'created' => ['type' => 'datetime', 'length' => null, 'null' => true, 'default' => null, 'comment' => '', 'precision' => null],
         'modified' => ['type' => 'datetime', 'length' => null, 'null' => true, 'default' => null, 'comment' => '', 'precision' => null],
         '_constraints' => [
             'primary' => ['type' => 'primary', 'columns' => ['id'], 'length' => []],
         ],
         '_options' => [
-            'engine' => 'MyISAM',
+            'engine' => 'InnoDB',
             'collation' => 'utf8_unicode_ci'
         ],
     ];
@@ -39,6 +37,12 @@ class PaymentsAccountsFixture extends TestFixture
      * @var array
      */
     public $records = [
-
+        [
+            'id' => '4dd53305-9715-4be4-b169-20defe113d2a',
+            'owner_id' => '060d5eb6-18eb-40dc-a36d-4b1004482caf',
+            'title' => 'Lorem ipsum dolor sit amet',
+            'created' => '2018-02-21 12:51:02',
+            'modified' => '2018-02-21 12:51:02',
+        ],
     ];
 }
