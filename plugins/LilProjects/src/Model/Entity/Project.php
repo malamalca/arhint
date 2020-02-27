@@ -35,6 +35,7 @@ class Project extends Entity
      */
     protected $_accessible = [
         'owner_id' => true,
+        'status_id' => true,
         'no' => true,
         'title' => true,
         'lat' => true,

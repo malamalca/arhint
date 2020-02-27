@@ -2,24 +2,27 @@ div#project-logo {
     display: block;
     float: right;
     margin-top: -63px;
-    width: 300px;
-    padding-left: 70px;
-    padding-top: 20px;
+    width: 220px;
+    height: 220px;
+    padding-left: 10px;
+    padding-top: 10px;
 
-    background-image: url('../img/paperclip.png');
-    background-repeat: no-repeat;
 
-    -moz-transform: scaleX(-1);
-    -o-transform: scaleX(-1);
-    -webkit-transform: scaleX(-1);
-    transform: scaleX(-1);
-    filter: FlipH;
-    -ms-filter: "FlipH";
+
 }
 
 div#project-logo img {
     width: 200px;
+    border-radius: 50%;
+    background-color: #f0f0f0;
 }
+
+.project-avatar {
+    border-radius: 50%;
+    background-color: #f0f0f0;
+}
+
+table#ProjectsIndex
 
 textarea#projects-logs-descript {
     width: 600px;
@@ -39,6 +42,10 @@ textarea#projects-logs-descript {
 .view-panel#projects-logs table td {
     font-weight: normal;
     vertical-align: top;
+}
+.view-panel#projects-logs table td textarea {
+    border: solid 1px #A8A8A8;
+    background-color: #ffffff !important;
 }
 .view-panel#projects-logs table tbody tr td:first-child {
     width: 100px;

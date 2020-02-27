@@ -1,55 +1,91 @@
 <?php
 
+// FILTER by active
+$activeLink = $this->Html->link(
+    empty($filter['inactive']) ? __d('lil_invoices', 'Active') : __d('lil_invoices', 'All'),
+    ['action' => 'filter'],
+    ['class' => 'dropdown-trigger', 'id' => 'filter-active', 'data-target' => 'dropdown-active']
+);
+$popupActive = ['items' => [
+    ['title' => __d('lil_invoices', 'Active'), 'url' => ['?' => array_merge($this->getRequest()->getQuery(), ['inactive' => null])]],
+    ['title' => __d('lil_invoices', 'All'), 'url' => ['?' => array_merge($this->getRequest()->getQuery(), ['inactive' => 1])]],
+]];
+
+$popupActive = $this->Lil->popup('active', $popupActive, true);
+
+$filterTitle = __d('lil_projects', '{0} Projects', [$activeLink]);
+
 $index = [
-	'title_for_layout' => __d('lil_projects', 'Projects'),
-	'menu' => [
-		'add' => [
-			'title' => __d('lil_projects', 'Add'),
-			'visible' => true,
-			'url' => ['action' => 'add']
-		],
-	],
-	'table' => [
-		'parameters' => [
-			'width' => '100%', 'cellspacing' => 0, 'cellpadding' => 0,
-			'class' => 'index-static'
-		],
-		'head' => ['rows' => [['columns' => [
-			'no' => __d('lil_projects', 'No.'),
+    'title_for_layout' => $filterTitle,
+    'menu' => [
+        'add' => [
+            'title' => __d('lil_projects', 'Add'),
+            'visible' => true,
+            'url' => ['action' => 'add']
+        ],
+    ],
+    'actions' => ['lines' => [$popupActive]],
+    'table' => [
+        'parameters' => [
+            'width' => '100%', 'cellspacing' => 0, 'cellpadding' => 0,
+            'class' => 'index-static', 'id' => 'ProjectsIndex'
+        ],
+        'head' => ['rows' => [['columns' => [
+            'image' => ['params' => ['class' => 'center'], 'html' => '&nbsp;'],
             'title' => __d('lil_projects', 'Title'),
-            'image' => ['params' => ['class' => 'center'], 'html' => __d('lil_projects', 'Image')],
-			'expenses' => __d('lil_projects', 'Expenses'),
-			'workhours' => ['params' => ['class' => 'center'], 'html' => __d('lil_projects', 'Work Hours/Cost')],
-            'total' => __d('lil_projects', 'Total'),
-            'actions' => ''
-		]]]],
-		'foot' => ['rows' => [['columns' => [
-			'counter' => ['html' => '&nbsp;', 'params' => ['colspan' => 7]]
-		]]]],
-	]
+            'status' => ['params' => ['class' => 'center'], 'html' => __d('lil_projects', 'Status')],
+            'actions' => '',
+            'log' => ['params' => ['class' => 'left'], 'html' => __d('lil_projects', 'Last Log')],
+        ]]]],
+        'foot' => ['rows' => [['columns' => [
+            'counter' => ['html' => '&nbsp;', 'params' => ['colspan' => 7]]
+        ]]]],
+    ]
 ];
 
-function formatDuration($duration)
-{
-	$hours = floor($duration / 3600);
-	$minutes = $duration % 60;
-	return str_pad($hours, 2, '0', STR_PAD_LEFT) . ':' . str_pad($minutes, 2, '0', STR_PAD_LEFT);
-}
-
 foreach ($projects as $project) {
+    $projectStatus = $projectsStatuses[$project->status_id] ?? '';
+
+    $lastLogDescript = '';
+    if (!empty($project->last_log)) {
+        $lastLogDescript = sprintf(
+            '<span class="small">%2$s, %3$s</span><div>%1$s</div>',
+            h($project->last_log->descript),
+            $project->last_log->created,
+            $project->last_log->user->name,
+        );
+    }
+
     $index['table']['body']['rows'][]['columns'] = [
-		'no' => $this->Html->link($project->no, ['action' => 'view', $project->id]),
-        'title' => h($project->title),
-        'image' =>  [
+        'image' => [
             'params' => ['class' => 'center'],
-            'html' => empty($project->ico) ? '' : $this->Html->image(['action' => 'picture', $project->id, 'thumb'], ['style' => 'height: 50px;'])
+            'html' => empty($project->ico) ? '' : $this->Html->image(['action' => 'picture', $project->id, 'thumb'], ['style' => 'height: 50px;', 'class' => 'project-avatar'])
         ],
-		'expenses' => '',
-		'workhours' => ['params' => ['class' => 'center'],
-			'html' => isset($workhours[$project->id]) ? formatDuration($workhours[$project->id]) : '-'],
-        'total' => '',
-        'actions' => $this->Lil->editLink($project->id) . ' ' . $this->Lil->deleteLink($project->id)
+        'title' =>
+        $this->Html->link($project->no, ['action' => 'view', $project->id], ['class' => 'small']) . '<br />' .
+            $this->Html->link($project->title, ['action' => 'view', $project->id], ['class' => 'big']),
+        'status' => [
+            'params' => ['class' => 'center'],
+            'html' => $projectStatus ? ('<div class="chip z-depth-1">' . h($projectStatus) . '</div>') : '',
+        ],
+        'actions' => $this->Html->link(
+            '<i class="material-icons chevron">chat_bubble_outline</i>',
+            ['controller' => 'ProjectsLogs', 'action' => 'add', '?' => ['project' => $project->id]],
+            ['escape' => false, 'class' => 'btn btn-small btn-floating add-projects-log']
+        ),
+        'log' => $lastLogDescript,
     ];
 }
 
 echo $this->Lil->index($index, 'LilProjects.Projects.index');
+?>
+<script type="text/javascript">
+
+    $(document).ready(function() {
+        $(".add-projects-log").each(function() {
+            $(this).modalPopup({
+                title: "<?= __d('lil_projects', 'Add Log') ?>"
+            });
+        });
+    });
+</script>

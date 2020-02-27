@@ -49,6 +49,22 @@ $editForm = [
                     ]
                 ]
             ],
+            'status' => [
+                'method' => 'control',
+                'parameters' => [
+                    'status_id',
+                    [
+                        'type' => 'select',
+                        'label' => [
+                            'class' => 'active',
+                            'text' => __d('lil_projects', 'Status') . ':',
+                        ],
+                        'class' => 'browser-default',
+                        'empty' => '-- ' . __d('lil_projects', 'status') . ' --',
+                        'options' => $projectStatuses
+                    ]
+                ]
+            ],
             'active' => [
                 'method' => 'control',
                 'parameters' => [

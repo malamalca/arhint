@@ -21,6 +21,10 @@ $editForm = [
                 'method' => 'hidden',
                 'parameters' => ['id']
             ],
+            'redirect' => [
+                'method' => 'hidden',
+                'parameters' => ['redirect', ['default' => base64_encode($this->getRequest()->referer())]]
+            ],
             'project_id' => [
                 'method' => 'hidden',
                 'parameters' => ['project_id']

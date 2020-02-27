@@ -10,6 +10,14 @@
     text-decoration: line-through !important;
 }
 
+.small {
+    font-size: 75% !important;
+}
+.big {
+    font-size: 120% !important;
+}
+
+
 h3 {
     font-size: 30px;
 }
@@ -196,8 +204,8 @@ input {
     }
 
     input {
-        height: 35px !important;
-        line-height: 35px !important;
+        height: 37px !important;
+        line-height: 32px !important;
     }
 }
 

@@ -235,6 +235,15 @@ class Application extends BaseApplication implements
             'loginUrl' => Router::url('/users/login'),
         ]);
 
+        $params = $request->getAttribute('params');
+        if (
+            $params['controller'] == 'Projects' &&
+            $params['action'] == 'index' &&
+            $params['_ext'] == 'txt'
+        ) {
+            $service->loadAuthenticator('Authentication.HttpBasic');
+        }
+
         return $service;
     }
 
@@ -246,9 +255,6 @@ class Application extends BaseApplication implements
      */
     public function getAuthorizationService(ServerRequestInterface $request): AuthorizationServiceInterface
     {
-        //$resolver = new MapResolver();
-        //$resolver->map(ServerRequest::class, RequestPolicy::class);
-
         $resolver = new OrmResolver();
 
         return new AuthorizationService($resolver);

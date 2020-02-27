@@ -10,7 +10,8 @@ use Cake\Validation\Validator;
 /**
  * Projects Model
  *
- * @property \LilProjects\Model\Table\OwnersTable|\Cake\ORM\Association\BelongsTo $Owners
+ * @property \LilProjects\Model\Table\ProjectsLogsTable|\Cake\ORM\Association\HasMany $ProjectsLogs
+ * @property \LilProjects\Model\Table\ProjectsStatusesTable|\Cake\ORM\Association\HasMany $ProjectsStatuses
  *
  * @method \LilProjects\Model\Entity\Project get($primaryKey, $options = [])
  * @method \LilProjects\Model\Entity\Project newEntity($data = null, array $options = [])
@@ -46,9 +47,31 @@ class ProjectsTable extends Table
             'className' => 'LilProjects.ProjectsWorkhours',
         ]);
 
+        $this->belongsTo('ProjectsStatuses', [
+            'foreignKey' => 'status_id',
+            'className' => 'LilProjects.ProjectsStatuses',
+        ]);
+
         $this->hasMany('ProjectsLogs', [
             'foreignKey' => 'project_id',
             'className' => 'LilProjects.ProjectsLogs',
+        ]);
+
+        $this->hasOne('LastLog', [
+            'foreignKey' => false,
+            'className' => 'LilProjects.ProjectsLogs',
+            'conditions' => function (\Cake\Database\Expression\QueryExpression $exp, \Cake\ORM\Query $query) {
+                $subquery = $query
+                    ->getConnection()
+                    ->newQuery()
+                    ->select(['SubLastLog.id'])
+                    ->from(['SubLastLog' => 'projects_logs'])
+                    ->where(['Projects.id = SubLastLog.project_id'])
+                    ->order(['SubLastLog.created' => 'DESC'])
+                    ->limit(1);
+
+                return $exp->add(['LastLog.id' => $subquery]);
+            },
         ]);
     }
 
@@ -101,5 +124,22 @@ class ProjectsTable extends Table
     public function isOwnedBy($entityId, $ownerId)
     {
         return $this->exists(['id' => $entityId, 'owner_id' => $ownerId]);
+    }
+
+    /**
+     * filter method
+     *
+     * @param array $filter Filter data.
+     * @return array
+     */
+    public function filter(&$filter)
+    {
+        $ret = ['conditions' => [], 'contain' => []];
+
+        if (!empty($filter['inactive'])) {
+            $ret['conditions']['Projects.active IN'] = [true, false];
+        }
+
+        return $ret;
     }
 }

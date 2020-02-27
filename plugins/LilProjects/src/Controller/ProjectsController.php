@@ -15,62 +15,33 @@ use Cake\ORM\TableRegistry;
 class ProjectsController extends AppController
 {
     /**
-     * beforeFilter method
-     *
-     * @param \Cake\Event\Event $event Event object.
-     * @return void
-     */
-    /*public function beforeFilter(Event $event)
-    {
-        if ($this->getRequest()->getParam('_ext') == 'txt') {
-            $this->Auth->allow('index');
-        }
-        parent::beforeFilter($event);
-        if (
-            (in_array($this->getRequest()->getParam('action'), ['index']) &&
-            in_array($this->getRequest()->getParam('_ext'), ['txt']) &&
-            !$this->Auth->user('id'))
-        ) {
-            if (!isset($_SERVER['PHP_AUTH_USER'])) {
-                header('WWW-Authenticate: Basic realm="Lil Projects"');
-                header('HTTP/1.0 401 Unauthorized');
-                echo __d('lil_projects', 'Invalid username/password!');
-                exit;
-            } else {
-                $user = $this->Auth->identify();
-                if (!$user) {
-                    unset($_SERVER['PHP_AUTH_USER']);
-                    header('HTTP/1.0 401 Unauthorized');
-                    echo __d('lil_projects', 'Invalid username/password!');
-                    exit;
-                } else {
-                    $this->Auth->setUser($user);
-                }
-            }
-        }
-    }*/
-
-    /**
      * Index method
      *
      * @return \Cake\Http\Response|void
      */
     public function index()
     {
+        $filter = (array)$this->getRequest()->getQuery();
+
+        $params = array_merge_recursive(
+            ['conditions' => [
+                'Projects.active IN' => [true],
+            ]],
+            $this->Projects->filter($filter)
+        );
+
         $projects = $this->Authorization->applyScope($this->Projects->find())
             ->select()
+            ->contain(['LastLog' => ['Users']])
+            ->where($params['conditions'])
             ->order('title')
             ->all();
 
-        $q = TableRegistry::get('LilProjects.ProjectsWorkhours')->find(
-            'list',
-            ['keyField' => 'project_id', 'valueField' => 'duration']
-        );
-        $workhours = $q->select(['project_id', 'duration' => $q->func()->sum('duration')])
-            ->group('project_id')
+        $projectsStatuses = $this->Authorization->applyScope($this->Projects->ProjectsStatuses->find('list'), 'index')
+            ->order(['title'])
             ->toArray();
 
-        $this->set(compact('projects', 'workhours'));
+        $this->set(compact('projects', 'projectsStatuses'));
     }
 
     /**
@@ -236,7 +207,12 @@ class ProjectsController extends AppController
             }
             $this->Flash->error(__d('lil_projects', 'The project could not be saved. Please, try again.'));
         }
-        $this->set(compact('project'));
+
+        $projectStatuses = $this->Authorization->applyScope($this->Projects->ProjectsStatuses->find('list'), 'index')
+            ->order(['title'])
+            ->toArray();
+
+        $this->set(compact('project', 'projectStatuses'));
 
         return null;
     }
@@ -252,6 +228,7 @@ class ProjectsController extends AppController
     {
         $this->getRequest()->allowMethod(['post', 'delete', 'get']);
         $project = $this->Projects->get($id);
+        $this->Authorization->authorize($project);
         if ($this->Projects->delete($project)) {
             $this->Flash->success(__d('lil_projects', 'The project has been deleted.'));
         } else {
