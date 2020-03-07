@@ -90,22 +90,8 @@ class Application extends BaseApplication implements
         $routes->setRouteClass(DashedRoute::class);
 
         $routes->scope('/', function (RouteBuilder $builder) {
-            $builder->connect('/', ['plugin' => 'LilCrm', 'controller' => 'Contacts', 'action' => 'index']);
-            //$builder->connect('/pages/*', ['controller' => 'Pages', 'action' => 'display']);
+            $builder->connect('/', ['plugin' => 'LilProjects', 'controller' => 'Projects', 'action' => 'index']);
 
-            /*
-             * Connect catchall routes for all controllers.
-             *
-             * The `fallbacks` method is a shortcut for
-             *
-             * ```
-             * $builder->connect('/:controller', ['action' => 'index']);
-             * $builder->connect('/:controller/:action/*', []);
-             * ```
-             *
-             * You can remove these routes once you've connected the
-             * routes you want in your application.
-             */
             $builder->fallbacks();
         });
     }
@@ -118,38 +104,49 @@ class Application extends BaseApplication implements
      */
     public function middleware(MiddlewareQueue $middlewareQueue): MiddlewareQueue
     {
+        $csrf = new CsrfProtectionMiddleware([]);
+        $csrf->whitelistCallback(function ($request) {
+            if (
+                $request->getParam('controller') == 'Invoices' &&
+                $request->getParam('action') == 'edit' &&
+                $request->hasHeader('Lil-Scan')
+            ) {
+                return true;
+            }
+        });
+
         $middlewareQueue
-            // Catch any exceptions in the lower layers,
-            // and make an error page/response
-            ->add(new ErrorHandlerMiddleware(Configure::read('Error')))
+        // Catch any exceptions in the lower layers,
+        // and make an error page/response
+        ->add(new ErrorHandlerMiddleware(Configure::read('Error')))
 
-            // Handle plugin/theme assets like CakePHP normally does.
-            ->add(new AssetMiddleware([
-                'cacheTime' => Configure::read('Asset.cacheTime'),
-            ]))
+        // Handle plugin/theme assets like CakePHP normally does.
+        ->add(new AssetMiddleware([
+            'cacheTime' => Configure::read('Asset.cacheTime'),
+        ]))
 
-            // Add routing middleware.
-            // If you have a large number of routes connected, turning on routes
-            // caching in production could improve performance. For that when
-            // creating the middleware instance specify the cache config name by
-            // using it's second constructor argument:
-            // `new RoutingMiddleware($this, '_cake_routes_')`
-            ->add(new RoutingMiddleware($this))
+        // Add routing middleware.
+        // If you have a large number of routes connected, turning on routes
+        // caching in production could improve performance. For that when
+        // creating the middleware instance specify the cache config name by
+        // using it's second constructor argument:
+        // `new RoutingMiddleware($this, '_cake_routes_')`
+        ->add(new RoutingMiddleware($this))
 
-            ->add(new RoutingMiddleware($this, '_cake_routes_'))
-            ->add(new CsrfProtectionMiddleware([]))
-            ->add(new EncryptedCookieMiddleware([self::REMEMBERME_COOKIE_NAME], Configure::read('Security.cookieKey')))
-            ->add(new AuthenticationMiddleware($this))
-            ->add(new AuthorizationMiddleware($this, [
-                'unauthorizedHandler' => [
-                    'className' => 'Authorization.Redirect',
-                    'url' => '/users/login',
-                    'queryParam' => 'redirectUrl',
-                    'exceptions' => [
-                        MissingIdentityException::class,
-                    ],
+        ->add(new RoutingMiddleware($this, '_cake_routes_'))
+        ->add($csrf)
+        ->add(new EncryptedCookieMiddleware([self::REMEMBERME_COOKIE_NAME], Configure::read('Security.cookieKey')))
+        ->add(new AuthenticationMiddleware($this))
+        ->add(new AuthorizationMiddleware($this, [
+            'unauthorizedHandler' => [
+                'className' => 'Authorization.Redirect',
+                'url' => '/users/login',
+                'queryParam' => 'redirectUrl',
+                'exceptions' => [
+                    MissingIdentityException::class,
                 ],
-            ]));
+            ],
+        ]));
 
         if (Configure::read('debug')) {
             // Disable authz for debugkit
@@ -201,38 +198,38 @@ class Application extends BaseApplication implements
         $fields = [
             'username' => 'username',
             'password' => 'passwd',
-        ];
+            ];
 
         // Load identifiers
         $service->loadIdentifier('Authentication.Password', [
-            'fields' => $fields,
-            'passwordHasher' => [
-                'className' => 'Authentication.Fallback',
-                'hashers' => [
-                    'Authentication.Default',
-                    [
-                        'className' => 'Authentication.Legacy',
-                        'hashType' => 'sha1',
-                    ],
+        'fields' => $fields,
+        'passwordHasher' => [
+            'className' => 'Authentication.Fallback',
+            'hashers' => [
+                'Authentication.Default',
+                [
+                    'className' => 'Authentication.Legacy',
+                    'hashType' => 'sha1',
                 ],
             ],
+        ],
         ]);
 
         // Load the authenticators, you want session first
         $service->loadAuthenticator('Authentication.Session');
 
         $service->loadAuthenticator('Authentication.Form', [
-            'fields' => $fields,
-            'loginUrl' => Router::url('/users/login'),
+        'fields' => $fields,
+        'loginUrl' => Router::url('/users/login'),
         ]);
 
         $service->loadAuthenticator('Authentication.Cookie', [
-            'fields' => $fields,
-            'cookie' => [
-                'name' => self::REMEMBERME_COOKIE_NAME,
-                'expire' => (new Time())->addDays(30),
-            ],
-            'loginUrl' => Router::url('/users/login'),
+        'fields' => $fields,
+        'cookie' => [
+            'name' => self::REMEMBERME_COOKIE_NAME,
+            'expire' => (new Time())->addDays(30),
+        ],
+        'loginUrl' => Router::url('/users/login'),
         ]);
 
         $params = $request->getAttribute('params');
@@ -240,6 +237,12 @@ class Application extends BaseApplication implements
             $params['controller'] == 'Projects' &&
             $params['action'] == 'index' &&
             $params['_ext'] == 'txt'
+        ) {
+            $service->loadAuthenticator('Authentication.HttpBasic');
+        }
+        if (
+            $params['controller'] == 'Invoices' &&
+            $params['action'] == 'edit'
         ) {
             $service->loadAuthenticator('Authentication.HttpBasic');
         }

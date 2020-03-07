@@ -149,7 +149,11 @@ class ProjectsController extends AppController
             $this->viewBuilder()->setTemplate('map_popup');
         }
 
-        $this->set(compact('project', 'logs'));
+        $projectsStatuses = $this->Authorization->applyScope($this->Projects->ProjectsStatuses->find('list'), 'index')
+            ->order(['title'])
+            ->toArray();
+
+        $this->set(compact('project', 'logs', 'projectsStatuses'));
     }
 
     /**

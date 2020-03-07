@@ -23,6 +23,7 @@ class LilInvoicesSidebar
             return;
         }
 
+        $controller = $event->getSubject();
         $request = $event->getSubject()->getRequest();
         $currentUser = $event->getSubject()->getCurrentUser();
 
@@ -55,80 +56,56 @@ class LilInvoicesSidebar
                 'visible' => true,
                 'title' => __d('lil_invoices', 'Reports'),
                 'url' => false,
-                'expandable' => true,
                 'params' => [],
-                'active' => false,
-                'expand' => false,
+                'active' => $request->getParam('controller') == 'Invoices' && $request->getParam('action') == 'report',
                 'submenu' => [],
             ];
         }
-            $sidebar['documents']['items']['reports']['expand'] =
-                $exp = $sidebar['documents']['items']['reports']['expand'] ||
-                ($request->getParam('controller') == 'Invoices' && $request->getParam('action') == 'report');
 
-            $sidebar['documents']['items']['reports']['submenu']['invoices_report'] = [
-                'visible' => true,
-                'title' => __d('lil_invoices', 'List'),
-                'url' => [
-                    'plugin' => 'LilInvoices',
-                    'controller' => 'Invoices',
-                    'action' => 'report',
-                ],
-                'active' => $request->getParam('controller') == 'Invoices' && $request->getParam('action') == 'report',
-            ];
-
-            ////////////////////////////////////////////////////////////////////////////////////////
-            Lil::insertIntoArray(
-                $sidebar['documents']['items'],
-                [
-                    'received' => [
-                        'visible' => true,
-                        'title' => __d('lil_invoices', 'Received Documents'),
-                        'url' => false,
-                        'active' => false,
-                        'expand' => false,
-                    ],
-                    'issued' => [
-                        'visible' => true,
-                        'title' => __d('lil_invoices', 'Issued Documents'),
-                        'url' => false,
-                        'active' => false,
-                        'expand' => false,
-                    ],
-                ],
-                ['before' => 'reports']
-            );
-
-        // ARCHIVE SIDEBAR SUBMENU
-        if (empty($sidebar['documents']['items']['archive'])) {
-            $sidebar['documents']['items']['archive'] = [
+        $sidebar['documents']['items']['reports']['submenu']['invoices_report'] = [
             'visible' => true,
-            'title' => __d('lil_invoices', 'Archive'),
-            'url' => false,
-            'expandable' => true,
-            'params' => [],
-            'active' => false,
-            'expand' => false,
-            'submenu' => [],
-            ];
-        }
+            'title' => __d('lil_invoices', 'List'),
+            'url' => [
+                'plugin' => 'LilInvoices',
+                'controller' => 'Invoices',
+                'action' => 'report',
+            ],
+            'active' => $request->getParam('controller') == 'Invoices' && $request->getParam('action') == 'report',
+        ];
 
-            // LOOKUPS SIDEBAR SUBMENU
+        ////////////////////////////////////////////////////////////////////////////////////////
+        Lil::insertIntoArray(
+            $sidebar['documents']['items'],
+            [
+                'received' => [
+                    'visible' => true,
+                    'title' => __d('lil_invoices', 'Received Documents'),
+                    'url' => false,
+                    'active' => false,
+                ],
+                'issued' => [
+                    'visible' => true,
+                    'title' => __d('lil_invoices', 'Issued Documents'),
+                    'url' => false,
+                    'active' => false,
+                ],
+            ],
+            ['before' => 'reports']
+        );
+
+        // LOOKUPS SIDEBAR SUBMENU
         if (empty($sidebar['documents']['items']['lookups'])) {
             $sidebar['documents']['items']['lookups'] = [
-            'visible' => true,
-            'title' => __d('lil_invoices', 'Lookups'),
-            'url' => false,
-            'expandable' => true,
-            'params' => [],
-            'active' => false,
-            'expand' => false,
-            'submenu' => [],
+                'visible' => true,
+                'title' => __d('lil_invoices', 'Lookups'),
+                'url' => false,
+                'params' => [],
+                'active' => false,
+                'submenu' => [],
             ];
         }
 
-        $sidebar['documents']['items']['lookups']['expand'] =
-            $sidebar['documents']['items']['lookups']['expand'] ||
+        $sidebar['documents']['items']['lookups']['active'] =
             in_array($request->getParam('controller'), ['Items', 'InvoicesCounters']) ||
             ($request->getParam('controller') == 'Vats' &&
                         in_array($request->getParam('action'), ['index', 'edit'])) ||
@@ -136,8 +113,6 @@ class LilInvoicesSidebar
                         in_array($request->getParam('action'), ['index', 'edit'])) ||
             ($request->getParam('controller') == 'Items' &&
                         in_array($request->getParam('action'), ['index', 'edit']));
-
-        $sidebar['documents']['items']['lookups']['active'] = $sidebar['documents']['items']['lookups']['expand'];
 
         $sidebar['documents']['items']['lookups']['submenu'] =
             [
@@ -186,47 +161,38 @@ class LilInvoicesSidebar
             ];
 
         // build counters submenu only when needed
-        if (($request->getParam('plugin') == 'LilInvoices') && ($request->getParam('controller') == 'Invoices')) {
+        if (($request->getParam('plugin') == 'LilInvoices')) {
             ////////////////////////////////////////////////////////////////////////////////////////
             // Fetch counters
             //if (!$counters = Cache::read('LilInvoices.sidebarCounters', 'Lil')) {
             $InvoicesCounters = TableRegistry::get('LilInvoices.InvoicesCounters');
-            $counters = $InvoicesCounters
-                ->find()
-                ->where(['owner_id' => $currentUser['company_id']])
+            $counters = $controller->Authorization->applyScope($InvoicesCounters->find(), 'index')
+                ->where(['active' => true])
                 ->order(['active', 'kind DESC', 'title'])
                 ->all();
             //  Cache::write('LilInvoices.sidebarCounters', $counters, 'Lil');
             //}
 
-            // determine counter_id for sidebar
-            $activeCounter = null;
-            if (
-                !$request->getQuery('counter') &&
-                $request->getParam('controller') == 'Invoices' &&
-                in_array($request->getParam('action'), ['view', 'preview'])
-            ) {
-                $invCounter = TableRegistry::get('LilInvoices.Invoices')
-                    ->find()
-                    ->select(['counter_id'])
-                    ->where(['Invoices.id' => $request->getParam('pass.0')])
-                    ->first();
-
-                $activeCounter = $invCounter->id;
+            // determine current counter
+            $isActionIndex = $request->getParam('controller') == 'Invoices' && $request->getParam('action') == 'index';
+            $currentCounter = $request->getQuery('counter');
+            if (!$currentCounter) {
+                $currentCounter = $request->getQuery('filter.counter');
+            }
+            if (!$currentCounter) {
+                $currentCounter = $event->getSubject()->viewBuilder()->getVar('currentCounter');
+            }
+            if (!$currentCounter && $counters->count() > 0 && $isActionIndex) {
+                $currentCounter = $counters->first()->id;
             }
 
             // build submenus
-            $archivedCounters = [];
-            $activeCounters = [];
-            foreach ($counters as $c) {
-                if ($c->active) {
-                    $target = $c->kind;
-                    $activeCounters[$c->kind][] = $c->id;
-                } else {
-                    $target = 'archive';
-                    $archivedCounters[] = $c->id;
+            foreach ($counters as $i => $c) {
+                if ($currentCounter == $c->id) {
+                    $sidebar['documents']['items'][$c->kind]['active'] = true;
                 }
-                $sidebar['documents']['items'][$target]['submenu'][$c->id] = [
+
+                $sidebar['documents']['items'][$c->kind]['submenu'][$c->id] = [
                     'visible' => true,
                     'title' => $c->title,
                     'url' => [
@@ -235,55 +201,8 @@ class LilInvoicesSidebar
                         'action' => 'index',
                         '?' => ['counter' => $c->id],
                     ],
-                    'active' => false,
+                    'active' => $currentCounter == $c->id,
                 ];
-            }
-
-            // determine current counter
-            $currentCounter = $request->getQuery('counter');
-            if (!$currentCounter) {
-                $currentCounter = $request->getQuery('filter.counter');
-            }
-            if (!$currentCounter) {
-                $currentCounter = $event->getSubject()->viewBuilder()->getVar('currentCounter');
-            }
-
-            if ($currentCounter) {
-                $tgt = 'archive';
-                foreach ($activeCounters as $activeCounterKind => $activeKindCounters) {
-                    if (in_array($currentCounter, $activeKindCounters)) {
-                        $tgt = $activeCounterKind;
-                        break;
-                    }
-                }
-            }
-
-            if (!$currentCounter && !empty($activeCounters)) {
-                $counterKinds = array_keys($activeCounters);
-
-                if (in_array($request->getQuery('kind'), $counterKinds)) {
-                    $tgt = $request->getQuery('kind');
-                } else {
-                    $tgt = reset($counterKinds);
-                }
-
-                if ($tgt) {
-                    $currentCounter = reset($activeCounters[$tgt]);
-                }
-            }
-
-            if (!$currentCounter && !empty($archivedCounters)) {
-                $currentCounter = reset($archivedCounters);
-                $targerSubmenu = 'archive';
-            }
-
-            if (
-                !empty($tgt) &&
-                ($request->getParam('plugin') == 'LilInvoices') &&
-                !(substr($request->getParam('action'), 0, 6) == 'report')
-            ) {
-                $sidebar['documents']['items'][$tgt]['active'] = true;
-                $sidebar['documents']['items'][$tgt]['submenu'][$currentCounter]['active'] = true;
             }
         }
 

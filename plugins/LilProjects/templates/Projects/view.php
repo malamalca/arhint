@@ -1,6 +1,6 @@
 <?php
     $projectView = [
-        'title_for_layout' => $project->no . ' - ' . $project->title,
+        'title_for_layout' => '<span class="small">' . $project->no . '</span><br />' . $project->title,
         'menu' => [
             'edit' => [
                 'title' => __d('lil_projects', 'Edit'),
@@ -28,7 +28,8 @@
                     'controller' => 'ProjectsLogs',
                     'action' => 'add',
                     '?' => ['project' => $project->id]
-                ]
+                ],
+                'params' => ['id' => 'add-projects-log']
             ],
         ],
         'entity' => $project,
@@ -37,6 +38,15 @@
                 '<div id="project-logo">%1$s</div>',
                 $this->Html->image(['action' => 'picture', $project->id])
             ),
+            'properties' => [
+                'lines' => [
+                    'status' => [
+                        'label' => __d('lil_projects', 'Status') . ':',
+                        'text' => empty($project->status_id) ? '' : ('<div class="chip z-depth-1">' . h($projectsStatuses[$project->status_id]) . '</div>')
+                    ],
+                ]
+            ],
+            'logs_title' => '<h3>' . __d('lil_projects', 'Logs') . '</h3>',
             'logs' => [
                 'params' => ['id' => 'projects-logs'],
                 'table' => [
@@ -47,14 +57,17 @@
         ]
     ];
 
-    $projectView['panels']['logs']['table']['body']['rows'][] = ['columns' => [
+    /*$projectView['panels']['logs']['table']['body']['rows'][] = ['columns' => [
         h($this->getCurrentUser()->get('name')),
         $this->Form->create(null, ['url' => ['controller' => 'ProjectsLogs', 'action' => 'add', '?' => ['project' => $project->id]], 'id' => 'add-log']) .
         $this->Form->textarea('descript', ['rows' => 2]) .
         $this->Form->button(__d('lil_projects', 'Save'), ['id' => 'submit-logs-btn']) .
         $this->Form->end()
-    ]];
+    ]];*/
 
+    if ($logs->count() == 0) {
+        $projectView['panels']['logs'] = '<i>' . __d('lil_projects', 'No logs created.') . '</i>';
+    }
     foreach ($logs as $log) {
         $projectView['panels']['logs']['table']['body']['rows'][] = ['columns' => [
             'user' => h($log->user->name),
@@ -69,3 +82,14 @@
     }
 
     echo $this->Lil->panels($projectView, 'LilProjects.Projects.view');
+    ?>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("#add-projects-log").each(function() {
+            $(this).modalPopup({
+                title: "<?= __d('lil_projects', 'Add Log') ?>",
+                onOpen: function(popup) { $("#projects-logs-descript", popup).focus(); }
+            });
+        });
+    });
+</script>

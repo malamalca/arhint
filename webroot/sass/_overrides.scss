@@ -12,14 +12,24 @@
 
 .small {
     font-size: 75% !important;
+
 }
 .big {
     font-size: 120% !important;
 }
 
-
+h2 {
+    font-size: 36px;
+}
 h3 {
     font-size: 30px;
+}
+
+button, input, optgroup, select, textarea {
+    line-height: 2 !important;
+}
+textarea {
+    background-color: #ffffff !important;
 }
 
 /* sidebar */
@@ -101,7 +111,7 @@ main, footer, nav {
     .sidenav-header {
         text-transform: uppercase;
         border-bottom: solid 1px #c0c0c0;
-        background-color: #f0f0f0 !important;
+        background-color: #e0e0e0 !important;
     }
     .sidenav-menu {
         .chevron {
@@ -112,19 +122,37 @@ main, footer, nav {
             li {
                 width: 100%;
 
+                a {
+                    font-size: 0.95rem;
+                }
+
                 .collapsible-header {
                     .chevron {
                         float: right;
                     }
                 }
+
+                .sidenav-header {
+                    font-weight: bold;
+                }
             }
 
             li.active {
                 .sidenav-header {
-                    color: #ffffff !important;
-                    text-shadow: 2px 2px $primary-color;
-                    background-color: $primary-color-light !important;
+                    color: white !important;
+                    font-weight: bold;
+                    background-color: $secondary-color !important;
+                    text-shadow: 1px 1px black;
                 }
+            }
+        }
+    }
+
+    .sidenav-submenu {
+        li {
+            a {
+                font-size: 0.9rem !important;
+                font-weight: normal !important;
             }
         }
     }

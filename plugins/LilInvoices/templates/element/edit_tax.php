@@ -56,9 +56,10 @@ foreach ($invoices_taxes as $k => $invoices_tax) {
         ],
     ];
     $analytics['tax_' . $taxIx++] = [
-        'method' => 'control',
+        'method' => 'select',
         'parameters' => [
-            'field' => sprintf('invoices_taxes.%d.vat_id', $k),
+            sprintf('invoices_taxes.%d.vat_id', $k),
+            $vatLevels,
             [
                 'type' => 'select',
                 'label' => false,
@@ -89,7 +90,7 @@ foreach ($invoices_taxes as $k => $invoices_tax) {
     $analytics['tax_' . $taxIx++] = '<td class="td-invoices-tax-base right-align">';
     $analytics['tax_' . $taxIx++] = [
         'class' => $this->Form,
-        'method' => 'control',
+        'method' => 'number',
         'parameters' => [
             'field' => sprintf('invoices_taxes.%d.base', $k),
             [

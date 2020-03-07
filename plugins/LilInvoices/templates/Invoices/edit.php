@@ -1,5 +1,6 @@
 <?php
 use Cake\Core\Configure;
+use Cake\Core\Plugin;
 use Cake\Routing\Router;
 
 $lilDocumentHelper = $this->loadHelper('LilInvoices.LilDocument');
@@ -147,6 +148,21 @@ $invoiceEdit = [
                     'field' => 'location', [
                         'label' => __d('lil_invoices', 'Location') . ':',
                         'default' => $invoice->issuer->city,
+                    ],
+                ],
+            ],
+            'project' => !Plugin::isLoaded('LilProjects') ? null : [
+                'method' => 'control',
+                'parameters' => [
+                    'field' => 'project_id', [
+                        'type' => 'select',
+                        'label' => [
+                            'text' => __d('lil_invoices', 'Project') . ':',
+                            'class' => 'active'
+                        ],
+                        'options' => $projects,
+                        'empty' => '-- ' . __d('lil_invoices', 'no project') . ' --',
+                        'class' => 'browser-default'
                     ],
                 ],
             ],

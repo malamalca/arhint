@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2018-03-03 18:29+0000\n"
-"PO-Revision-Date: 2018-03-03 19:30+0100\n"
+"POT-Creation-Date: 2020-02-29 17:04+0000\n"
+"PO-Revision-Date: 2020-02-29 18:07+0100\n"
 "Last-Translator: \n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
 "Language: sl_SI\n"
@@ -14,92 +14,190 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n"
 "%100==4 ? 2 : 3);\n"
-"X-Generator: Poedit 2.0.6\n"
+"X-Generator: Poedit 2.2.1\n"
 
-#: C:/htdocs/arhint/plugins/LilProjects/src/Controller/ProjectsController.php:34;41
-msgid "Invalid username/password!"
-msgstr "Neveljavno uporabniško ime ali geslo"
-
-#: C:/htdocs/arhint/plugins/LilProjects/src/Controller/ProjectsController.php:147
+#: Controller/ProjectsController.php:204
 msgid "The project has been saved."
 msgstr "Projekt je shranjen."
 
-#: C:/htdocs/arhint/plugins/LilProjects/src/Controller/ProjectsController.php:151
+#: Controller/ProjectsController.php:212
 msgid "The project could not be saved. Please, try again."
 msgstr "Projekta ni mogoče shraniti. Preverite vpisane podatke."
 
-#: C:/htdocs/arhint/plugins/LilProjects/src/Controller/ProjectsController.php:168
+#: Controller/ProjectsController.php:237
 msgid "The project has been deleted."
 msgstr "Projekt je izbrisan."
 
-#: C:/htdocs/arhint/plugins/LilProjects/src/Controller/ProjectsController.php:170
+#: Controller/ProjectsController.php:239
 msgid "The project could not be deleted. Please, try again."
 msgstr "Projekta ni mogoče izbrisati."
 
-#: C:/htdocs/arhint/plugins/LilProjects/src/Controller/ProjectsWorkhoursController.php:52
+#: Controller/ProjectsLogsController.php:49
+msgid "The projects log has been saved."
+msgstr "Zapis je shranjen."
+
+#: Controller/ProjectsLogsController.php:58
+msgid "The projects log could not be saved. Please, try again."
+msgstr "Zapisa ni mogoče shraniti. Preverite vpisane podatke."
+
+#: Controller/ProjectsLogsController.php:81
+msgid "The projects log has been deleted."
+msgstr "Zapis je izbrisan."
+
+#: Controller/ProjectsLogsController.php:83
+msgid "The projects log could not be deleted. Please, try again."
+msgstr "Zapisa ni mogoče izbrisati."
+
+#: Controller/ProjectsStatusesController.php:65
+msgid "The projects status has been saved."
+msgstr "Status je shranjen."
+
+#: Controller/ProjectsStatusesController.php:69
+msgid "The projects status could not be saved. Please, try again."
+msgstr "Statusa ni mogoče shraniti. Preverite vpisane podatke."
+
+#: Controller/ProjectsStatusesController.php:89
+msgid "The projects status has been deleted."
+msgstr "Status je izbrisan."
+
+#: Controller/ProjectsStatusesController.php:91
+msgid "The projects status could not be deleted. Please, try again."
+msgstr "Statusa ni mogoče izbrisati."
+
+#: Controller/ProjectsWorkhoursController.php:55
 msgid "The projects workhour has been saved."
 msgstr "Delovni čas je shranjen."
 
-#: C:/htdocs/arhint/plugins/LilProjects/src/Controller/ProjectsWorkhoursController.php:56
+#: Controller/ProjectsWorkhoursController.php:59
 msgid "The projects workhour could not be saved. Please, try again."
 msgstr "Delovnega časa ni mogoče shraniti. Preverite vpisane podatke."
 
-#: C:/htdocs/arhint/plugins/LilProjects/src/Controller/ProjectsWorkhoursController.php:73
+#: Controller/ProjectsWorkhoursController.php:78
 msgid "The projects workhour has been deleted."
 msgstr "Delovni čas je izbrisan."
 
-#: C:/htdocs/arhint/plugins/LilProjects/src/Controller/ProjectsWorkhoursController.php:75
+#: Controller/ProjectsWorkhoursController.php:80
 msgid "The projects workhour could not be deleted. Please, try again."
 msgstr "Delovnega časa ni mogoče izbrisati."
 
-#: C:/htdocs/arhint/plugins/LilProjects/src/Event/LilProjectsEvents.php:42
-#: C:/htdocs/arhint/plugins/LilProjects/src/Lib/LilProjectsSidebar.php:27;38
-#: C:/htdocs/arhint/plugins/LilProjects/src/Template/Projects/index.ctp:4
+#: Event/LilProjectsEvents.php:39 Lib/LilProjectsSidebar.php:30
 msgid "Projects"
 msgstr "Projekti"
 
-#: C:/htdocs/arhint/plugins/LilProjects/src/Template/Projects/edit.ctp:9
-msgid "Edit Project"
-msgstr "Uredi projekt"
+#: ProjectsLogs/edit.php:10
+msgid "Edit Log"
+msgstr "Uredi zapis"
 
-#: C:/htdocs/arhint/plugins/LilProjects/src/Template/Projects/edit.ctp:9
-msgid "Add Project"
-msgstr "Vpis projekta"
+#: ProjectsLogs/edit.php:10 Projects/index.php:84 Projects/view.php:25
+msgid "Add Log"
+msgstr "Dodaj zapis"
 
-#: C:/htdocs/arhint/plugins/LilProjects/src/Template/Projects/edit.ctp:12
-msgid "Delete"
-msgstr "Briši"
-
-#: C:/htdocs/arhint/plugins/LilProjects/src/Template/Projects/edit.ctp:16
-msgid "Are you sure you want to delete this project?"
-msgstr "Ste prepričani, da želite izbrisati projekt?"
-
-#: C:/htdocs/arhint/plugins/LilProjects/src/Template/Projects/edit.ctp:45
-#: C:/htdocs/arhint/plugins/LilProjects/src/Template/Projects/index.ctp:18
-msgid "No."
-msgstr "Št."
-
-#: C:/htdocs/arhint/plugins/LilProjects/src/Template/Projects/edit.ctp:56
-#: C:/htdocs/arhint/plugins/LilProjects/src/Template/Projects/index.ctp:19
-msgid "Title"
-msgstr "Naziv"
-
-#: C:/htdocs/arhint/plugins/LilProjects/src/Template/Projects/edit.ctp:64
+#: ProjectsLogs/edit.php:51 ProjectsStatuses/edit.php:35 Projects/edit.php:129
+#: Projects/map_popup.php:30 Projects/view.php:62
 msgid "Save"
 msgstr "Shrani"
 
-#: C:/htdocs/arhint/plugins/LilProjects/src/Template/Projects/index.ctp:7
+#: ProjectsStatuses/edit.php:4
+msgid "Edit Project Status"
+msgstr "Uredi status projekta"
+
+#: ProjectsStatuses/edit.php:4
+msgid "Add Project Status"
+msgstr "Vpis statusa projekta"
+
+#: ProjectsStatuses/edit.php:27 ProjectsStatuses/index.php:21
+#: Projects/edit.php:48 Projects/index.php:35
+msgid "Title"
+msgstr "Naziv"
+
+#: ProjectsStatuses/edit.php:28
+msgid "Title is required."
+msgstr "Naziv je zahtevano polje."
+
+#: ProjectsStatuses/index.php:4
+msgid "Statuses"
+msgstr "Statusi"
+
+#: ProjectsStatuses/index.php:7 Projects/index.php:22 Projects/map.php:9
 msgid "Add"
 msgstr "Vpis"
 
-#: C:/htdocs/arhint/plugins/LilProjects/src/Template/Projects/index.ctp:20
-msgid "Expenses"
-msgstr "Stroški"
+#: Projects/edit.php:8
+msgid "Edit Project"
+msgstr "Uredi projekt"
 
-#: C:/htdocs/arhint/plugins/LilProjects/src/Template/Projects/index.ctp:21
-msgid "Work Hours/Cost"
-msgstr "Ure/Strošek"
+#: Projects/edit.php:8
+msgid "Add Project"
+msgstr "Vpis projekta"
 
-#: C:/htdocs/arhint/plugins/LilProjects/src/Template/Projects/index.ctp:22
-msgid "Total"
-msgstr "Skupaj"
+#: Projects/edit.php:37
+msgid "No."
+msgstr "Št."
+
+#: Projects/edit.php:60 Projects/index.php:36 Projects/view.php:43
+msgid "Status"
+msgstr "Status"
+
+#: Projects/edit.php:63
+msgid "status"
+msgstr "status"
+
+#: Projects/edit.php:74 Projects/index.php:5 Projects/index.php:10
+msgid "Active"
+msgstr "Aktivni"
+
+#: Projects/edit.php:86
+msgid "Latitude"
+msgstr "Zem. širina"
+
+#: Projects/edit.php:97
+msgid "Longitude"
+msgstr "Zem. dolžina"
+
+#: Projects/edit.php:121
+msgid "Colorize"
+msgstr "Obarvanost"
+
+#: Projects/index.php:5 Projects/index.php:11
+msgid "All"
+msgstr "Vsi"
+
+#: Projects/index.php:16
+msgid "{0} Projects"
+msgstr "{0} Projekti"
+
+#: Projects/index.php:38
+msgid "Last Log"
+msgstr "Zadnji zapisi"
+
+#: Projects/map.php:6
+msgid "Projects Map"
+msgstr "Zemljevid projektov"
+
+#: Projects/view.php:6
+msgid "Edit"
+msgstr "Uredi"
+
+#: Projects/view.php:14
+msgid "Delete"
+msgstr "Briši"
+
+#: Projects/view.php:21
+msgid "Are you sure you want to delete this project?"
+msgstr "Ste prepričani, da želite izbrisati projekt?"
+
+#: Projects/view.php:73
+msgid "delete"
+msgstr "briši"
+
+#~ msgid "Invalid username/password!"
+#~ msgstr "Neveljavno uporabniško ime ali geslo"
+
+#~ msgid "Expenses"
+#~ msgstr "Stroški"
+
+#~ msgid "Work Hours/Cost"
+#~ msgstr "Ure/Strošek"
+
+#~ msgid "Total"
+#~ msgstr "Skupaj"

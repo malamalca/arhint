@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace LilInvoices\Controller;
 
 use Cake\Collection\Collection;
+use Cake\Core\Plugin;
 use Cake\Event\EventInterface;
 use Cake\Http\Exception\NotFoundException;
 use Cake\I18n\FrozenTime;
@@ -39,6 +40,11 @@ class InvoicesController extends AppController
             }
 
             if (in_array($this->getRequest()->getParam('action'), ['editPreview'])) {
+                $this->Security->setConfig('validatePost', false);
+            }
+
+            // post from external program like LilScan
+            if (in_array($this->getRequest()->getParam('action'), ['edit']) && $this->request->hasHeader('Lil-Scan')) {
                 $this->Security->setConfig('validatePost', false);
             }
         }
@@ -173,16 +179,16 @@ class InvoicesController extends AppController
 
                 if ($this->Invoices->save($invoice, $saveOptions)) {
                     $conn->commit();
-                    if (!$this->getRequest()->is('ajax')) {
-                        $this->Flash->success(__d('lil_invoices', 'The invoice has been saved.'));
-
-                        return $this->redirect(['action' => 'view', $invoice->id]);
-                    } else {
+                    if ($this->getRequest()->is('ajax') || $this->getRequest()->is('lilScan')) {
                         $response = $this->getResponse()
                             ->withType('application/json')
                             ->withStringBody(json_encode(['invoice' => $invoice]));
 
                         return $response;
+                    } else {
+                        $this->Flash->success(__d('lil_invoices', 'The invoice has been saved.'));
+
+                        return $this->redirect(['action' => 'view', $invoice->id]);
                     }
                 }
 
@@ -205,11 +211,18 @@ class InvoicesController extends AppController
             ->where(['InvoicesCounters.id' => $invoice->counter_id])
             ->first();
 
+        $projects = [];
+        if (Plugin::isLoaded('LilProjects')) {
+            /** @var \LilProjects\Model\Table\ProjectsTable $ProjectsTable */
+            $ProjectsTable = TableRegistry::getTableLocator()->get('LilProjects.Projects');
+            $projects = $ProjectsTable->findForOwner($this->getCurrentUser()->get('company_id'));
+        }
+
         /** @var \LilInvoices\Model\Table\VatsTable $VatsTable */
         $VatsTable = TableRegistry::getTableLocator()->get('LilInvoices.Vats');
         $vatLevels = $VatsTable->levels($this->getCurrentUser()->get('company_id'));
 
-        $this->set(compact('invoice', 'counter', 'vatLevels'));
+        $this->set(compact('invoice', 'counter', 'vatLevels', 'projects'));
 
         return null;
     }

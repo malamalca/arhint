@@ -180,6 +180,9 @@ ServerRequest::addDetector('tablet', function ($request) {
 
     return $detector->isTablet();
 });
+ServerRequest::addDetector('lilScan', function ($request) {
+    return $request->hasHeader('Lil-Scan');
+});
 
 ServerRequest::addDetector('pdf', ['param' => '_ext', 'options' => ['pdf']]);
 

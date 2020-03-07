@@ -50,7 +50,11 @@ $userForm = [
                 'parameters' => ['old_passwd', [
                     'type' => 'password',
                     'label' => __('Current Password') . ':',
-                    'value' => ''
+                    'value' => '',
+                    'error' => [
+                        'empty' => __('Must not be empty.'),
+                        'match' => __('Passwords do not match.')
+                    ]
                 ]]
             ],
             'passwd' => [
@@ -66,7 +70,11 @@ $userForm = [
                 'parameters' => ['repeat_passwd', [
                     'type' => 'password',
                     'label' => __('Repeat Password') . ':',
-                    'value' => ''
+                    'value' => '',
+                    'error' => [
+                        'empty' => __('Must not be empty.'),
+                        'match' => __('Passwords do not match.')
+                    ]
                 ]]
             ],
             'fs_login_end' => '</fieldset>',

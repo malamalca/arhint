@@ -142,4 +142,22 @@ class ProjectsTable extends Table
 
         return $ret;
     }
+
+    /**
+     * List projects by kind for specified owner.
+     *
+     * @param string $ownerId User Id.
+     * @return array
+     */
+    public function findForOwner($ownerId)
+    {
+        // In a controller or table method.
+        $query = $this->find('list', ['keyField' => 'id', 'valueField' => 'title'])
+            ->where(['owner_id' => $ownerId, 'active' => true])
+            ->order('title');
+
+        $data = $query->toArray();
+
+        return $data;
+    }
 }

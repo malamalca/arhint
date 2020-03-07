@@ -57,4 +57,14 @@ class Project extends Entity
     {
         return $this->no . ' - ' . $this->title;
     }
+
+    /**
+     * Magic method __toString
+     *
+     * @return string
+     */
+    public function __toString(): string
+    {
+        return $this->title;
+    }
 }

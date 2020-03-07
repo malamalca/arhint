@@ -59,7 +59,7 @@ use Cake\I18n\Time;
                     }
                     ?>
                 </li>
-                <li class="sidenav-header"><?= $this->Html->link(Configure::read('Lil.appTitle'), '/') ?></a></li>
+                <!--<li class="sidenav-header"><?= $this->Html->link(Configure::read('Lil.appTitle'), '/') ?></a></li>-->
                 <li class="sidenav-menu no-padding hide-on-large-only">
                     <?= $this->element('mainmenu', ['prefix' => 'side']) ?>
                 </li>
@@ -78,7 +78,7 @@ use Cake\I18n\Time;
             <?php
             if ($title = $this->fetch('title')) {
                 if ($title != '&nbsp;') {
-                    printf('<h3>%s</h3>', $title);
+                    printf('<h2>%s</h2>', $title);
                 }
             }
             ?>

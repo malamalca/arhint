@@ -169,8 +169,7 @@ class UsersController extends AppController
      */
     public function index()
     {
-        $q = $this->Users->find()
-            ->where(['company_id' => $this->getCurrentUser()->get('company_id')])
+        $q = $this->Authorization->applyScope($this->Users->find())
             ->order('name');
 
         $filter = $this->Users->filter($q, $this->getRequest());
@@ -191,6 +190,8 @@ class UsersController extends AppController
     public function view($id = null)
     {
         $user = $this->Users->get($id);
+
+        $this->Authorization->authorize($user);
 
         $this->set('user', $user);
 
@@ -240,6 +241,9 @@ class UsersController extends AppController
             $user = $this->Users->newEmptyEntity();
             $user->company_id = $this->getCurrentUser()->get('company_id');
         }
+
+        $this->Authorization->authorize($user);
+
         if ($this->getRequest()->is(['patch', 'post', 'put'])) {
             $user = $this->Users->patchEntity($user, $this->getRequest()->getData());
             if ($this->Users->save($user)) {
@@ -265,8 +269,14 @@ class UsersController extends AppController
     {
         $user = $this->Users->get($this->getCurrentUser()->get('id'));
 
+        $this->Authorization->authorize($user);
+
         if ($this->getRequest()->is(['patch', 'post', 'put'])) {
             $user = $this->Users->patchEntity($user, $this->getRequest()->getData(), ['validate' => 'properties']);
+            if (empty($this->getRequest()->getData('passwd'))) {
+                unset($user->passwd);
+            }
+
             if ($this->Users->save($user)) {
                 $this->Flash->success(__('Properties have been saved.'));
 

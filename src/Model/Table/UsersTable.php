@@ -165,44 +165,38 @@ class UsersTable extends Table
     {
         $validator = new Validator();
         $validator
+            ->allowEmptyString('passwd')
             ->add('passwd', 'minLength', ['rule' => ['minLength', 4]])
-            ->requirePresence(
-                'repeat_passwd',
-                function ($context) {
-                    return !empty($context['data']['repeat_passwd']);
-                }
-            )
-            ->notEmptyString('repeat_passwd')
+
+            ->notEmptyString('repeat_passwd', 'empty', function ($context) {
+                return !empty($context['data']['passwd']);
+            })
             ->add('repeat_passwd', 'match', [
                     'rule' => function ($value, $context) {
                         return $value == $context['data']['passwd'];
                     },
                 ])
 
-            ->requirePresence(
-                'old_passwd',
-                function ($context) {
-                    return !empty($context['data']['old_passwd']);
-                }
-            )
-            ->notEmptyString('old_passwd')
-            ->add('repeat_passwd', 'match', [
-                    'rule' => function ($value, $context) {
-                        /** @var \App\Controller\UsersController $controller */
-                        $controller = $this;
+            ->notEmptyString('old_passwd', 'empty', function ($context) {
+                return !empty($context['data']['passwd']);
+            })
+            ->add('old_passwd', 'match', [
+                'rule' => function ($value, $context) {
+                    /** @var \App\Controller\UsersController $controller */
+                    $controller = $this;
 
-                        /** @var \App\Model\Table\UsersTable $UsersTable */
-                        $UsersTable = TableRegistry::getTableLocator()->get('Users');
-                        $user = $UsersTable->get($context['data']['id']);
+                    /** @var \App\Model\Table\UsersTable $UsersTable */
+                    $UsersTable = TableRegistry::getTableLocator()->get('Users');
+                    $user = $UsersTable->get($context['data']['id']);
 
-                        /** @var \Authentication\Identifier\PasswordIdentifier $identifier */
-                        $identifier = $controller->Authentication->getIdentity()->getIdentifier();
+                    /** @var \Authentication\Identifier\PasswordIdentifier $identifier */
+                    $identifier = $controller->Authentication->getIdentity()->getIdentifier();
 
-                        $passwordHasher = $identifier->getPasswordHasher();
+                    $passwordHasher = $identifier->getPasswordHasher();
 
-                        return $passwordHasher->check($value, $user->passwd);
-                    },
-                ]);
+                    return $passwordHasher->check($value, $user->passwd);
+                },
+            ]);
 
         return $validator;
     }

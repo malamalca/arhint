@@ -201,7 +201,6 @@ jQuery.fn.InvoiceItemEditor = function (pOptions) {
 
     var elem = $('input.invoices-item-descript', this).get(0);
     M.AutocompleteAjax.init(elem, $this.invoicesItemAutocomplete);
-    //$('input.invoices-item-descript', this).autocomplete(this.invoicesItemAutocomplete);
 
     $('input.invoices-item-qty', this).blur($this.onInputsChange);
     $('input.invoices-item-price', this).blur($this.onInputsChange);

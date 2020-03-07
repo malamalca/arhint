@@ -51,7 +51,7 @@ div#PanelViewContactEmployees {
 #ContactsIndexTable td.contact-name div.contact-employer,
 #ContactsIndexTable td.contact-name div.contact-descript {
     display: block;
-    max-width: 350px;
+    max-width: 280px;
 
     white-space: nowrap;
     overflow: hidden;

@@ -75,13 +75,17 @@ class LilExpensesEvents implements EventListenerInterface
             'expense_kind' => [
                 'method' => 'control',
                 'parameters' => ['expense', [
-                    'label' => __d('lil_expenses', 'Income/Expense') . ':',
+                    'label' => [
+                        'text' => __d('lil_expenses', 'Income/Expense') . ':',
+                        'class' => 'active',
+                    ],
                     'type' => 'select',
                     'options' => [
                         constant('LILEXPENSES_COUNTER_INCOME') => __d('lil_expenses', 'Income'),
                         constant('LILEXPENSES_COUNTER_EXPENSE') => __d('lil_expenses', 'Expense'),
                     ],
                     'empty' => __d('lil_expenses', 'Neither expense nor income'),
+                    'class' => 'browser-default',
                 ]],
             ],
             'fs_expense_end' => '</fieldset>',

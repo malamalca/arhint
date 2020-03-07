@@ -21,6 +21,7 @@ class LilInvoicesEvents implements EventListenerInterface
             'View.beforeRender' => 'addScripts',
             'Lil.Sidebar.beforeRender' => 'modifySidebar',
             'Lil.Panels.LilCrm.Contacts.view' => 'showInvoicesTable',
+            'Lil.Panels.LilProjects.Projects.view' => 'showInvoicesTable',
         ];
     }
 
@@ -66,33 +67,67 @@ class LilInvoicesEvents implements EventListenerInterface
         $view = $event->getSubject();
         $view->loadHelper('Paginator');
 
+        $invoicesPerPage = 5;
+        $page = (int)$view->getRequest()->getQuery('invoices.page', 1);
+
+        // prepare query
+        $sort = 'Invoices.';
+        $sort .= $view->getRequest()->getQuery('invoices.sort', 'dat_issue');
+        $sort .= ' ' . $view->getRequest()->getQuery('invoices.direction', 'DESC');
+
         $Invoices = TableRegistry::get('LilInvoices.Invoices');
-        $invoices = $Invoices->find()
-            ->where([
-                'OR' => [
-                    'Buyers.contact_id' => $panels->entity->id,
-                    'Issuers.contact_id' => $panels->entity->id,
-                ],
-                // II - izdajatelj; IV - prejemnik; BY - naročnik
-            ])
-            ->contain(['Buyers', 'Issuers', 'InvoicesCounters'])
-            ->order('Invoices.dat_issue DESC')
+        $query = $Invoices->find();
+
+        switch ($event->getName()) {
+            case 'Lil.Panels.LilCrm.Contacts.view':
+                $query->where([
+                    'OR' => [
+                        'Buyers.contact_id' => $panels->entity->id,
+                        'Issuers.contact_id' => $panels->entity->id,
+                    ],
+                ])
+                ->contain(['Buyers', 'Issuers', 'InvoicesCounters']);
+                break;
+            case 'Lil.Panels.LilProjects.Projects.view':
+                $query->where(['Invoices.project_id' => $panels->entity->id])
+                ->contain(['InvoicesCounters']);
+                break;
+        }
+
+        // fetch invoices
+        $query4Invoices = clone $query;
+        $invoices = $query4Invoices->order($sort)
+            ->limit($invoicesPerPage)
+            ->page($page)
             ->all();
 
-        $page = (int)$view->getRequest()->getQuery('invoices.page', 1);
-        $view->setRequest($view->getRequest()->withParam(
+        // calculate total sum and number of invoices
+        $invoicesTotals = $query->select([
+            'invoicesSum' => $query->func()->sum('Invoices.total'),
+            'invoicesCount' => $query->func()->count('Invoices.id'),
+        ])
+            ->disableHydration()
+            ->first();
+
+        // set view variables
+        $view->set('entityId', $view->getRequest()->getParam('pass.0'));
+        $view->set('invoicesSum', $invoicesTotals['invoicesSum']);
+
+        // set paging data
+        $view->setRequest($view->getRequest()->withAttribute(
             'paging',
             ['Invoices' => [
-                'pageCount' => floor($invoices->count() / 10),
+                'pageCount' => (int)(floor($invoicesTotals['invoicesCount'] / $invoicesPerPage)),
                 'page' => $page,
                 'scope' => 'invoices',
             ]]
         ));
 
+        // create Lil panels
         $invoicesPanels = [
-            'payments_title' => '<h3>' . __d('lil_invoices', 'Invoices') . '</h3>',
-            'payments_table' => $view->element('LilInvoices.invoices_list', [
-                'invoices' => $invoices->take(10, ($page - 1 ) * 10),
+            'invoices_title' => '<h3>' . __d('lil_invoices', 'Invoices') . '</h3>',
+            'invoices_table' => $view->element('LilInvoices.invoices_list', [
+                'invoices' => $invoices,
             ]),
         ];
 

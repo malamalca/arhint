@@ -38,7 +38,7 @@ if (!empty($sidebar)) {
                                     <i class="material-icons chevron">arrow_drop_down</i>
                                 </a>
                                 <div class="collapsible-body">
-                                    <ul>
+                                    <ul class="sidenav-submenu">
                                     <?php
                                     foreach ($item['submenu'] as $submenuItem) {
                                         if (!empty($submenuItem['visible'])) {

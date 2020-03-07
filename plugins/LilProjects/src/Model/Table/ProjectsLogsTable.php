@@ -67,7 +67,7 @@ class ProjectsLogsTable extends Table
 
         $validator
             ->scalar('descript')
-            ->notEmpty('descript');
+            ->notEmptyString('descript');
 
         return $validator;
     }

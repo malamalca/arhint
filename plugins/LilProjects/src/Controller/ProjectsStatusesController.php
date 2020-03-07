@@ -62,11 +62,11 @@ class ProjectsStatusesController extends AppController
         if ($this->request->is(['patch', 'post', 'put'])) {
             $projectsStatus = $this->ProjectsStatuses->patchEntity($projectsStatus, $this->request->getData());
             if ($this->ProjectsStatuses->save($projectsStatus)) {
-                $this->Flash->success(__('The projects status has been saved.'));
+                $this->Flash->success(__d('lil_projects', 'The projects status has been saved.'));
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The projects status could not be saved. Please, try again.'));
+            $this->Flash->error(__d('lil_projects', 'The projects status could not be saved. Please, try again.'));
         }
         $this->set(compact('projectsStatus'));
 
@@ -86,9 +86,9 @@ class ProjectsStatusesController extends AppController
         $projectsStatus = $this->ProjectsStatuses->get($id);
         $this->Authorization->authorize($projectsStatus);
         if ($this->ProjectsStatuses->delete($projectsStatus)) {
-            $this->Flash->success(__('The projects status has been deleted.'));
+            $this->Flash->success(__d('lil_projects', 'The projects status has been deleted.'));
         } else {
-            $this->Flash->error(__('The projects status could not be deleted. Please, try again.'));
+            $this->Flash->error(__d('lil_projects', 'The projects status could not be deleted. Please, try again.'));
         }
 
         return $this->redirect(['action' => 'index']);

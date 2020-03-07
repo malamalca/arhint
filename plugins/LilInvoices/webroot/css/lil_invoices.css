@@ -1,15 +1,37 @@
 /* EDIT INVOICE */
 #invoice-title, #invoice-receiver-title, #invoice-buyer-title, #invoice-issuer-title,
+#invoice-no, #invoice-location, #invoice-project-id,
+#invoice-total,
 #invoice-pmt-kind, #invoice-pmt-sepa-type, #invoice-pmt-descript {
+    width: 400px !important;
+}
+
+#invoice-dat-issue, #invoice-dat-service, #invoice-dat-expire {
+    width: auto !important;
+}
+
+#invoice-analytics-table,
+#invoice-tax-table,
+#invoice-dates-table,
+#invoice-items-table,
+table#InvoicesList {
+    width: 750px;
+}
+table#InvoicePayment {
     width: 400px;
 }
 
-#invoice-analytics-table, #invoice-tax-table, #invoice-dates-table, #invoice-items-table {
-    width: 750px;
-}
-
-#invoice-analytics-table td, #invoice-tax-table td, invoice-payments-table td {
+#invoice-analytics-table td,
+#invoice-tax-table td,
+#invoice-items-table td,
+#invoice-payments-table td,
+#InvoicePayment td,
+#invoice-dates-table td {
     vertical-align: baseline;
+    padding: 0 !important;
+    padding-top: 7px !important;
+    padding-left: 3px !important;
+    padding-right: 3px !important;
 }
 
 #invoice-descript {
@@ -101,11 +123,20 @@ iframe#invoice-view {
     border: none;
 }
 
+.td-invoices-item-descript div.input-field {
+    margin: 0;
+}
+.td-invoices-item-descript div.input-field input {
+    height: 32px !important;
+}
+
 /* EDIT COUNTER */
-#counter-kind, #counter-title, #counter-tpl-title, #counter-mask, #counter-template-descript,
+#counter-kind, #counter-title, #counter-tpl-title, #counter-mask,
+#counter-counter, #counter-expense,
+#counter-template-descript,
 #counter-tpl-header-id, #counter-tpl-body-id, #counter-tpl-footer-id, #counter-doc-type
 {
-    width: 400px;
+    width: 400px !important;
 }
 
 /* EDIT TEMPLATE */
@@ -121,4 +152,15 @@ iframe#invoice-view {
     font-family: courier, monospace;
     font-size: 12px;
      -moz-tab-size:4; -o-tab-size:4; -webkit-tab-size:4; tab-size:4;
+}
+
+
+/*  INVOICES INDEX */
+#AdminInvoicesIndex div.invoices-no {
+    display: block;
+    max-width: 180px;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }

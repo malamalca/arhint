@@ -14,6 +14,7 @@ use Cake\ORM\TableRegistry;
  * @property string|null $user_id
  * @property string|null $contact_id
  * @property string $counter_id
+ * @property string|null $project_id
  * @property string|null $doc_type
  * @property string|null $tpl_header_id
  * @property string|null $tpl_body_id

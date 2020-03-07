@@ -1,49 +1,57 @@
 <?php
 // UPDATE `invoices_clients` SET contact_id = (SELECT id FROM contacts WHERE contacts.title = invoices_clients.title);
-if (!$invoices->isEmpty()) {
+if ($invoices->count() > 0) {
+    $pagingUrl = [
+        'action' => 'view',
+        $entityId
+    ];
+    $pagingDirection = $this->getRequest()->getQuery('invoices.direction', 'asc');
+    $pagingDirection = $pagingDirection == 'asc' ? 'desc' : null;
+
     $paymentsTable = [
         'parameters' => [
-            'width' => '100%', 'cellspacing' => 0, 'cellpadding' => 0, 'id' => 'PaymentsList', 'width' => '700'
+            'width' => '100%', 'cellspacing' => 0, 'cellpadding' => 0, 'id' => 'InvoicesList', 'width' => '700'
         ],
         'head' => ['rows' => [['columns' => [
             'no' => [
-                'parameters' => ['class' => 'left'],
-                'html' => __d('lil_invoices', 'No'),
+                'parameters' => ['class' => 'left-align'],
+                'html' => __d('lil_invoices', 'Invoice'),
             ],
             'date' => [
-                'parameters' => ['class' => 'center'],
-                'html' => __d('lil_invoices', 'Date'),
-            ],
-            'account' => [
-                'parameters' => ['class' => 'left'],
-                'html' => __d('lil_invoices', 'Title'),
-            ],
-            'net_total' => [
-                'parameters' => ['class' => 'right'],
-                'html' => __d('lil_invoices', 'Net Total'),
+                'parameters' => ['class' => 'center-align'],
+                'html' => $this->Paginator->sort(
+                    'dat_issue',
+                    __d('lil_invoices', 'Date'),
+                    ['url' => $pagingUrl, 'direction' => $pagingDirection]
+                ),
             ],
             'total' => [
-                'parameters' => ['class' => 'right'],
-                'html' => __d('lil_invoices', 'Total'),
+                'parameters' => ['class' => 'right-align'],
+                'html' => $this->Paginator->sort(
+                    'total',
+                    __d('lil_invoices', 'Total'),
+                    ['url' => $pagingUrl, 'direction' => $pagingDirection]
+                ),
             ],
         ]]]],
         'foot' => ['rows' => [['columns' => [
             'actions' => [
-                'parameters' => ['colspan' => '2', 'class' => 'left'],
-                'html' => '<ul class="paginator-numbers">' .
-                    $this->Paginator->numbers(['first' => 1, 'last' => 1, 'modulus' => 3, 'model' => 'Invoices']) .
+                'parameters' => ['class' => 'left-align'],
+                'html' => '<ul class="paginator">' .
+                    $this->Paginator->numbers([
+                        'first' => 1,
+                        'last' => 1,
+                        'modulus' => 3,
+                        'url' => $pagingUrl
+                    ]) .
                     '</ul>',
             ],
             'caption' => [
-                'parameters' => ['class' => 'right'],
+                'parameters' => ['class' => 'right-align'],
                 'html' => __d('lil_invoices', 'Total') . ':',
             ],
-            'net_total' => [
-                'parameters' => ['class' => 'right'],
-                'html' => '',
-            ],
             'total' => [
-                'parameters' => ['class' => 'right'],
+                'parameters' => ['class' => 'right-align'],
                 'html' => '',
             ],
          ]]]],
@@ -54,47 +62,36 @@ if (!$invoices->isEmpty()) {
     foreach ($invoices as $invoice) {
         $paymentsTable['body']['rows'][]['columns'] = [
             'no' => [
-                'parameters' => ['class' => 'left'],
-                'html' => $this->Html->link(
-                    $invoice->no,
+                'parameters' => ['class' => 'left-align'],
+                'html' =>
+                '<div class="small">' . h($invoice->invoices_counter->title) . '</div>' .
+                $this->Html->link(
+                    '#' . $invoice->no . ' - ' . $invoice->title,
                     [
                         'plugin' => 'LilInvoices',
                         'controller' => 'invoices',
                         'action' => 'view',
                         $invoice->id,
                     ]
-                ) . '<div class="light">' . h($invoice->invoices_counter->title) . '</div>',
+                ),
             ],
             'date' => [
-                'parameters' => ['class' => 'center'],
-                'html' => $this->Time->format($invoice->dat_issue, $this->Lil->dateFormat()),
-            ],
-            'title' => [
-                'parameters' => ['class' => 'left'],
-                'html' => h($invoice->title),
-            ],
-            'net_total' => [
-                'parameters' => ['class' => 'right'],
-                'html' => $this->Number->precision($invoice->net_total, 2),
+                'parameters' => ['class' => 'center-align'],
+                'html' => (string)$invoice->dat_issue,
             ],
             'total' => [
-                'parameters' => ['class' => 'right'],
-                'html' => $this->Number->precision($invoice->total, 2),
+                'parameters' => ['class' => 'right-align'],
+                'html' => $this->Number->currency($invoice->total),
             ],
         ];
         $total += $invoice->total;
         $net_total += $invoice->net_total;
     }
 
-    $paymentsTable['foot']['rows'][0]['columns']['net_total']['html'] =
-        $this->Number->precision($net_total, 2);
     $paymentsTable['foot']['rows'][0]['columns']['total']['html'] =
-        $this->Number->precision($total, 2);
+        $this->Number->currency($invoicesSum);
 
-    echo $this->Lil->table($paymentsTable, 'LilExpenses.Element.payments_list');
-
-    $this->Lil->jsReady(sprintf('$("td.edit-payment > a").click(function() { popup("%s", $(this).prop("href"), "auto", 500); return false; });', __d('lil_invoices', 'Edit Payment')));
-    $this->Lil->jsReady(sprintf('$("th.add-payment > a").click(function() { popup("%s", $(this).prop("href"), "auto", 500); return false; });', __d('lil_invoices', 'Add Payment')));
+    echo $this->Lil->table($paymentsTable, 'LilInvoices.Element.invoices_list');
 } else {
     echo '<div class="hint">' . __d('lil_invoices', 'No invoices for this Contact found.') . '</div>';
 }

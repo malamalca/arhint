@@ -404,6 +404,6 @@ return [
 
     'Lil' => [
         'layout' => 'default',
-        'appTitle' => 'ARHIM Intranet',
+        'appTitle' => 'ARHINT',
     ]
 ];

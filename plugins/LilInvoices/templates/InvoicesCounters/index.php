@@ -75,7 +75,13 @@ foreach ($counters as $counter) {
         ],
         'actions' => [
             'parameters' => ['class' => 'right-align'],
-            'html' => $this->Lil->editLink($counter->id) . ' ' . $this->Lil->deleteLink($counter->id),
+            'html' =>
+                $this->Html->link(
+                    '<i class="material-icons chevron">unarchive</i>',
+                    ['controller' => 'Invoices', 'action' => 'index', '?' => ['counter' => $counter->id]],
+                    ['escape' => false, 'class' => 'btn btn-small btn-floating waves-effect waves-light waves-circle']
+                ) . ' ' .
+                $this->Lil->editLink($counter->id) . ' ' . $this->Lil->deleteLink($counter->id),
         ],
     ];
 }

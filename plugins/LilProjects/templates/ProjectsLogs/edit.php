@@ -39,8 +39,8 @@ $editForm = [
                 'parameters' => [
                     'descript',
                     [
-                        'type' => 'textarea',
-                        'label' => __d('lil_projects', 'Title') . ':',
+                        'type' => 'text',
+                        'label' => false,
                     ]
                 ]
             ],

@@ -291,7 +291,7 @@ if ($lilDocumentHelper->isInvoice($invoice)) {
     }
 
     $items = [
-        'parameters' => ['cellspacing' => "0", 'cellpadding' => "0", 'id' => "invoice-analytics-table", 'class' => "index-static"],
+        'parameters' => ['cellspacing' => "0", 'cellpadding' => "0", 'id' => "invoice-analytics-table"],
         'head' => [
             'rows' => [
                 0 => [

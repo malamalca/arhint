@@ -76,7 +76,7 @@ foreach ($invoices_items as $k => $item) {
 
     $analytics['itm_' . $itmIx++] = '<td class="td-invoices-item-qty right-align">';
     $analytics['itm_' . $itmIx++] = [
-        'method' => 'control',
+        'method' => 'number',
         'parameters' => [
             'field' => 'invoices_items.' . $k . '.qty', [
                 'type' => 'number',
@@ -92,7 +92,7 @@ foreach ($invoices_items as $k => $item) {
 
     $analytics['itm_' . $itmIx++] = '<td class="td-invoices-item-unit right-align">';
     $analytics['itm_' . $itmIx++] = [
-        'method' => 'control',
+        'method' => 'text',
         'parameters' => [
             'field' => 'invoices_items.' . $k . '.unit', [
                 'type' => 'text',
@@ -107,7 +107,7 @@ foreach ($invoices_items as $k => $item) {
 
     $analytics['itm_' . $itmIx++] = '<td class="td-invoices-item-price right-align">';
     $analytics['itm_' . $itmIx++] = [
-        'method' => 'control',
+        'method' => 'number',
         'parameters' => [
             'field' => 'invoices_items.' . $k . '.price', [
                 'type' => 'number',
@@ -123,7 +123,7 @@ foreach ($invoices_items as $k => $item) {
 
     $analytics['itm_' . $itmIx++] = '<td class="td-invoices-item-discount right-align">';
     $analytics['itm_' . $itmIx++] = [
-        'method' => 'control',
+        'method' => 'number',
         'parameters' => [
             'field' => 'invoices_items.' . $k . '.discount', [
                 'type' => 'number',
@@ -170,14 +170,14 @@ foreach ($invoices_items as $k => $item) {
         ],
     ];
     $analytics['itm_' . $itmIx++] = [
-        'method' => 'control',
+        'method' => 'select',
         'parameters' => [
             'field' => 'invoices_items.' . $k . '.vat_id',
+            $vatOptions,
             [
                 'type' => 'select',
                 'label' => false,
                 'value' => $item->vat_id,
-                'options' => $vatOptions,
                 'class' => 'invoices-item-vat_id browser-default',
                 'empty' => true,
             ],
@@ -214,14 +214,14 @@ foreach ($invoices_items as $k => $item) {
     // table FOOTER with grand total and add new row link
     $analytics['itm_' . $itmIx++] = '<tfoot><tr>';
     $analytics['itm_' . $itmIx++] = sprintf(
-        '<th colspan="2">%s</th>',
+        '<th colspan="3">%s</th>',
         $this->Html->link(
             __d('lil_invoices', 'Add new Item'),
             'javascript:void(0);',
             ['id' => 'add-invoice-item-row']
         )
     );
-    $analytics['itm_' . $itmIx++] = sprintf('<th colspan="4" class="right-align">%1$s:</th>', __d('lil_invoices', 'Grand Total'));
+    $analytics['itm_' . $itmIx++] = sprintf('<th colspan="3" class="right-align">%1$s:</th>', __d('lil_invoices', 'Grand Total'));
     $analytics['itm_' . $itmIx++] = sprintf('<th class="right-align" id="invoice-items-total">%s</th>', $this->Number->precision($itemsTotal, 2));
     $analytics['itm_' . $itmIx++] = '<th class="right-align">&nbsp;</th>';
     $analytics['itm_' . $itmIx++] = sprintf('<th class="right-align" id="invoice-items-grand-total">%s</th>', $this->Number->precision($itemsGrandTotal, 2));

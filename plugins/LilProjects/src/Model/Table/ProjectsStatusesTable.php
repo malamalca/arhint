@@ -10,7 +10,7 @@ use Cake\Validation\Validator;
 /**
  * ProjectsStatuses Model
  *
- * @property \LilProjects\Model\Table\OwnersTable&\Cake\ORM\Association\BelongsTo $Owners
+ * @property \LilProjects\Model\Table\ProjectsTable&\Cake\ORM\Association\HasMany $Projects
  *
  * @method \LilProjects\Model\Entity\ProjectsStatus newEmptyEntity()
  * @method \LilProjects\Model\Entity\ProjectsStatus newEntity(array $data, array $options = [])
@@ -41,6 +41,11 @@ class ProjectsStatusesTable extends Table
         $this->setTable('projects_statuses');
         $this->setDisplayField('title');
         $this->setPrimaryKey('id');
+
+        $this->hasMany('Projects', [
+            'foreignKey' => 'status_id',
+            'className' => 'LilProjects.Projects',
+        ]);
 
         $this->belongsTo('Companies', [
             'foreignKey' => 'owner_id',
@@ -78,6 +83,14 @@ class ProjectsStatusesTable extends Table
     public function buildRules(RulesChecker $rules): RulesChecker
     {
         $rules->add($rules->existsIn(['owner_id'], 'Companies'));
+
+        $rules->addDelete(function ($entity, $options) {
+            $projectsCount = $this->Projects->find()
+                ->where(['Projects.status_id' => $entity->id])
+                ->count();
+
+            return $projectsCount == 0;
+        }, 'usedInProject');
 
         return $rules;
     }

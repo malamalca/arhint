@@ -47,7 +47,7 @@ $contactsIndex = [
                             'html' => sprintf('<input placeholder="%s" id="SearchBox" />', __d('lil_crm', 'Search')),
                         ],
                         'pagination' => [
-                            'params' => ['colspan' => 2, 'class' => 'right-align'],
+                            'params' => ['colspan' => 2, 'class' => 'right-align hide-on-small-only'],
                             'html' => '<ul class="paginator">' . $this->Paginator->numbers([
                                 'first' => '<<',
                                 'last' => '>>',
@@ -61,15 +61,15 @@ $contactsIndex = [
                         'html' => $filter['kind'] == 'T' ? __d('lil_crm', 'Name') : __d('lil_crm', 'Title'),
                     ],
                     'emails' => [
-                        'parameters' => ['class' => 'left-align'],
+                        'parameters' => ['class' => 'left-align hide-on-small-only'],
                         'html' => __d('lil_crm', 'Email'),
                     ],
                     'phones' => [
-                        'parameters' => ['class' => 'left-align'],
+                        'parameters' => ['class' => 'left-align hide-on-small-only'],
                         'html' => __d('lil_crm', 'Phone'),
                     ],
                     'syncable' => [
-                        'parameters' => ['class' => 'center-align'],
+                        'parameters' => ['class' => 'center-align hide-on-small-only'],
                         'html' => __d('lil_crm', 'Syncable'),
                     ],
                 ],
@@ -151,22 +151,24 @@ foreach ($contacts as $contact) {
         'columns' => [
             'title' => [
                 'parameters' => ['class' => 'contact-name'],
-                'html' => $this->Html->link(
+                'html' =>
+                sprintf('<div class="hide-on-med-and-up" style="display: block; float: right">%s</div>', $phones) .
+                $this->Html->link(
                     $contact->title,
                     ['action' => 'view', $contact->id],
                     ['class' => 'big', 'title' => $contact->title]
                 ) . $job . $address . $descript,
             ],
             'emails' => [
-                'parameters' => ['class' => 'nowrap'],
+                'parameters' => ['class' => 'nowrap hide-on-small-only'],
                 'html' => $emails,
             ],
             'phones' => [
-                'parameters' => ['class' => 'nowrap'],
+                'parameters' => ['class' => 'nowrap hide-on-small-only'],
                 'html' => $phones,
             ],
             'syncable' => [
-                'parameters' => ['class' => 'center-align'],
+                'parameters' => ['class' => 'center-align hide-on-small-only'],
                 'html' => $syncable,
             ],
         ],

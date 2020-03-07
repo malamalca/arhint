@@ -5,7 +5,8 @@ jQuery.fn.modalPopup = function(p_options) {
         url: $(this).prop("href"),
         processSubmit: false,
         onJson: null,
-        onBeforeRequest: null
+        onBeforeRequest: null,
+        onOpen: null
 	};
 	var $this       = this;
     var options     = [];
@@ -45,7 +46,9 @@ jQuery.fn.modalPopup = function(p_options) {
 
                 $this.instance.open();
 
-
+                if ($this.options.onOpen instanceof Function) {
+                    $this.options.onOpen($this.popup);
+                }
             })
             .fail(function() {
                 alert("Request Failed");
@@ -112,8 +115,7 @@ jQuery.fn.modalPopup = function(p_options) {
     // initialization
     $this.options = jQuery().extend(true, {}, default_options, p_options);
     $this.popup = $(template.join("\n")).appendTo(document.body);
-    $this.popup.modal();
-    $this.instance = M.Modal.getInstance($this.popup);
+    $this.instance = M.Modal.init($this.popup.get(0));
 
     $(this).on("click", $this.onClick);
 }
