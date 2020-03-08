@@ -19,9 +19,16 @@ class ProjectsWorkhoursController extends AppController
      */
     public function index()
     {
+        $this->Authorization->skipAuthorization();
+        $this->paginate = [
+            'contain' => ['Users'],
+        ];
+
         $projectsWorkhours = $this->paginate($this->ProjectsWorkhours);
 
-        $this->set(compact('projectsWorkhours'));
+        $project = $this->ProjectsWorkhours->Projects->get($this->getRequest()->getQuery('project'));
+
+        $this->set(compact('projectsWorkhours', 'project'));
     }
 
     /**
@@ -43,9 +50,14 @@ class ProjectsWorkhoursController extends AppController
      */
     public function edit($id = null)
     {
-        $projectsWorkhour = $this->ProjectsWorkhours->get($id, [
-            'contain' => [],
-        ]);
+        if ($id) {
+            $projectsWorkhour = $this->ProjectsWorkhours->get($id);
+        } else {
+            $projectsWorkhour = $this->ProjectsWorkhours->newEmptyEntity();
+            $projectsWorkhour->project_id = $this->getRequest()->getQuery('project');
+        }
+        $this->Authorization->authorize($projectsWorkhour);
+
         if ($this->getRequest()->is(['patch', 'post', 'put'])) {
             $projectsWorkhour = $this->ProjectsWorkhours->patchEntity(
                 $projectsWorkhour,
@@ -72,8 +84,9 @@ class ProjectsWorkhoursController extends AppController
      */
     public function delete($id = null)
     {
-        $this->getRequest()->allowMethod(['post', 'delete']);
+        $this->getRequest()->allowMethod(['post', 'delete', 'get']);
         $projectsWorkhour = $this->ProjectsWorkhours->get($id);
+        $this->Authorization->authorize($projectsWorkhour);
         if ($this->ProjectsWorkhours->delete($projectsWorkhour)) {
             $this->Flash->success(__d('lil_projects', 'The projects workhour has been deleted.'));
         } else {

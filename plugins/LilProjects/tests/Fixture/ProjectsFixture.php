@@ -40,7 +40,7 @@ class ProjectsFixture extends TestFixture
     public $records = [
         [
             'id' => '4dd53305-9715-4be4-b169-20defe113d2a',
-            'owner_id' => '060d5eb6-18eb-40dc-a36d-4b1004482caf',
+            'owner_id' => COMPANY_FIRST,
             'title' => 'Lorem ipsum dolor sit amet',
             'created' => '2018-02-21 12:51:02',
             'modified' => '2018-02-21 12:51:02',

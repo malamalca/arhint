@@ -1,5 +1,6 @@
 <?php
 use Cake\Core\Configure;
+use Cake\Core\Plugin;
 use Cake\Routing\Router;
 use Cake\Utility\Text;
 
@@ -219,6 +220,19 @@ $invoiceView = [
                     'text' => (string)$invoice->dat_approval,
                 ],
             ],
+        ],
+        'project' => !Plugin::isLoaded('LilProjects') ? null : [
+            'lines' => [
+                [
+                    'label' => __d('lil_invoices', 'Project') . ':',
+                    'text' => $this->Html->link((string)$invoice->project, [
+                        'plugin' => 'LilProjects',
+                        'controller' => 'Projects',
+                        'action' => 'view',
+                        $invoice->project_id
+                    ])
+                ]
+            ]
         ],
         'total' => !$lilDocumentHelper->isInvoice($invoice) ? null : [
             'id' => 'invoice-total',

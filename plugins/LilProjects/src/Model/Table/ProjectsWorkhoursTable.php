@@ -15,6 +15,7 @@ use Cake\Validation\Validator;
  *
  * @method \LilProjects\Model\Entity\ProjectsWorkhour get($primaryKey, $options = [])
  * @method \LilProjects\Model\Entity\ProjectsWorkhour newEntity($data = null, array $options = [])
+ * @method \LilProjects\Model\Entity\ProjectsWorkhour newEmptyEntity(array $options = [])
  * @method \LilProjects\Model\Entity\ProjectsWorkhour[] newEntities(array $data, array $options = [])
  * @method \LilProjects\Model\Entity\ProjectsWorkhour|bool save(\Cake\Datasource\EntityInterface $entity, $options = [])
  * @method \LilProjects\Model\Entity\ProjectsWorkhour patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
@@ -86,5 +87,21 @@ class ProjectsWorkhoursTable extends Table
         $rules->add($rules->existsIn(['user_id'], 'Users'));
 
         return $rules;
+    }
+
+    /**
+     * Returns total duration for specified project id.
+     *
+     * @param string $projectId Project id
+     * @return int Duration in seconds
+     */
+    public function getTotalDuration($projectId)
+    {
+        $query = $this->find();
+        $data = $query->select(['totalDuration' => $query->func()->sum('duration')])
+            ->disableHydration()
+            ->first();
+
+        return $data['totalDuration'];
     }
 }

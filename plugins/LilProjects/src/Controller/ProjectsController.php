@@ -137,6 +137,10 @@ class ProjectsController extends AppController
 
         $this->Authorization->authorize($project);
 
+        /** @var \LilProjects\Model\Table\ProjectsWorkhoursTable $WorkhoursTable */
+        $WorkhoursTable = TableRegistry::get('LilProjects.ProjectsWorkhours');
+        $workDuration = $WorkhoursTable->getTotalDuration($project->id);
+
         $logs = TableRegistry::get('LilProjects.ProjectsLogs')->find()
             ->select()
             ->where(['project_id' => $id])
@@ -153,7 +157,7 @@ class ProjectsController extends AppController
             ->order(['title'])
             ->toArray();
 
-        $this->set(compact('project', 'logs', 'projectsStatuses'));
+        $this->set(compact('project', 'logs', 'projectsStatuses', 'workDuration'));
     }
 
     /**

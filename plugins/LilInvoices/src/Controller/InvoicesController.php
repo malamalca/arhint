@@ -106,12 +106,14 @@ class InvoicesController extends AppController
      */
     public function view($id = null)
     {
-        $invoice = $this->Invoices->get($id, [
-            'contain' => [
-                'Issuers', 'Buyers', 'Receivers',
-                'InvoicesCounters', 'InvoicesItems', 'InvoicesTaxes', 'InvoicesAttachments',
-            ],
-        ]);
+        $containTables = [
+            'Issuers', 'Buyers', 'Receivers',
+            'InvoicesCounters', 'InvoicesItems', 'InvoicesTaxes', 'InvoicesAttachments',
+        ];
+        if (Plugin::isLoaded('LilProjects')) {
+            $containTables[] = 'Projects';
+        }
+        $invoice = $this->Invoices->get($id, ['contain' => $containTables]);
 
         $this->Authorization->authorize($invoice);
 

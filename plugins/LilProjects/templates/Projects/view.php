@@ -44,6 +44,14 @@
                         'label' => __d('lil_projects', 'Status') . ':',
                         'text' => empty($project->status_id) ? '' : ('<div class="chip z-depth-1">' . h($projectsStatuses[$project->status_id]) . '</div>')
                     ],
+                    'work_duration' => [
+                        'label' => __d('lil_projects', 'Work Duration') . ':',
+                        'text' => $this->Html->link($this->Arhint->duration($workDuration), [
+                            'controller' => 'ProjectsWorkhours',
+                            'action' => 'index',
+                            '?' => ['project' => $project->id]
+                        ])
+                    ]
                 ]
             ],
             'logs_title' => '<h3>' . __d('lil_projects', 'Logs') . '</h3>',

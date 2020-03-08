@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace LilInvoices\Model\Table;
 
 use ArrayObject;
+use Cake\Core\Plugin;
 use Cake\Event\Event;
 use Cake\I18n\FrozenDate;
 use Cake\ORM\Entity;
@@ -92,6 +93,13 @@ class InvoicesTable extends Table
             'foreignKey' => 'tpl_footer_id',
             'className' => 'LilInvoices\Model\Table\InvoicesTemplatesTable',
         ]);
+
+        if (Plugin::isLoaded('LilProjects')) {
+            $this->belongsTo('Projects', [
+                'foreignKey' => 'project_id',
+                'className' => 'LilProjects\Model\Table\ProjectsTable',
+            ]);
+        }
     }
 
     /**
