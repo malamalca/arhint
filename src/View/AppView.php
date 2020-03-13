@@ -67,6 +67,7 @@ class AppView extends View
                 'widgets' => [
                     'lil-decimal' => ['Lil.LilDecimal', '_view'],
                     'lil-date' => ['Lil.LilDate', '_view'],
+                    'duration' => ['Duration', '_view'],
                 ],
         ]);
     }

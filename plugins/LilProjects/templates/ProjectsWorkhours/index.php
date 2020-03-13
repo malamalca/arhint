@@ -9,8 +9,7 @@ $tableIndex = [
             'url' => [
                 'plugin' => 'LilProjects',
                 'controller' => 'ProjectsWorkhours',
-                'action' => 'add',
-                '?' => ['project' => $project->id]
+                'action' => 'add'
             ],
         ],
     ],

@@ -26,9 +26,9 @@ class ProjectsWorkhoursController extends AppController
 
         $projectsWorkhours = $this->paginate($this->ProjectsWorkhours);
 
-        $project = $this->ProjectsWorkhours->Projects->get($this->getRequest()->getQuery('project'));
+        //$project = $this->ProjectsWorkhours->Projects->get($this->getRequest()->getQuery('project'));
 
-        $this->set(compact('projectsWorkhours', 'project'));
+        $this->set(compact('projectsWorkhours'));
     }
 
     /**
@@ -54,6 +54,7 @@ class ProjectsWorkhoursController extends AppController
             $projectsWorkhour = $this->ProjectsWorkhours->get($id);
         } else {
             $projectsWorkhour = $this->ProjectsWorkhours->newEmptyEntity();
+            $projectsWorkhour->user_id = $this->getCurrentUser()->get('id');
             $projectsWorkhour->project_id = $this->getRequest()->getQuery('project');
         }
         $this->Authorization->authorize($projectsWorkhour);
@@ -70,7 +71,14 @@ class ProjectsWorkhoursController extends AppController
             }
             $this->Flash->error(__d('lil_projects', 'The projects workhour could not be saved. Please, try again.'));
         }
-        $this->set(compact('projectsWorkhour'));
+
+        $projects = $this->Authorization->applyScope($this->ProjectsWorkhours->Projects->find('list'), 'index')
+            ->select()
+            ->where(['active' => true])
+            ->order('title')
+            ->toArray();
+
+        $this->set(compact('projectsWorkhour', 'projects'));
 
         return null;
     }
