@@ -88,11 +88,19 @@ class InvoicesController extends AppController
             ->contain($params['contain'])
             ->order($params['order']);
 
+        $sumQuery = clone $query;
+        $invoicesTotals = $sumQuery->select([
+            'sumTotal' => $sumQuery->func()->sum('Invoices.total'),
+            'sumNetTotal' => $sumQuery->func()->sum('Invoices.net_total'),
+        ])
+            ->disableHydration()
+            ->first();
+
         $data = $this->paginate($query);
 
         $dateSpan = $this->Invoices->maxSpan($filter['counter']);
 
-        $this->set(compact('data', 'filter', 'counter', 'dateSpan'));
+        $this->set(compact('data', 'filter', 'counter', 'dateSpan', 'invoicesTotals'));
 
         return null;
     }

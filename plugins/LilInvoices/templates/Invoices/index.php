@@ -193,8 +193,8 @@ foreach ($data as $invoice) {
     $total += $invoice->total;
     $net_total += $invoice->net_total;
 }
-$invoices_index['table']['foot']['rows'][0]['columns']['total']['html'] = $this->Number->currency($total);
-$invoices_index['table']['foot']['rows'][0]['columns']['net_total']['html'] = $this->Number->currency($net_total);
+$invoices_index['table']['foot']['rows'][0]['columns']['total']['html'] = $this->Number->currency($invoicesTotals['sumTotal']);
+$invoices_index['table']['foot']['rows'][0]['columns']['net_total']['html'] = $this->Number->currency($invoicesTotals['sumNetTotal']);
 
 echo $this->Lil->index($invoices_index, 'LilInvoices.Invoices.index');
 ?>
