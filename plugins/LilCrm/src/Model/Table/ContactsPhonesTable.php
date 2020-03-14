@@ -49,13 +49,13 @@ class ContactsPhonesTable extends Table
     {
         $validator
             //->add('id', 'valid', ['rule' => 'uuid'])
-            ->allowEmpty('id', 'create')
-            ->allowEmpty('contact_id')
-            ->allowEmpty('no')
-            ->allowEmpty('kind')
+            ->allowEmptyString('id', 'create')
+            ->allowEmptyString('contact_id')
+            ->allowEmptyString('no')
+            ->allowEmptyString('kind')
             ->add('primary', 'valid', ['rule' => 'boolean'])
             //->requirePresence('primary', 'create')
-            ->notEmpty('primary');
+            ->notEmptyString('primary');
 
         return $validator;
     }

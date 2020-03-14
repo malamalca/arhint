@@ -54,17 +54,17 @@ class ContactsAddressesTable extends Table
     {
         $validator
             //->add('id', 'valid', ['rule' => 'uuid'])
-            ->allowEmpty('id', 'create')
-            ->allowEmpty('contact_id')
+            ->allowEmptyString('id', 'create')
+            ->allowEmptyString('contact_id')
             ->add('primary', 'valid', ['rule' => 'boolean'])
             //->requirePresence('primary', 'create')
-            ->notEmpty('primary')
-            ->notEmpty('kind')
-            ->notEmpty('street')
+            ->notEmptyString('primary')
+            ->notEmptyString('kind')
+            ->notEmptyString('street')
 
-            ->allowEmpty('zip')
-            ->allowEmpty('city')
-            ->allowEmpty('country');
+            ->allowEmptyString('zip')
+            ->allowEmptyString('city')
+            ->allowEmptyString('country');
 
         return $validator;
     }

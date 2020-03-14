@@ -63,18 +63,18 @@ class PaymentsTable extends Table
     {
         $validator
             ->add('id', 'valid', ['rule' => 'uuid'])
-            ->allowEmpty('id', 'create');
+            ->allowEmptyString('id', 'create');
 
         $validator
             ->add('dat_happened', 'valid', ['rule' => 'date'])
             ->allowEmpty('dat_happened');
 
         $validator
-            ->notEmpty('descript');
+            ->notEmptyString('descript');
 
         $validator
         //    ->add('amount', 'valid', ['rule' => 'numeric'])
-            ->notEmpty('amount');
+            ->notEmptyString('amount');
 
         return $validator;
     }

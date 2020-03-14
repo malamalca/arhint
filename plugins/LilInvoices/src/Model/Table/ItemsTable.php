@@ -54,17 +54,17 @@ class ItemsTable extends Table
             ->allowEmpty('id', 'create')
             ->add('vat_id', 'valid', ['rule' => 'uuid'])
             ->allowEmptyString('vat_id')
-            ->notEmpty('descript')
+            ->notEmptyString('descript')
             ->add('qty', 'valid', ['rule' => 'decimal'])
             ->requirePresence('qty', 'create')
-            ->notEmpty('qty')
+            ->notEmptyString('qty')
             ->allowEmptyString('unit')
             ->add('price', 'valid', ['rule' => 'decimal'])
             ->requirePresence('price', 'create')
-            ->notEmpty('price')
+            ->notEmptyString('price')
             ->add('discount', 'valid', ['rule' => 'decimal'])
             ->requirePresence('discount', 'create')
-            ->notEmpty('discount');
+            ->notEmptyString('discount');
 
         return $validator;
     }

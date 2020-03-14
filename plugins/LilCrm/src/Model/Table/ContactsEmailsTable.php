@@ -49,14 +49,14 @@ class ContactsEmailsTable extends Table
     {
         $validator
             //->add('id', 'valid', ['rule' => 'uuid'])
-            ->allowEmpty('id', 'create')
-            ->allowEmpty('contact_id')
+            ->allowEmptyString('id', 'create')
+            ->allowEmptyString('contact_id')
             ->add('primary', 'valid', ['rule' => 'boolean'])
             //->requirePresence('primary', 'create')
-            ->notEmpty('primary')
+            ->notEmptyString('primary')
             ->add('email', 'valid', ['rule' => 'email'])
-            ->allowEmpty('email')
-            ->allowEmpty('kind');
+            ->allowEmptyString('email')
+            ->allowEmptyString('kind');
 
         return $validator;
     }

@@ -43,12 +43,12 @@ class InvoicesTemplatesTable extends Table
     {
         $validator
             ->add('id', 'valid', ['rule' => 'uuid'])
-            ->allowEmpty('id', 'create')
+            ->allowEmptyString('id', 'create')
             ->add('owner_id', 'valid', ['rule' => 'uuid'])
-            ->allowEmpty('owner_id')
-            ->notEmpty('kind')
-            ->allowEmpty('title')
-            ->allowEmpty('body');
+            ->allowEmptyString('owner_id')
+            ->notEmptyString('kind')
+            ->allowEmptyString('title')
+            ->allowEmptyString('body');
 
         return $validator;
     }

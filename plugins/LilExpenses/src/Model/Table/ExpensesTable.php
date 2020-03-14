@@ -61,25 +61,25 @@ class ExpensesTable extends Table
     public function validationDefault(Validator $validator): Validator
     {
         $validator
-            ->allowEmpty('id', 'create');
+            ->allowEmptyString('id', 'create');
 
         $validator
-            ->allowEmpty('model');
+            ->allowEmptyString('model');
 
         $validator
             ->add('dat_happened', 'valid', ['rule' => 'date'])
-            ->allowEmpty('dat_happened');
+            ->allowEmptyString('dat_happened');
 
         $validator
-            ->allowEmpty('title');
+            ->allowEmptyString('title');
 
         $validator
             ->add('net_total', 'valid', ['rule' => 'decimal'])
-            ->allowEmpty('net_total');
+            ->allowEmptyString('net_total');
 
         $validator
             ->add('total', 'valid', ['rule' => 'decimal'])
-            ->allowEmpty('total');
+            ->allowEmptyString('total');
 
         return $validator;
     }

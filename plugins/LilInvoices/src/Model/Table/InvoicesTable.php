@@ -120,7 +120,7 @@ class InvoicesTable extends Table
             ->notEmptyString('counter_id')
             //->add('invoices_attachment_count', 'valid', ['rule' => 'numeric'])
             //->requirePresence('invoices_attachment_count', 'create')
-            //->notEmpty('invoices_attachment_count')
+            //->notEmptyString('invoices_attachment_count')
             ->add('counter', 'valid', ['rule' => 'numeric'])
             ->allowEmptyString('counter')
             ->allowEmptyString('no')

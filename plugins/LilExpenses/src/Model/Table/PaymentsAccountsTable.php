@@ -45,20 +45,20 @@ class PaymentsAccountsTable extends Table
     {
         $validator
             ->add('id', 'valid', ['rule' => 'uuid'])
-            ->allowEmpty('id', 'create');
+            ->allowEmptyString('id', 'create');
 
         $validator
-            ->notEmpty('title');
+            ->notEmptyString('title');
 
         $validator
             ->add('primary', 'valid', ['rule' => 'boolean'])
             ->requirePresence('primary', 'create')
-            ->notEmpty('primary');
+            ->notEmptyString('primary');
 
         $validator
             ->add('active', 'valid', ['rule' => 'boolean'])
             ->requirePresence('active', 'create')
-            ->notEmpty('active');
+            ->notEmptyString('active');
 
         return $validator;
     }

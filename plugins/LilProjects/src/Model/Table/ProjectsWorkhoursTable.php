@@ -62,11 +62,11 @@ class ProjectsWorkhoursTable extends Table
     {
         $validator
             ->uuid('id')
-            ->allowEmpty('id', 'create');
+            ->allowEmptyString('id', 'create');
 
         $validator
             ->dateTime('started')
-            ->allowEmpty('started');
+            ->allowEmptyString('started');
 
         $validator
             ->integer('duration');

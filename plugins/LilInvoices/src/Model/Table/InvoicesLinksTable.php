@@ -52,11 +52,11 @@ class InvoicesLinksTable extends Table
     {
         $validator
             ->add('id', 'valid', ['rule' => 'uuid'])
-            ->allowEmpty('id', 'create')
+            ->allowEmptyString('id', 'create')
             ->add('link_id', 'valid', ['rule' => 'uuid'])
-            ->allowEmpty('link_id')
+            ->allowEmptyString('link_id')
             ->add('invoice_id', 'valid', ['rule' => 'uuid'])
-            ->allowEmpty('invoice_id');
+            ->allowEmptyString('invoice_id');
 
         return $validator;
     }

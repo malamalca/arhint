@@ -50,15 +50,15 @@ class ContactsAccountsTable extends Table
     {
         $validator
             //->add('id', 'valid', ['rule' => 'uuid'])
-            ->allowEmpty('id', 'create')
+            ->allowEmptyString('id', 'create')
             ->add('contact_id', 'valid', ['rule' => 'uuid'])
-            ->allowEmpty('contact_id')
+            ->allowEmptyString('contact_id')
             ->add('primary', 'valid', ['rule' => 'boolean'])
             //->requirePresence('primary', 'create')
-            ->notEmpty('primary')
-            ->allowEmpty('kind')
-            ->allowEmpty('iban')
-            ->allowEmpty('bic');
+            ->notEmptyString('primary')
+            ->allowEmptyString('kind')
+            ->allowEmptyString('iban')
+            ->allowEmptyString('bic');
 
         return $validator;
     }

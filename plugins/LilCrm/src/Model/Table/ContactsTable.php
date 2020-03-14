@@ -104,11 +104,11 @@ class ContactsTable extends Table
     public function validationDefault(Validator $validator): Validator
     {
         $validator
-            ->allowEmpty('id', 'create')
+            ->allowEmptyString('id', 'create')
             ->requirePresence('kind', 'create')
-            ->notEmpty('kind')
-            //->allowEmpty('name')
-            //->allowEmpty('surname')
+            ->notEmptyString('kind')
+            //->allowEmptyString('name')
+            //->allowEmptyString('surname')
 
             ->add('surname', 'nameorsurname', ['rule' => function ($value, $context) {
                 return $context['data']['kind'] != 'T' ||
@@ -117,22 +117,22 @@ class ContactsTable extends Table
             }])
 
             //->requirePresence('title', 'create')
-            ->notEmpty('title')
+            ->notEmptyString('title')
 
-            ->allowEmpty('descript')
-            ->allowEmpty('mat_no')
+            ->allowEmptyString('descript')
+            ->allowEmptyString('mat_no')
 
-            ->notEmpty('tax_no')
+            ->notEmptyString('tax_no')
 
             ->add('tax_status', 'valid', ['rule' => 'boolean'])
 
-            ->allowEmpty('tax_status')
-            ->allowEmpty('company_id')
-            ->allowEmpty('job')
+            ->allowEmptyString('tax_status')
+            ->allowEmptyString('company_id')
+            ->allowEmptyString('job')
             ->add('syncable', 'valid', ['rule' => 'boolean']);
 
             //->requirePresence('syncable', 'create')
-            //->notEmpty('syncable')
+            //->notEmptyString('syncable')
 
         return $validator;
     }

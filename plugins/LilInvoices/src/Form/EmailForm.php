@@ -51,8 +51,8 @@ class EmailForm extends Form
         return $validator
             ->requirePresence('to')
             ->email('to')
-            ->notEmpty('subject')
-            ->notEmpty('body');
+            ->notEmptyString('subject')
+            ->notEmptyString('body');
     }
 
     /**

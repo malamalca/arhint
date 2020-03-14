@@ -50,18 +50,18 @@ class AdremasContactsTable extends Table
     {
         $validator
             //->add('id', 'valid', ['rule' => 'uuid'])
-            ->allowEmpty('id', 'create')
+            ->allowEmptyString('id', 'create')
             //->add('owner_id', 'valid', ['rule' => 'uuid'])
-            ->allowEmpty('owner_id')
+            ->allowEmptyString('owner_id')
             ->add('adrema_id', 'valid', ['rule' => 'uuid'])
-            ->allowEmpty('adrema_id')
+            ->allowEmptyString('adrema_id')
             //->add('contacts_address_id', 'valid', ['rule' => 'uuid'])
-            ->allowEmpty('contacts_address_id')
-            ->allowEmpty('title')
-            ->allowEmpty('street')
-            ->allowEmpty('city')
-            ->allowEmpty('zip')
-            ->allowEmpty('country');
+            ->allowEmptyString('contacts_address_id')
+            ->allowEmptyString('title')
+            ->allowEmptyString('street')
+            ->allowEmptyString('city')
+            ->allowEmptyString('zip')
+            ->allowEmptyString('country');
 
         return $validator;
     }

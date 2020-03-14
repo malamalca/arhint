@@ -51,11 +51,11 @@ class VatsTable extends Table
     {
         $validator
             ->add('id', 'valid', ['rule' => 'uuid'])
-            ->allowEmpty('id', 'create')
-            ->notEmpty('descript')
+            ->allowEmptyString('id', 'create')
+            ->notEmptyString('descript')
             ->add('percent', 'valid', ['rule' => 'decimal'])
             ->requirePresence('percent', 'create')
-            ->notEmpty('percent');
+            ->notEmptyString('percent');
 
         return $validator;
     }
