@@ -6,6 +6,7 @@
 /tmp/*
 /vendor/*
 /uploads/*
+/uploads/Invoices/*
 
 # OS generated files #
 ######################
