@@ -51,7 +51,7 @@ class ItemsTable extends Table
     public function validationDefault(Validator $validator): Validator
     {
         $validator
-            ->allowEmpty('id', 'create')
+            ->allowEmptyString('id', 'create')
             ->add('vat_id', 'valid', ['rule' => 'uuid'])
             ->allowEmptyString('vat_id')
             ->notEmptyString('descript')

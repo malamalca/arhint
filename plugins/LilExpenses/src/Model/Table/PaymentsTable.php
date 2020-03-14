@@ -67,7 +67,7 @@ class PaymentsTable extends Table
 
         $validator
             ->add('dat_happened', 'valid', ['rule' => 'date'])
-            ->allowEmpty('dat_happened');
+            ->allowEmptyString('dat_happened');
 
         $validator
             ->notEmptyString('descript');
