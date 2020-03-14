@@ -85,18 +85,18 @@ class ProjectsTable extends Table
     {
         $validator
             ->uuid('id')
-            ->allowEmpty('id', 'create');
+            ->allowEmptyString('id', 'create');
 
         $validator
             ->maxLength('no', 50)
-            ->notEmpty('no');
+            ->notEmptyString('no');
 
         $validator
             ->maxLength('title', 250)
-            ->notEmpty('title');
+            ->notEmptyString('title');
 
         $validator
-            ->allowEmpty('ico')
+            ->allowEmptyString('ico')
             ->uploadedFile('ico', ['types' => ['image/png'], 'maxSize' => 1000000, 'optional' => true]);
 
         return $validator;
