@@ -1,6 +1,6 @@
 <?php
     $projectView = [
-        'title_for_layout' => '<span class="small">' . $project->no . '</span><br />' . $project->title,
+        'title_for_layout' => '<span class="small">' . $project->no . ' </span><br />' . $project->title,
         'menu' => [
             'edit' => [
                 'title' => __d('lil_projects', 'Edit'),

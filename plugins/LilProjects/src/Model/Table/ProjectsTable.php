@@ -140,6 +140,10 @@ class ProjectsTable extends Table
             $ret['conditions']['Projects.active IN'] = [true, false];
         }
 
+        if (!empty($filter['status'])) {
+            $ret['conditions']['Projects.statud_id'] = $filter['status'];
+        }
+
         // manual search
         if (!empty($filter['search']) && ($filter['search'] != '[[search]]')) {
             $ret['conditions'][] = ['OR' => [

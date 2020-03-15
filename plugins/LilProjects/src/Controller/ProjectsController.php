@@ -24,7 +24,7 @@ class ProjectsController extends AppController
     {
         $filter = (array)$this->getRequest()->getQuery();
 
-        $filter['order'] = 'Projects.title';
+        $filter['order'] = 'Projects.no';
 
         $params = array_merge_recursive(
             ['conditions' => [

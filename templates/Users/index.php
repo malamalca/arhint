@@ -16,7 +16,6 @@ $dropdownActive = ['items' => [
 ]];
 $dropdownActive = $this->Lil->popup('active', $dropdownActive, true);
 
-
 $usersTitle = __('{0} Users', $activeLink);
 
 $usersIndex = [
