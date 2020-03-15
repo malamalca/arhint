@@ -84,10 +84,9 @@ class InvoicesController extends AppController
         $params = $this->Invoices->filter($filter);
 
         $query = $this->Authorization->applyScope($this->Invoices->find())
-            ->where($params['conditions'])
-            ->contain($params['contain'])
-            ->order($params['order']);
+            ->where($params['conditions']);
 
+        // use original query for SUM()
         $sumQuery = clone $query;
         $invoicesTotals = $sumQuery->select([
             'sumTotal' => $sumQuery->func()->sum('Invoices.total'),
@@ -95,6 +94,10 @@ class InvoicesController extends AppController
         ])
             ->disableHydration()
             ->first();
+
+        // add contain and order to original query
+        $query->contain($params['contain'])
+            ->order($params['order']);
 
         $data = $this->paginate($query);
 

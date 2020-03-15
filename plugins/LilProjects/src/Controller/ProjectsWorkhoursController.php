@@ -26,9 +26,15 @@ class ProjectsWorkhoursController extends AppController
 
         $projectsWorkhours = $this->paginate($this->ProjectsWorkhours);
 
-        //$project = $this->ProjectsWorkhours->Projects->get($this->getRequest()->getQuery('project'));
+        $project = null;
+        $projectId = $this->getRequest()->getQuery('project');
+        if (!empty($projectId)) {
+            $project = $this->ProjectsWorkhours->Projects->get($projectId);
 
-        $this->set(compact('projectsWorkhours'));
+            $this->Authorization->authorize($project, 'edit');
+        }
+
+        $this->set(compact('projectsWorkhours', 'project'));
     }
 
     /**

@@ -140,6 +140,20 @@ class ProjectsTable extends Table
             $ret['conditions']['Projects.active IN'] = [true, false];
         }
 
+        // manual search
+        if (!empty($filter['search']) && ($filter['search'] != '[[search]]')) {
+            $ret['conditions'][] = ['OR' => [
+                'Projects.no LIKE' => '%' . $filter['search'] . '%',
+                'Projects.title LIKE' => '%' . $filter['search'] . '%',
+            ]];
+        }
+
+        if (isset($filter['sort'])) {
+            $ret['order'] = [];
+        } else {
+            $ret['order'] = $filter['order'] ?? [];
+        }
+
         return $ret;
     }
 

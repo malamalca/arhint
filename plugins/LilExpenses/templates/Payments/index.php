@@ -205,7 +205,7 @@ if (!empty($payments)) {
             'account' => h($p->payments_account->title ?? __d('lil_expenses', 'N/A')),
             'date' => [
                 'parameters' => ['class' => 'center-align'],
-                'html' => $p->dat_happened ?? '',
+                'html' => $this->Arhint->calendarDay($p->dat_happened),
             ],
             'descript' => $this->Html->link($p->descript ?: __d('lil_expenses', 'N/A'), [
                 'action' => 'edit',

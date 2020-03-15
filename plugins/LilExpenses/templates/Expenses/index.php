@@ -184,7 +184,7 @@ if (!empty($expenses)) {
             'descript' => $this->LilExpense->link($e, false),
             'date' => [
                 'parameters' => ['class' => 'center-align'],
-                'html' => (string)$e->dat_happened,
+                'html' => $this->Arhint->calendarDay($e->dat_happened),
             ],
 
             'net_total' => [

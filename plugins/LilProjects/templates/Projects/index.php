@@ -1,4 +1,5 @@
 <?php
+use Cake\Routing\Router;
 
 // FILTER by active
 $activeLink = $this->Html->link(
@@ -14,14 +15,15 @@ $popupActive = ['items' => [
 $popupActive = $this->Lil->popup('active', $popupActive, true);
 
 $filterTitle = __d('lil_projects', '{0} Projects', [$activeLink]);
-
 $index = [
     'title_for_layout' => $filterTitle,
     'menu' => [
         'add' => [
             'title' => __d('lil_projects', 'Add'),
             'visible' => true,
-            'url' => ['action' => 'add']
+            'url' => [
+                'action' => 'add'
+            ]
         ],
     ],
     'actions' => ['lines' => [$popupActive]],
@@ -30,13 +32,36 @@ $index = [
             'width' => '100%', 'cellspacing' => 0, 'cellpadding' => 0,
             'class' => 'index-static', 'id' => 'ProjectsIndex'
         ],
-        'head' => ['rows' => [['columns' => [
-            'image' => ['params' => ['class' => 'center hide-on-small-only'], 'html' => '&nbsp;'],
-            'title' => __d('lil_projects', 'Title'),
-            'status' => ['params' => ['class' => 'center hide-on-small-only'], 'html' => __d('lil_projects', 'Status')],
-            'actions' => '',
-            'log' => ['params' => ['class' => 'left'], 'html' => __d('lil_projects', 'Last Log')],
-        ]]]],
+        'head' => ['rows' => [
+            0 => [
+                'columns' => [
+                    'search' => [
+                        'params' => ['colspan' => 2, 'class' => 'input-field'],
+                        'html' => sprintf('<input placeholder="%s" id="SearchBox" />', __d('lil_projects', 'Search')),
+                    ],
+                    'empty' => [
+                        'params' => ['colspan' => 1, 'class' => ''],
+                        'html' => '',
+                    ],
+                    'pagination' => [
+                        'params' => ['colspan' => 3, 'class' => 'right-align hide-on-small-only'],
+                        'html' => '<ul class="paginator">' . $this->Paginator->numbers([
+                            'first' => '<<',
+                            'last' => '>>',
+                            'modulus' => 3]) . '</ul>'
+                    ],
+                ],
+            ],
+            1 => [
+                'columns' => [
+                    'image' => ['params' => ['class' => 'center hide-on-small-only'], 'html' => '&nbsp;'],
+                    'title' => __d('lil_projects', 'Title'),
+                    'status' => ['params' => ['class' => 'center hide-on-small-only'], 'html' => __d('lil_projects', 'Status')],
+                    'actions' => '',
+                    'log' => ['params' => ['class' => 'left'], 'html' => __d('lil_projects', 'Last Log')],
+                ]
+            ]
+        ]],
     ]
 ];
 
@@ -77,8 +102,40 @@ foreach ($projects as $project) {
 echo $this->Lil->index($index, 'LilProjects.Projects.index');
 ?>
 <script type="text/javascript">
+    var searchUrl = "<?php echo Router::url([
+        'plugin' => 'LilProjects',
+        'controller' => 'Projects',
+        'action' => 'index',
+        '?' => array_merge($this->request->getQuery(), ['search' => '__term__']),
+    ]); ?>";
 
     $(document).ready(function() {
+        ////////////////////////////////////////////////////////////////////////////////////////////
+        // Filter for invoices
+        $("#SearchBox").on("input", function(e) {
+            var rx_term = new RegExp("__term__", "i");
+            $.get(searchUrl.replace(rx_term, encodeURIComponent($(this).val())), function(response) {
+                let tBody = response.substring(response.indexOf("<tbody>")+7, response.indexOf("</tbody>"));
+                $("#ProjectsIndex tbody").html(tBody);
+
+                let tFoot = response.substring(response.indexOf("<tfoot>")+7, response.indexOf("</tfoot>"));
+                $("#ProjectsIndex tfoot").html(tFoot);
+
+                let paginator = response.substring(
+                    response.indexOf("<ul class=\"paginator\">")+22,
+                    response.indexOf("</ul>", response.indexOf("<ul class=\"paginator\">"))
+                );
+                $("#ProjectsIndex ul.paginator").html(paginator);
+
+                $(".add-projects-log").each(function() {
+                    $(this).modalPopup({
+                        title: "<?= __d('lil_projects', 'Add Log') ?>",
+                        onOpen: function(popup) { $("#projects-logs-descript", popup).focus(); }
+                    });
+                });
+            });
+        });
+
         $(".add-projects-log").each(function() {
             $(this).modalPopup({
                 title: "<?= __d('lil_projects', 'Add Log') ?>",

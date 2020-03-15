@@ -97,11 +97,11 @@ $invoices_index = [
                     'html' => __d('lil_invoices', 'Client'),
                 ],
                 'net_total' => [
-                    'parameters' => ['class' => 'right-align nowrap hide-on-small-only'],
+                    'parameters' => ['class' => 'right-align hide-on-small-only'],
                     'html' => $this->Paginator->sort('net_total', __d('lil_invoices', 'Net Total')),
                 ],
                 'total' => [
-                    'parameters' => ['class' => 'right-align nowrap'],
+                    'parameters' => ['class' => 'right-align'],
                     'html' => $this->Paginator->sort('total', __d('lil_invoices', 'Total')),
                 ],
             ]],
@@ -120,11 +120,11 @@ $invoices_index = [
                 'html' => '',
             ],
             'title' => [
-                'parameters' => ['class' => 'right-align hide-on-small-only'],
+                'parameters' => ['class' => 'invoices-title right-align hide-on-small-only'],
                 'html' => '',
             ],
             'client' => [
-                'parameters' => ['class' => 'right-align hide-on-small-only'],
+                'parameters' => ['class' => 'invoices-client right-align hide-on-small-only'],
                 'html' => __d('lil_invoices', 'Total Sum') . ': ',
             ],
             'net_total' => [
@@ -168,25 +168,25 @@ foreach ($data as $invoice) {
         ],
         'date' => [
             'parameters' => ['class' => 'center-align nowrap hide-on-small-only'],
-            'html' => (string)$invoice->dat_issue,
+            'html' => $this->Arhint->calendarDay($invoice->dat_issue),
         ],
         'title' => [
-            'parameters' => ['class' => 'left-align nowrap hide-on-small-only'],
+            'parameters' => ['class' => 'invoices-title left-align hide-on-small-only'],
             'html' => h($invoice->title) .
                 // attachment
                 ($invoice->invoices_attachment_count == 0 ? '' :
                     ' ' . $this->Html->image('/lil_invoices/img/attachment.png')),
         ],
         'client' => [
-            'parameters' => ['class' => 'left-align hide-on-small-only'],
-            'html' => '<div style="height: 20px; min-width: 250px; overflow: hidden; scroll: none;">' . h($client->title) . '</div>',
+            'parameters' => ['class' => 'invoices-client left-align hide-on-small-only'],
+            'html' => '<div style="height: 20px; overflow: hidden; scroll: none;">' . h($client->title) . '</div>',
         ],
         'net_total' => [
-            'parameters' => ['class' => 'right-align nowrap hide-on-small-only'],
+            'parameters' => ['class' => 'invoices-net_total right-align nowrap hide-on-small-only'],
             'html' => $this->Number->currency($invoice->net_total),
         ],
         'total' => [
-            'parameters' => ['class' => 'right-align nowrap'],
+            'parameters' => ['class' => 'invoices-total right-align nowrap'],
             'html' => $this->Number->currency($invoice->total),
         ],
     ];

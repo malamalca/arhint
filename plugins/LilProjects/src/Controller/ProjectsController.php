@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace LilProjects\Controller;
 
+use Cake\Cache\Cache;
 use Cake\ORM\TableRegistry;
 
 /**
@@ -23,6 +24,8 @@ class ProjectsController extends AppController
     {
         $filter = (array)$this->getRequest()->getQuery();
 
+        $filter['order'] = 'Projects.title';
+
         $params = array_merge_recursive(
             ['conditions' => [
                 'Projects.active IN' => [true],
@@ -30,12 +33,13 @@ class ProjectsController extends AppController
             $this->Projects->filter($filter)
         );
 
-        $projects = $this->Authorization->applyScope($this->Projects->find())
+        $query = $this->Authorization->applyScope($this->Projects->find())
             ->select()
             ->contain(['LastLog' => ['Users']])
             ->where($params['conditions'])
-            ->order('title')
-            ->all();
+            ->order($params['order']);
+
+        $projects = $this->paginate($query);
 
         $projectsStatuses = $this->Authorization->applyScope($this->Projects->ProjectsStatuses->find('list'), 'index')
             ->order(['title'])
@@ -78,39 +82,43 @@ class ProjectsController extends AppController
 
         switch ($size) {
             case 'thumb':
-                $im = imagecreatefromstring(base64_decode($project->ico));
-                $width = imagesx($im);
-                $height = imagesy($im);
-                $ratio = 50 / $height;
+                $imageData = Cache::remember($project->id . '-thumb', function () use ($project) {
+                    $im = imagecreatefromstring(base64_decode($project->ico));
+                    $width = imagesx($im);
+                    $height = imagesy($im);
+                    $ratio = 50 / $height;
 
-                $newWidth = (int)round($width * $ratio);
-                $newHeight = 50;
+                    $newWidth = (int)round($width * $ratio);
+                    $newHeight = 50;
 
-                $newImage = imagecreatetruecolor($newWidth, $newHeight);
-                imagealphablending($newImage, false);
-                imagesavealpha($newImage, true);
-                $transparent = imagecolorallocatealpha($newImage, 255, 255, 255, 127);
-                imagefilledrectangle($newImage, 0, 0, $newWidth, $newHeight, $transparent);
-                imagecopyresampled($newImage, $im, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height);
+                    $newImage = imagecreatetruecolor($newWidth, $newHeight);
+                    imagealphablending($newImage, false);
+                    imagesavealpha($newImage, true);
+                    $transparent = imagecolorallocatealpha($newImage, 255, 255, 255, 127);
+                    imagefilledrectangle($newImage, 0, 0, $newWidth, $newHeight, $transparent);
+                    imagecopyresampled($newImage, $im, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height);
 
-                if (!empty($project->colorize)) {
-                    imagefilter(
-                        $newImage,
-                        IMG_FILTER_COLORIZE,
-                        hexdec(substr($project->colorize, 0, 2)),
-                        hexdec(substr($project->colorize, 2, 2)),
-                        hexdec(substr($project->colorize, 4, 2))
-                    );
-                }
-                imagedestroy($im);
+                    if (!empty($project->colorize)) {
+                        imagefilter(
+                            $newImage,
+                            IMG_FILTER_COLORIZE,
+                            hexdec(substr($project->colorize, 0, 2)),
+                            hexdec(substr($project->colorize, 2, 2)),
+                            hexdec(substr($project->colorize, 4, 2))
+                        );
+                    }
+                    imagedestroy($im);
 
-                $im = $newImage;
+                    $im = $newImage;
 
-                ob_start();
-                imagepng($im);
-                $imageData = ob_get_contents();
-                ob_end_clean();
-                imagedestroy($im);
+                    ob_start();
+                    imagepng($im);
+                    $imageData = ob_get_contents();
+                    ob_end_clean();
+                    imagedestroy($im);
+
+                    return $imageData;
+                });
 
                 break;
             default:

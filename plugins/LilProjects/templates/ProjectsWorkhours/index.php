@@ -1,7 +1,12 @@
 <?php
 
+$pageTitle = __d('lil_projects', 'Workhours');
+if (!empty($project)) {
+    $pageTitle = __d('lil_projects', 'Workhours for "{0}"', (string)$project);
+}
+
 $tableIndex = [
-    'title_for_layout' => __d('lil_projects', 'Workhours'),
+    'title_for_layout' => $pageTitle,
     'menu' => [
         'add' => [
             'title' => __d('lil_projects', 'Add'),
@@ -9,7 +14,8 @@ $tableIndex = [
             'url' => [
                 'plugin' => 'LilProjects',
                 'controller' => 'ProjectsWorkhours',
-                'action' => 'add'
+                'action' => 'add',
+                '?' => ['project' => $project->id ?: null]
             ],
         ],
     ],

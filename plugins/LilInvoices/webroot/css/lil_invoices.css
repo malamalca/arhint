@@ -164,3 +164,12 @@ iframe#invoice-view {
     overflow: hidden;
     text-overflow: ellipsis;
 }
+#AdminInvoicesIndex td.invoices-net_total,
+#AdminInvoicesIndex td.invoices-total {
+    width: 100px !important;
+    max-width: 100px !important;
+}
+#AdminInvoicesIndex td.invoices-client,
+#AdminInvoicesIndex td.invoices-title {
+    max-width: 300px !important;
+}

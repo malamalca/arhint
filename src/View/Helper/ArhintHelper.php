@@ -238,12 +238,12 @@ class ArhintHelper extends Helper
     {
         $ret = sprintf(
             '<span class="calendar-day">' .
-                '<span class="day-name%4$s">%1$s</span><span class="month">%3$s</span>' .
-                '<span class="day">%2$s</span>' .
+                '<span class="year-name%4$s">%3$s</span>' .
+                '<span class="day">%2$s</span><span class="month">%1$s</span>' .
                 '</span>',
-            $day->i18nFormat('eeee'),
-            $day->i18nFormat('dd'),
             $day->i18nFormat('MMMM'),
+            $day->i18nFormat('dd'),
+            $day->i18nFormat('y'),
             ($day->isWeekend() ? ' weekend' : '')
         );
 
