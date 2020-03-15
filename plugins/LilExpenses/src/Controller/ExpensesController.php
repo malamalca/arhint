@@ -263,7 +263,7 @@ class ExpensesController extends AppController
             $report = new ArhintReport(
                 'Expenses.unpaid',
                 $this->request,
-                ['title' => __('Unpaid Expenses')]
+                ['title' => __d('lil_expenses', 'Unpaid Expenses')]
             );
             $report->set(compact('data'));
 

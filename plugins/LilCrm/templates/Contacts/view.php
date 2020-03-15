@@ -206,7 +206,7 @@ if (!empty($job)) {
             $contact_view['panels']['phones']['lines'][] = [
                 'label' => __d('lil_crm', 'Phone') .
                     ' / ' .
-                    h(ucfirst($phoneTypes[$phone->kind] ?? __('lil_crm', 'other'))) .
+                    h(ucfirst($phoneTypes[$phone->kind] ?? __d('lil_crm', 'other'))) .
                     ':',
                 'text' => implode(' ', [
                     $phone->no,

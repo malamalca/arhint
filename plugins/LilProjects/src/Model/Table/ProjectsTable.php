@@ -141,7 +141,7 @@ class ProjectsTable extends Table
         }
 
         if (!empty($filter['status'])) {
-            $ret['conditions']['Projects.statud_id'] = $filter['status'];
+            $ret['conditions']['Projects.status_id'] = $filter['status'];
         }
 
         // manual search

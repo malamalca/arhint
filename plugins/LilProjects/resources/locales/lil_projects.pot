@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2020-02-29 17:04+0000\n"
+"POT-Creation-Date: 2020-03-15 17:38+0000\n"
 "PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
 "Last-Translator: NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
@@ -14,19 +14,19 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: Controller/ProjectsController.php:204
+#: Controller/ProjectsController.php:216
 msgid "The project has been saved."
 msgstr ""
 
-#: Controller/ProjectsController.php:212
+#: Controller/ProjectsController.php:224
 msgid "The project could not be saved. Please, try again."
 msgstr ""
 
-#: Controller/ProjectsController.php:237
+#: Controller/ProjectsController.php:249
 msgid "The project has been deleted."
 msgstr ""
 
-#: Controller/ProjectsController.php:239
+#: Controller/ProjectsController.php:251
 msgid "The project could not be deleted. Please, try again."
 msgstr ""
 
@@ -62,25 +62,35 @@ msgstr ""
 msgid "The projects status could not be deleted. Please, try again."
 msgstr ""
 
-#: Controller/ProjectsWorkhoursController.php:55
+#: Controller/ProjectsWorkhoursController.php:74
 msgid "The projects workhour has been saved."
 msgstr ""
 
-#: Controller/ProjectsWorkhoursController.php:59
+#: Controller/ProjectsWorkhoursController.php:78
 msgid "The projects workhour could not be saved. Please, try again."
 msgstr ""
 
-#: Controller/ProjectsWorkhoursController.php:78
+#: Controller/ProjectsWorkhoursController.php:105
 msgid "The projects workhour has been deleted."
 msgstr ""
 
-#: Controller/ProjectsWorkhoursController.php:80
+#: Controller/ProjectsWorkhoursController.php:107
 msgid "The projects workhour could not be deleted. Please, try again."
 msgstr ""
 
 #: Event/LilProjectsEvents.php:39
 #: Lib/LilProjectsSidebar.php:30
+#: Lib/LilProjectsSidebar.php:41
 msgid "Projects"
+msgstr ""
+
+#: Lib/LilProjectsSidebar.php:52
+msgid "Lookups"
+msgstr ""
+
+#: Lib/LilProjectsSidebar.php:58
+#: ProjectsStatuses/index.php:4
+msgid "Statuses"
 msgstr ""
 
 #: ProjectsLogs/edit.php:10
@@ -88,16 +98,18 @@ msgid "Edit Log"
 msgstr ""
 
 #: ProjectsLogs/edit.php:10
-#: Projects/index.php:84
+#: Projects/index.php:154
+#: Projects/index.php:163
 #: Projects/view.php:25
+#: Projects/view.php:98
 msgid "Add Log"
 msgstr ""
 
 #: ProjectsLogs/edit.php:51
 #: ProjectsStatuses/edit.php:35
+#: ProjectsWorkhours/edit.php:73
 #: Projects/edit.php:129
 #: Projects/map_popup.php:30
-#: Projects/view.php:62
 msgid "Save"
 msgstr ""
 
@@ -112,7 +124,7 @@ msgstr ""
 #: ProjectsStatuses/edit.php:27
 #: ProjectsStatuses/index.php:21
 #: Projects/edit.php:48
-#: Projects/index.php:35
+#: Projects/index.php:80
 msgid "Title"
 msgstr ""
 
@@ -120,14 +132,45 @@ msgstr ""
 msgid "Title is required."
 msgstr ""
 
-#: ProjectsStatuses/index.php:4
-msgid "Statuses"
-msgstr ""
-
 #: ProjectsStatuses/index.php:7
-#: Projects/index.php:22
+#: ProjectsWorkhours/index.php:12
+#: Projects/index.php:44
 #: Projects/map.php:9
 msgid "Add"
+msgstr ""
+
+#: ProjectsWorkhours/edit.php:6
+msgid "Edit Project Workhour"
+msgstr ""
+
+#: ProjectsWorkhours/edit.php:6
+msgid "Add Project Workhour"
+msgstr ""
+
+#: ProjectsWorkhours/edit.php:36
+msgid "Project"
+msgstr ""
+
+#: ProjectsWorkhours/edit.php:50
+#: ProjectsWorkhours/index.php:28
+msgid "Started"
+msgstr ""
+
+#: ProjectsWorkhours/edit.php:64
+#: ProjectsWorkhours/index.php:29
+msgid "Duration"
+msgstr ""
+
+#: ProjectsWorkhours/index.php:3
+msgid "Workhours"
+msgstr ""
+
+#: ProjectsWorkhours/index.php:5
+msgid "Workhours for \"{0}\""
+msgstr ""
+
+#: ProjectsWorkhours/index.php:27
+msgid "User"
 msgstr ""
 
 #: Projects/edit.php:8
@@ -143,8 +186,8 @@ msgid "No."
 msgstr ""
 
 #: Projects/edit.php:60
-#: Projects/index.php:36
-#: Projects/view.php:43
+#: Projects/index.php:81
+#: Projects/view.php:44
 msgid "Status"
 msgstr ""
 
@@ -153,8 +196,8 @@ msgid "status"
 msgstr ""
 
 #: Projects/edit.php:74
-#: Projects/index.php:5
-#: Projects/index.php:10
+#: Projects/index.php:6
+#: Projects/index.php:11
 msgid "Active"
 msgstr ""
 
@@ -170,16 +213,25 @@ msgstr ""
 msgid "Colorize"
 msgstr ""
 
-#: Projects/index.php:5
-#: Projects/index.php:11
+#: Projects/index.php:6
+#: Projects/index.php:12
 msgid "All"
 msgstr ""
 
-#: Projects/index.php:16
-msgid "{0} Projects"
+#: Projects/index.php:19
+#: Projects/index.php:24
+msgid "All Statuses"
 msgstr ""
 
-#: Projects/index.php:38
+#: Projects/index.php:39
+msgid "{0} Projects for {1}"
+msgstr ""
+
+#: Projects/index.php:62
+msgid "Search"
+msgstr ""
+
+#: Projects/index.php:83
 msgid "Last Log"
 msgstr ""
 
@@ -199,7 +251,19 @@ msgstr ""
 msgid "Are you sure you want to delete this project?"
 msgstr ""
 
-#: Projects/view.php:73
+#: Projects/view.php:48
+msgid "Work Duration"
+msgstr ""
+
+#: Projects/view.php:57
+msgid "Logs"
+msgstr ""
+
+#: Projects/view.php:77
+msgid "No logs created."
+msgstr ""
+
+#: Projects/view.php:86
 msgid "delete"
 msgstr ""
 

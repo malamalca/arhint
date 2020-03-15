@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: LilCrm\n"
-"POT-Creation-Date: 2015-09-16 07:47+0200\n"
-"PO-Revision-Date: 2015-09-16 07:54+0200\n"
+"POT-Creation-Date: 2020-03-15 17:47+0000\n"
+"PO-Revision-Date: 2020-03-15 18:49+0100\n"
 "Last-Translator: Malamalca <info@malamalca.com>\n"
 "Language-Team: \n"
 "Language: sl_SI\n"
@@ -14,562 +14,566 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n"
 "%100==4 ? 2 : 3);\n"
-"X-Generator: Poedit 1.8.4\n"
+"X-Generator: Poedit 2.2.1\n"
 
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Controller/AdremasController.php:70
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Controller/LabelsController.php:80;162
-msgid "Invalid adrema"
-msgstr "Adrema ne obstaja"
-
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Controller/AdremasController.php:84
+#: Controller/AdremasController.php:60
 msgid "The adrema has been saved."
 msgstr "Adrema je shranjena."
 
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Controller/AdremasController.php:87
+#: Controller/AdremasController.php:64
 msgid "The adrema could not be saved. Please, try again."
 msgstr "Adreme ni mogoče shraniti. Preverite vpisana polja."
 
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Controller/AdremasController.php:104
+#: Controller/AdremasController.php:83
 msgid "The adrema has been deleted."
 msgstr "Adrema je izbrisana."
 
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Controller/AdremasController.php:106
+#: Controller/AdremasController.php:85
 msgid "The adrema could not be deleted. Please, try again."
 msgstr "Adreme ni mogoče brisati. Poizkusite ponovno."
 
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Controller/ContactsAccountsController.php:61
-msgid "Invalid account"
-msgstr "Račun ne obstaja"
-
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Controller/ContactsAccountsController.php:71
+#: Controller/ContactsAccountsController.php:51
 msgid "The contacts' account has been saved."
 msgstr "Račun je shranjen."
 
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Controller/ContactsAccountsController.php:74
+#: Controller/ContactsAccountsController.php:55
 msgid "The contacts' account could not be saved. Please, try again."
 msgstr "Računa ni mogoče shraniti. Preverite vpisana polja."
 
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Controller/ContactsAccountsController.php:91
+#: Controller/ContactsAccountsController.php:75
 msgid "The contacts account has been deleted."
 msgstr "Račun je izbrisan."
 
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Controller/ContactsAccountsController.php:93
+#: Controller/ContactsAccountsController.php:77
 msgid "The contacts account could not be deleted. Please, try again."
 msgstr "Računa ni mogoče izbrisati. Poizkusite ponovno."
 
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Controller/ContactsAddressesController.php:66;144;173
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Controller/LabelsController.php:153
-msgid "Invalid address"
-msgstr "Naslov ne obstaja."
-
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Controller/ContactsAddressesController.php:76
+#: Controller/ContactsAddressesController.php:55
 msgid "The contacts' address has been saved."
 msgstr "Naslov je shranjen."
 
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Controller/ContactsAddressesController.php:79
+#: Controller/ContactsAddressesController.php:59
 msgid "The contacts' address could not be saved. Please, try again."
 msgstr "Naslova ni mogoče shraniti. Preverite vpisana polja."
 
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Controller/ContactsAddressesController.php:96
+#: Controller/ContactsAddressesController.php:80
 msgid "The contacts address has been deleted."
 msgstr "Naslov je izbrisan."
 
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Controller/ContactsAddressesController.php:98
+#: Controller/ContactsAddressesController.php:82
 msgid "The contacts address could not be deleted. Please, try again."
 msgstr "Naslova ni mogoče izbrisati. Poizkusite ponovno."
 
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Controller/ContactsController.php:110;136;241
+#: Controller/ContactsAddressesController.php:127
+#: Controller/ContactsAddressesController.php:161
+msgid "Invalid address"
+msgstr "Naslov ne obstaja."
+
+#: Controller/ContactsController.php:104
 msgid "Invalid contact"
 msgstr "Kontakt ne obstaja."
 
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Controller/ContactsController.php:164
+#: Controller/ContactsController.php:191
 msgid "Contact has been saved."
 msgstr "Kontakt je shranjen."
 
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Controller/ContactsController.php:168
+#: Controller/ContactsController.php:196
 msgid "Unable to save your contact."
 msgstr "Kontakta ni mogoče shraniti."
 
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Controller/ContactsController.php:185
+#: Controller/ContactsController.php:219
 msgid "The contact been deleted."
 msgstr "Kontakt je izbrisan."
 
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Controller/ContactsController.php:188
+#: Controller/ContactsController.php:223
 msgid "The contact could not be deleted. Please, try again."
 msgstr "Kontakta ni mogoče izbrisati. Poizkusite ponovno."
 
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Controller/ContactsController.php:260
+#: Controller/ContactsController.php:286
+msgid "Invalid Request"
+msgstr "Napaka pri zahtevku"
+
+#: Controller/ContactsController.php:312
 msgid "Invalid ajax call or contact does not exist."
 msgstr "Napaka pri povezavi, mogoče kontakt ne obstaja."
 
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Controller/ContactsController.php:336
+#: Controller/ContactsController.php:385 Controller/ContactsController.php:394
 msgid "Soap call failed"
 msgstr "Oddaljeni klic je spodletel."
 
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Controller/ContactsEmailsController.php:63
-msgid "Invalid email"
-msgstr "Email ne obstaja."
-
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Controller/ContactsEmailsController.php:73
+#: Controller/ContactsEmailsController.php:52
 msgid "The contacts email has been saved."
 msgstr "Email naslov je shranjen."
 
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Controller/ContactsEmailsController.php:76
+#: Controller/ContactsEmailsController.php:56
 msgid "The contacts email could not be saved. Please, try again."
 msgstr "Email naslova ni mogoče shraniti. Preverite vpisana polja."
 
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Controller/ContactsEmailsController.php:93
+#: Controller/ContactsEmailsController.php:76
 msgid "The contacts email has been deleted."
 msgstr "Email naslov je izbrisan."
 
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Controller/ContactsEmailsController.php:95
+#: Controller/ContactsEmailsController.php:78
 msgid "The contacts email could not be deleted. Please, try again."
 msgstr "Email naslova ni mogoče izbrisati. Poizkusite ponovno."
 
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Controller/ContactsPhonesController.php:63
-msgid "Invalid phone"
-msgstr "Telefon ne obstaja."
-
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Controller/ContactsPhonesController.php:73
+#: Controller/ContactsPhonesController.php:51
 msgid "The contacts phone has been saved."
 msgstr "Telefon je shranjen."
 
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Controller/ContactsPhonesController.php:76
+#: Controller/ContactsPhonesController.php:55
 msgid "The contacts phone could not be saved. Please, try again."
 msgstr "Številke ni mogoče shraniti. Preverite vpisana polja."
 
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Controller/ContactsPhonesController.php:93
+#: Controller/ContactsPhonesController.php:75
 msgid "The contacts phone has been deleted."
 msgstr "Telefonska številka je izbrisana"
 
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Controller/ContactsPhonesController.php:95
+#: Controller/ContactsPhonesController.php:77
 msgid "The contacts phone could not be deleted. Please, try again."
 msgstr "Številke ni mogoče izbrisati. Poizkusite ponovno."
 
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Controller/LabelsController.php:112
+#: Controller/LabelsController.php:44
+msgid "Invalid adrema"
+msgstr "Adrema ne obstaja"
+
+#: Controller/LabelsController.php:82
 msgid "Invalid label"
 msgstr "Nalepka ne obstaja."
 
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Controller/LabelsController.php:169
+#: Controller/LabelsController.php:147
 msgid "The address has been saved."
 msgstr "Naslov je shranjen."
 
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Controller/LabelsController.php:172
+#: Controller/LabelsController.php:151
 msgid "The address could not be saved. Please, try again."
 msgstr "Naslova ni mogoče shraniti. Preverite vpisana polja."
 
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Controller/LabelsController.php:190
+#: Controller/LabelsController.php:173
 msgid "The label has been deleted."
 msgstr "Nalepka je izbrisana."
 
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Controller/LabelsController.php:192
+#: Controller/LabelsController.php:175
 msgid "The label could not be deleted. Please, try again."
 msgstr "Nalepke ni mogoče izbrisati. Poizkusite ponovno."
 
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Lib/LilCrmSidebar.php:21
+#: Event/LilCrmEvents.php:39 Lib/LilCrmSidebar.php:28
 msgid "Costumers"
 msgstr "Stranke in kontakti"
 
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Lib/LilCrmSidebar.php:33
+#: Lib/LilCrmSidebar.php:40
 msgid "Contacts"
 msgstr "Kontakti"
 
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Lib/LilCrmSidebar.php:48
+#: Lib/LilCrmSidebar.php:55
 msgid "Companies"
 msgstr "Podjetja"
 
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Lib/LilCrmSidebar.php:63
+#: Lib/LilCrmSidebar.php:70
 msgid "Labels"
 msgstr "Nalepke in obrazci"
 
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/Adremas/edit.ctp:4
+#: Adremas/edit.php:4
 msgid "Edit Adrema"
 msgstr "Uredi adremo"
 
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/Adremas/edit.ctp:4
+#: Adremas/edit.php:4
 msgid "Add Adrema"
 msgstr "Vpis adreme"
 
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/Adremas/edit.ctp:45
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/Contacts/edit.ctp:65
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/Contacts/index.ctp:54
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/Labels/adrema.ctp:76
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/Labels/edit_address.ctp:72
+#: Adremas/edit.php:41 Contacts/edit.php:61 Contacts/index.php:61
+#: Labels/adrema.php:74 Labels/edit_address.php:51
 msgid "Title"
 msgstr "Naziv"
 
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/Adremas/edit.ctp:47
+#: Adremas/edit.php:43
 msgid "Adrema title is required."
 msgstr "Naziv je obvezno polje."
 
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/Adremas/edit.ctp:56
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/Contacts/edit.ctp:331
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/ContactsAccounts/edit.ctp:99
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/ContactsAddresses/edit.ctp:116
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/ContactsEmails/edit.ctp:83
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/ContactsPhones/edit.ctp:85
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/Labels/edit_address.ctp:140
+#: Adremas/edit.php:51 ContactsAccounts/edit.php:93
+#: ContactsAddresses/edit.php:113 ContactsEmails/edit.php:79
+#: ContactsPhones/edit.php:79 Contacts/edit.php:374 Labels/edit_address.php:114
 msgid "Save"
 msgstr "Shrani"
 
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/Contacts/edit.ctp:6
-msgid "Edit Contact"
-msgstr "Uredi kontakt"
-
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/Contacts/edit.ctp:8
-msgid "Add a Person"
-msgstr "Vpis kontakta"
-
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/Contacts/edit.ctp:10
-msgid "Add a Company"
-msgstr "Vpis podjetja"
-
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/Contacts/edit.ctp:58
-msgid "Company Data"
-msgstr "Podatki podjetja"
-
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/Contacts/edit.ctp:66
-msgid "Please enter contact's title."
-msgstr "Vpišite naziv kontakta."
-
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/Contacts/edit.ctp:75
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/Contacts/view.ctp:129
-msgid "Mat no."
-msgstr "Matična št."
-
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/Contacts/edit.ctp:79
-msgid "Tax no."
-msgstr "Davčna št."
-
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/Contacts/edit.ctp:92
-msgid "Please enter tax no."
-msgstr "Vpišite davčno številko."
-
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/Contacts/edit.ctp:100
-msgid "Tax status"
-msgstr "Zavezanec za DDV"
-
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/Contacts/edit.ctp:110;145
-msgid "Description"
-msgstr "Opis"
-
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/Contacts/edit.ctp:118
-msgid "Personal Data"
-msgstr "Osebni podatki"
-
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/Contacts/edit.ctp:124
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/Contacts/index.ctp:54
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/Contacts/view.ctp:251
-msgid "Name"
-msgstr "Ime"
-
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/Contacts/edit.ctp:133
-msgid "Surname"
-msgstr "Priimek"
-
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/Contacts/edit.ctp:134
-msgid "Please enter Contact's name or surname."
-msgstr "Vpišite ime ali priimek."
-
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/Contacts/edit.ctp:156
-msgid "Sync-able Contact"
-msgstr "Kontakt se sinhronizira na splet"
-
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/Contacts/edit.ctp:162
-msgid "Work Position"
-msgstr "Delavno mesto"
-
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/Contacts/edit.ctp:176
-msgid "Company Name"
-msgstr "Naziv podjetja"
-
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/Contacts/edit.ctp:204
-msgid "Job description"
-msgstr "Delovno mesto"
-
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/Contacts/edit.ctp:215
-msgid "Primary Address"
-msgstr "Glavni naslov"
-
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/Contacts/edit.ctp:239
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/ContactsAddresses/edit.ctp:64
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/Labels/adrema.ctp:77
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/Labels/edit_address.ctp:88
-msgid "Street"
-msgstr "Ulica"
-
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/Contacts/edit.ctp:243
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/ContactsAddresses/edit.ctp:68
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/Labels/edit_address.ctp:94
-msgid "ZIP and City"
-msgstr "Pošta in kraj"
-
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/Contacts/edit.ctp:269
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/Labels/adrema.ctp:80
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/Labels/edit_address.ctp:128
-msgid "Country"
-msgstr "Država"
-
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/Contacts/edit.ctp:280
-msgid "Primary Account"
-msgstr "Primarni račun"
-
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/Contacts/edit.ctp:304
-msgid "IBAN"
-msgstr "IBAN"
-
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/Contacts/edit.ctp:312
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/ContactsAccounts/edit.ctp:72
-msgid "BIC"
-msgstr "BIC"
-
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/Contacts/edit.ctp:320
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/ContactsAccounts/edit.ctp:80
-msgid "Bank"
-msgstr "Banka"
-
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/Contacts/index.ctp:11;26
-msgid "Contact List"
-msgstr "Seznam kontaktov"
-
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/Contacts/index.ctp:14;29
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/Contacts/view.ctp:57
-msgid "Add"
-msgstr "Dodaj"
-
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/Contacts/index.ctp:58
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/Contacts/view.ctp:171;252
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/ContactsEmails/edit.ctp:64
-msgid "Email"
-msgstr "Email"
-
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/Contacts/index.ctp:62
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/Contacts/view.ctp:198;253
-msgid "Phone"
-msgstr "Telefon"
-
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/Contacts/index.ctp:66
-msgid "Syncable"
-msgstr "Sinhr."
-
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/Contacts/index.ctp:81
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/Contacts/view.ctp:12
-msgid "employed"
-msgstr "zaposlen/a"
-
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/Contacts/index.ctp:83
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/Contacts/view.ctp:17
-msgid "at"
-msgstr " "
-
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/Contacts/view.ctp:31
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/Labels/adrema.ctp:18
-msgid "Edit"
-msgstr "Uredi"
-
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/Contacts/view.ctp:42
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/Labels/adrema.ctp:28
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/Labels/edit_address.ctp:9
-msgid "Delete"
-msgstr "Briši"
-
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/Contacts/view.ctp:52
-msgid "Are you sure you want to delete this contact?"
-msgstr "Ste prepričani, da želite izbrisati kontakt?"
-
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/Contacts/view.ctp:61
-msgid "Add Adress"
-msgstr "Nov naslov"
-
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/Contacts/view.ctp:70
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/Labels/edit_address.ctp:6
-msgid "Add Address"
-msgstr "Nov naslov"
-
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/Contacts/view.ctp:75;84
-msgid "Add Email"
-msgstr "Nov email"
-
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/Contacts/view.ctp:89;98
-msgid "Add Phone"
-msgstr "Nov telefon"
-
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/Contacts/view.ctp:103;112
-msgid "Add Account"
-msgstr "Nov račun"
-
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/Contacts/view.ctp:136
-msgid "TAX payee no."
-msgstr "ID št. za DDV"
-
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/Contacts/view.ctp:136
-msgid "TAX no."
-msgstr "Davčna št."
-
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/Contacts/view.ctp:146
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/ContactsAddresses/edit.ctp:58
-msgid "Address"
-msgstr "Naslovi"
-
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/Contacts/view.ctp:146
-msgid "other"
-msgstr "ostalo"
-
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/Contacts/view.ctp:219
-msgid "Unknown"
-msgstr "N/A"
-
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/Contacts/view.ctp:225
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/ContactsAccounts/edit.ctp:58
-msgid "Account"
-msgstr "Račun"
-
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/Contacts/view.ctp:245
-msgid "Employees"
-msgstr "Zaposleni"
-
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/Contacts/view.ctp:288
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/ContactsAddresses/edit.ctp:6
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/Labels/edit_address.ctp:6
-msgid "Edit Address"
-msgstr "Uredi naslov"
-
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/Contacts/view.ctp:289
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/ContactsEmails/edit.ctp:6
-msgid "Edit Email"
-msgstr "Uredi email"
-
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/Contacts/view.ctp:290
-msgid "Edit Phone"
-msgstr "Urejanje telefona"
-
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/Contacts/view.ctp:291
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/ContactsAccounts/edit.ctp:6
+#: ContactsAccounts/edit.php:6 Contacts/view.php:315
 msgid "Edit Account"
 msgstr "Uredi račun"
 
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/ContactsAccounts/edit.ctp:8
+#: ContactsAccounts/edit.php:8
 msgid "Add an Account"
 msgstr "Nov račun"
 
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/ContactsAccounts/edit.ctp:49
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/ContactsAddresses/edit.ctp:49
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/ContactsEmails/edit.ctp:49
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/ContactsPhones/edit.ctp:51
+#: ContactsAccounts/edit.php:45 ContactsAddresses/edit.php:45
+#: ContactsEmails/edit.php:45 ContactsPhones/edit.php:45
 msgid "Kind"
 msgstr "Tip"
 
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/ContactsAccounts/edit.ctp:52
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/ContactsAddresses/edit.ctp:52
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/ContactsEmails/edit.ctp:52
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/ContactsPhones/edit.ctp:54
+#: ContactsAccounts/edit.php:50 ContactsAddresses/edit.php:50
+#: ContactsEmails/edit.php:50 ContactsPhones/edit.php:50
 msgid "Entry of this type already exists."
 msgstr "Zapis takega tipa že obstaja. Izberite drug tip."
 
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/ContactsAccounts/edit.ctp:64
-msgid "IBan"
+#: ContactsAccounts/edit.php:62 Contacts/edit.php:291
+msgid "IBAN"
 msgstr "IBAN"
 
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/ContactsAccounts/edit.ctp:91
+#: ContactsAccounts/edit.php:69 Contacts/edit.php:298
+msgid "BIC"
+msgstr "BIC"
+
+#: ContactsAccounts/edit.php:76 Contacts/edit.php:305
+msgid "Bank"
+msgstr "Banka"
+
+#: ContactsAccounts/edit.php:86
 msgid "This is a primary account"
 msgstr "To je glavni račun"
 
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/ContactsAddresses/edit.ctp:8
+#: ContactsAddresses/edit.php:6 Contacts/view.php:312 Labels/edit_address.php:6
+msgid "Edit Address"
+msgstr "Uredi naslov"
+
+#: ContactsAddresses/edit.php:8
 msgid "Add an Address"
 msgstr "Nov naslov"
 
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/ContactsAddresses/edit.ctp:94
+#: ContactsAddresses/edit.php:62 Contacts/edit.php:225 Labels/adrema.php:75
+#: Labels/edit_address.php:66
+msgid "Street"
+msgstr "Ulica"
+
+#: ContactsAddresses/edit.php:80 Contacts/edit.php:232
+#: Labels/edit_address.php:72
+msgid "ZIP and City"
+msgstr "Pošta in kraj"
+
+#: ContactsAddresses/edit.php:90
 msgid "State"
 msgstr "Država"
 
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/ContactsAddresses/edit.ctp:108
+#: ContactsAddresses/edit.php:106
 msgid "This is a primary address"
 msgstr "To je glavni naslov"
 
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/ContactsEmails/edit.ctp:8
+#: ContactsEmails/edit.php:6 Contacts/view.php:313
+msgid "Edit Email"
+msgstr "Uredi email"
+
+#: ContactsEmails/edit.php:8
 msgid "Add an Email"
 msgstr "Nov email"
 
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/ContactsEmails/edit.ctp:75
+#: ContactsEmails/edit.php:62 Contacts/edit.php:335 Contacts/index.php:65
+#: Contacts/view.php:179 Contacts/view.php:273
+msgid "Email"
+msgstr "Email"
+
+#: ContactsEmails/edit.php:72
 msgid "This is a primary email"
 msgstr "To je glavni email naslov"
 
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/ContactsPhones/edit.ctp:6
+#: ContactsPhones/edit.php:6
 msgid "Edit Phone Number"
 msgstr "Urejanje telefona"
 
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/ContactsPhones/edit.ctp:8
+#: ContactsPhones/edit.php:8
 msgid "Add a Phone Number"
 msgstr "Nov telefon"
 
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/ContactsPhones/edit.ctp:66
+#: ContactsPhones/edit.php:62 Contacts/edit.php:362
 msgid "Phone Number"
 msgstr "Telefonska številka"
 
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/ContactsPhones/edit.ctp:77
+#: ContactsPhones/edit.php:72
 msgid "This is a primary phone"
 msgstr "To je glavna telefonska številka"
 
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/Labels/adrema.ctp:5
+#: Contacts/edit.php:6
+msgid "Edit Contact"
+msgstr "Uredi kontakt"
+
+#: Contacts/edit.php:8
+msgid "Add a Person"
+msgstr "Vpis kontakta"
+
+#: Contacts/edit.php:10 Contacts/edit.php:415
+msgid "Add a Company"
+msgstr "Vpis podjetja"
+
+#: Contacts/edit.php:55
+msgid "Company Data"
+msgstr "Podatki podjetja"
+
+#: Contacts/edit.php:62
+msgid "Please enter contact's title."
+msgstr "Vpišite naziv kontakta."
+
+#: Contacts/edit.php:70 Contacts/view.php:132
+msgid "Mat no."
+msgstr "Matična št."
+
+#: Contacts/edit.php:74
+msgid "Tax no."
+msgstr "Davčna št."
+
+#: Contacts/edit.php:85
+msgid "Please enter tax no."
+msgstr "Vpišite davčno številko."
+
+#: Contacts/edit.php:92
+msgid "Tax status"
+msgstr "Zavezanec za DDV"
+
+#: Contacts/edit.php:101 Contacts/edit.php:133
+msgid "Description"
+msgstr "Opis"
+
+#: Contacts/edit.php:109
+msgid "Personal Data"
+msgstr "Osebni podatki"
+
+#: Contacts/edit.php:114 Contacts/index.php:61 Contacts/view.php:272
+msgid "Name"
+msgstr "Ime"
+
+#: Contacts/edit.php:122
+msgid "Surname"
+msgstr "Priimek"
+
+#: Contacts/edit.php:123
+msgid "Please enter Contact's name or surname."
+msgstr "Vpišite ime ali priimek."
+
+#: Contacts/edit.php:143
+msgid "Sync-able Contact"
+msgstr "Kontakt se sinhronizira na splet"
+
+#: Contacts/edit.php:150
+msgid "Work Position"
+msgstr "Delavno mesto"
+
+#: Contacts/edit.php:162
+msgid "Company Name"
+msgstr "Naziv podjetja"
+
+#: Contacts/edit.php:168
+msgid "Start typing to select employer. You can also add a [$1new company]."
+msgstr ""
+"Začnite s tipkanjem za izbiro zaposlovalca. Lahko tudi vpišete [$1novo "
+"podjetje]."
+
+#: Contacts/edit.php:190
+msgid "Job description"
+msgstr "Delovno mesto"
+
+#: Contacts/edit.php:203
+msgid "Primary Address"
+msgstr "Glavni naslov"
+
+#: Contacts/edit.php:256 Labels/adrema.php:78 Labels/edit_address.php:103
+msgid "Country"
+msgstr "Država"
+
+#: Contacts/edit.php:270
+msgid "Primary Account"
+msgstr "Primarni račun"
+
+#: Contacts/edit.php:314
+msgid "Primary Email"
+msgstr "Primarni email"
+
+#: Contacts/edit.php:341
+msgid "Primary Phone"
+msgstr "Primarni telefon"
+
+#: Contacts/index.php:5 Contacts/index.php:20
+msgid "Contact List"
+msgstr "Seznam kontaktov"
+
+#: Contacts/index.php:8 Contacts/index.php:23 Contacts/view.php:58
+msgid "Add"
+msgstr "Dodaj"
+
+#: Contacts/index.php:47
+msgid "Search"
+msgstr "Išči"
+
+#: Contacts/index.php:69 Contacts/view.php:207 Contacts/view.php:274
+msgid "Phone"
+msgstr "Telefon"
+
+#: Contacts/index.php:73
+msgid "Syncable"
+msgstr "Sinhr."
+
+#: Contacts/index.php:89 Contacts/view.php:12
+msgid "employed"
+msgstr "zaposlen/a"
+
+#: Contacts/index.php:91 Contacts/view.php:17
+msgid "at"
+msgstr " pri"
+
+#: Contacts/view.php:32 Labels/adrema.php:18
+msgid "Edit"
+msgstr "Uredi"
+
+#: Contacts/view.php:43 Labels/adrema.php:28
+msgid "Delete"
+msgstr "Briši"
+
+#: Contacts/view.php:53
+msgid "Are you sure you want to delete this contact?"
+msgstr "Ste prepričani, da želite izbrisati kontakt?"
+
+#: Contacts/view.php:62 Labels/edit_address.php:6
+msgid "Add Address"
+msgstr "Nov naslov"
+
+#: Contacts/view.php:76
+msgid "Add Email"
+msgstr "Nov email"
+
+#: Contacts/view.php:90
+msgid "Add Phone"
+msgstr "Nov telefon"
+
+#: Contacts/view.php:104
+msgid "Add Account"
+msgstr "Nov račun"
+
+#: Contacts/view.php:139
+msgid "TAX payee no."
+msgstr "ID št. za DDV"
+
+#: Contacts/view.php:139
+msgid "TAX no."
+msgstr "Davčna št."
+
+#: Contacts/view.php:151
+msgid "Address"
+msgstr "Naslovi"
+
+#: Contacts/view.php:153 Contacts/view.php:209
+msgid "other"
+msgstr "ostalo"
+
+#: Contacts/view.php:186
+msgid "N/A"
+msgstr "NP"
+
+#: Contacts/view.php:231
+msgid "Unknown"
+msgstr "N/A"
+
+#: Contacts/view.php:238
+msgid "Account"
+msgstr "Račun"
+
+#: Contacts/view.php:259
+msgid "Last modified"
+msgstr "Zadnja sprememba"
+
+#: Contacts/view.php:266
+msgid "Employees"
+msgstr "Zaposleni"
+
+#: Contacts/view.php:314
+msgid "Edit Phone"
+msgstr "Urejanje telefona"
+
+#: Contacts/view.php:324
+msgid "Add new Address"
+msgstr "Nov naslov"
+
+#: Contacts/view.php:325
+msgid "Add new Account"
+msgstr "Nov račun"
+
+#: Contacts/view.php:326
+msgid "Add new Email"
+msgstr "Nov email"
+
+#: Contacts/view.php:327
+msgid "Add new Phone"
+msgstr "Nov telefon"
+
+#: Labels/adrema.php:5
 msgid "Select and Edit Adrema"
 msgstr "Izbira in urejanje adreme"
 
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/Labels/adrema.ctp:8
+#: Labels/adrema.php:8
 msgid "Save As"
 msgstr "Shrani kot"
 
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/Labels/adrema.ctp:37
-msgid "Are you sure you want to delete current adrema and all of its contacts?"
-msgstr "Ste prepričani, da želite izbrisati adremo in vse povezane kontakte?"
+#: Labels/adrema.php:37
+msgid "Are you sure you want to delete current adrema?"
+msgstr "Ste prepričani, da želite izbrisati adremo?"
 
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/Labels/adrema.ctp:65
+#: Labels/adrema.php:63
 msgid "Adrema"
 msgstr "Adrema"
 
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/Labels/adrema.ctp:78
+#: Labels/adrema.php:76
 msgid "City"
 msgstr "Kraj"
 
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/Labels/adrema.ctp:79
+#: Labels/adrema.php:77
 msgid "ZIP"
 msgstr "Poštna št."
 
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/Labels/adrema.ctp:87
+#: Labels/adrema.php:86
 msgid "Add new address"
 msgstr "Dodaj naslov"
 
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/Labels/adrema.ctp:102
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/Labels/label.ctp:51
+#: Labels/adrema.php:100 Labels/label.php:48
 msgid "Next"
 msgstr "Naprej"
 
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/Labels/adrema.ctp:136
+#: Labels/adrema.php:146
 msgid "Are you sure you want to remove this contact from adrema?"
 msgstr "Ste prepričani, da želite izbrisati kontakt iz adreme?"
 
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/Labels/adrema.ctp:144
+#: Labels/adrema.php:154
 msgid "No adremas found. Please {0}."
 msgstr "Ni vpisane adreme. {0}."
 
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/Labels/adrema.ctp:145
+#: Labels/adrema.php:155
 msgid "add new adrema"
 msgstr "Vpis nove adreme"
 
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/Labels/edit_address.ctp:18
-msgid "Are you sure you want to delete this item?"
-msgstr "Ste prepričani, da želite izbrisati element?"
-
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/Labels/edit_address.ctp:73
+#: Labels/edit_address.php:52
 msgid "Title is required."
 msgstr "Naziv je obvezno polje."
 
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/Labels/label.ctp:6
-msgid "Select Label"
-msgstr "Izberite nalepko ali obrazec"
+#: Labels/label.php:6
+msgid "Print Adrema \"{0}\""
+msgstr "Tiskaj adremo \"{0}\""
 
-#: D:/xampp/htdocs/arhint/plugins/LilCrm/src/Template/Labels/label.ctp:40
+#: Labels/label.php:38
 msgid "Label"
 msgstr "Nalepka ali obrazec"
+
+#~ msgid "Invalid email"
+#~ msgstr "Email ne obstaja."
+
+#~ msgid "Invalid phone"
+#~ msgstr "Telefon ne obstaja."
+
+#~ msgid "Add Adress"
+#~ msgstr "Nov naslov"
+
+#~ msgid "IBan"
+#~ msgstr "IBAN"
+
+#~ msgid ""
+#~ "Are you sure you want to delete current adrema and all of its contacts?"
+#~ msgstr ""
+#~ "Ste prepričani, da želite izbrisati adremo in vse povezane kontakte?"
+
+#~ msgid "Select Label"
+#~ msgstr "Izberite nalepko ali obrazec"
 
 #~ msgid "BBan"
 #~ msgstr "BBAN"

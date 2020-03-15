@@ -146,7 +146,7 @@ $admin_index = [
                 'columns' => [
                     'search' => [
                         'params' => ['colspan' => 1, 'class' => 'input-field'],
-                        'html' => sprintf('<input placeholder="%s" id="SearchBox" />', __d('lil_invoices', 'Search')),
+                        'html' => sprintf('<input placeholder="%s" id="SearchBox" />', __d('lil_expenses', 'Search')),
                     ],
                     'pagination' => [
                         'params' => ['colspan' => 4, 'class' => 'right-align'],

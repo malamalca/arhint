@@ -11,10 +11,32 @@ $popupActive = ['items' => [
     ['title' => __d('lil_projects', 'Active'), 'url' => ['?' => array_merge($this->getRequest()->getQuery(), ['inactive' => null])]],
     ['title' => __d('lil_projects', 'All'), 'url' => ['?' => array_merge($this->getRequest()->getQuery(), ['inactive' => 1])]],
 ]];
-
 $popupActive = $this->Lil->popup('active', $popupActive, true);
 
-$filterTitle = __d('lil_projects', '{0} Projects', [$activeLink]);
+// FILTER by status
+$activeStatus = $this->getRequest()->getQuery('status');
+$statusLink = $this->Html->link(
+    $projectsStatuses[$activeStatus] ?? __d('lil_projects', 'All Statuses'),
+    ['action' => 'filter'],
+    ['class' => 'dropdown-trigger', 'id' => 'filter-status', 'data-target' => 'dropdown-status']
+);
+$popupStatus = ['items' => [[
+    'title' => __d('lil_projects', 'All Statuses'),
+    'url' => ['?' => array_merge($this->getRequest()->getQuery(), ['status' => null])],
+    'params' => ['class' => 'nowrap']
+]]];
+foreach ($projectsStatuses as $statusId => $statusTitle) {
+    $popupStatus['items'][] = [
+        'title' => $statusTitle,
+        'url' => ['?' => array_merge($this->getRequest()->getQuery(), ['status' => $statusId])],
+        'active' => ($activeStatus == $statusId),
+        'params' => ['class' => 'nowrap']
+    ];
+}
+$popupStatus = $this->Lil->popup('status', $popupStatus, true);
+
+// PAGE title
+$filterTitle = __d('lil_projects', '{0} Projects for {1}', [$activeLink, $statusLink]);
 $index = [
     'title_for_layout' => $filterTitle,
     'menu' => [
@@ -26,7 +48,7 @@ $index = [
             ]
         ],
     ],
-    'actions' => ['lines' => [$popupActive]],
+    'actions' => ['lines' => [$popupActive, $popupStatus]],
     'table' => [
         'parameters' => [
             'width' => '100%', 'cellspacing' => 0, 'cellpadding' => 0,
