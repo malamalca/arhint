@@ -7,15 +7,15 @@ if (!empty($filter['start']) && !empty($filter['end'])) {
         $this->LilDate->format($filter['end'])
     );
 } elseif (!empty($filter['end'])) {
-    $date_caption = __d('lil_expenses', 'to %s', $this->LilDate->format($filter['end']));
+    $date_caption = __d('lil_expenses', 'to {0}', $this->LilDate->format($filter['end']));
 } elseif (!empty($filter['start'])) {
-    $date_caption = __d('lil_expenses', 'from %s', $this->LilDate->format($filter['start']));
+    $date_caption = __d('lil_expenses', 'from {0}', $this->LilDate->format($filter['start']));
 }
 
 if (empty($filter['counter'])) {
     $counter_caption = __d('lil_expenses', 'For all counters.');
 } else {
-    $counter_caption = __d('lil_expenses', 'For specified counters: %s', '<br />+ ' .
+    $counter_caption = __d('lil_expenses', 'For specified counters: {0}', '<br />+ ' .
         implode(', <br />+ ', array_intersect_key($counters, array_flip($filter['counter']))));
 }
 

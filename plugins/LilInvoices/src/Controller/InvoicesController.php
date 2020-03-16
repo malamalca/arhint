@@ -551,17 +551,17 @@ class InvoicesController extends AppController
                 $invoice = $this->Invoices->get($sourceId, ['contain' => ['Issuers', 'Buyers', 'Receivers',
                     'InvoicesTaxes', 'InvoicesItems', 'InvoicesCounters']]);
 
-                $invoice->isNew(true);
+                $invoice->setNew(true);
                 unset($invoice->id);
 
                 foreach ($invoice->invoices_items as &$item) {
-                    $item->isNew(true);
+                    $item->setNew(true);
                     unset($item->id);
                     unset($item->invoice_id);
                 }
 
                 foreach ($invoice->invoices_taxes as &$tax) {
-                    $tax->isNew(true);
+                    $tax->setNew(true);
                     unset($tax->id);
                     unset($tax->invoice_id);
                 }
