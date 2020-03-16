@@ -24,22 +24,24 @@ $config = [
     'LilCrm.showSidebar' => true,
 
     'LilCrm.emailTypes' => [
-        'P' => __d('lil_crm', 'personal'),
+        'P' => __d('lil_crm', 'primary'),
         'W' => __d('lil_crm', 'work'),
     ],
     'LilCrm.phoneTypes' => [
+        'P' => __d('lil_crm', 'primary'),
         'M' => __d('lil_crm', 'mobile'),
         'W' => __d('lil_crm', 'work'),
         'F' => __d('lil_crm', 'fax'),
         'H' => __d('lil_crm', 'home'),
-        'P' => __d('lil_crm', 'personal'),
     ],
     'LilCrm.addressTypes' => [
+        'P' => __d('lil_crm', 'primary'),
         'H' => __d('lil_crm', 'home'),
         'W' => __d('lil_crm', 'work'),
         'O' => __d('lil_crm', 'temporary'),
     ],
     'LilCrm.accountTypes' => [
+        'P' => __d('lil_crm', 'primary'),
         'B' => __d('lil_crm', 'business'),
     ],
 

@@ -230,11 +230,18 @@ if ($contact->id) {
         ],
         'address_zipcity_wrapper' => '<div class="input-field" id="contact-address-zip_city">',
         'address_zipcity_label' => '<label for="contact-address-zip">' . __d('lil_crm', 'ZIP and City') . ':</label>',
+        'address_kind' => [
+            'method' => 'hidden',
+            'parameters' => [
+                'field' => 'primary_address.kind',
+                'options' => ['default' => 'P'],
+            ],
+        ],
         'address_zip' => [
             'method' => 'text',
             'parameters' => [
                 'field' => 'primary_address.zip',
-                'options' => [ 'id' => 'contact-address-zip'],
+                'options' => ['id' => 'contact-address-zip'],
             ],
         ],
         'address_city' => [
@@ -276,6 +283,13 @@ if ($contact->id) {
         'account_contact_id' => [
             'method' => 'control',
             'parameters' => ['field' => 'primary_account.contact_id', 'options' => ['type' => 'hidden']],
+        ],
+        'account_kind' => [
+            'method' => 'hidden',
+            'parameters' => [
+                'field' => 'primary_account.kind',
+                'options' => ['default' => 'P'],
+            ],
         ],
         'account_primary' => [
             'method' => 'control',
@@ -321,6 +335,13 @@ if ($contact->id) {
             'method' => 'control',
             'parameters' => ['field' => 'primary_email.contact_id', 'options' => ['type' => 'hidden']],
         ],
+        'email_kind' => [
+            'method' => 'hidden',
+            'parameters' => [
+                'field' => 'primary_email.kind',
+                'options' => ['default' => 'P'],
+            ],
+        ],
         'email_primary' => [
             'method' => 'control',
             'parameters' => [
@@ -347,6 +368,13 @@ if ($contact->id) {
         'phone_contact_id' => [
             'method' => 'control',
             'parameters' => ['field' => 'primary_phone.contact_id', 'options' => ['type' => 'hidden']],
+        ],
+        'phone_kind' => [
+            'method' => 'hidden',
+            'parameters' => [
+                'field' => 'primary_phone.kind',
+                'options' => ['default' => 'P'],
+            ],
         ],
         'phone_primary' => [
             'method' => 'control',
