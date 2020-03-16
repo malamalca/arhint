@@ -4,16 +4,18 @@
     // process submenus
 if (!empty($main_menu)) {
     foreach ($main_menu as $itemKey => $item) {
-        if (isset($item['submenu'])) {
+        if (!empty($item['submenu'])) {
             printf('<ul id="%s" class="dropdown-content">', 'dropdown_' . $itemKey . '_' . $prefix);
             foreach ($item['submenu'] as $subItem) {
-                $params = isset($subItem['params']) ? array_diff_key($subItem['params'], array_flip($badParamKeys)) : [];
-                if (isset($subItem['params']['confirm'])) {
-                    $params['onclick'] = sprintf('return confirm("%s");', $subItem['params']['confirm']);
+                if (!empty($subItem)) {
+                    $params = isset($subItem['params']) ? array_diff_key($subItem['params'], array_flip($badParamKeys)) : [];
+                    if (isset($subItem['params']['confirm'])) {
+                        $params['onclick'] = sprintf('return confirm("%s");', $subItem['params']['confirm']);
+                    }
+                    echo '<li>';
+                    echo $this->Html->link($subItem['title'], $subItem['url'], $params);
+                    echo '</li>';
                 }
-                echo '<li>';
-                echo $this->Html->link($subItem['title'], $subItem['url'], $params);
-                echo '</li>';
             }
             print ('</ul>');
         }
