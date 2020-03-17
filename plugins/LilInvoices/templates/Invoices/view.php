@@ -230,7 +230,7 @@ $invoiceView = [
                         'controller' => 'Projects',
                         'action' => 'view',
                         $invoice->project_id
-                    ])
+                    ]) . ' &nbsp;'
                 ]
             ]
         ],
