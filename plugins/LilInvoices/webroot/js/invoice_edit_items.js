@@ -158,7 +158,8 @@ jQuery.fn.InvoiceItemEditor = function (pOptions) {
         $('input#invoice-invoices-items-' + from + '-id', row).prop('name', 'invoices_items[' + to + '][id]').prop('id', 'invoice-invoices-items-' + to + '-id');
         $('input#invoice-invoices-items-' + from + '-item-id', row).prop('name', 'invoices_items[' + to + '][item_id]').prop('id', 'invoice-invoices-items-' + to + '-item-id');
         $('input#invoice-invoices-items-' + from + '-invoice-id', row).prop('name', 'invoices_items[' + to + '][invoice_id]').prop('id', 'invoice-invoices-items-' + to + '-invoice-id');
-        $('input#invoice-invoices-items-' + from + '-vat-id', row).prop('name', 'invoices_items[' + to + '][vat_id]').prop('id', 'invoice-invoices-items-' + to + '-vat-id');
+
+        $('select#invoice-invoices-items-' + from + '-vat-id', row).prop('name', 'invoices_items[' + to + '][vat_id]').prop('id', 'invoice-invoices-items-' + to + '-vat-id');
         $('input#invoice-invoices-items-' + from + '-vat-percent', row).prop('name', 'invoices_items[' + to + '][vat_percent]').prop('id', 'invoice-invoices-items-' + to + '-vat-percent');
         $('input#invoice-invoices-items-' + from + '-vat-title', row).prop('name', 'invoices_items[' + to + '][vat_title]').prop('id', 'invoice-invoices-items-' + to + '-vat-title');
 

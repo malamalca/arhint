@@ -168,7 +168,7 @@ foreach ($invoices_items as $k => $item) {
         'parameters' => [
             'field' => 'invoices_items.' . $k . '.vat_percent', [
                 'type' => 'hidden',
-                'value' => $this->Number->precision($item->vat_percent, 1),
+                'value' => $item->vat_percent,
                 'class' => 'invoices-item-vat_percent',
             ],
         ],
