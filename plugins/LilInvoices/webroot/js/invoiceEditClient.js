@@ -122,7 +122,7 @@ jQuery.fn.InvoiceEditClient = function (options) {
 
                     $(el).prepend(li);
 
-                    $(el).css({"padding-top": "30px"});
+                    $(el).css({"padding-top": "30px", "min-width": "300px"});
                     $(el).on('scroll', function () {
                         $(li).css({'top': $(el).scrollTop()}); });
                     $(li).css({'position': 'absolute', 'top': 0, 'background-color:': '#ff0000'});

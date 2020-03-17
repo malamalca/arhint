@@ -494,7 +494,7 @@ echo $this->Lil->form($invoiceEdit, 'LilInvoices.Invoices.edit');
                 'plugin' => 'LilCrm',
                 'controller' => 'Contacts',
                 'action' => 'autocomplete',
-                '?' => ['kind' => 'C', 'detailed' => true],
+                '?' => ['detailed' => true],
             ]); ?>",
             addContactDialogUrl: "<?= Router::url([
                 'plugin' => 'LilCrm',
