@@ -5,6 +5,7 @@ namespace LilProjects\Controller;
 
 use Cake\Cache\Cache;
 use Cake\ORM\TableRegistry;
+use LilProjects\Lib\LilProjectsFuncs;
 
 /**
  * Projects Controller
@@ -83,41 +84,7 @@ class ProjectsController extends AppController
         switch ($size) {
             case 'thumb':
                 $imageData = Cache::remember($project->id . '-thumb', function () use ($project) {
-                    $im = imagecreatefromstring(base64_decode($project->ico));
-                    $width = imagesx($im);
-                    $height = imagesy($im);
-                    $ratio = 50 / $height;
-
-                    $newWidth = (int)round($width * $ratio);
-                    $newHeight = 50;
-
-                    $newImage = imagecreatetruecolor($newWidth, $newHeight);
-                    imagealphablending($newImage, false);
-                    imagesavealpha($newImage, true);
-                    $transparent = imagecolorallocatealpha($newImage, 255, 255, 255, 127);
-                    imagefilledrectangle($newImage, 0, 0, $newWidth, $newHeight, $transparent);
-                    imagecopyresampled($newImage, $im, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height);
-
-                    if (!empty($project->colorize)) {
-                        imagefilter(
-                            $newImage,
-                            IMG_FILTER_COLORIZE,
-                            hexdec(substr($project->colorize, 0, 2)),
-                            hexdec(substr($project->colorize, 2, 2)),
-                            hexdec(substr($project->colorize, 4, 2))
-                        );
-                    }
-                    imagedestroy($im);
-
-                    $im = $newImage;
-
-                    ob_start();
-                    imagepng($im);
-                    $imageData = ob_get_contents();
-                    ob_end_clean();
-                    imagedestroy($im);
-
-                    return $imageData;
+                    return LilProjectsFuncs::thumb($project);
                 });
 
                 break;
@@ -213,6 +180,8 @@ class ProjectsController extends AppController
             }
 
             if ($this->Projects->save($project)) {
+                Cache::delete($project->id . '-thumb');
+
                 $this->Flash->success(__d('lil_projects', 'The project has been saved.'));
                 $redirect = $this->getRequest()->getData('redirect');
                 if (!empty($redirect)) {

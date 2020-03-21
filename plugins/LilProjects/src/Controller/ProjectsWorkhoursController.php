@@ -3,6 +3,9 @@ declare(strict_types=1);
 
 namespace LilProjects\Controller;
 
+use Cake\Event\EventInterface;
+use Cake\I18n\Time;
+
 /**
  * ProjectsWorkhours Controller
  *
@@ -12,6 +15,25 @@ namespace LilProjects\Controller;
  */
 class ProjectsWorkhoursController extends AppController
 {
+    /**
+     * BeforeFilter event handler
+     *
+     * @param \Cake\Event\EventInterface $event Event interface
+     * @return \Cake\Http\Response|null
+     */
+    public function beforeFilter(EventInterface $event)
+    {
+        parent::beforeFilter($event);
+
+        if (!empty($this->Security)) {
+            if (in_array($this->getRequest()->getParam('action'), ['import'])) {
+                $this->Security->setConfig('validatePost', false);
+            }
+        }
+
+        return null;
+    }
+
     /**
      * Index method
      *
@@ -107,6 +129,74 @@ class ProjectsWorkhoursController extends AppController
             $this->Flash->error(__d('lil_projects', 'The projects workhour could not be deleted. Please, try again.'));
         }
 
-        return $this->redirect(['action' => 'index']);
+        return $this->redirect(['action' => 'index', '?' => ['project' => $projectsWorkhour->project_id]]);
+    }
+
+    /**
+     * Import from timetracking software
+     *
+     * @return \Cake\Http\Response|null
+     */
+    public function import()
+    {
+        $this->getRequest()->allowMethod(['post']);
+
+        $data = $this->getRequest()->getData('data');
+        if (!empty($data)) {
+            $projects = $this->Authorization->applyScope($this->ProjectsWorkhours->Projects->find('list'), 'index')
+                ->select()
+                ->where(['active' => true])
+                ->order('title')
+                ->toArray();
+
+            foreach ((array)$data as $registration) {
+                if (
+                    !empty($registration['project_id']) &&
+                    isset($projects[$registration['project_id']]) &&
+                    !empty($registration['datetime']) &&
+                    Time::parseDateTime($registration['datetime'], 'yyyy-MM-dd HH:mm:ss')
+                ) {
+                    $registrationTime = Time::parseDateTime($registration['datetime'], 'yyyy-MM-dd HH:mm:ss');
+
+                    if ($registration['mode'] == 'start') {
+                        $workhour = $this->ProjectsWorkhours->newEmptyEntity();
+                        $workhour->user_id = $this->getCurrentUser()->get('id');
+                        $workhour->project_id = $registration['project_id'];
+                        $workhour->started = $registrationTime;
+
+                        $this->ProjectsWorkhours->save($workhour);
+                    }
+
+                    if ($registration['mode'] == 'stop') {
+                        if (!empty($workhour)) {
+                            // previously saved workhour in the same loop exists
+                            if ($workhour->project_id != $registration['project_id']) {
+                                unset($workhour);
+                            }
+                        } else {
+                            // select last workhour
+                            /** @var \LilProjects\Model\Entity\ProjectsWorkhour $workhour */
+                            $workhour = $this->ProjectsWorkhours->find()
+                            ->select()
+                            ->where(['user_id' => $this->getCurrentUser()->get('id')])
+                            ->order('started DESC')
+                            ->limit(1)
+                            ->first();
+                            if (!empty($workhour) && ($workhour->project_id != $registration['project_id'])) {
+                                unset($workhour);
+                            }
+                        }
+                        // calculate work duration
+                        if (!empty($workhour)) {
+                            $workhour->duration = $registrationTime->diffInSeconds($workhour->started);
+                            $this->ProjectsWorkhours->save($workhour);
+                            unset($workhour);
+                        }
+                    }
+                }
+            }
+        }
+
+        return $this->getResponse();
     }
 }

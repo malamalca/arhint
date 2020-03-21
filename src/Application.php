@@ -113,6 +113,13 @@ class Application extends BaseApplication implements
             ) {
                 return true;
             }
+
+            if (
+                $request->getParam('controller') == 'ProjectsWorkhours' &&
+                $request->getParam('action') == 'import'
+            ) {
+                return true;
+            }
         });
 
         $middlewareQueue
@@ -219,17 +226,17 @@ class Application extends BaseApplication implements
         $service->loadAuthenticator('Authentication.Session');
 
         $service->loadAuthenticator('Authentication.Form', [
-        'fields' => $fields,
-        'loginUrl' => Router::url('/users/login'),
+            'fields' => $fields,
+            'loginUrl' => Router::url('/users/login'),
         ]);
 
         $service->loadAuthenticator('Authentication.Cookie', [
-        'fields' => $fields,
-        'cookie' => [
-            'name' => self::REMEMBERME_COOKIE_NAME,
-            'expire' => (new Time())->addDays(30),
-        ],
-        'loginUrl' => Router::url('/users/login'),
+            'fields' => $fields,
+            'cookie' => [
+                'name' => self::REMEMBERME_COOKIE_NAME,
+                'expire' => (new Time())->addDays(30),
+            ],
+            'loginUrl' => Router::url('/users/login'),
         ]);
 
         $params = $request->getAttribute('params');
@@ -240,6 +247,14 @@ class Application extends BaseApplication implements
         ) {
             $service->loadAuthenticator('Authentication.HttpBasic');
         }
+
+        if (
+            $params['controller'] == 'ProjectsWorkhours' &&
+            $params['action'] == 'import'
+        ) {
+            $service->loadAuthenticator('Authentication.HttpBasic');
+        }
+
         if (
             $params['controller'] == 'Invoices' &&
             $params['action'] == 'edit'

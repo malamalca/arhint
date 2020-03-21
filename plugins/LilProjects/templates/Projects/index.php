@@ -1,5 +1,6 @@
 <?php
 use Cake\Routing\Router;
+use LilProjects\Lib\LilProjectsFuncs;
 
 // FILTER by active
 $activeLink = $this->Html->link(
@@ -103,7 +104,11 @@ foreach ($projects as $project) {
     $index['table']['body']['rows'][]['columns'] = [
         'image' => [
             'params' => ['class' => 'center hide-on-small-only'],
-            'html' => empty($project->ico) ? '' : $this->Html->image(['action' => 'picture', $project->id, 'thumb'], ['style' => 'height: 50px;', 'class' => 'project-avatar'])
+            'html' => $this->Html->image(
+                //['action' => 'picture', $project->id, 'thumb'],
+                'data:image/png;base64, ' . base64_encode(LilProjectsFuncs::thumb($project)),
+                ['style' => 'height: 50px;', 'class' => 'project-avatar', 'quote' => false]
+            )
         ],
         'title' =>
         $this->Html->link($project->no, ['action' => 'view', $project->id], ['class' => 'small']) . '<br />' .
