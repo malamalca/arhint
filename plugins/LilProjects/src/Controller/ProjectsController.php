@@ -28,9 +28,12 @@ class ProjectsController extends AppController
         $filter['order'] = 'Projects.no';
 
         $params = array_merge_recursive(
-            ['conditions' => [
-                'Projects.active IN' => [true],
-            ]],
+            [
+                'conditions' => [
+                    'Projects.active IN' => [true],
+                ],
+                'order' => ['Projects.no DESC']
+            ],
             $this->Projects->filter($filter)
         );
 
@@ -83,9 +86,10 @@ class ProjectsController extends AppController
 
         switch ($size) {
             case 'thumb':
-                $imageData = Cache::remember($project->id . '-thumb', function () use ($project) {
-                    return LilProjectsFuncs::thumb($project);
-                });
+                //$imageData = Cache::remember($project->id . '-thumb', function () use ($project) {
+                //    return LilProjectsFuncs::thumb($project);
+                //});
+                $imageData = LilProjectsFuncs::thumb($project);
 
                 break;
             default:

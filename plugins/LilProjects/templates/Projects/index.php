@@ -169,5 +169,7 @@ echo $this->Lil->index($index, 'LilProjects.Projects.index');
                 onOpen: function(popup) { $("#projects-logs-descript", popup).focus(); }
             });
         });
+
+        $("#SearchBox").focus();
     });
 </script>
