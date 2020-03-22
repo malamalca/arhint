@@ -66,7 +66,12 @@ return [
             'templates' => [ROOT . DS . 'templates' . DS],
             'locales' => [RESOURCES . 'locales' . DS],
         ],
-        'uploadedFilesAsObjects' => false
+        'uploadedFilesAsObjects' => false,
+
+        'fromEmail' => [
+            'from' => 'info@arhint.si',
+            'name' => 'ARHINT'
+        ]
     ],
 
     /*
@@ -405,5 +410,6 @@ return [
     'Lil' => [
         'layout' => 'default',
         'appTitle' => 'ARHINT',
-    ]
+    ],
+
 ];

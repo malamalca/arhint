@@ -22,7 +22,7 @@ class InvoicesClientPolicy
         /** @var \LilInvoices\Model\Table\InvoicesTable $InvoicesTable */
         $InvoicesTable = TableRegistry::getTableLocator()->get('LilInvoices.Invoices');
 
-        return $InvoicesTable->isOwnedBy($entity->invoice_id, $user->id);
+        return $InvoicesTable->isOwnedBy($entity->invoice_id, $user->company_id);
     }
 
     /**
@@ -37,21 +37,6 @@ class InvoicesClientPolicy
         /** @var \LilInvoices\Model\Table\InvoicesTable $InvoicesTable */
         $InvoicesTable = TableRegistry::getTableLocator()->get('LilInvoices.Invoices');
 
-        return $InvoicesTable->isOwnedBy($entity->invoice_id, $user->id);
-    }
-
-    /**
-     * Authorize delete action
-     *
-     * @param \App\Model\Entity\User $user User
-     * @param \LilInvoices\Model\Entity\InvoicesClient $entity Entity
-     * @return bool
-     */
-    public function canDelete($user, $entity)
-    {
-        /** @var \LilInvoices\Model\Table\InvoicesTable $InvoicesTable */
-        $InvoicesTable = TableRegistry::getTableLocator()->get('LilInvoices.Invoices');
-
-        return $InvoicesTable->isOwnedBy($entity->invoice_id, $user->id);
+        return $InvoicesTable->isOwnedBy($entity->invoice_id, $user->company_id);
     }
 }

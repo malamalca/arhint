@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: LilInvoices 3.0\n"
-"POT-Creation-Date: 2020-03-15 17:38+0000\n"
-"PO-Revision-Date: 2020-03-15 18:42+0100\n"
+"POT-Creation-Date: 2020-03-22 18:45+0000\n"
+"PO-Revision-Date: 2020-03-22 19:48+0100\n"
 "Last-Translator: ARHIM d.o.o. <info@arhim.si>\n"
 "Language-Team: \n"
 "Language: sl_SI\n"
@@ -31,6 +31,14 @@ msgstr "Priponka je izbrisana."
 #: Controller/InvoicesAttachmentsController.php:110
 msgid "The attachment could not be deleted. Please, try again."
 msgstr "Napaka pri brisanju. Preverite povezavo in poizkusite ponovno."
+
+#: Controller/InvoicesClientsController.php:32
+msgid "The client has been saved."
+msgstr "Klient je stranjen."
+
+#: Controller/InvoicesClientsController.php:36
+msgid "The client could not be saved. Please, try again."
+msgstr "Napaka v vpisanih podatkih. Preverite polja in poizkusite ponovno."
 
 #: Controller/InvoicesController.php:73
 msgid "No counters found. Please activate or add a new one."
@@ -94,15 +102,15 @@ msgstr "Števec dokumentov je izbrisan."
 msgid "The invoices counter could not be deleted. Please, try again."
 msgstr "Napaka pri brisanju. Preverite povezavo in poizkusite ponovno."
 
-#: Controller/InvoicesLinksController.php:25
+#: Controller/InvoicesLinksController.php:49
 msgid "Invoices have been successfully linked."
 msgstr "Povezava dokumentov je shranjena."
 
-#: Controller/InvoicesLinksController.php:48
+#: Controller/InvoicesLinksController.php:72
 msgid "The invoices link has been deleted."
 msgstr "Povezava je bila izbrisana."
 
-#: Controller/InvoicesLinksController.php:50
+#: Controller/InvoicesLinksController.php:74
 msgid "The invoices link could not be deleted. Please, try again."
 msgstr "Napaka pri brisanju. Preverite povezavo in poizkusite ponovno."
 
@@ -216,12 +224,99 @@ msgstr "Dodaj priponko"
 msgid "A file must be selected for upload."
 msgstr "Datoteka mora biti izbrana."
 
-#: InvoicesAttachments/add.php:48 InvoicesCounters/edit.php:181
-#: InvoicesLinks/link.php:52 InvoicesTemplates/edit.php:110
-#: Invoices/edit.php:237 Invoices/templates.php:85 Items/edit.php:104
-#: Vats/edit.php:51
+#: InvoicesAttachments/add.php:48 InvoicesClients/edit.php:185
+#: InvoicesCounters/edit.php:181 InvoicesLinks/link.php:52
+#: InvoicesTemplates/edit.php:110 Invoices/edit.php:237
+#: Invoices/templates.php:85 Items/edit.php:104 Vats/edit.php:51
 msgid "Save"
 msgstr "Shrani"
+
+#: InvoicesClients/edit.php:7
+msgid "Edit Client"
+msgstr "Urejanje klienta"
+
+#: InvoicesClients/edit.php:32 InvoicesCounters/edit.php:76
+#: InvoicesCounters/index.php:57 InvoicesTemplates/edit.php:36
+#: InvoicesTemplates/index.php:21 Invoices/edit.php:114 Invoices/index.php:93
+#: Invoices/pdf/report.php:19 Invoices/view.php:194
+msgid "Title"
+msgstr "Naziv"
+
+#: InvoicesClients/edit.php:33 InvoicesTemplates/edit.php:37
+msgid "Title is required."
+msgstr "Naziv je zahtevano polje."
+
+#: InvoicesClients/edit.php:42
+msgid "Tax no."
+msgstr "Davčna št."
+
+#: InvoicesClients/edit.php:43
+msgid "Tax no is required."
+msgstr "Davčna št. je zahtevano polje."
+
+#: InvoicesClients/edit.php:52
+msgid "Mat no."
+msgstr "Matična št."
+
+#: InvoicesClients/edit.php:53
+msgid "Mat no is required."
+msgstr "Matična št. je zahtevano polje."
+
+#: InvoicesClients/edit.php:60
+msgid "Address"
+msgstr "Naslov"
+
+#: InvoicesClients/edit.php:67
+msgid "Street"
+msgstr "Ulica"
+
+#: InvoicesClients/edit.php:68
+msgid "Street is required."
+msgstr "Ulica je zahtevano polje."
+
+#: InvoicesClients/edit.php:73
+msgid "ZIP and City"
+msgstr "Pošta in kraj"
+
+#: InvoicesClients/edit.php:110
+msgid "Country"
+msgstr "Država"
+
+#: InvoicesClients/edit.php:123
+msgid "Account Data"
+msgstr "Transakcijski račun"
+
+#: InvoicesClients/edit.php:129
+msgid "IBAN"
+msgstr "IBAN"
+
+#: InvoicesClients/edit.php:136
+msgid "BIC"
+msgstr "BIC"
+
+#: InvoicesClients/edit.php:143
+msgid "Bank"
+msgstr "Naziv banke"
+
+#: InvoicesClients/edit.php:150
+msgid "Contact Data"
+msgstr "Kontaktni podatki"
+
+#: InvoicesClients/edit.php:156
+msgid "Contact Person"
+msgstr "Kontaktna oseba"
+
+#: InvoicesClients/edit.php:163
+msgid "Phone"
+msgstr "Telefon"
+
+#: InvoicesClients/edit.php:170
+msgid "Fax"
+msgstr "Faks"
+
+#: InvoicesClients/edit.php:177
+msgid "Email"
+msgstr "Email"
 
 #: InvoicesCounters/edit.php:15
 msgid "Edit Counter"
@@ -256,13 +351,6 @@ msgstr "Tip"
 #: InvoicesCounters/edit.php:65
 msgid "unspecified"
 msgstr "brez"
-
-#: InvoicesCounters/edit.php:76 InvoicesCounters/index.php:57
-#: InvoicesTemplates/edit.php:36 InvoicesTemplates/index.php:21
-#: Invoices/edit.php:114 Invoices/index.php:93 Invoices/pdf/report.php:19
-#: Invoices/view.php:158
-msgid "Title"
-msgstr "Naziv"
 
 #: InvoicesCounters/edit.php:85
 msgid "Counter Status"
@@ -360,10 +448,6 @@ msgstr "Uredi predlogo"
 msgid "Add Template"
 msgstr "Vpis predloge"
 
-#: InvoicesTemplates/edit.php:37
-msgid "Title is required."
-msgstr "Naziv je zahtevano polje."
-
 #: InvoicesTemplates/edit.php:80
 msgid "Remove image"
 msgstr "Odstrani sliko"
@@ -388,11 +472,11 @@ msgstr "Predogled"
 msgid "Please enter invoice's title."
 msgstr "Vpišite naziv dokumenta."
 
-#: Invoices/edit.php:125 Invoices/view.php:166
+#: Invoices/edit.php:125 Invoices/view.php:202
 msgid "Receiver"
 msgstr "Prejemnik"
 
-#: Invoices/edit.php:125 Invoices/view.php:166
+#: Invoices/edit.php:125 Invoices/view.php:202
 msgid "Issuer"
 msgstr "Izdajatelj"
 
@@ -412,7 +496,7 @@ msgstr "Dokument št."
 msgid "Location"
 msgstr "Kraj izdaje"
 
-#: Invoices/edit.php:160 Invoices/view.php:227
+#: Invoices/edit.php:160 Invoices/view.php:265
 msgid "Project"
 msgstr "Projekt"
 
@@ -424,19 +508,19 @@ msgstr "brez projekta"
 msgid "Dates"
 msgstr "Datumi"
 
-#: Invoices/edit.php:181 Invoices/view.php:207
+#: Invoices/edit.php:181 Invoices/view.php:245
 msgid "Date of issue"
 msgstr "Datum dokumenta"
 
 #: Invoices/edit.php:183 Invoices/edit.php:304 Invoices/edit.php:318
 #: Invoices/edit.php:449 element/edit_items.php:71 element/edit_items.php:87
-#: element/edit_items.php:102 element/edit_items.php:118
-#: element/edit_items.php:134 element/edit_tax.php:101
+#: element/edit_items.php:103 element/edit_items.php:120
+#: element/edit_items.php:137 element/edit_tax.php:102
 msgid "Blank"
 msgstr "Vpišite podatek"
 
-#: Invoices/edit.php:195 Invoices/view.php:313 Invoices/view.php:397
-#: Invoices/view.php:505 Items/edit.php:30 Items/index.php:21 Vats/edit.php:30
+#: Invoices/edit.php:195 Invoices/view.php:351 Invoices/view.php:435
+#: Invoices/view.php:543 Items/edit.php:30 Items/index.php:21 Vats/edit.php:30
 #: Vats/index.php:21 element/edit_items.php:8
 msgid "Description"
 msgstr "Opis"
@@ -457,20 +541,20 @@ msgstr "Naročnik - plačnik"
 msgid "Use different client for buyer."
 msgstr "Izberi drugega plačnika"
 
-#: Invoices/edit.php:303 Invoices/view.php:211
+#: Invoices/edit.php:303 Invoices/view.php:249
 msgid "Service date"
 msgstr "Datum storitve"
 
-#: Invoices/edit.php:317 Invoices/view.php:215
+#: Invoices/edit.php:317 Invoices/view.php:253
 msgid "Expiration date"
 msgstr "Datum zapadlosti"
 
-#: Invoices/edit.php:331 Invoices/edit.php:345 Invoices/view.php:352
+#: Invoices/edit.php:331 Invoices/edit.php:345 Invoices/view.php:390
 msgid "Analytics"
 msgstr "Analitika"
 
 #: Invoices/edit.php:338 Invoices/index.php:105 Invoices/pdf/report.php:22
-#: Invoices/view.php:240 Invoices/view.php:401 element/invoices_list.php:32
+#: Invoices/view.php:278 Invoices/view.php:439 element/invoices_list.php:32
 #: element/invoices_list.php:51
 msgid "Total"
 msgstr "Skupaj"
@@ -563,7 +647,7 @@ msgstr "Zadeva"
 msgid "Send"
 msgstr "Pošlji"
 
-#: Invoices/email.php:91 Invoices/view.php:442
+#: Invoices/email.php:91 Invoices/view.php:480
 msgid "Attachments"
 msgstr "Priponke"
 
@@ -711,97 +795,109 @@ msgstr "eSlog"
 msgid "Settings"
 msgstr "Nastavitve"
 
-#: Invoices/view.php:197
+#: Invoices/view.php:151 Invoices/view.php:556
+msgid "Edit Issuer"
+msgstr "Urejanje izdajatelja"
+
+#: Invoices/view.php:163 Invoices/view.php:557
+msgid "Edit Receiver"
+msgstr "Urejanje prejemnika"
+
+#: Invoices/view.php:175 Invoices/view.php:558
+msgid "Edit Buyer"
+msgstr "Urejanje naročnika-plačnika"
+
+#: Invoices/view.php:235
 msgid "TAX payee no."
 msgstr "ID št. za DDV"
 
-#: Invoices/view.php:197
+#: Invoices/view.php:235
 msgid "TAX no."
 msgstr "Davčna št."
 
-#: Invoices/view.php:219
+#: Invoices/view.php:257
 msgid "Approval date"
 msgstr "Datum potrditve"
 
-#: Invoices/view.php:314 element/edit_items.php:9
+#: Invoices/view.php:352 element/edit_items.php:9
 msgid "Quantity"
 msgstr "Količina"
 
-#: Invoices/view.php:315 Items/edit.php:54 Items/index.php:27
+#: Invoices/view.php:353 Items/edit.php:54 Items/index.php:27
 #: element/edit_items.php:10
 msgid "Unit"
 msgstr "E.M."
 
-#: Invoices/view.php:316 element/edit_items.php:11
+#: Invoices/view.php:354 element/edit_items.php:11
 msgid "Price per Unit"
 msgstr "Cena"
 
-#: Invoices/view.php:317 element/edit_items.php:12
+#: Invoices/view.php:355 element/edit_items.php:12
 msgid "Discount [%]"
 msgstr "Popust [%]"
 
-#: Invoices/view.php:318 element/edit_items.php:13
+#: Invoices/view.php:356 element/edit_items.php:13
 msgid "Unit Total"
 msgstr "Skupaj"
 
-#: Invoices/view.php:319 element/edit_items.php:14
+#: Invoices/view.php:357 element/edit_items.php:14
 msgid "Tax [%]"
 msgstr "DDV [%]"
 
-#: Invoices/view.php:320 element/edit_items.php:15 element/edit_tax.php:12
+#: Invoices/view.php:358 element/edit_items.php:15 element/edit_tax.php:12
 msgid "Total with Tax"
 msgstr "Skupaj z DDV"
 
-#: Invoices/view.php:332 Invoices/view.php:413 element/edit_items.php:224
-#: element/edit_tax.php:145
+#: Invoices/view.php:370 Invoices/view.php:451 element/edit_items.php:229
+#: element/edit_tax.php:147
 msgid "Grand Total"
 msgstr "Skupni znesek"
 
-#: Invoices/view.php:398 element/edit_tax.php:9
+#: Invoices/view.php:436 element/edit_tax.php:9
 msgid "VAT [%]"
 msgstr "DDV [%]"
 
-#: Invoices/view.php:399 element/edit_tax.php:10
+#: Invoices/view.php:437 element/edit_tax.php:10
 msgid "Base"
 msgstr "Osnova"
 
-#: Invoices/view.php:400 element/edit_tax.php:11
+#: Invoices/view.php:438 element/edit_tax.php:11
 msgid "Tax"
 msgstr "DDV"
 
-#: Invoices/view.php:434
+#: Invoices/view.php:472
 msgid "VAT Analytics"
 msgstr "DDV Analitika"
 
-#: Invoices/view.php:444
+#: Invoices/view.php:482
 msgid "No attachments found."
 msgstr "Ni priponk."
 
-#: Invoices/view.php:464
+#: Invoices/view.php:502
 msgid "Are you sure you want to delete this attachment"
 msgstr "Ste prepričani, da želite izbrisati priponko?"
 
-#: Invoices/view.php:472
+#: Invoices/view.php:510
 msgid "Linked Invoices"
 msgstr "Povezani dokumenti"
 
-#: Invoices/view.php:474
+#: Invoices/view.php:512
 msgid "No linked invoices found."
 msgstr "Ni povezanih dokumentov."
 
-#: Invoices/view.php:496
+#: Invoices/view.php:534
 msgid "Are you sure you want to delete this link?"
 msgstr "Ste prepričani, da želite izbrisati povezan dokument?"
 
-#: Invoices/view.php:513
+#: Invoices/view.php:551
 msgid "Edit Templates"
 msgstr "Uredi predloge"
 
-#: Invoices/view.php:515
+#: Invoices/view.php:553
 msgid "Attach File"
 msgstr "Pripenjanje"
 
-#: Invoices/view.php:516
+#: Invoices/view.php:554
 msgid "Link Invoice"
 msgstr "Povezava dokumentov"
 
@@ -857,11 +953,11 @@ msgstr "DDV stopnje"
 msgid "Level"
 msgstr "Stopnja"
 
-#: element/edit_items.php:197 element/edit_tax.php:121
+#: element/edit_items.php:202 element/edit_tax.php:123
 msgid "Remove Item"
 msgstr "Odstrani artikel"
 
-#: element/edit_items.php:219
+#: element/edit_items.php:224
 msgid "Add new Item"
 msgstr "Vpis novega artikla"
 
@@ -869,7 +965,7 @@ msgstr "Vpis novega artikla"
 msgid "VAT Description"
 msgstr "Opis"
 
-#: element/edit_tax.php:140
+#: element/edit_tax.php:142
 msgid "Add new Tax"
 msgstr "Vpišite DDV"
 
@@ -1011,9 +1107,6 @@ msgstr "Dokumenti ne obstajajo"
 #~ msgid "Remove footer"
 #~ msgstr "Odstrani sliko v nogi"
 
-#~ msgid "Counters"
-#~ msgstr "Števci"
-
 #~ msgid "Payment Type"
 #~ msgstr "Tip plačila"
 
@@ -1025,9 +1118,6 @@ msgstr "Dokumenti ne obstajajo"
 
 #~ msgid "Payments"
 #~ msgstr "Plačila"
-
-#~ msgid "Account"
-#~ msgstr "Račun"
 
 #~ msgid "Amount"
 #~ msgstr "Količina"
@@ -1482,9 +1572,6 @@ msgstr "Dokumenti ne obstajajo"
 #~ msgid "%4$s \"%3$s\" from %1$s to %2$s"
 #~ msgstr "%4$s \"%3$s\" od %1$s do %2$s"
 
-#~ msgid "Email"
-#~ msgstr "Email"
-
 #~ msgid "Send via Email"
 #~ msgstr "Pošlji na email"
 
@@ -1520,9 +1607,6 @@ msgstr "Dokumenti ne obstajajo"
 
 #~ msgid "Invoice no: %s"
 #~ msgstr "Račun št. %s"
-
-#~ msgid "Address"
-#~ msgstr "Naslov"
 
 #~ msgid "This counter creates income/expense."
 #~ msgstr "Števec ustvari prihodek/odhodek."

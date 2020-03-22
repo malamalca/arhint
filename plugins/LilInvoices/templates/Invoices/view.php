@@ -136,7 +136,7 @@ $invoiceView = [
             'title' => __d('lil_invoices', 'Settings'),
             'visible' => true,
             'submenu' => [
-                'page' => [
+                'templates' => [
                     'title' => __d('lil_invoices', 'Templates'),
                     'visible' => true,
                     'url' => [
@@ -147,6 +147,42 @@ $invoiceView = [
                         'id' => 'EditTemplates'
                     ]
                 ],
+                'issuer' => empty($invoice->issuer) ? null : [
+                    'title' => __d('lil_invoices', 'Edit Issuer'),
+                    'visible' => true,
+                    'url' => [
+                        'controller' => 'InvoicesClients',
+                        'action' => 'edit',
+                        $invoice->issuer->id ?? '',
+                    ],
+                    'params' => [
+                        'id' => 'EditIssuer'
+                    ]
+                ],
+                'receiver' => empty($invoice->receiver) ? null : [
+                    'title' => __d('lil_invoices', 'Edit Receiver'),
+                    'visible' => true,
+                    'url' => [
+                        'controller' => 'InvoicesClients',
+                        'action' => 'edit',
+                        $invoice->receiver->id ?? '',
+                    ],
+                    'params' => [
+                        'id' => 'EditReceiver'
+                    ]
+                ],
+                'buyer' => empty($invoice->buyer) ? null : [
+                    'title' => __d('lil_invoices', 'Edit Buyer'),
+                    'visible' => true,
+                    'url' => [
+                        'controller' => 'InvoicesClients',
+                        'action' => 'edit',
+                        $invoice->buyer->id ?? '',
+                    ],
+                    'params' => [
+                        'id' => 'EditBuyer'
+                    ]
+                ]
             ],
         ],
     ],
@@ -516,5 +552,9 @@ echo $this->Lil->panels($invoiceView, 'LilInvoices.Invoices.view');
 
         $("#AttachFile").modalPopup({title: "<?= __d('lil_invoices', 'Attach File') ?>"});
         $("#AttachLink").modalPopup({title: "<?= __d('lil_invoices', 'Link Invoice') ?>"});
+
+        $("#EditIssuer").modalPopup({title: "<?= __d('lil_invoices', 'Edit Issuer') ?>"});
+        $("#EditReceiver").modalPopup({title: "<?= __d('lil_invoices', 'Edit Receiver') ?>"});
+        $("#EditBuyer").modalPopup({title: "<?= __d('lil_invoices', 'Edit Buyer') ?>"});
     });
 </script>

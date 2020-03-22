@@ -241,7 +241,7 @@ class UsersTable extends Table
         $user->reset_key = uniqid();
         if ($this->save($user)) {
             $email = new Mailer('default');
-            $email->setFrom([Configure::read('from.email') => Configure::read('from.name')]);
+            $email->setFrom([Configure::read('App.fromEmail.from') => Configure::read('App.fromEmail.name')]);
             $email->setTo($user->email);
             $email->setSubject(__('Password Reset'));
 

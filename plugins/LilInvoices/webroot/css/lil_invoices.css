@@ -173,3 +173,12 @@ iframe#invoice-view {
 #AdminInvoicesIndex td.invoices-title {
     max-width: 300px !important;
 }
+
+/* ADDRESS */
+#client-address-zip {
+    width: 50px;
+    margin-right: 5px;
+}
+#client-address-city {
+    width: 170px;
+}
