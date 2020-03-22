@@ -34,8 +34,6 @@ $usersIndex = [
             $dropdownActive
         ]
     ],
-    'pre' => '<div class="row"><div class="col s12 m12 l12">',
-    'post' => '</div></div>',
     'table' => [
         'head' => [
             'rows' => [
@@ -43,7 +41,7 @@ $usersIndex = [
                     [
                         'icon' => [
                             'params' => ['class' => 'center-align'],
-                            'html' => __('Privileges')
+                            'html' => '&nbsp;'
                         ],
                         'title' => __('Name'),
                         ''

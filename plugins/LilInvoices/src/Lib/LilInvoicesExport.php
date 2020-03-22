@@ -64,6 +64,7 @@ class LilInvoicesExport
                 'Buyers',
                 'Issuers',
                 'InvoicesAttachments',
+                'InvoicesLinks' => ['Invoices'],
                 'TplHeaders', 'TplBodies', 'TplFooters',
             ],
             'order' => ['Invoices.counter'],

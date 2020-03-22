@@ -40,6 +40,7 @@ jQuery.fn.InvoiceEditClient = function (options) {
         $("#invoice-" + target + "-country-code", $this).val(client.country_code);
 
         $("#invoice-" + target + "-iban", $this).val(client.iban);
+        $("#invoice-" + target + "-bic", $this).val(client.bic);
         $("#invoice-" + target + "-bank", $this).val(client.bank);
 
         $("#invoice-" + target + "-email", $this).val(client.email);
@@ -60,6 +61,7 @@ jQuery.fn.InvoiceEditClient = function (options) {
             country_code: $("#invoice-" + target + "-country-code", $this).val(),
 
             iban: $("#invoice-" + target + "-iban", $this).val(),
+            bic: $("#invoice-" + target + "-bic", $this).val(),
             bank: $("#invoice-" + target + "-bank", $this).val(),
 
             email: $("#invoice-" + target + "-email", $this).val(),

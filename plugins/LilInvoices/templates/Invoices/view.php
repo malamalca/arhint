@@ -180,6 +180,7 @@ $invoiceView = [
                         ),
                 ],
                 'client-address' => empty($invoice->client->primary_address) ? null : [
+                    'label' => '&nbsp;',
                     'text' =>
                         implode(', ', array_filter([
                             h($invoice->client->primary_address->street),
@@ -194,6 +195,7 @@ $invoiceView = [
                         ])),
                 ],
                 'client-tax_no' => empty($invoice->client->tax_no) ? null : [
+                    'label' => '&nbsp;',
                     'text' => ($invoice->client->tax_status ? __d('lil_invoices', 'TAX payee no.') : __d('lil_invoices', 'TAX no.')) . ' ' .
                         h($invoice->client->tax_no),
                 ],

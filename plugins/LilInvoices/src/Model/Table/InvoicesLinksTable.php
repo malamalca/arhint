@@ -32,10 +32,6 @@ class InvoicesLinksTable extends Table
         $this->setDisplayField('id');
         $this->setPrimaryKey('id');
         $this->addBehavior('Timestamp');
-        //$this->belongsTo('Links', [
-        //    'foreignKey' => 'link_id',
-        //    'className' => 'LilInvoices\Model\Table\LinksTable'
-        //]);
         $this->belongsTo('Invoices', [
             'foreignKey' => 'invoice_id',
             'className' => 'LilInvoices\Model\Table\InvoicesTable',

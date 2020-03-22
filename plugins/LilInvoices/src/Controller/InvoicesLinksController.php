@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace LilInvoices\Controller;
 
+use Cake\Event\EventInterface;
+
 /**
  * InvoicesLinks Controller
  *
@@ -10,6 +12,28 @@ namespace LilInvoices\Controller;
  */
 class InvoicesLinksController extends AppController
 {
+    /**
+     * BeforeFilter event handler
+     *
+     * @param \Cake\Event\EventInterface $event Event interface
+     * @return \Cake\Http\Response|null
+     */
+    public function beforeFilter(EventInterface $event)
+    {
+        parent::beforeFilter($event);
+
+        if (!empty($this->Security)) {
+            if (in_array($this->getRequest()->getParam('action'), ['link'])) {
+                $this->Security->setConfig(
+                    'unlockedFields',
+                    ['invoice_id']
+                );
+            }
+        }
+
+        return null;
+    }
+
     /**
      * Link method
      *

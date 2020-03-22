@@ -18,96 +18,99 @@
 
     foreach ((array)$invoices as $invoice) {
         $transformed['IzdaniRacunEnostavni']['Racun'][$i] = [
-        '@Id' => 'data',
-        'GlavaRacuna' => [
-            // VrstaRacuna :: E:El-1001 :: 380 - račun
-            'VrstaRacuna' => '380',
-            'StevilkaRacuna' => $invoice->no,
-            // FunkcijaRacuna :: E-1225 :: 9 - original, 31 - kopija
-            'FunkcijaRacuna' => '9',
-            'NacinPlacila' => empty($invoice->pmt_kind) ? 0 : $invoice->pmt_kind,
-            //'StroskovnoMesto' => '',
-            'KodaNamena' => empty($invoice->pmt_sepa_type) ? 'OTHR' : $invoice->pmt_sepa_type,
-        ],
+            '@Id' => 'data',
+            'GlavaRacuna' => [
+                // VrstaRacuna :: E:El-1001 :: 380 - račun
+                'VrstaRacuna' => '380',
+                'StevilkaRacuna' => $invoice->no,
+                // FunkcijaRacuna :: E-1225 :: 9 - original, 31 - kopija
+                'FunkcijaRacuna' => '9',
+                'NacinPlacila' => empty($invoice->pmt_kind) ? 0 : $invoice->pmt_kind,
+                //'StroskovnoMesto' => '',
+                'KodaNamena' => empty($invoice->pmt_sepa_type) ? 'OTHR' : $invoice->pmt_sepa_type,
+            ],
 
-        'Valuta' => [
-            'VrstaValuteRacuna' => '2',
-            'KodaValute' => 'EUR',
-        ],
-        'Lokacije' => [
-            // VrstaLokacije = 91 :: 57-kraj plačila, 91-kraj izdaje dokumenta, 162-kraj prodaje (E: El-LOC01)
-            'VrstaLokacije' => '91',
-            'NazivLokacije' => substr($invoice->location, 0, 70),
-        ],
-        'DatumiRacuna' => [
-            0 => [
-                'VrstaDatuma' => 137,
-                // VrstaDatuma = 137 :: datum izdaje
-                'DatumRacuna' => $invoice->dat_issue ? $invoice->dat_issue->format('c') : '',
+            'Valuta' => [
+                'VrstaValuteRacuna' => '2',
+                'KodaValute' => 'EUR',
             ],
-            1 => [
-                'VrstaDatuma' => 35,
-                // VrstaDatuma = 35 :: datum opravljene storitve oz. odpreme blaga
-                'DatumRacuna' => $invoice->dat_service ? $invoice->dat_service->format('c') : '',
+            'Lokacije' => [
+                // VrstaLokacije = 91 :: 57-kraj plačila, 91-kraj izdaje dokumenta, 162-kraj prodaje (E: El-LOC01)
+                'VrstaLokacije' => '91',
+                'NazivLokacije' => substr($invoice->location, 0, 70),
             ],
-        ],
-        'PlacilniPogoji' => [
-            'PodatkiORokih' => [
-                'VrstaPogoja' => '3',
-            ],
-            'PlacilniRoki' => [
-                'VrstaDatumaPlacilnegaRoka' => '13',
-                'Datum' => $invoice->dat_expire ? $invoice->dat_expire->format('c') : '',
-            ],
-        ],
-        'PoljubnoBesedilo' => [
-            0 => [
-                // naslov računa
-                'VrstaBesedila' => 'AAI',
-                'Besedilo' => [
-                    'Tekst1' => 'NASLOV_RACUNA',
-                    'Tekst2' => $invoice->title,
+            'DatumiRacuna' => [
+                0 => [
+                    'VrstaDatuma' => 137,
+                    // VrstaDatuma = 137 :: datum izdaje
+                    'DatumRacuna' => $invoice->dat_issue ? $invoice->dat_issue->format('c') : '',
+                ],
+                1 => [
+                    'VrstaDatuma' => 35,
+                    // VrstaDatuma = 35 :: datum opravljene storitve oz. odpreme blaga
+                    'DatumRacuna' => $invoice->dat_service ? $invoice->dat_service->format('c') : '',
                 ],
             ],
-            1 => [
-                'VrstaBesedila' => 'ZZZ',
-                'Besedilo' => [
-                    'Tekst1' => 'TIP_DOKUMENTA',
-                    'Tekst2' => $docTypes[$invoice->doc_type],
+            'PlacilniPogoji' => [
+                'PodatkiORokih' => [
+                    'VrstaPogoja' => '3',
+                ],
+                'PlacilniRoki' => [
+                    'VrstaDatumaPlacilnegaRoka' => '13',
+                    'Datum' => $invoice->dat_expire ? $invoice->dat_expire->format('c') : '',
                 ],
             ],
-            2 => [
-                'VrstaBesedila' => 'ZZZ',
-                'Besedilo' => [
-                    'Tekst1' => 'VRSTA_DOKUMENTA',
-                    'Tekst2' => $invoice->invoices_counter->kind,
+            'PoljubnoBesedilo' => [
+                0 => [
+                    // naslov računa
+                    'VrstaBesedila' => 'AAI',
+                    'Besedilo' => [
+                        'Tekst1' => 'NASLOV_RACUNA',
+                        'Tekst2' => $invoice->title,
+                    ],
+                ],
+                1 => [
+                    'VrstaBesedila' => 'ZZZ',
+                    'Besedilo' => [
+                        'Tekst1' => 'TIP_DOKUMENTA',
+                        'Tekst2' => $docTypes[$invoice->doc_type],
+                    ],
+                ],
+                2 => [
+                    'VrstaBesedila' => 'ZZZ',
+                    'Besedilo' => [
+                        'Tekst1' => 'VRSTA_DOKUMENTA',
+                        'Tekst2' => $invoice->invoices_counter->kind,
+                    ],
+                ],
+                3 => [
+                    'VrstaBesedila' => 'AAI',
+                    'Besedilo' => [
+                        'Tekst1' => 'PRIROCNIK_ESLOG_1_6',
+                        'Tekst2' => 'Dodatna informacija o verziji priročnika ESLOG_1_6',
+                    ],
+                ],
+                4 => [
+                    'VrstaBesedila' => 'AAI',
+                    'Besedilo' => [
+                        'Tekst1' => 'FAKTURIST',
+                        'Tekst2' => $invoice->issuer->person,
+                    ],
+                ],
+                5 => [
+                    'VrstaBesedila' => 'AAI',
+                    'Besedilo' => [
+                        'Tekst1' => 'GLAVA_TEKST',
+                        'Tekst2' => $invoice->title,
+                    ],
                 ],
             ],
-            3 => [
-                'VrstaBesedila' => 'AAI',
-                'Besedilo' => [
-                    'Tekst1' => 'PRIROCNIK_ESLOG_1_6',
-                    'Tekst2' => 'Dodatna informacija o verziji priročnika ESLOG_1_6',
-                ],
-            ],
-            4 => [
-                'VrstaBesedila' => 'AAI',
-                'Besedilo' => [
-                    'Tekst1' => 'FAKTURIST',
-                    'Tekst2' => $invoice->issuer->person,
-                ],
-            ],
-            5 => [
-                'VrstaBesedila' => 'AAI',
-                'Besedilo' => [
-                    'Tekst1' => 'GLAVA_TEKST',
-                    'Tekst2' => '',
-                ],
-            ],
-        ],
+            'ReferencniDokumenti' => [
 
-        'PodatkiPodjetja' => [
-        ],
+            ],
+
+            'PodatkiPodjetja' => [
+            ],
         ];
 
         $dodatniTextIndex = 5;
@@ -121,6 +124,13 @@
             ],
             ];
             $dodatniTextIndex = 6;
+        }
+
+        foreach ((array)$invoice->invoices_links as $link) {
+            $transformed['IzdaniRacunEnostavni']['Racun'][$i]['ReferencniDokumenti'][] = [
+                '@VrstaDokumenta' => $link->invoice->doc_type,
+                'StevilkaDokumenta' => $link->invoice->no
+            ];
         }
 
         foreach ([$invoice->buyer, $invoice->issuer, $invoice->receiver] as $client) {
@@ -141,7 +151,7 @@
                     'BancniRacun' => [
                         'StevilkaBancnegaRacuna' => $client->iban,
                         'NazivBanke1' => '',
-                        //'BIC' => str_pad($client->bic, 11, 'X'),
+                        'BIC' => str_pad($client->bic, 11, 'X'),
                     ],
                 ],
 

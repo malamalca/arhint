@@ -62,17 +62,12 @@ class UsersTable extends Table
         $validator
             ->scalar('name')
             ->maxLength('name', 50)
-            ->allowEmptyString('name');
+            ->notEmptyString('name');
 
         $validator
             ->scalar('username')
             ->maxLength('username', 100)
-            ->allowEmptyString('username');
-
-        $validator
-            ->scalar('username_old')
-            ->maxLength('username_old', 50)
-            ->allowEmptyString('username_old');
+            ->notEmptyString('username');
 
         $validator
             ->scalar('passwd')
@@ -91,7 +86,7 @@ class UsersTable extends Table
 
         $validator
             ->email('email')
-            ->allowEmptyString('email');
+            ->notEmptyString('email');
 
         $validator
             ->scalar('reset_key')

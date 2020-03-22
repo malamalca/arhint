@@ -32,7 +32,7 @@ class ProjectsController extends AppController
                 'conditions' => [
                     'Projects.active IN' => [true],
                 ],
-                'order' => ['Projects.no DESC']
+                'order' => ['Projects.no DESC'],
             ],
             $this->Projects->filter($filter)
         );
@@ -84,6 +84,7 @@ class ProjectsController extends AppController
 
         $this->Authorization->authorize($project, 'view');
 
+        $imageData = null;
         switch ($size) {
             case 'thumb':
                 //$imageData = Cache::remember($project->id . '-thumb', function () use ($project) {
@@ -93,7 +94,9 @@ class ProjectsController extends AppController
 
                 break;
             default:
-                $imageData = base64_decode($project->ico);
+                if (!empty($project->ico)) {
+                    $imageData = base64_decode($project->ico);
+                }
         }
 
         $response = $this->response;

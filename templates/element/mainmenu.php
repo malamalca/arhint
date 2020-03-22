@@ -5,14 +5,14 @@
 if (!empty($main_menu)) {
     foreach ($main_menu as $itemKey => $item) {
         if (!empty($item['submenu'])) {
-            printf('<ul id="%s" class="dropdown-content">', 'dropdown_' . $itemKey . '_' . $prefix);
+            printf('<ul id="%s" class="dropdown-content main-menu">', 'dropdown_' . $itemKey . '_' . $prefix);
             foreach ($item['submenu'] as $subItem) {
                 if (!empty($subItem)) {
                     $params = isset($subItem['params']) ? array_diff_key($subItem['params'], array_flip($badParamKeys)) : [];
                     if (isset($subItem['params']['confirm'])) {
                         $params['onclick'] = sprintf('return confirm("%s");', $subItem['params']['confirm']);
                     }
-                    echo '<li>';
+                    echo '<li class="nowrap">';
                     echo $this->Html->link($subItem['title'], $subItem['url'], $params);
                     echo '</li>';
                 }

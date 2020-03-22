@@ -114,6 +114,17 @@ function clientFields($kind, $client, $lock = true)
             'parameters' => [$kind . '.iban'],
         ],
 
+        $kind . '-bic' => [
+            'method' => 'control',
+            'parameters' => [
+                'field' => $kind . '.bic', ['type' => $defType],
+            ],
+        ],
+        $kind . '-bic-unlock' => $lock ? null : [
+            'method' => 'unlockField',
+            'parameters' => [$kind . '.bic'],
+        ],
+
         $kind . '-bank' => [
             'method' => 'control',
             'parameters' => [

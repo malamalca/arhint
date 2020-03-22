@@ -301,6 +301,8 @@ class UsersController extends AppController
     {
         $this->getRequest()->allowMethod(['get']);
         $user = $this->Users->get($id);
+        $this->Authorization->authorize($user);
+
         if ($this->Users->delete($user)) {
             $this->Flash->success(__('The user has been deleted.'));
         } else {

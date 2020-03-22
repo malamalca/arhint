@@ -20,6 +20,7 @@ use Cake\ORM\TableRegistry;
  * @property string|null $country
  * @property string|null $country_code
  * @property string|null $iban
+ * @property string|null $bic
  * @property string|null $bank
  * @property string|null $tax_no
  * @property string|null $mat_no
@@ -75,6 +76,7 @@ class InvoicesClient extends Entity
 
         if (isset($company->primary_account)) {
             $this->iban = $company->primary_account->iban;
+            $this->bic = $company->primary_account->bic;
             $this->bank = $company->primary_account->bank;
             // todo: convert bic to bank name
         }

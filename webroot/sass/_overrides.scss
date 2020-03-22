@@ -83,6 +83,10 @@ main, footer, nav {
     @extend .hide-on-large-only !optional;
 }
 
+ul.main-menu {
+    width: auto !important;
+}
+
 .sidenav {
     @media print {
         display: none;
