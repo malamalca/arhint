@@ -235,7 +235,9 @@ class InvoicesController extends AppController
         $VatsTable = TableRegistry::getTableLocator()->get('LilInvoices.Vats');
         $vatLevels = $VatsTable->levels($this->getCurrentUser()->get('company_id'));
 
-        $this->set(compact('invoice', 'counter', 'vatLevels', 'projects'));
+        $currentCounter = $invoice->counter_id;
+
+        $this->set(compact('invoice', 'counter', 'vatLevels', 'projects', 'currentCounter'));
 
         return null;
     }

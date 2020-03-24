@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace LilInvoices\Controller;
 
 use Cake\Core\Configure;
-use Cake\ORM\TableRegistry;
+use Cake\Http\Exception\NotFoundException;
 
 /**
  * InvoicesAttachments Controller
@@ -23,16 +23,56 @@ class InvoicesAttachmentsController extends AppController
      */
     public function view($id = null, $name = null)
     {
-        /** @var \LilInvoices\Model\Table\InvoicesAttachmentsTable $InvoicesAttachments */
-        $InvoicesAttachments = TableRegistry::get('LilInvoices.InvoicesAttachments');
-        $a = $InvoicesAttachments->get($id);
+        $a = $this->InvoicesAttachments->get($id);
 
         $this->Authorization->authorize($a);
 
         $path = Configure::read('LilInvoices.uploadFolder') . DS . $a->filename;
-        $name = $a->original;
 
-        $this->response = $this->response->withFile($path, ['name' => $name]);
+        $this->response = $this->response->withFile($path, ['name' => $a->original]);
+
+        return $this->response;
+    }
+
+    /**
+     * Download method
+     *
+     * @param  string $invoiceId   Invoice id.
+     * @return \Cake\Http\Response|null
+     * @throws \Cake\Http\Exception\NotFoundException When record not found.
+     */
+    public function downloadAll($invoiceId)
+    {
+        $attachments = $this->Authorization->applyScope($this->InvoicesAttachments->find(), 'index')
+            ->where(['invoice_id' => $invoiceId])
+            ->all();
+
+        if ($attachments->count() == 0) {
+            throw new NotFoundException(__d('lil_invoices', 'No Attachments Found.'));
+        }
+
+        if ($attachments->count() == 1) {
+            $path = Configure::read('LilInvoices.uploadFolder') . DS . $attachments->first()->filename;
+            $this->response = $this->response->withFile(
+                $path,
+                ['name' => $attachments->first()->original, 'download' => true]
+            );
+        } else {
+            $tmpFilename = uniqid('attachments') . '.zip';
+
+            $zip = new \ZipArchive();
+            $res = $zip->open(constant('TMP') . $tmpFilename, \ZipArchive::CREATE);
+            foreach ($attachments as $attachment) {
+                $path = Configure::read('LilInvoices.uploadFolder') . DS . $attachment->filename;
+                $zip->addFile($path, $attachment->original);
+            }
+            $zip->close();
+            $this->response = $this->response->withFile(
+                constant('TMP') . $tmpFilename,
+                ['name' => $tmpFilename, 'download' => true]
+            );
+            unlink(constant('TMP') . $tmpFilename);
+        }
 
         return $this->response;
     }
@@ -54,10 +94,7 @@ class InvoicesAttachmentsController extends AppController
             }
         }
 
-        /** @var \LilInvoices\Model\Table\InvoicesAttachmentsTable $InvoicesAttachments */
-        $InvoicesAttachments = TableRegistry::get('LilInvoices.InvoicesAttachments');
-
-        $attachment = $InvoicesAttachments->newEmptyEntity();
+        $attachment = $this->InvoicesAttachments->newEmptyEntity();
         $attachment->invoice_id = $invoiceId;
 
         $this->Authorization->authorize($attachment, 'edit');
@@ -65,17 +102,10 @@ class InvoicesAttachmentsController extends AppController
         if ($this->getRequest()->is('post')) {
             $tmpName = $this->getRequest()->getData('filename.tmp_name');
 
-            $attachment = $InvoicesAttachments->patchEntity($attachment, $this->getRequest()->getData());
+            $attachment = $this->InvoicesAttachments->patchEntity($attachment, $this->getRequest()->getData());
 
             if (!$attachment->getErrors()) {
-                /*$attachment->original = $fileData['name'];
-                $attachment->mime = $fileData['type'];
-                $attachment->filesize = $fileData['size'];*/
-
-                //$fileDest = Configure::read('LilInvoices.uploadFolder') . DS . $attachment->filename;
-                //$moved = copy($tmpName, $fileDest);
-
-                if ($InvoicesAttachments->save($attachment, ['uploadedFilename' => $tmpName])) {
+                if ($this->InvoicesAttachments->save($attachment, ['uploadedFilename' => $tmpName])) {
                     $this->Flash->success(__d('lil_invoices', 'The invoices attachment has been saved.'));
 
                     return $this->redirect(['controller' => 'Invoices', 'action' => 'view', $attachment->invoice_id]);
@@ -98,13 +128,11 @@ class InvoicesAttachmentsController extends AppController
      */
     public function delete($id = null)
     {
-        /** @var \LilInvoices\Model\Table\InvoicesAttachmentsTable $InvoicesAttachments */
-        $InvoicesAttachments = TableRegistry::get('LilInvoices.InvoicesAttachments');
-        $attachment = $InvoicesAttachments->get($id);
+        $attachment = $this->InvoicesAttachments->get($id);
 
         $this->Authorization->authorize($attachment);
 
-        if ($InvoicesAttachments->delete($attachment)) {
+        if ($this->InvoicesAttachments->delete($attachment)) {
             $this->Flash->success(__d('lil_invoices', 'The invoices attachment has been deleted.'));
         } else {
             $this->Flash->error(__d('lil_invoices', 'The attachment could not be deleted. Please, try again.'));

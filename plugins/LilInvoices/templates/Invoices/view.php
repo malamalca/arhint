@@ -8,8 +8,6 @@ $lilDocumentHelper = $this->loadHelper('LilInvoices.LilDocument');
 $dateFormat = strtr(implode(Configure::read('Lil.dateSeparator'), str_split(Configure::read('Lil.dateFormat'))), ['Y' => 'yyyy', 'M' => 'MM', 'D' => 'dd']);
 $invoice->client = $invoice->invoices_counter->kind == 'issued' ? $invoice->receiver : $invoice->issuer;
 
-$this->set('currentCounter', $invoice->counter_id);
-
 $invoiceView = [
     'title_for_layout' => __d(
         'lil_invoices',

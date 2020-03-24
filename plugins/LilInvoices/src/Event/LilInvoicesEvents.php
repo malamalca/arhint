@@ -124,11 +124,16 @@ class LilInvoicesEvents implements EventListenerInterface
         ));
 
         // create Lil panels
+        switch ($view->getRequest()->getParam('plugin')) {
+            case 'LilProjects':
+                $elementTemplate = 'LilInvoices.invoices_projects_list';
+                break;
+            default:
+                $elementTemplate = 'LilInvoices.invoices_list';
+        }
         $invoicesPanels = [
             'invoices_title' => '<h3>' . __d('lil_invoices', 'Invoices') . '</h3>',
-            'invoices_table' => $view->element('LilInvoices.invoices_list', [
-                'invoices' => $invoices,
-            ]),
+            'invoices_table' => $view->element($elementTemplate, ['invoices' => $invoices]),
         ];
 
         $view->Lil->insertIntoArray($panels->panels, $invoicesPanels);

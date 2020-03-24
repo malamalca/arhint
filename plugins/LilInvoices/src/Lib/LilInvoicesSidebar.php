@@ -176,13 +176,13 @@ class LilInvoicesSidebar
             // determine current counter
             $isActionIndex = $request->getParam('controller') == 'Invoices' && $request->getParam('action') == 'index';
             $currentCounter = $request->getQuery('counter');
-            if (!$currentCounter) {
+            if (empty($currentCounter)) {
                 $currentCounter = $request->getQuery('filter.counter');
             }
-            if (!$currentCounter) {
+            if (empty($currentCounter)) {
                 $currentCounter = $event->getSubject()->viewBuilder()->getVar('currentCounter');
             }
-            if (!$currentCounter && $counters->count() > 0 && $isActionIndex) {
+            if (empty($currentCounter) && $counters->count() > 0 && $isActionIndex) {
                 $currentCounter = $counters->first()->id;
             }
 
