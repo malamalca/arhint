@@ -47,7 +47,7 @@ class UsersFixture extends TestFixture
         $this->records = [
             [
                 'id' => '048acacf-d87c-4088-a3a7-4bab30f6a040',
-                'company_id' => '8155426d-2302-4fa5-97de-e33cefb9d704',
+                'company_id' => COMPANY_FIRST,
                 'name' => 'Admin User',
                 'username' => 'admin',
                 'passwd' => 'admin',

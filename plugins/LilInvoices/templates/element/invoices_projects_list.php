@@ -14,7 +14,11 @@ if ($invoices->count() > 0) {
         'head' => ['rows' => [['columns' => [
             'no' => [
                 'parameters' => ['class' => 'left-align'],
-                'html' => __d('lil_invoices', 'Invoice'),
+                'html' => $this->Paginator->sort(
+                    'no',
+                    __d('lil_invoices', 'Invoice'),
+                    ['url' => $pagingUrl, 'direction' => $pagingDirection]
+                ),
             ],
             'download' => [
                 'parameters' => ['class' => 'center-align'],

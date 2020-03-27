@@ -38,14 +38,14 @@ class ContactsEmailsFixture extends TestFixture
      * @var array
      */
     public $records = [
-        /*[
-            'id' => 1,
-            'contact_id' => 'Lorem ipsum dolor sit amet',
+        [
+            'id' => '1',
+            'contact_id' => COMPANY_FIRST,
             'primary' => 1,
-            'email' => 'Lorem ipsum dolor sit amet',
-            'kind' => 'Lorem ipsum dolor sit ame',
+            'email' => 'info@arhim.si',
+            'kind' => 'W',
             'created' => '2015-01-31 07:29:20',
             'modified' => '2015-01-31 07:29:20',
-        ],*/
+        ],
     ];
 }

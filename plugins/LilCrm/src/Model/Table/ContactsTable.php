@@ -42,7 +42,7 @@ class ContactsTable extends Table
 
         $this->belongsTo('Users', [
             'foreignKey' => 'owner_id',
-            'className' => 'Lil\Model\Table\UsersTable',
+            'className' => 'App\Model\Table\UsersTable',
         ]);
 
         $this->hasMany('Employees', [

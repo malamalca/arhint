@@ -38,14 +38,14 @@ class ContactsPhonesFixture extends TestFixture
      * @var array
      */
     public $records = [
-        /*[
-            'id' => 1,
-            'contact_id' => 'Lorem ipsum dolor sit amet',
-            'no' => 'Lorem ipsum dolor sit amet',
-            'kind' => 'Lorem ipsum dolor sit ame',
+        [
+            'id' => '1',
+            'contact_id' => COMPANY_FIRST,
+            'no' => '041 891 824',
+            'kind' => 'W',
             'primary' => 1,
             'created' => '2015-01-31 07:29:24',
             'modified' => '2015-01-31 07:29:24',
-        ],*/
+        ],
     ];
 }

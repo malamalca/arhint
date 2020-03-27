@@ -21,6 +21,7 @@ class AdremasControllerTest extends TestCase
      */
     public $fixtures = [
         'Adremas' => 'plugin.LilCrm.Adremas',
+        'AdremasContacts' => 'plugin.LilCrm.AdremasContacts',
         'Users' => 'app.Users'
     ];
 
@@ -41,23 +42,6 @@ class AdremasControllerTest extends TestCase
     }
 
     /**
-     * Test index method
-     *
-     * @return void
-     */
-    /*public function testIndex()
-    {
-        $this->disableErrorHandlerMiddleware();
-
-        $this->get('/lil_crm/adremas/index');
-        $this->assertRedirect();
-
-        $this->login(USER_ADMIN);
-        $this->get('/lil_crm/adremas/index');
-        $this->assertResponseOk();
-    }*/
-
-    /**
      * Test add method
      *
      * @return void
@@ -69,11 +53,6 @@ class AdremasControllerTest extends TestCase
             'owner_id' => COMPANY_FIRST,
             'title' => 'Test Add Adrema'
         ];
-
-        //$this->disableErrorHandlerMiddleware();
-
-        //$this->get('/lil_crm/adremas/add');
-        //$this->assertRedirect();
 
         $this->post('/lil_crm/adremas/add', $data);
         $this->assertResponseError();
@@ -97,7 +76,25 @@ class AdremasControllerTest extends TestCase
      */
     public function testEdit()
     {
-        $this->markTestIncomplete('Not implemented yet.');
+        $data = [
+            'id' => '49a90cfe-fda4-49ca-b7ec-ca5534465431',
+            'owner_id' => COMPANY_FIRST,
+            'title' => 'Test Edit Adrema'
+        ];
+
+        $this->post('/lil_crm/adremas/edit/49a90cfe-fda4-49ca-b7ec-ca5534465431', $data);
+        $this->assertResponseError();
+
+        $this->login(USER_ADMIN);
+
+        $this->get('/lil_crm/adremas/edit/49a90cfe-fda4-49ca-b7ec-ca5534465431');
+        $this->assertResponseOk();
+
+        $this->enableCsrfToken();
+        $this->enableSecurityToken();
+
+        $this->post(['plugin' => 'LilCrm', 'controller' => 'Adremas', 'action' => 'edit', '49a90cfe-fda4-49ca-b7ec-ca5534465431'], $data);
+        $this->assertRedirectContains('/lil_crm/labels/adrema/');
     }
 
     /**
@@ -107,6 +104,12 @@ class AdremasControllerTest extends TestCase
      */
     public function testDelete()
     {
-        $this->markTestIncomplete('Not implemented yet.');
+        $this->get('/lil_crm/adremas/delete/49a90cfe-fda4-49ca-b7ec-ca5534465431');
+        $this->assertRedirect(); // to login
+
+        $this->login(USER_ADMIN);
+
+        $this->get('/lil_crm/adremas/delete/49a90cfe-fda4-49ca-b7ec-ca5534465431');
+        $this->assertRedirectContains('/lil_crm/labels/adrema'); // no trailing slash = no trailing adrema id!!!
     }
 }

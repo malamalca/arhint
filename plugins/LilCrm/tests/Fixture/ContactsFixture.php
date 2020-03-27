@@ -48,6 +48,7 @@ class ContactsFixture extends TestFixture
     public $records = [
         [
             'id' => '8155426d-2302-4fa5-97de-e33cefb9d704',
+            'owner_id' => COMPANY_FIRST,
             'kind' => 'C',
             'name' => null,
             'surname' => null,
@@ -64,6 +65,7 @@ class ContactsFixture extends TestFixture
         ],
         [
             'id' => '49a90cfe-fda4-49ca-b7ec-ca50783b5a42',
+            'owner_id' => COMPANY_FIRST,
             'kind' => 'T',
             'name' => 'Miha',
             'surname' => 'Nahtigal',
@@ -80,6 +82,7 @@ class ContactsFixture extends TestFixture
         ],
         [
             'id' => '49a90cfe-fda4-49ca-b7ec-ca50783b5a43',
+            'owner_id' => '49a90cfe-fda4-49ca-b7ec-ca50783b5a44',
             'kind' => 'C',
             'name' => null,
             'surname' => null,

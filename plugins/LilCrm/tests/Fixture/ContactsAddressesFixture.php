@@ -42,9 +42,9 @@ class ContactsAddressesFixture extends TestFixture
      * @var array
      */
     public $records = [
-        /*[
+        [
             'id' => '49a90cfe-fda4-49ca-b7ed-ca50783b5a41',
-            'contact_id' => '49a90cfe-fda4-49ca-b7ec-ca50783b5a41',
+            'contact_id' => COMPANY_FIRST,
             'primary' => true,
             'kind' => 'W',
             'street' => 'Slakova ulica 36',
@@ -65,6 +65,6 @@ class ContactsAddressesFixture extends TestFixture
             'country' => 'AcMe',
             'created' => '2015-01-31 07:29:14',
             'modified' => '2015-01-31 07:29:14',
-        ],*/
+        ],
     ];
 }
