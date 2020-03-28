@@ -5,6 +5,7 @@ namespace LilProjects\Lib;
 
 class LilProjectsFuncs
 {
+    protected const THUMB_SIZE = 50;
     /**
      * Return thumbnail image for specified project
      *
@@ -33,17 +34,25 @@ class LilProjectsFuncs
             $im = imagecreatefromstring(base64_decode($project->ico));
             $width = imagesx($im);
             $height = imagesy($im);
-            $ratio = 50 / $height;
 
-            $newWidth = (int)round($width * $ratio);
-            $newHeight = 50;
+            if ($width > $height) {
+                $newHeight = self::THUMB_SIZE;
+                $newWidth = (int)floor($width * $newHeight / $height);
+                $cropX = (int)ceil(($width - $height) / 2);
+                $cropY = 0;
+            } else {
+                $newWidth = self::THUMB_SIZE;
+                $newHeight = (int)floor($height * $newWidth / $width);
+                $cropX = 0;
+                $cropY = (int)ceil(($height - $width) / 2);
+            }
 
-            $newImage = imagecreatetruecolor($newWidth, $newHeight);
+            $newImage = imagecreatetruecolor(self::THUMB_SIZE, self::THUMB_SIZE);
             imagealphablending($newImage, false);
             imagesavealpha($newImage, true);
             $transparent = imagecolorallocatealpha($newImage, 255, 255, 255, 127);
-            imagefilledrectangle($newImage, 0, 0, $newWidth, $newHeight, $transparent);
-            imagecopyresampled($newImage, $im, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height);
+            imagefilledrectangle($newImage, 0, 0, self::THUMB_SIZE, self::THUMB_SIZE, $transparent);
+            imagecopyresampled($newImage, $im, 0, 0, $cropX, $cropY, $newWidth, $newHeight, $width, $height);
             imagedestroy($im);
         }
 
