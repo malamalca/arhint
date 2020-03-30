@@ -16,15 +16,21 @@ $report = [
                     'label' => ' ' . __d('lil_expenses', 'Filter by Counter'),
                     'id' => 'FilterCounter',
                     'name' => 'filter_counter',
+                    'autocomplete' => 'off',
+                    'hiddenField' => false
                 ])),
+            'filter_counter_unlock' => [
+                'method' => 'unlockField',
+                'parameters' => ['filter_counter'],
+            ],
             'div_counter_start' => empty($counters) ? null : '<div id="FilterCounters">',
             'counter' => empty($counters) ? null : [
                 'method' => 'control',
                 'parameters' => ['counter', [
-                        'type' => 'select',
-                        'options' => $counters,
-                        'multiple' => 'checkbox',
-                        'label' => false,
+                    'type' => 'select',
+                    'options' => $counters,
+                    'multiple' => 'checkbox',
+                    'label' => false,
                 ]],
             ],
             'div_counter_end' => empty($counters) ? null : '</div>',
@@ -35,14 +41,14 @@ $report = [
             'start' => [
                 'method' => 'control',
                 'parameters' => ['start', [
-                    'type' => 'lil-date',
+                    'type' => 'date',
                     'label' => __d('lil_expenses', 'Issued from') . ':',
                 ]],
             ],
             'end' => [
                 'method' => 'control',
                 'parameters' => ['end', [
-                    'type' => 'lil-date',
+                    'type' => 'date',
                     'label' => __d('lil_expenses', 'Issued to') . ':',
                 ]],
             ],

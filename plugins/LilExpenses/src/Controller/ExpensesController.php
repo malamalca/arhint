@@ -205,12 +205,12 @@ class ExpensesController extends AppController
         $counters = [];
         if (Plugin::isLoaded('LilInvoices')) {
             $InvoicesCounters = TableRegistry::get('LilInvoices.InvoicesCounters');
-            $counters = $InvoicesCounters->find('invoicesList')
-                ->where([
-                    'owner_id' => $this->getCurrentUser()->get('company_id'),
-                    'active' => true,
-                ])
+            $counters = $this->Authorization->applyScope($InvoicesCounters->find(), 'index')
+                ->where(['active' => true])
                 ->order(['kind', 'title'])
+                ->combine('id', function ($entity) {
+                    return $entity;
+                })
                 ->toArray();
             $this->set(compact('counters'));
         }
@@ -224,13 +224,6 @@ class ExpensesController extends AppController
                 $filter['counter'] = array_intersect_key((array)$filter['counter'], array_keys($counters));
             } else {
                 $filter['counter'] = array_keys($counters);
-            }
-
-            if (!empty($filter['start'])) {
-                $filter['start'] = Time::parseDate($filter['start'], 'yyyy-MM-dd');
-            }
-            if (!empty($filter['end'])) {
-                $filter['end'] = Time::parseDate($filter['end'], 'yyyy-MM-dd');
             }
 
             $paymentsQuery = $this->PaymentsExpenses->find();
@@ -248,14 +241,14 @@ class ExpensesController extends AppController
                 ->select([
                     'payments_total' => $paymentsQuery,
                 ])
-                //->contain(['Invoices', 'Invoices.InvoicesCounters'])
-                // , 'InvoicesCounters.title',
-                // 'Invoices.id', 'Invoices.title', 'Invoices.no', 'Invoices.total',
-                // 'Invoices.counter', 'Invoices.dat_issue', 'Invoices.dat_expire', 'Invoices.counter_id',
-                //->where([
-                //    'Expenses.model' => 'Invoice',
-                //    'Invoices.counter_id IN' => (array)$filter['counter'],
-                //])
+                ->select($this->Expenses->Invoices)
+                ->select($this->Expenses->Invoices->Issuers)
+                ->select($this->Expenses->Invoices->Receivers)
+                ->contain(['Invoices' => ['Issuers', 'Receivers']])
+                ->where([
+                    'Expenses.model' => 'Invoice',
+                    'Invoices.counter_id IN' => (array)$filter['counter'],
+                ])
                 ->order('Expenses.dat_happened DESC')
                 ->having($query->newExpr()->add('ABS(Expenses.total - COALESCE(payments_total, 0)) > 0.01'));
             $data = $query->all();
@@ -265,7 +258,7 @@ class ExpensesController extends AppController
                 $this->request,
                 ['title' => __d('lil_expenses', 'Unpaid Expenses')]
             );
-            $report->set(compact('data'));
+            $report->set(compact('data', 'filter', 'counters'));
 
             $tmpName = $report->export();
 
