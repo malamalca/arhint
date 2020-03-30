@@ -218,4 +218,3 @@ if (empty($data)) {
 }
 
 echo $this->Lil->panels($analytics);
-die;
