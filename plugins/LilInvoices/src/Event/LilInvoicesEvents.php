@@ -117,7 +117,7 @@ class LilInvoicesEvents implements EventListenerInterface
         $view->setRequest($view->getRequest()->withAttribute(
             'paging',
             ['Invoices' => [
-                'pageCount' => (int)(floor($invoicesTotals['invoicesCount'] / $invoicesPerPage)),
+                'pageCount' => (int)(ceil($invoicesTotals['invoicesCount'] / $invoicesPerPage)),
                 'page' => $page,
                 'scope' => 'invoices',
             ]]
