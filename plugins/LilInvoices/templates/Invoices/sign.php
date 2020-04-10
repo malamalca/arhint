@@ -76,7 +76,7 @@ $invoice_preview = [
                                     'class' => 'active'
                                 ],
                                 'default' => (new Time())->toDatetimeString(),
-                                //'readonly' => true
+                                'readonly' => !$this->getCurrentUser()->hasRole('root')
                             ],
                         ],
                     ],
@@ -89,7 +89,7 @@ $invoice_preview = [
                 ],
             ]
         ],
-        //'preview' => sprintf('<br /><iframe id="invoice-view" src="%s"></iframe>', $action)
+        'preview' => $this->getRequest()->is('ajax') ? null : sprintf('<br /><iframe id="invoice-view" src="%s"></iframe>', $action)
     ],
 ];
 
@@ -99,15 +99,14 @@ $this->Html->script('/LilInvoices/js/hwcrypto-legacy.js', ['block' => 'script'])
 $this->Html->script('/LilInvoices/js/hwcrypto.js', ['block' => 'script']);
 $this->Html->script('/LilInvoices/js/hex2base.js', ['block' => 'script']);
 
-//$this->Lil->jsReady('$("#invoice-view").height(window.innerHeight - $("#invoice-view").offset().top - 30);');
-
 if (!$this->getRequest()->is('ajax')) {
-?>
+    ?>
 <script type="text/javascript">
 
     $(document).ready(function() {
-        var signature = $("#signature").val();
+        $("#invoice-view").height(window.innerHeight - $("#invoice-view").offset().top - 30);
 
+        var signature = $("#signature").val();
         if (signature == "") {
             $("form#InvoiceSign").on("submit", function(e) {
                 e.preventDefault();
@@ -154,6 +153,6 @@ if (!$this->getRequest()->is('ajax')) {
         }
     });
 </script>
-<?php
+    <?php
 }
 ?>
