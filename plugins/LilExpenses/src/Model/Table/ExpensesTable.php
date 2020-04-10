@@ -11,10 +11,8 @@ use Cake\Validation\Validator;
 /**
  * Expenses Model
  *
- * @property \Cake\ORM\Association\BelongsTo $Foreigns
- * @property \Cake\ORM\Association\BelongsTo $Projects
- * @property \Cake\ORM\Association\BelongsTo $Users
  * @property \LilExpenses\Model\Table\PaymentsTable|\Cake\ORM\Association\BelongsToMany $Payments
+ * @property \LilInvoices\Model\Table\InvoicesTable|\Cake\ORM\Association\BelongsTo $Invoices
  *
  * @method \LilExpenses\Model\Entity\Expense get(string $id, array $data = [])
  * @method \LilExpenses\Model\Entity\Expense newEmptyEntity()

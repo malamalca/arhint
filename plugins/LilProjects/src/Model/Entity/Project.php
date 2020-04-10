@@ -65,6 +65,6 @@ class Project extends Entity
      */
     public function __toString(): string
     {
-        return $this->title;
+        return $this->no . ' - ' . $this->title;
     }
 }

@@ -41,20 +41,15 @@ class ProjectsWorkhoursController extends AppController
      */
     public function index()
     {
-        $this->Authorization->skipAuthorization();
-        $this->paginate = [
-            'contain' => ['Users'],
-        ];
+        $project = $this->ProjectsWorkhours->Projects->get($this->getRequest()->getQuery('project'));
+        $this->Authorization->authorize($project, 'view');
 
-        $projectsWorkhours = $this->paginate($this->ProjectsWorkhours);
+        $query = $this->ProjectsWorkhours->find()
+            ->where(['project_id' => $project->id])
+            ->contain(['Users'])
+            ->order(['started DESC']);
 
-        $project = null;
-        $projectId = $this->getRequest()->getQuery('project');
-        if (!empty($projectId)) {
-            $project = $this->ProjectsWorkhours->Projects->get($projectId);
-
-            $this->Authorization->authorize($project, 'edit');
-        }
+        $projectsWorkhours = $this->paginate($query);
 
         $this->set(compact('projectsWorkhours', 'project'));
     }
@@ -95,15 +90,17 @@ class ProjectsWorkhoursController extends AppController
             if ($this->ProjectsWorkhours->save($projectsWorkhour)) {
                 $this->Flash->success(__d('lil_projects', 'The projects workhour has been saved.'));
 
-                return $this->redirect(['action' => 'index']);
+                return $this->redirect(['action' => 'index', '?' => ['project' => $projectsWorkhour->project_id]]);
             }
             $this->Flash->error(__d('lil_projects', 'The projects workhour could not be saved. Please, try again.'));
         }
 
-        $projects = $this->Authorization->applyScope($this->ProjectsWorkhours->Projects->find('list'), 'index')
-            ->select()
+        $projects = $this->Authorization->applyScope($this->ProjectsWorkhours->Projects->find(), 'index')
             ->where(['active' => true])
-            ->order('title')
+            ->order(['no DESC', 'title'])
+            ->combine('id', function ($entity) {
+                return $entity;
+            })
             ->toArray();
 
         $this->set(compact('projectsWorkhour', 'projects'));

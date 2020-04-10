@@ -46,8 +46,8 @@ if ($invoices->count() > 0) {
                 'parameters' => ['class' => 'left-align'],
                 'html' => '<ul class="paginator">' .
                     $this->Paginator->numbers([
-                        'first' => 1,
-                        'last' => 1,
+                        'first' => '<<',
+                        'last' => '>>',
                         'modulus' => 3,
                         'url' => $pagingUrl
                     ]) .

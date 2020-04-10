@@ -50,9 +50,7 @@ class EmailForm extends Form
     {
         return $validator
             ->requirePresence('to')
-            ->email('to')
-            ->notEmptyString('subject')
-            ->notEmptyString('body');
+            ->email('to');
     }
 
     /**
@@ -65,8 +63,12 @@ class EmailForm extends Form
     {
         $filter = (array)$this->request->getQuery();
 
+        $identity = $this->request->getAttribute('identity');
+
         $Exporter = new LilInvoicesExport();
-        $invoices = $Exporter->find($filter)->toArray();
+        $invoices = $Exporter->find($filter);
+        $identity->applyScope('index', $invoices);
+        $invoices = $invoices->toArray();
 
         if (count($invoices) > 0) {
             $data = $Exporter->export('pdf', $invoices);
@@ -101,7 +103,7 @@ class EmailForm extends Form
                     ],
                 ]);
 
-                $result = $email->deliver((string)$this->request->getBody());
+                $result = $email->deliver((string)$this->request->getData('body'));
 
                 return (bool)$result;
             }

@@ -29,7 +29,7 @@ class ContactPolicy
      */
     public function canEdit($user, $contact)
     {
-        return ($user->company_id == $contact->owner_id) && $user->hasRole('admin');
+        return $user->company_id == $contact->owner_id;
     }
 
     /**
@@ -41,6 +41,6 @@ class ContactPolicy
      */
     public function canDelete($user, $contact)
     {
-        return ($user->company_id == $contact->owner_id) && $user->hasRole('admin');
+        return $user->company_id == $contact->owner_id;
     }
 }

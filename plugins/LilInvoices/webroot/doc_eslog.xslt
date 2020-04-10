@@ -177,7 +177,7 @@
 								</xsl:for-each>
 							</xsl:if>
 
-							<xsl:if test="$referencni_dokumenti">
+							<xsl:if test="$referencni_dokumenti/*">
 								<tr>
 									<td height="5px"/>
 								</tr>

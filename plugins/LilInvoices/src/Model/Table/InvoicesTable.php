@@ -17,6 +17,9 @@ use Cake\Validation\Validator;
  * Invoices Model
  *
  * @property \LilInvoices\Model\Table\InvoicesCountersTable $InvoicesCounters
+ * @property \LilInvoices\Model\Table\InvoicesClientsTable|\Cake\ORM\Association\hasOne $Buyers
+ * @property \LilInvoices\Model\Table\InvoicesClientsTable|\Cake\ORM\Association\hasOne $Issuers
+ * @property \LilInvoices\Model\Table\InvoicesClientsTable|\Cake\ORM\Association\hasOne $Receivers
  *
  * @method \LilInvoices\Model\Entity\Invoice get(string $id, array $options = [])
  * @method \LilInvoices\Model\Entity\Invoice newEmptyEntity()

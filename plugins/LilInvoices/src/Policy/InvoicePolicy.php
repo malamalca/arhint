@@ -33,6 +33,30 @@ class InvoicePolicy
     }
 
     /**
+     * Authorize email action
+     *
+     * @param \App\Model\Entity\User $user User
+     * @param \LilInvoices\Model\Entity\Invoice $entity Entity
+     * @return bool
+     */
+    public function canEmail($user, $entity)
+    {
+        return $entity->owner_id == $user->company_id;
+    }
+
+    /**
+     * Authorize sign action
+     *
+     * @param \App\Model\Entity\User $user User
+     * @param \LilInvoices\Model\Entity\Invoice $entity Entity
+     * @return bool
+     */
+    public function canSign($user, $entity)
+    {
+        return $entity->owner_id == $user->company_id;
+    }
+
+    /**
      * Authorize delete action
      *
      * @param \App\Model\Entity\User $user User

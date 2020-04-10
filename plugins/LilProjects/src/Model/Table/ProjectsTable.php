@@ -5,6 +5,7 @@ namespace LilProjects\Model\Table;
 
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
+use Cake\ORM\TableRegistry;
 use Cake\Validation\Validator;
 
 /**
@@ -111,6 +112,16 @@ class ProjectsTable extends Table
      */
     public function buildRules(RulesChecker $rules): RulesChecker
     {
+        $rules->addDelete(function ($entity, $options) {
+            /** @var \LilProjects\Model\Table\ProjectsWorkhoursTable $ProjectsWorkhours */
+            $ProjectsWorkhours = TableRegistry::getTableLocator()->get('LilProjects.ProjectsWorkhours');
+            $projectsCount = $ProjectsWorkhours->find()
+                ->where(['ProjectsWorkhours.project_id' => $entity->id])
+                ->count();
+
+            return $projectsCount == 0;
+        }, 'usedInProjectsWorkhours');
+
         return $rules;
     }
 

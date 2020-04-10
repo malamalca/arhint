@@ -10,8 +10,10 @@ use Cake\Http\Exception\NotFoundException;
 use Cake\I18n\FrozenTime;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Text;
+use InvalidArgumentException;
 use LilInvoices\Form\EmailForm;
 use LilInvoices\Lib\LilInvoicesExport;
+use LilInvoices\Lib\LilInvoicesSigner;
 
 /**
  * Invoices Controller
@@ -40,6 +42,10 @@ class InvoicesController extends AppController
             }
 
             if (in_array($this->getRequest()->getParam('action'), ['editPreview'])) {
+                $this->Security->setConfig('validatePost', false);
+            }
+
+            if (in_array($this->getRequest()->getParam('action'), ['sign'])) {
                 $this->Security->setConfig('validatePost', false);
             }
 
@@ -228,7 +234,13 @@ class InvoicesController extends AppController
         if (Plugin::isLoaded('LilProjects')) {
             /** @var \LilProjects\Model\Table\ProjectsTable $ProjectsTable */
             $ProjectsTable = TableRegistry::getTableLocator()->get('LilProjects.Projects');
-            $projects = $ProjectsTable->findForOwner($this->getCurrentUser()->get('company_id'));
+            $projects = $this->Authorization->applyScope($ProjectsTable->find(), 'index')
+                ->where(['active' => true])
+                ->order(['no DESC', 'title'])
+                ->combine('id', function ($entity) {
+                    return $entity;
+                })
+                ->toArray();
         }
 
         /** @var \LilInvoices\Model\Table\VatsTable $VatsTable */
@@ -273,22 +285,53 @@ class InvoicesController extends AppController
      *
      * Signs invoice after editing
      *
+     * @param string $id Invoice id
      * @return \Cake\Http\Response|null
      */
-    public function sign()
+    public function sign($id)
     {
-        if (!$this->getRequest()->is(['patch', 'post', 'put'])) {
-            throw new NotFoundException(__d('lil_invoices', 'No data to sign.'));
-        }
-
-        $invoice = $this->parseRequest();
-
+        $invoice = $this->Invoices->get($id);
         $this->Authorization->authorize($invoice);
 
-        $Exporter = new LilInvoicesExport();
-        $xml = $Exporter->export('html', [$invoice]);
+        if ($this->getRequest()->is(['post', 'put'])) {
+            $signTimestamp = FrozenTime::parseDateTime($this->getRequest()->getData('dat_sign'), 'yyyy-MM-ddTHH:mm:ss');
+            $cert = $this->getRequest()->getData('sign_cert');
 
-        $this->set('xml', $xml);
+            if (empty($cert) || empty($signTimestamp)) {
+                throw new InvalidArgumentException('Invalid Request Arguments');
+            }
+
+            $signer = new LilInvoicesSigner($id);
+            $signer->setSignatureDatetime($signTimestamp);
+            $signer->setCertificate($cert);
+
+            $signature = $this->getRequest()->getData('sign_signature');
+            if (empty($signature)) {
+                $digest = $signer->getSigningHash();
+            } else {
+                $signer->setSignature($signature);
+
+                $invoice = $this->Invoices->patchEntity($invoice, $this->getRequest()->getData());
+                $invoice->signed = $signer->getXml();
+
+                if ($this->Invoices->save($invoice)) {
+                    $this->Flash->success(__d('lil_invoices', 'The invoice has been signed.'));
+
+                    $redirectUrl = $this->getRequest()->getQuery('redirect');
+                    if (!empty($redirectUrl)) {
+                        return $this->redirect(base64_decode($redirectUrl));
+                    } else {
+                        return $this->redirect(['action' => 'view', $invoice->id]);
+                    }
+                } else {
+                    $this->Flash->error(__d('lil_invoices', 'Signing invoice failed. Please, try again.'));
+                }
+            }
+        }
+
+        $this->set(compact('id', 'invoice'));
+        $this->set('name', $invoice->title);
+        $this->set('digest', $digest ?? '');
 
         return null;
     }
