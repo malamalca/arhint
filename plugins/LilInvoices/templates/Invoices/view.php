@@ -108,7 +108,7 @@ $invoiceView = [
                         '?' => ['download' => 1],
                     ],
                 ],
-                'sepaxml' => !$lilDocumentHelper->isInvoice($invoice) ? null : [
+                'sepaxml' => !$invoice->isInvoice() ? null : [
                     'title' => __d('lil_invoices', 'Sepa XML'),
                     'visible' => true,
                     'url' => [
@@ -118,7 +118,7 @@ $invoiceView = [
                         '?' => ['download' => 1],
                     ],
                 ],
-                'eslog' => !$lilDocumentHelper->isInvoice($invoice) ? null : [
+                'eslog' => !$invoice->isInvoice() ? null : [
                     'title' => __d('lil_invoices', 'eSlog'),
                     'visible' => true,
                     'url' => [
@@ -243,11 +243,11 @@ $invoiceView = [
                     'label' => __d('lil_invoices', 'Date of issue') . ':',
                     'text' => (string)$invoice->dat_issue,
                 ],
-                1 => !$lilDocumentHelper->isInvoice($invoice) ? null : [
+                1 => !$invoice->isInvoice() ? null : [
                     'label' => __d('lil_invoices', 'Service date') . ':',
                     'text' => (string)$invoice->dat_service,
                 ],
-                2 => !$lilDocumentHelper->isInvoice($invoice) ? null : [
+                2 => !$invoice->isInvoice() ? null : [
                     'label' => __d('lil_invoices', 'Expiration date') . ':',
                     'text' => (string)$invoice->dat_expire,
                 ],
@@ -270,7 +270,7 @@ $invoiceView = [
                 ]
             ]
         ],
-        'total' => !$lilDocumentHelper->isInvoice($invoice) ? null : [
+        'total' => !$invoice->isInvoice() ? null : [
             'id' => 'invoice-total',
             'lines' => [[
                 'label' => __d('lil_invoices', 'Total') . ':',
@@ -293,7 +293,7 @@ foreach ($counters as $cntr) {
     ];
 }
 
-if ($lilDocumentHelper->isInvoice($invoice)) {
+if ($invoice->isInvoice()) {
     ////////////////////////////////////////////////////////////////////////////////////////////////
     // ITEMS
     $itemsBody = [];

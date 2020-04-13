@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace LilInvoices\Model\Entity;
 
+use Cake\Core\Configure;
 use Cake\ORM\Entity;
 use Cake\ORM\TableRegistry;
 
@@ -86,5 +87,15 @@ class Invoice extends Entity
 
         // update counter
         $InvoicesCounters->updateAll(['counter' => $counter->counter + 1], ['id' => $counter->id]);
+    }
+
+    /**
+     * Checks if current document is Invoice
+     *
+     * @return bool
+     */
+    public function isInvoice()
+    {
+        return in_array($this->doc_type, Configure::read('LilInvoices.invoiceDocTypes'));
     }
 }

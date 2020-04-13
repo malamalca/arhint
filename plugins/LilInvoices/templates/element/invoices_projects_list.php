@@ -109,7 +109,7 @@ if ($invoices->count() > 0) {
             ],
             'total' => [
                 'parameters' => ['class' => 'right-align'],
-                'html' => $this->Number->currency($invoice->total),
+                'html' => $invoice->isInvoice() ? $this->Number->currency($invoice->total) : '',
             ],
         ];
         $total += $invoice->total;

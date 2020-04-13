@@ -110,7 +110,7 @@ class LilExpensesEvents implements EventListenerInterface
         $invoice = $panels->entity;
         $view->loadHelper('LilInvoices.LilDocument');
 
-        if ($view->LilDocument->isInvoice($invoice)) {
+        if ($invoice->isInvoice()) {
             /** @var \LilInvoices\Model\Table\InvoicesCountersTable $InvoicesCounters */
             $InvoicesCounters = TableRegistry::get('LilInvoices.InvoicesCounters');
             $counter = $InvoicesCounters->get($invoice->counter_id);

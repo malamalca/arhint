@@ -261,9 +261,11 @@ if ($contact->id) {
                     'options' => Configure::read('LilCrm.countries'),
                     'label' => [
                         'text' => __d('lil_crm', 'Country') . ':',
+                        'class' => 'active'
                     ],
                     'id' => 'contact-address-country',
                     'default' => Configure::read('LilCrm.defaultCountry'),
+                    'class' => 'browser-default',
                     'empty' => true,
                 ],
             ],

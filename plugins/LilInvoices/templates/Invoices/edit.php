@@ -3,7 +3,6 @@ use Cake\Core\Configure;
 use Cake\Core\Plugin;
 use Cake\Routing\Router;
 
-$lilDocumentHelper = $this->loadHelper('LilInvoices.LilDocument');
 $client = $counter->kind == 'issued' ? 'receiver' : 'issuer';
 
 if ($invoice->isNew()) {
@@ -122,7 +121,10 @@ $invoiceEdit = [
                 'method' => 'control',
                 'parameters' => [
                     'field' => $client . '.title',
-                    ['label' => ($counter->kind == 'issued' ? __d('lil_invoices', 'Receiver') : __d('lil_invoices', 'Issuer')) . ':'],
+                    [
+                        'label' => ($counter->kind == 'issued' ? __d('lil_invoices', 'Receiver') : __d('lil_invoices', 'Issuer')) . ':',
+                        'autocomplete' => 'off'
+                    ],
                 ],
             ],
             'client_error' => [
@@ -137,7 +139,7 @@ $invoiceEdit = [
                 'method' => 'control',
                 'parameters' => [
                     'field' => 'no', [
-                        'label' => ($lilDocumentHelper->isInvoice($invoice) ? __d('lil_invoices', 'Invoice no') : __d('lil_invoices', 'Document no')) . ':',
+                        'label' => ($invoice->isInvoice() ? __d('lil_invoices', 'Invoice no') : __d('lil_invoices', 'Document no')) . ':',
                         'disabled' => !empty($counter->mask),
                     ],
                 ],
@@ -262,7 +264,7 @@ require dirname(dirname(__FILE__)) . DS . 'element' . DS . 'edit_client.php';
 $this->Lil->insertIntoArray($invoiceEdit['form']['lines'], clientFields('receiver', $invoice->receiver), ['after' => 'client_error']);
 $this->Lil->insertIntoArray($invoiceEdit['form']['lines'], clientFields('issuer', $invoice->receiver), ['after' => 'client_error']);
 
-if ($lilDocumentHelper->isInvoice($invoice)) {
+if ($invoice->isInvoice()) {
     ////////////////////////////////////////////////////////////////////////////////////////////////
     // additional client "buyer" - INVOICES ONLY
     $clientBuyer = clientFields('buyer', $invoice->buyer) +
@@ -326,7 +328,7 @@ if ($lilDocumentHelper->isInvoice($invoice)) {
     ////////////////////////////////////////////////////////////////////////////////////////////////
     // analytics and taxes
     $analytics = [];
-    if ($lilDocumentHelper->isInvoice($invoice) && $counter->kind == 'received') {
+    if ($invoice->isInvoice() && $counter->kind == 'received') {
         $analytics['fs_analytics_start'] = '<fieldset>';
         $analytics['fs_analytics_legend'] = sprintf('<legend>%s</legend>', __d('lil_invoices', 'Analytics'));
         $analytics['analytics'] = [

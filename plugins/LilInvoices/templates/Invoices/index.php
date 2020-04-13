@@ -66,7 +66,11 @@ $invoices_index = [
                 'columns' => [
                     'search' => [
                         'params' => ['colspan' => 2, 'class' => 'input-field'],
-                        'html' => sprintf('<input placeholder="%s" id="SearchBox" />', __d('lil_invoices', 'Search')),
+                        'html' => sprintf(
+                            '<input placeholder="%1$s" id="SearchBox" value="%2$s" />',
+                            __d('lil_invoices', 'Search'),
+                            $this->getRequest()->getQuery('search', '')
+                        ),
                     ],
                     'pagination' => [
                         'params' => ['colspan' => 5, 'class' => 'right-align hide-on-small-only'],
