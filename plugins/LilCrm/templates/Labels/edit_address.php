@@ -37,6 +37,10 @@ $editAddressForm = [
                     ['id' => 'contacts-address_id'],
                 ],
             ],
+            'address_id_unlock' => [
+                'method' => 'unlockField',
+                'parameters' => ['contacts_address_id'],
+            ],
             'adrema_id' => [
                 'method' => 'hidden',
                 'parameters' => [
@@ -51,6 +55,7 @@ $editAddressForm = [
                         'label' => __d('lil_crm', 'Title') . ':',
                         'error' => __d('lil_crm', 'Title is required.'),
                         'id' => 'contacts-title',
+                        'autocomplete' => 'off'
                     ],
                 ],
             ],
@@ -100,11 +105,15 @@ $editAddressForm = [
                     'field' => 'country',
                     'options' => [
                         'type' => 'select',
-                        'label' => __d('lil_crm', 'Country') . ':',
+                        'label' => [
+                            'text' => __d('lil_crm', 'Country') . ':',
+                            'class' => 'active'
+                        ],
                         'disabled' => $address->contacts_address_id ? 'disabled' : '',
                         'default' => Configure::read('LilCrm.defaultCountry'),
                         'options' => Configure::read('LilCrm.countries'),
                         'empty' => true,
+                        'class' => 'browser-default'
                     ],
                 ],
             ],
@@ -127,40 +136,47 @@ echo $this->Lil->form($editAddressForm, 'LilCrm.Labels.edit_address');
 ?>
 <script type="text/javascript">
     $(document).ready(function() {
-        $("#contacts-title").autocomplete({
-            autoFocus: true,
-            source: '<?php echo Router::url(['controller' => 'ContactsAddresses', 'action' => 'autocomplete']); ?>',
-            search: function() {
-                $('#contacts-address_id').val('');
-                $('#ImageContactCheck').hide();
+        var elem = document.querySelector("#contacts-title");
 
-                $('#contact-address-street').attr('disabled', false);
-                $('#contact-address-zip').attr('disabled', false);
-                $('#contact-address-city').attr('disabled', false);
-                $('#contact-address-country').attr('disabled', false);
-            },
-            select: function(event, ui) {
-                if (ui.item) {
-                    $('#ImageContactCheck').show();
-                    $("#contacts-title").val(ui.item.title);
-                    $("#contacts-address_id").val(ui.item.id);
+        if (elem) {
+            var instance = M.AutocompleteAjax.init(elem, {
+                source: '<?php echo Router::url(['controller' => 'ContactsAddresses', 'action' => 'autocomplete']); ?>',
+                onSearch: function () {
+                    $('#contacts-address_id').val('');
+                    $('#ImageContactCheck').hide();
 
-                    $('#contact-address-street').val(ui.item.street).attr('disabled', true);
-                    $('#contact-address-zip').val(ui.item.zip).attr('disabled', true);
-                    $('#contact-address-city').val(ui.item.city).attr('disabled', true);
-                    $('#contact-address-country').val(ui.item.country).attr('disabled', true);
+                    $('#contact-address-street').attr('readonly', false);
+                    $('#contact-address-zip').attr('readonly', false);
+                    $('#contact-address-city').attr('readonly', false);
+                    $('#contact-address-country').attr('readonly', false);
+                },
+                onSelect: function (item) {
+                    if (item) {
+                        $('#ImageContactCheck').show();
+                        $("#contacts-title").val(item.title);
+                        $("#contacts-address_id").val(item.id);
+
+                        $('#contact-address-street').val(item.street).attr('readonly', true);
+                        $('#contact-address-zip').val(item.zip).attr('readonly', true);
+                        $('#contact-address-city').val(item.city).attr('readonly', true);
+                        $('#contact-address-country').val(item.country).attr('readonly', true);
+                    }
                 }
-            }
-        }).keyup(function() {
-            if ($(this).val() === "") {
-                $('#contacts-address_id').val('');
-                $('#ImageContactCheck').hide();
+            });
 
-                $('#contact-address-street').attr('disabled', false);
-                $('#contact-address-zip').attr('disabled', false);
-                $('#contact-address-city').attr('disabled', false);
-                $('#contact-address-country').attr('disabled', false);
-            }
-        });
+            $(elem)
+                .on("keyup", function () {
+                    if ($(this).val() === "") {
+                        $('#contacts-address_id').val('');
+                        $('#ImageContactCheck').hide();
+
+                        $('#contact-address-street').attr('readonly', false);
+                        $('#contact-address-zip').attr('readonly', false);
+                        $('#contact-address-city').attr('readonly', false);
+                        $('#contact-address-country').attr('readonly', false);
+                    }
+                });
+        }
+
     });
 </script>

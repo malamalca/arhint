@@ -96,7 +96,7 @@ class ContactsAddressesController extends AppController
             $term = (string)$this->getRequest()->getQuery('term');
 
             $result = $this->Authorization->applyScope($this->ContactsAddresses->find(), 'index')
-                ->find()
+                ->select()
                 ->where(['OR' => [
                     'Contacts.title LIKE' => '%' . $term . '%',
                     'ContactsAddresses.street LIKE' => '%' . $term . '%',

@@ -500,14 +500,19 @@ if ($contact->id) {
                 $("#contact-mat-no", parentForm).val(data.mat_no);
                 $("#contact-tax-no", parentForm).val(data.tax_no);
                 $("#contact-tax-status", parentForm).attr("checked", data.tax_no.substr(0,2) == "SI");
-                $('#contact-address-street', parentForm).val(data.street);
-                $('#contact-address-zip', parentForm).val(data.zip);
-                $('#contact-address-city', parentForm).val(data.city);
-                $('#contact-address-country-code', parentForm).val(data.country_code);
 
-                $('#contact-account-iban', parentForm).val(data.iban);
-                $('#contact-account-bic', parentForm).val(data.bic);
-                $('#contact-account-bank', parentForm).val(data.bank);
+                if (data.primary_address) {
+                    $('#contact-address-street', parentForm).val(data.primary_address.street);
+                    $('#contact-address-zip', parentForm).val(data.primary_address.zip);
+                    $('#contact-address-city', parentForm).val(data.primary_address.city);
+                    $('#contact-address-country-code', parentForm).val(data.primary_address.country_code);
+                }
+
+                if (data.primary_account) {
+                    $('#contact-account-iban', parentForm).val(data.primary_account.iban);
+                    $('#contact-account-bic', parentForm).val(data.primary_account.bic);
+                    $('#contact-account-bank', parentForm).val(data.primary_account.bank);
+                }
 
                 M.updateTextFields()
             })

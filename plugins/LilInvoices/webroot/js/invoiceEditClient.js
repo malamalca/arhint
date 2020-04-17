@@ -33,18 +33,29 @@ jQuery.fn.InvoiceEditClient = function (options) {
         $("#invoice-" + target + "-mat-no", $this).val(client.mat_no);
         $("#invoice-" + target + "-tax-no", $this).val(client.tax_no);
 
-        $("#invoice-" + target + "-street", $this).val(client.street);
-        $("#invoice-" + target + "-city", $this).val(client.city);
-        $("#invoice-" + target + "-zip", $this).val(client.zip);
-        $("#invoice-" + target + "-country", $this).val(client.country);
-        $("#invoice-" + target + "-country-code", $this).val(client.country_code);
+        if (client.primary_address) {
+            $("#invoice-" + target + "-street", $this).val(client.primary_address.street);
+            $("#invoice-" + target + "-city", $this).val(client.primary_address.city);
+            $("#invoice-" + target + "-zip", $this).val(client.primary_address.zip);
+            $("#invoice-" + target + "-country", $this).val(client.primary_address.country);
+            $("#invoice-" + target + "-country-code", $this).val(client.primary_address.country_code);
+        }
 
-        $("#invoice-" + target + "-iban", $this).val(client.iban);
-        $("#invoice-" + target + "-bic", $this).val(client.bic);
-        $("#invoice-" + target + "-bank", $this).val(client.bank);
+        if (client.primary_account) {
+            $("#invoice-" + target + "-iban", $this).val(client.primary_account.iban);
+            $("#invoice-" + target + "-bic", $this).val(client.primary_account.bic);
+            $("#invoice-" + target + "-bank", $this).val(client.primary_account.bank);
+        }
 
-        $("#invoice-" + target + "-email", $this).val(client.email);
-        $("#invoice-" + target + "-phone", $this).val(client.phone);
+        if (client.primary_email) {
+            $("#invoice-" + target + "-email", $this).val(client.primary_email.email);
+        }
+
+        if (client.primary_phone) {
+            $("#invoice-" + target + "-phone", $this).val(client.primary_phone.phone);
+        }
+
+        M.updateTextFields()
     }
 
     this.collectClientData = function (target) {
@@ -108,7 +119,7 @@ jQuery.fn.InvoiceEditClient = function (options) {
                     $("#image-" + target + "-checked", $this).hide();
                 },
                 onSelect: function (item) {
-                    $this.selectClient(target, item);
+                    $this.selectClient(target, item.client);
                 },
                 onOpenEnd: function (el) {
                     var li = $(

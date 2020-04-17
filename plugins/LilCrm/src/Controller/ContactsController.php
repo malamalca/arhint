@@ -259,8 +259,7 @@ class ContactsController extends AppController
                         ->all();
 
                     foreach ($contacts as $c) {
-                        $data[] = ['label' => $c->title, 'value' => $c->title] +
-                            $c->toShort();
+                        $data[] = ['label' => $c->title, 'value' => $c->title, 'client' => $c];
                     }
                 } else {
                     $result = $this->Authorization->applyScope($this->Contacts->find(), 'index')
@@ -358,14 +357,15 @@ class ContactsController extends AppController
                 ]);
 
                 $racun = null;
-                if (isset($result->xmlTransakcijskiRacuni->anyType)) {
-                    if (is_array($result->xmlTransakcijskiRacuni->anyType)) {
-                        $racun = $result->xmlTransakcijskiRacuni->anyType[0]->enc_value;
+                if (isset($result->xmlTransakcijskiRacuni)) {
+                    if (is_array($result->xmlTransakcijskiRacuni)) {
+                        $racun = $result->xmlTransakcijskiRacuni[0]->xmlTransakcijskiRacun;
                     } else {
-                        $racun = $result->xmlTransakcijskiRacuni->anyType->enc_value;
+                        $racun = $result->xmlTransakcijskiRacuni->xmlTransakcijskiRacun;
                     }
                 }
 
+                $c->primary_account = null;
                 if ($racun) {
                     $bban = strtr($racun->xmlTRR, ['-' => '']);
                     $bankId = substr($bban, 0, 2);
@@ -380,7 +380,7 @@ class ContactsController extends AppController
                     ]);
                 }
 
-                $data = $c->toShort();
+                $data = $c;
             } else {
                 throw new NotFoundException(__d('lil_crm', 'Soap call failed'));
             }
