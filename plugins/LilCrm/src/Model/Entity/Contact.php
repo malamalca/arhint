@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace LilCrm\Model\Entity;
 
-use Cake\Core\Configure;
 use Cake\ORM\Entity;
 
 /**
@@ -25,10 +24,10 @@ use Cake\ORM\Entity;
  * @property \Cake\I18n\FrozenTime|null $modified
  *
  * @property \LilCrm\Model\Entity\Contact $company
- * @property \LilCrm\Model\Entity\ContactsAccount $primary_account
- * @property \LilCrm\Model\Entity\ContactsAddress $primary_address
- * @property \LilCrm\Model\Entity\ContactsEmail $primary_email
- * @property \LilCrm\Model\Entity\ContactsPhone $primary_phone
+ * @property \LilCrm\Model\Entity\ContactsAccount|null $primary_account
+ * @property \LilCrm\Model\Entity\ContactsAddress|null $primary_address
+ * @property \LilCrm\Model\Entity\ContactsEmail|null $primary_email
+ * @property \LilCrm\Model\Entity\ContactsPhone|null $primary_phone
  *
  * @property \LilCrm\Model\Entity\ContactsAccount $contact_accounts
  * @property \LilCrm\Model\Entity\ContactsAddress $contact_addresses
