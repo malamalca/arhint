@@ -50,6 +50,19 @@ $invoiceView = [
                         'id' => 'AttachFile',
                     ],
                 ],
+                'scan' => [
+                    'title' => __d('lil_invoices', 'Scan'),
+                    'visible' => $this->Lil->userLevel('admin'),
+                    'url' => [
+                        'plugin' => 'LilInvoices',
+                        'controller' => 'invoicesAttachments',
+                        'action' => 'scan',
+                        $invoice->id,
+                    ],
+                    'params' => [
+                        'id' => 'AttachScan',
+                    ],
+                ],
                 'link' => [
                     'title' => __d('lil_invoices', 'Linked Invoice'),
                     'visible' => true,
@@ -549,6 +562,12 @@ echo $this->Lil->panels($invoiceView, 'LilInvoices.Invoices.view');
 
         $("#AttachFile").modalPopup({title: "<?= __d('lil_invoices', 'Attach File') ?>"});
         $("#AttachLink").modalPopup({title: "<?= __d('lil_invoices', 'Link Invoice') ?>"});
+        $("#AttachScan").modalPopup({title: "<?= __d('lil_invoices', 'Scan Invoice') ?>", onClose: function() {
+            if (typeof window.ws != "undefined" && window.ws) {
+                ws.close();
+                window.ws = null;
+            }
+        }});
 
         $("#EditIssuer").modalPopup({title: "<?= __d('lil_invoices', 'Edit Issuer') ?>"});
         $("#EditReceiver").modalPopup({title: "<?= __d('lil_invoices', 'Edit Receiver') ?>"});

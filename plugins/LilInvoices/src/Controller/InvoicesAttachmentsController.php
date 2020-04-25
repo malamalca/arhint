@@ -35,7 +35,7 @@ class InvoicesAttachmentsController extends AppController
     }
 
     /**
-     * Download method
+     * Download all attachment for specified Invoice
      *
      * @param  string $invoiceId   Invoice id.
      * @return \Cake\Http\Response|null
@@ -83,7 +83,19 @@ class InvoicesAttachmentsController extends AppController
      * @param  string|null $invoiceId Invoices id.
      * @return \Cake\Http\Response|null
      */
-    public function add($invoiceId = null)
+    public function scan($invoiceId = null)
+    {
+        return $this->setAction('add', $invoiceId, 'scan');
+    }
+
+    /**
+     * Add method
+     *
+     * @param string $invoiceId Invoices id.
+     * @param string $mode Mode - 'upload' or 'scan'
+     * @return \Cake\Http\Response|null
+     */
+    public function add($invoiceId, $mode = 'upload')
     {
         $uploadDir = Configure::read('LilInvoices.uploadFolder');
         if (!is_writable($uploadDir)) {
@@ -94,15 +106,37 @@ class InvoicesAttachmentsController extends AppController
             }
         }
 
+        if ($mode == 'scan') {
+            $this->viewBuilder()->setTemplate('scan');
+        }
+
         $attachment = $this->InvoicesAttachments->newEmptyEntity();
         $attachment->invoice_id = $invoiceId;
 
         $this->Authorization->authorize($attachment, 'edit');
 
         if ($this->getRequest()->is('post')) {
-            $tmpName = $this->getRequest()->getData('filename.tmp_name');
+            $tmpName = null;
+            $data = $this->getRequest()->getData();
+            if ($mode == 'scan') {
+                // process scanned image
+                $pdfData = $this->getRequest()->getData('scanned');
+                if (!empty($pdfData)) {
+                    $tmpName = tempnam(constant('TMP'), 'LilScan') . '.pdf';
+                    $tmpBinary = base64_decode($pdfData);
+                    file_put_contents($tmpName, $tmpBinary);
+                    $data['filename'] = [
+                        'name' => uniqid('scan') . '.pdf',
+                        'type' => 'application/pdf',
+                        'size' => strlen($tmpBinary),
+                    ];
+                    unset($data['scanned']);
+                }
+            } else {
+                $tmpName = $this->getRequest()->getData('filename.tmp_name');
+            }
 
-            $attachment = $this->InvoicesAttachments->patchEntity($attachment, $this->getRequest()->getData());
+            $attachment = $this->InvoicesAttachments->patchEntity($attachment, $data);
 
             if (!$attachment->getErrors()) {
                 if ($this->InvoicesAttachments->save($attachment, ['uploadedFilename' => $tmpName])) {

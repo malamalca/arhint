@@ -56,7 +56,7 @@ class LilInvoicesEvents implements EventListenerInterface
     }
 
     /**
-     * Add invoices list to Contact view page.
+     * Add invoices list to Contact and Project view page.
      *
      * @param \Cake\Event\Event $event Event object.
      * @param \Lil\Lib\LilPanels $panels Panels object.
@@ -66,7 +66,21 @@ class LilInvoicesEvents implements EventListenerInterface
     {
         $view = $event->getSubject();
         $view->loadHelper('Paginator');
+        $identity = $view->getRequest()->getAttribute('identity');
 
+        // fetch counters
+        $InvoicesCounters = TableRegistry::get('LilInvoices.InvoicesCounters');
+        $countersQuery = $InvoicesCounters->find();
+        $identity->applyScope('index', $countersQuery);
+        $counters = $countersQuery
+            ->where(['active' => true])
+            ->order(['kind', 'title'])
+            ->combine('id', function ($entity) {
+                return $entity;
+            })
+            ->toArray();
+
+        // fetch invoices
         $invoicesPerPage = 5;
         $page = (int)$view->getRequest()->getQuery('invoices.page', 1);
 
@@ -126,6 +140,22 @@ class LilInvoicesEvents implements EventListenerInterface
         // create Lil panels
         switch ($view->getRequest()->getParam('plugin')) {
             case 'LilProjects':
+                $panels->menu['add_invoice'] = [
+                    'title' => __d('lil_invoices', 'Add Invoice'),
+                    'visible' => true,
+                    'submenu' => [],
+                ];
+                foreach ($counters as $counter) {
+                    $panels->menu['add_invoice']['submenu'][] = [
+                        'title' => $counter->title,
+                        'url' => [
+                            'plugin' => 'LilInvoices',
+                            'controller' => 'Invoices',
+                            'action' => 'add',
+                            '?' => ['counter' => $counter->id],
+                        ],
+                    ];
+                }
                 $elementTemplate = 'LilInvoices.invoices_projects_list';
                 break;
             default:

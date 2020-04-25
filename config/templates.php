@@ -5,7 +5,7 @@
         'inputContainerError' => '<div class="input-field error {{type}}{{required}}">{{content}}<span class="helper-text">{{error}}</span></div>',
         'inputInlineContainer' => '<div class="input-field inline {{type}}{{required}}">{{content}}</div>',
         'submitContainer' => '<div class="input-field submit">{{content}}</div>',
-        'inputSubmit' => '<button class="btn waves-effect waves-light" type="submit">Submit</button>',
+        'inputSubmit' => '<button class="btn waves-effect waves-light" type="submit">' . __('Submit') . '</button>',
 
         //'label' => '<label class="active"{{attrs}}>{{text}}</label>',
         'nestingLabel' => '<p>{{hidden}}<label{{attrs}}>{{input}}<span>{{text}}</span></label></p>',

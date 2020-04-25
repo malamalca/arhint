@@ -108,7 +108,11 @@ class InvoicesAttachmentsTable extends Table
         $attachmentCount = $this->find()->where(['invoice_id' => $entity->invoice_id])->count();
         $invoices->updateAll(['invoices_attachment_count' => $attachmentCount], ['id' => $entity->invoice_id]);
 
-        if (!empty($options['uploadedFilename'])) {
+        if (
+            !empty($options['uploadedFilename']) &&
+            !empty($entity->filename) &&
+            file_exists($options['uploadedFilename'])
+        ) {
             $fileDest = Configure::read('LilInvoices.uploadFolder') . DS . $entity->filename;
             $moved = copy($options['uploadedFilename'], $fileDest);
         }
@@ -125,7 +129,7 @@ class InvoicesAttachmentsTable extends Table
     public function afterDelete(Event $event, Entity $entity, ArrayObject $options)
     {
         $fileName = (string)Configure::read('LilInvoices.uploadFolder') . DS . $entity->filename;
-        if (file_exists($fileName)) {
+        if (file_exists($fileName) && is_file($fileName)) {
             unlink($fileName);
         }
     }

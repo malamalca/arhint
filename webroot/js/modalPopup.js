@@ -6,7 +6,8 @@ jQuery.fn.modalPopup = function(p_options) {
         processSubmit: false,
         onJson: null,
         onBeforeRequest: null,
-        onOpen: null
+        onOpen: null,
+        onClose: null
 	};
 	var $this       = this;
     var options     = [];
@@ -115,7 +116,14 @@ jQuery.fn.modalPopup = function(p_options) {
     // initialization
     $this.options = jQuery().extend(true, {}, default_options, p_options);
     $this.popup = $(template.join("\n")).appendTo(document.body);
-    $this.instance = M.Modal.init($this.popup.get(0));
+    $this.instance = M.Modal.init($this.popup.get(0), {
+        dismissible: true,
+        onCloseEnd: function() {
+            if ($this.options.onClose instanceof Function) {
+                $this.options.onClose($this.popup);
+            }
+        }
+    });
 
     $(this).on("click", $this.onClick);
 }
