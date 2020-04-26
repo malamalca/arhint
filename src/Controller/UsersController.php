@@ -273,6 +273,20 @@ class UsersController extends AppController
 
         if ($this->getRequest()->is(['patch', 'post', 'put'])) {
             $user = $this->Users->patchEntity($user, $this->getRequest()->getData(), ['validate' => 'properties']);
+
+            $avatarFile = $this->getRequest()->getData('avatar_file');
+            if (is_array($avatarFile)) {
+                if (isset($avatarFile['error'])) {
+                    if ($avatarFile['error'] == UPLOAD_ERR_OK) {
+                        $user->avatar = base64_encode(file_get_contents($avatarFile['tmp_name']));
+                    }
+                    if ($avatarFile['error'] == UPLOAD_ERR_NO_FILE) {
+                        unset($user->avatar);
+                        $user->setDirty('avatar', false);
+                    }
+                }
+            }
+
             if (empty($this->getRequest()->getData('passwd'))) {
                 unset($user->passwd);
             }
@@ -310,5 +324,32 @@ class UsersController extends AppController
         }
 
         return $this->redirect(['action' => 'index']);
+    }
+
+    /**
+     * Avatar method
+     *
+     * @param string|null $id User id.
+     * @return \Cake\Http\Response|void
+     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
+     */
+    public function avatar($id = null)
+    {
+        if (!empty($id)) {
+            $user = $this->Users->get($id);
+            $this->Authorization->authorize($user, 'view');
+
+            $imageData = $user->getAvatarImage();
+        }
+
+        if (empty($imageData)) {
+            $imageData = file_get_contents(constant('WWW_ROOT') . 'img' . DS . 'avatar.png');
+        }
+
+        $response = $this->response;
+        $response = $response->withStringBody($imageData);
+        $response = $response->withType('png');
+
+        return $response;
     }
 }

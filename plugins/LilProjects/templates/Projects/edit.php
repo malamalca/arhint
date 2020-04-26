@@ -105,7 +105,6 @@ $editForm = [
                     'ico',
                     [
                         'type' => 'file',
-                        'precision' => 4,
                         //'label' => __d('lil_projects', 'Icon') . ':',
                         'label' => false
                     ]

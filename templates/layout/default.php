@@ -1,6 +1,7 @@
 <?php
 use Cake\Core\Configure;
 use Cake\I18n\Time;
+use Cake\Routing\Router;
 ?>
 <!DOCTYPE html>
 <html>
@@ -46,13 +47,23 @@ use Cake\I18n\Time;
             <ul id="slide-out" class="sidenav sidenav-fixed">
                 <!-- Sidebar -->
                 <li class="sidenav-user">
-                    <?= $this->Html->image('avatar.png', ['class' => 'sidenav-avatar circle']) ?>
+                    <?= $this->Html->image(
+                        Router::url(
+                            ['plugin' => false, 'controller' => 'Users', 'action' => 'avatar', $this->getCurrentUser()->get('id')],
+                            true
+                        ),
+                        ['class' => 'sidenav-avatar circle']
+                    ) ?>
                     <?php
                     if ($this->getCurrentUser() && $this->getCurrentUser()->get('id')) {
+                        $isUserProperties = $this->getRequest()->getParam('controller') == 'Users' &&
+                            $this->getRequest()->getParam('action') == 'properties';
                         ?>
                     <div class="sidenav-user-title"><?= h($this->getCurrentUser()->get('name')) ?></div>
-                    <ul class="collection" id="user-settings" style="display: none">
-                        <li><?= $this->Html->link(__('Settings'), ['plugin' => false, 'controller' => 'Users', 'action' => 'properties']) ?></li>
+                    <ul class="collection" id="user-settings" style="display: <?= $isUserProperties ? 'default' : 'none' ?>">
+                        <li class="<?= $isUserProperties ? 'active' : '' ?>">
+                            <?= $this->Html->link(__('Settings'), ['plugin' => false, 'controller' => 'Users', 'action' => 'properties']) ?>
+                        </li>
                         <li><?= $this->Html->link(__('Logout'), ['plugin' => false, 'controller' => 'Users', 'action' => 'logout']) ?></li>
                     </ul>
                         <?php

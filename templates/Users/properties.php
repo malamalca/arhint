@@ -10,7 +10,7 @@ $userForm = [
         'lines' => [
             'form_start' => [
                 'method' => 'create',
-                'parameters' => [$user]
+                'parameters' => [$user, ['type' => 'file']]
             ],
             'id' => [
                 'method' => 'hidden',
@@ -40,6 +40,19 @@ $userForm = [
                     'type' => 'text',
                     'label' => __('Email') . ':',
                 ]]
+            ],
+            'avatar' => [
+                'method' => 'control',
+                'parameters' => [
+                    'avatar_file',
+                    [
+                        'type' => 'file',
+                        'label' => [
+                            'text' => __('Avatar') . ':',
+                            'class' => 'active'
+                        ]
+                    ]
+                ]
             ],
             'fs_basics_end' => '</fieldset>',
 
