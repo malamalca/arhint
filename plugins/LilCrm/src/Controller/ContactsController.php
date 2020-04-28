@@ -367,6 +367,9 @@ class ContactsController extends AppController
 
                 $c->primary_account = null;
                 if ($racun) {
+                    if (is_array($racun)) {
+                        $racun = reset($racun);
+                    }
                     $bban = strtr($racun->xmlTRR, ['-' => '']);
                     $bankId = substr($bban, 0, 2);
                     $banks = Configure::read('LilCrm.banks');
