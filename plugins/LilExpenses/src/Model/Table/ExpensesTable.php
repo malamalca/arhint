@@ -3,7 +3,11 @@ declare(strict_types=1);
 
 namespace LilExpenses\Model\Table;
 
+use ArrayObject;
+use Cake\Event\Event;
 use Cake\I18n\Time;
+use Cake\ORM\Entity;
+use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
@@ -95,6 +99,23 @@ class ExpensesTable extends Table
     }
 
     /**
+     * beforeSave method
+     *
+     * @param \Cake\Event\Event $event Event object.
+     * @param \LilInvoices\Model\Entity\Invoice $entity Entity object.
+     * @param \ArrayObject $options Array object.
+     * @return bool
+     */
+    public function beforeSave(Event $event, Entity $entity, ArrayObject $options)
+    {
+        if ($entity->isNew() && !empty($entity->dat_happened) && empty($entity->month)) {
+            $entity->month = (string)$entity->dat_happened->i18nFormat('yyyy-MM');
+        }
+
+        return true;
+    }
+
+    /**
      * Filters accounts by query string
      *
      * @param array $filter Filter array.
@@ -180,4 +201,27 @@ class ExpensesTable extends Table
 
         return date('Y');
     }
+
+    /**
+     * Returns monthly totals
+     */
+    public function monthlyTotals(Query $query, array $options)
+    {
+        $year = $options['year'];
+        $data = $query
+            ->select(['Expenses.month', 'monthly_amount' => $query->func()->sum('Expenses.total')])
+            ->where(['Expenses.month LIKE' => $year . '-%', 'Expenses.total >' => 0])
+            ->group('Expenses.month')
+            ->combine('month', 'monthly_amount')
+            ->toArray();
+
+        $prev = 0;
+        foreach ($data as $month => $total) {
+            $data[$month] = $total + $prev;
+            $prev = $data[$month];
+        }
+
+        return $data;
+    }
+
 }

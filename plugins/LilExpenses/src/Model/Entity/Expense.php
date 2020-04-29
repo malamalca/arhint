@@ -13,6 +13,7 @@ use Cake\ORM\Entity;
  * @property string|null $model
  * @property string|null $foreign_id
  * @property \Cake\I18n\FrozenDate|null $dat_happened
+ * @property string|null $month
  * @property string|null $title
  * @property float|null $net_total
  * @property float|null $total

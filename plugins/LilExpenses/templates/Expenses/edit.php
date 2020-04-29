@@ -56,6 +56,13 @@ $payment_edit = [
                     'default' => $this->getRequest()->getQuery('date') ?: new Time(),
                 ]],
             ],
+            'month' => [
+                'method' => 'control',
+                'parameters' => ['month', [
+                    'type' => 'text',
+                    'label' => __d('lil_expenses', 'Month') . ':',
+                ]],
+            ],
             'net_total' => [
                 'method' => 'control',
                 'parameters' => ['net_total', [
@@ -116,9 +123,15 @@ echo $this->Lil->form($payment_edit, 'LilExpenses.Expenses.edit');
 ?>
 <script type="text/javascript">
     $(document).ready(function() {
-        $('input#net-total').blur(function() {
-            if ($('input#total').val() == '') {
-                $('input#total').val($(this).val());
+        $("input#net-total").blur(function() {
+            if ($("input#total").val() == "") {
+                $("input#total").val($(this).val());
+            }
+        });
+
+        $("input#dat-happened").blur(function() {
+            if ($("input#month").val() == "") {
+                $("input#month").val($(this).val().substr(0, 7));
             }
         });
     });

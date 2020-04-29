@@ -272,6 +272,31 @@ class ExpensesController extends AppController
     }
 
     /**
+     * Show yearly report
+     *
+     * @return \Cake\Http\Response|null
+     */
+    public function graphYearly()
+    {
+        $this->Authorization->skipAuthorization();
+
+        if (!$this->getRequest()->is('ajax')) {
+            $year = $this->getRequest()->getQuery('year', '2020');
+
+            $query = $this->Authorization->applyScope($this->Expenses->find(), 'index');
+            $data1 = $this->Expenses->monthlyTotals($query, ['year' => $year, 'cummulative' => true]);
+
+            $query = $this->Authorization->applyScope($this->Expenses->find(), 'index');
+            $data2 = $this->Expenses->monthlyTotals($query, ['year' => $year - 1, 'cummulative' => true]);
+
+            $query = $this->Authorization->applyScope($this->Expenses->find(), 'index');
+            $data3 = $this->Expenses->monthlyTotals($query, ['year' => $year - 2, 'cummulative' => true]);
+
+            $this->set(compact('data1', 'data2', 'data3', 'year'));
+        }
+    }
+
+    /**
      * Import Sepa XML payments and offer import actions
      *
      * @return \Cake\Http\Response|null
