@@ -1,6 +1,6 @@
 <?php
 $graphPanels = [
-    'title_for_layout' => __d('lil_expenses', 'GRAPH: Yearly Expenses'),
+    'title_for_layout' => __d('lil_expenses', 'GRAPH: Yearly Income/Expenses'),
     'panels' => [
         'graph' => [
             'lines' => [

@@ -102,7 +102,7 @@ class ExpensesTable extends Table
      * beforeSave method
      *
      * @param \Cake\Event\Event $event Event object.
-     * @param \LilInvoices\Model\Entity\Invoice $entity Entity object.
+     * @param \LilExpenses\Model\Entity\Expense $entity Entity object.
      * @param \ArrayObject $options Array object.
      * @return bool
      */
@@ -204,24 +204,36 @@ class ExpensesTable extends Table
 
     /**
      * Returns monthly totals
+     *
+     * @param \Cake\ORM\Query $query Query object
+     * @param array $options Options array
+     * @return array
      */
     public function monthlyTotals(Query $query, array $options)
     {
-        $year = $options['year'];
-        $data = $query
+        $year = $options['year'] ?? '2020';
+        $query = $query
             ->select(['Expenses.month', 'monthly_amount' => $query->func()->sum('Expenses.total')])
-            ->where(['Expenses.month LIKE' => $year . '-%', 'Expenses.total >' => 0])
-            ->group('Expenses.month')
+            ->where(['Expenses.month LIKE' => $year . '-%'])->group('Expenses.month');
+
+        if (isset($options['kind']) && $options['kind'] == 'expenses') {
+            $query = $query->andWhere(['Expenses.total <' => 0]);
+        } else {
+            $query = $query->andWhere(['Expenses.total >' => 0]);
+        }
+
+        $data = $query
             ->combine('month', 'monthly_amount')
             ->toArray();
 
-        $prev = 0;
-        foreach ($data as $month => $total) {
-            $data[$month] = $total + $prev;
-            $prev = $data[$month];
+        if (!empty($options['cummulative'])) {
+            $prev = 0;
+            foreach ($data as $month => $total) {
+                $data[$month] = abs($total) + $prev;
+                $prev = $data[$month];
+            }
         }
 
         return $data;
     }
-
 }

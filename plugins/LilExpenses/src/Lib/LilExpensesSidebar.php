@@ -53,7 +53,7 @@ class LilExpensesSidebar
                     'action' => 'index',
                 ],
                 'active' => $request->getParam('controller') == 'Expenses' &&
-                    !in_array($request->getParam('action'), ['reportUnpaid', 'importSepa']),
+                    !in_array($request->getParam('action'), ['reportUnpaid', 'graphYeary', 'importSepa']),
             ],
             'reports' => [
                 'visible' => true,
@@ -62,9 +62,9 @@ class LilExpensesSidebar
                 'expandable' => true,
                 'params' => [],
                 'active' => ($request->getParam('controller') == 'Expenses') &&
-                    (substr($request->getParam('action'), 0, 6) == 'report'),
+                    (in_array(substr($request->getParam('action'), 0, 5), ['repor', 'graph'])),
                 'expand' => ($request->getParam('controller') == 'Expenses') &&
-                    (substr($request->getParam('action'), 0, 6) == 'report'),
+                    (in_array(substr($request->getParam('action'), 0, 5), ['repor', 'graph'])),
                 'submenu' => [
                     'payments_accounts' => [
                         'visible' => true,
@@ -77,6 +77,18 @@ class LilExpensesSidebar
                         ],
                         'active' => $request->getParam('controller') == 'Expenses' &&
                         $request->getParam('action') == 'reportUnpaid',
+                    ],
+                    'graph_yearly' => [
+                        'visible' => true,
+                        'title' => __d('lil_expenses', 'Yearly Graph'),
+
+                        'url' => [
+                            'plugin' => 'LilExpenses',
+                            'controller' => 'Expenses',
+                            'action' => 'graphYearly',
+                        ],
+                        'active' => $request->getParam('controller') == 'Expenses' &&
+                        $request->getParam('action') == 'graphYearly',
                     ],
                 ],
             ],
