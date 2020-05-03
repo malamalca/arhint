@@ -29,7 +29,7 @@ class InvoicesLinksTableTest extends TestCase
     {
         parent::setUp();
         $config = TableRegistry::exists('InvoicesLinks') ? [] : ['className' => 'LilInvoices\Model\Table\InvoicesLinksTable'];
-        $this->InvoicesLinks = TableRegistry::get('InvoicesLinks', $config);
+        $this->InvoicesLinks = TableRegistry::getTableLocator()->get('InvoicesLinks', $config);
     }
 
     /**

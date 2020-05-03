@@ -30,7 +30,7 @@ class ContactsTableTest extends TestCase
     {
         parent::setUp();
         $config = TableRegistry::exists('Contacts') ? [] : ['className' => 'LilCrm\Model\Table\ContactsTable'];
-        $this->Contacts = TableRegistry::get('Contacts', $config);
+        $this->Contacts = TableRegistry::getTableLocator()->get('Contacts', $config);
     }
 
     /**
@@ -46,32 +46,17 @@ class ContactsTableTest extends TestCase
     }
 
     /**
-     * Test initialize method
+     * Test name generation
      *
      * @return void
      */
-    public function testInitialize()
+    public function testTitleGeneration()
     {
-        $this->markTestIncomplete('Not implemented yet.');
-    }
+        $contact = $this->Contacts->get('49a90cfe-fda4-49ca-b7ec-ca50783b5a45');
+        $contact->name = 'Different';
+        $contact->surname = 'Title';
+        $contact = $this->Contacts->save($contact);
 
-    /**
-     * Test validationDefault method
-     *
-     * @return void
-     */
-    public function testValidationDefault()
-    {
-        $this->markTestIncomplete('Not implemented yet.');
-    }
-
-    /**
-     * Test buildRules method
-     *
-     * @return void
-     */
-    public function testBuildRules()
-    {
-        $this->markTestIncomplete('Not implemented yet.');
+        $this->assertEquals('Title Different', $contact->title);
     }
 }

@@ -30,7 +30,7 @@ class ContactsPhonesTableTest extends TestCase
     {
         parent::setUp();
         $config = TableRegistry::exists('ContactsPhones') ? [] : ['className' => 'LilCrm\Model\Table\ContactsPhonesTable'];
-        $this->ContactsPhones = TableRegistry::get('ContactsPhones', $config);
+        $this->ContactsPhones = TableRegistry::getTableLocator()->get('ContactsPhones', $config);
     }
 
     /**

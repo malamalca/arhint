@@ -120,10 +120,10 @@ class ProjectsController extends AppController
         $this->Authorization->authorize($project);
 
         /** @var \LilProjects\Model\Table\ProjectsWorkhoursTable $WorkhoursTable */
-        $WorkhoursTable = TableRegistry::get('LilProjects.ProjectsWorkhours');
+        $WorkhoursTable = TableRegistry::getTableLocator()->get('LilProjects.ProjectsWorkhours');
         $workDuration = $WorkhoursTable->getTotalDuration($project->id);
 
-        $logs = TableRegistry::get('LilProjects.ProjectsLogs')->find()
+        $logs = TableRegistry::getTableLocator()->get('LilProjects.ProjectsLogs')->find()
             ->select()
             ->where(['project_id' => $id])
             ->order('ProjectsLogs.created DESC')

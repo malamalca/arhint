@@ -24,7 +24,7 @@ require dirname(__DIR__) . '/config/bootstrap.php';
 //
 $Hasher = PasswordHasherFactory::build(['className' => 'Default', 'hashType' => PASSWORD_BCRYPT, 'hashOptions' => ['salt' => Security::getSalt()]]);
 
-$Users = TableRegistry::get('Users');
+$Users = TableRegistry::getTableLocator()->get('Users');
 $user = $Users->find()
     ->select()
     ->where(['username' => $_SERVER['PHP_AUTH_USER']])

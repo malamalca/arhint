@@ -31,7 +31,7 @@ class AdremasTableTest extends TestCase
     {
         parent::setUp();
         $config = TableRegistry::exists('Adremas') ? [] : ['className' => 'LilCrm\Model\Table\AdremasTable'];
-        $this->Adremas = TableRegistry::get('Adremas', $config);
+        $this->Adremas = TableRegistry::getTableLocator()->get('Adremas', $config);
     }
 
     /**

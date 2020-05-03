@@ -4,16 +4,17 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2020-03-15 17:02+0000\n"
-"PO-Revision-Date: 2020-03-15 18:59+0100\n"
+"POT-Creation-Date: 2020-04-30 18:30+0000\n"
+"PO-Revision-Date: 2020-05-03 18:32+0200\n"
+"Last-Translator: \n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
+"Language: sl_SI\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100>=3 && n%100<=4 ? 2 : 3);\n"
+"Plural-Forms: nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100>=3 && n"
+"%100<=4 ? 2 : 3);\n"
 "X-Generator: Poedit 2.2.1\n"
-"Last-Translator: \n"
-"Language: sl_SI\n"
 
 #: Controller/UsersController.php:116
 msgid "An email with password reset instructions has been sent."
@@ -45,25 +46,27 @@ msgstr "Uporabnik je shranjen."
 
 #: Controller/UsersController.php:254
 msgid "The user could not be saved. Please, try again."
-msgstr "Uporabnika ni mogoče shraniti. Preverite vpisane podatke in poizkusite ponovno."
+msgstr ""
+"Uporabnika ni mogoče shraniti. Preverite vpisane podatke in poizkusite "
+"ponovno."
 
-#: Controller/UsersController.php:281
+#: Controller/UsersController.php:295
 msgid "Properties have been saved."
 msgstr "Nastavitve so shranjene."
 
-#: Controller/UsersController.php:285
+#: Controller/UsersController.php:299
 msgid "Properties could not be saved. Please, try again."
 msgstr "Ni mogoče shraniti nastavitev. Preverite vpisane podatke."
 
-#: Controller/UsersController.php:305
+#: Controller/UsersController.php:321
 msgid "The user has been deleted."
 msgstr "Uporabnik je izbrisan."
 
-#: Controller/UsersController.php:307
+#: Controller/UsersController.php:323
 msgid "The user could not be deleted. Please, try again."
 msgstr "Uporabnika ni mogoče izbrisati, ker je povezan z veljavnimi podatki."
 
-#: Model/Table/UsersTable.php:251 Users/reset.php:5
+#: Model/Table/UsersTable.php:246 Users/reset.php:5
 msgid "Password Reset"
 msgstr "Sprememba gesla"
 
@@ -113,11 +116,11 @@ msgstr "Novo geslo"
 msgid "Password is required, format must be valid."
 msgstr "Geslo je obvezno, preverja se format."
 
-#: Users/change_password.php:11 Users/edit.php:96 Users/properties.php:72
+#: Users/change_password.php:11 Users/edit.php:96 Users/properties.php:85
 msgid "Repeat Password"
 msgstr "Ponovitev gesla"
 
-#: Users/change_password.php:11 Users/properties.php:56 Users/properties.php:76
+#: Users/change_password.php:11 Users/properties.php:69 Users/properties.php:89
 msgid "Passwords do not match."
 msgstr "Gesli se ne ujemata."
 
@@ -133,13 +136,13 @@ msgstr "Uredi uporabnika"
 msgid "Basics"
 msgstr "Osnovni podatki"
 
-#: Users/edit.php:33 Users/index.php:49 Users/properties.php:33
-#: Users/view.php:34
+#: Users/edit.php:33 Users/index.php:46 Users/properties.php:33
+#: Users/view.php:29
 msgid "Name"
 msgstr "Ime"
 
 #: Users/edit.php:40 Users/properties.php:41 Users/reset.php:24
-#: Users/view.php:36
+#: Users/view.php:31
 msgid "Email"
 msgstr "Email"
 
@@ -155,7 +158,7 @@ msgstr "Skrit uporabnik"
 msgid "Login"
 msgstr "Prijava"
 
-#: Users/edit.php:66 Users/index.php:47
+#: Users/edit.php:66
 msgid "Privileges"
 msgstr "Pravice"
 
@@ -175,15 +178,15 @@ msgstr "Urednik"
 msgid "Reader"
 msgstr "Bralec"
 
-#: Users/edit.php:80 Users/login.php:19 Users/view.php:35
+#: Users/edit.php:80 Users/login.php:19 Users/view.php:30
 msgid "Username"
 msgstr "Uporabniško ime"
 
-#: Users/edit.php:88 Users/login.php:29 Users/properties.php:64
+#: Users/edit.php:88 Users/login.php:29 Users/properties.php:77
 msgid "Password"
 msgstr "Geslo"
 
-#: Users/edit.php:105 Users/properties.php:85
+#: Users/edit.php:105 Users/properties.php:98
 msgid "Save"
 msgstr "Shrani"
 
@@ -199,11 +202,11 @@ msgstr "Neaktivni"
 msgid "Active"
 msgstr "Aktivni"
 
-#: Users/index.php:20
+#: Users/index.php:19
 msgid "{0} Users"
 msgstr "{0} uporabniki"
 
-#: Users/index.php:26
+#: Users/index.php:25
 msgid "Add"
 msgstr "Vpis"
 
@@ -215,7 +218,7 @@ msgstr "Zapomni si prijavo na tem računalniku"
 msgid "OK"
 msgstr "OK"
 
-#: Users/login.php:53
+#: Users/login.php:53 email/text/reset.php:13
 msgid "Forgot your password?"
 msgstr "Pozabljeno geslo?"
 
@@ -223,15 +226,19 @@ msgstr "Pozabljeno geslo?"
 msgid "My Properties"
 msgstr "Nastavitve"
 
-#: Users/properties.php:47
+#: Users/properties.php:51
+msgid "Avatar"
+msgstr "Avatar"
+
+#: Users/properties.php:60
 msgid "Change Password"
 msgstr "Sprememba gesla"
 
-#: Users/properties.php:52
+#: Users/properties.php:65
 msgid "Current Password"
 msgstr "Trenutno geslo"
 
-#: Users/properties.php:55 Users/properties.php:75
+#: Users/properties.php:68 Users/properties.php:88
 msgid "Must not be empty."
 msgstr "Polje ne sme ostati prazno."
 
@@ -252,41 +259,51 @@ msgid "Edit"
 msgstr "Uredi"
 
 #: Users/view.php:15
-msgid "Add Group"
-msgstr "Vpis skupine"
-
-#: Users/view.php:20
 msgid "Delete"
 msgstr "Briši"
 
-#: Users/view.php:24
+#: Users/view.php:19
 msgid "Are you sure you want to delete this user?"
 msgstr "Ste prepričani, da želite izbrisati uporabnika?"
 
-#: Users/view.php:39
-msgid "Department"
-msgstr "Oddelek"
+#: email/text/reset.php:15
+msgid "You've received this mail from password reset request on Famiree"
+msgstr ""
 
-#: Users/view.php:39
-msgid "none"
-msgstr "brez"
+#: email/text/reset.php:16
+msgid "Please follow this url to change your password:"
+msgstr ""
 
-#: Users/view.php:42
-msgid "Groups"
-msgstr "Skupine"
+#: email/text/reset.php:20
+msgid "Please discard this email if you did not want to change your password."
+msgstr ""
 
-#: Users/view.php:47
-msgid "Valid From"
-msgstr "Velja od"
+#: email/text/reset.php:23
+msgid "Best Regards."
+msgstr ""
 
-#: Users/view.php:48
-msgid "Group name"
-msgstr "Naziv"
-
-#: layout/default.php:55
+#: layout/default.php:65
 msgid "Settings"
 msgstr "Nastavitve"
 
-#: layout/default.php:56
+#: layout/default.php:67
 msgid "Logout"
 msgstr "Odjava"
+
+#~ msgid "Add Group"
+#~ msgstr "Vpis skupine"
+
+#~ msgid "Department"
+#~ msgstr "Oddelek"
+
+#~ msgid "none"
+#~ msgstr "brez"
+
+#~ msgid "Groups"
+#~ msgstr "Skupine"
+
+#~ msgid "Valid From"
+#~ msgstr "Velja od"
+
+#~ msgid "Group name"
+#~ msgstr "Naziv"

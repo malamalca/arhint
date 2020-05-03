@@ -39,7 +39,7 @@ class LilExpensesImport
         });
 
         if (!empty($cachedPayments)) {
-            $Payments = TableRegistry::get('LilExpenses.Payments');
+            $Payments = TableRegistry::getTableLocator()->get('LilExpenses.Payments');
             $linkedPayments = $Payments->find('list', ['valueField' => 'sepa_id'])
                 ->where([
                     'Payments.owner_id' => $this->ownerId,

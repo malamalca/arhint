@@ -48,7 +48,7 @@ class InvoicesAttachmentsControllerTest extends IntegrationTestCase
     {
         $this->testAdd();
 
-        $InvoicesAttachments = TableRegistry::get('LilInvoices.InvoicesAttachments');
+        $InvoicesAttachments = TableRegistry::getTableLocator()->get('LilInvoices.InvoicesAttachments');
         $attachments = $InvoicesAttachments->find()
             ->select()
             ->where(['invoice_id' => 'd0d59a31-6de7-4eb4-8230-ca09113a7fe5'])
@@ -89,7 +89,7 @@ class InvoicesAttachmentsControllerTest extends IntegrationTestCase
 
         $this->assertRedirect(['controller' => 'Invoices', 'action' => 'view', 'd0d59a31-6de7-4eb4-8230-ca09113a7fe5']);
 
-        $invoices = TableRegistry::get('LilInvoices.Invoices');
+        $invoices = TableRegistry::getTableLocator()->get('LilInvoices.Invoices');
         $invoice = $invoices->get('d0d59a31-6de7-4eb4-8230-ca09113a7fe5', ['contain' => ['InvoicesAttachments']]);
         $this->assertEquals($invoice->invoices_attachment_count, 1);
 
@@ -105,7 +105,7 @@ class InvoicesAttachmentsControllerTest extends IntegrationTestCase
     public function testDelete()
     {
         $this->testAdd();
-        $InvoicesAttachments = TableRegistry::get('LilInvoices.InvoicesAttachments');
+        $InvoicesAttachments = TableRegistry::getTableLocator()->get('LilInvoices.InvoicesAttachments');
         $attachments = $InvoicesAttachments->find()
             ->select()
             ->where(['invoice_id' => 'd0d59a31-6de7-4eb4-8230-ca09113a7fe5'])

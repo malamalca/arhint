@@ -58,7 +58,7 @@ class ProjectsLogsController extends AppController
             $this->Flash->error(__d('lil_projects', 'The projects log could not be saved. Please, try again.'));
         }
 
-        $project = TableRegistry::get('LilProjects.Projects')->get($projectsLog->project_id);
+        $project = TableRegistry::getTableLocator()->get('LilProjects.Projects')->get($projectsLog->project_id);
         $this->set(compact('projectsLog', 'project'));
 
         return null;

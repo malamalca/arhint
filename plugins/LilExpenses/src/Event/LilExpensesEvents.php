@@ -111,17 +111,17 @@ class LilExpensesEvents implements EventListenerInterface
 
         if ($invoice->isInvoice()) {
             /** @var \LilInvoices\Model\Table\InvoicesCountersTable $InvoicesCounters */
-            $InvoicesCounters = TableRegistry::get('LilInvoices.InvoicesCounters');
+            $InvoicesCounters = TableRegistry::getTableLocator()->get('LilInvoices.InvoicesCounters');
             $counter = $InvoicesCounters->get($invoice->counter_id);
 
             if (!is_null($counter->expense)) {
-                $expenses = TableRegistry::get('LilExpenses.Expenses')->find()
+                $expenses = TableRegistry::getTableLocator()->get('LilExpenses.Expenses')->find()
                     ->where(['model' => 'Invoice', 'foreign_id' => $invoice->id])
                     ->contain(['Payments'])
                     ->all();
 
                 /** @var \LilExpenses\Model\Table\PaymentsAccountsTable $PaymentsAccountsTable */
-                $PaymentsAccountsTable = TableRegistry::get('LilExpenses.PaymentsAccounts');
+                $PaymentsAccountsTable = TableRegistry::getTableLocator()->get('LilExpenses.PaymentsAccounts');
                 $accounts = $PaymentsAccountsTable->listForOwner($invoice->owner_id);
 
                 $paymentsPanels = [
@@ -159,7 +159,7 @@ class LilExpensesEvents implements EventListenerInterface
         if (get_class($event->getSubject()) == 'LilInvoices\Model\Table\InvoicesTable') {
             $counter = $event->getSubject()->InvoicesCounters->get($invoice->counter_id);
             if (($counter->expense === 0) || ($counter->expense === 1)) {
-                $Expenses = TableRegistry::get('LilExpenses.Expenses');
+                $Expenses = TableRegistry::getTableLocator()->get('LilExpenses.Expenses');
 
                 if (!$invoice->isNew()) {
                     /** @var \LilExpenses\Model\Entity\Expense $expense */

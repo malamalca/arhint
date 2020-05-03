@@ -92,7 +92,7 @@ class InvoicesControllerTest extends IntegrationTestCase
         // Set session data
         $this->login(USER_ADMIN);
 
-        $counters = TableRegistry::get('LilInvoices.InvoicesCounters');
+        $counters = TableRegistry::getTableLocator()->get('LilInvoices.InvoicesCounters');
         $counter = $counters->get('1d53bc5b-de2d-4e85-b13b-81b39a97fc89');
 
         $data = [
@@ -152,7 +152,7 @@ class InvoicesControllerTest extends IntegrationTestCase
 
         $this->post('lil_invoices/invoices/add?counter=1d53bc5b-de2d-4e85-b13b-81b39a97fc89', $data);
 
-        $Invoices = TableRegistry::get('LilInvoices.Invoices');
+        $Invoices = TableRegistry::getTableLocator()->get('LilInvoices.Invoices');
         $invoice = $Invoices
             ->find()
             ->contain(['InvoicesItems'])
@@ -172,7 +172,7 @@ class InvoicesControllerTest extends IntegrationTestCase
         $this->assertEquals($counter->counter + 1, $newCounter->counter);
 
         // test attached clients
-        $Contacts = TableRegistry::get('LilInvoices.InvoicesClients');
+        $Contacts = TableRegistry::getTableLocator()->get('LilInvoices.InvoicesClients');
         $buyer = $Contacts
             ->find()
             ->where(['invoice_id' => $invoice->id, 'InvoicesClients.kind' => 'BY'])
@@ -236,7 +236,7 @@ class InvoicesControllerTest extends IntegrationTestCase
         $this->post('lil_invoices/invoices/edit/d0d59a31-6de7-4eb4-8230-ca09113a7fe5?counter=1d53bc5b-de2d-4e85-b13b-81b39a97fc88', $data);
         $this->assertRedirect(['action' => 'view', 'd0d59a31-6de7-4eb4-8230-ca09113a7fe5']);
 
-        $invoices = TableRegistry::get('LilInvoices.Invoices');
+        $invoices = TableRegistry::getTableLocator()->get('LilInvoices.Invoices');
         $invoice = $invoices->get('d0d59a31-6de7-4eb4-8230-ca09113a7fe5');
 
         $this->assertEquals(120, $invoice->net_total);
@@ -311,14 +311,14 @@ class InvoicesControllerTest extends IntegrationTestCase
         //var_dump($this->_response);
         $this->assertRedirect(['action' => 'view', 'd0d59a31-6de7-4eb4-8230-ca09113a7fe5']);
 
-        $invoices = TableRegistry::get('LilInvoices.Invoices');
+        $invoices = TableRegistry::getTableLocator()->get('LilInvoices.Invoices');
         $invoice = $invoices->get('d0d59a31-6de7-4eb4-8230-ca09113a7fe5', ['contain' => ['InvoicesTaxes']]);
 
         $this->assertEquals(2, count($invoice->invoices_taxes));
         $this->assertEquals(110, $invoice->net_total);
         $this->assertEquals(round(100 * 1.22 + 10 * 1.095, 2), $invoice->total);
 
-        $taxes = TableRegistry::get('LilInvoices.InvoicesTaxes');
+        $taxes = TableRegistry::getTableLocator()->get('LilInvoices.InvoicesTaxes');
         $taxExist = $taxes->exists(['id' => 1]);
         $this->assertFalse($taxExist);
     }
@@ -390,7 +390,7 @@ class InvoicesControllerTest extends IntegrationTestCase
         $this->post('lil_invoices/invoices/edit/d0d59a31-6de7-4eb4-8230-ca09113a7fe6?filter%5Bcounter%5D=1d53bc5b-de2d-4e85-b13b-81b39a97fc89', $data);
         $this->assertRedirect(['action' => 'view', 'd0d59a31-6de7-4eb4-8230-ca09113a7fe6']);
 
-        $invoices = TableRegistry::get('LilInvoices.Invoices');
+        $invoices = TableRegistry::getTableLocator()->get('LilInvoices.Invoices');
         $invoice = $invoices->get('d0d59a31-6de7-4eb4-8230-ca09113a7fe6', ['contain' => ['InvoicesItems']]);
 
         $this->assertEquals(2, count($invoice->invoices_items));
@@ -463,14 +463,14 @@ class InvoicesControllerTest extends IntegrationTestCase
         $this->post('lil_invoices/invoices/edit/d0d59a31-6de7-4eb4-8230-ca09113a7fe6?filter%5Bcounter%5D=1d53bc5b-de2d-4e85-b13b-81b39a97fc89', $data);
         $this->assertRedirect(['action' => 'view', 'd0d59a31-6de7-4eb4-8230-ca09113a7fe6']);
 
-        $invoices = TableRegistry::get('LilInvoices.Invoices');
+        $invoices = TableRegistry::getTableLocator()->get('LilInvoices.Invoices');
         $invoice = $invoices->get('d0d59a31-6de7-4eb4-8230-ca09113a7fe6', ['contain' => ['InvoicesItems']]);
 
         $this->assertEquals(1, count($invoice->invoices_items));
         $this->assertEquals(100 * 0.9 * 2, $invoice->net_total);
         $this->assertEquals(round((100 * 0.9 * 2) * 1.22, 2), $invoice->total);
 
-        $items = TableRegistry::get('LilInvoices.InvoicesItems');
+        $items = TableRegistry::getTableLocator()->get('LilInvoices.InvoicesItems');
         $deletedItem = $items->exists(['id' => 1]);
         $this->assertFalse($deletedItem);
     }
@@ -500,7 +500,7 @@ class InvoicesControllerTest extends IntegrationTestCase
         $this->post('lil_invoices/invoices/edit/d0d59a31-6de7-4eb4-8230-ca09113a7fe6', $data);
         $this->assertRedirect(['action' => 'view', 'd0d59a31-6de7-4eb4-8230-ca09113a7fe6']);
 
-        $invoices = TableRegistry::get('LilInvoices.Invoices');
+        $invoices = TableRegistry::getTableLocator()->get('LilInvoices.Invoices');
         $invoice = $invoices->get('d0d59a31-6de7-4eb4-8230-ca09113a7fe6', ['contain' => ['InvoicesItems']]);
 
         $this->assertEquals(1, count($invoice->invoices_items));
@@ -520,7 +520,7 @@ class InvoicesControllerTest extends IntegrationTestCase
         $this->post('lil_invoices/invoices/edit/d0d59a31-6de7-4eb4-8230-ca09113a7fe5', $data);
         $this->assertRedirect(['action' => 'view', 'd0d59a31-6de7-4eb4-8230-ca09113a7fe5']);
 
-        $invoices = TableRegistry::get('LilInvoices.Invoices');
+        $invoices = TableRegistry::getTableLocator()->get('LilInvoices.Invoices');
         $invoice = $invoices->get('d0d59a31-6de7-4eb4-8230-ca09113a7fe5', ['contain' => ['InvoicesTaxes']]);
 
         $this->assertEquals(1, count($invoice->invoices_taxes));

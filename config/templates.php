@@ -16,7 +16,7 @@
         'hidden' => '<input type="hidden" name="{{name}}"{{attrs}} />',
 
         'popup' => '<ul id="dropdown-{{name}}" class="dropdown-content {{class}}">{{content}}</ul>',
-        'popup-item' => '<li><a href="{{url}}"{{attrs}}>{{content}}</a></li>',
+        'popup-item' => '<li{{active}}><a href="{{url}}"{{attrs}}>{{content}}</a></li>',
         'popup-item-plain' => '<li class="divider" tabindex="-1"></li>',
 
         'tablestart' => '<table class="index {{class}}"{{attrs}}>',

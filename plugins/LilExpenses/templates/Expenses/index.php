@@ -8,12 +8,12 @@ $this->loadHelper('LilExpenses.LilExpense');
 
 $fromto = ['income' => __d('lil_expenses', 'Income'), 'expenses' => __d('lil_expenses', 'Expenses')];
 
-$fromtoLink = $this->Html->link(
+$kindLink = $this->Html->link(
     !empty($filter['type']) ? $fromto[$filter['type']] : __d('lil_expenses', 'Income and Expenses'),
     ['action' => 'filter'],
-    ['class' => 'dropdown-trigger', 'id' => 'filter-fromto', 'data-target' => 'dropdown-fromto']
+    ['class' => 'dropdown-trigger', 'id' => 'filter-kind', 'data-target' => 'dropdown-kind']
 );
-$popupFromto = ['items' => [[
+$popupKind = ['items' => [[
         'title' => __d('lil_expenses', 'Income and Expenses'),
         'url' => ['?' => array_merge($this->getRequest()->getQuery(), ['type' => null])],
         'active' => empty($filter['type']),
@@ -27,9 +27,9 @@ $popupFromto = ['items' => [[
         'active' => $this->getRequest()->getQuery('type') == 'expenses',
     ],
 ]];
-$popupFromto = $this->Lil->popup('fromto', $popupFromto, true);
+$popupKind = $this->Lil->popup('kind', $popupKind, true);
 
-$title = __d('lil_expenses', '{0}', [$fromtoLink]);
+$title = __d('lil_expenses', '{0}', [$kindLink]);
 $hiddenControls = '';
 
 if (isset($filter['span'])) {
@@ -100,7 +100,7 @@ if (isset($filter['span'])) {
             $title = __d(
                 'lil_expenses',
                 '{0} for {1} {2}',
-                [$fromtoLink, $monthLink, $yearLink]
+                [$kindLink, $monthLink, $yearLink]
             );
             break;
     }
@@ -115,7 +115,7 @@ $admin_index = [
             'url' => ['action' => 'add'],
         ],
     ],
-    'actions' => ['lines' => [$hiddenControls, $popupFromto, $popupMonths, $popupYears]],
+    'actions' => ['lines' => [$hiddenControls, $popupKind, $popupMonths, $popupYears]],
     'table' => [
         'parameters' => [
             'width' => '100%', 'cellspacing' => 0, 'cellpadding' => 0, 'id' => 'ExpensesIndex'

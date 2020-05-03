@@ -39,7 +39,7 @@ class ProjectsWorkhoursTableTest extends TestCase
     {
         parent::setUp();
         $config = TableRegistry::exists('ProjectsWorkhours') ? [] : ['className' => ProjectsWorkhoursTable::class];
-        $this->ProjectsWorkhours = TableRegistry::get('ProjectsWorkhours', $config);
+        $this->ProjectsWorkhours = TableRegistry::getTableLocator()->get('ProjectsWorkhours', $config);
     }
 
     /**

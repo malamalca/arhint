@@ -34,7 +34,7 @@ class LabelsController extends AppController
             $adremaId = key((array)$adremas);
         }
 
-        $addresses = TableRegistry::get('LilCrm.AdremasContacts')
+        $addresses = TableRegistry::getTableLocator()->get('LilCrm.AdremasContacts')
             ->find()
             ->where(['adrema_id' => $adremaId])
             ->contain(['ContactsAddresses'])
@@ -96,7 +96,7 @@ class LabelsController extends AppController
 
         $this->Authorization->authorize($adrema, 'view');
 
-        $addresses = TableRegistry::get('LilCrm.AdremasContacts')
+        $addresses = TableRegistry::getTableLocator()->get('LilCrm.AdremasContacts')
             ->find()
             ->where(['adrema_id' => $adrema->id])
             ->contain(['ContactsAddresses'])

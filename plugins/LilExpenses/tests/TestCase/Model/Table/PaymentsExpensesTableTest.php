@@ -29,7 +29,7 @@ class PaymentsExpensesTableTest extends TestCase
     {
         parent::setUp();
         $config = TableRegistry::exists('PaymentsExpenses') ? [] : ['className' => 'LilExpenses\Model\Table\PaymentsExpensesTable'];
-        $this->PaymentsExpenses = TableRegistry::get('PaymentsExpenses', $config);
+        $this->PaymentsExpenses = TableRegistry::getTableLocator()->get('PaymentsExpenses', $config);
     }
 
     /**

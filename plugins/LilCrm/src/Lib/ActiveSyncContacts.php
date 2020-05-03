@@ -117,7 +117,7 @@ class ActiveSyncContacts implements Syncroton_Data_IData
      */
     public function createEntry($_folderId, Syncroton_Model_IEntry $_entry)
     {
-        $Contacts = TableRegistry::get('LilCrm.Contacts');
+        $Contacts = TableRegistry::getTableLocator()->get('LilCrm.Contacts');
         $c = $Contacts->newEmptyEntity();
         $c->owner_id = $this->_ownerId;
         $c->name = $_entry->firstName;
@@ -196,7 +196,7 @@ class ActiveSyncContacts implements Syncroton_Data_IData
      */
     public function deleteEntry($_folderId, $_serverId, $_collectionData)
     {
-        $Contacts = TableRegistry::get('LilCrm.Contacts');
+        $Contacts = TableRegistry::getTableLocator()->get('LilCrm.Contacts');
         $contact = $Contacts->get($_serverId);
         $result = $Contacts->delete($contact);
 
@@ -268,7 +268,7 @@ class ActiveSyncContacts implements Syncroton_Data_IData
     ) {
         $folderId = $_folderId instanceof Syncroton_Model_IFolder ? $_folderId->id : $_folderId;
 
-        $Contacts = TableRegistry::get('LilCrm.Contacts');
+        $Contacts = TableRegistry::getTableLocator()->get('LilCrm.Contacts');
         $query = $Contacts->find('list');
 
         $query
@@ -327,7 +327,7 @@ class ActiveSyncContacts implements Syncroton_Data_IData
     {
         $folderId = $_folderId instanceof Syncroton_Model_IFolder ? $_folderId->id : $_folderId;
 
-        $Contacts = TableRegistry::get('LilCrm.Contacts');
+        $Contacts = TableRegistry::getTableLocator()->get('LilCrm.Contacts');
         $ids = array_keys($Contacts->find('list')
             ->select(['id'])
             ->where([
@@ -389,7 +389,7 @@ class ActiveSyncContacts implements Syncroton_Data_IData
      */
     public function getEntry(Syncroton_Model_SyncCollection $collection, $serverId)
     {
-        $Contacts = TableRegistry::get('LilCrm.Contacts');
+        $Contacts = TableRegistry::getTableLocator()->get('LilCrm.Contacts');
         $c = $Contacts->get(
             $serverId,
             ['contain' => ['Companies', 'ContactsPhones', 'ContactsAddresses', 'ContactsEmails']]
@@ -476,7 +476,7 @@ class ActiveSyncContacts implements Syncroton_Data_IData
      */
     public function updateEntry($_folderId, $_serverId, Syncroton_Model_IEntry $_entry)
     {
-        $Contacts = TableRegistry::get('LilCrm.Contacts');
+        $Contacts = TableRegistry::getTableLocator()->get('LilCrm.Contacts');
         $c = $Contacts->get($_serverId, ['contain' => ['ContactsPhones', 'ContactsAddresses', 'ContactsEmails']]);
         if (empty($c)) {
             $c = $Contacts->newEntity();

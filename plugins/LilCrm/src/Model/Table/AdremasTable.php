@@ -73,7 +73,7 @@ class AdremasTable extends Table
      */
     public function copyAddresses($sourceId, $destId)
     {
-        $AdremasContacts = TableRegistry::get('LilCrm.AdremasContacts');
+        $AdremasContacts = TableRegistry::getTableLocator()->get('LilCrm.AdremasContacts');
 
         $addresses = $AdremasContacts
             ->find()

@@ -29,7 +29,7 @@ class InvoicesItemsTableTest extends TestCase
     {
         parent::setUp();
         $config = TableRegistry::exists('InvoicesItems') ? [] : ['className' => 'LilInvoices\Model\Table\InvoicesItemsTable'];
-        $this->InvoicesItems = TableRegistry::get('InvoicesItems', $config);
+        $this->InvoicesItems = TableRegistry::getTableLocator()->get('InvoicesItems', $config);
     }
 
     /**

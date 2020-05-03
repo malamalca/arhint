@@ -97,5 +97,22 @@ class ContactsFixture extends TestFixture
             'created' => '2015-01-31 07:28:53',
             'modified' => '2015-01-31 07:28:53',
         ],
+        [
+            'id' => '49a90cfe-fda4-49ca-b7ec-ca50783b5a45',
+            'owner_id' => COMPANY_FIRST,
+            'kind' => 'T',
+            'name' => 'Second',
+            'surname' => 'Person',
+            'title' => 'Person Second',
+            'descript' => 'That\'s not me!',
+            'mat_no' => null,
+            'tax_no' => null,
+            'tax_status' => 0,
+            'company_id' => '8155426d-2302-4fa5-97de-e33cefb9d704',
+            'job' => 'Employee',
+            //'syncable' => true,
+            'created' => '2015-01-31 07:28:54',
+            'modified' => '2015-01-31 07:28:54',
+        ],
     ];
 }

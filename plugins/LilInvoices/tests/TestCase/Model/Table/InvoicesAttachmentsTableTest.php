@@ -29,7 +29,7 @@ class InvoicesAttachmentsTableTest extends TestCase
     {
         parent::setUp();
         $config = TableRegistry::exists('InvoicesAttachments') ? [] : ['className' => 'LilInvoices\Model\Table\InvoicesAttachmentsTable'];
-        $this->InvoicesAttachments = TableRegistry::get('InvoicesAttachments', $config);
+        $this->InvoicesAttachments = TableRegistry::getTableLocator()->get('InvoicesAttachments', $config);
     }
 
     /**

@@ -29,7 +29,7 @@ class VatsTableTest extends TestCase
     {
         parent::setUp();
         $config = TableRegistry::exists('Vats') ? [] : ['className' => 'LilInvoices\Model\Table\VatsTable'];
-        $this->Vats = TableRegistry::get('Vats', $config);
+        $this->Vats = TableRegistry::getTableLocator()->get('Vats', $config);
     }
 
     /**

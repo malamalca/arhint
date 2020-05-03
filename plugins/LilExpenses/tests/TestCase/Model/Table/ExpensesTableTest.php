@@ -31,7 +31,7 @@ class ExpensesTableTest extends TestCase
     {
         parent::setUp();
         $config = TableRegistry::exists('Expenses') ? [] : ['className' => 'LilExpenses\Model\Table\ExpensesTable'];
-        $this->Expenses = TableRegistry::get('Expenses', $config);
+        $this->Expenses = TableRegistry::getTableLocator()->get('Expenses', $config);
     }
 
     /**

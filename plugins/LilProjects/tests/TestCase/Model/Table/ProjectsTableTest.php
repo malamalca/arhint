@@ -38,7 +38,7 @@ class ProjectsTableTest extends TestCase
     {
         parent::setUp();
         $config = TableRegistry::exists('Projects') ? [] : ['className' => ProjectsTable::class];
-        $this->Projects = TableRegistry::get('Projects', $config);
+        $this->Projects = TableRegistry::getTableLocator()->get('Projects', $config);
     }
 
     /**

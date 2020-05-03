@@ -104,7 +104,7 @@ class InvoicesAttachmentsTable extends Table
      */
     public function afterSave(Event $event, Entity $entity, ArrayObject $options)
     {
-        $invoices = TableRegistry::get('LilInvoices.Invoices');
+        $invoices = TableRegistry::getTableLocator()->get('LilInvoices.Invoices');
         $attachmentCount = $this->find()->where(['invoice_id' => $entity->invoice_id])->count();
         $invoices->updateAll(['invoices_attachment_count' => $attachmentCount], ['id' => $entity->invoice_id]);
 

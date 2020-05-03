@@ -203,7 +203,7 @@ class ExpensesController extends AppController
 
         $counters = [];
         if (Plugin::isLoaded('LilInvoices')) {
-            $InvoicesCounters = TableRegistry::get('LilInvoices.InvoicesCounters');
+            $InvoicesCounters = TableRegistry::getTableLocator()->get('LilInvoices.InvoicesCounters');
             $counters = $this->Authorization->applyScope($InvoicesCounters->find(), 'index')
                 ->where(['active' => true])
                 ->order(['kind', 'title'])
@@ -298,7 +298,7 @@ class ExpensesController extends AppController
             $query = $this->Authorization->applyScope($this->Expenses->find(), 'index');
             $data3 = $this->Expenses->monthlyTotals($query, array_merge($options, ['year' => $year - 2]));
 
-            $this->set(compact('data1', 'data2', 'data3', 'year'));
+            $this->set(compact('data1', 'data2', 'data3', 'year', 'kind'));
         }
 
         return null;

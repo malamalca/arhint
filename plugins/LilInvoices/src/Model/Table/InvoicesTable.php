@@ -199,12 +199,12 @@ class InvoicesTable extends Table
     {
         // delete sub elements
         if (!empty($entity->deleteTaxesList)) {
-            TableRegistry::get('LilInvices.InvoicesTaxes')->deleteAll([
+            TableRegistry::getTableLocator()->get('LilInvices.InvoicesTaxes')->deleteAll([
                 'id IN' => $entity->deleteTaxesList,
             ]);
         }
         if (!empty($entity->deleteItemsList)) {
-            TableRegistry::get('LilInvices.InvoicesItems')->deleteAll([
+            TableRegistry::getTableLocator()->get('LilInvices.InvoicesItems')->deleteAll([
                 'id IN' => $entity->deleteItemsList,
             ]);
         }

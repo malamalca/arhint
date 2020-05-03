@@ -69,7 +69,7 @@ class LilInvoicesEvents implements EventListenerInterface
         $identity = $view->getRequest()->getAttribute('identity');
 
         // fetch counters
-        $InvoicesCounters = TableRegistry::get('LilInvoices.InvoicesCounters');
+        $InvoicesCounters = TableRegistry::getTableLocator()->get('LilInvoices.InvoicesCounters');
         $countersQuery = $InvoicesCounters->find();
         $identity->applyScope('index', $countersQuery);
         $counters = $countersQuery
@@ -89,7 +89,7 @@ class LilInvoicesEvents implements EventListenerInterface
         $sort .= $view->getRequest()->getQuery('invoices.sort', 'no');
         $sort .= ' ' . $view->getRequest()->getQuery('invoices.direction', 'DESC');
 
-        $Invoices = TableRegistry::get('LilInvoices.Invoices');
+        $Invoices = TableRegistry::getTableLocator()->get('LilInvoices.Invoices');
         $query = $Invoices->find();
 
         switch ($event->getName()) {

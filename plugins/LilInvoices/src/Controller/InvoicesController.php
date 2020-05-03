@@ -139,7 +139,7 @@ class InvoicesController extends AppController
         $LinksTable = TableRegistry::getTableLocator()->get('LilInvoices.InvoicesLinks');
         $links = $LinksTable->forInvoice($id);
 
-        $counters = TableRegistry::get('LilInvoices.InvoicesCounters')
+        $counters = TableRegistry::getTableLocator()->get('LilInvoices.InvoicesCounters')
             ->find()
             ->where(['owner_id' => $this->getCurrentUser()->get('company_id'), 'active' => true])
             ->all();
@@ -226,7 +226,7 @@ class InvoicesController extends AppController
             }
         }
 
-        $counter = TableRegistry::get('LilInvoices.InvoicesCounters')
+        $counter = TableRegistry::getTableLocator()->get('LilInvoices.InvoicesCounters')
             ->find()
             ->where(['InvoicesCounters.id' => $invoice->counter_id])
             ->first();

@@ -165,7 +165,7 @@ class LilInvoicesSidebar
             ////////////////////////////////////////////////////////////////////////////////////////
             // Fetch counters
             //if (!$counters = Cache::read('LilInvoices.sidebarCounters', 'Lil')) {
-            $InvoicesCounters = TableRegistry::get('LilInvoices.InvoicesCounters');
+            $InvoicesCounters = TableRegistry::getTableLocator()->get('LilInvoices.InvoicesCounters');
             $counters = $controller->Authorization->applyScope($InvoicesCounters->find(), 'index')
                 ->where(['active' => true])
                 ->order(['active', 'kind DESC', 'title'])
