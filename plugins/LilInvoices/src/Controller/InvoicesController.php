@@ -210,7 +210,7 @@ class InvoicesController extends AppController
 
                         return $this->redirect($this->getRequest()->getData('referer') ?? [
                             'action' => 'view',
-                            $invoice->id
+                            $invoice->id,
                         ]);
                     }
                 }
