@@ -152,7 +152,7 @@ class LilInvoicesEvents implements EventListenerInterface
                             'plugin' => 'LilInvoices',
                             'controller' => 'Invoices',
                             'action' => 'add',
-                            '?' => ['counter' => $counter->id],
+                            '?' => ['counter' => $counter->id, 'project' => $view->getRequest()->getParam('pass.0')],
                         ],
                     ];
                 }

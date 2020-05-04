@@ -55,7 +55,10 @@ $invoiceEdit = [
             ],
             'referer' => [
                 'method' => 'control',
-                'parameters' => ['referer', ['type' => 'hidden']],
+                'parameters' => ['referer', [
+                    'type' => 'hidden',
+                    'default' => $this->getRequest()->referer()
+                ]],
             ],
             'id' => [
                 'method' => 'control',
@@ -164,7 +167,8 @@ $invoiceEdit = [
                         ],
                         'options' => $projects,
                         'empty' => '-- ' . __d('lil_invoices', 'no project') . ' --',
-                        'class' => 'browser-default'
+                        'class' => 'browser-default',
+                        'default' => $this->getRequest()->getQuery('project')
                     ],
                 ],
             ],
