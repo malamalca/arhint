@@ -82,7 +82,7 @@ if (isset($filter['span'])) {
             $popupMonths = $this->Lil->popup('month', $popupMonths, true);
 
             $popupYears = ['items' => []];
-            $endYear = date('Y');
+            $destYear = date('Y');
             for ($i = $destYear; $i >= $minYear; $i--) {
                 $popupYears['items'][] = [
                     'title' => (string)$i,

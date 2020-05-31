@@ -164,6 +164,15 @@ class ExpensesTable extends Table
             }
         }
 
+        if (isset($filter['type'])) {
+            if ($filter['type'] == 'income') {
+                $ret['conditions']['Expenses.total >='] = 0;
+            }
+            if ($filter['type'] == 'expenses') {
+                $ret['conditions']['Expenses.total <'] = 0;
+            }
+        }
+
         return $ret;
     }
 
