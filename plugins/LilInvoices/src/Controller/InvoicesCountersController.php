@@ -22,16 +22,18 @@ class InvoicesCountersController extends AppController
         $filter = (array)$this->getRequest()->getQuery();
 
         $params = array_merge_recursive(
-            ['conditions' => [
-                'InvoicesCounters.active IN' => [true],
-            ]],
+            [
+                'conditions' => ['InvoicesCounters.active IN' => [true]],
+            ],
             $this->InvoicesCounters->filter($filter)
         );
 
-        $counters = $this->Authorization->applyScope($this->InvoicesCounters->find())
+        $query = $this->Authorization->applyScope($this->InvoicesCounters->find())
             ->where($params['conditions'])
-            ->contain($params['contain'])
-            ->all();
+            ->contain($params['contain']);
+
+        $counters = $this->paginate($query, ['limit' => 10]);
+        //dd($counters);
 
         $this->set(compact('counters', 'filter'));
 

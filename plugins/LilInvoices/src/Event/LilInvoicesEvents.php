@@ -5,6 +5,7 @@ namespace LilInvoices\Event;
 
 use Cake\Event\EventListenerInterface;
 use Cake\ORM\TableRegistry;
+use Cake\Routing\Router;
 use LilInvoices\Lib\LilInvoicesSidebar;
 
 class LilInvoicesEvents implements EventListenerInterface
@@ -152,7 +153,11 @@ class LilInvoicesEvents implements EventListenerInterface
                             'plugin' => 'LilInvoices',
                             'controller' => 'Invoices',
                             'action' => 'add',
-                            '?' => ['counter' => $counter->id, 'project' => $view->getRequest()->getParam('pass.0')],
+                            '?' => [
+                                'counter' => $counter->id,
+                                'project' => $view->getRequest()->getParam('pass.0'),
+                                'redirect' => base64_encode(Router::url(null, true)),
+                            ],
                         ],
                     ];
                 }

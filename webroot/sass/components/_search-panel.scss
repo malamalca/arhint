@@ -1,0 +1,11 @@
+div.search-panel {
+    padding: 5px;
+    padding-bottom: 0;
+    background-color: $default-background-color;
+    border-bottom: solid 1px $table-border-color;
+
+    input {
+        border: none !important;
+        background-color: transparent !important;
+    }
+}

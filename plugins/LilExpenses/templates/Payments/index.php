@@ -104,7 +104,7 @@ if (isset($filter['span'])) {
 
             $popupYears = ['items' => []];
             $destYear = date('Y');
-            for ($i = $minYear; $i <= $destYear; $i++) {
+            for ($i = $destYear; $i >= $minYear; $i--) {
                 $popupYears['items'][] = [
                     'title' => (string)$i,
                     'url' => ['?' => array_merge($this->getRequest()->getQuery(), ['year' => (int)$i])],
@@ -138,25 +138,12 @@ $admin_index = [
     ],
     'actions' => ['lines' => [$hiddenControls, $popupAccounts, $popupFromto, $popupYears, $popupMonths]],
     'table' => [
+        'pre' => $this->Arhint->searchPanel($this->getRequest()->getQuery('search', '')),
         'parameters' => [
             'width' => '100%', 'cellspacing' => 0, 'cellpadding' => 0, 'id' => 'PaymentsIndex',
         ],
         'head' => ['rows' => [
             0 => [
-                'columns' => [
-                    'search' => [
-                        'params' => ['colspan' => 1, 'class' => 'input-field'],
-                        'html' => sprintf('<input placeholder="%s" id="SearchBox" />', __d('lil_expenses', 'Search')),
-                    ],
-                    'pagination' => [
-                        'params' => ['colspan' => 4, 'class' => 'right-align'],
-                        'html' => '<ul class="paginator">' . $this->Paginator->numbers([
-                            'first' => '<<',
-                            'last' => '>>',
-                            'modulus' => 3]) . '</ul>'],
-                ],
-            ],
-            1 => [
                 'columns' => [
                     'account' => [
                         'parameters' => ['class' => 'left-align'],
@@ -177,8 +164,15 @@ $admin_index = [
             ]
         ]],
         'foot' => ['rows' => [['columns' => [
+            'paginator' => [
+                'params' => ['colspan' => 2],
+                'html' => '<ul class="paginator">' . $this->Paginator->numbers([
+                    'first' => '<<',
+                    'last' => '>>',
+                    'modulus' => 3]) . '</ul>'
+            ],
             'title' => [
-                'parameters' => ['colspan' => '3', 'class' => 'right-align'],
+                'parameters' => ['class' => 'right-align'],
                 'html' => __d('lil_expenses', 'Recapitulation') . ':',
             ],
             'recap' => [
@@ -257,20 +251,11 @@ echo $this->Lil->index($admin_index, 'LilExpenses.Payments.index');
     $(document).ready(function() {
         ////////////////////////////////////////////////////////////////////////////////////////////
         // Filter for invoices
-        $("#SearchBox").on("input", function(e) {
+        $(".search-panel input").on("input", function(e) {
             var rx_term = new RegExp("__term__", "i");
             $.get(searchUrl.replace(rx_term, encodeURIComponent($(this).val())), function(response) {
-                let tBody = response.substring(response.indexOf("<tbody>")+7, response.indexOf("</tbody>"));
-                $("#PaymentsIndex tbody").html(tBody);
-
-                let tFoot = response.substring(response.indexOf("<tfoot>")+7, response.indexOf("</tfoot>"));
-                $("#PaymentsIndex tfoot").html(tFoot);
-
-                let paginator = response.substring(
-                    response.indexOf("<ul class=\"paginator\">")+22,
-                    response.indexOf("</ul>", response.indexOf("<ul class=\"paginator\">"))
-                );
-                $("#PaymentsIndex ul.paginator").html(paginator);
+                let tBody = response.substring(response.indexOf("<table class=\"index"), response.indexOf("</table>")+8);
+                $("#PaymentsIndex").html(tBody);
             });
         });
 

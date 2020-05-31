@@ -1,5 +1,6 @@
 <?php
 use Cake\Core\Configure;
+use Cake\Routing\Router;
 
 $documentTypes = Configure::read('LilInvoices.documentTypes');
 
@@ -50,18 +51,28 @@ $countersIndex = [
     ],
     'actions' => ['lines' => [$popupActive, $popupType]],
     'table' => [
+        'pre' => $this->Arhint->searchPanel($this->getRequest()->getQuery('search', '')),
         'parameters' => [
-            'width' => '100%', 'cellspacing' => 0, 'cellpadding' => 0, 'id' => 'AdminInvoicesCountersIndex'
+            'width' => '100%', 'cellspacing' => 0, 'cellpadding' => 0, 'id' => 'InvoicesCountersIndex'
         ],
         'head' => ['rows' => [['columns' => [
-            'title' => __d('lil_invoices', 'Title'),
-            'doc_type' => __d('lil_invoices', 'Type'),
+            'title' => $this->Paginator->sort('title', __d('lil_invoices', 'Title')),
+            'doc_type' => $this->Paginator->sort('doc_type', __d('lil_invoices', 'Type')),
             'no' => [
                 'parameters' => ['class' => 'right-align'],
                 'html' => __d('lil_invoices', 'Last no'),
              ],
              'actions' => [],
         ]]]],
+        'foot' => ['rows' => [['columns' => [
+            'paginator' => [
+                'params' => ['colspan' => 4],
+                'html' => '<ul class="paginator">' . $this->Paginator->numbers([
+                    'first' => '<<',
+                    'last' => '>>',
+                    'modulus' => 3]) . '</ul>'
+            ]
+        ]]]]
     ],
 ];
 
@@ -77,7 +88,7 @@ foreach ($counters as $counter) {
             'parameters' => ['class' => 'right-align'],
             'html' =>
                 $this->Html->link(
-                    '<i class="material-icons chevron">unarchive</i>',
+                    '<i class="material-icons chevron">list</i>',
                     ['controller' => 'Invoices', 'action' => 'index', '?' => ['counter' => $counter->id]],
                     ['escape' => false, 'class' => 'btn btn-small btn-floating waves-effect waves-light waves-circle']
                 ) . ' ' .
@@ -87,3 +98,26 @@ foreach ($counters as $counter) {
 }
 
 echo $this->Lil->index($countersIndex, 'LilInvoices.InvoicesCounters.index');
+?>
+<script type="text/javascript">
+    var searchUrl = "<?php echo Router::url([
+        'plugin' => 'LilInvoices',
+        'controller' => 'InvoicesCounters',
+        'action' => 'index',
+        '?' => array_merge($this->getRequest()->getQuery(), ['search' => '__term__']),
+    ]); ?>";
+
+    $(document).ready(function() {
+        ////////////////////////////////////////////////////////////////////////////////////////////
+        // Filter for invoices
+        $(".search-panel input").on("input", function(e) {
+            var rx_term = new RegExp("__term__", "i");
+            $.get(searchUrl.replace(rx_term, encodeURIComponent($(this).val())), function(response) {
+                let tTable = $("<body>" + response + "</body>").filter("#InvoicesCountersIndex").html();
+                $("#InvoicesCountersIndex").html(tTable);
+            });
+        });
+
+        $(".search-panel input").focus();
+    });
+</script>

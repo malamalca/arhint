@@ -57,7 +57,7 @@ class InvoicesClientsTable extends Table
             ->notEmptyString('kind');
 
         $validator
-            ->allowEmptyString('title');
+            ->notEmptyString('title');
 
         $validator
             ->allowEmptyString('person');

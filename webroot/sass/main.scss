@@ -41,6 +41,8 @@
 @import "vendor/Materialize/components/timepicker";
 
 
+$default-background-color: #f0f0f0 !default;
+
 @import "components/monthpicker";
 @import "components/calendarday";
 @import "components/timepanel";
@@ -48,6 +50,7 @@
 @import "components/userspicker-input";
 @import "components/monthpicker-input";
 @import "components/view-panel";
+@import "components/search-panel";
 
 @import "material-icons";
 

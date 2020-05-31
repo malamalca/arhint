@@ -83,7 +83,7 @@ if (isset($filter['span'])) {
 
             $popupYears = ['items' => []];
             $endYear = date('Y');
-            for ($i = $minYear; $i <= $endYear; $i++) {
+            for ($i = $destYear; $i >= $minYear; $i--) {
                 $popupYears['items'][] = [
                     'title' => (string)$i,
                     'url' => ['?' => array_merge($this->getRequest()->getQuery(), ['year' => (int)$i])],

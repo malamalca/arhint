@@ -208,7 +208,9 @@ class InvoicesController extends AppController
                     } else {
                         $this->Flash->success(__d('lil_invoices', 'The invoice has been saved.'));
 
-                        return $this->redirect($this->getRequest()->getData('referer') ?? [
+                        $referer = $this->getRequest()->getData('referer');
+
+                        return $this->redirect(!empty($referer) ? base64_decode($referer) : [
                             'action' => 'view',
                             $invoice->id,
                         ]);

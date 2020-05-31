@@ -180,6 +180,10 @@ class InvoicesCountersTable extends Table
             $ret['conditions']['InvoicesCounters.active IN'] = [true, false];
         }
 
+        if (!empty($filter['search'])) {
+            $ret['conditions']['InvoicesCounters.title LIKE'] = '%' . $filter['search'] . '%';
+        }
+
         return $ret;
     }
 }

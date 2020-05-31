@@ -58,20 +58,13 @@ $invoices_index = [
         ],
     ],
     'table' => [
+        'pre' => $this->Arhint->searchPanel($this->getRequest()->getQuery('search', '')),
         'parameters' => [
             'width' => '100%', 'cellspacing' => 0, 'cellpadding' => 0, 'id' => 'AdminInvoicesIndex'
         ],
         'head' => ['rows' => [
-            0 => [
+            /*0 => [
                 'columns' => [
-                    'search' => [
-                        'params' => ['colspan' => 2, 'class' => 'input-field'],
-                        'html' => sprintf(
-                            '<input placeholder="%1$s" id="SearchBox" value="%2$s" />',
-                            __d('lil_invoices', 'Search'),
-                            $this->getRequest()->getQuery('search', '')
-                        ),
-                    ],
                     'pagination' => [
                         'params' => ['colspan' => 5, 'class' => 'right-align hide-on-small-only'],
                         'html' => '<ul class="paginator">' . $this->Paginator->numbers([
@@ -79,7 +72,7 @@ $invoices_index = [
                             'last' => '>>',
                             'modulus' => 3]) . '</ul>'],
                 ],
-            ],
+            ],*/
             1 => ['columns' => [
                 'cnt' => [
                     'parameters' => ['class' => 'center-align hide-on-small-only'],
@@ -116,8 +109,11 @@ $invoices_index = [
                 'html' => '',
             ],
             'no' => [
-                'parameters' => ['class' => 'right-align '],
-                'html' => '',
+                'parameters' => ['class' => 'left-align '],
+                'html' => '<ul class="paginator">' . $this->Paginator->numbers([
+                    'first' => '<<',
+                    'last' => '>>',
+                    'modulus' => 3]) . '</ul>',
             ],
             'date' => [
                 'parameters' => ['class' => 'right-align hide-on-small-only'],
@@ -235,20 +231,11 @@ echo $this->Lil->index($invoices_index, 'LilInvoices.Invoices.index');
     $(document).ready(function() {
         ////////////////////////////////////////////////////////////////////////////////////////////
         // Filter for invoices
-        $("#SearchBox").on("input", function(e) {
+        $(".search-panel input").on("input", function(e) {
             var rx_term = new RegExp("__term__", "i");
             $.get(searchUrl.replace(rx_term, encodeURIComponent($(this).val())), function(response) {
-                let tBody = response.substring(response.indexOf("<tbody>")+7, response.indexOf("</tbody>"));
-                $("#AdminInvoicesIndex tbody").html(tBody);
-
-                let tFoot = response.substring(response.indexOf("<tfoot>")+7, response.indexOf("</tfoot>"));
-                $("#AdminInvoicesIndex tfoot").html(tFoot);
-
-                let paginator = response.substring(
-                    response.indexOf("<ul class=\"paginator\">")+22,
-                    response.indexOf("</ul>", response.indexOf("<ul class=\"paginator\">"))
-                );
-                $("#AdminInvoicesIndex ul.paginator").html(paginator);
+                let tBody = response.substring(response.indexOf("<table class=\"index"), response.indexOf("</table>")+8);
+                $("#AdminInvoicesIndex").html(tBody);
             });
         });
 

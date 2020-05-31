@@ -57,7 +57,7 @@ $invoiceEdit = [
                 'method' => 'control',
                 'parameters' => ['referer', [
                     'type' => 'hidden',
-                    'default' => $this->getRequest()->referer()
+                    'default' => $this->getRequest()->getQuery('redirect')
                 ]],
             ],
             'id' => [

@@ -321,4 +321,19 @@ class ArhintHelper extends Helper
 
         return $ret;
     }
+
+    /**
+     * Output line with search panel
+     *
+     * @param string $defaultValue Default Value
+     * @return string
+     */
+    public function searchPanel($defaultValue)
+    {
+        return sprintf(
+            '<div class="search-panel"><input type="text" placeholder ="%1$s" value="%2$s"></div>',
+            __('Search'),
+            $defaultValue
+        );
+    }
 }

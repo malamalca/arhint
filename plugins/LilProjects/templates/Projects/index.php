@@ -51,40 +51,29 @@ $index = [
     ],
     'actions' => ['lines' => [$popupActive, $popupStatus]],
     'table' => [
+        'pre' => $this->Arhint->searchPanel($this->getRequest()->getQuery('search', '')),
         'parameters' => [
             'width' => '100%', 'cellspacing' => 0, 'cellpadding' => 0,
             'class' => 'index-static', 'id' => 'ProjectsIndex'
         ],
-        'head' => ['rows' => [
-            0 => [
-                'columns' => [
-                    'search' => [
-                        'params' => ['colspan' => 2, 'class' => 'input-field'],
-                        'html' => sprintf('<input placeholder="%s" id="SearchBox" />', __d('lil_projects', 'Search')),
-                    ],
-                    'empty' => [
-                        'params' => ['colspan' => 1, 'class' => ''],
-                        'html' => '',
-                    ],
-                    'pagination' => [
-                        'params' => ['colspan' => 3, 'class' => 'right-align hide-on-small-only'],
-                        'html' => '<ul class="paginator">' . $this->Paginator->numbers([
-                            'first' => '<<',
-                            'last' => '>>',
-                            'modulus' => 3]) . '</ul>'
-                    ],
-                ],
-            ],
-            1 => [
-                'columns' => [
-                    'image' => ['params' => ['class' => 'center hide-on-small-only'], 'html' => '&nbsp;'],
-                    'title' => __d('lil_projects', 'Title'),
-                    'status' => ['params' => ['class' => 'center hide-on-small-only'], 'html' => __d('lil_projects', 'Status')],
-                    'actions' => '',
-                    'log' => ['params' => ['class' => 'left'], 'html' => __d('lil_projects', 'Last Log')],
-                ]
+        'head' => ['rows' => [[
+            'columns' => [
+                'image' => ['params' => ['class' => 'center hide-on-small-only'], 'html' => '&nbsp;'],
+                'title' => __d('lil_projects', 'Title'),
+                'status' => ['params' => ['class' => 'center hide-on-small-only'], 'html' => __d('lil_projects', 'Status')],
+                'actions' => '',
+                'log' => ['params' => ['class' => 'left'], 'html' => __d('lil_projects', 'Last Log')],
             ]
-        ]],
+        ]]],
+        'foot' => ['rows' => [['columns' => [
+            'paginator' => [
+                'params' => ['colspan' => 5],
+                'html' => '<ul class="paginator">' . $this->Paginator->numbers([
+                    'first' => '<<',
+                    'last' => '>>',
+                    'modulus' => 3]) . '</ul>'
+            ]
+        ]]]]
     ]
 ];
 
@@ -139,20 +128,11 @@ echo $this->Lil->index($index, 'LilProjects.Projects.index');
     $(document).ready(function() {
         ////////////////////////////////////////////////////////////////////////////////////////////
         // Filter for invoices
-        $("#SearchBox").on("input", function(e) {
+        $(".search-panel input").on("input", function(e) {
             var rx_term = new RegExp("__term__", "i");
             $.get(searchUrl.replace(rx_term, encodeURIComponent($(this).val())), function(response) {
-                let tBody = response.substring(response.indexOf("<tbody>")+7, response.indexOf("</tbody>"));
-                $("#ProjectsIndex tbody").html(tBody);
-
-                let tFoot = response.substring(response.indexOf("<tfoot>")+7, response.indexOf("</tfoot>"));
-                $("#ProjectsIndex tfoot").html(tFoot);
-
-                let paginator = response.substring(
-                    response.indexOf("<ul class=\"paginator\">")+22,
-                    response.indexOf("</ul>", response.indexOf("<ul class=\"paginator\">"))
-                );
-                $("#ProjectsIndex ul.paginator").html(paginator);
+                let tBody = response.substring(response.indexOf("<table class=\"index"), response.indexOf("</table>")+8);
+                $("#ProjectsIndex").html(tBody);
 
                 $(".add-projects-log").each(function() {
                     $(this).modalPopup({
