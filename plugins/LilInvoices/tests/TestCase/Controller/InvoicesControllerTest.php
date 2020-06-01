@@ -190,6 +190,64 @@ class InvoicesControllerTest extends IntegrationTestCase
     }
 
     /**
+     * Test add from ArhintScan
+     *
+     * * ..\..\vendor\bin\phpunit --filter testAddArhintScan tests\TestCase\Controller\InvoicesControllerTest.php
+     *
+     * @return void
+     */
+    public function testAddArhintScan()
+    {
+        // External program has to send a valid header
+        $this->configRequest([
+            'headers' => ['Lil-Scan' => 'Valid']
+        ]);
+        // Set session data
+        $this->login(USER_ADMIN);
+
+        $counters = TableRegistry::getTableLocator()->get('LilInvoices.InvoicesCounters');
+        $counter = $counters->get('1d53bc5b-de2d-4e85-b13b-81b39a97fc89');
+
+        $data = [
+            'counter_id' => '1d53bc5b-de2d-4e85-b13b-81b39a97fc89',
+            'title' => 'Uploaded Document',
+            'dat_issue' => '2020-05-31',
+            'invoices_attachments' => [
+                0 => [
+                    'filename' => [
+                        'name' => 'sunset.jpg',
+                        'type' => 'image/jpg',
+                        'size' => 100963,
+                        'tmp_name' => dirname(__FILE__) . DS . 'data' . DS . 'sunset.jpg',
+                    ]
+                ]
+            ]
+        ];
+
+        $this->post('lil_invoices/invoices/edit', $data);
+
+        $this->assertResponseSuccess();
+        $this->assertContentType('application/json');
+        $this->assertResponseContains('{"invoice":{');
+
+        //dd((string)$this->_response->getBody());
+
+        $Invoices = TableRegistry::getTableLocator()->get('LilInvoices.Invoices');
+        $invoice = $Invoices
+            ->find()
+            ->contain(['InvoicesItems'])
+            ->where(['counter_id' => '1d53bc5b-de2d-4e85-b13b-81b39a97fc89'])
+            ->order(['created DESC'])->first();
+
+        $this->assertEquals('Uploaded Document', $invoice->title);
+        $this->assertEquals($counter->counter + 1, $invoice->counter);
+
+        // test if counter increases
+        $newCounter = $counters->get('1d53bc5b-de2d-4e85-b13b-81b39a97fc89');
+        $this->assertEquals($counter->counter + 1, $newCounter->counter);
+    }
+
+    /**
      * Test edit received invoice method
      *
      * ..\..\vendor\bin\phpunit --filter testEditReceived tests\TestCase\Controller\InvoicesControllerTest.php
