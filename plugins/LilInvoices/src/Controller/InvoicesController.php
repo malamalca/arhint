@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace LilInvoices\Controller;
 
-use Cake\Collection\Collection;
 use Cake\Core\Plugin;
 use Cake\Event\EventInterface;
 use Cake\Http\Exception\NotFoundException;
@@ -663,72 +662,31 @@ class InvoicesController extends AppController
         }
 
         if ($this->getRequest()->is(['patch', 'post', 'put'])) {
-            $presentItemsBefore = [];
-            if (!empty($invoice->invoices_items)) {
-                $presentItemsBefore = (new Collection($invoice->invoices_items))->extract('id')->toArray();
-            }
-
-            $presentTaxesBefore = [];
-            if (!empty($invoice->invoices_taxes)) {
-                $presentTaxesBefore = (new Collection($invoice->invoices_taxes))->extract('id')->toArray();
-            }
-
             // patch invoice and existing sub elements
             $assocModels = ['InvoicesTaxes', 'InvoicesItems', 'InvoicesAttachments', 'Issuers', 'Buyers', 'Receivers'];
             $invoice = $this->Invoices->patchEntity($invoice, $this->getRequest()->getData(), [
                 'associated' => $assocModels,
             ]);
 
-            // always recalculate net total sum
-            $invoice->net_total = 0;
-
-            ////////////////////////////////////////////////////////////////////////////////////////////
-            // create new entities or extract entities that are still valid
-            $presentTaxesAfter = [];
-            $presentTaxesAfter = (new Collection((array)$invoice->invoices_taxes))->extract('id')->toArray();
-
-            // create delete list
-            $deleteTaxesList = array_diff($presentTaxesBefore, $presentTaxesAfter);
-            $invoice->deleteTaxesList = $deleteTaxesList;
-
-            // remove entities which were deleted in form
             if (!empty($invoice->invoices_taxes)) {
-                foreach ($invoice->invoices_taxes as $i => $tax) {
-                    if (in_array($tax->id, $deleteTaxesList)) {
-                        unset($invoice->invoices_taxes[$i]);
-                    } else {
-                        $invoice->net_total += $tax->base;
-                    }
+                $invoice->net_total = 0;
+                foreach ($invoice->invoices_taxes as $tax) {
+                    $invoice->net_total += $tax->base;
                 }
             }
 
             $invoice->setDirty('invoices_taxes', true);
 
-            ////////////////////////////////////////////////////////////////////////////////////////////
-            // create new entities or extract entities that are still valid
-            $presentItemsAfter = [];
-            $presentItemsAfter = (new Collection((array)$invoice->invoices_items))->extract('id')->toArray();
-
-            // create delete list
-            $deleteItemsList = array_diff($presentItemsBefore, $presentItemsAfter);
-            $invoice->deleteItemsList = $deleteItemsList;
-
-            // remove entities which were deleted in form
-            // calculate total only when there are items
             if (!empty($invoice->invoices_items)) {
                 $invoice->total = 0;
                 $invoice->net_total = 0;
-                foreach ($invoice->invoices_items as $i => $item) {
-                    if (in_array($item->id, $deleteItemsList)) {
-                        unset($invoice->invoices_items[$i]);
-                    } else {
-                        $invoice->net_total += $item->net_total;
-                        $invoice->total += $item->total;
-                    }
+                foreach ($invoice->invoices_items as $item) {
+                    $invoice->net_total += $item->net_total;
+                    $invoice->total += $item->total;
                 }
-
-                $invoice->setDirty('invoices_items', true);
             }
+
+            $invoice->setDirty('invoices_items', true);
         }
 
         return $invoice;

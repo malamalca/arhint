@@ -67,11 +67,13 @@ class InvoicesTable extends Table
             'foreignKey' => 'invoice_id',
             'className' => 'LilInvoices\Model\Table\InvoicesItemsTable',
             'dependant' => true,
+            'saveStrategy' => 'replace',
         ]);
         $this->hasMany('InvoicesTaxes', [
             'foreignKey' => 'invoice_id',
             'className' => 'LilInvoices\Model\Table\InvoicesTaxesTable',
             'dependant' => true,
+            'saveStrategy' => 'replace',
         ]);
         $this->hasMany('InvoicesLinks', [
             'foreignKey' => 'invoice_id',

@@ -376,9 +376,9 @@ class InvoicesControllerTest extends IntegrationTestCase
         $this->assertEquals(110, $invoice->net_total);
         $this->assertEquals(round(100 * 1.22 + 10 * 1.095, 2), $invoice->total);
 
-        $taxes = TableRegistry::getTableLocator()->get('LilInvoices.InvoicesTaxes');
-        $taxExist = $taxes->exists(['id' => 1]);
-        $this->assertFalse($taxExist);
+        //$taxes = TableRegistry::getTableLocator()->get('LilInvoices.InvoicesTaxes');
+        //$taxExist = $taxes->exists(['id' => 1]);
+        //$this->assertFalse($taxExist);
     }
 
     /**
@@ -528,9 +528,9 @@ class InvoicesControllerTest extends IntegrationTestCase
         $this->assertEquals(100 * 0.9 * 2, $invoice->net_total);
         $this->assertEquals(round((100 * 0.9 * 2) * 1.22, 2), $invoice->total);
 
-        $items = TableRegistry::getTableLocator()->get('LilInvoices.InvoicesItems');
-        $deletedItem = $items->exists(['id' => 1]);
-        $this->assertFalse($deletedItem);
+        //$items = TableRegistry::getTableLocator()->get('LilInvoices.InvoicesItems');
+        //$deletedItem = $items->exists(['id' => 1]);
+        //$this->assertFalse($deletedItem);
     }
 
     /**
