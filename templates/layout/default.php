@@ -49,7 +49,13 @@ use Cake\Routing\Router;
                 <li class="sidenav-user">
                     <?= $this->Html->image(
                         Router::url(
-                            ['plugin' => false, 'controller' => 'Users', 'action' => 'avatar', $this->getCurrentUser() ? $this->getCurrentUser()->get('id') : null],
+                            [
+                                'plugin' => false,
+                                'controller' => 'Users',
+                                'action' => 'avatar',
+                                $this->getCurrentUser() ? $this->getCurrentUser()->get('id') : null,
+                                '_ext' => 'png'
+                            ],
                             true
                         ),
                         ['class' => 'sidenav-avatar circle']
