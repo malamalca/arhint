@@ -10,7 +10,6 @@ use Cake\I18n\FrozenDate;
 use Cake\ORM\Entity;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
-use Cake\ORM\TableRegistry;
 use Cake\Validation\Validator;
 
 /**
@@ -174,42 +173,32 @@ class InvoicesTable extends Table
      * beforeSave method
      *
      * @param \Cake\Event\Event $event Event object.
-     * @param \LilInvoices\Model\Entity\Invoice $entity Entity object.
+     * @param \LilInvoices\Model\Entity\Invoice $invoice Entity object.
      * @param \ArrayObject $options Array object.
      * @return bool
      */
-    public function beforeSave(Event $event, Entity $entity, ArrayObject $options)
+    public function beforeSave(Event $event, Entity $invoice, ArrayObject $options)
     {
-        if ($entity->isNew() && !empty($entity->counter_id)) {
-            if (empty($entity->invoices_counter)) {
-                $entity->invoices_counter = $this->InvoicesCounters->get($entity->counter_id);
+        if ($invoice->isDirty('invoices_taxes')) {
+            $invoice->net_total = 0;
+            foreach ((array)$invoice->invoices_taxes as $tax) {
+                $invoice->net_total += $tax->base;
+            }
+        }
+        //$invoice->setDirty('invoices_taxes', true);
+
+        if ($invoice->isDirty('invoices_items')) {
+            $invoice->net_total = 0;
+            $invoice->total = 0;
+            foreach ($invoice->invoices_items as $item) {
+                $invoice->net_total += $item->net_total;
+                $invoice->total += $item->total;
             }
         }
 
-        return true;
-    }
+        //$invoice->setDirty('invoices_items', true);
 
-    /**
-     * afterSave method
-     *
-     * @param \Cake\Event\Event $event Event object.
-     * @param \LilInvoices\Model\Entity\Invoice $entity Entity object.
-     * @param \ArrayObject $options Array object.
-     * @return void
-     */
-    public function afterSave(Event $event, Entity $entity, ArrayObject $options)
-    {
-        // delete sub elements
-        if (!empty($entity->deleteTaxesList)) {
-            TableRegistry::getTableLocator()->get('LilInvices.InvoicesTaxes')->deleteAll([
-                'id IN' => $entity->deleteTaxesList,
-            ]);
-        }
-        if (!empty($entity->deleteItemsList)) {
-            TableRegistry::getTableLocator()->get('LilInvices.InvoicesItems')->deleteAll([
-                'id IN' => $entity->deleteItemsList,
-            ]);
-        }
+        return true;
     }
 
     /**

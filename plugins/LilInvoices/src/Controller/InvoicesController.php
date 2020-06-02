@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace LilInvoices\Controller;
 
+use Cake\Cache\Cache;
 use Cake\Core\Plugin;
 use Cake\Event\EventInterface;
 use Cake\Http\Exception\NotFoundException;
@@ -89,8 +90,7 @@ class InvoicesController extends AppController
         $params = $this->Invoices->filter($filter);
 
         $query = $this->Authorization->applyScope($this->Invoices->find())
-            ->where($params['conditions'])
-            ->contain($params['contain']);
+            ->where($params['conditions']);
 
         // use original query for SUM()
         $sumQuery = clone $query;
@@ -103,7 +103,8 @@ class InvoicesController extends AppController
 
         // add contain and order to original query
         $query
-            ->order($params['order']);
+            ->order($params['order'])
+            ->contain($params['contain']);
 
         $data = $this->paginate($query);
 
@@ -138,10 +139,15 @@ class InvoicesController extends AppController
         $LinksTable = TableRegistry::getTableLocator()->get('LilInvoices.InvoicesLinks');
         $links = $LinksTable->forInvoice($id);
 
-        $counters = TableRegistry::getTableLocator()->get('LilInvoices.InvoicesCounters')
-            ->find()
-            ->where(['owner_id' => $this->getCurrentUser()->get('company_id'), 'active' => true])
-            ->all();
+        $controller = $this;
+        $counters = Cache::remember('LilInvoices.sidebarCounters', function () use ($controller) {
+            $InvoicesCounters = TableRegistry::getTableLocator()->get('LilInvoices.InvoicesCounters');
+
+            return $controller->Authorization->applyScope($InvoicesCounters->find(), 'index')
+                ->where(['active' => true])
+                ->order(['active', 'kind DESC', 'title'])
+                ->all();
+        }, 'Lil');
 
         $currentCounter = $invoice->invoices_counter->id;
 
@@ -179,6 +185,12 @@ class InvoicesController extends AppController
         $this->Authorization->authorize($invoice);
 
         if ($this->getRequest()->is(['patch', 'post', 'put'])) {
+            // patch invoice and existing sub elements
+            $assocModels = ['InvoicesTaxes', 'InvoicesItems', 'InvoicesAttachments', 'Issuers', 'Buyers', 'Receivers'];
+            $invoice = $this->Invoices->patchEntity($invoice, $this->getRequest()->getData(), [
+                'associated' => $assocModels,
+            ]);
+
             if (!$invoice->getErrors()) {
                 // commit/rollback session
                 $conn = $this->Invoices->getConnection();
@@ -194,9 +206,7 @@ class InvoicesController extends AppController
                     unset($invoice->invoices_attachments);
                 }
 
-                $saveOptions = ['uploadedFilename' => $tmpName];
-
-                if ($this->Invoices->save($invoice, $saveOptions)) {
+                if ($this->Invoices->save($invoice, ['uploadedFilename' => $tmpName])) {
                     $conn->commit();
                     if ($this->getRequest()->is('ajax') || $this->getRequest()->is('lilScan')) {
                         $response = $this->getResponse()
@@ -237,15 +247,19 @@ class InvoicesController extends AppController
 
         $projects = [];
         if (Plugin::isLoaded('LilProjects')) {
-            /** @var \LilProjects\Model\Table\ProjectsTable $ProjectsTable */
-            $ProjectsTable = TableRegistry::getTableLocator()->get('LilProjects.Projects');
-            $projects = $this->Authorization->applyScope($ProjectsTable->find(), 'index')
-                ->where(['active' => true])
-                ->order(['no DESC', 'title'])
-                ->combine('id', function ($entity) {
-                    return $entity;
-                })
-                ->toArray();
+            $controller = $this;
+            $counters = Cache::remember('LilInvoices.projectsList', function ($controller) {
+                /** @var \LilProjects\Model\Table\ProjectsTable $ProjectsTable */
+                $ProjectsTable = TableRegistry::getTableLocator()->get('LilProjects.Projects');
+
+                return $controller->Authorization->applyScope($ProjectsTable->find(), 'index')
+                    ->where(['active' => true])
+                    ->order(['no DESC', 'title'])
+                    ->combine('id', function ($entity) {
+                        return $entity;
+                    })
+                    ->toArray();
+            }, 'Lil');
         }
 
         /** @var \LilInvoices\Model\Table\VatsTable $VatsTable */
@@ -659,34 +673,6 @@ class InvoicesController extends AppController
             }
 
             $invoice->no = $InvoicesCounters->generateNo($invoice->counter_id);
-        }
-
-        if ($this->getRequest()->is(['patch', 'post', 'put'])) {
-            // patch invoice and existing sub elements
-            $assocModels = ['InvoicesTaxes', 'InvoicesItems', 'InvoicesAttachments', 'Issuers', 'Buyers', 'Receivers'];
-            $invoice = $this->Invoices->patchEntity($invoice, $this->getRequest()->getData(), [
-                'associated' => $assocModels,
-            ]);
-
-            if (!empty($invoice->invoices_taxes)) {
-                $invoice->net_total = 0;
-                foreach ($invoice->invoices_taxes as $tax) {
-                    $invoice->net_total += $tax->base;
-                }
-            }
-
-            $invoice->setDirty('invoices_taxes', true);
-
-            if (!empty($invoice->invoices_items)) {
-                $invoice->total = 0;
-                $invoice->net_total = 0;
-                foreach ($invoice->invoices_items as $item) {
-                    $invoice->net_total += $item->net_total;
-                    $invoice->total += $item->total;
-                }
-            }
-
-            $invoice->setDirty('invoices_items', true);
         }
 
         return $invoice;

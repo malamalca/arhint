@@ -545,6 +545,13 @@ class InvoicesControllerTest extends IntegrationTestCase
         // Set session data
         $this->login(USER_ADMIN);
 
+        $invoices = TableRegistry::getTableLocator()->get('LilInvoices.Invoices');
+        $invoice = $invoices->get('d0d59a31-6de7-4eb4-8230-ca09113a7fe6', ['contain' => ['InvoicesItems']]);
+
+        $this->assertEquals(1, count($invoice->invoices_items));
+        $this->assertEquals(290, $invoice->net_total);
+        $this->assertEquals(353.8, $invoice->total);
+
         $data = [
             'id' => 'd0d59a31-6de7-4eb4-8230-ca09113a7fe6',
             'tpl_header_id' => 'a08d3c00-7443-40e0-ac62-0caca1747e24',
@@ -562,7 +569,8 @@ class InvoicesControllerTest extends IntegrationTestCase
         $invoice = $invoices->get('d0d59a31-6de7-4eb4-8230-ca09113a7fe6', ['contain' => ['InvoicesItems']]);
 
         $this->assertEquals(1, count($invoice->invoices_items));
-        $this->assertEquals(1, $invoice->invoices_items[0]->id);
+        $this->assertEquals(290, $invoice->net_total);
+        $this->assertEquals(353.8, $invoice->total);
 
         // received
         $data = [

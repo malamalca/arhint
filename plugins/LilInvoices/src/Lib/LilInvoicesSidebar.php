@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace LilInvoices\Lib;
 
+use Cake\Cache\Cache;
 use Cake\ORM\TableRegistry;
 use Lil\Lib\Lil;
 
@@ -164,14 +165,15 @@ class LilInvoicesSidebar
         if (($request->getParam('plugin') == 'LilInvoices')) {
             ////////////////////////////////////////////////////////////////////////////////////////
             // Fetch counters
-            //if (!$counters = Cache::read('LilInvoices.sidebarCounters', 'Lil')) {
-            $InvoicesCounters = TableRegistry::getTableLocator()->get('LilInvoices.InvoicesCounters');
-            $counters = $controller->Authorization->applyScope($InvoicesCounters->find(), 'index')
-                ->where(['active' => true])
-                ->order(['active', 'kind DESC', 'title'])
-                ->all();
-            //  Cache::write('LilInvoices.sidebarCounters', $counters, 'Lil');
-            //}
+            $counters = Cache::remember('LilInvoices.sidebarCounters', function () use ($controller) {
+                /** @var \LilInvoices\Model\Table\InvoicesCountersTable $InvoicesCounters */
+                $InvoicesCounters = TableRegistry::getTableLocator()->get('LilInvoices.InvoicesCounters');
+
+                return $controller->Authorization->applyScope($InvoicesCounters->find(), 'index')
+                    ->where(['active' => true])
+                    ->order(['active', 'kind DESC', 'title'])
+                    ->all();
+            }, 'Lil');
 
             // determine current counter
             $isActionIndex = $request->getParam('controller') == 'Invoices' && $request->getParam('action') == 'index';
