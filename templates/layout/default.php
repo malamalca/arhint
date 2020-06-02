@@ -11,8 +11,6 @@ use Cake\Routing\Router;
     <title>
         <?= strip_tags($this->fetch('title')) ?>
     </title>
-    <?= $this->Html->meta('icon') ?>
-
     <?= $this->Html->css('main.css') ?>
 
     <?= $this->fetch('meta') ?>
@@ -54,7 +52,7 @@ use Cake\Routing\Router;
                                 'controller' => 'Users',
                                 'action' => 'avatar',
                                 $this->getCurrentUser() ? $this->getCurrentUser()->get('id') : null,
-                                '_ext' => 'png'
+                                //'_ext' => 'png'
                             ],
                             true
                         ),
