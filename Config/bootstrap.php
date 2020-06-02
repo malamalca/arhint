@@ -158,7 +158,7 @@ if ($fullBaseUrl) {
 }
 unset($fullBaseUrl);
 
-Router::extensions(['json', 'xml', 'pdf', 'txt']);
+Router::extensions(['json', 'xml', 'pdf', 'txt', 'png']);
 
 Cache::setConfig(Configure::consume('Cache'));
 ConnectionManager::setConfig(Configure::consume('Datasources'));
