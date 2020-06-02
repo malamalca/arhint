@@ -52,7 +52,7 @@ use Cake\Routing\Router;
                                 'controller' => 'Users',
                                 'action' => 'avatar',
                                 $this->getCurrentUser() ? $this->getCurrentUser()->get('id') : null,
-                                //'_ext' => 'png'
+                                '_ext' => 'png'
                             ],
                             true
                         ),
