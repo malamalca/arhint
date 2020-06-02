@@ -346,9 +346,10 @@ class UsersController extends AppController
             $imageData = file_get_contents(constant('WWW_ROOT') . 'img' . DS . 'avatar.png');
         }
 
-        $response = $this->response;
-        $response = $response->withStringBody($imageData);
-        $response = $response->withType('png');
+        $response = $this->response
+            ->withStringBody($imageData)
+            ->withType('png')
+            ->withModified($user->modified);
 
         return $response;
     }
