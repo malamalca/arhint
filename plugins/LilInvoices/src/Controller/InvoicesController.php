@@ -140,14 +140,18 @@ class InvoicesController extends AppController
         $links = $LinksTable->forInvoice($id);
 
         $controller = $this;
-        $counters = Cache::remember('LilInvoices.sidebarCounters', function () use ($controller) {
-            $InvoicesCounters = TableRegistry::getTableLocator()->get('LilInvoices.InvoicesCounters');
+        $counters = Cache::remember(
+            'LilInvoices.sidebarCounters.' . $this->getCurrentUser()->id,
+            function () use ($controller) {
+                $InvoicesCounters = TableRegistry::getTableLocator()->get('LilInvoices.InvoicesCounters');
 
-            return $controller->Authorization->applyScope($InvoicesCounters->find(), 'index')
-                ->where(['active' => true])
-                ->order(['active', 'kind DESC', 'title'])
-                ->all();
-        }, 'Lil');
+                return $controller->Authorization->applyScope($InvoicesCounters->find(), 'index')
+                    ->where(['active' => true])
+                    ->order(['active', 'kind DESC', 'title'])
+                    ->all();
+            },
+            'Lil'
+        );
 
         $currentCounter = $invoice->invoices_counter->id;
 
@@ -248,18 +252,22 @@ class InvoicesController extends AppController
         $projects = [];
         if (Plugin::isLoaded('LilProjects')) {
             $controller = $this;
-            $counters = Cache::remember('LilInvoices.projectsList', function ($controller) {
-                /** @var \LilProjects\Model\Table\ProjectsTable $ProjectsTable */
-                $ProjectsTable = TableRegistry::getTableLocator()->get('LilProjects.Projects');
+            $counters = Cache::remember(
+                'LilInvoices.projectsList' . $this->getCurrentUser()->id,
+                function ($controller) {
+                    /** @var \LilProjects\Model\Table\ProjectsTable $ProjectsTable */
+                    $ProjectsTable = TableRegistry::getTableLocator()->get('LilProjects.Projects');
 
-                return $controller->Authorization->applyScope($ProjectsTable->find(), 'index')
-                    ->where(['active' => true])
-                    ->order(['no DESC', 'title'])
-                    ->combine('id', function ($entity) {
-                        return $entity;
-                    })
-                    ->toArray();
-            }, 'Lil');
+                    return $controller->Authorization->applyScope($ProjectsTable->find(), 'index')
+                        ->where(['active' => true])
+                        ->order(['no DESC', 'title'])
+                        ->combine('id', function ($entity) {
+                            return $entity;
+                        })
+                        ->toArray();
+                },
+                'Lil'
+            );
         }
 
         /** @var \LilInvoices\Model\Table\VatsTable $VatsTable */

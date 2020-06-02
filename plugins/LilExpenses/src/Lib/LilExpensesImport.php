@@ -34,9 +34,12 @@ class LilExpensesImport
      */
     public function getPayments()
     {
-        $cachedPayments = Cache::remember('LilExpenses.sepaImportedPayments', function () {
-            return [];
-        });
+        $cachedPayments = Cache::remember(
+            'LilExpenses.sepaImportedPayments' . $this->ownerId,
+            function () {
+                return [];
+            }
+        );
 
         if (!empty($cachedPayments)) {
             $Payments = TableRegistry::getTableLocator()->get('LilExpenses.Payments');
@@ -62,7 +65,7 @@ class LilExpensesImport
      */
     public function clear()
     {
-        Cache::delete('LilExpenses.sepaImportedPayments');
+        Cache::delete('LilExpenses.sepaImportedPayments' . $this->ownerId);
     }
 
     /**
@@ -152,7 +155,7 @@ class LilExpensesImport
                 $cachedPayments[$payment['id']] = $payment;
             }
 
-            Cache::write('LilExpenses.sepaImportedPayments', $cachedPayments);
+            Cache::write('LilExpenses.sepaImportedPayments' . $this->ownerId, $cachedPayments);
 
             return true;
         }

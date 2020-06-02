@@ -3,3 +3,13 @@
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
 </IfModule>
+
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ############################################
+    ## Add default Expires header
+    ## http://developer.yahoo.com/performance/rules.html#expires
+    <FilesMatch "\.(jpg|jpeg|png|gif|ico)$">
+        ExpiresDefault "access plus 1 year"
+    </FilesMatch>
+</IfModule>

@@ -165,15 +165,19 @@ class LilInvoicesSidebar
         if (($request->getParam('plugin') == 'LilInvoices')) {
             ////////////////////////////////////////////////////////////////////////////////////////
             // Fetch counters
-            $counters = Cache::remember('LilInvoices.sidebarCounters', function () use ($controller) {
-                /** @var \LilInvoices\Model\Table\InvoicesCountersTable $InvoicesCounters */
-                $InvoicesCounters = TableRegistry::getTableLocator()->get('LilInvoices.InvoicesCounters');
+            $counters = Cache::remember(
+                'LilInvoices.sidebarCounters' . $controller->getCurrentUser()->id,
+                function () use ($controller) {
+                    /** @var \LilInvoices\Model\Table\InvoicesCountersTable $InvoicesCounters */
+                    $InvoicesCounters = TableRegistry::getTableLocator()->get('LilInvoices.InvoicesCounters');
 
-                return $controller->Authorization->applyScope($InvoicesCounters->find(), 'index')
-                    ->where(['active' => true])
-                    ->order(['active', 'kind DESC', 'title'])
-                    ->all();
-            }, 'Lil');
+                    return $controller->Authorization->applyScope($InvoicesCounters->find(), 'index')
+                        ->where(['active' => true])
+                        ->order(['active', 'kind DESC', 'title'])
+                        ->all();
+                },
+                'Lil'
+            );
 
             // determine current counter
             $isActionIndex = $request->getParam('controller') == 'Invoices' && $request->getParam('action') == 'index';

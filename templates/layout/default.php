@@ -11,6 +11,8 @@ use Cake\Routing\Router;
     <title>
         <?= strip_tags($this->fetch('title')) ?>
     </title>
+    <?= $this->Html->meta('icon') ?>
+
     <?= $this->Html->css('main.css') ?>
 
     <?= $this->fetch('meta') ?>

@@ -349,8 +349,7 @@ class UsersController extends AppController
         $response = $this->response
             ->withStringBody($imageData)
             ->withType('png')
-            ->withModified($user->modified)
-            ->withCache('-1 minute', '+30 days');
+            ->withCache('-1 day', '+30 days');
 
         return $response;
     }
