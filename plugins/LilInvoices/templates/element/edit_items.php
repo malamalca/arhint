@@ -68,6 +68,7 @@ foreach ($invoices_items as $k => $item) {
                 'label' => false,
                 'size' => 30,
                 'class' => 'invoices-item-descript',
+                'autocomplete' => 'off',
                 'error' => __d('lil_invoices', 'Blank'),
             ],
         ],

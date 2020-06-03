@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace LilInvoices\Controller;
 
+use Cake\Cache\Cache;
 use Cake\ORM\TableRegistry;
 
 /**
@@ -77,6 +78,8 @@ class InvoicesCountersController extends AppController
                 if ($this->InvoicesCounters->save($counter)) {
                     $this->Flash->success(__d('lil_invoices', 'The invoices counter has been saved.'));
 
+                    Cache::delete('LilInvoices.sidebarCounters' . $this->getCurrentUser()->id, 'Lil');
+
                     return $this->redirect(['action' => 'index']);
                 }
             }
@@ -105,6 +108,8 @@ class InvoicesCountersController extends AppController
 
         if ($this->InvoicesCounters->delete($invoicesCounter)) {
             $this->Flash->success(__d('lil_invoices', 'The invoices counter has been deleted.'));
+
+            Cache::delete('LilInvoices.sidebarCounters' . $this->getCurrentUser()->id, 'Lil');
         } else {
             $this->Flash->error(__d('lil_invoices', 'The invoices counter could not be deleted. Please, try again.'));
         }

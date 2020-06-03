@@ -29,6 +29,8 @@ jQuery.fn.InvoiceItemEditor = function (pOptions) {
 
         $this.recalculateRow(row);
 
+        $('input.invoices-item-descript', row).focus();
+
         return false;
     }
 
