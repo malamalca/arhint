@@ -237,7 +237,7 @@ echo $this->Lil->index($invoices_index, 'LilInvoices.Invoices.index');
                 let tBody = response.substring(response.indexOf("<table class=\"index"), response.indexOf("</table>")+8);
                 $("#AdminInvoicesIndex").html(tBody);
             });
-        });
+        }).focus();
 
 
         ////////////////////////////////////////////////////////////////////////////////////////////

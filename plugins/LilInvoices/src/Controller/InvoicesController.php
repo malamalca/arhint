@@ -254,7 +254,7 @@ class InvoicesController extends AppController
             $controller = $this;
             $counters = Cache::remember(
                 'LilInvoices.projectsList' . $this->getCurrentUser()->id,
-                function ($controller) {
+                function () use ($controller) {
                     /** @var \LilProjects\Model\Table\ProjectsTable $ProjectsTable */
                     $ProjectsTable = TableRegistry::getTableLocator()->get('LilProjects.Projects');
 
