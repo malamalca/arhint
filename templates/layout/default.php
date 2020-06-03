@@ -19,7 +19,7 @@ use Cake\Routing\Router;
     <?= $this->fetch('css') ?>
 
     <?= $this->Html->script('/lil/js/jquery.min.js') ?>
-    <?= $this->Html->script('/js/vendor/Materialize/bin/materialize.js') ?>
+    <?= $this->Html->script('/js/vendor/Materialize/bin/materialize.min.js') ?>
     <?= $this->Html->script('/lil/js/lil_float.js') ?>
     <?= $this->Html->script('/lil/js/lil_date.js') ?>
     <?= $this->Html->script('monthpicker.js') ?>
