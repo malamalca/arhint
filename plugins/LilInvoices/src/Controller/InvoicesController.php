@@ -252,7 +252,7 @@ class InvoicesController extends AppController
         $projects = [];
         if (Plugin::isLoaded('LilProjects')) {
             $controller = $this;
-            $counters = Cache::remember(
+            $projects = Cache::remember(
                 'LilInvoices.projectsList' . $this->getCurrentUser()->id,
                 function () use ($controller) {
                     /** @var \LilProjects\Model\Table\ProjectsTable $ProjectsTable */

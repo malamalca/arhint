@@ -305,8 +305,8 @@ class InvoicesTable extends Table
         $query = $this->find();
         $query
             ->select([
-                'start' => $query->func()->min('Invoices.dat_issue'),
-                'end' => $query->func()->max('Invoices.dat_issue'),
+                'start' => $query->func()->min('Invoices.dat_issue', ['string']),
+                'end' => $query->func()->max('Invoices.dat_issue', ['string']),
             ])
             ->where(['Invoices.counter_id' => $counterId]);
         $ret = $query->first()->toArray();
@@ -314,12 +314,12 @@ class InvoicesTable extends Table
         if (empty($ret['start'])) {
             $ret['start'] = new FrozenDate();
         } else {
-            $ret['start'] = FrozenDate::parse((string)$ret['start']);
+            $ret['start'] = FrozenDate::parse($ret['start']);
         }
         if (empty($ret['end'])) {
             $ret['end'] = new FrozenDate();
         } else {
-            $ret['end'] = FrozenDate::parse((string)$ret['end']);
+            $ret['end'] = FrozenDate::parse($ret['end']);
         }
 
         return $ret;

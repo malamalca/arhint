@@ -188,12 +188,12 @@ class PaymentsTable extends Table
     {
         $q = $this->find();
 
-        $r = $q->select(['min_date' => $q->func()->min('dat_happened')])
+        $r = $q->select(['min_date' => $q->func()->min('dat_happened', ['string'])])
             ->where(['owner_id' => $ownerId])
             ->first();
 
         if (!empty($r->min_date)) {
-            return substr($r->min_date, 0, 4);
+            return substr((string)$r->min_date, 0, 4);
         }
 
         return date('Y');

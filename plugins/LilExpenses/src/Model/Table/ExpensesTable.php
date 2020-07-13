@@ -199,7 +199,7 @@ class ExpensesTable extends Table
         $q = $this->find();
 
         $r = $q->select(['min_date' => $q->func()
-            ->min('dat_happened')])
+            ->min('dat_happened', ['string'])])
             ->where(['owner_id' => $ownerId])
             ->first();
 
