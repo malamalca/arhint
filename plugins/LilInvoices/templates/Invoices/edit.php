@@ -27,7 +27,7 @@ $invoiceEdit = [
         'editPreview' => [
             'title' => __d('lil_invoices', 'Preview'),
             'visible' => true,
-            'url' => "javascript:void();",
+            'url' => 'javascript:void();',
             'params' => ['id' => 'MenuEditPreview'],
         ],
     ],
@@ -57,7 +57,7 @@ $invoiceEdit = [
                 'method' => 'control',
                 'parameters' => ['referer', [
                     'type' => 'hidden',
-                    'default' => $this->getRequest()->getQuery('redirect')
+                    'default' => $this->getRequest()->getQuery('redirect'),
                 ]],
             ],
             'id' => [
@@ -126,7 +126,7 @@ $invoiceEdit = [
                     'field' => $client . '.title',
                     [
                         'label' => ($counter->kind == 'issued' ? __d('lil_invoices', 'Receiver') : __d('lil_invoices', 'Issuer')) . ':',
-                        'autocomplete' => 'off'
+                        'autocomplete' => 'off',
                     ],
                 ],
             ],
@@ -163,12 +163,12 @@ $invoiceEdit = [
                         'type' => 'select',
                         'label' => [
                             'text' => __d('lil_invoices', 'Project') . ':',
-                            'class' => 'active'
+                            'class' => 'active',
                         ],
                         'options' => $projects,
                         'empty' => '-- ' . __d('lil_invoices', 'no project') . ' --',
                         'class' => 'browser-default',
-                        'default' => $this->getRequest()->getQuery('project')
+                        'default' => $this->getRequest()->getQuery('project'),
                     ],
                 ],
             ],

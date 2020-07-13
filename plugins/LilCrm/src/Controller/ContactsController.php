@@ -184,7 +184,7 @@ class ContactsController extends AppController
             if (!$contact->getErrors() && $this->Contacts->save($contact)) {
                 if ($this->getRequest()->is('ajax')) {
                     return $this->response
-                        ->withType("application/json")
+                        ->withType('application/json')
                         ->withStringBody((string)json_encode($contact));
                 }
 

@@ -55,7 +55,7 @@ $editAddressForm = [
                         'label' => __d('lil_crm', 'Title') . ':',
                         'error' => __d('lil_crm', 'Title is required.'),
                         'id' => 'contacts-title',
-                        'autocomplete' => 'off'
+                        'autocomplete' => 'off',
                     ],
                 ],
             ],
@@ -107,13 +107,13 @@ $editAddressForm = [
                         'type' => 'select',
                         'label' => [
                             'text' => __d('lil_crm', 'Country') . ':',
-                            'class' => 'active'
+                            'class' => 'active',
                         ],
                         'disabled' => $address->contacts_address_id ? 'disabled' : '',
                         'default' => Configure::read('LilCrm.defaultCountry'),
                         'options' => Configure::read('LilCrm.countries'),
                         'empty' => true,
-                        'class' => 'browser-default'
+                        'class' => 'browser-default',
                     ],
                 ],
             ],

@@ -14,7 +14,6 @@ use Cake\Validation\Validator;
  * Contacts Model
  *
  * @method bool touch(\LilCrm\Model\Entity\Contact $entity)
- *
  * @property \LilCrm\Model\Table\ContactsAccountsTable $ContactsAccounts
  * @property \LilCrm\Model\Table\ContactsAddressesTable $ContactsAddresses
  * @property \LilCrm\Model\Table\ContactsEmailsTable $ContactsEmails

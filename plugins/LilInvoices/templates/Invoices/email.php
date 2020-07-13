@@ -1,6 +1,5 @@
 <?php
 
-use Cake\Routing\Router;
 
 $send_invoice = [
     'title_for_layout' => __d('lil_invoices', 'Email Invoice'),
@@ -99,7 +98,7 @@ foreach ($attachments as $invoice_id => $invoice_title) {
     );
     $invoices_display[] = [
         'method' => 'hidden',
-        'parameters' => ['invoices', ['value' => $invoice_id, 'id' => 'attachment-' . $invoice_id]]
+        'parameters' => ['invoices', ['value' => $invoice_id, 'id' => 'attachment-' . $invoice_id]],
     ];
 }
 $invoices_display[] = '</div>';

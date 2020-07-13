@@ -1,6 +1,7 @@
 <?php
 
 use Cake\Routing\Router;
+
 $attachmentScan = [
     'title_for_layout' => __d('lil_invoices', 'Scan an Attachment'),
     'form' => [
@@ -31,13 +32,13 @@ $attachmentScan = [
             ],
             'scanned_unlock' => [
                 'method' => 'unlockField',
-                'parameters' => ['scanned']
+                'parameters' => ['scanned'],
             ],
             'submit' => [
                 'method' => 'button',
                 'parameters' => [
                     __d('lil_invoices', 'Scan a Document'),
-                    ['id' => 'DoScan']
+                    ['id' => 'DoScan'],
                 ],
             ],
             'form_end' => [

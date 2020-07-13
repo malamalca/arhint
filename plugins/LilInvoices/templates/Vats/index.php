@@ -15,7 +15,7 @@ $vatIndex = [
     ],
     'table' => [
         'parameters' => [
-            'width' => '100%', 'cellspacing' => 0, 'cellpadding' => 0, 'id' => 'AdminVatsIndex'
+            'width' => '100%', 'cellspacing' => 0, 'cellpadding' => 0, 'id' => 'AdminVatsIndex',
         ],
         'head' => ['rows' => [['columns' => [
             'descript' => __d('lil_invoices', 'Description'),

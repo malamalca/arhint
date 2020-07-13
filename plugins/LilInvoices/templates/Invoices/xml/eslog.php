@@ -1,13 +1,12 @@
 <?php
     use Cake\Core\Configure;
-    use Cake\Routing\Router;
-    use Cake\Utility\Xml;
+        use Cake\Utility\Xml;
 
     $transformed = ['IzdaniRacunEnostavni' => [
         'xmlns:ds' => 'http://www.w3.org/2000/09/xmldsig#',
         'xmlns:xds' => 'http://uri.etsi.org/01903/v1.1.1#',
         'xmlns:xsi' => 'http://www.w3.org/2001/XMLSchema-instance',
-        '@xsi:noNamespaceSchemaLocation' => "http://www.gzs.si/e-poslovanje/sheme/eSLOG_1-6_EnostavniRacun.xsd",
+        '@xsi:noNamespaceSchemaLocation' => 'http://www.gzs.si/e-poslovanje/sheme/eSLOG_1-6_EnostavniRacun.xsd',
     ]];
 
     // find bank name for current users' company
@@ -129,7 +128,7 @@
         foreach ((array)$invoice->invoices_links as $link) {
             $transformed['IzdaniRacunEnostavni']['Racun'][$i]['ReferencniDokumenti'][] = [
                 '@VrstaDokumenta' => $link->invoice->doc_type,
-                'StevilkaDokumenta' => $link->invoice->no
+                'StevilkaDokumenta' => $link->invoice->no,
             ];
         }
 
@@ -439,7 +438,7 @@
         $descript = explode("\n", $this->Lil->mbWordWrap($invoice->descript, 70));
 
         foreach ($descript as $k => $d_line) {
-            if (($k % 4) == 0) {
+            if ($k % 4 == 0) {
                 $ln_cnt = 2;
                 $dodatniTextIndex++;
 

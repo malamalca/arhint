@@ -15,9 +15,8 @@ use Cake\Validation\Validator;
 /**
  * Expenses Model
  *
- * @property \LilExpenses\Model\Table\PaymentsTable|\Cake\ORM\Association\BelongsToMany $Payments
- * @property \LilInvoices\Model\Table\InvoicesTable|\Cake\ORM\Association\BelongsTo $Invoices
- *
+ * @property \LilExpenses\Model\Table\PaymentsTable $Payments
+ * @property \LilInvoices\Model\Table\InvoicesTable $Invoices
  * @method \LilExpenses\Model\Entity\Expense get(string $id, array $data = [])
  * @method \LilExpenses\Model\Entity\Expense newEmptyEntity()
  * @method \LilExpenses\Model\Entity\Expense patchEntity($expense, array $data = [])

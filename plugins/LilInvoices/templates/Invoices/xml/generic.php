@@ -1,7 +1,6 @@
 <?php
     use Cake\Core\Configure;
-    use Cake\Routing\Router;
-    use Cake\Utility\Xml;
+        use Cake\Utility\Xml;
 
     $Lil = $this->loadHelper('Lil.Lil');
 

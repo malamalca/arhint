@@ -1,7 +1,4 @@
 <?php
-use Cake\Core\Configure;
-use Cake\Routing\Router;
-use Cake\Utility\Inflector;
 
 $invoicesTable = [
     'data' => $data,

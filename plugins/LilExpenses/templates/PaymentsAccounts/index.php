@@ -14,7 +14,7 @@
         ],
         'table' => [
             'parameters' => [
-                'width' => '100%', 'cellspacing' => 0, 'cellpadding' => 0, 'id' => 'PaymentsAccountsIndex'
+                'width' => '100%', 'cellspacing' => 0, 'cellpadding' => 0, 'id' => 'PaymentsAccountsIndex',
             ],
             'head' => ['rows' => [['columns' => [
                 'title' => __d('lil_expenses', 'Title'),

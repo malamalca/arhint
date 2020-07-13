@@ -7,6 +7,7 @@ class RemoveModelFromAttachments extends AbstractMigration
 {
     /**
      * Up Method.
+     *
      * @return void
      */
     public function up()
@@ -22,6 +23,7 @@ class RemoveModelFromAttachments extends AbstractMigration
 
     /**
      * Down Method.
+     *
      * @return void
      */
     public function down()

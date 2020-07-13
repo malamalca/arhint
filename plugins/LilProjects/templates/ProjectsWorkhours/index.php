@@ -15,13 +15,13 @@ $tableIndex = [
                 'plugin' => 'LilProjects',
                 'controller' => 'ProjectsWorkhours',
                 'action' => 'add',
-                '?' => ['project' => $project->id ?: null]
+                '?' => ['project' => $project->id ?: null],
             ],
         ],
     ],
     'table' => [
         'parameters' => [
-            'width' => '100%', 'cellspacing' => 0, 'cellpadding' => 0
+            'width' => '100%', 'cellspacing' => 0, 'cellpadding' => 0,
         ],
         'head' => ['rows' => [['columns' => [
             'user' => __d('lil_projects', 'User'),

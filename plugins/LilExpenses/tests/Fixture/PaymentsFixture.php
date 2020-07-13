@@ -5,7 +5,6 @@ use Cake\TestSuite\Fixture\TestFixture;
 
 /**
  * PaymentsFixture
- *
  */
 class PaymentsFixture extends TestFixture
 {

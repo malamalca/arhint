@@ -2,14 +2,14 @@
 if ($invoices->count() > 0) {
     $pagingUrl = [
         'action' => 'view',
-        $entityId
+        $entityId,
     ];
     $pagingDirection = $this->getRequest()->getQuery('invoices.direction', 'asc');
     $pagingDirection = $pagingDirection == 'asc' ? 'desc' : null;
 
     $paymentsTable = [
         'parameters' => [
-            'width' => '100%', 'cellspacing' => 0, 'cellpadding' => 0, 'id' => 'InvoicesList', 'width' => '700'
+            'width' => '100%', 'cellspacing' => 0, 'cellpadding' => 0, 'id' => 'InvoicesList', 'width' => '700',
         ],
         'head' => ['rows' => [['columns' => [
             'no' => [
@@ -49,7 +49,7 @@ if ($invoices->count() > 0) {
                         'first' => '<<',
                         'last' => '>>',
                         'modulus' => 3,
-                        'url' => $pagingUrl
+                        'url' => $pagingUrl,
                     ]) .
                     '</ul>',
             ],
@@ -99,7 +99,7 @@ if ($invoices->count() > 0) {
                     [
                         'title' => __d('lil_invoices', 'Download Attachment(s)'),
                         'escape' => false,
-                        'class' => 'btn btn-small btn-floating waves-effect waves-light waves-circle'
+                        'class' => 'btn btn-small btn-floating waves-effect waves-light waves-circle',
                     ]
                 ),
             ],

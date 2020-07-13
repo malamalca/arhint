@@ -5,7 +5,6 @@ use Cake\TestSuite\Fixture\TestFixture;
 
 /**
  * VatsFixture
- *
  */
 class VatsFixture extends TestFixture
 {

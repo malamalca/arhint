@@ -5,7 +5,6 @@ use Cake\TestSuite\Fixture\TestFixture;
 
 /**
  * ProjectsWorkhoursFixture
- *
  */
 class ProjectsWorkhoursFixture extends TestFixture
 {

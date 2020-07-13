@@ -29,7 +29,7 @@ class InvoicesAttachmentsControllerTest extends IntegrationTestCase
         $this->configRequest([
             'environment' => [
                 'SERVER_NAME' => 'localhost',
-            ]
+            ],
         ]);
     }
 

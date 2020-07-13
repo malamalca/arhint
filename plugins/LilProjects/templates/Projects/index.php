@@ -24,14 +24,14 @@ $statusLink = $this->Html->link(
 $popupStatus = ['items' => [[
     'title' => __d('lil_projects', 'All Statuses'),
     'url' => ['?' => array_merge($this->getRequest()->getQuery(), ['status' => null])],
-    'params' => ['class' => 'nowrap']
+    'params' => ['class' => 'nowrap'],
 ]]];
 foreach ($projectsStatuses as $statusId => $statusTitle) {
     $popupStatus['items'][] = [
         'title' => $statusTitle,
         'url' => ['?' => array_merge($this->getRequest()->getQuery(), ['status' => $statusId])],
         'active' => ($activeStatus == $statusId),
-        'params' => ['class' => 'nowrap']
+        'params' => ['class' => 'nowrap'],
     ];
 }
 $popupStatus = $this->Lil->popup('status', $popupStatus, true);
@@ -45,8 +45,8 @@ $index = [
             'title' => __d('lil_projects', 'Add'),
             'visible' => true,
             'url' => [
-                'action' => 'add'
-            ]
+                'action' => 'add',
+            ],
         ],
     ],
     'actions' => ['lines' => [$popupActive, $popupStatus]],
@@ -54,7 +54,7 @@ $index = [
         'pre' => $this->Arhint->searchPanel($this->getRequest()->getQuery('search', '')),
         'parameters' => [
             'width' => '100%', 'cellspacing' => 0, 'cellpadding' => 0,
-            'class' => 'index-static', 'id' => 'ProjectsIndex'
+            'class' => 'index-static', 'id' => 'ProjectsIndex',
         ],
         'head' => ['rows' => [[
             'columns' => [
@@ -63,7 +63,7 @@ $index = [
                 'status' => ['params' => ['class' => 'center hide-on-small-only'], 'html' => __d('lil_projects', 'Status')],
                 'actions' => '',
                 'log' => ['params' => ['class' => 'left'], 'html' => __d('lil_projects', 'Last Log')],
-            ]
+            ],
         ]]],
         'foot' => ['rows' => [['columns' => [
             'paginator' => [
@@ -71,10 +71,10 @@ $index = [
                 'html' => '<ul class="paginator">' . $this->Paginator->numbers([
                     'first' => '<<',
                     'last' => '>>',
-                    'modulus' => 3]) . '</ul>'
-            ]
-        ]]]]
-    ]
+                    'modulus' => 3]) . '</ul>',
+            ],
+        ]]]],
+    ],
 ];
 
 foreach ($projects as $project) {
@@ -97,7 +97,7 @@ foreach ($projects as $project) {
                 //['action' => 'picture', $project->id, 'thumb'],
                 'data:image/png;base64, ' . base64_encode(LilProjectsFuncs::thumb($project)),
                 ['style' => 'height: 50px;', 'class' => 'project-avatar', 'quote' => false]
-            )
+            ),
         ],
         'title' =>
         $this->Html->link($project->no, ['action' => 'view', $project->id], ['class' => 'small']) . '<br />' .

@@ -86,7 +86,7 @@ foreach ($invoices_items as $k => $item) {
                 'size' => 5,
                 'class' => 'invoices-item-qty',
                 'error' => __d('lil_invoices', 'Blank'),
-                'id' => 'invoice-invoices-items-' . $k . '-qty'
+                'id' => 'invoice-invoices-items-' . $k . '-qty',
             ],
         ],
     ];
@@ -102,7 +102,7 @@ foreach ($invoices_items as $k => $item) {
                 'size' => 5,
                 'class' => 'invoices-item-unit',
                 'error' => __d('lil_invoices', 'Blank'),
-                'id' => 'invoice-invoices-items-' . $k . '-unit'
+                'id' => 'invoice-invoices-items-' . $k . '-unit',
             ],
         ],
     ];
@@ -119,7 +119,7 @@ foreach ($invoices_items as $k => $item) {
                 'size' => 12,
                 'class' => 'invoices-item-price',
                 'error' => __d('lil_invoices', 'Blank'),
-                'id' => 'invoice-invoices-items-' . $k . '-price'
+                'id' => 'invoice-invoices-items-' . $k . '-price',
             ],
         ],
     ];
@@ -136,7 +136,7 @@ foreach ($invoices_items as $k => $item) {
                 'size' => 5,
                 'class' => 'invoices-item-discount',
                 'error' => __d('lil_invoices', 'Blank'),
-                'id' => 'invoice-invoices-items-' . $k . '-discount'
+                'id' => 'invoice-invoices-items-' . $k . '-discount',
             ],
         ],
     ];
@@ -185,7 +185,7 @@ foreach ($invoices_items as $k => $item) {
                 'value' => $item->vat_id,
                 'class' => 'invoices-item-vat_id browser-default',
                 'empty' => true,
-                'id' => 'invoice-invoices-items-' . $k . '-vat-id'
+                'id' => 'invoice-invoices-items-' . $k . '-vat-id',
             ],
         ],
     ];

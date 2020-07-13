@@ -15,7 +15,7 @@ $tableIndex = [
     ],
     'table' => [
         'parameters' => [
-            'width' => '100%', 'cellspacing' => 0, 'cellpadding' => 0
+            'width' => '100%', 'cellspacing' => 0, 'cellpadding' => 0,
         ],
         'head' => ['rows' => [['columns' => [
             'descript' => __d('lil_projects', 'Title'),

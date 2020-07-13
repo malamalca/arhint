@@ -1,6 +1,4 @@
 <?php
-use Cake\Core\Configure;
-use Cake\Routing\Router;
 
 $invoice_edit = [
     'title_for_layout' => __d(

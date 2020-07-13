@@ -8,10 +8,10 @@
                 'params' => ['id' => 'projects-logs'],
                 'table' => [
                     'params' => ['class' => 'index-static', 'id' => 'projects-logs'],
-                    'body' => ['rows' => []]
-                ]
-            ]
-        ]
+                    'body' => ['rows' => []],
+                ],
+            ],
+        ],
     ];
 
     foreach ($logs as $log) {
@@ -19,7 +19,7 @@
             'user' => h($log->user->name),
             'descript' =>
                 sprintf('<div class="logs-header">%s</div>', $this->Time->i18nFormat($log->created)) .
-                $this->Lil->autop($log->descript)
+                $this->Lil->autop($log->descript),
         ]];
     }
 
@@ -28,9 +28,7 @@
         $this->Form->create(null, ['url' => ['controller' => 'ProjectsLogs', 'action' => 'add', 'project' => $project->id], 'id' => 'add-log']) .
         $this->Form->control('descript', ['type' => 'textarea', 'label' => false, 'rows' => 2]) .
         $this->Form->button(__d('lil_projects', 'Save'), ['id' => 'submit-logs-btn']) .
-        $this->Form->end()
+        $this->Form->end(),
     ]];
 
     echo $this->Lil->panels($projectView, 'LilProjects.Projects.map_popup');
-
-?>

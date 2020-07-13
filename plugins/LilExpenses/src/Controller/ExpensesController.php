@@ -14,7 +14,6 @@ use LilExpenses\Lib\LilExpensesImport;
  *
  * @property \LilExpenses\Model\Table\ExpensesTable $Expenses
  * @property \LilExpenses\Model\Table\PaymentsExpensesTable $PaymentsExpenses
- *
  * @method \App\Model\Entity\User getCurrentUser()
  */
 class ExpensesController extends AppController

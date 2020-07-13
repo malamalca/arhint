@@ -5,7 +5,6 @@ use Cake\TestSuite\Fixture\TestFixture;
 
 /**
  * AdremasContactsFixture
- *
  */
 class AdremasContactsFixture extends TestFixture
 {

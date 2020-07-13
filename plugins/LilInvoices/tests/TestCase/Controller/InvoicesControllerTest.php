@@ -34,7 +34,7 @@ class InvoicesControllerTest extends IntegrationTestCase
         'Payments' => 'plugin.LilExpenses.Payments',
         'PaymentsExpenses' => 'plugin.LilExpenses.PaymentsExpenses',
         'PaymentsAccounts' => 'plugin.LilExpenses.PaymentsAccounts',
-        'Projects' => 'plugin.LilProjects.Projects'
+        'Projects' => 'plugin.LilProjects.Projects',
     ];
 
     public function setUp(): void
@@ -43,7 +43,7 @@ class InvoicesControllerTest extends IntegrationTestCase
         $this->configRequest([
             'environment' => [
                 'SERVER_NAME' => 'localhost',
-            ]
+            ],
         ]);
     }
 
@@ -200,7 +200,7 @@ class InvoicesControllerTest extends IntegrationTestCase
     {
         // External program has to send a valid header
         $this->configRequest([
-            'headers' => ['Lil-Scan' => 'Valid']
+            'headers' => ['Lil-Scan' => 'Valid'],
         ]);
         // Set session data
         $this->login(USER_ADMIN);
@@ -219,9 +219,9 @@ class InvoicesControllerTest extends IntegrationTestCase
                         'type' => 'image/jpg',
                         'size' => 100963,
                         'tmp_name' => dirname(__FILE__) . DS . 'data' . DS . 'sunset.jpg',
-                    ]
-                ]
-            ]
+                    ],
+                ],
+            ],
         ];
 
         $this->post('lil_invoices/invoices/edit', $data);

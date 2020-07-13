@@ -16,7 +16,7 @@ $selectFileForm = [
                 'parameters' => ['sepafile', [
                     'type' => 'file',
                     'label' => __d('lil_expenses', 'Upload a XML') . ':',
-                    'accept' => '.xml,.zip'
+                    'accept' => '.xml,.zip',
                 ]],
             ],
 

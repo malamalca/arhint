@@ -1,7 +1,5 @@
 <?php
 
-use Cake\Core\Configure;
-use Cake\I18n\Time;
 use Cake\Routing\Router;
 
 $this->loadHelper('LilExpenses.LilExpense');
@@ -118,7 +116,7 @@ $admin_index = [
     'actions' => ['lines' => [$hiddenControls, $popupKind, $popupMonths, $popupYears]],
     'table' => [
         'parameters' => [
-            'width' => '100%', 'cellspacing' => 0, 'cellpadding' => 0, 'id' => 'ExpensesIndex'
+            'width' => '100%', 'cellspacing' => 0, 'cellpadding' => 0, 'id' => 'ExpensesIndex',
         ],
         'head' => ['rows' => [['columns' => [
             'icon' => [

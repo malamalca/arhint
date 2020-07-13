@@ -34,7 +34,7 @@ class ContactsControllerTest extends IntegrationTestCase
         $this->configRequest([
             'environment' => [
                 'SERVER_NAME' => 'localhost',
-            ]
+            ],
         ]);
     }
 
@@ -73,7 +73,6 @@ class ContactsControllerTest extends IntegrationTestCase
 
         $this->get('lil_crm/Contacts/view/' . COMPANY_FIRST);
         $this->assertResponseOk();
-
     }
 
     /**
@@ -96,8 +95,8 @@ class ContactsControllerTest extends IntegrationTestCase
                 'id' => '',
                 'contact_id' => '',
                 'kind' => 'P',
-                'email' => 'another.user@test.com'
-            ]
+                'email' => 'another.user@test.com',
+            ],
         ];
 
         $this->post('/lil_crm/Contacts/add/T', $data);
@@ -135,8 +134,8 @@ class ContactsControllerTest extends IntegrationTestCase
                 'id' => '',
                 'contact_id' => '',
                 'kind' => '',
-                'email' => ''
-            ]
+                'email' => '',
+            ],
         ];
 
         $this->post('/lil_crm/Contacts/edit/49a90cfe-fda4-49ca-b7ec-ca50783b5a45', $data);

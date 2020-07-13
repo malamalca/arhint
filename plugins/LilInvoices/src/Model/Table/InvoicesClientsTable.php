@@ -11,7 +11,6 @@ use Cake\Validation\Validator;
  * InvoicesClients Model
  *
  * @property \Cake\ORM\Association\BelongsTo $Contacts
- *
  * @method \LilInvoices\Model\Entity\InvoicesClient get(string $id)
  * @method \LilInvoices\Model\Entity\InvoicesClient newEntity(array $data = [])
  * @method \LilInvoices\Model\Entity\InvoicesClient newEmptyEntity()

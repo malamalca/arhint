@@ -1,8 +1,6 @@
 <?php
-use Cake\Core\Configure;
 use Cake\I18n\Time;
 use Cake\Routing\Router;
-use Cake\Utility\Inflector;
 
 $this->set('head_for_layout', false);
 
@@ -73,23 +71,23 @@ $invoice_preview = [
                                 'type' => 'datetime',
                                 'label' => [
                                     'text' => __d('lil_invoices', 'Datetime') . ':',
-                                    'class' => 'active'
+                                    'class' => 'active',
                                 ],
                                 'default' => (new Time())->toDatetimeString(),
-                                'readonly' => !$this->getCurrentUser()->hasRole('root')
+                                'readonly' => !$this->getCurrentUser()->hasRole('root'),
                             ],
                         ],
                     ],
                     'form_end' => [
                         'method' => 'button',
                         'parameters' => [
-                            'Sign Invoice'
+                            'Sign Invoice',
                         ],
                     ],
                 ],
-            ]
+            ],
         ],
-        'preview' => $this->getRequest()->is('ajax') ? null : sprintf('<br /><iframe id="invoice-view" src="%s"></iframe>', $action)
+        'preview' => $this->getRequest()->is('ajax') ? null : sprintf('<br /><iframe id="invoice-view" src="%s"></iframe>', $action),
     ],
 ];
 

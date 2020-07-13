@@ -37,7 +37,7 @@ $attachment_add = [
                         'error' => [
                             'empty' => __d('lil_invoices', 'A file must be selected for upload.'),
                         ],
-                        'class' => 'browser-default'
+                        'class' => 'browser-default',
                     ],
                 ],
             ],

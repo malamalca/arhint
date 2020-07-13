@@ -53,7 +53,7 @@ $countersIndex = [
     'table' => [
         'pre' => $this->Arhint->searchPanel($this->getRequest()->getQuery('search', '')),
         'parameters' => [
-            'width' => '100%', 'cellspacing' => 0, 'cellpadding' => 0, 'id' => 'InvoicesCountersIndex'
+            'width' => '100%', 'cellspacing' => 0, 'cellpadding' => 0, 'id' => 'InvoicesCountersIndex',
         ],
         'head' => ['rows' => [['columns' => [
             'title' => $this->Paginator->sort('title', __d('lil_invoices', 'Title')),
@@ -70,9 +70,9 @@ $countersIndex = [
                 'html' => '<ul class="paginator">' . $this->Paginator->numbers([
                     'first' => '<<',
                     'last' => '>>',
-                    'modulus' => 3]) . '</ul>'
-            ]
-        ]]]]
+                    'modulus' => 3]) . '</ul>',
+            ],
+        ]]]],
     ],
 ];
 

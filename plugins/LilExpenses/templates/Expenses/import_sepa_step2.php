@@ -88,7 +88,7 @@ $popupAction = [
             'title' => __d('lil_expenses', 'Create a New Expense'),
             'params' => ['id' => 'popupItem-AddExpense', 'class' => 'nowrap'],
         ],
-    ]
+    ],
 ];
 echo $this->Lil->popup('action', $popupAction, true);
 

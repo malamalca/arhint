@@ -105,7 +105,7 @@ class Application extends BaseApplication implements
     public function middleware(MiddlewareQueue $middlewareQueue): MiddlewareQueue
     {
         $csrf = new CsrfProtectionMiddleware([]);
-        $csrf->whitelistCallback(function ($request) {
+        $csrf->skipCheckCallback(function ($request) {
             if (
                 $request->getParam('controller') == 'Invoices' &&
                 $request->getParam('action') == 'edit' &&

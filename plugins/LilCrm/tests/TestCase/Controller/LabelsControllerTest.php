@@ -22,7 +22,7 @@ class LabelsControllerTest extends IntegrationTestCase
         'AdremasContacts' => 'plugin.LilCrm.AdremasContacts',
         'Contacts' => 'plugin.LilCrm.Contacts',
         'ContactsAddresses' => 'plugin.LilCrm.ContactsAddresses',
-        'Users' => 'app.Users'
+        'Users' => 'app.Users',
     ];
 
     public function setUp(): void
@@ -31,7 +31,7 @@ class LabelsControllerTest extends IntegrationTestCase
         $this->configRequest([
             'environment' => [
                 'SERVER_NAME' => 'localhost',
-            ]
+            ],
         ]);
     }
 
@@ -80,33 +80,4 @@ class LabelsControllerTest extends IntegrationTestCase
         $this->assertNoRedirect();
     }
 
-    /**
-     * Test add method
-     *
-     * @return void
-     */
-    public function testAdd()
-    {
-        $this->markTestIncomplete('Not implemented yet.');
-    }
-
-    /**
-     * Test edit method
-     *
-     * @return void
-     */
-    public function testEdit()
-    {
-        $this->markTestIncomplete('Not implemented yet.');
-    }
-
-    /**
-     * Test delete method
-     *
-     * @return void
-     */
-    public function testDelete()
-    {
-        $this->markTestIncomplete('Not implemented yet.');
-    }
 }

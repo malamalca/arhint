@@ -34,9 +34,9 @@ $editForm = [
                         'options' => $projects,
                         'label' => [
                             'text' => __d('lil_projects', 'Project') . ':',
-                            'class' => 'active'
+                            'class' => 'active',
                         ],
-                        'class' => 'browser-default'
+                        'class' => 'browser-default',
                     ],
                 ],
             ],
@@ -48,9 +48,9 @@ $editForm = [
                         'type' => 'datetime',
                         'label' => [
                             'text' => __d('lil_projects', 'Started') . ':',
-                            'class' => 'active'
+                            'class' => 'active',
                         ],
-                        'default' => new Time()
+                        'default' => new Time(),
                     ],
                 ],
             ],
@@ -62,7 +62,7 @@ $editForm = [
                         'type' => 'duration',
                         'label' => [
                             'text' => __d('lil_projects', 'Duration') . ':',
-                            'class' => 'active'
+                            'class' => 'active',
                         ],
                     ],
                 ],

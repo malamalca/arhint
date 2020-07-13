@@ -28,7 +28,7 @@ class InvoicesCountersControllerTest extends IntegrationTestCase
         $this->configRequest([
             'environment' => [
                 'SERVER_NAME' => 'localhost',
-            ]
+            ],
         ]);
     }
 
@@ -74,7 +74,7 @@ class InvoicesCountersControllerTest extends IntegrationTestCase
             'template_descript' => null,
             'header' => null,
             'footer' => null,
-            'active' => 1
+            'active' => 1,
         ];
 
         $this->get('lil_invoices/invoices-counters/add', $data);

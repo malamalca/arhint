@@ -8,7 +8,6 @@ use Cake\I18n\FrozenDate;
 use Cake\View\Helper;
 
 /**
- *
  * @property \Cake\View\Helper\HtmlHelper $Html
  */
 class ArhintHelper extends Helper

@@ -12,7 +12,6 @@ use Cake\Validation\Validator;
  *
  * @property \LilProjects\Model\Table\ProjectsTable|\Cake\ORM\Association\BelongsTo $Projects
  * @property \LilProjects\Model\Table\UsersTable|\Cake\ORM\Association\BelongsTo $Users
- *
  * @method \LilProjects\Model\Entity\ProjectsWorkhour get($primaryKey, $options = [])
  * @method \LilProjects\Model\Entity\ProjectsWorkhour newEntity($data = null, array $options = [])
  * @method \LilProjects\Model\Entity\ProjectsWorkhour newEmptyEntity(array $options = [])
@@ -21,7 +20,6 @@ use Cake\Validation\Validator;
  * @method \LilProjects\Model\Entity\ProjectsWorkhour patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
  * @method \LilProjects\Model\Entity\ProjectsWorkhour[] patchEntities($entities, array $data, array $options = [])
  * @method \LilProjects\Model\Entity\ProjectsWorkhour findOrCreate($search, callable $callback = null, $options = [])
- *
  * @mixin \Cake\ORM\Behavior\TimestampBehavior
  */
 class ProjectsWorkhoursTable extends Table

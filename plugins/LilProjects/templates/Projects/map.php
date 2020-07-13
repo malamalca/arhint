@@ -10,16 +10,16 @@
                 'visible' => true,
                 'url' => [
                     'action' => 'add',
-                ]
-            ]
+                ],
+            ],
         ],
         'panels' => [
-            'map' => '<div id="map" style="height: 90%;"></div>'
-        ]
+            'map' => '<div id="map" style="height: 90%;"></div>',
+        ],
     ];
 
     echo $this->Lil->panels($projectsMap, 'LilProjects.Projects.map');
-?>
+    ?>
 
     <script>
         var map;
@@ -47,7 +47,7 @@
             <?php
             foreach ($projects as $i => $project) {
                 printf(
-                    'projects[%1$s] = {type: "house", id:"%6$s", position: new google.maps.LatLng(%2$s, %3$s), info: "%4$s", icon: "%5$s", title: "%7$s"};'. PHP_EOL,
+                    'projects[%1$s] = {type: "house", id:"%6$s", position: new google.maps.LatLng(%2$s, %3$s), info: "%4$s", icon: "%5$s", title: "%7$s"};' . PHP_EOL,
                     $i,
                     (float)$project->lat,
                     (float)$project->lon,

@@ -10,6 +10,7 @@ class AddBicToInvoicesClients extends AbstractMigration
      *
      * More information on this method is available here:
      * http://docs.phinx.org/en/latest/migrations.html#the-change-method
+     *
      * @return void
      */
     public function change()
@@ -19,7 +20,7 @@ class AddBicToInvoicesClients extends AbstractMigration
             'default' => null,
             'limit' => 11,
             'null' => true,
-            'after' => 'iban'
+            'after' => 'iban',
         ]);
         $table->update();
     }

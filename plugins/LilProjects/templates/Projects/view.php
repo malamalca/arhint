@@ -8,7 +8,7 @@
                 'url' => [
                     'action' => 'edit',
                     $project->id,
-                ]
+                ],
             ],
             'delete' => [
                 'title' => __d('lil_projects', 'Delete'),
@@ -18,8 +18,8 @@
                     $project->id,
                 ],
                 'params' => [
-                    'confirm' => __d('lil_projects', 'Are you sure you want to delete this project?')
-                ]
+                    'confirm' => __d('lil_projects', 'Are you sure you want to delete this project?'),
+                ],
             ],
             'log' => [
                 'title' => __d('lil_projects', 'Add Log'),
@@ -27,9 +27,9 @@
                 'url' => [
                     'controller' => 'ProjectsLogs',
                     'action' => 'add',
-                    '?' => ['project' => $project->id]
+                    '?' => ['project' => $project->id],
                 ],
-                'params' => ['id' => 'add-projects-log']
+                'params' => ['id' => 'add-projects-log'],
             ],
         ],
         'entity' => $project,
@@ -42,27 +42,27 @@
                 'lines' => [
                     'status' => [
                         'label' => __d('lil_projects', 'Status') . ':',
-                        'text' => empty($project->status_id) ? '' : ('<div class="chip z-depth-1">' . h($projectsStatuses[$project->status_id]) . '</div>')
+                        'text' => empty($project->status_id) ? '' : ('<div class="chip z-depth-1">' . h($projectsStatuses[$project->status_id]) . '</div>'),
                     ],
                     'work_duration' => [
                         'label' => __d('lil_projects', 'Work Duration') . ':',
                         'text' => $this->Html->link($this->Arhint->duration($workDuration), [
                             'controller' => 'ProjectsWorkhours',
                             'action' => 'index',
-                            '?' => ['project' => $project->id]
-                        ])
-                    ]
-                ]
+                            '?' => ['project' => $project->id],
+                        ]),
+                    ],
+                ],
             ],
             'logs_title' => '<h3>' . __d('lil_projects', 'Logs') . '</h3>',
             'logs' => [
                 'params' => ['id' => 'projects-logs'],
                 'table' => [
                     'params' => ['class' => 'striped', 'id' => 'projects-logs'],
-                    'body' => ['rows' => []]
-                ]
-            ]
-        ]
+                    'body' => ['rows' => []],
+                ],
+            ],
+        ],
     ];
 
     /*$projectView['panels']['logs']['table']['body']['rows'][] = ['columns' => [
@@ -85,7 +85,7 @@
                     $this->Time->i18nFormat($log->created),
                     $this->Html->link(__d('lil_projects', 'delete'), ['controller' => 'ProjectsLogs', 'action' => 'delete', $log->id])
                 ) .
-                $this->Lil->autop($log->descript)
+                $this->Lil->autop($log->descript),
         ]];
     }
 

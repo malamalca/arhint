@@ -1,7 +1,6 @@
 <?php
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
-use Cake\Routing\Router;
 use Cake\Utility\Text;
 
 $dateFormat = strtr(implode(Configure::read('Lil.dateSeparator'), str_split(Configure::read('Lil.dateFormat'))), ['Y' => 'yyyy', 'M' => 'MM', 'D' => 'dd']);
@@ -104,7 +103,7 @@ $invoiceView = [
             'url' => [
                 'action' => 'email',
                 '?' => ['id' => $invoice->id],
-            ]
+            ],
         ],
         'export' => [
             'title' => __d('lil_invoices', 'Export'),
@@ -154,8 +153,8 @@ $invoiceView = [
                         $invoice->id,
                     ],
                     'params' => [
-                        'id' => 'EditTemplates'
-                    ]
+                        'id' => 'EditTemplates',
+                    ],
                 ],
                 'issuer' => empty($invoice->issuer) ? null : [
                     'title' => __d('lil_invoices', 'Edit Issuer'),
@@ -166,8 +165,8 @@ $invoiceView = [
                         $invoice->issuer->id ?? '',
                     ],
                     'params' => [
-                        'id' => 'EditIssuer'
-                    ]
+                        'id' => 'EditIssuer',
+                    ],
                 ],
                 'receiver' => empty($invoice->receiver) ? null : [
                     'title' => __d('lil_invoices', 'Edit Receiver'),
@@ -178,8 +177,8 @@ $invoiceView = [
                         $invoice->receiver->id ?? '',
                     ],
                     'params' => [
-                        'id' => 'EditReceiver'
-                    ]
+                        'id' => 'EditReceiver',
+                    ],
                 ],
                 'buyer' => empty($invoice->buyer) ? null : [
                     'title' => __d('lil_invoices', 'Edit Buyer'),
@@ -190,9 +189,9 @@ $invoiceView = [
                         $invoice->buyer->id ?? '',
                     ],
                     'params' => [
-                        'id' => 'EditBuyer'
-                    ]
-                ]
+                        'id' => 'EditBuyer',
+                    ],
+                ],
             ],
         ],
     ],
@@ -277,10 +276,10 @@ $invoiceView = [
                         'plugin' => 'LilProjects',
                         'controller' => 'Projects',
                         'action' => 'view',
-                        $invoice->project_id
-                    ]) . ' &nbsp;'
-                ]
-            ]
+                        $invoice->project_id,
+                    ]) . ' &nbsp;',
+                ],
+            ],
         ],
         'total' => !$invoice->isInvoice() ? null : [
             'id' => 'invoice-total',
@@ -353,7 +352,7 @@ if ($invoice->isInvoice()) {
     }
 
     $items = [
-        'parameters' => ['cellspacing' => "0", 'cellpadding' => "0", 'id' => "invoice-analytics-table"],
+        'parameters' => ['cellspacing' => '0', 'cellpadding' => '0', 'id' => 'invoice-analytics-table'],
         'head' => [
             'rows' => [
                 0 => [
@@ -437,7 +436,7 @@ if ($invoice->isInvoice()) {
         $grandTotal += $lineTotal;
     }
     $taxes = [
-        'parameters' => ['cellspacing' => "0", 'cellpadding' => "0", 'id' => "invoice-taxes-table", 'class' => "index-static"],
+        'parameters' => ['cellspacing' => '0', 'cellpadding' => '0', 'id' => 'invoice-taxes-table', 'class' => 'index-static'],
         'head' => [
             'rows' => [
                 0 => [

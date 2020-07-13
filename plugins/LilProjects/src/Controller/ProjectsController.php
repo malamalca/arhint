@@ -11,7 +11,6 @@ use LilProjects\Lib\LilProjectsFuncs;
  * Projects Controller
  *
  * @property \LilProjects\Model\Table\ProjectsTable $Projects
- *
  * @method \LilProjects\Model\Entity\Project[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
 class ProjectsController extends AppController

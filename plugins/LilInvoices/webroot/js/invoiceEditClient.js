@@ -144,10 +144,10 @@ jQuery.fn.InvoiceEditClient = function (options) {
                         url: options.addContactDialogUrl.replace("__kind__", "T"),
                         title: options.addPersonDialogTitle,
                         processSubmit: true,
-                        onBeforeRequest: function() {
+                        onBeforeRequest: function () {
                             instance.close();
                         },
-                        onJson: function(item) {
+                        onJson: function (item) {
                             $this.selectClient(target, item);
                         }
                     });
@@ -156,10 +156,10 @@ jQuery.fn.InvoiceEditClient = function (options) {
                         url: options.addContactDialogUrl.replace("__kind__", "C"),
                         title: options.addCompanyDialogTitle,
                         processSubmit: true,
-                        onBeforeRequest: function() {
+                        onBeforeRequest: function () {
                             instance.close();
                         },
-                        onJson: function(item) {
+                        onJson: function (item) {
                             $this.selectClient(target, item);
                         }
                     });

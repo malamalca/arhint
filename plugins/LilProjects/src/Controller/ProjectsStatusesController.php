@@ -7,7 +7,6 @@ namespace LilProjects\Controller;
  * ProjectsStatuses Controller
  *
  * @property \LilProjects\Model\Table\ProjectsStatusesTable $ProjectsStatuses
- *
  * @method \LilProjects\Model\Entity\ProjectsStatus[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
 class ProjectsStatusesController extends AppController

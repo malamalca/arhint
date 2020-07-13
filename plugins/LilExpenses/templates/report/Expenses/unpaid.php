@@ -192,7 +192,7 @@ if (empty($data)) {
                 ],
                 'issued' => [
                     'parameters' => ['class' => 'center-align', 'width' => '13%'],
-                    'html' => $tableFields['issued']
+                    'html' => $tableFields['issued'],
                 ],
                 'title' => [
                     'parameters' => ['class' => 'left-align', 'width' => '20%'],

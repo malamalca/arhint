@@ -51,10 +51,10 @@ $graphPanels = [
     'panels' => [
         'graph' => [
             'lines' => [
-                '<canvas id="expensesChart" height="400" style="width: 100% !important;"></canvas>'
-            ]
-        ]
-    ]
+                '<canvas id="expensesChart" height="400" style="width: 100% !important;"></canvas>',
+            ],
+        ],
+    ],
 ];
 
 echo $this->Html->script('https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js');

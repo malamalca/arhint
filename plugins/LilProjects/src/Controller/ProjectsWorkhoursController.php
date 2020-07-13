@@ -10,7 +10,6 @@ use Cake\I18n\Time;
  * ProjectsWorkhours Controller
  *
  * @property \LilProjects\Model\Table\ProjectsWorkhoursTable $ProjectsWorkhours
- *
  * @method \LilProjects\Model\Entity\ProjectsWorkhour[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
 class ProjectsWorkhoursController extends AppController

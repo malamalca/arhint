@@ -1,6 +1,5 @@
 <?php
 
-use Cake\I18n\Time;
 use Cake\Routing\Router;
 
 /** POPUP Accounts */
@@ -160,8 +159,8 @@ $admin_index = [
                         'parameters' => ['class' => 'right-align'],
                         'html' => $this->Paginator->sort('amount', __d('lil_expenses', 'Payment')),
                     ],
-                ]
-            ]
+                ],
+            ],
         ]],
         'foot' => ['rows' => [['columns' => [
             'paginator' => [
@@ -169,7 +168,7 @@ $admin_index = [
                 'html' => '<ul class="paginator">' . $this->Paginator->numbers([
                     'first' => '<<',
                     'last' => '>>',
-                    'modulus' => 3]) . '</ul>'
+                    'modulus' => 3]) . '</ul>',
             ],
             'title' => [
                 'parameters' => ['class' => 'right-align'],

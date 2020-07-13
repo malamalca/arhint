@@ -96,7 +96,7 @@ $clientEdit = [
             'address_country-unlock' => [
                 'method' => 'unlockField',
                 'parameters' => [
-                    'field' => 'country'
+                    'field' => 'country',
                 ],
             ],
             'address_country_code' => [
@@ -108,11 +108,11 @@ $clientEdit = [
                         'options' => Configure::read('LilCrm.countries'),
                         'label' => [
                             'text' => __d('lil_invoices', 'Country') . ':',
-                            'class' => 'active'
+                            'class' => 'active',
                         ],
                         'default' => Configure::read('LilCrm.defaultCountry'),
                         'empty' => true,
-                        'class' => 'browser-default'
+                        'class' => 'browser-default',
                     ],
                 ],
             ],

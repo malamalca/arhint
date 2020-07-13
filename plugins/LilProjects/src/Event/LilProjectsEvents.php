@@ -25,7 +25,6 @@ class LilProjectsEvents implements EventListenerInterface
      * Adds css script to layout
      *
      * @param \Cake\Event\Event $event Event object.
-     *
      * @return void
      */
     public function addScripts($event)
@@ -45,7 +44,6 @@ class LilProjectsEvents implements EventListenerInterface
      *
      * @param \Cake\Event\Event $event Event object.
      * @param \ArrayObject $sidebar Sidebar array.
-     *
      * @return void
      */
     public function modifySidebar($event, $sidebar)

@@ -15,7 +15,7 @@ $templatesIndex = [
     ],
     'table' => [
         'parameters' => [
-            'width' => '100%', 'cellspacing' => 0, 'cellpadding' => 0, 'id' => 'AdminTemplatesIndex'
+            'width' => '100%', 'cellspacing' => 0, 'cellpadding' => 0, 'id' => 'AdminTemplatesIndex',
         ],
         'head' => ['rows' => [['columns' => [
             'title' => __d('lil_invoices', 'Title'),

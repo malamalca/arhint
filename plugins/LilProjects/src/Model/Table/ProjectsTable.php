@@ -13,7 +13,6 @@ use Cake\Validation\Validator;
  *
  * @property \LilProjects\Model\Table\ProjectsLogsTable|\Cake\ORM\Association\HasMany $ProjectsLogs
  * @property \LilProjects\Model\Table\ProjectsStatusesTable|\Cake\ORM\Association\HasMany $ProjectsStatuses
- *
  * @method \LilProjects\Model\Entity\Project get($primaryKey, $options = [])
  * @method \LilProjects\Model\Entity\Project newEntity($data = null, array $options = [])
  * @method \LilProjects\Model\Entity\Project newEmptyEntity(array $options = [])
@@ -22,7 +21,6 @@ use Cake\Validation\Validator;
  * @method \LilProjects\Model\Entity\Project patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
  * @method \LilProjects\Model\Entity\Project[] patchEntities($entities, array $data, array $options = [])
  * @method \LilProjects\Model\Entity\Project findOrCreate($search, callable $callback = null, $options = [])
- *
  * @mixin \Cake\ORM\Behavior\TimestampBehavior
  */
 class ProjectsTable extends Table

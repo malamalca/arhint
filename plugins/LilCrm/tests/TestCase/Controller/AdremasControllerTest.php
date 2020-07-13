@@ -22,7 +22,7 @@ class AdremasControllerTest extends TestCase
     public $fixtures = [
         'Adremas' => 'plugin.LilCrm.Adremas',
         'AdremasContacts' => 'plugin.LilCrm.AdremasContacts',
-        'Users' => 'app.Users'
+        'Users' => 'app.Users',
     ];
 
     public function setUp(): void
@@ -31,7 +31,7 @@ class AdremasControllerTest extends TestCase
         $this->configRequest([
             'environment' => [
                 'SERVER_NAME' => 'localhost',
-            ]
+            ],
         ]);
     }
 
@@ -51,7 +51,7 @@ class AdremasControllerTest extends TestCase
         $data = [
             'id' => '',
             'owner_id' => COMPANY_FIRST,
-            'title' => 'Test Add Adrema'
+            'title' => 'Test Add Adrema',
         ];
 
         $this->post('/lil_crm/adremas/add', $data);
@@ -79,7 +79,7 @@ class AdremasControllerTest extends TestCase
         $data = [
             'id' => '49a90cfe-fda4-49ca-b7ec-ca5534465431',
             'owner_id' => COMPANY_FIRST,
-            'title' => 'Test Edit Adrema'
+            'title' => 'Test Edit Adrema',
         ];
 
         $this->post('/lil_crm/adremas/edit/49a90cfe-fda4-49ca-b7ec-ca5534465431', $data);

@@ -277,11 +277,11 @@ class ActiveSyncContacts implements Syncroton_Data_IData
                 'owner_id' => $this->_ownerId,
                 'kind' => 'T',
                 'syncable' => true,
-                'modified >' => $_startTimeStamp->format("Y-m-d H:i:s"),
+                'modified >' => $_startTimeStamp->format('Y-m-d H:i:s'),
             ]);
 
         if ($_endTimeStamp instanceof DateTime) {
-            $query->where(['modified <' => $_endTimeStamp->format("Y-m-d H:i:s")]);
+            $query->where(['modified <' => $_endTimeStamp->format('Y-m-d H:i:s')]);
         }
 
         $ids = array_keys($query->toArray());

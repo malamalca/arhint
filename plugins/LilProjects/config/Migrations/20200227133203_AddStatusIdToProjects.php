@@ -10,6 +10,7 @@ class AddStatusIdToProjects extends AbstractMigration
      *
      * More information on this method is available here:
      * http://docs.phinx.org/en/latest/migrations.html#the-change-method
+     *
      * @return void
      */
     public function change()
@@ -19,7 +20,7 @@ class AddStatusIdToProjects extends AbstractMigration
                 'default' => null,
                 'limit' => null,
                 'null' => true,
-                'after' => 'owner_id'
+                'after' => 'owner_id',
             ])
             ->update();
     }

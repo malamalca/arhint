@@ -17,7 +17,7 @@ $report = [
                     'id' => 'FilterCounter',
                     'name' => 'filter_counter',
                     'autocomplete' => 'off',
-                    'hiddenField' => false
+                    'hiddenField' => false,
                 ])),
             'filter_counter_unlock' => [
                 'method' => 'unlockField',

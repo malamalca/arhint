@@ -9,7 +9,7 @@ use Cake\Http\Exception\NotFoundException;
  * Users Controller
  *
  * @property \App\Model\Table\UsersTable $Users
- *
+ * @property \Cake\Controller\Component\SecurityComponent $Security
  * @method \App\Model\Entity\User[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
 class UsersController extends AppController

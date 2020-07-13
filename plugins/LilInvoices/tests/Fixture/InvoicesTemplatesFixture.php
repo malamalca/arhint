@@ -5,7 +5,6 @@ use Cake\TestSuite\Fixture\TestFixture;
 
 /**
  * InvoicesTemplatesFixture
- *
  */
 class InvoicesTemplatesFixture extends TestFixture
 {
@@ -45,7 +44,7 @@ class InvoicesTemplatesFixture extends TestFixture
             'kind' => 'header',
             'body' => 'Test header',
             'main' => true,
-        ]
+        ],
 
     ];
 }

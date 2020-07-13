@@ -4,7 +4,7 @@ if ($expense) {
         'pre' => '<div class="row"><div class="col l8 m12">',
         'post' => '</div></div>',
         'parameters' => [
-            'width' => '700', 'cellspacing' => 0, 'cellpadding' => 0, 'id' => 'PaymentsList'
+            'width' => '700', 'cellspacing' => 0, 'cellpadding' => 0, 'id' => 'PaymentsList',
         ],
         'head' => ['rows' => [['columns' => [
             'date' => [
@@ -84,7 +84,7 @@ if ($expense) {
         sprintf(
             '<span%2$s>%1$s</span>',
             $this->Number->precision($expense->total - $total, 2),
-            ($expense->total - $total) < 0 ? ' class="negative"' : ''
+            $expense->total - $total < 0 ? ' class="negative"' : ''
         );
 
     echo $this->Lil->table($paymentsTable, 'LilExpenses.Element.payments_list');

@@ -27,7 +27,7 @@ foreach ($addresses as $address) {
     }
 
     $full_position = $start_no + $i - 1;
-    if ((($full_position % 21 ) == 0) && ($full_position > 0)) {
+    if (($full_position % 21 == 0) && ($full_position > 0)) {
         $this->addPage();
     }
 

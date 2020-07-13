@@ -9,7 +9,6 @@ use Cake\ORM\TableRegistry;
  * ProjectsLogs Controller
  *
  * @property \LilProjects\Model\Table\ProjectsLogsTable $ProjectsLogs
- *
  * @method \LilProjects\Model\Entity\ProjectsLog[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
 class ProjectsLogsController extends AppController

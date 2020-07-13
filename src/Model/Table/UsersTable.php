@@ -16,7 +16,6 @@ use Cake\Validation\Validator;
  * Users Model
  *
  * @property \App\Model\Table\CompaniesTable|\Cake\ORM\Association\BelongsTo $Companies
- *
  * @method \App\Model\Entity\User get($primaryKey, $options = [])
  * @method \App\Model\Entity\User newEntity($data = null, array $options = [])
  * @method \App\Model\Entity\User[] newEntities(array $data, array $options = [])
@@ -25,7 +24,6 @@ use Cake\Validation\Validator;
  * @method \App\Model\Entity\User patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
  * @method \App\Model\Entity\User[] patchEntities($entities, array $data, array $options = [])
  * @method \App\Model\Entity\User findOrCreate($search, callable $callback = null, $options = [])
- *
  * @mixin \Cake\ORM\Behavior\TimestampBehavior
  */
 class UsersTable extends Table
@@ -125,7 +123,6 @@ class UsersTable extends Table
      * validationResetPassword validation rules.
      *
      * @param \Cake\Validation\Validator $validator Validator instance.
-     *
      * @return \Cake\Validation\Validator
      */
     public function validationResetPassword($validator)
@@ -153,7 +150,6 @@ class UsersTable extends Table
      * validationProperties validation rules.
      *
      * @param \Cake\Validation\Validator $validator Validator instance.
-     *
      * @return \Cake\Validation\Validator
      */
     public function validationProperties($validator)
@@ -233,7 +229,6 @@ class UsersTable extends Table
      * Sends reset email
      *
      * @param \App\Model\Entity\User $user User entity.
-     *
      * @return bool
      */
     public function sendResetEmail($user)

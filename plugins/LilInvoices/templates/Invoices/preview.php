@@ -1,7 +1,5 @@
 <?php
-use Cake\Core\Configure;
 use Cake\Routing\Router;
-use Cake\Utility\Inflector;
 
 $this->set('head_for_layout', false);
 

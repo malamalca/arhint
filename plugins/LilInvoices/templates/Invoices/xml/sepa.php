@@ -1,12 +1,10 @@
 <?php
-    use Cake\Core\Configure;
-    use Cake\Routing\Router;
-    use Cake\Utility\Xml;
+            use Cake\Utility\Xml;
 
     $transformed = ['Document' => [
         'xmlns:' => 'urn:iso:std:iso:20022:tech:xsd:pain.001.001.03',
         'xmlns:xsi' => 'http://www.w3.org/2001/XMLSchema-instance',
-        '@xsi:schemaLocation' => "urn:iso:std:iso:20022:tech:xsd:pain.001.001.03 ./pain.001.001.03.xsd",
+        '@xsi:schemaLocation' => 'urn:iso:std:iso:20022:tech:xsd:pain.001.001.03 ./pain.001.001.03.xsd',
         'CstmrCdtTrfInitn' => [
         ],
     ]];

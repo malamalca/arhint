@@ -15,7 +15,6 @@ use Cake\Validation\Validator;
  * ContactsAddresses Model
  *
  * @property \LilCrm\Model\Table\ContactsTable $Contacts
- *
  * @method \LilCrm\Model\Entity\ContactsAddress newEmptyEntity()
  * @method \LilCrm\Model\Entity\ContactsAddress newEntity(array $data)
  */

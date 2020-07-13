@@ -11,7 +11,6 @@ use Cake\Validation\Validator;
  * ProjectsStatuses Model
  *
  * @property \LilProjects\Model\Table\ProjectsTable&\Cake\ORM\Association\HasMany $Projects
- *
  * @method \LilProjects\Model\Entity\ProjectsStatus newEmptyEntity()
  * @method \LilProjects\Model\Entity\ProjectsStatus newEntity(array $data, array $options = [])
  * @method \LilProjects\Model\Entity\ProjectsStatus[] newEntities(array $data, array $options = [])

@@ -3,14 +3,14 @@
 if ($invoices->count() > 0) {
     $pagingUrl = [
         'action' => 'view',
-        $entityId
+        $entityId,
     ];
     $pagingDirection = $this->getRequest()->getQuery('invoices.direction', 'asc');
     $pagingDirection = $pagingDirection == 'asc' ? 'desc' : null;
 
     $paymentsTable = [
         'parameters' => [
-            'width' => '100%', 'cellspacing' => 0, 'cellpadding' => 0, 'id' => 'InvoicesList', 'width' => '700'
+            'width' => '100%', 'cellspacing' => 0, 'cellpadding' => 0, 'id' => 'InvoicesList', 'width' => '700',
         ],
         'head' => ['rows' => [['columns' => [
             'no' => [
@@ -42,7 +42,7 @@ if ($invoices->count() > 0) {
                         'first' => 1,
                         'last' => 1,
                         'modulus' => 3,
-                        'url' => $pagingUrl
+                        'url' => $pagingUrl,
                     ]) .
                     '</ul>',
             ],
