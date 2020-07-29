@@ -299,7 +299,7 @@ foreach ($counters as $cntr) {
         'url' => [
             'controller' => 'Invoices',
             'action' => 'edit',
-            '?' => ['duplicate' => $invoice->id],
+            '?' => ['duplicate' => $invoice->id, 'counter' => $cntr->id],
         ],
     ];
 }
