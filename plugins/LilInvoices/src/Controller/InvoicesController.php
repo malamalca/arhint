@@ -649,6 +649,13 @@ class InvoicesController extends AppController
                 $invoice->receiver->setNew(true);
                 unset($invoice->receiver->id);
                 unset($invoice->receiver->invoice_id);
+
+                $counterId = $this->getRequest()->getQuery('counter', $invoice->counter_id);
+
+                $invoice->invoices_counter = $InvoicesCounters->get($counterId);
+
+                $invoice->counter_id = $invoice->invoices_counter->id;
+                $invoice->doc_type = $invoice->invoices_counter->doc_type;
             } else {
                 // new entity
                 $invoice = $this->Invoices->newEmptyEntity();
