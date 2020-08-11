@@ -251,23 +251,9 @@ class InvoicesController extends AppController
 
         $projects = [];
         if (Plugin::isLoaded('LilProjects')) {
-            $controller = $this;
-            $projects = Cache::remember(
-                'LilInvoices.projectsList' . $this->getCurrentUser()->id,
-                function () use ($controller) {
-                    /** @var \LilProjects\Model\Table\ProjectsTable $ProjectsTable */
-                    $ProjectsTable = TableRegistry::getTableLocator()->get('LilProjects.Projects');
-
-                    return $controller->Authorization->applyScope($ProjectsTable->find(), 'index')
-                        ->where(['active' => true])
-                        ->order(['no DESC', 'title'])
-                        ->combine('id', function ($entity) {
-                            return $entity;
-                        })
-                        ->toArray();
-                },
-                'Lil'
-            );
+            $ProjectsTable = TableRegistry::getTableLocator()->get('LilProjects.Projects');
+            $projectsQuery = $this->Authorization->applyScope($ProjectsTable->find(), 'index');
+            $projects = $ProjectsTable->findForOwner($this->getCurrentUser()->id, $projectsQuery);
         }
 
         /** @var \LilInvoices\Model\Table\VatsTable $VatsTable */
@@ -667,9 +653,6 @@ class InvoicesController extends AppController
                 $invoice->buyer = $InvoicesClients->newEntity(['kind' => 'BY']);
 
                 $counterId = $this->getRequest()->getQuery('counter');
-                if (empty($counterId)) {
-                    $counterId = $this->getRequest()->getData('counter_id');
-                }
 
                 $invoice->invoices_counter = $InvoicesCounters->get($counterId);
 

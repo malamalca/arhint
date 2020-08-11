@@ -3,6 +3,10 @@ declare(strict_types=1);
 
 namespace LilProjects\Model\Table;
 
+use ArrayObject;
+use Cake\Cache\Cache;
+use Cake\Event\Event;
+use Cake\ORM\Entity;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
@@ -171,19 +175,43 @@ class ProjectsTable extends Table
     }
 
     /**
+     * afterDelete method
+     *
+     * @param \Cake\Event\Event $event Event object.
+     * @param \LilInvoices\Model\Entity\InvoicesAttachment $entity Entity object.
+     * @param \ArrayObject $options Array object.
+     * @return void
+     */
+    public function afterDelete(Event $event, Entity $entity, ArrayObject $options)
+    {
+    }
+
+    /**
      * List projects by kind for specified owner.
      *
      * @param string $ownerId User Id.
+     * @param \Cake\ORM\Query $query Query object.
      * @return array
      */
-    public function findForOwner($ownerId)
+    public function findForOwner($ownerId, $query = null)
     {
-        // In a controller or table method.
-        $query = $this->find('list', ['keyField' => 'id', 'valueField' => 'title'])
-            ->where(['owner_id' => $ownerId, 'active' => true])
-            ->order('title');
+        if (empty($query)) {
+            $query = $this->find();
+        }
 
-        $data = $query->toArray();
+        $data = Cache::remember(
+            'LilProjects.projectsList.' . $ownerId,
+            function () use ($query) {
+                return $query
+                    ->where(['active' => true])
+                    ->order(['no DESC', 'title'])
+                    ->combine('id', function ($entity) {
+                        return $entity;
+                    })
+                    ->toArray();
+            },
+            'Lil'
+        );
 
         return $data;
     }
