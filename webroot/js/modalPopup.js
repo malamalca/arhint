@@ -7,16 +7,19 @@ jQuery.fn.modalPopup = function(p_options) {
         onJson: null,
         onBeforeRequest: null,
         onOpen: null,
-        onClose: null
+        onClose: null,
+        onResize: null
 	};
 	var $this       = this;
     var options     = [];
     var popup       = null;
     var instance    = null;
+    var oldHeight   = null;
 
     var template = [
         '<div class="modal">',
         '   <div class="modal-content">',
+        '   <a href="#" class="btn btn-small modal-close" style="float: right">x</a>',
         '   <h4>Modal Header</h4>',
         '   <p></p>',
         '   </div>',
@@ -48,7 +51,7 @@ jQuery.fn.modalPopup = function(p_options) {
                 $this.instance.open();
 
                 if ($this.options.onOpen instanceof Function) {
-                    $this.options.onOpen($this.popup);
+                    $this.options.onOpen($this.popup, $this.instance);
                 }
             })
             .fail(function() {
@@ -59,6 +62,17 @@ jQuery.fn.modalPopup = function(p_options) {
         e.preventDefault();
         return false;
     };
+
+    this.checkResize = function(e)
+    {
+        let popupHeight = $($this.popup).height();
+        if ($this.oldHeight != popupHeight) {
+            if ($this.options.onResize instanceof Function) {
+                $this.options.onResize($this.popup, $this.instance);
+            }
+        }
+        $this.oldHeight = popupHeight;
+    }
 
     // Do an ajax form post
     this.popupFormSubmit = function(e)
@@ -116,6 +130,15 @@ jQuery.fn.modalPopup = function(p_options) {
     // initialization
     $this.options = jQuery().extend(true, {}, default_options, p_options);
     $this.popup = $(template.join("\n")).appendTo(document.body);
+
+    $(".modal-close", $this.popup).on("click", function(e) {
+        $this.instance.close();
+    });
+
+    $(window).on("resize", function(e) {
+        $this.checkResize(e);
+    });
+
     $this.instance = M.Modal.init($this.popup.get(0), {
         dismissible: true,
         onCloseEnd: function() {

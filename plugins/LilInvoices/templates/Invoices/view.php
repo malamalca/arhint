@@ -599,9 +599,11 @@ echo $this->Lil->panels($invoiceView, 'LilInvoices.Invoices.view');
             $(this).modalPopup({
                 title: "<?= __d('lil_invoices', 'Attachment Preview') ?>",
                 onOpen: function(popup) {
-                    $(popup).height(window.innerHeight - 30);
-                    //$("#invoice-view", popup).height(window.innerHeight - $("#invoice-view").offset().top - 30);
-                    $("#invoice-view", popup).height($(popup).innerHeight() - 120);
+                    $(popup).height(window.innerHeight);
+                    $("#invoice-view", popup).height($(popup).innerHeight() - 125);
+                },
+                onResize: function(popup) {
+                    $("#invoice-view", popup).height($(popup).innerHeight() - 125);
                 }
             });
         });
