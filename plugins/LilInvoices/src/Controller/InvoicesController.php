@@ -204,10 +204,15 @@ class InvoicesController extends AppController
                     $invoice->getNextCounterNo();
                 }
 
-                // file upload
+                // if there is no uploaded file, unset invoices_attachments
                 $tmpName = $this->getRequest()->getData('invoices_attachments.0.filename.tmp_name');
-                if (empty($tmpName)) {
+                $scannedData = $this->getRequest()->getData('invoices_attachments.0.scanned');
+                if (empty($tmpName) && empty($scannedData)) {
                     unset($invoice->invoices_attachments);
+                }
+                if (!empty($scannedData)) {
+                    $tmpName = tempnam(constant('TMP'), 'LilScan') . '.pdf';
+                    file_put_contents($tmpName, base64_decode($scannedData));
                 }
 
                 if ($this->Invoices->save($invoice, ['uploadedFilename' => $tmpName])) {

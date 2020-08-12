@@ -234,6 +234,21 @@ $invoiceEdit = [
                     ],
                 ],
             ],
+            'file.scan.button' => [
+                'method' => 'button',
+                'parameters' => [
+                    __d('lil_invoices', 'Scan a Document'),
+                    ['id' => 'DoScanBtn'],
+                ],
+            ],
+            'file.scan.scanned' => [
+                'method' => 'hidden',
+                'parameters' => ['invoices_attachments.0.scanned', ['id' => 'scanned']],
+            ],
+            'file.scan.scanned_unlock' => [
+                'method' => 'unlockField',
+                'parameters' => ['invoices_attachments.0.scanned'],
+            ],
             'fs_attachments_end' => '</fieldset>',
 
             ////////////////////////////////////////////////////////////////////////////////////
@@ -561,6 +576,33 @@ echo $this->Lil->form($invoiceEdit, 'LilInvoices.Invoices.edit');
             paste_auto_cleanup_on_paste : true,
             autoresize_max_height: 500,
             width: "750px"
+        });
+
+        // websocket server for scanning
+        $("#DoScanBtn").click(function(e) {
+            var wsImpl = window.WebSocket || window.MozWebSocket;
+            window.ws = new wsImpl("ws://localhost:8080/");
+
+            ws.onmessage = function(e) {
+                if (e.data == "cancel") {
+                } else {
+                    $("#scanned").val(e.data);
+                    ws.send("done");
+                }
+                window.ws = null;
+            };
+            ws.onopen = function() {
+                ws.send("EE");
+            };
+            ws.onclose = function() {
+                window.ws = null;
+            };
+            ws.onerror = function(e) {
+                alert("No Scanner Found!");
+                window.ws = null;
+            }
+            e.preventDefault();
+            return false;
         });
     });
 

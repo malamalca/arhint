@@ -92,6 +92,12 @@ class InvoicesAttachmentsTable extends Table
             $data['mime'] = $fileData['type'];
             $data['filesize'] = $fileData['size'];
         }
+        if (!empty($data['scanned'])) {
+            $data['filename'] = uniqid('');
+            $data['original'] = 'scanned.pdf';
+            $data['mime'] = 'application/pdf';
+            $data['filesize'] = strlen(base64_encode($data['scanned']));
+        }
     }
 
     /**
@@ -115,6 +121,7 @@ class InvoicesAttachmentsTable extends Table
         ) {
             $fileDest = Configure::read('LilInvoices.uploadFolder') . DS . $entity->filename;
             $moved = copy($options['uploadedFilename'], $fileDest);
+            unlink($options['uploadedFilename']);
         }
     }
 

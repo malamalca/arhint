@@ -60,12 +60,13 @@ echo $this->Lil->form($attachmentScan, 'LilInvoices.InvoicesAttachments.scan');
         window.ws = new wsImpl("ws://localhost:8080/");
 
         ws.onmessage = function(e) {
-            if (e.data == 'cancel') {
+            if (e.data == "cancel") {
                 window.location = $("#referer").val();
                 return;
             }
             $("#scanned").val(e.data);
             $("#ScanForm").submit();
+            ws.send("done");
         };
         ws.onopen = function() {
             $("#DoScan").click(function(e) {
