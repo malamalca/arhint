@@ -358,6 +358,10 @@ class InvoicesController extends AppController
     public function editPreview()
     {
         $invoice = $this->parseRequest($this->getRequest()->getData('id'));
+        $assocModels = ['InvoicesTaxes', 'InvoicesItems', 'InvoicesAttachments', 'Issuers', 'Buyers', 'Receivers'];
+        $invoice = $this->Invoices->patchEntity($invoice, $this->getRequest()->getData(), [
+            'associated' => $assocModels,
+        ]);
 
         $this->Authorization->authorize($invoice, 'view');
 
@@ -653,6 +657,9 @@ class InvoicesController extends AppController
                 $invoice->buyer = $InvoicesClients->newEntity(['kind' => 'BY']);
 
                 $counterId = $this->getRequest()->getQuery('counter');
+                if (empty($counterId)) {
+                    $counterId = $this->getRequest()->getData('counter_id');
+                }
 
                 $invoice->invoices_counter = $InvoicesCounters->get($counterId);
 

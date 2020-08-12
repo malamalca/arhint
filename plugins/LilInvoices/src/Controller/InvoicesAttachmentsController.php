@@ -4,7 +4,9 @@ declare(strict_types=1);
 namespace LilInvoices\Controller;
 
 use Cake\Core\Configure;
+use Cake\Filesystem\File;
 use Cake\Http\Exception\NotFoundException;
+use Laminas\Diactoros\Stream;
 
 /**
  * InvoicesAttachments Controller
@@ -16,22 +18,45 @@ class InvoicesAttachmentsController extends AppController
     /**
      * View method
      *
-     * @param  string|null $id   Invoices Attachment id.
+     * @param  string $id   Invoices Attachment id.
+     * @return void
+     * @throws \Cake\Http\Exception\NotFoundException When record not found.
+     */
+    public function view($id)
+    {
+        $a = $this->InvoicesAttachments->get($id);
+
+        $this->Authorization->authorize($a, 'view');
+
+        $path = Configure::read('LilInvoices.uploadFolder') . DS . $a->filename;
+
+        $this->set(compact('a', 'path'));
+    }
+
+    /**
+     * Download method
+     *
+     * @param  string $id   Invoices Attachment id.
+     * @param  bool|null $forceDownload Force download of an attachment.
      * @param  string|null $name Invoices Attachment name.
      * @return \Cake\Http\Response|null
      * @throws \Cake\Http\Exception\NotFoundException When record not found.
      */
-    public function view($id = null, $name = null)
+    public function download($id, $forceDownload = true, $name = null)
     {
         $a = $this->InvoicesAttachments->get($id);
 
-        $this->Authorization->authorize($a);
+        $this->Authorization->authorize($a, 'view');
 
         $path = Configure::read('LilInvoices.uploadFolder') . DS . $a->filename;
 
-        $this->response = $this->response->withFile($path, ['name' => $a->original]);
+        $file = new File($a->original);
+        $mimeType = $this->response->getMimeType($file->ext());
 
-        return $this->response;
+        $response = $this->response->withFile($path, ['name' => $a->original, 'download' => (bool)$forceDownload]);
+        $response = $response->withType($mimeType);
+
+        return $response;
     }
 
     /**

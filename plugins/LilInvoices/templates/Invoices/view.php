@@ -494,21 +494,44 @@ if (empty($invoice->invoices_attachments)) {
     foreach ($invoice->invoices_attachments as $atch) {
         $invoiceView['panels']['attachments_' . $atch->id] = sprintf(
             '<div>%1$s (%2$s) %3$s</div>',
-            $this->Html->link($atch['original'], [
-                'controller' => 'invoices-attachments',
-                'action' => 'view',
-                $atch->id,
-                $atch->original,
-            ]),
+            $this->Html->link(
+                $atch['original'],
+                [
+                    'controller' => 'invoices-attachments',
+                    'action' => 'view',
+                    $atch->id,
+                ],
+                [
+                    'class' => 'AttachmentPreview'
+                ]
+            ),
             $this->Number->toReadableSize((int)$atch->filesize),
             $this->Html->link(
-                $this->Html->image('/lil_invoices/img/remove.gif'),
+                '<i class="material-icons">get_app</i>',
                 [
-                'controller' => 'invoices-attachments',
-                'action' => 'delete',
-                $atch->id,
+                    'controller' => 'invoices-attachments',
+                    'action' => 'download',
+                    $atch->id,
+                    1,
+                    $atch->original,
                 ],
-                ['escape' => false, 'confirm' => __d('lil_invoices', 'Are you sure you want to delete this attachment')]
+                [
+                    'escape' => false,
+                    'class' => 'btn btn-small btn-floating waves-effect waves-light waves-circle',
+                ]
+            ) . ' ' .
+            $this->Html->link(
+                '<i class="material-icons">delete</i>',
+                [
+                    'controller' => 'invoices-attachments',
+                    'action' => 'delete',
+                    $atch->id,
+                ],
+                [
+                    'escape' => false,
+                    'confirm' => __d('lil_invoices', 'Are you sure you want to delete this attachment'),
+                    'class' => 'btn btn-small btn-floating waves-effect waves-light waves-circle',
+                ]
             )
         );
     }
@@ -571,5 +594,16 @@ echo $this->Lil->panels($invoiceView, 'LilInvoices.Invoices.view');
         $("#EditIssuer").modalPopup({title: "<?= __d('lil_invoices', 'Edit Issuer') ?>"});
         $("#EditReceiver").modalPopup({title: "<?= __d('lil_invoices', 'Edit Receiver') ?>"});
         $("#EditBuyer").modalPopup({title: "<?= __d('lil_invoices', 'Edit Buyer') ?>"});
+
+        $(".AttachmentPreview").each(function() {
+            $(this).modalPopup({
+                title: "<?= __d('lil_invoices', 'Attachment Preview') ?>",
+                onOpen: function(popup) {
+                    $(popup).height(window.innerHeight - 30);
+                    //$("#invoice-view", popup).height(window.innerHeight - $("#invoice-view").offset().top - 30);
+                    $("#invoice-view", popup).height($(popup).innerHeight() - 120);
+                }
+            });
+        });
     });
 </script>
