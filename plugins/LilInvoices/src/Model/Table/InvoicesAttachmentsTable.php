@@ -121,7 +121,7 @@ class InvoicesAttachmentsTable extends Table
         ) {
             $fileDest = Configure::read('LilInvoices.uploadFolder') . DS . $entity->filename;
             $moved = copy($options['uploadedFilename'], $fileDest);
-            unlink($options['uploadedFilename']);
+            //unlink($options['uploadedFilename']);
         }
     }
 

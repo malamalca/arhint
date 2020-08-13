@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace LilInvoices\Model\Entity;
 
+use Cake\Core\Configure;
 use Cake\ORM\Entity;
 
 /**
@@ -46,5 +47,15 @@ class InvoicesCounter extends Entity
     public function __toString(): string
     {
         return $this->title;
+    }
+
+    /**
+     * Checks if current document is Invoice
+     *
+     * @return bool
+     */
+    public function isInvoice()
+    {
+        return in_array($this->doc_type, Configure::read('LilInvoices.invoiceDocTypes'));
     }
 }

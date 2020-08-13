@@ -89,7 +89,12 @@ class InvoicesController extends AppController
         $filter['order'] = 'Invoices.counter DESC';
         $params = $this->Invoices->filter($filter);
 
+        $invoiceFields = ['id', 'no', 'counter', 'dat_issue', 'title', 'net_total', 'total', 'project_id'];
+        $clientFields = ['Issuers.title', 'Receivers.title'];
+        $params['contain'] = ['Issuers', 'Receivers'];
+
         $query = $this->Authorization->applyScope($this->Invoices->find())
+            ->select($invoiceFields)
             ->where($params['conditions']);
 
         // use original query for SUM()
@@ -103,6 +108,7 @@ class InvoicesController extends AppController
 
         // add contain and order to original query
         $query
+            ->select($clientFields)
             ->order($params['order'])
             ->contain($params['contain']);
 
@@ -110,7 +116,15 @@ class InvoicesController extends AppController
 
         $dateSpan = $this->Invoices->maxSpan($filter['counter']);
 
-        $this->set(compact('data', 'filter', 'counter', 'dateSpan', 'invoicesTotals'));
+        $projects = [];
+        if (Plugin::isLoaded('LilProjects')) {
+            /** @var \LilProjects\Model\Table\ProjectsTable $ProjectsTable */
+            $ProjectsTable = TableRegistry::getTableLocator()->get('LilProjects.Projects');
+            $projectsQuery = $this->Authorization->applyScope($ProjectsTable->find(), 'index');
+            $projects = $ProjectsTable->findForOwner($this->getCurrentUser()->id, $projectsQuery);
+        }
+
+        $this->set(compact('data', 'filter', 'counter', 'projects', 'dateSpan', 'invoicesTotals'));
 
         return null;
     }
@@ -256,6 +270,7 @@ class InvoicesController extends AppController
 
         $projects = [];
         if (Plugin::isLoaded('LilProjects')) {
+            /** @var \LilProjects\Model\Table\ProjectsTable $ProjectsTable */
             $ProjectsTable = TableRegistry::getTableLocator()->get('LilProjects.Projects');
             $projectsQuery = $this->Authorization->applyScope($ProjectsTable->find(), 'index');
             $projects = $ProjectsTable->findForOwner($this->getCurrentUser()->id, $projectsQuery);

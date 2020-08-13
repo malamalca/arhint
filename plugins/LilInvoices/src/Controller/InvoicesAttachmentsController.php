@@ -6,7 +6,6 @@ namespace LilInvoices\Controller;
 use Cake\Core\Configure;
 use Cake\Filesystem\File;
 use Cake\Http\Exception\NotFoundException;
-use Laminas\Diactoros\Stream;
 
 /**
  * InvoicesAttachments Controller
