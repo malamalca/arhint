@@ -95,6 +95,7 @@ class InvoicesController extends AppController
 
         $query = $this->Authorization->applyScope($this->Invoices->find())
             ->select($invoiceFields)
+            ->contain($params['contain'])
             ->where($params['conditions']);
 
         // use original query for SUM()
@@ -109,8 +110,7 @@ class InvoicesController extends AppController
         // add contain and order to original query
         $query
             ->select($clientFields)
-            ->order($params['order'])
-            ->contain($params['contain']);
+            ->order($params['order']);
 
         $data = $this->paginate($query);
 
