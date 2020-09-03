@@ -29,13 +29,10 @@ class PaymentsController extends AppController
             $filter['span'] = 'month';
         }
 
-        $params = array_merge_recursive([
-                'contain' => ['PaymentsAccounts'],
-            ], $this->Payments->filter($filter, $ownerId));
+        $params = $this->Payments->filter($filter, $ownerId);
 
         $query = $this->Authorization->applyScope($this->Payments->find())
             ->where($params['conditions'])
-            ->contain($params['contain'])
             ->order($params['order']);
 
         $payments = $this->paginate($query);

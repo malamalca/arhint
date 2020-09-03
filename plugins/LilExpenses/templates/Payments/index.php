@@ -195,7 +195,7 @@ if (!empty($payments)) {
         $admin_index['table']['body']['rows'][] = [
         'data' => $p,
         'columns' => [
-            'account' => h($p->payments_account->title ?? __d('lil_expenses', 'N/A')),
+            'account' => h($accounts[$p->account_id] ?? __d('lil_expenses', 'N/A')),
             'date' => [
                 'parameters' => ['class' => 'center-align'],
                 'html' => $this->Arhint->calendarDay($p->dat_happened),
