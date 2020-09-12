@@ -32,6 +32,7 @@ class PaymentsController extends AppController
         $params = $this->Payments->filter($filter, $ownerId);
 
         $query = $this->Authorization->applyScope($this->Payments->find())
+            ->select(['id', 'account_id', 'dat_happened', 'amount', 'descript'])
             ->where($params['conditions'])
             ->order($params['order']);
 

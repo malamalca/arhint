@@ -78,7 +78,7 @@ $countersIndex = [
 
 foreach ($counters as $counter) {
     $countersIndex['table']['body']['rows'][]['columns'] = [
-        'descript' => $this->Html->link($counter->title, ['action' => 'edit', $counter->id]),
+        'descript' => $this->Html->link($counter->title, ['controller' => 'Invoices', 'action' => 'index', '?' => ['counter' => $counter->id]]),
         'doc_type' => isset($documentTypes[$counter->doc_type]) ? h($documentTypes[$counter->doc_type]) : __d('lil_invoices', 'N/A'),
         'no' => [
             'parameters' => ['class' => 'right-align'],

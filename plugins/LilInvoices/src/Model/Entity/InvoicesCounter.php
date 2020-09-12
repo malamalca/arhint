@@ -23,6 +23,7 @@ use Cake\ORM\Entity;
  * @property string|null $tpl_header_id
  * @property string|null $tpl_body_id
  * @property string|null $tpl_footer_id
+ * @property bool $primary
  * @property bool $active
  * @property \Cake\I18n\FrozenTime|null $created
  * @property \Cake\I18n\FrozenTime|null $modified

@@ -155,11 +155,13 @@ class PaymentsTable extends Table
             $ret['conditions']['Payments.descript LIKE'] = '%' . $filter['search'] . '%';
         }
 
-        $validAccounts = array_keys($this->PaymentsAccounts->listForOwner($ownerId));
-        if (empty($filter['account']) || !in_array($filter['account'], $validAccounts)) {
-            $filter['account'] = null;
-        } else {
-            $ret['conditions']['Payments.account_id'] = $filter['account'];
+        if (!empty($filter['account'])) {
+            $validAccounts = array_keys($this->PaymentsAccounts->listForOwner($ownerId));
+            if (empty($filter['account']) || !in_array($filter['account'], $validAccounts)) {
+                $filter['account'] = null;
+            } else {
+                $ret['conditions']['Payments.account_id'] = $filter['account'];
+            }
         }
 
         return $ret;
