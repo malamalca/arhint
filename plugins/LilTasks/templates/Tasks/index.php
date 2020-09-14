@@ -72,7 +72,7 @@
                             'controller' => 'Tasks',
                             'action' => 'index',
                             '?' => ['folder' => $task->folder_id],
-                        ],
+                        ]
                     ),
                 ],
             ];

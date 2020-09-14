@@ -50,10 +50,10 @@ class TasksFoldersTable extends Table
     {
         $validator
             ->add('id', 'valid', ['rule' => 'uuid'])
-            ->allowEmpty('id', 'create');
+            ->allowEmptyString('id', 'create');
 
         $validator
-            ->allowEmpty('title');
+            ->notEmptyString('title');
 
         return $validator;
     }

@@ -49,28 +49,28 @@ class TasksTable extends Table
     {
         $validator
             ->add('id', 'valid', ['rule' => 'uuid'])
-            ->allowEmpty('id', 'create');
+            ->allowEmptyString('id', 'create');
 
         $validator
-            ->allowEmpty('model');
+            ->allowEmptyString('model');
 
         $validator
-            ->allowEmpty('title');
+            ->notEmptyString('title');
 
         $validator
-            ->allowEmpty('descript');
+            ->allowEmptyString('descript');
 
         $validator
             ->add('started', 'valid', ['rule' => 'date'])
-            ->allowEmpty('started');
+            ->allowEmptyString('started');
 
         $validator
             ->add('deadline', 'valid', ['rule' => 'date'])
-            ->allowEmpty('deadline');
+            ->allowEmptyString('deadline');
 
         $validator
             ->add('completed', 'valid', ['rule' => 'datetime'])
-            ->allowEmpty('completed');
+            ->allowEmptyString('completed');
 
         return $validator;
     }
