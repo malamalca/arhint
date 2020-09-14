@@ -31,6 +31,7 @@ use LilCrm\Plugin as LilCrmPlugin;
 use LilExpenses\Plugin as LilExpensesPlugin;
 use LilInvoices\Plugin as LilInvoicesPlugin;
 use LilProjects\Plugin as LilProjectsPlugin;
+use LilTasks\Plugin as LilTasksPlugin;
 use Psr\Http\Message\ServerRequestInterface;
 
 /**
@@ -77,6 +78,7 @@ class Application extends BaseApplication implements
         $this->addPlugin(LilExpensesPlugin::class, ['bootstrap' => true, 'routes' => true]);
         $this->addPlugin(LilInvoicesPlugin::class, ['bootstrap' => true, 'routes' => true]);
         $this->addPlugin(LilProjectsPlugin::class, ['bootstrap' => true, 'routes' => true]);
+        $this->addPlugin(LilTasksPlugin::class, ['bootstrap' => true, 'routes' => true]);
     }
 
     /**

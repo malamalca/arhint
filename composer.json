@@ -53,7 +53,8 @@
             "LilCrm\\": "plugins/LilCrm/src/",
             "LilExpenses\\": "plugins/LilExpenses/src/",
             "LilInvoices\\": "plugins/LilInvoices/src/",
-            "LilProjects\\": "plugins/LilProjects/src/"
+            "LilProjects\\": "plugins/LilProjects/src/",
+            "LilTasks\\": "plugins/LilTasks/src/"
         }
     },
     "autoload-dev": {
@@ -64,7 +65,8 @@
             "LilCrm\\Test\\": "plugins\\LilCrm\\tests\\",
             "LilExpenses\\Test\\": "plugins\\LilExpenses\\tests\\",
             "LilInvoices\\Test\\": "plugins\\LilInvoices\\tests\\",
-            "LilProjects\\Test\\": "plugins\\LilProjects\\tests\\"
+            "LilProjects\\Test\\": "plugins\\LilProjects\\tests\\",
+            "LilTasks\\Test\\": "plugins\\LilTasks\\tests\\"
         }
     },
     "scripts": {
@@ -76,9 +78,9 @@
             "@cs-check",
             "@stan"
         ],
-        "cs-check": "phpcs --colors -p --standard=vendor/cakephp/cakephp-codesniffer/CakePHP src/ tests/ plugins/LilExpenses/src/ plugins/LilCrm/src/ plugins/LilInvoices/src/ plugins/LilProjects/src/",
+        "cs-check": "phpcs --colors -p --standard=vendor/cakephp/cakephp-codesniffer/CakePHP src/ tests/ plugins/LilExpenses/src/ plugins/LilCrm/src/ plugins/LilInvoices/src/ plugins/LilProjects/src/ plugins/LilTasks/src/",
         "cs-fix": "phpcbf --colors --standard=vendor/cakephp/cakephp-codesniffer/CakePHP src/ tests/",
-        "stan": "phpstan analyse src/ plugins/LilExpenses/src/ plugins/LilCrm/src/ plugins/LilInvoices/src/ plugins/LilProjects/src/",
+        "stan": "phpstan analyse src/ plugins/LilExpenses/src/ plugins/LilCrm/src/ plugins/LilInvoices/src/ plugins/LilProjects/src/ plugins/LilTasks/src/",
         "test": "phpunit --colors=always"
     },
     "prefer-stable": true,

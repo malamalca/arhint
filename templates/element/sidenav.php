@@ -45,7 +45,8 @@ if (!empty($sidebar)) {
                                             ?>
                                         <li class="waves-effect<?= !empty($submenuItem['active']) ? ' active' : '' ?>">
                                             <a href="<?= $this->Url->build($submenuItem['url']) ?>">
-                                            <?= h($submenuItem['title']) ?>
+                                                <?= h($submenuItem['title']) ?>
+                                                <?= !empty($submenuItem['badge']) ? sprintf('<span class="new badge" data-badge-caption="%s"></span>', $submenuItem['badge']) : '' ?>
                                                 <i class="material-icons chevron"></i>
                                             </a>
                                         </li>

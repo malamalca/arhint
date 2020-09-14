@@ -1,0 +1,149 @@
+# LANGUAGE translation of CakePHP Application
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"POT-Creation-Date: 2015-12-13 17:58+0000\n"
+"PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
+"Last-Translator: NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+
+#: D:/xampp/htdocs/arhint/plugins/LilTasks/src/Controller/TasksController.php:93;121
+msgid "The task has been saved."
+msgstr ""
+
+#: D:/xampp/htdocs/arhint/plugins/LilTasks/src/Controller/TasksController.php:96
+msgid "The task could not be saved. Please, try again."
+msgstr ""
+
+#: D:/xampp/htdocs/arhint/plugins/LilTasks/src/Controller/TasksController.php:123;141
+msgid "The task could not be deleted. Please, try again."
+msgstr ""
+
+#: D:/xampp/htdocs/arhint/plugins/LilTasks/src/Controller/TasksController.php:139
+msgid "The task has been deleted."
+msgstr ""
+
+#: D:/xampp/htdocs/arhint/plugins/LilTasks/src/Controller/TasksFoldersController.php:67
+msgid "The folder has been saved."
+msgstr ""
+
+#: D:/xampp/htdocs/arhint/plugins/LilTasks/src/Controller/TasksFoldersController.php:70
+msgid "The folder could not be saved. Please, try again."
+msgstr ""
+
+#: D:/xampp/htdocs/arhint/plugins/LilTasks/src/Controller/TasksFoldersController.php:88
+msgid "The folder has been deleted."
+msgstr ""
+
+#: D:/xampp/htdocs/arhint/plugins/LilTasks/src/Controller/TasksFoldersController.php:90
+msgid "The folder could not be deleted. Please, try again."
+msgstr ""
+
+#: D:/xampp/htdocs/arhint/plugins/LilTasks/src/Event/LilTasksEvents.php:36
+#: D:/xampp/htdocs/arhint/plugins/LilTasks/src/Lib/LilTasksSidebar.php:23
+msgid "Tasks"
+msgstr ""
+
+#: D:/xampp/htdocs/arhint/plugins/LilTasks/src/Lib/LilTasksSidebar.php:34
+msgid "Filters"
+msgstr ""
+
+#: D:/xampp/htdocs/arhint/plugins/LilTasks/src/Lib/LilTasksSidebar.php:41
+msgid "Today's Tasks"
+msgstr ""
+
+#: D:/xampp/htdocs/arhint/plugins/LilTasks/src/Lib/LilTasksSidebar.php:52
+msgid "Tomorrow's Tasks"
+msgstr ""
+
+#: D:/xampp/htdocs/arhint/plugins/LilTasks/src/Lib/LilTasksSidebar.php:63
+msgid "Upcoming Week"
+msgstr ""
+
+#: D:/xampp/htdocs/arhint/plugins/LilTasks/src/Lib/LilTasksSidebar.php:74
+msgid "No Due Date"
+msgstr ""
+
+#: D:/xampp/htdocs/arhint/plugins/LilTasks/src/Lib/LilTasksSidebar.php:85
+msgid "All Tasks"
+msgstr ""
+
+#: D:/xampp/htdocs/arhint/plugins/LilTasks/src/Lib/LilTasksSidebar.php:97
+msgid "Completed Tasks"
+msgstr ""
+
+#: D:/xampp/htdocs/arhint/plugins/LilTasks/src/Lib/LilTasksSidebar.php:110
+msgid "Folders"
+msgstr ""
+
+#: D:/xampp/htdocs/arhint/plugins/LilTasks/src/Template/Tasks/edit.ctp:9
+msgid "Edit Task"
+msgstr ""
+
+#: D:/xampp/htdocs/arhint/plugins/LilTasks/src/Template/Tasks/edit.ctp:9
+#: D:/xampp/htdocs/arhint/plugins/LilTasks/src/Template/Tasks/index.ctp:8
+msgid "Add Task"
+msgstr ""
+
+#: D:/xampp/htdocs/arhint/plugins/LilTasks/src/Template/Tasks/edit.ctp:12
+#: D:/xampp/htdocs/arhint/plugins/LilTasks/src/Template/TasksFolders/edit.ctp:12
+msgid "Delete"
+msgstr ""
+
+#: D:/xampp/htdocs/arhint/plugins/LilTasks/src/Template/Tasks/edit.ctp:21
+msgid "Are you sure you want to delete this task?"
+msgstr ""
+
+#: D:/xampp/htdocs/arhint/plugins/LilTasks/src/Template/Tasks/edit.ctp:48
+#: D:/xampp/htdocs/arhint/plugins/LilTasks/src/Template/TasksFolders/edit.ctp:48
+msgid "Title"
+msgstr ""
+
+#: D:/xampp/htdocs/arhint/plugins/LilTasks/src/Template/Tasks/edit.ctp:58
+msgid "Due Date"
+msgstr ""
+
+#: D:/xampp/htdocs/arhint/plugins/LilTasks/src/Template/Tasks/edit.ctp:68
+msgid "Notes"
+msgstr ""
+
+#: D:/xampp/htdocs/arhint/plugins/LilTasks/src/Template/Tasks/edit.ctp:78
+msgid "List"
+msgstr ""
+
+#: D:/xampp/htdocs/arhint/plugins/LilTasks/src/Template/Tasks/edit.ctp:88
+#: D:/xampp/htdocs/arhint/plugins/LilTasks/src/Template/TasksFolders/edit.ctp:56
+msgid "Save"
+msgstr ""
+
+#: D:/xampp/htdocs/arhint/plugins/LilTasks/src/Template/Tasks/index.ctp:17
+msgid "Add List"
+msgstr ""
+
+#: D:/xampp/htdocs/arhint/plugins/LilTasks/src/Template/Tasks/index.ctp:70
+msgid "today"
+msgstr ""
+
+#: D:/xampp/htdocs/arhint/plugins/LilTasks/src/Template/Tasks/index.ctp:73
+msgid "tomorrow"
+msgstr ""
+
+#: D:/xampp/htdocs/arhint/plugins/LilTasks/src/Template/TasksFolders/edit.ctp:9
+msgid "Edit Task List"
+msgstr ""
+
+#: D:/xampp/htdocs/arhint/plugins/LilTasks/src/Template/TasksFolders/edit.ctp:9
+msgid "Add Task List"
+msgstr ""
+
+#: D:/xampp/htdocs/arhint/plugins/LilTasks/src/Template/TasksFolders/edit.ctp:21
+msgid "Are you sure you want to delete this folder?"
+msgstr ""
+

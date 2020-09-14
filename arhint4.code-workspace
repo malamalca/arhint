@@ -16,7 +16,7 @@
                 "finishStatusMessage": "CSS compiled"
             }
         ],
-        "phpcs.standard": "C:\\Users\\miha.nahtigal\\AppData\\Roaming\\Composer\\vendor\\cakephp\\cakephp-codesniffer\\CakePHP",
+        "phpcs.standard": "vendor\\cakephp\\cakephp-codesniffer\\CakePHP",
 
         "phpunit.php": "C:\\xampp\\php\\php.exe",
         "phpunit.phpunit": "vendor\\phpunit\\phpunit\\phpunit",
