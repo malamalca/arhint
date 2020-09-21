@@ -50,7 +50,7 @@ class InvoicesAttachmentsController extends AppController
         $path = Configure::read('LilInvoices.uploadFolder') . DS . $a->filename;
 
         $file = new File($a->original);
-        $mimeType = $this->response->getMimeType($file->ext());
+        $mimeType = $this->response->getMimeType(strtolower($file->ext()));
 
         $response = $this->response->withFile($path, ['name' => $a->original, 'download' => (bool)$forceDownload]);
         $response = $response->withType($mimeType);

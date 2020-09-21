@@ -95,6 +95,12 @@ ul.main-menu {
     .sidenav-user {
         @extend .center-align !optional;
 
+        a.sidenav-avatar {
+            display: inline;
+            clear: both;
+            padding: 0;
+            background-color: transparent !important;
+        }
         img {
             width: 30%;
             height: 90px;
@@ -110,6 +116,10 @@ ul.main-menu {
             padding: 0px;
             margin-top: 0px;
             margin-bottom: 12px;
+        }
+
+        .sidenav-user-title {
+            cursor: pointer;
         }
     }
 

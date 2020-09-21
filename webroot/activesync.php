@@ -6,7 +6,6 @@
 use Cake\Auth\PasswordHasherFactory;
 use Cake\Core\Configure;
 use Cake\Datasource\ConnectionManager;
-use Cake\Network\Request;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Security;
 
@@ -21,7 +20,6 @@ if (!isset($_SERVER['PHP_AUTH_USER'])) {
 require dirname(__DIR__) . '/vendor/autoload.php';
 require dirname(__DIR__) . '/config/bootstrap.php';
 
-//
 $Hasher = PasswordHasherFactory::build(['className' => 'Default', 'hashType' => PASSWORD_BCRYPT, 'hashOptions' => ['salt' => Security::getSalt()]]);
 
 $Users = TableRegistry::getTableLocator()->get('Users');
@@ -44,7 +42,6 @@ if (!$Hasher->check($_SERVER['PHP_AUTH_PW'], $user->passwd)) {
 
 Syncroton_Registry::set('user', $user);
 
-//
 $conf = ConnectionManager::get('default')->config();
 $db = Zend_Db::factory('PDO_MYSQL', [
     'host' => $conf['host'],
@@ -61,7 +58,7 @@ if (Configure::read('debug')) {
 }
 
 Syncroton_Registry::setContactsDataClass('\LilCrm\Lib\ActiveSyncContacts');
-//Syncroton_Registry::setTasksDataClass('\LilActiveSync\Lib\LilActiveSyncTasks');
+Syncroton_Registry::setTasksDataClass('\LilTasks\Lib\LilActiveSyncTasks');
 //Syncroton_Registry::setCalendarDataClass('Syncroton_Data_Calendar');
 //Syncroton_Registry::setEmailDataClass('Syncroton_Data_Email');
 

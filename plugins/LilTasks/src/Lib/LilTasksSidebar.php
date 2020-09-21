@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace LilTasks\Lib;
 
+use Cake\Cache\Cache;
 use Cake\ORM\TableRegistry;
 use Lil\Lib\Lil;
 
@@ -17,16 +18,20 @@ class LilTasksSidebar
      */
     public static function countOpenTasks($due, $owner_id)
     {
-        /** @var \LilTasks\Model\Table\TasksTable $TasksTable */
-        $TasksTable = TableRegistry::get('LilTasks.Tasks');
+        $count = Cache::remember('LilTasks.OpenTasks.' . $owner_id . '.' . $due, function () use ($due, $owner_id) {
+            /** @var \LilTasks\Model\Table\TasksTable $TasksTable */
+            $TasksTable = TableRegistry::get('LilTasks.Tasks');
 
-        $filter = ['due' => $due, 'completed' => 'notyet'];
-        $params = $TasksTable->filter($filter);
+            $filter = ['due' => $due, 'completed' => 'notyet'];
+            $params = $TasksTable->filter($filter);
 
-        $count = $TasksTable->find()->select()
-          ->where(['Tasks.owner_id' => $owner_id])
-          ->andWhere($params['conditions'])
-          ->count();
+            $count = $TasksTable->find()->select()
+                ->where(['Tasks.owner_id' => $owner_id])
+                ->andWhere($params['conditions'])
+                ->count();
+
+            return $count;
+        });
 
         return $count;
     }
@@ -40,16 +45,23 @@ class LilTasksSidebar
      */
     public static function countOpenTasksInFolder($folder_id, $owner_id)
     {
-        /** @var \LilTasks\Model\Table\TasksTable $TasksTable */
-        $TasksTable = TableRegistry::get('LilTasks.Tasks');
+        $count = Cache::remember(
+            'LilTasks.OpenTasksInFolder.' . $owner_id . '.' . $folder_id,
+            function () use ($folder_id, $owner_id) {
+                /** @var \LilTasks\Model\Table\TasksTable $TasksTable */
+                $TasksTable = TableRegistry::get('LilTasks.Tasks');
 
-        $filter = ['completed' => 'notyet'];
-        $params = $TasksTable->filter($filter);
+                $filter = ['completed' => 'notyet'];
+                $params = $TasksTable->filter($filter);
 
-        $count = $TasksTable->find()->select()
-          ->where(['Tasks.owner_id' => $owner_id, 'Tasks.folder_id' => $folder_id])
-          ->andWhere($params['conditions'])
-          ->count();
+                $count = $TasksTable->find()->select()
+                    ->where(['Tasks.owner_id' => $owner_id, 'Tasks.folder_id' => $folder_id])
+                    ->andWhere($params['conditions'])
+                    ->count();
+
+                return $count;
+            }
+        );
 
         return $count;
     }
@@ -188,10 +200,10 @@ class LilTasksSidebar
         /** @var \LilTasks\Model\Table\TasksFoldersTable $TasksFolders */
         $TasksFolders = TableRegistry::get('LilTasks.TasksFolders');
 
-        $folders = $TasksFolders->findForOwner($currentUser['company_id']);
+        $folders = $TasksFolders->findForOwner($currentUser->company_id);
 
         foreach ($folders as $folder) {
-            $countFolder = self::countOpenTasksInFolder($folder->id, $currentUser['company_id']);
+            $countFolder = self::countOpenTasksInFolder($folder->id, $currentUser->company_id);
             $tasks['items']['folders']['submenu'][] = [
                 'title' => h($folder->title),
                 'badge' => $countFolder == 0 ? '' : $countFolder,

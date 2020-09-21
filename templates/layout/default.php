@@ -1,6 +1,5 @@
 <?php
 use Cake\Core\Configure;
-use Cake\I18n\Time;
 use Cake\Routing\Router;
 ?>
 <!DOCTYPE html>
@@ -47,6 +46,7 @@ use Cake\Routing\Router;
             <ul id="slide-out" class="sidenav sidenav-fixed">
                 <!-- Sidebar -->
                 <li class="sidenav-user">
+                    <a href="<?= Router::url('/', true) ?>" class="sidenav-avatar">
                     <?= $this->Html->image(
                         Router::url(
                             [
@@ -54,12 +54,13 @@ use Cake\Routing\Router;
                                 'controller' => 'Users',
                                 'action' => 'avatar',
                                 $this->getCurrentUser() ? $this->getCurrentUser()->get('id') : null,
-                                '_ext' => 'png'
+                                '_ext' => 'png',
                             ],
                             true
                         ),
-                        ['class' => 'sidenav-avatar circle']
+                        ['class' => 'circle']
                     ) ?>
+                    </a>
                     <?php
                     if ($this->getCurrentUser() && $this->getCurrentUser()->get('id')) {
                         $isUserProperties = $this->getRequest()->getParam('controller') == 'Users' &&
@@ -93,7 +94,8 @@ use Cake\Routing\Router;
             <?= $this->Flash->render() ?>
 
             <?php
-            if ($title = $this->fetch('title')) {
+            $title = $this->fetch('title');
+            if (!empty($title)) {
                 if ($title != '&nbsp;') {
                     printf('<h2>%s</h2>', $title);
                 }
@@ -119,7 +121,7 @@ use Cake\Routing\Router;
         $(document).ready(function(){
             M.AutoInit();
 
-            $(".sidenav-avatar, .sidenav-user-title").on("click", function(e) {
+            $(".sidenav-user-title").on("click", function(e) {
                 $("#user-settings").toggle();
             });
 

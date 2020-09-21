@@ -16,6 +16,8 @@
                 "finishStatusMessage": "CSS compiled"
             }
         ],
+
+        "phpcs.executablePath": "vendor\\bin\\phpcs.bat",
         "phpcs.standard": "vendor\\cakephp\\cakephp-codesniffer\\CakePHP",
 
         "phpunit.php": "C:\\xampp\\php\\php.exe",

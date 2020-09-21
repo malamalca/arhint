@@ -479,7 +479,7 @@ class ActiveSyncContacts implements Syncroton_Data_IData
         $Contacts = TableRegistry::getTableLocator()->get('LilCrm.Contacts');
         $c = $Contacts->get($_serverId, ['contain' => ['ContactsPhones', 'ContactsAddresses', 'ContactsEmails']]);
         if (empty($c)) {
-            $c = $Contacts->newEntity();
+            $c = $Contacts->newEmptyEntity();
             $c->id = $_serverId;
             $c->owner_id = $this->_ownerId;
         }

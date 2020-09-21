@@ -13,6 +13,7 @@ use Cake\Validation\Validator;
  *
  * @property \Cake\ORM\Association\BelongsTo $Owners
  * @property \Cake\ORM\Association\BelongsTo $Foreigns
+ * @method \LilTasks\Model\Entity\Task get(string $id, array $data = [])
  */
 class TasksTable extends Table
 {

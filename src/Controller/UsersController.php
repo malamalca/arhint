@@ -34,7 +34,7 @@ class UsersController extends AppController
     {
         parent::beforeFilter($event);
 
-        $this->Authentication->allowUnauthenticated(['login', 'reset', 'changePassword']);
+        $this->Authentication->allowUnauthenticated(['login', 'reset', 'changePassword', 'avatar']);
 
         if ($this->getRequest()->getParam('action') == 'login') {
             $this->Security->setConfig('validatePost', false);
@@ -340,6 +340,8 @@ class UsersController extends AppController
             $this->Authorization->authorize($user, 'view');
 
             $imageData = $user->getAvatarImage();
+        } else {
+            $this->Authorization->skipAuthorization();
         }
 
         if (empty($imageData)) {

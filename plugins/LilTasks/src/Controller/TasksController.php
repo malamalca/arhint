@@ -22,18 +22,13 @@ class TasksController extends AppController
     {
         $filter = $this->getRequest()->getQueryParams();
 
-        if (
-            !empty($filter['folder']) &&
-            !$this->Tasks->TasksFolders->exists([
-                'TasksFolders.id IN' => (array)$filter['folder'],
-                'TasksFolders.owner_id' => $this->getCurrentUser()->get('company_id'),
-            ])
-        ) {
+        $folders = $this->Tasks->TasksFolders->listForOwner($this->getCurrentUser()->get('company_id'));
+
+        if (!empty($filter['folder']) && !in_array($filter['folder'], array_keys($folders))) {
             throw new NotFoundException(__d('lil_tasks', 'Folder does not exist.'));
         }
 
         $params = array_merge_recursive([
-            'contain' => ['TasksFolders'],
             'conditions' => [],
             'order' => ['TasksFolders.title ASC', 'Tasks.completed'],
         ], $this->Tasks->filter($filter));

@@ -118,7 +118,12 @@ class TasksFoldersTable extends Table
     public function listForOwner($ownerId)
     {
         $conditions = ['TasksFolders.owner_id' => $ownerId];
-        $ret = $this->find('list')->where($conditions)->toArray();
+        $ret = $this->find('list')
+            ->where($conditions)
+            ->combine('id', function ($entity) {
+                return $entity;
+            })
+            ->toArray();
 
         return $ret;
     }

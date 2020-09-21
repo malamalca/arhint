@@ -2,20 +2,29 @@
     use Cake\I18n\Time;
 
     $this->set('head_for_layout', false);
+
+    $folderTitle = null;
+    $folderId = $this->getRequest()->getQuery('folder');
+
+    if (!empty($folderId)) {
+        $folderTitle = $tasks->first()->tasks_folder->title;
+    }
+
     $tasksIndex = [
+        'title' => $folderTitle ? __d('lil_tasks', 'Tasks :: {0}', $folderTitle) : ' ',
         'menu' => [
             'add' => [
                 'title' => __d('lil_tasks', 'Add Task'),
                 'visible' => true,
-                'url' => array_merge(
-                    [
-                        'plugin' => 'LilTasks',
-                        'controller' => 'Tasks',
-                        'action' => 'add',
-                    ],
-                    $this->getRequest()->getQuery('folder') ? ['folder' => $this->getRequest()->getQuery('folder')] : [],
-                    $this->getRequest()->getQuery('due') ? ['due' => $this->getRequest()->getQuery('due')] : []
-                ),
+                'url' => [
+                    'plugin' => 'LilTasks',
+                    'controller' => 'Tasks',
+                    'action' => 'add',
+                    '?' => array_merge(
+                        ['folder' => $this->getRequest()->getQuery('folder'), null],
+                        ['due' => $this->getRequest()->getQuery('due', null)]
+                    ),
+                ],
                 'params' => [
                     'onclick' => $this->getRequest()->is('mobile') ? null : sprintf(
                         'popup("%1$s", $(this).attr("href"), "auto"); return false;',
@@ -44,7 +53,7 @@
 
     $taskFolderId = null;
     foreach ($tasks as $task) {
-        if ($taskFolderId != $task->folder_id) {
+        if ($taskFolderId != $task->folder_id && !$this->getRequest()->getQuery('folder')) {
             $tasksIndex['panels'][] = [
                 'params' => ['class' => 'lil-tasks-folder' . (empty($taskFolderId) ? ' lil-tasks-folder-first' : '')],
                 'lines' => [
@@ -66,7 +75,7 @@
                         ]) .
                     '</div>',
                     'title' => $this->Html->link(
-                        $task->tasks_folder->title,
+                        __d('lil_tasks', 'Tasks') . ' :: ' . $task->tasks_folder->title,
                         [
                             'plugin' => 'LilTasks',
                             'controller' => 'Tasks',
