@@ -31,7 +31,11 @@ class LilTasksEvents implements EventListenerInterface
     {
         $view = $event->getSubject();
         $view->append('script');
-        echo $view->Html->css('LilTasks.lil_tasks');
+        if ($view->getRequest()->is('mobile')) {
+            echo $view->Html->css('LilTasks.lil_tasks_mobile');
+        } else {
+            echo $view->Html->css('LilTasks.lil_tasks');
+        }
         $view->end();
 
         if ($view->getRequest()->getParam('plugin') == 'LilTasks') {

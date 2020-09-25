@@ -30,4 +30,14 @@ class TasksFolder extends Entity
         '*' => true,
         'id' => false,
     ];
+
+    /**
+     * Magic method __toString
+     *
+     * @return string
+     */
+    public function __toString(): string
+    {
+        return $this->title;
+    }
 }

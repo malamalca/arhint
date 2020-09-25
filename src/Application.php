@@ -142,7 +142,6 @@ class Application extends BaseApplication implements
         // `new RoutingMiddleware($this, '_cake_routes_')`
         ->add(new RoutingMiddleware($this))
 
-        ->add(new RoutingMiddleware($this, '_cake_routes_'))
         ->add($csrf)
         ->add(new EncryptedCookieMiddleware([self::REMEMBERME_COOKIE_NAME], Configure::read('Security.cookieKey')))
         ->add(new AuthenticationMiddleware($this))

@@ -1,12 +1,11 @@
 /* INDEX */
 .lil-tasks-folder {
     display: block;
-    height: 25px;
     max-width: 600px;
-    
+
     border: solid 1px #a0a0a0;
     background-color: #f0f0f0;
-    
+
     margin-top: 20px;
     margin-left: 0px;
     margin-bottom: 5px;
@@ -19,28 +18,27 @@
 }
 .lil-tasks-folder a {
     color: black;
-    
+
     font-family: Arial, sans-serif;
     font-weight: bold;
     font-size: 18px;
     text-decoration: none;
-    
+
     margin-left: 10px;
 }
 
 .lil-task-item {
     display: block;
-    height: 30px;
     max-width: 600px;
-    
-    border: solid 1px #f0f0f0;
-    background-color: #fafafa;
-    
+
+    /*border: solid 1px #f0f0f0;
+    background-color: #fafafa;*/
+
     margin-left: 0px;
-    margin-bottom: 5px;
+    margin-bottom: -1px !important;
     padding-top: 10px;
-    padding-bottom: 10px;
-    
+    padding-bottom: 0;
+
     overflow: hidden;
 }
 
@@ -75,7 +73,7 @@ a.lil-task-tick img {
     color: #606060;
 }
 
-span.lil-task-priority-medium, 
+span.lil-task-priority-medium,
 span.lil-task-priority-high {
     color: red;
 }
@@ -111,14 +109,14 @@ div.lil-task-swipe-actions a.lil-task-swipe-delete {
     display: inline-block;
     width: 50px; height: 50px;
     margin-left: 0px;
-    
+
     overflow: hidden;
     line-height: 50px;
-    
+
     font-weight: normal;
     text-align: center;
     vertical-align: middle;
-    
+
     background-color: #f0f0f0;
 }
 div.lil-tasks-folder div.lil-task-swipe-actions a.lil-task-swipe-edit {

@@ -29,6 +29,7 @@ class TasksController extends AppController
         }
 
         $params = array_merge_recursive([
+            'contain' => ['TasksFolders'],
             'conditions' => [],
             'order' => ['TasksFolders.title ASC', 'Tasks.completed'],
         ], $this->Tasks->filter($filter));
@@ -84,6 +85,7 @@ class TasksController extends AppController
         }
 
         $folders = $this->Tasks->TasksFolders->listForOwner($this->getCurrentUser()->get('company_id'));
+
         $this->set(compact('task', 'folders'));
     }
 
