@@ -12,58 +12,49 @@ class LilTasksSidebar
     /**
      * Returns number of open tasks for specified due string.
      *
-     * @param string $due Due string
      * @param string $owner_id Owner id
      * @return int
      */
-    public static function countOpenTasks($due, $owner_id)
+    public static function countOpenTasks($owner_id)
     {
-        $count = Cache::remember('LilTasks.OpenTasks.' . $owner_id . '.' . $due, function () use ($due, $owner_id) {
-            /** @var \LilTasks\Model\Table\TasksTable $TasksTable */
-            $TasksTable = TableRegistry::get('LilTasks.Tasks');
-
-            $filter = ['due' => $due, 'completed' => 'notyet'];
-            $params = $TasksTable->filter($filter);
-
-            $count = $TasksTable->find()->select()
-                ->where(['Tasks.owner_id' => $owner_id])
-                ->andWhere($params['conditions'])
-                ->count();
-
-            return $count;
-        });
-
-        return $count;
-    }
-
-    /**
-     * Returns number of open tasks for specified folder.
-     *
-     * @param string $folder_id Folder id
-     * @param string $owner_id Owner id
-     * @return int
-     */
-    public static function countOpenTasksInFolder($folder_id, $owner_id)
-    {
-        $count = Cache::remember(
-            'LilTasks.OpenTasksInFolder.' . $owner_id . '.' . $folder_id,
-            function () use ($folder_id, $owner_id) {
+        $counters = Cache::remember(
+            'LilTasks.' . $owner_id . '.OpenTasks',
+            function () use ($owner_id) {
                 /** @var \LilTasks\Model\Table\TasksTable $TasksTable */
                 $TasksTable = TableRegistry::get('LilTasks.Tasks');
+
+                $taskDues = ['today', 'tomorrow', 'morethan2days', 'empty'];
+                foreach ($taskDues as $due) {
+                    $filter = ['due' => $due, 'completed' => 'notyet'];
+                    $params = $TasksTable->filter($filter);
+
+                    $count = $TasksTable->find()->select()
+                        ->where(['Tasks.owner_id' => $owner_id])
+                        ->andWhere($params['conditions'])
+                        ->count();
+
+                    $ret[$due] = $count;
+                }
 
                 $filter = ['completed' => 'notyet'];
                 $params = $TasksTable->filter($filter);
 
-                $count = $TasksTable->find()->select()
-                    ->where(['Tasks.owner_id' => $owner_id, 'Tasks.folder_id' => $folder_id])
+                $q = $TasksTable->find();
+                $countByFolder = $q
+                    ->select(['id', 'folder_id', 'count' => $q->func()->count('*')])
+                    ->where(['Tasks.owner_id' => $owner_id])
                     ->andWhere($params['conditions'])
-                    ->count();
+                    ->group('Tasks.folder_id')
+                    ->combine('folder_id', 'count')
+                    ->toArray();
 
-                return $count;
+                $ret['folders'] = $countByFolder;
+
+                return $ret;
             }
         );
 
-        return $count;
+        return $counters;
     }
 
     /**
@@ -98,10 +89,11 @@ class LilTasksSidebar
             'action' => 'index',
         ];
 
-        $countToday = self::countOpenTasks('today', $currentUser['company_id']);
-        $countTomorrow = self::countOpenTasks('tomorrow', $currentUser['company_id']);
-        $countFuture = self::countOpenTasks('morethan2days', $currentUser['company_id']);
-        $countEmpty = self::countOpenTasks('empty', $currentUser['company_id']);
+        $openTasksCounters = self::countOpenTasks($currentUser['company_id']);
+        $countToday = $openTasksCounters['today'];
+        $countTomorrow = $openTasksCounters['tomorrow'];
+        $countFuture = $openTasksCounters['morethan2days'];
+        $countEmpty = $openTasksCounters['empty'];
 
         $tasks['items'] = [
             'filters' => [
@@ -203,7 +195,7 @@ class LilTasksSidebar
         $folders = $TasksFolders->findForOwner($currentUser->company_id);
 
         foreach ($folders as $folder) {
-            $countFolder = self::countOpenTasksInFolder($folder->id, $currentUser->company_id);
+            $countFolder = $openTasksCounters['folders'][$folder->id] ?? 0;
             $tasks['items']['folders']['submenu'][] = [
                 'title' => h($folder->title),
                 'badge' => $countFolder == 0 ? '' : $countFolder,

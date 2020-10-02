@@ -116,6 +116,21 @@ class InvoicesController extends AppController
 
         $dateSpan = $this->Invoices->maxSpan($filter['counter']);
 
+        $counters = [];
+        $controller = $this;
+        $counters = Cache::remember(
+            'LilInvoices.sidebarCounters.' . $this->getCurrentUser()->id,
+            function () use ($controller) {
+                $InvoicesCounters = TableRegistry::getTableLocator()->get('LilInvoices.InvoicesCounters');
+
+                return $controller->Authorization->applyScope($InvoicesCounters->find(), 'index')
+                    ->where(['active' => true])
+                    ->order(['active', 'kind DESC', 'title'])
+                    ->all();
+            },
+            'Lil'
+        );
+
         $projects = [];
         if (Plugin::isLoaded('LilProjects')) {
             /** @var \LilProjects\Model\Table\ProjectsTable $ProjectsTable */
@@ -124,7 +139,7 @@ class InvoicesController extends AppController
             $projects = $ProjectsTable->findForOwner($this->getCurrentUser()->id, $projectsQuery);
         }
 
-        $this->set(compact('data', 'filter', 'counter', 'projects', 'dateSpan', 'invoicesTotals'));
+        $this->set(compact('data', 'filter', 'counter', 'projects', 'dateSpan', 'invoicesTotals', 'counters'));
 
         return null;
     }

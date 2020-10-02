@@ -70,7 +70,7 @@ return [
 
         'fromEmail' => [
             'from' => 'info@arhint.si',
-            'name' => 'ARHINT'
+            'name' => 'ARHINT',
         ]
     ],
 
@@ -118,7 +118,7 @@ return [
          */
         '_cake_core_' => [
             'className' => FileEngine::class,
-            'prefix' => 'arhint_cake_core_',
+            'prefix' => 'arhint_core_',
             'path' => CACHE . 'persistent' . DS,
             'serialize' => true,
             'duration' => '+1 years',
@@ -133,7 +133,7 @@ return [
          */
         '_cake_model_' => [
             'className' => FileEngine::class,
-            'prefix' => 'arhint_cake_model_',
+            'prefix' => 'arhint_model_',
             'path' => CACHE . 'models' . DS,
             'serialize' => true,
             'duration' => '+1 years',
@@ -147,7 +147,7 @@ return [
          */
         '_cake_routes_' => [
             'className' => FileEngine::class,
-            'prefix' => 'arhint_cake_routes_',
+            'prefix' => 'arhint_routes_',
             'path' => CACHE,
             'serialize' => true,
             'duration' => '+1 years',

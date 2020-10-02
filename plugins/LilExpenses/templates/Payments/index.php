@@ -260,7 +260,8 @@ echo $this->Lil->index($admin_index, 'LilExpenses.Payments.index');
 
         // dates picker
         $("#lil-payments-input-date-start").datepicker({
-            dateFormat: 'yy-mm-dd',
+            format: 'yy-mm-dd',
+            setDefaultDate: true,
             onSelect: function(dateString, inst) {
                 filterByDate(dateString, 'start');
             },
@@ -275,7 +276,8 @@ echo $this->Lil->index($admin_index, 'LilExpenses.Payments.index');
         });
 
         $("#lil-payments-input-date-end").datepicker({
-            dateFormat: 'yy-mm-dd',
+            format: 'yy-mm-dd',
+            setDefaultDate: true,
             onSelect: function(dateString, inst) {
                 filterByDate(dateString, 'end');
             },

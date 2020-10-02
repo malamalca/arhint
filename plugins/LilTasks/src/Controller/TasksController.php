@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace LilTasks\Controller;
 
+use Cake\Cache\Cache;
 use Cake\Http\Exception\NotFoundException;
 use Cake\I18n\Time;
 
@@ -78,6 +79,8 @@ class TasksController extends AppController
             if ($this->Tasks->save($task)) {
                 $this->Flash->success(__d('lil_tasks', 'The task has been saved.'));
 
+                Cache::delete('LilTasks.' . $task->owner_id . '.OpenTasks');
+
                 return $this->redirect(['action' => 'index']);
             } else {
                 $this->Flash->error(__d('lil_tasks', 'The task could not be saved. Please, try again.'));
@@ -110,6 +113,8 @@ class TasksController extends AppController
             $this->Flash->error(__d('lil_tasks', 'The task could not be saved. Please, try again.'));
         }
 
+        Cache::delete('LilTasks.' . $task->owner_id . '.OpenTasks');
+
         return $this->redirect($this->getRequest()->referer());
     }
 
@@ -127,6 +132,8 @@ class TasksController extends AppController
 
         if ($this->Tasks->delete($task)) {
             $this->Flash->success(__d('lil_tasks', 'The task has been deleted.'));
+
+            Cache::delete('LilTasks.' . $task->owner_id . '.OpenTasks');
         } else {
             $this->Flash->error(__d('lil_tasks', 'The task could not be deleted. Please, try again.'));
         }

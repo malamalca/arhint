@@ -16,12 +16,28 @@ $endLink = $this->Html->link(
     ['class' => 'dropdown-trigger no-autoinit nowrap', 'data-target' => 'lil-invoices-input-date-end']
 );
 
+$counterLink = $this->Html->link(
+    $counter->title,
+    ['action' => 'filter'],
+    ['class' => 'dropdown-trigger', 'id' => 'filter-counters', 'data-target' => 'dropdown-counters']
+);
+$popupCounters = [];
+foreach ($counters as $cntr) {
+    $menuItem = [
+        'title' => h($cntr->title),
+        'url' => ['?' => array_merge($this->getRequest()->getQuery(), ['counter' => $cntr->id])],
+        'active' => $this->getRequest()->getQuery('counter') == $cntr->id,
+    ];
+    $popupCounters['items'][] = $menuItem;
+}
+$popupCounters = $this->Lil->popup('counters', $popupCounters, true);
+
 $title = __d(
     'lil_invoices',
     '"{2}" from {0} to {1}',
     $startLink,
     $endLink,
-    h($counter->title)
+    $counterLink
 );
 
 $invoices_index = [
@@ -32,6 +48,7 @@ $invoices_index = [
         'lines' => [
             sprintf('<input type="hidden" value="%s" id="lil-invoices-input-date-start" />', $start_span->toDateString()),
             sprintf('<input type="hidden" value="%s" id="lil-invoices-input-date-end" />', $end_span->toDateString()),
+            $popupCounters,
         ],
     ],
     'menu' => [
@@ -125,11 +142,11 @@ $invoices_index = [
                 'parameters' => ['class' => 'invoices-project right-align nowrap'],
                 'html' => '&nbsp;',
             ],
-            'net_total' => (!$counter->isInvoice()) ? null : [
+            'net_total' => !$counter->isInvoice() ? null : [
                 'parameters' => ['class' => 'right-align nowrap hide-on-small-only'],
                 'html' => '&nbsp;',
             ],
-            'total' => (!$counter->isInvoice()) ? null : [
+            'total' => !$counter->isInvoice() ? null : [
                 'parameters' => ['class' => 'right-align nowrap'],
                 'html' => '&nbsp;',
             ],
@@ -142,7 +159,7 @@ $net_total = 0;
 $link_template = '<a href="' . Router::url(['action' => 'view', '__id__']) . '">__title__</a>';
 foreach ($data as $invoice) {
     $client = $counter->kind == 'issued' ? $invoice->receiver : $invoice->issuer;
-    $project = isset($projects[$invoice->project_id]) ? $projects[$invoice->project_id] : null;
+    $project = $projects[$invoice->project_id] ?? null;
 
     $invoices_index['table']['body']['rows'][]['columns'] = [
         'cnt' => [
@@ -240,7 +257,8 @@ echo $this->Lil->index($invoices_index, 'LilInvoices.Invoices.index');
         $(".search-panel input").on("input", function(e) {
             var rx_term = new RegExp("__term__", "i");
             $.get(searchUrl.replace(rx_term, encodeURIComponent($(this).val())), function(response) {
-                let tBody = response.substring(response.indexOf("<table class=\"index"), response.indexOf("</table>")+8);
+                let tBody = response
+                    .substring(response.indexOf("<table class=\"index"), response.indexOf("</table>")+8);
                 $("#AdminInvoicesIndex").html(tBody);
             });
         }).focus();
@@ -249,32 +267,32 @@ echo $this->Lil->index($invoices_index, 'LilInvoices.Invoices.index');
         ////////////////////////////////////////////////////////////////////////////////////////////
         // Start-End date in title
         $("#lil-invoices-input-date-start").datepicker({
-            dateFormat: 'yyyy-mm-dd',
+            format: "yyyy-mm-dd",
             setDefaultDate: true,
             onSelect: function(date, inst) {
                 let dateString = new Date(date.getTime() - (date.getTimezoneOffset() * 60000 ))
                     .toISOString()
                     .substring(0,10);
-                filterByDate(dateString, 'start');
+                filterByDate(dateString, "start");
             }
         });
         $("#lil-invoices-link-date-start").click(function() {
-            $("#lil-invoices-input-date-start").datepicker('open');
+            $("#lil-invoices-input-date-start").datepicker("open");
             return false;
         });
 
         $("#lil-invoices-input-date-end").datepicker({
-            dateFormat: 'yyyy-mm-dd',
+            format: "yyyy-mm-dd",
             setDefaultDate: true,
             onSelect: function(date) {
                 let dateString = new Date(date.getTime() - (date.getTimezoneOffset() * 60000 ))
                     .toISOString()
                     .substring(0,10);
-                filterByDate(dateString, 'end');
+                filterByDate(dateString, "end");
             }
         });
         $("#lil-invoices-link-date-end").click(function() {
-            $("#lil-invoices-input-date-end").datepicker('open');
+            $("#lil-invoices-input-date-end").datepicker("open");
             return false;
         });
 
