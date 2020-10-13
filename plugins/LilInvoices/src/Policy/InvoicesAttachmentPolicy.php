@@ -37,7 +37,7 @@ class InvoicesAttachmentPolicy
         /** @var \LilInvoices\Model\Table\InvoicesTable $InvoicesTable */
         $InvoicesTable = TableRegistry::getTableLocator()->get('LilInvoices.Invoices');
 
-        return $InvoicesTable->isOwnedBy($entity->invoice_id, $user->company_id);
+        return $InvoicesTable->isOwnedBy($entity->invoice_id, $user->company_id) && $user->hasRole('editor');
     }
 
     /**
@@ -52,6 +52,6 @@ class InvoicesAttachmentPolicy
         /** @var \LilInvoices\Model\Table\InvoicesTable $InvoicesTable */
         $InvoicesTable = TableRegistry::getTableLocator()->get('LilInvoices.Invoices');
 
-        return $InvoicesTable->isOwnedBy($entity->invoice_id, $user->company_id);
+        return $InvoicesTable->isOwnedBy($entity->invoice_id, $user->company_id) && $user->hasRole('editor');
     }
 }

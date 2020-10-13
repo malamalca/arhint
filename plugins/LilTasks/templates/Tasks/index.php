@@ -8,6 +8,8 @@ if (!empty($folderId)) {
     $folderTitle = $tasks->first()->tasks_folder->title;
 }
 
+$this->set('pageTitle', __d('lil_tasks', 'Tasks') . ($folderTitle ? ' :: ' . h($folderTitle) : ''));
+
 $tasksIndex = [
     'title' => ' ',
     'menu' => [

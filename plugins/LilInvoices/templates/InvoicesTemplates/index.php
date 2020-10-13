@@ -5,7 +5,7 @@ $templatesIndex = [
     'menu' => [
         'add' => [
             'title' => __d('lil_invoices', 'Add'),
-            'visible' => true,
+            'visible' => $this->getCurrentUser()->hasRole('editor'),
             'url' => [
                 'plugin' => 'LilInvoices',
                 'controller' => 'InvoicesTemplates',
@@ -26,8 +26,8 @@ $templatesIndex = [
 
 foreach ($templates as $template) {
     $templatesIndex['table']['body']['rows'][]['columns'] = [
-        'title' => $this->Html->link($template->title, ['action' => 'edit', $template->id]),
-        'actions' => [
+        'title' => h($template->title),
+        'actions' => !$this->getCurrentUser()->hasRole('editor') ? '' : [
             'parameters' => ['class' => 'right-align'],
             'html' => $this->Lil->editLink($template->id) . ' ' . $this->Lil->deleteLink($template->id),
         ],

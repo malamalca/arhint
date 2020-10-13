@@ -8,7 +8,7 @@ use Cake\Routing\Router;
     <?= $this->Html->charset() ?>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>
-        <?= strip_tags($this->fetch('title')) ?>
+        <?= strip_tags($pageTitle ?? $this->fetch('title')) ?>
     </title>
     <?= $this->Html->meta('icon') ?>
 

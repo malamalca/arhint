@@ -78,7 +78,7 @@ class InvoicesCountersController extends AppController
                 if ($this->InvoicesCounters->save($counter)) {
                     $this->Flash->success(__d('lil_invoices', 'The invoices counter has been saved.'));
 
-                    Cache::delete('LilInvoices.sidebarCounters' . $this->getCurrentUser()->id, 'Lil');
+                    Cache::delete('LilInvoices.sidebarCounters.' . $this->getCurrentUser()->id);
 
                     return $this->redirect(['action' => 'index']);
                 }
@@ -109,7 +109,7 @@ class InvoicesCountersController extends AppController
         if ($this->InvoicesCounters->delete($invoicesCounter)) {
             $this->Flash->success(__d('lil_invoices', 'The invoices counter has been deleted.'));
 
-            Cache::delete('LilInvoices.sidebarCounters' . $this->getCurrentUser()->id, 'Lil');
+            Cache::delete('LilInvoices.sidebarCounters.' . $this->getCurrentUser()->id);
         } else {
             $this->Flash->error(__d('lil_invoices', 'The invoices counter could not be deleted. Please, try again.'));
         }

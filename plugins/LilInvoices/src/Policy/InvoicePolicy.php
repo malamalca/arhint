@@ -29,7 +29,7 @@ class InvoicePolicy
      */
     public function canEdit($user, $entity)
     {
-        return $entity->owner_id == $user->company_id;
+        return $entity->owner_id == $user->company_id && $this->getCurrentUser()->hasRole('editor');
     }
 
     /**
@@ -53,7 +53,7 @@ class InvoicePolicy
      */
     public function canSign($user, $entity)
     {
-        return $entity->owner_id == $user->company_id;
+        return $entity->owner_id == $user->company_id && $user->hasRole('editor');
     }
 
     /**
@@ -65,6 +65,6 @@ class InvoicePolicy
      */
     public function canDelete($user, $entity)
     {
-        return $entity->owner_id == $user->company_id;
+        return $entity->owner_id == $user->company_id && $user->hasRole('editor');
     }
 }

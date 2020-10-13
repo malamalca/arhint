@@ -5,11 +5,10 @@ $itemsIndex = [
     'menu' => [
         'add' => [
             'title' => __d('lil_invoices', 'Add'),
-            'visible' => true,
-            'url'   => [
-                'plugin'     => 'LilInvoices',
+            'visible' => $this->getCurrentUser()->hasRole('editor'),
+            'url' => [
                 'controller' => 'Items',
-                'action'     => 'add',
+                'action' => 'add',
             ],
         ],
     ],
@@ -41,7 +40,7 @@ $itemsIndex = [
 
 foreach ($items as $item) {
     $itemsIndex['table']['body']['rows'][]['columns'] = [
-        'descript' => $this->Html->link($item->descript, ['action' => 'edit', $item->id]),
+        'descript' => h($item->descript),
         'qty' => [
             'parameters' => ['class' => 'right-align'],
             'html' => $this->Number->precision($item->qty, 2),
@@ -55,7 +54,7 @@ foreach ($items as $item) {
             'parameters' => ['class' => 'right-align'],
             'html' => $this->Number->currency($item->price),
         ],
-        'actions' => [
+        'actions' => !$this->getCurrentUser()->hasRole('editor') ? '' : [
             'parameters' => ['class' => 'right-align'],
             'html' => $this->Lil->editLink($item->id) . ' ' . $this->Lil->deleteLink($item->id),
         ],

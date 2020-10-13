@@ -13,7 +13,7 @@ class LilTasksSidebar
      * Returns number of open tasks for specified due string.
      *
      * @param string $owner_id Owner id
-     * @return int
+     * @return array
      */
     public static function countOpenTasks($owner_id)
     {

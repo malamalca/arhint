@@ -54,7 +54,7 @@ $invoices_index = [
     'menu' => [
         'add' => [
             'title' => __d('lil_invoices', 'Add'),
-            'visible' => $counter->active,
+            'visible' => $counter->active && $this->getCurrentUser()->hasRole('editor'),
             'url' => [
                 'plugin' => 'LilInvoices',
                 'controller' => 'invoices',
@@ -299,7 +299,7 @@ echo $this->Lil->index($invoices_index, 'LilInvoices.Invoices.index');
         ////////////////////////////////////////////////////////////////////////////////////////////
         $('#MenuItemExportSepaXml, #MenuItemExportPdf, #MenuItemEmail, #MenuItemPrint').click(function(e) {
             let rx_term = new RegExp("__term__", "i");
-            let searchTerm = $("#SearchBox").val();
+            let searchTerm = $(".search-panel input").val();
             let url = $(this).prop("href").replace(rx_term, encodeURIComponent(searchTerm));
 
             document.location.href = url;

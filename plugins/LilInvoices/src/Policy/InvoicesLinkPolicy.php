@@ -22,7 +22,7 @@ class InvoicesLinkPolicy
         /** @var \LilInvoices\Model\Table\InvoicesTable $InvoicesTable */
         $InvoicesTable = TableRegistry::getTableLocator()->get('LilInvoices.Invoices');
 
-        return $InvoicesTable->isOwnedBy($entity->invoice_id, $user->id);
+        return $InvoicesTable->isOwnedBy($entity->invoice_id, $user->id) && $user->hasRole('editor');
     }
 
     /**
@@ -37,6 +37,6 @@ class InvoicesLinkPolicy
         /** @var \LilInvoices\Model\Table\InvoicesTable $InvoicesTable */
         $InvoicesTable = TableRegistry::getTableLocator()->get('LilInvoices.Invoices');
 
-        return $InvoicesTable->isOwnedBy($entity->invoice_id, $user->id);
+        return $InvoicesTable->isOwnedBy($entity->invoice_id, $user->id) && $user->hasRole('editor');
     }
 }

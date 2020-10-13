@@ -18,7 +18,7 @@ $invoiceView = [
     'menu' => [
         'edit' => [
             'title' => __d('lil_invoices', 'Edit'),
-            'visible' => $invoice->invoices_counter->active,
+            'visible' => $invoice->invoices_counter->active && $this->getCurrentUser()->hasRole('editor'),
             'url' => [
                 'action' => 'edit',
                 $invoice->id,
@@ -26,7 +26,7 @@ $invoiceView = [
         ],
         'duplicate' => [
             'title' => __d('lil_invoices', 'Duplicate'),
-            'visible' => true,
+            'visible' => $this->getCurrentUser()->hasRole('editor'),
             'url' => [
                 'action' => 'edit',
                 '?' => ['duplicate' => $invoice->id],
@@ -34,7 +34,7 @@ $invoiceView = [
         ],
         'attach' => [
             'title' => __d('lil_invoices', 'Attach'),
-            'visible' => true,
+            'visible' => $this->getCurrentUser()->hasRole('editor'),
             'submenu' => [
                 'attachment' => [
                     'title' => __d('lil_invoices', 'File'),
@@ -79,7 +79,7 @@ $invoiceView = [
         ],
         'delete' => [
             'title' => __d('lil_invoices', 'Delete'),
-            'visible' => $invoice->invoices_counter->active,
+            'visible' => $invoice->invoices_counter->active && $this->getCurrentUser()->hasRole('editor'),
             'url' => [
                 'action' => 'delete',
                 $invoice->id,
@@ -143,7 +143,7 @@ $invoiceView = [
         ],
         'settings' => [
             'title' => __d('lil_invoices', 'Settings'),
-            'visible' => true,
+            'visible' => $this->getCurrentUser()->hasRole('editor'),
             'submenu' => [
                 'templates' => [
                     'title' => __d('lil_invoices', 'Templates'),

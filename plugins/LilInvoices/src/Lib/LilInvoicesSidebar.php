@@ -166,7 +166,7 @@ class LilInvoicesSidebar
             ////////////////////////////////////////////////////////////////////////////////////////
             // Fetch counters
             $counters = Cache::remember(
-                'LilInvoices.sidebarCounters' . $controller->getCurrentUser()->id,
+                'LilInvoices.sidebarCounters.' . $controller->getCurrentUser()->id,
                 function () use ($controller) {
                     /** @var \LilInvoices\Model\Table\InvoicesCountersTable $InvoicesCounters */
                     $InvoicesCounters = TableRegistry::getTableLocator()->get('LilInvoices.InvoicesCounters');
@@ -175,8 +175,7 @@ class LilInvoicesSidebar
                         ->where(['active' => true])
                         ->order(['active', 'kind DESC', 'title'])
                         ->all();
-                },
-                'Lil'
+                }
             );
 
             // determine current counter

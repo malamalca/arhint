@@ -41,7 +41,7 @@ $countersIndex = [
     'menu' => [
         'add' => [
             'title' => __d('lil_invoices', 'Add'),
-            'visible' => true,
+            'visible' => $this->getCurrentUser()->hasRole('editor'),
             'url' => [
                 'plugin' => 'LilInvoices',
                 'controller' => 'InvoicesCounters',
@@ -92,7 +92,9 @@ foreach ($counters as $counter) {
                     ['controller' => 'Invoices', 'action' => 'index', '?' => ['counter' => $counter->id]],
                     ['escape' => false, 'class' => 'btn btn-small btn-floating waves-effect waves-light waves-circle']
                 ) . ' ' .
-                $this->Lil->editLink($counter->id) . ' ' . $this->Lil->deleteLink($counter->id),
+                (!$this->getCurrentUser()->hasRole('editor') ? '' : (
+                    $this->Lil->editLink($counter->id) . ' ' . $this->Lil->deleteLink($counter->id)
+                )),
         ],
     ];
 }

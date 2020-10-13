@@ -209,8 +209,7 @@ class ProjectsTable extends Table
                         return $entity;
                     })
                     ->toArray();
-            },
-            'Lil'
+            }
         );
 
         return $data;

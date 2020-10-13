@@ -16,9 +16,9 @@ use Cake\ORM\Entity;
  * @property \LilTasks\Model\Entity\Foreign $foreign
  * @property string $title
  * @property string $descript
- * @property \Cake\I18n\Time $started
- * @property \Cake\I18n\Time $deadline
- * @property \Cake\I18n\Time $completed
+ * @property \Cake\I18n\Time|null $started
+ * @property \Cake\I18n\Time|null $deadline
+ * @property \Cake\I18n\Time|null $completed
  * @property \Cake\I18n\Time $created
  * @property \Cake\I18n\Time $modified
  */

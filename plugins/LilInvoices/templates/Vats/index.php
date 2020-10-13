@@ -5,7 +5,7 @@ $vatIndex = [
     'menu' => [
         'add' => [
             'title' => __d('lil_invoices', 'Add'),
-            'visible' => true,
+            'visible' => $this->getCurrentUser()->hasRole('editor'),
             'url' => [
                 'plugin' => 'LilInvoices',
                 'controller' => 'vats',
@@ -30,12 +30,12 @@ $vatIndex = [
 
 foreach ($vats as $vat) {
     $vatIndex['table']['body']['rows'][]['columns'] = [
-        'descript' => $this->Html->link($vat->descript, ['action' => 'edit', $vat->id]),
+        'descript' => h($vat->descript),
         'percent' => [
             'parameters' => ['class' => 'right-align'],
             'html' => $this->Number->precision($vat->percent, 1),
         ],
-        'actions' => [
+        'actions' => !$this->getCurrentUser()->hasRole('editor') ? '' : [
             'parameters' => ['class' => 'right-align'],
             'html' => $this->Lil->editLink($vat->id) . ' ' . $this->Lil->deleteLink($vat->id),
         ],

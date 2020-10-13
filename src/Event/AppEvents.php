@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace App\Event;
 
-use App\Lib\AppSidebar;
 use ArrayObject;
 use Cake\Event\Event;
 use Cake\Event\EventListenerInterface;
@@ -51,7 +50,6 @@ class AppEvents implements EventListenerInterface
     {
         $ret = $sidebar;
         unset($sidebar['welcome']);
-
 
         return $ret;
     }
