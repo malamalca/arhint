@@ -74,7 +74,7 @@ class LilInvoicesEvents implements EventListenerInterface
         $countersQuery = $InvoicesCounters->find();
         $identity->applyScope('index', $countersQuery);
         $counters = $countersQuery
-            ->where(['active' => true])
+            ->select(['id', 'title', 'kind', 'active'])
             ->order(['kind', 'title'])
             ->combine('id', function ($entity) {
                 return $entity;
@@ -101,11 +101,10 @@ class LilInvoicesEvents implements EventListenerInterface
                         'Issuers.contact_id' => $panels->entity->id,
                     ],
                 ])
-                ->contain(['Buyers', 'Issuers', 'InvoicesCounters']);
+                ->contain(['Buyers', 'Issuers']);
                 break;
             case 'Lil.Panels.LilProjects.Projects.view':
-                $query->where(['Invoices.project_id' => $panels->entity->id])
-                ->contain(['InvoicesCounters']);
+                $query->where(['Invoices.project_id' => $panels->entity->id]);
                 break;
         }
 
@@ -147,19 +146,21 @@ class LilInvoicesEvents implements EventListenerInterface
                     'submenu' => [],
                 ];
                 foreach ($counters as $counter) {
-                    $panels->menu['add_invoice']['submenu'][] = [
-                        'title' => $counter->title,
-                        'url' => [
-                            'plugin' => 'LilInvoices',
-                            'controller' => 'Invoices',
-                            'action' => 'add',
-                            '?' => [
-                                'counter' => $counter->id,
-                                'project' => $view->getRequest()->getParam('pass.0'),
-                                'redirect' => base64_encode(Router::url(null, true)),
+                    if ($counter->active) {
+                        $panels->menu['add_invoice']['submenu'][] = [
+                            'title' => $counter->title,
+                            'url' => [
+                                'plugin' => 'LilInvoices',
+                                'controller' => 'Invoices',
+                                'action' => 'add',
+                                '?' => [
+                                    'counter' => $counter->id,
+                                    'project' => $view->getRequest()->getParam('pass.0'),
+                                    'redirect' => base64_encode(Router::url(null, true)),
+                                ],
                             ],
-                        ],
-                    ];
+                        ];
+                    }
                 }
                 $elementTemplate = 'LilInvoices.invoices_projects_list';
                 break;
@@ -168,7 +169,7 @@ class LilInvoicesEvents implements EventListenerInterface
         }
         $invoicesPanels = [
             'invoices_title' => '<h3>' . __d('lil_invoices', 'Invoices') . '</h3>',
-            'invoices_table' => $view->element($elementTemplate, ['invoices' => $invoices]),
+            'invoices_table' => $view->element($elementTemplate, ['invoices' => $invoices, 'counters' => $counters]),
         ];
 
         $view->Lil->insertIntoArray($panels->panels, $invoicesPanels);

@@ -29,7 +29,7 @@ class InvoicePolicy
      */
     public function canEdit($user, $entity)
     {
-        return $entity->owner_id == $user->company_id && $this->getCurrentUser()->hasRole('editor');
+        return $entity->owner_id == $user->company_id && $user->hasRole('editor');
     }
 
     /**

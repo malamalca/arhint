@@ -126,9 +126,24 @@ class ProjectsController extends AppController
             ->select()
             ->where(['project_id' => $id])
             ->order('ProjectsLogs.created DESC')
-            ->contain(['Users'])
             ->limit(5)
             ->all();
+
+        $userIds = [];
+        foreach ($logs as $log) {
+            $userIds[] = $log->user_id;
+        }
+
+        $users = [];
+        if (!empty($userIds)) {
+            $users = TableRegistry::getTableLocator()->get('Users')->find()
+                ->select(['id', 'name'])
+                ->where(['id IN' => $userIds])
+                ->combine('id', function ($entity) {
+                    return $entity;
+                })
+                ->toArray();
+        }
 
         if ($this->getRequest()->is('ajax')) {
             $this->viewBuilder()->setTemplate('map_popup');
@@ -138,7 +153,7 @@ class ProjectsController extends AppController
             ->order(['title'])
             ->toArray();
 
-        $this->set(compact('project', 'logs', 'projectsStatuses', 'workDuration'));
+        $this->set(compact('project', 'logs', 'users', 'projectsStatuses', 'workDuration'));
     }
 
     /**

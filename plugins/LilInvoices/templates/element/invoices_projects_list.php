@@ -75,7 +75,7 @@ if ($invoices->count() > 0) {
             'no' => [
                 'parameters' => ['class' => 'left-align'],
                 'html' =>
-                '<div class="small">' . h($invoice->invoices_counter->title) . '</div>' .
+                '<div class="small">' . h($counters[$invoice->counter_id]->title) . '</div>' .
                 $this->Html->link(
                     '#' . $invoice->no . ' - ' . $invoice->title,
                     [

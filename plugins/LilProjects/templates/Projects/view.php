@@ -78,7 +78,7 @@
     }
     foreach ($logs as $log) {
         $projectView['panels']['logs']['table']['body']['rows'][] = ['columns' => [
-            'user' => h($log->user->name),
+            'user' => h($users[$log->user_id]->name),
             'descript' =>
                 sprintf(
                     '<div class="logs-header">%2$s %1$s</div>',
