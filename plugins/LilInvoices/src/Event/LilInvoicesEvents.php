@@ -87,7 +87,7 @@ class LilInvoicesEvents implements EventListenerInterface
 
         // prepare query
         $sort = 'Invoices.';
-        $sort .= $view->getRequest()->getQuery('invoices.sort', 'no');
+        $sort .= $view->getRequest()->getQuery('invoices.sort', 'counter');
         $sort .= ' ' . $view->getRequest()->getQuery('invoices.direction', 'DESC');
 
         $Invoices = TableRegistry::getTableLocator()->get('LilInvoices.Invoices');
