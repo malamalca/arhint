@@ -6,6 +6,7 @@ namespace LilTasks\Controller;
 use Cake\Cache\Cache;
 use Cake\Http\Exception\NotFoundException;
 use Cake\I18n\Time;
+use Cake\ORM\TableRegistry;
 
 /**
  * Tasks Controller
@@ -23,7 +24,10 @@ class TasksController extends AppController
     {
         $filter = $this->getRequest()->getQueryParams();
 
-        $folders = $this->Tasks->TasksFolders->listForOwner($this->getCurrentUser()->get('company_id'));
+        /** @var \LilTasks\Model\Table\TasksFoldersTable $TasksFolders */
+        $TasksFolders = TableRegistry::get('LilTasks.TasksFolders');
+
+        $folders = $TasksFolders->listForOwner($this->getCurrentUser()->get('company_id'));
 
         if (!empty($filter['folder']) && !in_array($filter['folder'], array_keys($folders))) {
             throw new NotFoundException(__d('lil_tasks', 'Folder does not exist.'));
@@ -87,7 +91,10 @@ class TasksController extends AppController
             }
         }
 
-        $folders = $this->Tasks->TasksFolders->listForOwner($this->getCurrentUser()->get('company_id'));
+        /** @var \LilTasks\Model\Table\TasksFoldersTable $TasksFolders */
+        $TasksFolders = TableRegistry::get('LilTasks.TasksFolders');
+
+        $folders = $TasksFolders->listForOwner($this->getCurrentUser()->get('company_id'));
 
         $this->set(compact('task', 'folders'));
     }

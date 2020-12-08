@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace LilTasks\Controller;
 
+use Cake\Cache\Cache;
+
 /**
  * TasksFolders Controller
  *
@@ -41,6 +43,8 @@ class TasksFoldersController extends AppController
 
         if ($this->getRequest()->is(['patch', 'post', 'put'])) {
             $folder = $this->TasksFolders->patchEntity($folder, $this->getRequest()->getData());
+            Cache::delete('LilTasks.' . $folder->owner_id . '.Folders');
+
             if ($this->TasksFolders->save($folder)) {
                 $this->Flash->success(__d('lil_tasks', 'The folder has been saved.'));
 
@@ -66,6 +70,8 @@ class TasksFoldersController extends AppController
         $this->Authorization->authorize($tasksFolder);
 
         if ($this->TasksFolders->delete($tasksFolder)) {
+            Cache::delete('LilTasks.' . $tasksFolder->owner_id . '.Folders');
+
             $this->Flash->success(__d('lil_tasks', 'The folder has been deleted.'));
         } else {
             $this->Flash->error(__d('lil_tasks', 'The folder could not be deleted. Please, try again.'));

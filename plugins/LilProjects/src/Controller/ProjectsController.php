@@ -45,6 +45,7 @@ class ProjectsController extends AppController
         $projects = $this->paginate($query);
 
         $projectsStatuses = $this->Authorization->applyScope($this->Projects->ProjectsStatuses->find('list'), 'index')
+            ->cache('Projects.ProjectsStatuses.' . $this->getCurrentUser()->get('company_id'))
             ->order(['title'])
             ->toArray();
 

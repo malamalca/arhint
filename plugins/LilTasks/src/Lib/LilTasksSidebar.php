@@ -189,27 +189,35 @@ class LilTasksSidebar
             ],
         ];
 
-        /** @var \LilTasks\Model\Table\TasksFoldersTable $TasksFolders */
-        $TasksFolders = TableRegistry::get('LilTasks.TasksFolders');
+        $owner_id = $currentUser->company_id;
+        $folders = Cache::remember(
+            'LilTasks.' . $owner_id . '.Folders',
+            function () use ($owner_id, $openTasksCounters, $request) {
+                /** @var \LilTasks\Model\Table\TasksFoldersTable $TasksFolders */
+                $TasksFolders = TableRegistry::get('LilTasks.TasksFolders');
 
-        $folders = $TasksFolders->findForOwner($currentUser->company_id);
+                $folders = $TasksFolders->findForOwner($owner_id);
 
-        foreach ($folders as $folder) {
-            $countFolder = $openTasksCounters['folders'][$folder->id] ?? 0;
-            $tasks['items']['folders']['submenu'][] = [
-                'title' => h($folder->title),
-                'badge' => $countFolder == 0 ? '' : $countFolder,
-                'visible' => true,
-                'url' => [
-                    'plugin' => 'LilTasks',
-                    'controller' => 'Tasks',
-                    'action' => 'index',
-                    '?' => ['folder' => $folder->id],
-                ],
-                'active' => $request->getQuery('folder') == $folder->id,
-                'params' => ['escape' => false],
-            ];
-        }
+                foreach ($folders as $folder) {
+                    $countFolder = $openTasksCounters['folders'][$folder->id] ?? 0;
+                    $tasks['items']['folders']['submenu'][] = [
+                        'title' => h($folder->title),
+                        'badge' => $countFolder == 0 ? '' : $countFolder,
+                        'visible' => true,
+                        'url' => [
+                            'plugin' => 'LilTasks',
+                            'controller' => 'Tasks',
+                            'action' => 'index',
+                            '?' => ['folder' => $folder->id],
+                        ],
+                        'active' => $request->getQuery('folder') == $folder->id,
+                        'params' => ['escape' => false],
+                    ];
+                }
+
+                return $folders;
+            }
+        );
 
         // insert into sidebar right after welcome panel
         Lil::insertIntoArray($sidebar, ['tasks' => $tasks], ['after' => 'welcome']);

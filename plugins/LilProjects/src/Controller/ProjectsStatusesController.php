@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace LilProjects\Controller;
 
+use Cake\Cache\Cache;
+
 /**
  * ProjectsStatuses Controller
  *
@@ -61,6 +63,8 @@ class ProjectsStatusesController extends AppController
         if ($this->request->is(['patch', 'post', 'put'])) {
             $projectsStatus = $this->ProjectsStatuses->patchEntity($projectsStatus, $this->request->getData());
             if ($this->ProjectsStatuses->save($projectsStatus)) {
+                Cache::delete('Projects.ProjectsStatuses.' . $projectsStatus->owner_id);
+
                 $this->Flash->success(__d('lil_projects', 'The projects status has been saved.'));
 
                 return $this->redirect(['action' => 'index']);
@@ -85,6 +89,7 @@ class ProjectsStatusesController extends AppController
         $projectsStatus = $this->ProjectsStatuses->get($id);
         $this->Authorization->authorize($projectsStatus);
         if ($this->ProjectsStatuses->delete($projectsStatus)) {
+            Cache::delete('Projects.ProjectsStatuses.' . $projectsStatus->owner_id);
             $this->Flash->success(__d('lil_projects', 'The projects status has been deleted.'));
         } else {
             $this->Flash->error(__d('lil_projects', 'The projects status could not be deleted. Please, try again.'));

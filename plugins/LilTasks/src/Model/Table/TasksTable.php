@@ -14,6 +14,9 @@ use Cake\Validation\Validator;
  * @property \Cake\ORM\Association\BelongsTo $Owners
  * @property \Cake\ORM\Association\BelongsTo $Foreigns
  * @method \LilTasks\Model\Entity\Task get(string $id, array $data = [])
+ * @method \LilTasks\Model\Entity\Task newEntity($data = null, array $options = [])
+ * @method \LilTasks\Model\Entity\Task newEmptyEntity(array $options = [])
+ * @method \LilTasks\Model\Entity\Task patchEntity(\LilTasks\Model\Entity\Task $entity, array $data = [])
  */
 class TasksTable extends Table
 {
