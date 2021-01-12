@@ -100,7 +100,7 @@ class LilInvoicesEvents implements EventListenerInterface
                     ->distinct()
                     ->where(['contact_id' => $panels->entity->id]);
 
-                $query->select(['id', 'counter_id', 'title', 'dat_issue', 'total', 'invoices_attachment_count']);
+                $query->select(['id', 'no', 'counter_id', 'title', 'dat_issue', 'total', 'invoices_attachment_count']);
                 $query->where(['id IN' => $matchingInvoices]);
                 /*$query->where([
                     'OR' => [
