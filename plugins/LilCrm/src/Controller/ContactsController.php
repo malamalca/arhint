@@ -77,19 +77,14 @@ class ContactsController extends AppController
     /**
      * View method
      *
-     * @param  string|null $id Contact id.
+     * @param  string $id Contact id.
      * @return void
      * @throws \Cake\Http\Exception\NotFoundException When record not found.
      */
-    public function view($id = null)
+    public function view($id)
     {
-        $contact = $this->Contacts->find()
-            ->where(['Contacts.id' => $id])
-            ->contain([
-                'ContactsEmails', 'ContactsPhones', 'ContactsAddresses', 'ContactsAccounts',
-                'Companies',
-            ])
-            ->first();
+        $contact = $this->Contacts->get($id, ['contain' => [
+            'ContactsEmails', 'ContactsPhones', 'ContactsAddresses', 'ContactsAccounts', 'Companies']]);
 
         $this->Authorization->authorize($contact, 'view');
 
@@ -98,11 +93,7 @@ class ContactsController extends AppController
             ->contain(['PrimaryEmails', 'PrimaryPhones'])
             ->all();
 
-        if ($id && $contact) {
-            $this->set(compact('contact', 'employees'));
-        } else {
-            throw new NotFoundException(__d('lil_crm', 'Invalid contact'));
-        }
+        $this->set(compact('contact', 'employees'));
     }
 
     /**

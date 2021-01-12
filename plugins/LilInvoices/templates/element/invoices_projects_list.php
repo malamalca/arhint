@@ -69,7 +69,6 @@ if ($invoices->count() > 0) {
     ];
 
     $total = 0;
-    $net_total = 0;
     foreach ($invoices as $invoice) {
         $paymentsTable['body']['rows'][]['columns'] = [
             'no' => [
@@ -113,7 +112,6 @@ if ($invoices->count() > 0) {
             ],
         ];
         $total += $invoice->total;
-        $net_total += $invoice->net_total;
     }
 
     $paymentsTable['foot']['rows'][0]['columns']['total']['html'] =
