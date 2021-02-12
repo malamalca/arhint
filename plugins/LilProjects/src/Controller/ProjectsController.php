@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace LilProjects\Controller;
 
-use Cake\Cache\Cache;
 use Cake\ORM\TableRegistry;
 use LilProjects\Lib\LilProjectsFuncs;
 
@@ -202,8 +201,6 @@ class ProjectsController extends AppController
             }
 
             if ($this->Projects->save($project)) {
-                Cache::delete('LilProjects.projectsList.' . $project->owner_id);
-
                 $this->Flash->success(__d('lil_projects', 'The project has been saved.'));
                 $redirect = $this->getRequest()->getData('redirect');
                 if (!empty($redirect)) {
@@ -237,7 +234,6 @@ class ProjectsController extends AppController
         $project = $this->Projects->get($id);
         $this->Authorization->authorize($project);
         if ($this->Projects->delete($project)) {
-            Cache::delete('LilProjects.projectsList.' . $project->owner_id);
             $this->Flash->success(__d('lil_projects', 'The project has been deleted.'));
         } else {
             $this->Flash->error(__d('lil_projects', 'The project could not be deleted. Please, try again.'));

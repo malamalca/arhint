@@ -6,11 +6,11 @@ namespace LilProjects\Model\Table;
 use ArrayObject;
 use Cake\Cache\Cache;
 use Cake\Event\Event;
-use Cake\ORM\Entity;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
 use Cake\Validation\Validator;
+use LilProjects\Model\Entity\Project;
 
 /**
  * Projects Model
@@ -175,21 +175,35 @@ class ProjectsTable extends Table
     }
 
     /**
-     * afterDelete method
+     * afterSave method
      *
      * @param \Cake\Event\Event $event Event object.
-     * @param \LilInvoices\Model\Entity\InvoicesAttachment $entity Entity object.
+     * @param \LilProjects\Model\Entity\Project $project Entity object.
      * @param \ArrayObject $options Array object.
      * @return void
      */
-    public function afterDelete(Event $event, Entity $entity, ArrayObject $options)
+    public function afterSave(Event $event, Project $project, ArrayObject $options)
     {
+        Cache::delete('LilProjects.projectsList.' . $project->owner_id);
+    }
+
+    /**
+     * afterDelete method
+     *
+     * @param \Cake\Event\Event $event Event object.
+     * @param \LilProjects\Model\Entity\Project $project Entity object.
+     * @param \ArrayObject $options Array object.
+     * @return void
+     */
+    public function afterDelete(Event $event, Project $project, ArrayObject $options)
+    {
+        Cache::delete('LilProjects.projectsList.' . $project->owner_id);
     }
 
     /**
      * List projects by kind for specified owner.
      *
-     * @param string $ownerId User Id.
+     * @param string $ownerId Users Company Id.
      * @param \Cake\ORM\Query $query Query object.
      * @return array
      */

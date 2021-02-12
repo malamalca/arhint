@@ -91,66 +91,82 @@ class LilInvoicesExport
     {
         $result = null;
 
-        if (in_array($ext, ['html', 'pdf', 'xml'])) {
-            $pdf = null;
+        switch ($ext) {
+            case 'html':
+            case 'pdf':
+            case 'xml':
+                $pdf = null;
 
-            if ($ext == 'pdf') {
-                $pdfEngine = Configure::read('LilInvoices.pdfEngine');
-                $pdfOptions = Configure::read('LilInvoices.' . $pdfEngine);
-                $pdf = LilPdfFactory::create($pdfEngine, (array)$pdfOptions);
-            }
-
-            $responseHtml = '';
-
-            foreach ($invoices as $invoice) {
-                $this->view->set('invoices', [0 => $invoice]);
-
-                $this->view->setTemplate('LilInvoices.generic');
-                if (in_array($invoice->doc_type, Configure::read('LilInvoices.invoiceDocTypes'))) {
-                    $this->view->setTemplate('LilInvoices.eslog');
+                if ($ext == 'pdf') {
+                    $pdfEngine = Configure::read('LilInvoices.pdfEngine');
+                    $pdfOptions = Configure::read('LilInvoices.' . $pdfEngine);
+                    $pdf = LilPdfFactory::create($pdfEngine, (array)$pdfOptions);
                 }
 
-                $outputHtml = $this->view->render();
+                $responseHtml = '';
+
+                foreach ($invoices as $invoice) {
+                    $this->view->set('invoices', [0 => $invoice]);
+
+                    $this->view->setTemplate('LilInvoices.generic');
+                    if (in_array($invoice->doc_type, Configure::read('LilInvoices.invoiceDocTypes'))) {
+                        $this->view->setTemplate('LilInvoices.eslog');
+                    }
+
+                    $outputHtml = $this->view->render();
+
+                    if (in_array($ext, ['html', 'xml', 'eslog'])) {
+                        $responseHtml .= $outputHtml;
+                    }
+                    if ($ext == 'pdf') {
+                        // PDF
+                        $pageOptions = [];
+                        if (!empty($invoice->tpl_header)) {
+                            $pdf->setHeaderHtml($this->_autop($invoice->tpl_header->body));
+                        }
+                        if (!empty($invoice->tpl_footer)) {
+                            $pdf->setFooterHtml($this->_autop($invoice->tpl_footer->body));
+                        }
+                        $pdf->newPage($this->toHtml($invoice, $outputHtml), $pageOptions);
+                    }
+                }
 
                 if (in_array($ext, ['html', 'xml', 'eslog'])) {
-                    $responseHtml .= $outputHtml;
-                }
-                if ($ext == 'pdf') {
-                    // PDF
-                    $pageOptions = [];
-                    if (!empty($invoice->tpl_header)) {
-                        $pdf->setHeaderHtml($this->_autop($invoice->tpl_header->body));
+                    if ($ext == 'html') {
+                        $result = $this->toHtml($invoices[0], $responseHtml);
+                    } else {
+                        $result = $responseHtml;
                     }
-                    if (!empty($invoice->tpl_footer)) {
-                        $pdf->setFooterHtml($this->_autop($invoice->tpl_footer->body));
-                    }
-                    $pdf->newPage($this->toHtml($invoice, $outputHtml), $pageOptions);
-                }
-            }
-
-            if (in_array($ext, ['html', 'xml', 'eslog'])) {
-                if ($ext == 'html') {
-                    $result = $this->toHtml($invoices[0], $responseHtml);
                 } else {
-                    $result = $responseHtml;
-                }
-            } else {
-                $tmpFilename = constant('TMP') . uniqid('xml2pdf') . '.pdf';
-                if (!$pdf->saveAs($tmpFilename)) {
-                    $this->lastError = $pdf->getError();
+                    $tmpFilename = constant('TMP') . uniqid('xml2pdf') . '.pdf';
+                    if (!$pdf->saveAs($tmpFilename)) {
+                        $this->lastError = $pdf->getError();
 
-                    return false;
+                        return false;
+                    }
+                    $result = file_get_contents($tmpFilename);
+                    unlink($tmpFilename);
                 }
-                $result = file_get_contents($tmpFilename);
-                unlink($tmpFilename);
-            }
-        } else {
-            $this->view->set(compact('invoices'));
-            $viewCtp = 'LilInvoices.eslog';
-            if ($ext == 'sepa') {
-                $viewCtp = 'LilInvoices.sepa';
-            }
-            $result = $this->view->render($viewCtp);
+                break;
+            case 'eslog20':
+                $responseHtml = '';
+                foreach ($invoices as $invoice) {
+                    $this->view->set('invoices', [0 => $invoice]);
+                    $this->view->setTemplate('LilInvoices.generic');
+                    $this->view->setTemplate('LilInvoices.eslog20');
+
+                    $responseHtml .= $this->view->render();
+                }
+
+                $result = $responseHtml;
+                break;
+            default:
+                $this->view->set(compact('invoices'));
+                $viewCtp = 'LilInvoices.eslog';
+                if ($ext == 'sepa') {
+                    $viewCtp = 'LilInvoices.sepa';
+                }
+                $result = $this->view->render($viewCtp);
         }
 
         return $result;
@@ -178,13 +194,14 @@ class LilInvoicesExport
                 break;
             case 'xml':
             case 'eslog':
+                $ext = 'eslog.xml';
+                break;
+            case 'eslog20':
+                $ext = 'eslog20.xml';
+                $result = $result->withType('xml');
+                break;
             case 'sepa':
-                if ($ext == 'eslog') {
-                    $ext = 'eslog.xml';
-                }
-                if ($ext == 'sepa') {
-                    $ext = 'sepa.xml';
-                }
+                $ext = 'sepa.xml';
                 $result = $result->withType('xml');
                 break;
             case 'pdf':

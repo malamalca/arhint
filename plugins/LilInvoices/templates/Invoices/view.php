@@ -139,6 +139,16 @@ $invoiceView = [
                         '?' => ['download' => 1],
                     ],
                 ],
+                'eslog20' => !$invoice->isInvoice() ? null : [
+                    'title' => __d('lil_invoices', 'eSlog 2.0'),
+                    'visible' => true,
+                    'url' => [
+                        'action' => 'export',
+                        $invoice->id,
+                        Text::slug($invoice->title) . '.eslog20.xml',
+                        '?' => ['download' => 1],
+                    ],
+                ],
             ],
         ],
         'settings' => [

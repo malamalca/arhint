@@ -75,6 +75,25 @@ $contactsIndex = [
                 ],
                 ]],
         ],
+        'foot' => [
+            'rows' => [
+                [
+                    'columns' => [
+                        'pagination' => [
+                            'params' => ['colspan' => 2, 'class' => 'left-align hide-on-small-only'],
+                            'html' => '<ul class="paginator">' . $this->Paginator->numbers([
+                                'first' => '<<',
+                                'last' => '>>',
+                                'modulus' => 3]) . '</ul>',
+                        ],
+                        'empty' => [
+                            'params' => ['colspan' => 2],
+                            'html' => '',
+                        ],
+                    ],
+                ],
+            ],
+        ],
     ],
 ];
 

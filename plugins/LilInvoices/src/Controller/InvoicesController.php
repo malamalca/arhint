@@ -136,7 +136,7 @@ class InvoicesController extends AppController
             /** @var \LilProjects\Model\Table\ProjectsTable $ProjectsTable */
             $ProjectsTable = TableRegistry::getTableLocator()->get('LilProjects.Projects');
             $projectsQuery = $this->Authorization->applyScope($ProjectsTable->find(), 'index');
-            $projects = $ProjectsTable->findForOwner($this->getCurrentUser()->id, $projectsQuery);
+            $projects = $ProjectsTable->findForOwner($this->getCurrentUser()->company_id, $projectsQuery);
         }
 
         $this->set(compact('data', 'filter', 'counter', 'projects', 'dateSpan', 'invoicesTotals', 'counters'));
@@ -288,7 +288,7 @@ class InvoicesController extends AppController
             /** @var \LilProjects\Model\Table\ProjectsTable $ProjectsTable */
             $ProjectsTable = TableRegistry::getTableLocator()->get('LilProjects.Projects');
             $projectsQuery = $this->Authorization->applyScope($ProjectsTable->find(), 'index');
-            $projects = $ProjectsTable->findForOwner($this->getCurrentUser()->id, $projectsQuery);
+            $projects = $ProjectsTable->findForOwner($this->getCurrentUser()->company_id, $projectsQuery);
         }
 
         /** @var \LilInvoices\Model\Table\VatsTable $VatsTable */
@@ -515,6 +515,9 @@ class InvoicesController extends AppController
         $ext = $this->getRequest()->getParam('_ext');
         if (!empty($name) && substr($name, -4) == 'sepa') {
             $ext = 'sepa';
+        }
+        if (!empty($name) && substr($name, -6) == 'slog20') {
+            $ext = 'eslog20';
         }
 
         $data = $Exporter->export($ext, $invoices);

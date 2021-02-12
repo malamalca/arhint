@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Model\Table;
 
+use Cake\Auth\PasswordHasherFactory;
 use Cake\Core\Configure;
 use Cake\Http\ServerRequest;
 use Cake\Mailer\Mailer;
@@ -173,17 +174,11 @@ class UsersTable extends Table
             })
             ->add('old_passwd', 'match', [
                 'rule' => function ($value, $context) {
-                    /** @var \App\Controller\UsersController $controller */
-                    $controller = $this;
-
                     /** @var \App\Model\Table\UsersTable $UsersTable */
                     $UsersTable = TableRegistry::getTableLocator()->get('Users');
                     $user = $UsersTable->get($context['data']['id']);
 
-                    /** @var \Authentication\Identifier\PasswordIdentifier $identifier */
-                    $identifier = $controller->Authentication->getIdentity()->getIdentifier();
-
-                    $passwordHasher = $identifier->getPasswordHasher();
+                    $passwordHasher = PasswordHasherFactory::build('Default');
 
                     return $passwordHasher->check($value, $user->passwd);
                 },
