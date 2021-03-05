@@ -211,30 +211,32 @@ echo $this->Lil->index($contactsIndex, 'LilCrm.Contacts.index');
         '?' => ['kind' => $filter['kind'], 'term' => '__term__'],
     ]); ?>";
 
-    $(document).ready(function() {
-        $(".toggle-syncable").click(function() {
-            var rx_id = new RegExp("__id__", "i");
-            var rx_syncable = new RegExp("__syncable__", "i");
-            var cb = this;
+    function onToggleSyncable() {
+        var rx_id = new RegExp("__id__", "i");
+        var rx_syncable = new RegExp("__syncable__", "i");
+        var cb = this;
 
-            // prevent another click before ajax request completes
-            $(cb).prop("disabled", true);
+        // prevent another click before ajax request completes
+        $(cb).prop("disabled", true);
 
-            // do the ajax request
-            var jqxhr = $.get(
-                toggleSyncableUrl
-                    .replace(rx_id, $(cb).prop("id").substr(2))
-                    .replace(rx_syncable, $(cb).prop("checked") === true ? 1 : 0)
-            )
-            .fail(function() {
-                // toggle checkbox back on ajax failure
-                $(cb).prop("checked", function (i, value) { return !value });
-            })
-            .always(function() {
-                // reenable cb
-                $(cb).prop("disabled", false);
-            });
+        // do the ajax request
+        var jqxhr = $.get(
+            toggleSyncableUrl
+                .replace(rx_id, $(cb).prop("id").substr(2))
+                .replace(rx_syncable, $(cb).prop("checked") === true ? 1 : 0)
+        )
+        .fail(function() {
+            // toggle checkbox back on ajax failure
+            $(cb).prop("checked", function (i, value) { return !value });
+        })
+        .always(function() {
+            // reenable cb
+            $(cb).prop("disabled", false);
         });
+    }
+
+    $(document).ready(function() {
+        $(".toggle-syncable").click(onToggleSyncable);
 
         $("#SearchBox").on("input", function(e) {
             if ($(this).val().length > 1) {
@@ -242,6 +244,8 @@ echo $this->Lil->index($contactsIndex, 'LilCrm.Contacts.index');
                 $.get(ajaxSearchUrl.replace(rx_term, encodeURIComponent($(this).val())), function(response) {
                     let tBody = response.substring(response.indexOf("<tbody>")+7, response.indexOf("</tbody>"));
                     $("#ContactsIndexTable tbody").html(tBody);
+
+                    $(".toggle-syncable").click(onToggleSyncable);
 
                     let paginator = response.substring(
                         response.indexOf("<ul class=\"paginator\">")+22,
