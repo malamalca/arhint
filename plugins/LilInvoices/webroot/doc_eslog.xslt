@@ -165,18 +165,6 @@
 									<td height="0.3cm"/>
 								</tr>
 
-							<xsl:if test="$GLAVA_TEKST">
-								<xsl:for-each select="$GLAVA_TEKST">
-									<tr>
-										<td colspan="2">
-											<xsl:call-template name="ConcatBesedilo">
-												<xsl:with-param name="besedilo" select="."/>
-											</xsl:call-template>
-										</td>
-									</tr>
-								</xsl:for-each>
-							</xsl:if>
-
 							<xsl:if test="$referencni_dokumenti/*">
 								<tr>
 									<td height="5px"/>

@@ -87,15 +87,21 @@ foreach ((array)$invoices as $invoice) {
                     'D_3207' => $invoice->buyer->country_code ?? 'SI',
                 ],
                 'G_SG3' => [
-                    0 => [
+                    /*0 => ['S_RFF' => [
+                        'C_C506' => [
+                            'D_1153' => '0199',
+                            'D_1154' => $invoice->buyer->tax_no,
+                        ],
+                    ]],
+                    1 => [
                         'S_RFF' => [
                             'C_C506' => [
                                 'D_1153' => 'GN',
                                 'D_1154' => $invoice->buyer->mat_no,
                             ],
                         ],
-                    ],
-                    1 => [
+                    ],*/
+                    2 => [
                         'S_RFF' => [
                             'C_C506' => [
                                 'D_1153' => 'VA',
@@ -140,19 +146,25 @@ foreach ((array)$invoices as $invoice) {
                     ],
                 ],
                 'G_SG3' => [
-                    0 => ['S_RFF' => [
+                    /*0 => ['S_RFF' => [
+                        'C_C506' => [
+                            'D_1153' => '0199',
+                            'D_1154' => $invoice->issuer->tax_no,
+                        ],
+                    ]],
+                    1 => ['S_RFF' => [
                         'C_C506' => [
                             'D_1153' => 'GN',
                             'D_1154' => $invoice->issuer->mat_no,
                         ],
-                    ]],
-                    1 => ['S_RFF' => [
+                    ]],*/
+                    2 => ['S_RFF' => [
                         'C_C506' => [
                             'D_1153' => 'VA',
                             'D_1154' => $invoice->issuer->tax_no,
                         ],
                     ]],
-                    2 => ['S_RFF' => [
+                    3 => ['S_RFF' => [
                         'C_C506' => [
                             'D_1153' => 'AHP',
                             'D_1154' => $invoice->issuer->tax_no,
@@ -255,7 +267,7 @@ foreach ((array)$invoices as $invoice) {
                         $em = 'MTR';
                         break;
                     default:
-                        $em = 'PCE';
+                        $em = 'C62'; // unit
                 }
 
                 $transformed['Invoice']['M_INVOIC'][$i]['G_SG26'] = [
@@ -273,7 +285,7 @@ foreach ((array)$invoices as $invoice) {
                         'C_C186' => [
                             'D_6063' => '47', // invoiced qty
                             'D_6060' => $this->Number->format($item->qty, ['pattern' => '##0.00', 'locale' => 'en-US']),
-                            'D_6411' => 'C62', // todo - convert unit to representation
+                            'D_6411' => $em,
                         ],
                     ],
                     'G_SG27' => [
@@ -385,7 +397,7 @@ foreach ((array)$invoices as $invoice) {
                 'C_C516' => [
                     // Total allowances
                     'D_5025' => '260',
-                    'D_5004' => $this->Number->format($total_tax, ['pattern' => '##0.00', 'locale' => 'en-US']),
+                    'D_5004' => $this->Number->format(0, ['pattern' => '##0.00', 'locale' => 'en-US']),
                 ],
             ],
         ],
@@ -424,15 +436,17 @@ foreach ((array)$invoices as $invoice) {
                 'D_5305' => 'S',
             ],
             'S_MOA' => [
-                'C_C516' => [
-                    'D_5025' => '125',
-                    'D_5004' => $this->Number->format($vat_data['base'], ['pattern' => '##0.00', 'locale' => 'en-US']),
+                0 => [
+                    'C_C516' => [
+                        'D_5025' => '125',
+                        'D_5004' => $this->Number->format($vat_data['base'], ['pattern' => '##0.00', 'locale' => 'en-US']),
+                    ],
                 ],
-            ],
-            'S_MOA' => [
-                'C_C516' => [
-                    'D_5025' => '124',
-                    'D_5004' => $this->Number->format($vat_data['amount'], ['pattern' => '##0.00', 'locale' => 'en-US']),
+                1 => [
+                    'C_C516' => [
+                        'D_5025' => '124',
+                        'D_5004' => $this->Number->format($vat_data['amount'], ['pattern' => '##0.00', 'locale' => 'en-US']),
+                    ],
                 ],
             ],
         ];
