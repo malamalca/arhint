@@ -199,7 +199,17 @@ foreach ($data as $invoice) {
         ],
         'project' => $counter->isInvoice() ? null : [
             'parameters' => ['class' => 'invoices-project left-align'],
-            'html' => '<div style="height: 20px; overflow: hidden; scroll: none;">' . h($project ?: '') . '</div>',
+            'html' => '<div style="height: 20px; overflow: hidden; scroll: none;">' .
+                ($project ? $this->Html->link(
+                    $project,
+                    [
+                        'plugin' => 'LilProjects',
+                        'controller' => 'projects',
+                        'action' => 'view',
+                        $project->id,
+                    ]
+                ) : '') .
+                '</div>',
         ],
         'net_total' => !$counter->isInvoice() ? null : [
             'parameters' => ['class' => 'invoices-net_total right-align nowrap hide-on-small-only'],
