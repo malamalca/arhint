@@ -89,7 +89,8 @@ class InvoicesController extends AppController
         $filter['order'] = 'Invoices.counter DESC';
         $params = $this->Invoices->filter($filter);
 
-        $invoiceFields = ['id', 'no', 'counter', 'dat_issue', 'title', 'net_total', 'total', 'project_id'];
+        $invoiceFields = ['id', 'no', 'counter', 'dat_issue', 'title', 'net_total', 'total', 'project_id',
+            'invoices_attachment_count'];
         $clientFields = ['Issuers.title', 'Receivers.title'];
         $params['contain'] = ['Issuers', 'Receivers'];
 
