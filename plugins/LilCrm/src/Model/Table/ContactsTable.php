@@ -6,6 +6,7 @@ namespace LilCrm\Model\Table;
 use ArrayObject;
 use Cake\Event\Event;
 use Cake\ORM\Entity;
+use Cake\ORM\Rule\IsUnique;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
@@ -145,6 +146,10 @@ class ContactsTable extends Table
      */
     public function buildRules(RulesChecker $rules): RulesChecker
     {
+        $rules->add(new IsUnique(['owner_id', 'tax_no'], ['allowMultipleNulls' => true]), 'uniqueTax', [
+            'errorField' => 'tax_no',
+        ]);
+
         return $rules;
     }
 

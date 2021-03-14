@@ -11,6 +11,8 @@ if ($contact->id) {
     }
 }
 
+var_dump($contact->getErrors());
+
     $editForm = [
         'title_for_layout' => $title,
         'form' => [
@@ -76,13 +78,15 @@ if ($contact->id) {
             'method' => 'text',
             'parameters' => [
                 'field' => 'tax_no',
-                'options' => ['id' => 'contact-tax-no'],
+                'options' => [
+                    'id' => 'contact-tax-no',
+                ],
             ],
         ],
         'tax_no_magic' => ' ' . $this->Html->image('LilCrm.wand.png', ['id' => 'magic-tax-lookup']),
         'tax_no_error' => [
             'method' => 'error',
-            'parameters' => ['tax_no', __d('lil_crm', 'Please enter tax no.')],
+            'parameters' => ['tax_no', __d('lil_crm', 'Invalid or existing tax no.')],
         ],
         'tax_no_div_end' => '</div>',
         'tax_status' => [
