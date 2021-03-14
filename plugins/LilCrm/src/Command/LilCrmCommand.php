@@ -17,6 +17,13 @@ use Cake\ORM\TableRegistry;
  */
 class LilCrmCommand extends Command
 {
+    /**
+     * Start the Command and interactive console.
+     *
+     * @param \Cake\Console\Arguments $args The command arguments.
+     * @param \Cake\Console\ConsoleIo $io The console io
+     * @return int|void|null The exit code or null for success
+     */
     public function execute(Arguments $args, ConsoleIo $io)
     {
         switch ($args->getArgumentAt(0)) {
@@ -43,9 +50,13 @@ class LilCrmCommand extends Command
     }
 
     /**
-     * Searches and resolves contact duplicatesf
+     * Searches and resolves contact duplicates.
+     *
+     * @param \Cake\Console\ConsoleIo $io The console io
+     * @return void
      */
-    public function findDuplicates(ConsoleIo $io) {
+    public function findDuplicates(ConsoleIo $io)
+    {
         $ContactsTable = TableRegistry::get('LilCrm.Contacts');
         $ContactsAccountsTable = TableRegistry::get('LilCrm.ContactsAccounts');
         $ContactsAddressesTable = TableRegistry::get('LilCrm.ContactsAddresses');
@@ -83,7 +94,7 @@ class LilCrmCommand extends Command
 
             if ($answer != 'S') {
                 // this is the contact we want to keep
-                $keepContact = $sameContacts->take(1, (int)$answer, 1)->first();
+                $keepContact = $sameContacts->take(1, (int)$answer)->first();
 
                 $io->info('KEEP CONTACT DATA:');
                 $io->info('Title: ' . $keepContact->title);
@@ -106,21 +117,26 @@ class LilCrmCommand extends Command
                         $io->out(sprintf('DELETING "%s"', $disposeContact->title));
 
                         foreach ($disposeContact->contacts_accounts as $j => $account) {
-                            if ($io->askChoice(sprintf('Keep account "%s"? ', $account->iban), ['Y', 'N'], 'N') == 'Y') {
+                            if ($io->askChoice(sprintf('Keep account "%s"?', $account->iban), ['Y', 'N'], 'N') == 'Y') {
                                 $account->contact_id = $keepContact->id;
                                 $ContactsAccountsTable->save($account);
                             }
                         }
 
                         foreach ($disposeContact->contacts_addresses as $j => $address) {
-                            if ($io->askChoice(sprintf('Keep address "%s"? ', $address->street . ', ' . $address->zip . ' ' . $address->city), ['Y', 'N'], 'N') == 'Y') {
+                            if (
+                                $io->askChoice(sprintf(
+                                    'Keep address "%s"?',
+                                    $address->street . ', ' . $address->zip . ' ' . $address->city
+                                ), ['Y', 'N'], 'N') == 'Y'
+                            ) {
                                 $address->contact_id = $keepContact->id;
                                 $ContactsAddressesTable->save($address);
                             }
                         }
 
                         foreach ($disposeContact->contacts_emails as $j => $email) {
-                            if ($io->askChoice(sprintf('Keep email "%s"? ', $email->email), ['Y', 'N'], 'N') == 'Y') {
+                            if ($io->askChoice(sprintf('Keep email "%s"?', $email->email), ['Y', 'N'], 'N') == 'Y') {
                                 $email->contact_id = $keepContact->id;
                                 $ContactsEmailsTable->save($email);
                             }
@@ -155,6 +171,7 @@ class LilCrmCommand extends Command
     /**
      * Delete records that do not have owner
      *
+     * @param object $class TableClass
      * @return void
      */
     private function deleteStaleRecords($class)

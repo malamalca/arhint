@@ -89,135 +89,137 @@ class LilTasksSidebar
             'action' => 'index',
         ];
 
-        $openTasksCounters = self::countOpenTasks($currentUser['company_id']);
-        $countToday = $openTasksCounters['today'];
-        $countTomorrow = $openTasksCounters['tomorrow'];
-        $countFuture = $openTasksCounters['morethan2days'];
-        $countEmpty = $openTasksCounters['empty'];
+        if ($request->getParam('plugin') == 'LilTasks') {
+            $openTasksCounters = self::countOpenTasks($currentUser['company_id']);
+            $countToday = $openTasksCounters['today'];
+            $countTomorrow = $openTasksCounters['tomorrow'];
+            $countFuture = $openTasksCounters['morethan2days'];
+            $countEmpty = $openTasksCounters['empty'];
 
-        $tasks['items'] = [
-            'filters' => [
-                'title' => __d('lil_tasks', 'Filters'),
-                'visible' => true,
-                'url' => false,
-                'active' => true,
-                'expand' => true,
-                'submenu' => [
-                    'todays' => [
-                        'title' => __d('lil_tasks', 'Today\'s Tasks'),
-                        'badge' => $countToday == 0 ? '' : $countToday,
-                        'visible' => true,
-                        'url' => [
-                            'plugin' => 'LilTasks',
-                            'controller' => 'Tasks',
-                            'action' => 'index',
-                            '?' => ['due' => 'today'],
+            $tasks['items'] = [
+                'filters' => [
+                    'title' => __d('lil_tasks', 'Filters'),
+                    'visible' => true,
+                    'url' => false,
+                    'active' => true,
+                    'expand' => true,
+                    'submenu' => [
+                        'todays' => [
+                            'title' => __d('lil_tasks', 'Today\'s Tasks'),
+                            'badge' => $countToday == 0 ? '' : $countToday,
+                            'visible' => true,
+                            'url' => [
+                                'plugin' => 'LilTasks',
+                                'controller' => 'Tasks',
+                                'action' => 'index',
+                                '?' => ['due' => 'today'],
+                            ],
+                            'active' => $request->getQuery('due') == 'today',
+                            'params' => ['escape' => false],
                         ],
-                        'active' => $request->getQuery('due') == 'today',
-                        'params' => ['escape' => false],
-                    ],
-                    'tomorrows' => [
-                        'title' => __d('lil_tasks', 'Tomorrow\'s Tasks'),
-                        'badge' => $countTomorrow == 0 ? '' : $countTomorrow,
-                        'visible' => true,
-                        'url' => [
-                            'plugin' => 'LilTasks',
-                            'controller' => 'Tasks',
-                            'action' => 'index',
-                            '?' => ['due' => 'tomorrow'],
+                        'tomorrows' => [
+                            'title' => __d('lil_tasks', 'Tomorrow\'s Tasks'),
+                            'badge' => $countTomorrow == 0 ? '' : $countTomorrow,
+                            'visible' => true,
+                            'url' => [
+                                'plugin' => 'LilTasks',
+                                'controller' => 'Tasks',
+                                'action' => 'index',
+                                '?' => ['due' => 'tomorrow'],
+                            ],
+                            'active' => $request->getQuery('due') == 'tomorrow',
+                            'params' => ['escape' => false],
                         ],
-                        'active' => $request->getQuery('due') == 'tomorrow',
-                        'params' => ['escape' => false],
-                    ],
-                    'week' => [
-                        'title' => __d('lil_tasks', 'Further on'),
-                        'badge' => $countFuture == 0 ? '' : $countFuture,
-                        'visible' => true,
-                        'url' => [
-                            'plugin' => 'LilTasks',
-                            'controller' => 'Tasks',
-                            'action' => 'index',
-                            '?' => ['due' => 'morethan2days'],
+                        'week' => [
+                            'title' => __d('lil_tasks', 'Further on'),
+                            'badge' => $countFuture == 0 ? '' : $countFuture,
+                            'visible' => true,
+                            'url' => [
+                                'plugin' => 'LilTasks',
+                                'controller' => 'Tasks',
+                                'action' => 'index',
+                                '?' => ['due' => 'morethan2days'],
+                            ],
+                            'active' => $request->getQuery('due') == 'morethan2days',
+                            'params' => ['escape' => false],
                         ],
-                        'active' => $request->getQuery('due') == 'morethan2days',
-                        'params' => ['escape' => false],
-                    ],
-                    'nodue' => [
-                        'title' => __d('lil_tasks', 'No Due Date'),
-                        'badge' => $countEmpty == 0 ? '' : $countEmpty,
-                        'visible' => true,
-                        'url' => [
-                            'plugin' => 'LilTasks',
-                            'controller' => 'Tasks',
-                            'action' => 'index',
-                            '?' => ['due' => 'empty'],
+                        'nodue' => [
+                            'title' => __d('lil_tasks', 'No Due Date'),
+                            'badge' => $countEmpty == 0 ? '' : $countEmpty,
+                            'visible' => true,
+                            'url' => [
+                                'plugin' => 'LilTasks',
+                                'controller' => 'Tasks',
+                                'action' => 'index',
+                                '?' => ['due' => 'empty'],
+                            ],
+                            'active' => $request->getQuery('due') == 'empty',
+                            'params' => ['escapeTitle' => false],
                         ],
-                        'active' => $request->getQuery('due') == 'empty',
-                        'params' => ['escapeTitle' => false],
-                    ],
-                    'all' => [
-                        'title' => __d('lil_tasks', 'All Tasks'),
-                        'visible' => true,
-                        'url' => [
-                            'plugin' => 'LilTasks',
-                            'controller' => 'Tasks',
-                            'action' => 'index',
+                        'all' => [
+                            'title' => __d('lil_tasks', 'All Tasks'),
+                            'visible' => true,
+                            'url' => [
+                                'plugin' => 'LilTasks',
+                                'controller' => 'Tasks',
+                                'action' => 'index',
+                            ],
+                            'active' => !$request->getQuery('due') &&
+                                !$request->getQuery('folder') &&
+                                !$request->getQuery('completed'),
                         ],
-                        'active' => !$request->getQuery('due') &&
-                            !$request->getQuery('folder') &&
-                            !$request->getQuery('completed'),
-                    ],
-                    'completed' => [
-                        'title' => __d('lil_tasks', 'Completed Tasks'),
-                        'visible' => true,
-                        'url' => [
-                            'plugin' => 'LilTasks',
-                            'controller' => 'Tasks',
-                            'action' => 'index',
-                            '?' => ['completed' => 'only'],
+                        'completed' => [
+                            'title' => __d('lil_tasks', 'Completed Tasks'),
+                            'visible' => true,
+                            'url' => [
+                                'plugin' => 'LilTasks',
+                                'controller' => 'Tasks',
+                                'action' => 'index',
+                                '?' => ['completed' => 'only'],
+                            ],
+                            'active' => $request->getQuery('completed') == 'only',
                         ],
-                        'active' => $request->getQuery('completed') == 'only',
                     ],
                 ],
-            ],
-            'folders' => [
-                'title' => __d('lil_tasks', 'Folders'),
-                'visible' => true,
-                'url' => false,
-                'active' => true,
-                'expand' => true,
-            ],
-        ];
+                'folders' => [
+                    'title' => __d('lil_tasks', 'Folders'),
+                    'visible' => true,
+                    'url' => false,
+                    'active' => true,
+                    'expand' => true,
+                ],
+            ];
 
-        $owner_id = $currentUser->company_id;
-        $folders = Cache::remember(
-            'LilTasks.' . $owner_id . '.Folders',
-            function () use ($owner_id, $openTasksCounters, $request) {
-                /** @var \LilTasks\Model\Table\TasksFoldersTable $TasksFolders */
-                $TasksFolders = TableRegistry::get('LilTasks.TasksFolders');
+            $owner_id = $currentUser->company_id;
+            $folders = Cache::remember(
+                'LilTasks.' . $owner_id . '.Folders',
+                function () use ($owner_id, $openTasksCounters, $request) {
+                    /** @var \LilTasks\Model\Table\TasksFoldersTable $TasksFolders */
+                    $TasksFolders = TableRegistry::get('LilTasks.TasksFolders');
 
-                $folders = $TasksFolders->findForOwner($owner_id);
+                    $folders = $TasksFolders->findForOwner($owner_id);
 
-                foreach ($folders as $folder) {
-                    $countFolder = $openTasksCounters['folders'][$folder->id] ?? 0;
-                    $tasks['items']['folders']['submenu'][] = [
-                        'title' => h($folder->title),
-                        'badge' => $countFolder == 0 ? '' : $countFolder,
-                        'visible' => true,
-                        'url' => [
-                            'plugin' => 'LilTasks',
-                            'controller' => 'Tasks',
-                            'action' => 'index',
-                            '?' => ['folder' => $folder->id],
-                        ],
-                        'active' => $request->getQuery('folder') == $folder->id,
-                        'params' => ['escape' => false],
-                    ];
+                    foreach ($folders as $folder) {
+                        $countFolder = $openTasksCounters['folders'][$folder->id] ?? 0;
+                        $tasks['items']['folders']['submenu'][] = [
+                            'title' => h($folder->title),
+                            'badge' => $countFolder == 0 ? '' : $countFolder,
+                            'visible' => true,
+                            'url' => [
+                                'plugin' => 'LilTasks',
+                                'controller' => 'Tasks',
+                                'action' => 'index',
+                                '?' => ['folder' => $folder->id],
+                            ],
+                            'active' => $request->getQuery('folder') == $folder->id,
+                            'params' => ['escape' => false],
+                        ];
+                    }
+
+                    return $folders;
                 }
-
-                return $folders;
-            }
-        );
+            );
+        }
 
         // insert into sidebar right after welcome panel
         Lil::insertIntoArray($sidebar, ['tasks' => $tasks], ['after' => 'welcome']);

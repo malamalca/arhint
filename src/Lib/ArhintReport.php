@@ -100,13 +100,6 @@ class ArhintReport
 
         $pdf = LilPdfFactory::create($pdfEngine, Hash::merge((array)$pdfOptions, $this->pdfOptions));
 
-        if (!empty($invoice->tpl_header)) {
-            $pdf->setHeaderHtml($this->_autop($invoice->tpl_header->body));
-        }
-        if (!empty($invoice->tpl_footer)) {
-            $pdf->setFooterHtml($this->_autop($invoice->tpl_footer->body));
-        }
-
         $outputHtml = $this->view->render();
         if (!empty($outputHtml)) {
             // output body

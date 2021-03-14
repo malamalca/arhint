@@ -147,6 +147,7 @@ class ContactsController extends AppController
                     'PrimaryPhones' => ['validate' => false],
                 ],
             ]);
+
             $contact->owner_id = $this->getCurrentUser()->get('company_id');
 
             // do not update company data, only company_id
