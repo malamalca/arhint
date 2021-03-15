@@ -81,7 +81,7 @@ if ($contact->kind != 'T') {
             ],
         ],
     ],
-    'tax_no_magic' => ' ' . $this->Html->image('LilCrm.wand.png', ['id' => 'magic-tax-lookup']),
+    'tax_no_magic' => ' ' . $this->Html->image('LilCrm.wand.png', ['id' => 'magic-tax-lookup', 'class' => 'btn-small']),
     'tax_no_error' => [
         'method' => 'error',
         'parameters' => ['tax_no', __d('lil_crm', 'Invalid or existing tax no.')],
@@ -497,7 +497,15 @@ echo $this->Lil->form($editForm, 'LilCrm.Contacts.edit');
 
             let parentForm = $(this).closest("form");
 
-            $.get(inetisUrl + $('#contact-tax-no').val(), function(data) {
+            let taxNo = $("#contact-tax-no").val();
+
+            if (taxNo.trim() == "") {
+                alert('No tax number entered!');
+
+                return false;
+            }
+
+            $.get(inetisUrl + taxNo, function(data) {
                 $("#contact-title", parentForm).val(data.title);
                 $("#contact-mat-no", parentForm).val(data.mat_no);
                 $("#contact-tax-no", parentForm).val(data.tax_no);

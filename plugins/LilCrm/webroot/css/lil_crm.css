@@ -60,6 +60,14 @@ div#PanelViewContactEmployees {
 
 
 /* EDIT CONTACT */
+input#contact-tax-no {
+    width: 150px !important;
+}
+img#magic-tax-lookup {
+    height: 30px !important;
+    line-height: 30px !important;
+    padding: 6px !important;
+}
 /*div#edit-contact-name, div#edit-contact-surname {
     display: block;
     float: left;

@@ -308,5 +308,11 @@ ul.paginator {
 }
 
 div.error-message {
-    color: #ff0000;
+    color: #d32f2f;
+    font-size: 90% !important;
+}
+
+input.form-error {
+    background-color: #ffebee !important;
+    color: #d32f2f !important;
 }
