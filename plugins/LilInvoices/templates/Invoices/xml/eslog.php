@@ -19,7 +19,7 @@
         $transformed['IzdaniRacunEnostavni']['Racun'][$i] = [
             '@Id' => 'data',
             'GlavaRacuna' => [
-                // VrstaRacuna :: E:El-1001 :: 380 - račun
+                // VrstaRacuna :: E:El-1001 :: 380 - račun ; 325 - predračun; 386 - avansni račun
                 'VrstaRacuna' => '380',
                 'StevilkaRacuna' => $invoice->no,
                 // FunkcijaRacuna :: E-1225 :: 9 - original, 31 - kopija

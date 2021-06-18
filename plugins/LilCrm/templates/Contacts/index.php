@@ -175,7 +175,7 @@ foreach ($contacts as $contact) {
                 $this->Html->link(
                     $contact->title,
                     ['action' => 'view', $contact->id],
-                    ['class' => 'big', 'title' => $contact->title]
+                    ['class' => 'big contact-name', 'title' => $contact->title]
                 ) . $job . $address . $descript,
             ],
             'emails' => [
@@ -211,6 +211,8 @@ echo $this->Lil->index($contactsIndex, 'LilCrm.Contacts.index');
         '?' => ['kind' => $filter['kind'], 'term' => '__term__'],
     ]); ?>";
 
+    var searchTimer = null;
+
     function onToggleSyncable() {
         var rx_id = new RegExp("__id__", "i");
         var rx_syncable = new RegExp("__syncable__", "i");
@@ -235,24 +237,35 @@ echo $this->Lil->index($contactsIndex, 'LilCrm.Contacts.index');
         });
     }
 
+    function searchContacts()
+    {
+        let rx_term = new RegExp("__term__", "i");
+        let searchTerm = $("#SearchBox").val();
+
+        $.get(ajaxSearchUrl.replace(rx_term, encodeURIComponent(searchTerm)), function(response) {
+            let tBody = response.substring(response.indexOf("<tbody>")+7, response.indexOf("</tbody>"));
+            $("#ContactsIndexTable tbody").html(tBody);
+
+            $(".toggle-syncable").click(onToggleSyncable);
+
+            let paginator = response.substring(
+                response.indexOf("<ul class=\"paginator\">")+22,
+                response.indexOf("</ul>", response.indexOf("<ul class=\"paginator\">"))
+            );
+            $("#ContactsIndexTable ul.paginator").html(paginator);
+        });
+    }
+
     $(document).ready(function() {
         $(".toggle-syncable").click(onToggleSyncable);
 
         $("#SearchBox").on("input", function(e) {
             if ($(this).val().length > 1) {
-                var rx_term = new RegExp("__term__", "i");
-                $.get(ajaxSearchUrl.replace(rx_term, encodeURIComponent($(this).val())), function(response) {
-                    let tBody = response.substring(response.indexOf("<tbody>")+7, response.indexOf("</tbody>"));
-                    $("#ContactsIndexTable tbody").html(tBody);
-
-                    $(".toggle-syncable").click(onToggleSyncable);
-
-                    let paginator = response.substring(
-                        response.indexOf("<ul class=\"paginator\">")+22,
-                        response.indexOf("</ul>", response.indexOf("<ul class=\"paginator\">"))
-                    );
-                    $("#ContactsIndexTable ul.paginator").html(paginator);
-                });
+                if (searchTimer) {
+                    window.clearTimeout(searchTimer);
+                    searchTimer = null;
+                }
+                searchTimer = window.setTimeout(searchContacts, 500);
             }
         });
     });

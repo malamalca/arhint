@@ -136,8 +136,14 @@ class InvoicesController extends AppController
         if (Plugin::isLoaded('LilProjects')) {
             /** @var \LilProjects\Model\Table\ProjectsTable $ProjectsTable */
             $ProjectsTable = TableRegistry::getTableLocator()->get('LilProjects.Projects');
-            $projectsQuery = $this->Authorization->applyScope($ProjectsTable->find(), 'index');
-            $projects = $ProjectsTable->findForOwner($this->getCurrentUser()->company_id, $projectsQuery);
+
+            $projectsIds = array_filter(array_unique($data->extract('project_id')->toList()));
+            $projects = $ProjectsTable->find()
+                ->where(['id IN' => $projectsIds])
+                ->combine('id', function ($entity) {
+                    return $entity;
+                })
+                ->toArray();
         }
 
         $this->set(compact('data', 'filter', 'counter', 'projects', 'dateSpan', 'invoicesTotals', 'counters'));
