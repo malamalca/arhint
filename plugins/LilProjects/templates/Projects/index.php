@@ -111,7 +111,10 @@ foreach ($projects as $project) {
             ['controller' => 'ProjectsLogs', 'action' => 'add', '?' => ['project' => $project->id]],
             ['escape' => false, 'class' => 'btn btn-small btn-floating add-projects-log']
         ),
-        'log' => $lastLogDescript,
+        'log' => [
+            'params' => ['class' => 'last-log'],
+            'html' => $lastLogDescript,
+        ]
     ];
 }
 
@@ -124,6 +127,8 @@ echo $this->Lil->index($index, 'LilProjects.Projects.index');
         'action' => 'index',
         '?' => array_merge($this->request->getQuery(), ['search' => '__term__']),
     ]); ?>";
+
+    var popupElement = null;
 
     $(document).ready(function() {
         ////////////////////////////////////////////////////////////////////////////////////////////
@@ -144,9 +149,17 @@ echo $this->Lil->index($index, 'LilProjects.Projects.index');
         });
 
         $(".add-projects-log").each(function() {
+            $(this).on("click", function(e) {
+                popupElement = $(this);
+            });
             $(this).modalPopup({
                 title: "<?= __d('lil_projects', 'Add Log') ?>",
-                onOpen: function(popup) { $("#projects-logs-descript", popup).focus(); }
+                processSubmit: true,
+                onOpen: function(popup) { $("#projects-logs-descript", popup).focus(); },
+                onHtml: function(data, popup) {
+                    $("td.last-log", popupElement.closest("tr")).html(data);
+                    popup.instance.close();
+                }
             });
         });
 

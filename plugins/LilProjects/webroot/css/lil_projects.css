@@ -56,3 +56,7 @@ textarea#projects-logs-descript {
     text-align: right;
     margin-bottom: 5px;
 }
+
+td.last-log {
+    max-width: 180px;
+}

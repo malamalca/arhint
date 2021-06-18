@@ -5,6 +5,7 @@ jQuery.fn.modalPopup = function(p_options) {
         url: $(this).prop("href"),
         processSubmit: false,
         onJson: null,
+        onHtml: null,
         onBeforeRequest: null,
         onOpen: null,
         onClose: null,
@@ -89,14 +90,19 @@ jQuery.fn.modalPopup = function(p_options) {
                     }
                 } else {
                     // it's html
-                    $("p", $this.popup).html(data);
+                    if ($this.options.onHtml instanceof Function) {
+                        $this.options.onHtml(data, $this);
+                    } else {
+                        $("p", $this.popup).html(data);
 
-                    if ($this.options.processSubmit) {
-                        $("form", $this.popup).submit($this.popupFormSubmit);
+
+                        if ($this.options.processSubmit) {
+                            $("form", $this.popup).submit($this.popupFormSubmit);
+                        }
+
+                        // update text fields for label placement
+                        M.updateTextFields();
                     }
-
-                    // update text fields for label placement
-                    M.updateTextFields();
                 }
             }
         );
