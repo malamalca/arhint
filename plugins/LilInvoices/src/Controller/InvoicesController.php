@@ -138,12 +138,16 @@ class InvoicesController extends AppController
             $ProjectsTable = TableRegistry::getTableLocator()->get('LilProjects.Projects');
 
             $projectsIds = array_filter(array_unique($data->extract('project_id')->toList()));
-            $projects = $ProjectsTable->find()
-                ->where(['id IN' => $projectsIds])
-                ->combine('id', function ($entity) {
-                    return $entity;
-                })
-                ->toArray();
+            
+            $projects = [];
+            if (!empty($projectsIds)) {
+                $projects = $ProjectsTable->find()
+                    ->where(['id IN' => $projectsIds])
+                    ->combine('id', function ($entity) {
+                        return $entity;
+                    })
+                    ->toArray();
+            }
         }
 
         $this->set(compact('data', 'filter', 'counter', 'projects', 'dateSpan', 'invoicesTotals', 'counters'));
