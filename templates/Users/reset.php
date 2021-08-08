@@ -13,7 +13,7 @@ $passwordReset = [
             ],
             'referer' => [
                 'method' => 'hidden',
-                'parameters' => ['field' => 'referer']
+                'parameters' => ['referer']
             ],
 
             'email' => [

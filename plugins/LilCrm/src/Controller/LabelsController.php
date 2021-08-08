@@ -34,14 +34,18 @@ class LabelsController extends AppController
             $adremaId = key((array)$adremas);
         }
 
-        $addresses = TableRegistry::getTableLocator()->get('LilCrm.AdremasContacts')
-            ->find()
-            ->where(['adrema_id' => $adremaId])
-            ->contain(['ContactsAddresses'])
-            ->all();
+        $addresses = [];
 
-        if (!empty($adremaId) && !in_array($adremaId, array_keys($adremas))) {
-            throw new NotFoundException(__d('lil_crm', 'Invalid adrema'));
+        if (!empty($adremaId)) {
+            $addresses = TableRegistry::getTableLocator()->get('LilCrm.AdremasContacts')
+                ->find()
+                ->where(['adrema_id' => $adremaId])
+                ->contain(['ContactsAddresses'])
+                ->all();
+
+            if (!empty($adremaId) && !in_array($adremaId, array_keys($adremas))) {
+                throw new NotFoundException(__d('lil_crm', 'Invalid adrema'));
+            }
         }
 
         $this->set(compact('addresses', 'adremas', 'adremaId'));

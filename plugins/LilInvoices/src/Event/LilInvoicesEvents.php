@@ -81,6 +81,10 @@ class LilInvoicesEvents implements EventListenerInterface
             })
             ->toArray();
 
+        if (sizeof($counters) == 0) {
+            return $panels;
+        }
+
         // fetch invoices
         $invoicesPerPage = 5;
         $page = (int)$view->getRequest()->getQuery('invoices.page', 1);

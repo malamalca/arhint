@@ -32,7 +32,7 @@ if (!empty($sidebar)) {
                             } else {
                                 ?>
                         <ul class="collapsible collapsible-accordion">
-                            <li class="waves-effect<?= !empty($item['active']) ? ' active' : '' ?>">
+                            <li class="<?= !empty($item['active']) ? ' active' : '' ?>">
                                 <a class="collapsible-header"<?= !empty($item['url']) ? sprintf('href="%s"', $this->Url->build($item['url'])) : '' ?>>
                                     <?= h($item['title']) ?>
                                     <i class="material-icons chevron">arrow_drop_down</i>
@@ -43,7 +43,7 @@ if (!empty($sidebar)) {
                                     foreach ($item['submenu'] as $submenuItem) {
                                         if (!empty($submenuItem['visible'])) {
                                             ?>
-                                        <li class="waves-effect<?= !empty($submenuItem['active']) ? ' active' : '' ?>">
+                                        <li class="<?= !empty($submenuItem['active']) ? ' active' : '' ?>">
                                             <a href="<?= $this->Url->build($submenuItem['url']) ?>">
                                                 <?= h($submenuItem['title']) ?>
                                                 <?= !empty($submenuItem['badge']) ? sprintf('<span class="new badge" data-badge-caption="%s"></span>', $submenuItem['badge']) : '' ?>

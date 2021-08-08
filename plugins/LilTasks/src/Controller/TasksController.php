@@ -145,6 +145,6 @@ class TasksController extends AppController
             $this->Flash->error(__d('lil_tasks', 'The task could not be deleted. Please, try again.'));
         }
 
-        return $this->redirect($this->referer());
+        return $this->redirect(['action' => 'index']);
     }
 }

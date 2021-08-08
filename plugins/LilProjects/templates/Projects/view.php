@@ -31,13 +31,23 @@
                 ],
                 'params' => ['id' => 'add-projects-log'],
             ],
+            'composite' => [
+                'title' => __d('lil_projects', 'Add Composite'),
+                'visible' => true,
+                'url' => [
+                    'controller' => 'ProjectsComposites',
+                    'action' => 'add',
+                    '?' => ['project' => $project->id],
+                ],
+                'params' => ['id' => 'add-projects-composite'],
+            ],
         ],
         'entity' => $project,
         'panels' => [
-            'logo' => sprintf(
-                '<div id="project-logo">%1$s</div>',
-                $this->Html->image(['action' => 'picture', $project->id])
-            ),
+            //'logo' => sprintf(
+            //    '<div id="project-logo">%1$s</div>',
+            //    $this->Html->image(['action' => 'picture', $project->id])
+            //),
             'properties' => [
                 'lines' => [
                     'status' => [
@@ -54,14 +64,31 @@
                     ],
                 ],
             ],
-            'logs_title' => '<h3>' . __d('lil_projects', 'Logs') . '</h3>',
+            'tabs' => '<div class="row view-panel">' .
+                '<div class="col s12"><ul class="tabs">' .
+                '<li class="tab col"><a href="#tabc_logs">' . __d('lil_projects', 'Logs') . '</a></li>' . 
+                sprintf('<li class="tab col"><a href="#tabc_composites"%s>' . __d('lil_projects', 'Composites') . '</a></li>',
+                $this->getRequest()->getQuery('tab') == 'composites' ? ' class="active"' : '') . 
+                '</ul></div>',
             'logs' => [
                 'params' => ['id' => 'projects-logs'],
                 'table' => [
+                    'pre' => '<div id="tabc_logs" class="col s12">',
+                    'post' => '</div>',
                     'params' => ['class' => 'striped', 'id' => 'projects-logs'],
                     'body' => ['rows' => []],
                 ],
             ],
+            'composites' => [
+                'params' => ['id' => 'projects-composites'],
+                'table' => [
+                    'pre' => '<div id="tabc_composites" class="col s12">', 
+                    'post' => '</div>',
+                    'params' => ['class' => 'striped', 'id' => 'projects-composites'],
+                    'body' => ['rows' => []],
+                ],
+            ],
+            'tabs_end' => '</div>',
         ],
     ];
 
@@ -74,7 +101,7 @@
     ]];*/
 
     if ($logs->count() == 0) {
-        $projectView['panels']['logs'] = '<i>' . __d('lil_projects', 'No logs created.') . '</i>';
+        //$projectView['panels']['logs'] = '<i>' . __d('lil_projects', 'No logs created.') . '</i>';
     }
     foreach ($logs as $log) {
         $projectView['panels']['logs']['table']['body']['rows'][] = ['columns' => [
@@ -89,6 +116,25 @@
         ]];
     }
 
+    foreach ($composites as $composite) {
+        $projectView['panels']['composites']['table']['body']['rows'][] = ['columns' => [
+            'no' => h($composite->no),
+            'title' => h($composite->title),
+            'actions' =>  [
+                'params' => ['class' => 'actions'],
+                'html' => $this->Html->link(
+                    '<i class="material-icons chevron">list</i>',
+                    ['controller' => 'ProjectsComposites', 'action' => 'view', $composite->id],
+                    ['escape' => false, 'class' => 'btn btn-small btn-floating waves-effect waves-light waves-circle']
+                ) . ' ' .
+                (!$this->getCurrentUser()->hasRole('editor') ? '' : (
+                    $this->Lil->editLink(['controller' => 'ProjectsComposites', 'action' => 'edit', $composite->id]) . ' ' .
+                    $this->Lil->deleteLink(['controller' => 'ProjectsComposites', 'action' => 'delete', $composite->id])
+                )),
+            ]
+        ]];
+    }
+
     echo $this->Lil->panels($projectView, 'LilProjects.Projects.view');
     ?>
 <script type="text/javascript">
@@ -97,6 +143,12 @@
             $(this).modalPopup({
                 title: "<?= __d('lil_projects', 'Add Log') ?>",
                 onOpen: function(popup) { $("#projects-logs-descript", popup).focus(); }
+            });
+        });
+        $("#add-projects-composite").each(function() {
+            $(this).modalPopup({
+                title: "<?= __d('lil_projects', 'Add Composite') ?>",
+                onOpen: function(popup) { $("#projects-composites-no", popup).focus(); }
             });
         });
     });

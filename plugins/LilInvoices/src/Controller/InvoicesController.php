@@ -76,6 +76,8 @@ class InvoicesController extends AppController
                 $this->getRequest()->getQuery('kind')
             );
             if (!$counter) {
+                $this->Authorization->skipAuthorization();
+                
                 $this->Flash->error(__d('lil_invoices', 'No counters found. Please activate or add a new one.'));
 
                 return $this->redirect(['controller' => 'InvoicesCounters']);

@@ -36,7 +36,11 @@ class AppController extends Controller
     {
         parent::initialize();
 
-        $this->loadComponent('RequestHandler');
+        $this->loadComponent('RequestHandler', [
+            'viewClassMap' => [
+                'aht' => 'App.AhtView',
+            ]
+        ]);
         $this->loadComponent('Flash');
 
         /*
@@ -50,6 +54,8 @@ class AppController extends Controller
 
         //Type::build('float')->useLocaleParser();
         //Type::build('decimal')->useLocaleParser();
+
+        $this->response->setTypeMap('aht', ['text/html']);
     }
 
     /**

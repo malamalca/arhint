@@ -158,7 +158,7 @@ if ($fullBaseUrl) {
 }
 unset($fullBaseUrl);
 
-Router::extensions(['json', 'xml', 'pdf', 'txt', 'png']);
+Router::extensions(['json', 'aht', 'xml', 'pdf', 'txt', 'png']);
 
 Cache::setConfig(Configure::consume('Cache'));
 ConnectionManager::setConfig(Configure::consume('Datasources'));
@@ -185,7 +185,7 @@ ServerRequest::addDetector('lilScan', function ($request) {
 });
 
 ServerRequest::addDetector('pdf', ['param' => '_ext', 'options' => ['pdf']]);
-
+ServerRequest::addDetector('aht', ['param' => '_ext', 'options' => ['aht']]);
 /*
  * You can set whether the ORM uses immutable or mutable Time types.
  * The default changed in 4.0 to immutable types. You can uncomment

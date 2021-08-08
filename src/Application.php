@@ -65,7 +65,7 @@ class Application extends BaseApplication implements
          * Debug Kit should not be installed on a production system
          */
         if (Configure::read('debug') && (PHP_SAPI != 'cli')) {
-            $this->addPlugin('DebugKit');
+            //$this->addPlugin('DebugKit');
         }
 
         if (PHP_SAPI == 'cli') {
@@ -92,8 +92,10 @@ class Application extends BaseApplication implements
         $routes->setRouteClass(DashedRoute::class);
 
         $routes->scope('/', function (RouteBuilder $builder) {
-            $builder->connect('/', ['plugin' => 'LilProjects', 'controller' => 'Projects', 'action' => 'index']);
+            //$builder->setExtensions(['json', 'aht', 'xml', 'pdf', 'txt', 'png']);
 
+            $builder->connect('/', ['plugin' => 'LilProjects', 'controller' => 'Projects', 'action' => 'index']);
+            
             $builder->fallbacks();
         });
     }
@@ -235,7 +237,7 @@ class Application extends BaseApplication implements
             'fields' => $fields,
             'cookie' => [
                 'name' => self::REMEMBERME_COOKIE_NAME,
-                'expire' => (new Time())->addDays(30),
+                'expires' => (new Time())->addDays(30),
             ],
             'loginUrl' => Router::url('/users/login'),
         ]);

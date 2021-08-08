@@ -48,7 +48,7 @@ $editForm = [
                     ],
                 ],
             ],
-            'status' => [
+            'status' => empty($projectStatuses) ? null : [
                 'method' => 'control',
                 'parameters' => [
                     'status_id',

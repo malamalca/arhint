@@ -28,8 +28,8 @@ class ArhintHelper extends Helper
     {
         $sign = $seconds < 0 ? '-' : '';
 
-        $hours = str_pad((string)floor(abs($seconds) / 3600), 2, '0', STR_PAD_LEFT);
-        $minutes = str_pad((string)(floor(abs($seconds) / 60) % 60), 2, '0', STR_PAD_LEFT);
+        $hours = str_pad((string)floor(abs((int)$seconds) / 3600), 2, '0', STR_PAD_LEFT);
+        $minutes = str_pad((string)(floor(abs((int)$seconds) / 60) % 60), 2, '0', STR_PAD_LEFT);
 
         return $sign . $hours . ':' . $minutes;
     }

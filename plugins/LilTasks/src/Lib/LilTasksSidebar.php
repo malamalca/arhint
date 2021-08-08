@@ -221,8 +221,7 @@ class LilTasksSidebar
             );
         }
 
-        // insert into sidebar right after welcome panel
-        Lil::insertIntoArray($sidebar, ['tasks' => $tasks], ['after' => 'welcome']);
+        $sidebar->append($tasks);
 
         $event->setResult(['sidebar' => $sidebar]);
     }
