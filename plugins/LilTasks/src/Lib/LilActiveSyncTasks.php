@@ -104,7 +104,7 @@ class LilActiveSyncTasks implements Syncroton_Data_IData
 
         if (!empty($task->completed)) {
             $entry->complete = 1;
-            $entry->dateCompleted = $task->completed;
+            $entry->dateCompleted = $task->completed ?? '';
         } else {
             $entry->complete = 0;
         }
@@ -271,7 +271,9 @@ class LilActiveSyncTasks implements Syncroton_Data_IData
      */
     public function updateFolder(Syncroton_Model_IFolder $_folder)
     {
-        $folderId = $_folderId instanceof Syncroton_Model_IFolder ? $_folderId->serverId : $_folderId;
+        //$folderId = $_folderId instanceof Syncroton_Model_IFolder ? $_folderId->serverId : $_folderId;
+        $folderId = $_folder->serverId;
+        Log::write('debug', 'Folder id: ' . $folderId);
 
         $TasksFolders = TableRegistry::get('LilTasks.TasksFolders');
         $folder = $TasksFolders->get($folderId);
