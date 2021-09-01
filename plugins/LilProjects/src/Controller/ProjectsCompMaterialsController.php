@@ -54,19 +54,22 @@ class ProjectsCompMaterialsController extends AppController
         } else {
             $material = $this->ProjectsCompMaterials->newEmptyEntity();
             $material->composite_id = $this->getRequest()->getQuery('composite');
+            $material->sort_order = $this->getRequest()->getQuery('order');
         }
-
 
         $this->Authorization->Authorize($material);
 
+        
         if ($this->request->is(['patch', 'post', 'put'])) {
             $material = $this->ProjectsCompMaterials->patchEntity($material, $this->request->getData());
+        
             if ($this->ProjectsCompMaterials->save($material)) {
                 if ($this->getRequest()->is('json')) {
-                    $response = $this->response->withStringBody(json_encode(['result' => $material]));
-                    return $response;
+                    $this->autoRender = false;
+                    header('Content-Type: application/json');
+                    echo json_encode(['result' => $material]);
+                    return;
                 }
-
 
                 $this->Flash->success(__('The projects comp material has been saved.'));
 
@@ -90,17 +93,22 @@ class ProjectsCompMaterialsController extends AppController
     public function delete($id = null)
     {
         $this->request->allowMethod(['post', 'delete', 'get']);
-        $projectsCompMaterial = $this->ProjectsCompMaterials->get($id);
+        $material = $this->ProjectsCompMaterials->get($id);
 
-        $this->Authorization->Authorize($projectsCompMaterial);
+        $this->Authorization->Authorize($material);
         
-        if ($this->ProjectsCompMaterials->delete($projectsCompMaterial)) {
+        if ($this->ProjectsCompMaterials->delete($material)) {
+            if ($this->getRequest()->is('json') || $this->getRequest()->is('aht')) {
+                $this->autoRender = false;
+                
+                return;
+            }
             $this->Flash->success(__('The projects comp material has been deleted.'));
         } else {
             $this->Flash->error(__('The projects comp material could not be deleted. Please, try again.'));
         }
 
-        return $this->redirect(['action' => 'index']);
+        return $this->redirect(['controller' => 'ProjectsComposites', 'action' => 'view', $material->composite_id]);
     }
 
     /**

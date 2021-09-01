@@ -6,13 +6,15 @@
 $editForm = [
     'form' => [
         'defaultHelper' => $this->Form,
-        'pre' => '<tr id="material-editor"><td></td><td colspan="2">',
-        'post' => '</td></<tr>',
+        'pre' => '<li id="material-editor"><div class="row">',
+        'post' => '</div></<li>',
         'lines' => [
             'form_start' => [
                 'method' => 'create',
                 'parameters' => ['model' => $material],
             ],
+
+            '<div class="col s1">',
             'id' => [
                 'method' => 'hidden',
                 'parameters' => ['id', ['id' => 'id']],
@@ -25,13 +27,14 @@ $editForm = [
                 'method' => 'hidden',
                 'parameters' => ['composite_id', ['id' => 'composite_id']],
             ],
+            '</div>',
+            '<div class="col s8">',
             'descript' => [
                 'method' => 'text',
-                'parameters' => [
-                    'descript',
-                    ['id' => 'descript'],
-                ],
+                'parameters' => ['descript', ['id' => 'descript']],
             ],
+            '</div>',
+            '<div class="col s3">',
             'thickness' => [
                 'method' => 'text',
                 'parameters' => [
@@ -39,17 +42,22 @@ $editForm = [
                     [
                         'type' => 'number',
                         'step' => 0.1,
-                        'id' => 'thickness'
+                        'id' => 'thickness',
                     ],
                 ],
             ],
-
+            '</div>',
+            '<div class="row">',
+            '<div class="col s2"></div>',
+            '<div class="col s7">',
             'submit' => [
                 'method' => 'submit',
                 'parameters' => [
                     'label' => __d('lil_projects', 'Save'),
                 ],
             ],
+            '</div>',
+            '</div>',
             'form_end' => [
                 'method' => 'end',
             ],
