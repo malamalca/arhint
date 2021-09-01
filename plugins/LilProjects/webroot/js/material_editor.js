@@ -53,7 +53,7 @@ MaterialEditor = function(p_options, p_anchor, p_data)
 
 		// remove esc handler
 		$(document).off('keyup.item-editor');
-
+g
 		//options.anchorRow = null;
 		return true;
 	}
