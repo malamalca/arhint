@@ -15,20 +15,21 @@ $editForm = [
             ],
             'id' => [
                 'method' => 'hidden',
-                'parameters' => ['id'],
+                'parameters' => ['id', ['id' => 'id']],
             ],
             'sort_order' => [
                 'method' => 'hidden',
-                'parameters' => ['sort_order'],
+                'parameters' => ['sort_order', ['id' => 'sort_order']],
             ],
             'composite_id' => [
                 'method' => 'hidden',
-                'parameters' => ['composite_id'],
+                'parameters' => ['composite_id', ['id' => 'composite_id']],
             ],
             'descript' => [
                 'method' => 'text',
                 'parameters' => [
                     'descript',
+                    ['id' => 'descript'],
                 ],
             ],
             'thickness' => [
@@ -38,6 +39,7 @@ $editForm = [
                     [
                         'type' => 'number',
                         'step' => 0.1,
+                        'id' => 'thickness'
                     ],
                 ],
             ],

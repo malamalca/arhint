@@ -174,12 +174,17 @@ class LilInvoicesEvents implements EventListenerInterface
                     }
                 }
                 $elementTemplate = 'LilInvoices.invoices_projects_list';
+
+                $invoicesTab = sprintf('<li class="tab col"><a href="#tabc_invoices"%s>' . __d('lil_invoices', 'Invoices') . '</a></li>',
+                    $view->getRequest()->getQuery('tab') == 'invoices' ? ' class="active"' : '');
+
+                $view->Lil->insertIntoArray($panels->panels['tabs']['lines'], ['invoices' => $invoicesTab], ['before' => 'post']);
                 break;
             default:
                 $elementTemplate = 'LilInvoices.invoices_list';
         }
         $invoicesPanels = [
-            'invoices_title' => '<h3>' . __d('lil_invoices', 'Invoices') . '</h3>',
+            //'invoices_title' => '<h3>' . __d('lil_invoices', 'Invoices') . '</h3>',
             'invoices_table' => $view->element($elementTemplate, ['invoices' => $invoices, 'counters' => $counters]),
         ];
 

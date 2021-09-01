@@ -64,12 +64,13 @@
                     ],
                 ],
             ],
-            'tabs' => '<div class="row view-panel">' .
-                '<div class="col s12"><ul class="tabs">' .
-                '<li class="tab col"><a href="#tabc_logs">' . __d('lil_projects', 'Logs') . '</a></li>' . 
-                sprintf('<li class="tab col"><a href="#tabc_composites"%s>' . __d('lil_projects', 'Composites') . '</a></li>',
-                $this->getRequest()->getQuery('tab') == 'composites' ? ' class="active"' : '') . 
-                '</ul></div>',
+            'tabs' => ['lines' => [
+                'pre' => '<div class="row view-panel"><div class="col s12"><ul class="tabs">',
+                'logs' => '<li class="tab col"><a href="#tabc_logs">' . __d('lil_projects', 'Logs') . '</a></li>',
+                'composites' => sprintf('<li class="tab col"><a href="#tabc_composites"%s>' . __d('lil_projects', 'Composites') . '</a></li>',
+                $this->getRequest()->getQuery('tab') == 'composites' ? ' class="active"' : ''),
+                'post' => '</ul></div>',
+            ]],
             'logs' => [
                 'params' => ['id' => 'projects-logs'],
                 'table' => [
@@ -82,7 +83,7 @@
             'composites' => [
                 'params' => ['id' => 'projects-composites'],
                 'table' => [
-                    'pre' => '<div id="tabc_composites" class="col s12">', 
+                    'pre' => '<div id="tabc_composites" class="col s12">',
                     'post' => '</div>',
                     'params' => ['class' => 'striped', 'id' => 'projects-composites'],
                     'body' => ['rows' => []],
@@ -101,7 +102,8 @@
     ]];*/
 
     if ($logs->count() == 0) {
-        //$projectView['panels']['logs'] = '<i>' . __d('lil_projects', 'No logs created.') . '</i>';
+        //unset($projectView['panels']['logs']['table']);
+        //$projectView['panels']['logs']['lines'][] = '<i>' . __d('lil_projects', 'No logs created.') . '</i>';
     }
     foreach ($logs as $log) {
         $projectView['panels']['logs']['table']['body']['rows'][] = ['columns' => [

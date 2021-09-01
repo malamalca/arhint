@@ -5,7 +5,7 @@ MaterialEditor = function(p_options, p_anchor, p_data)
 		data: {
 			id:"", composite_id:"", sort_order:1, descript:"", thickness:0,
 		},
-		
+
 		postUrl: "",
 		modifiedMessage: "Material has been modified. Exit without saving changes?",
 
@@ -14,13 +14,13 @@ MaterialEditor = function(p_options, p_anchor, p_data)
 		onAdd : function() {},
 		onUpdate: function() {}
 	};
-	
+
 	var $this = this;
 	var modified = false;
 	var editor = null;
 	var anchorRow = null;
 	var options;
-	
+
 	var	MaterialId;
 	var MaterialCompositeId;
 	var	MaterialDescript;
@@ -33,7 +33,7 @@ MaterialEditor = function(p_options, p_anchor, p_data)
 			return;
 		}
 
-		modified = 
+		modified =
 			($(MaterialDescript).val() != options.original.descript) ||
 			($(MaterialThickness).val() != options.original.thickness);
 	}
@@ -47,15 +47,16 @@ MaterialEditor = function(p_options, p_anchor, p_data)
 
 		// on hide callback
 		options.onHide.apply(editor);
-		
+
 		// remove esc handler
 		$(document).off('keyup.item-editor');
-		
+
 		anchorRow = null;
 		return true;
 	}
-	this.sendData = function(form) {	
+	this.sendData = function(form) {
 		$("div.submit button", editor).attr("disabled", true);
+
 		$.ajax({
 			url: $("form", $(editor)).attr("action"),
 			data: $("form", $(editor)).serialize(),
@@ -105,11 +106,11 @@ MaterialEditor = function(p_options, p_anchor, p_data)
 				success: function(data) {
 					editor = $(data).insertAfter(anchorRow).show();
 
-					options.data.id = $("input#id", $(editor)).val();
-					options.data.composite_id = $("input#composite_id", $(editor)).val();
-					options.data.descript = $("input#descript", $(editor)).val();
-					options.data.thickness = $("input#thickness", $(editor)).val();
-					options.data.sort_order = $("input#sort_order", $(editor)).val();
+					options.data.id = $("input#id", editor).val();
+					options.data.composite_id = $("input#composite_id", editor).val();
+					options.data.descript = $("input#descript", editor).val();
+					options.data.thickness = $("input#thickness", editor).val();
+					options.data.sort_order = $("input#sort_order", editor).val();
 
 					options.original = options.data;
 					modified = false;
@@ -117,7 +118,7 @@ MaterialEditor = function(p_options, p_anchor, p_data)
 					$("div.submit button", editor).on("click", function() { return $this.sendData($this); });
 					$("button.cancel", editor).on("click", function() { $this.updateModified(); return $this.removeEditor(); });
 					options.onShow.apply(editor);
-					
+
 					// cancel editing with esc
 					$(document).on('keyup.item-editor', function(e) {
 						if ((e.keyCode == 27)) {
@@ -126,16 +127,16 @@ MaterialEditor = function(p_options, p_anchor, p_data)
 							return $this.removeEditor();
 						}
 					});
-					
+
 					$("input#thickness", $(editor)).focus();
-					
+
 					return true;
 				},
 				error: function() {
 					return false;
 				}
 			});
-			
+
 		}
 		return true;
 	}

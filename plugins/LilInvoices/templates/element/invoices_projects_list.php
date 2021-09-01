@@ -1,5 +1,5 @@
 <?php
-if ($invoices->count() > 0) {
+//if ($invoices->count() > 0) {
     $pagingUrl = [
         'action' => 'view',
         $entityId,
@@ -11,6 +11,8 @@ if ($invoices->count() > 0) {
         'parameters' => [
             'width' => '100%', 'cellspacing' => 0, 'cellpadding' => 0, 'id' => 'InvoicesList', 'width' => '700',
         ],
+        'pre' => '<div id="tabc_invoices" class="col s12">',
+        'post' => '</div>',
         'head' => ['rows' => [['columns' => [
             'no' => [
                 'parameters' => ['class' => 'left-align'],
@@ -118,6 +120,6 @@ if ($invoices->count() > 0) {
         $this->Number->currency($invoicesSum);
 
     echo $this->Lil->table($paymentsTable, 'LilInvoices.Element.invoices_list');
-} else {
-    echo '<div class="hint">' . __d('lil_invoices', 'No invoices for this Contact found.') . '</div>';
-}
+//} else {
+//    echo '<div class="hint">' . __d('lil_invoices', 'No invoices for this project found.') . '</div>';
+//}
