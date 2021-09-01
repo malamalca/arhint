@@ -67,9 +67,9 @@ class ProjectsCompMaterialsTable extends Table
             ->allowEmptyString('id', null, 'create');
 
         $validator
-            ->scalar('title')
-            ->maxLength('title', 255)
-            ->allowEmptyString('title');
+            ->scalar('descript')
+            ->maxLength('descript', 255)
+            ->notEmptyString('descript');
 
         $validator
             ->decimal('thickness')

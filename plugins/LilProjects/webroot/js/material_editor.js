@@ -38,11 +38,14 @@ MaterialEditor = function(p_options, p_anchor, p_data)
 			($(MaterialThickness).val() != options.original.thickness);
 	}
 	this.removeEditor = function() {
-		if (anchorRow && modified && !confirm(options.modifiedMessage)) {
+		if (options.anchorRow && modified && !confirm(options.modifiedMessage)) {
 			return false;
 		}
 
-		$(anchorRow).show();
+		if (!$(options.anchorRow).hasClass("add-material-row")) {
+			$(options.anchorRow).show();
+		}
+
 		$(editor).remove();
 
 		// on hide callback
@@ -51,7 +54,7 @@ MaterialEditor = function(p_options, p_anchor, p_data)
 		// remove esc handler
 		$(document).off('keyup.item-editor');
 		
-		anchorRow = null;
+		//options.anchorRow = null;
 		return true;
 	}
 	this.sendData = function(form) {	
@@ -83,9 +86,9 @@ MaterialEditor = function(p_options, p_anchor, p_data)
 					modified = false;
 					$this.removeEditor();
 					if (options.data.id) {
-						options.onUpdate.apply(editor, [data.result, anchorRow]);
+						options.onUpdate.apply(editor, [data.result, options.anchorRow]);
 					} else {
-						options.onAdd.apply(editor, [data.result, anchorRow]);
+						options.onAdd.apply(editor, [data.result, options.anchorRow]);
 					}
 				}
 				return false;
@@ -97,13 +100,21 @@ MaterialEditor = function(p_options, p_anchor, p_data)
 	this.show = function(p_anchor, materialId) {
 		this.updateModified();
 		if (this.removeEditor()) {
-			anchorRow = p_anchor;
-			var rx_id = new RegExp("__id__", "ig");
+			options.anchorRow = p_anchor;
+			let rx_id = new RegExp("__id__", "ig");
+			let rx_order = new RegExp("__order__", "ig");
+
+			let targetUrl = null;
+			if (materialId) {
+				targetUrl = options.editUrl.replace(rx_id, materialId);
+			} else {
+				targetUrl = options.addUrl.replace(rx_order, $(p_anchor).index());
+			}
 
 			$.ajax({
-				url: options.editUrl.replace(rx_id, materialId),
+				url: targetUrl,
 				success: function(data) {
-					editor = $(data).insertAfter(anchorRow).show();
+					editor = $(data).insertAfter(options.anchorRow).show();
 
 					options.data.id = $("input#id", $(editor)).val();
 					options.data.composite_id = $("input#composite_id", $(editor)).val();
@@ -127,7 +138,7 @@ MaterialEditor = function(p_options, p_anchor, p_data)
 						}
 					});
 					
-					$("input#thickness", $(editor)).focus();
+					$("input#descript", $(editor)).focus();
 					
 					return true;
 				},

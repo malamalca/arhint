@@ -7,6 +7,7 @@ jQuery.fn.MaterialsList = function(options)
 		deleteUrl: "",
 		cloneUrl: "",
 		editUrl: "",
+		addUrl: "",
 		newItemTemplate: "",
 		addMaterialBarTemplate: '<div class="add-material-bar"><a href="#">Add Material</a></div>',
 		checkFormulaUrl: "",
@@ -37,33 +38,35 @@ jQuery.fn.MaterialsList = function(options)
 		element:			"#view-section-edit-form",
 		postUrl:			options.postUrl,
 		editUrl:			options.editUrl,
+		addUrl:				options.addUrl,
 		modifiedMessage:	options.modifiedMessage,
 		
 		onShow: function() {
-			$("tbody", $this).sortable("disable");
+			$($this).sortable("disable");
 		},
 		onHide: function() {
-			$("tbody", $this).sortable("enable");
+			$($this).sortable("enable");
 		},
 		onUpdate: function(data, src_el) {
-			$(".descript", src_el).html($this.nl2br(data.descript));
-			$(".thickness", src_el).html(LilFloatFormat(parseFloat(data.thickness)));
+			$("div.descript", src_el).html($this.nl2br(data.descript));
+			$("div.thickness", src_el).html(LilFloatFormat(parseFloat(data.thickness)));
 			
 			$this.calculateTotalThickness();
 		},
 		onAdd: function(data, src_el) {
 			let rx_id = new RegExp("__id__", "ig");	
+			let rx_descript = new RegExp("__descript__", "ig");	
+			let rx_thickness = new RegExp("__thickness__", "ig");	
 
-			let newRow = $(options.newItemTemplate.replace(rx_id, data.id));
+			let newRow = $(options.newItemTemplate.replace(rx_id, data.id).replace(rx_descript, "").replace(rx_thickness, ""));
 
-			$(".descript", newRow).html($this.nl2br(data.descript));
-			$(".thickness", newRow).html(LilFloatFormat(parseFloat(data.thickness)));
+			$("div.descript", newRow).html($this.nl2br(data.descript));
+			$("div.thickness", newRow).html(LilFloatFormat(parseFloat(data.thickness), 1));
 
-			$this.adjustItem(li);
+			$this.adjustItem(newRow);
 			
-			var nearestRow = $(src_el).closest("tr", $this);
-			if ($(nearestRow).length) {
-				$(nearestRow).after(newRow);
+			if (src_el) {
+				$(src_el).after(newRow);
 			} else {
 				$($this).prepend(newRow);
 			}
@@ -74,51 +77,39 @@ jQuery.fn.MaterialsList = function(options)
 	
 	this.calculateTotalThickness = function() {
 		let totalThickness = 0;
-		$("td.thickness", this).each(function() {
+		$("div.thickness", this).each(function() {
 			totalThickness += LilFloatStringToFloat($(this).html());
 		});	
 		
-		$("th.total-thickness").html(LilFloatFormat(totalThickness, 2));
+		$("div#total-thickness").html(LilFloatFormat(totalThickness, 1));
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	// adjust events on single row
 	this.adjustItem = function(row)
 	{
-		// aply editor to <li>s and add links
-		$("a.view-section-add-item", row).click(function() {
-			var li = $(this).closest("li");
-			if (editor.show(this, 
-				{ Item: {
-					sort_order: parseInt($("td.col-item-order span.handle", li).html()) + 1,
-				}})) {
-				$(this).hide();
-			}
-			return false;
-		});
-		
-		$(row).click(function(e) {
+		$("div.descript", row).click(function(e) {
 			e.preventDefault();
 			if (editor.show(row, $(row).attr("id").substr(3))) {
 				$(row).hide();
 			}
 			return false;
 		});
-
-		// add item bar on hover
-		$("td.descript").hover(function() {
-			$("div.add-material-bar", this).show();
-		}, function() {
-			$("div.add-material-bar", this).hide();
-		});
 			
-		// delete items
-		$("td.actions", row).hover(function() { $("a", this).toggle(); });
-		$("a.delete-material", row).click(function() { 
+		// actions on the left side of grid
+		$(row).hover(function() {
+			$("a", this).toggle();
+			$("div.add-material-bar", this).toggle();
+		});
+		$("a.delete-material", row).click(function(e) { 
 			$this.deleteItem(row);
 			return false;
 		}).hide();
-		$("a.reorder-handle").hide();
+		$("a.reorder-handle", row).hide();
+		$("div.add-material-bar", row).click(function(e) { 
+			e.preventDefault();
+			editor.show(row, null, $(row).index());
+		}).hide();
 	}
 
 	this.handleItemDragCtrlDown = function(event)
@@ -156,7 +147,7 @@ jQuery.fn.MaterialsList = function(options)
 			
 			var targetUrl = options.reorderUrl
 				.replace(rx_item, item_id)
-				.replace(rx_position, position + 1);
+				.replace(rx_position, position);
 			
 			// send new position
 			$.get(targetUrl, function(data) {
@@ -172,7 +163,7 @@ jQuery.fn.MaterialsList = function(options)
 					i++;
 				});
 			}).error(function() {
-				$("tbody", $this).sortable("cancel");
+				$($this).sortable("cancel");
 			});
 		}
 	}
@@ -208,8 +199,6 @@ jQuery.fn.MaterialsList = function(options)
 			$("li", $this).eq(item_start_pos).remove();
 			item_drag_mode = "default"; // reset
 		});
-		
-		
 	}
 	
 	// delete item main function
@@ -225,6 +214,9 @@ jQuery.fn.MaterialsList = function(options)
 			$.get(
 				targetUrl,
 				function(data) {
+					// remove add material bar
+					$(row).next().remove();
+					// remove material line
 					$(row).remove();
 					$this.calculateTotalThickness();
 				}
@@ -247,13 +239,13 @@ jQuery.fn.MaterialsList = function(options)
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	// apply li functionality to every item	
-	$("tbody>tr", this).each(function() {
+	$("li.composite-material-row", this).each(function() {
 		$this.adjustItem(this);
 	});
-	
+
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	// setup sortable for reordering items
-	$("tbody", $this).sortable({
+	$($this).sortable({
 		cursor: "move",
 		helper: "clone",
 		handle: "a.reorder-handle",
