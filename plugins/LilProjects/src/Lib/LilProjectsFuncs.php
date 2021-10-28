@@ -13,61 +13,71 @@ class LilProjectsFuncs
      * Return thumbnail image for specified project
      *
      * @param \LilProjects\Model\Entity\Project $project Project
+     * @param int $thumbSize Thumbnail size
      * @return mixed
      */
-    public static function thumb($project)
+    public static function thumb($project, $thumbSize = self::THUMB_SIZE)
     {
         if (empty($project->ico)) {
-            $newImage = imagecreatetruecolor(50, 50);
+            $newImage = imagecreatetruecolor($thumbSize, $thumbSize);
             imagealphablending($newImage, true);
             imagesavealpha($newImage, true);
 
             $white = imagecolorallocatealpha($newImage, 255, 255, 255, 127);
             imagefill($newImage, 0, 0, $white);
 
-            $lime = imagecolorallocatealpha($newImage, 255, 255, 255, 0);
+            $textColor = empty($project->colorize) ? '#ffffff' : $project->colorize;
+            $textColor = imagecolorallocatealpha(
+                $newImage,
+                hexdec(substr($textColor, 1, 2)),
+                hexdec(substr($textColor, 3, 2)),
+                hexdec(substr($textColor, 5, 2)),
+                0
+            );
 
             $caption = mb_substr($project->title, 0, 1);
             $parts = explode(' ', $project->title);
             $caption .= mb_substr($parts[count($parts) - 1], 0, 1);
 
             $fontFile = constant('WWW_ROOT') . 'font' . constant('DS') . 'arialbd.ttf';
-            imagettftext($newImage, 28, 0, 0, 38, $lime, $fontFile, strtoupper($caption));
+            imagettftext($newImage, (int)($thumbSize* 0.55), 0, 0, (int)(0.75 * $thumbSize), $textColor, $fontFile, strtoupper($caption));
         } else {
             $im = imagecreatefromstring(base64_decode($project->ico));
             $width = imagesx($im);
             $height = imagesy($im);
 
             if ($width > $height) {
-                $newHeight = self::THUMB_SIZE;
+                $newHeight = $thumbSize;
                 $newWidth = (int)floor($width * $newHeight / $height);
                 $cropX = (int)ceil(($width - $height) / 2);
                 $cropY = 0;
             } else {
-                $newWidth = self::THUMB_SIZE;
+                $newWidth = $thumbSize;
                 $newHeight = (int)floor($height * $newWidth / $width);
                 $cropX = 0;
                 $cropY = (int)ceil(($height - $width) / 2);
             }
 
-            $newImage = imagecreatetruecolor(self::THUMB_SIZE, self::THUMB_SIZE);
+            $newImage = imagecreatetruecolor($thumbSize, $thumbSize);
             imagealphablending($newImage, false);
             imagesavealpha($newImage, true);
             $transparent = imagecolorallocatealpha($newImage, 255, 255, 255, 127);
-            imagefilledrectangle($newImage, 0, 0, self::THUMB_SIZE, self::THUMB_SIZE, $transparent);
+            imagefilledrectangle($newImage, 0, 0, $thumbSize, $thumbSize, $transparent);
             imagecopyresampled($newImage, $im, 0, 0, $cropX, $cropY, $newWidth, $newHeight, $width, $height);
             imagedestroy($im);
+
+            if (!empty($project->colorize)) {
+                imagefilter(
+                    $newImage,
+                    IMG_FILTER_COLORIZE,
+                    hexdec(substr($project->colorize, 1, 2)),
+                    hexdec(substr($project->colorize, 3, 2)),
+                    hexdec(substr($project->colorize, 5, 2))
+                );
+            }
         }
 
-        if (!empty($project->colorize)) {
-            imagefilter(
-                $newImage,
-                IMG_FILTER_COLORIZE,
-                hexdec(substr($project->colorize, 0, 2)),
-                hexdec(substr($project->colorize, 2, 2)),
-                hexdec(substr($project->colorize, 4, 2))
-            );
-        }
+
 
         $im = $newImage;
 

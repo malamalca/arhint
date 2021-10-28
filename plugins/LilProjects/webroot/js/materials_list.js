@@ -67,6 +67,7 @@ jQuery.fn.MaterialsList = function(options)
                 .replace(rx_class, ""));
 
 			$("div.descript", newRow).html($this.nl2br(data.descript));
+            
             if (data.is_group) {
                 $(newRow).addClass("material-group");
             } else {

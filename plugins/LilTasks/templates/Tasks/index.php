@@ -134,17 +134,17 @@ foreach ($tasks as $task) {
 
     if (empty($task->tasker_id)) {
         if ($task->user_id != $this->getCurrentUser()->id) {
-            $usersDescript = __d('lil_tasks', '"{0}" to Anyone', h($users[$task->user_id]->name));
+            $usersDescript = __d('lil_tasks', '"{0}" to Anyone', h($users[$task->user_id]->name ?? ''));
         } else {
             $usersDescript = __d('lil_tasks', 'Me to Anyone');
         }
     } else {
         if ($task->user_id != $this->getCurrentUser()->id) {
-            $usersDescript = __d('lil_tasks', '"{0}" to Me', h($users[$task->user_id]->name));
+            $usersDescript = __d('lil_tasks', '"{0}" to Me', h($users[$task->user_id]->name ?? ''));
         }
 
         if ($task->tasker_id != $this->getCurrentUser()->id) {
-            $usersDescript = __d('lil_tasks', '"{0}" from Me', h($users[$task->tasker_id]->name));
+            $usersDescript = __d('lil_tasks', '"{0}" from Me', h($users[$task->tasker_id]->name ?? ''));
         }
 
     }

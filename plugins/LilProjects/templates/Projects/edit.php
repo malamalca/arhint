@@ -114,9 +114,11 @@ $editForm = [
                 'parameters' => [
                     'colorize',
                     [
-                        'type' => 'text',
-                        'size' => 6,
-                        'label' => __d('lil_projects', 'Colorize') . ':',
+                        'type' => 'color',
+                        'label' => [
+                            'text' => __d('lil_projects', 'Colorize') . ':',
+                            'class' => 'active',
+                        ],
                     ],
                 ],
             ],

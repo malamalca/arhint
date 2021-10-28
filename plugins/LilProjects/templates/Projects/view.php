@@ -1,6 +1,13 @@
 <?php
+    use LilProjects\Lib\LilProjectsFuncs;
+
     $projectView = [
-        'title_for_layout' => '<span class="small">' . $project->no . ' </span><br />' . $project->title,
+        'title_for_layout' =>
+        $this->Html->image(
+            'data:image/png;base64, ' . base64_encode(LilProjectsFuncs::thumb($project, 80)),
+            ['style' => 'float: left; margin-right: 20px;', 'class' => 'project-avatar', 'quote' => false]
+        ).
+            '<div><div class="small">' . $project->no . ' </div>' . $project->title . '</div>',
         'menu' => [
             'edit' => [
                 'title' => __d('lil_projects', 'Edit'),
