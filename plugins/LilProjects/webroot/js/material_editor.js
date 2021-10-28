@@ -53,7 +53,7 @@ MaterialEditor = function(p_options, p_anchor, p_data)
 
 		// remove esc handler
 		$(document).off('keyup.item-editor');
-g
+
 		//options.anchorRow = null;
 		return true;
 	}
@@ -98,7 +98,7 @@ g
 		$("div.submit button", editor).attr("disabled", false);
 		return false;
 	}
-	this.show = function(p_anchor, materialId) {
+	this.show = function(p_anchor, materialId, isGroup = false) {
 		this.updateModified();
 		if (this.removeEditor()) {
 			options.anchorRow = p_anchor;
@@ -109,7 +109,8 @@ g
 			if (materialId) {
 				targetUrl = options.editUrl.replace(rx_id, materialId);
 			} else {
-				targetUrl = options.addUrl.replace(rx_order, $(p_anchor).index());
+				targetUrl = options.addUrl.replace(rx_order, $(p_anchor).index() + 1);
+                targetUrl = targetUrl + "&group=1"
 			}
 
 			$.ajax({
@@ -138,6 +139,9 @@ g
 							return $this.removeEditor();
 						}
 					});
+
+                    M.textareaAutoResize($("textarea", $(editor)));
+
 					$("input#descript", $(editor)).focus();
 
 					return true;

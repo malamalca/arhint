@@ -14,8 +14,9 @@
         "malamalca/lil": "dev-4.x-dev",
         "mikehaertl/phpwkhtmltopdf": "2.0.*@dev",
         "mobiledetect/mobiledetectlib": "2.*",
-        "tecnickcom/tcpdf": "dev-main",
+        "phpoffice/phpword": "^0.18.2",
         "syncroton/syncroton": "dev-master",
+        "tecnickcom/tcpdf": "dev-main",
         "zendframework/zendframework1": "1.12.*"
     },
     "require-dev": {

@@ -56,7 +56,11 @@ class LilExpensesEvents implements EventListenerInterface
      */
     public function modifySidebar($event, $sidebar)
     {
-        LilExpensesSidebar::setAdminSidebar($event, $sidebar);
+        $user = $event->getSubject()->getRequest()->getAttribute('identity');
+
+        if ($user && $user->canUsePlugin('LilExpenses')) {
+            LilExpensesSidebar::setAdminSidebar($event, $sidebar);
+        }
     }
 
     /**

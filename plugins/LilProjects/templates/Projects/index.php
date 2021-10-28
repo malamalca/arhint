@@ -43,7 +43,7 @@ $index = [
     'menu' => [
         'add' => [
             'title' => __d('lil_projects', 'Add'),
-            'visible' => true,
+            'visible' => $this->getCurrentUser()->hasRole('admin'),
             'url' => [
                 'action' => 'add',
             ],

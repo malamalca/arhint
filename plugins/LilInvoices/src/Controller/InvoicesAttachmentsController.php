@@ -140,30 +140,31 @@ class InvoicesAttachmentsController extends AppController
         $this->Authorization->authorize($attachment, 'edit');
 
         if ($this->getRequest()->is('post')) {
-            $tmpName = null;
+            $tmpNames = [];
             $data = $this->getRequest()->getData();
             if ($mode == 'scan') {
                 // process scanned image
                 $pdfData = $this->getRequest()->getData('scanned');
                 if (!empty($pdfData)) {
-                    $tmpName = tempnam(constant('TMP'), 'LilScan') . '.pdf';
+                    $tmpName = uniqid('scan') . '.pdf';
+                    $tmpNames[$tmpName] = tempnam(constant('TMP'), 'LilScan') . '.pdf';
                     $tmpBinary = base64_decode($pdfData);
                     file_put_contents($tmpName, $tmpBinary);
                     $data['filename'] = [
-                        'name' => uniqid('scan') . '.pdf',
+                        'name' => $tmpName,
                         'type' => 'application/pdf',
                         'size' => strlen($tmpBinary),
                     ];
                     unset($data['scanned']);
                 }
             } else {
-                $tmpName = $this->getRequest()->getData('filename.tmp_name');
+                $tmpNames[$this->getRequest()->getData('filename.name')] = $this->getRequest()->getData('filename.tmp_name');
             }
 
             $attachment = $this->InvoicesAttachments->patchEntity($attachment, $data);
 
             if (!$attachment->getErrors()) {
-                if ($this->InvoicesAttachments->save($attachment, ['uploadedFilename' => $tmpName])) {
+                if ($this->InvoicesAttachments->save($attachment, ['uploadedFilename' => $tmpNames])) {
                     $this->Flash->success(__d('lil_invoices', 'The invoices attachment has been saved.'));
 
                     return $this->redirect(['controller' => 'Invoices', 'action' => 'view', $attachment->invoice_id]);

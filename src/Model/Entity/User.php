@@ -124,11 +124,12 @@ class User extends Entity implements IdentityInterface
     /**
      * Returns users plugins
      *
-     * @return array
+     * @param string $pluginName Plugin name
+     * @return bool
      */
-    public function getPlugins()
+    public function canUsePlugin($pluginName)
     {
-        return ['LilCrm'];
+        return true;
     }
 
     /**

@@ -257,7 +257,7 @@ class UsersTable extends Table
      */
     public function fetchForCompany($companyId, $options = [])
     {
-        // $groupByDepartment = false, $includeInactive = false, $includeHidden = false
+        // $groupByDepartment = false, $includeInactive = false
         $defaultOptions = [
             'group' => true,
             'inactive' => false,
@@ -279,10 +279,6 @@ class UsersTable extends Table
 
         if (!$options['inactive']) {
             $query->andWhere(['Users.active' => 1]);
-        }
-
-        if (!$options['hidden']) {
-            $query->andWhere(['Users.hidden' => 0]);
         }
 
         $ret = $query->toArray();

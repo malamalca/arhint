@@ -54,6 +54,11 @@ class LilActiveSyncTasks implements Syncroton_Data_IData
     protected $_ownerId;
 
     /**
+     * @var string|null
+     */
+    protected $_userId;
+
+    /**
      * The constructor
      *
      * @param \Syncroton_Model_IDevice $_device Device interface
@@ -71,11 +76,12 @@ class LilActiveSyncTasks implements Syncroton_Data_IData
         $user = Syncroton_Registry::get('user');
         if (!empty($user)) {
             $this->_ownerId = $user->company_id;
+            $this->_userId = $user->id;
         }
     }
 
     /**
-     * getEntry
+     * Returns Syncroton_Model_Task from LilTasks\Task entity.
      *
      * @param \Syncroton_Model_SyncCollection $collection Task entry.
      * @param mixed $serverId Task Server id.
@@ -113,12 +119,12 @@ class LilActiveSyncTasks implements Syncroton_Data_IData
     }
 
     /**
-     * createEntry
+     * Creates LilTasks\Task entity from Syncroton_Model_Task
      *
      * @see \Syncroton_Data_IData::createEntry()
      * @param string $_folderId Folder id.
      * @param \Syncroton_Model_IEntry $_entry Entry
-     * @return string
+     * @return string LilTasks\Task entity id
      */
     public function createEntry($_folderId, Syncroton_Model_IEntry $_entry)
     {
@@ -128,6 +134,8 @@ class LilActiveSyncTasks implements Syncroton_Data_IData
         $task = $Tasks->newEmptyEntity();
         $task->owner_id = $this->_ownerId;
         $task->folder_id = $folderId;
+        $task->user_id = $this->_userId;
+        $task->tasker_id = $this->_userId;
 
         $task->title = $_entry->subject;
         $task->priority = $_entry->importance;
@@ -149,7 +157,7 @@ class LilActiveSyncTasks implements Syncroton_Data_IData
     }
 
     /**
-     * updateEntry
+     * Update LilTasks\Task entity from Syncroton_Model_Task
      *
      * @see \Syncroton_Data_IData::updateEntry()
      * @param string $_folderId Folder id
@@ -168,6 +176,8 @@ class LilActiveSyncTasks implements Syncroton_Data_IData
             $task->id = $_serverId;
             $task->folder_id = $folderId;
             $task->owner_id = $this->_ownerId;
+            $task->user_id = $this->_userId;
+            $task->tasker_id = $this->_userId;
         }
         if (!$task->owner_id == $this->_ownerId) {
             throw new Syncroton_Exception_NotFound(sprintf('entry %s not found', $_serverId));
@@ -271,7 +281,7 @@ class LilActiveSyncTasks implements Syncroton_Data_IData
      */
     public function updateFolder(Syncroton_Model_IFolder $_folder)
     {
-        //$folderId = $_folderId instanceof Syncroton_Model_IFolder ? $_folderId->serverId : $_folderId;
+        //$folderId = $_folderId instanceof Syncroton_Model_IFolder ? $_folder->serverId : $_folder;
         $folderId = $_folder->serverId;
         Log::write('debug', 'Folder id: ' . $folderId);
 
@@ -420,7 +430,7 @@ class LilActiveSyncTasks implements Syncroton_Data_IData
             $Tasks->find('list')
             ->select(['id'])
             ->where([
-                'owner_id' => $this->_ownerId,
+                'OR' => ['tasker_id' => $this->_userId, 'tasker_id IS' => null],
                 'folder_id' => $folderId,
             ])
             ->toArray()
@@ -453,7 +463,7 @@ class LilActiveSyncTasks implements Syncroton_Data_IData
         $query
             ->select(['id'])
             ->where([
-                'owner_id' => $this->_ownerId,
+                'OR' => ['tasker_id' => $this->_userId, 'tasker_id IS' => null],
                 'folder_id' => $folderId,
                 'modified >' => $_startTimeStamp->format('Y-m-d H:i:s'),
             ]);

@@ -10,6 +10,8 @@ use Cake\ORM\Entity;
  *
  * @property string $id
  * @property string $owner_id
+ * @property string $user_id
+ * @property string $tasker_id
  * @property \LilTasks\Model\Entity\Owner $owner
  * @property string $model
  * @property string $foreign_id

@@ -48,7 +48,7 @@ class LilProjectsSidebar
                 'active' => $request->getParam('controller') == 'Projects',
             ],
             'lookups' => [
-                'visible' => true,
+                'visible' => $currentUser->hasRole('admin'),
                 'title' => __d('lil_projects', 'Lookups'),
                 'url' => false,
                 'active' => in_array($request->getParam('controller'), ['ProjectsStatuses']),
@@ -68,10 +68,7 @@ class LilProjectsSidebar
             ],
         ];
 
-        // insert into sidebar right after welcome panel
-        //Lil::insertIntoArray($sidebar, ['projects' => $sidebarProjects], ['after' => 'welcome']);
         $sidebar->append($sidebarProjects);
-
         $event->setResult(['sidebar' => $sidebar]);
 
         return true;

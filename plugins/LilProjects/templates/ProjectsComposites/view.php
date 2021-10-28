@@ -2,7 +2,17 @@
     use Cake\Routing\Router;
 
     $compositeView = [
-        'title_for_layout' => '<span class="small">' . $composite->no . ' </span> ' . $composite->title,
+        'title_for_layout' => sprintf(
+            '<div class="small">%1$s</div><span>%2$s</span> :: %3$s',
+            $this->Html->link((string)$project, [
+                'controller' => 'Projects',
+                'action' => 'view',
+                $project->id,
+                '?' => ['tab' => 'composites']
+            ]),
+            $composite->no,
+            $composite->title
+        ),
         'menu' => [
             'edit' => [
                 'title' => __d('lil_projects', 'Edit'),
@@ -44,7 +54,13 @@
         ],
     ];
 
-    $itemTemplate = '<li id="mat__id__" class="composite-material-row">' .
+    $addMaterialRowTemplate = '<div class="add-material-bar row"><div class="col s1"></div>' .
+        '<button class="add-material">Add Material</button>' .
+        '<button class="add-group">Add Group</button>' .
+        '<button class="add-lookup">Add From Lookup</button>' .
+        '</div>';
+
+    $itemTemplate = '<li id="mat__id__" class="composite-material-row__class__">' .
         '<div class="row">' .
         '<div class="actions col s1">' .
             '<a class="btn btn-small btn-flat reorder-handle"><i class="material-icons tiny">dehaze</i></a>' .
@@ -52,23 +68,29 @@
         '</div>' .
         '<div class="descript col s8">__descript__</div>' .
         '<div class="thickness right-align col s2">__thickness__</div>' .
-        '<div class="col s1">cm</div>' .
+        '<div class="unit col s1">__unit__</div>' .
         '</div>' .
-        '<div class="add-material-bar">&nbsp;</div>' .
+        $addMaterialRowTemplate .
         '</li>';
 
     // add material to first position
-    $compositeView['panels']['materials']['lines'][] = 
-        '<li class="composite-material-row"><div class="add-material-bar">&nbsp;</div></li>';
+    $compositeView['panels']['materials']['lines'][] =
+        '<li class="composite-material-row first">' . $addMaterialRowTemplate . '</li>';
 
 
     $totalThickness = 0;
     foreach ($composite->composites_materials as $i => $material) {
         $totalThickness += $material->thickness;
-        $compositeView['panels']['materials']['lines'][] = 
+        $compositeView['panels']['materials']['lines'][] =
             str_replace(
-                ['__id__', '__descript__', '__thickness__'], 
-                [$material->id, h($material->descript), $this->Number->precision((float)$material->thickness, 1)], 
+                ['__id__', '__descript__', '__thickness__', '__class__', '__unit__'],
+                [
+                    $material->id,
+                    h($material->descript),
+                    $material->is_group ? '' : $this->Number->precision((float)$material->thickness, 1),
+                    $material->is_group ? ' material-group' : '',
+                    $material->is_group ? '' : 'cm'
+                ],
                 $itemTemplate
             );
     }
@@ -85,8 +107,6 @@
         '</li>';
 
     $compositeView['panels']['materials']['lines'][] = '</ul>';
-
-    //$compositeView['panels']['materials']['table']['foot']['rows'][0]['columns']['sum']['html'] = $this->Number->precision((float)$totalThickness, 1);
 
     echo $this->Lil->panels($compositeView, 'LilProjects.Composites.view');
 

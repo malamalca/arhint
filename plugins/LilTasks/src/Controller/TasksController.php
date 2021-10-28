@@ -23,6 +23,7 @@ class TasksController extends AppController
     public function index()
     {
         $filter = $this->getRequest()->getQueryParams();
+        $filter['user'] = $this->getCurrentUser()->get('id');
 
         /** @var \LilTasks\Model\Table\TasksFoldersTable $TasksFolders */
         $TasksFolders = TableRegistry::get('LilTasks.TasksFolders');
@@ -46,7 +47,11 @@ class TasksController extends AppController
             ->order($params['order'])
             ->all();
 
-        $this->set(compact('tasks', 'filter'));
+        /** @var \App\Model\Table\TasksFoldersTable $TasksFolders */
+        $UsersTable = TableRegistry::get('App.Users');
+        $users = $UsersTable->fetchForCompany($this->getCurrentUser()->get('company_id'));
+
+        $this->set(compact('tasks', 'filter', 'users'));
     }
 
     /**
@@ -74,6 +79,7 @@ class TasksController extends AppController
         } else {
             $task = $this->Tasks->newEmptyEntity();
             $task->owner_id = $this->getCurrentUser()->get('company_id');
+            $task->user_id = $this->getCurrentUser()->id;
         }
 
         $this->Authorization->authorize($task);
@@ -83,7 +89,7 @@ class TasksController extends AppController
             if ($this->Tasks->save($task)) {
                 $this->Flash->success(__d('lil_tasks', 'The task has been saved.'));
 
-                Cache::delete('LilTasks.' . $task->owner_id . '.OpenTasks');
+                Cache::delete('LilTasks.' . $this->getCurrentUser()->id . '.OpenTasks');
 
                 return $this->redirect(['action' => 'index']);
             } else {
@@ -96,7 +102,11 @@ class TasksController extends AppController
 
         $folders = $TasksFolders->listForOwner($this->getCurrentUser()->get('company_id'));
 
-        $this->set(compact('task', 'folders'));
+        /** @var \App\Model\Table\TasksFoldersTable $TasksFolders */
+        $UsersTable = TableRegistry::get('App.Users');
+        $users = $UsersTable->fetchForCompany($this->getCurrentUser()->get('company_id'));
+
+        $this->set(compact('task', 'folders', 'users'));
     }
 
     /**
@@ -120,7 +130,7 @@ class TasksController extends AppController
             $this->Flash->error(__d('lil_tasks', 'The task could not be saved. Please, try again.'));
         }
 
-        Cache::delete('LilTasks.' . $task->owner_id . '.OpenTasks');
+        Cache::delete('LilTasks.' . $this->getCurrentUser()->id . '.OpenTasks');
 
         return $this->redirect($this->getRequest()->referer());
     }
@@ -140,7 +150,7 @@ class TasksController extends AppController
         if ($this->Tasks->delete($task)) {
             $this->Flash->success(__d('lil_tasks', 'The task has been deleted.'));
 
-            Cache::delete('LilTasks.' . $task->owner_id . '.OpenTasks');
+            Cache::delete('LilTasks.' . $this->getCurrentUser()->id . '.OpenTasks');
         } else {
             $this->Flash->error(__d('lil_tasks', 'The task could not be deleted. Please, try again.'));
         }

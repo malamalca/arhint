@@ -2,7 +2,16 @@
 
 $pageTitle = __d('lil_projects', 'Workhours');
 if (!empty($project)) {
-    $pageTitle = __d('lil_projects', 'Workhours for "{0}"', (string)$project);
+    $pageTitle = sprintf(
+        '<div class="small">%1$s</div>%2$s',
+        $this->Html->link((string)$project, [
+            'controller' => 'Projects',
+            'action' => 'view',
+            $project->id,
+            '?' => ['tab' => 'workhours']
+        ]),
+        __d('lil_projects', 'Workhours'),
+    );
 }
 
 $tableIndex = [

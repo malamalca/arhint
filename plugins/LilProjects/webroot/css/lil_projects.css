@@ -64,9 +64,17 @@ li#material-editor {
     border-top: solid 1px #A8A8A8;
 }
 
+li#material-editor textarea {
+    line-height: 105% !important;
+    padding-top: 0 !important;
+}
+
+li#material-editor .submit {
+    margin-top: 0 !important;
+}
+
 li#composite-material-foot {
     background-color: #f0f0f0;
-    height: 50px;
     font-weight: bold;
 }
 
@@ -75,6 +83,11 @@ li.composite-material-row {
     border-top: solid 1px #f0f0f0 !important;
 }
 
+li.composite-material-row.material-group {
+    text-transform: uppercase;
+    font-size: 110%;
+    border-top: dashed 1px #404040 !important;
+}
 
 li.composite-material-row div.actions .btn {
     padding-bottom: 1px;
@@ -86,10 +99,22 @@ li.composite-material-row div.row, li#material-editor div.row {
     margin-bottom: 0 !important;
 }
 
+li.composite-material-row.first {
+    min-height: 3px;
+    background-color: #f0f0f0;
+}
+
 div.add-material-bar {
-    font-size: 10px;
-    height: 15px;
+    font-size: 8px;
+    height: 20px;
     background-color: bisque;
     cursor: pointer;
     padding: 0 !important;
+    padding-top: 1px !important;
+}
+div.add-material-bar button {
+    padding: 0 !important;
+    margin-right: 4px;
+    width: 120px;
+    border: solid 1px #A8A8A8;
 }

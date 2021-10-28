@@ -13,7 +13,7 @@ $editForm = [
                 'method' => 'create',
                 'parameters' => ['model' => $material],
             ],
-
+            '<div class="row">',
             '<div class="col s1">',
             'id' => [
                 'method' => 'hidden',
@@ -27,15 +27,19 @@ $editForm = [
                 'method' => 'hidden',
                 'parameters' => ['composite_id', ['id' => 'composite_id']],
             ],
+            'is_group' => [
+                'method' => 'hidden',
+                'parameters' => ['is_group', ['id' => 'is_group']],
+            ],
             '</div>',
             '<div class="col s8">',
             'descript' => [
-                'method' => 'text',
+                'method' => 'textarea',
                 'parameters' => ['descript', ['id' => 'descript']],
             ],
             '</div>',
             '<div class="col s3">',
-            'thickness' => [
+            'thickness' => $material->is_group ? null : [
                 'method' => 'text',
                 'parameters' => [
                     'thickness',
@@ -47,9 +51,10 @@ $editForm = [
                 ],
             ],
             '</div>',
+            '</div>',
             '<div class="row">',
-            '<div class="col s2"></div>',
-            '<div class="col s7">',
+            '<div class="col s1">&nbsp;</div>',
+            '<div class="col s7 submit">',
             'submit' => [
                 'method' => 'submit',
                 'parameters' => [

@@ -6,8 +6,6 @@ namespace LilProjects\Model\Table;
 use ArrayObject;
 use Cake\Database\Expression\QueryExpression;
 use Cake\Event\Event;
-use Cake\ORM\Entity;
-use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
@@ -17,7 +15,6 @@ use LilProjects\Model\Entity\ProjectsCompMaterial;
  * ProjectsCompMaterials Model
  *
  * @property \LilProjects\Model\Table\CompositesTable&\Cake\ORM\Association\BelongsTo $Composites
- *
  * @method \LilProjects\Model\Entity\ProjectsCompMaterial newEmptyEntity()
  * @method \LilProjects\Model\Entity\ProjectsCompMaterial newEntity(array $data, array $options = [])
  * @method \LilProjects\Model\Entity\ProjectsCompMaterial[] newEntities(array $data, array $options = [])
@@ -102,7 +99,7 @@ class ProjectsCompMaterialsTable extends Table
      */
     public function beforeSave(Event $event, ProjectsCompMaterial $entity, ArrayObject $options)
     {
-        if ($entity->isNew()) {
+        if ($entity->isNew() && empty($entity->sort_order)) {
             $res = $this->find()
                 ->select(['max_order' => new QueryExpression('MAX(sort_order)')])
                 ->where(['composite_id' => $entity->composite_id])
@@ -110,10 +107,31 @@ class ProjectsCompMaterialsTable extends Table
                 ->first();
 
             $entity->sort_order = $res['max_order'] + 1;
-        
         }
- 	}
+    }
 
+
+    /**
+     * afterSave method
+     *
+     * @param \Cake\Event\Event $event Event object.
+     * @param \LilProjects\Model\Entity\ProjectsCompMaterial $entity Entity object.
+     * @param \ArrayObject $options Array object.
+     * @return void
+     */
+    public function afterSave(Event $event, ProjectsCompMaterial $entity, ArrayObject $options)
+    {
+        if ($entity->isNew()) {
+            $this->updateAll(
+                ['sort_order' => new QueryExpression('sort_order + 1')],
+                [
+                    'composite_id' => $entity->composite_id,
+                    'sort_order >=' => $entity->sort_order,
+                    'id <>' => $entity->id,
+                ]
+            );
+        }
+    }
     /**
      * afterDelete method
      *
@@ -124,43 +142,43 @@ class ProjectsCompMaterialsTable extends Table
      */
     public function afterDelete(Event $event, ProjectsCompMaterial $entity, ArrayObject $options)
     {
-		$this->updateAll(
-			[new QueryExpression('sort_order = sort_order - 1')],
-			[
-				'composite_id' => $entity->composite_id,
-				'sort_order >' => $entity->sort_order,
-			]
-		);
- 	}
+        $this->updateAll(
+            [new QueryExpression('sort_order = sort_order - 1')],
+            [
+                'composite_id' => $entity->composite_id,
+                'sort_order >' => $entity->sort_order,
+            ]
+        );
+    }
 
     /**
      * reorder method
      *
-     * @param \LilProjects\Model\Entity\ProjectsCompMaterial $material 
+     * @param \LilProjects\Model\Entity\ProjectsCompMaterial $material Material entity
      * @param int $newPosition New position inside section
      * @return bool
      */
-	public function reorder($material, $newPosition) {
-
+    public function reorder($material, $newPosition)
+    {
         $qExpr = new QueryExpression();
 
         if ($material->sort_order < $newPosition) {
             $delta = '-1'; // moving down
             $qExpr->between('sort_order', $material->sort_order, $newPosition);
         } else {
-            $delta = '+1'; // moving up        
+            $delta = '+1'; // moving up
             $qExpr->between('sort_order', $newPosition, $material->sort_order);
         }
-        
+
         // update all for new
         $this->updateAll(
             [new QueryExpression('sort_order = sort_order ' . $delta)],
             ['composite_id' => $material->composite_id, $qExpr]
         );
-        
+
         // update sorted item
         $this->updateAll(['sort_order' => $newPosition], ['id' => $material->id]);
-        
+
         return true;
-	}
+    }
 }

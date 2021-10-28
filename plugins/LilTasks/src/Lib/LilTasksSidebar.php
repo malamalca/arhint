@@ -5,44 +5,41 @@ namespace LilTasks\Lib;
 
 use Cake\Cache\Cache;
 use Cake\ORM\TableRegistry;
-use Lil\Lib\Lil;
 
 class LilTasksSidebar
 {
     /**
      * Returns number of open tasks for specified due string.
      *
-     * @param string $owner_id Owner id
+     * @param string $userId User id
      * @return array
      */
-    public static function countOpenTasks($owner_id)
+    public static function countOpenTasks($userId)
     {
         $counters = Cache::remember(
-            'LilTasks.' . $owner_id . '.OpenTasks',
-            function () use ($owner_id) {
+            'LilTasks.' . $userId . '.OpenTasks',
+            function () use ($userId) {
                 /** @var \LilTasks\Model\Table\TasksTable $TasksTable */
                 $TasksTable = TableRegistry::get('LilTasks.Tasks');
 
                 $taskDues = ['today', 'tomorrow', 'morethan2days', 'empty'];
                 foreach ($taskDues as $due) {
-                    $filter = ['due' => $due, 'completed' => 'notyet'];
+                    $filter = ['due' => $due, 'completed' => 'notyet', 'user' => $userId];
                     $params = $TasksTable->filter($filter);
 
                     $count = $TasksTable->find()->select()
-                        ->where(['Tasks.owner_id' => $owner_id])
                         ->andWhere($params['conditions'])
                         ->count();
 
                     $ret[$due] = $count;
                 }
 
-                $filter = ['completed' => 'notyet'];
+                $filter = ['completed' => 'notyet', 'user' => $userId];
                 $params = $TasksTable->filter($filter);
 
                 $q = $TasksTable->find();
                 $countByFolder = $q
                     ->select(['id', 'folder_id', 'count' => $q->func()->count('*')])
-                    ->where(['Tasks.owner_id' => $owner_id])
                     ->andWhere($params['conditions'])
                     ->group('Tasks.folder_id')
                     ->combine('folder_id', 'count')
@@ -90,7 +87,7 @@ class LilTasksSidebar
         ];
 
         if ($request->getParam('plugin') == 'LilTasks') {
-            $openTasksCounters = self::countOpenTasks($currentUser['company_id']);
+            $openTasksCounters = self::countOpenTasks($currentUser->id);
             $countToday = $openTasksCounters['today'];
             $countTomorrow = $openTasksCounters['tomorrow'];
             $countFuture = $openTasksCounters['morethan2days'];
@@ -190,7 +187,7 @@ class LilTasksSidebar
                 ],
             ];
 
-            $owner_id = $currentUser->company_id;
+            $owner_id = $currentUser->id;
             $folders = Cache::remember(
                 'LilTasks.' . $owner_id . '.Folders',
                 function () use ($owner_id, $openTasksCounters, $request) {

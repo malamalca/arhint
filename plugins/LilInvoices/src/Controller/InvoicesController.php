@@ -77,7 +77,6 @@ class InvoicesController extends AppController
             );
             if (!$counter) {
                 $this->Authorization->skipAuthorization();
-                
                 $this->Flash->error(__d('lil_invoices', 'No counters found. Please activate or add a new one.'));
 
                 return $this->redirect(['controller' => 'InvoicesCounters']);
@@ -140,7 +139,7 @@ class InvoicesController extends AppController
             $ProjectsTable = TableRegistry::getTableLocator()->get('LilProjects.Projects');
 
             $projectsIds = array_filter(array_unique($data->extract('project_id')->toList()));
-            
+
             $projects = [];
             if (!empty($projectsIds)) {
                 $projects = $ProjectsTable->find()
@@ -247,17 +246,28 @@ class InvoicesController extends AppController
                 }
 
                 // if there is no uploaded file, unset invoices_attachments
-                $tmpName = $this->getRequest()->getData('invoices_attachments.0.filename.tmp_name');
-                $scannedData = $this->getRequest()->getData('invoices_attachments.0.scanned');
-                if (empty($tmpName) && empty($scannedData)) {
-                    unset($invoice->invoices_attachments);
+                $tmpNames = [];
+
+                $tmpAttachments = $this->getRequest()->getData('invoices_attachments');
+                if (!empty($tmpAttachments)) {
+                    foreach ((array)$tmpAttachments as $tmpAttachment) {
+                        if (!empty($tmpAttachment['filename']['tmp_name'])) {
+                            $tmpNames[$tmpAttachment['filename']['name']] = $tmpAttachment['filename']['tmp_name'];
+                        }
+                    }
                 }
+                $scannedData = $this->getRequest()->getData('invoices_attachments.0.scanned');
                 if (!empty($scannedData)) {
                     $tmpName = tempnam(constant('TMP'), 'LilScan') . '.pdf';
                     file_put_contents($tmpName, base64_decode($scannedData));
+                    $tmpNames['scanned.pdf'] = $tmpName;
                 }
 
-                if ($this->Invoices->save($invoice, ['uploadedFilename' => $tmpName])) {
+                if (count($tmpNames) == 0) {
+                    unset($invoice->invoices_attachments);
+                }
+
+                if ($this->Invoices->save($invoice, ['uploadedFilename' => $tmpNames])) {
                     $conn->commit();
                     if ($this->getRequest()->is('ajax') || $this->getRequest()->is('lilScan')) {
                         $response = $this->getResponse()

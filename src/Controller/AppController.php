@@ -39,7 +39,7 @@ class AppController extends Controller
         $this->loadComponent('RequestHandler', [
             'viewClassMap' => [
                 'aht' => 'App.AhtView',
-            ]
+            ],
         ]);
         $this->loadComponent('Flash');
 

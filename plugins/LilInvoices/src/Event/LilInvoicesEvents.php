@@ -81,7 +81,7 @@ class LilInvoicesEvents implements EventListenerInterface
             })
             ->toArray();
 
-        if (sizeof($counters) == 0) {
+        if (count($counters) == 0) {
             return $panels;
         }
 
@@ -173,22 +173,38 @@ class LilInvoicesEvents implements EventListenerInterface
                         ];
                     }
                 }
-                $elementTemplate = 'LilInvoices.invoices_projects_list';
 
-                $invoicesTab = sprintf('<li class="tab col"><a href="#tabc_invoices"%s>' . __d('lil_invoices', 'Invoices') . '</a></li>',
-                    $view->getRequest()->getQuery('tab') == 'invoices' ? ' class="active"' : '');
+                if ($view->getRequest()->getQuery('tab') == 'invoices') {
+                    $elementTemplate = 'LilInvoices.invoices_projects_list';
+                }
 
-                $view->Lil->insertIntoArray($panels->panels['tabs']['lines'], ['invoices' => $invoicesTab], ['before' => 'post']);
+                // add invoices table
+                $invoicesTab = sprintf(
+                    '<li class="tab col"><a href="%1$s" target="_self"%3$s>%2$s</a></li>',
+                    $view->Url->build([$view->getRequest()->getParam('pass.0'), '?' => ['tab' => 'invoices']]),
+                    __d('lil_invoices', 'Invoices'),
+                    $view->getRequest()->getQuery('tab') == 'invoices' ? ' class="active"' : ''
+                );
+
+                $view->Lil->insertIntoArray(
+                    $panels->panels['tabs']['lines'],
+                    ['invoices' => $invoicesTab],
+                    ['before' => 'post']
+                );
+
                 break;
             default:
                 $elementTemplate = 'LilInvoices.invoices_list';
         }
-        $invoicesPanels = [
-            //'invoices_title' => '<h3>' . __d('lil_invoices', 'Invoices') . '</h3>',
-            'invoices_table' => $view->element($elementTemplate, ['invoices' => $invoices, 'counters' => $counters]),
-        ];
 
-        $view->Lil->insertIntoArray($panels->panels, $invoicesPanels);
+        if (!empty($elementTemplate)) {
+            $invoicesPanels = [
+                //'invoices_title' => '<h3>' . __d('lil_invoices', 'Invoices') . '</h3>',
+                'invoices_table' => $view->element($elementTemplate, ['invoices' => $invoices, 'counters' => $counters]),
+            ];
+
+            $view->Lil->insertIntoArray($panels->panels, $invoicesPanels);
+        }
 
         return $panels;
     }

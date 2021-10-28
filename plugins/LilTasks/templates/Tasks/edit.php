@@ -47,6 +47,10 @@ $taskEdit = [
                 'method' => 'hidden',
                 'parameters' => ['field' => 'owner_id'],
             ],
+            'user_id' => [
+                'method' => 'hidden',
+                'parameters' => ['field' => 'user_id'],
+            ],
 
             'title' => [
                 'method' => 'control',
@@ -66,6 +70,23 @@ $taskEdit = [
                         'type' => 'date',
                         'label' => __d('lil_tasks', 'Due Date') . ':',
                         'default' => $deadline,
+                    ],
+                ],
+            ],
+
+            'tasker' => [
+                'method' => 'control',
+                'parameters' => [
+                    'field' => 'tasker_id', [
+                        'type' => 'select',
+                        'label' => [
+                            'text' => __d('lil_tasks', 'Assigned To') . ':',
+                            'class' => 'active',
+                        ],
+                        'empty' => '-- ' . __d('lil_tasks', 'anyone') . ' --',
+                        'options' => $users,
+                        'default' => $this->getCurrentUser()->id,
+                        'class' => 'browser-default',
                     ],
                 ],
             ],

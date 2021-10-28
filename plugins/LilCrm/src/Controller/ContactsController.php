@@ -316,7 +316,7 @@ class ContactsController extends AppController
         $search = ['iskalni_niz' => $ddv];
         $client = new SoapClient('http://ddv.inetis.com/Iskalnik.asmx?WSDL');
         $data = [];
-        if (is_callable([$client, 'Isci'])) {
+        if (method_exists($client, 'Isci')) {
             $result = $client->Isci($search);
             if (isset($result->IsciResult->anyType)) {
                 $result = $result->IsciResult->anyType->enc_value;

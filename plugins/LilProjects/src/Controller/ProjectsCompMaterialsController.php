@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace LilProjects\Controller;
 
-use LilProjects\Controller\AppController;
 use Cake\ORM\TableRegistry;
 
 /**
@@ -54,31 +53,37 @@ class ProjectsCompMaterialsController extends AppController
         } else {
             $material = $this->ProjectsCompMaterials->newEmptyEntity();
             $material->composite_id = $this->getRequest()->getQuery('composite');
-            $material->sort_order = $this->getRequest()->getQuery('order');
+            $material->sort_order = (int)$this->getRequest()->getQuery('order');
+            $material->is_group = (bool)$this->getRequest()->getQuery('group');
         }
 
         $this->Authorization->Authorize($material);
 
-        
         if ($this->request->is(['patch', 'post', 'put'])) {
             $material = $this->ProjectsCompMaterials->patchEntity($material, $this->request->getData());
-        
+
             if ($this->ProjectsCompMaterials->save($material)) {
                 if ($this->getRequest()->is('json')) {
                     $this->autoRender = false;
                     header('Content-Type: application/json');
                     echo json_encode(['result' => $material]);
+
                     return;
                 }
 
-                $this->Flash->success(__('The projects comp material has been saved.'));
+                $this->Flash->success(__d('lil_projects', 'The projects comp material has been saved.'));
 
-                return $this->redirect(['controller' => 'ProjectsComposites', 'action' => 'view', $material->composite_id]);
+                return $this->redirect([
+                    'controller' => 'ProjectsComposites',
+                    'action' => 'view',
+                    $material->composite_id,
+                ]);
             }
-            $this->Flash->error(__('The projects comp material could not be saved. Please, try again.'));
+            $this->Flash->error(__d('lil_projects', 'The projects comp material could not be saved. Please, try again.'));
         }
 
-        $composite = TableRegistry::getTableLocator()->get('LilProjects.ProjectsComposites')->get($material->composite_id);
+        $ProjectsCompositesTable = TableRegistry::getTableLocator()->get('LilProjects.ProjectsComposites');
+        $composite = $ProjectsCompositesTable->get($material->composite_id);
 
         $this->set(compact('material', 'composite'));
     }
@@ -96,16 +101,16 @@ class ProjectsCompMaterialsController extends AppController
         $material = $this->ProjectsCompMaterials->get($id);
 
         $this->Authorization->Authorize($material);
-        
+
         if ($this->ProjectsCompMaterials->delete($material)) {
             if ($this->getRequest()->is('json') || $this->getRequest()->is('aht')) {
                 $this->autoRender = false;
-                
+
                 return;
             }
-            $this->Flash->success(__('The projects comp material has been deleted.'));
+            $this->Flash->success(__d('lil_projects', 'The projects comp material has been deleted.'));
         } else {
-            $this->Flash->error(__('The projects comp material could not be deleted. Please, try again.'));
+            $this->Flash->error(__d('lil_projects', 'The projects comp material could not be deleted. Please, try again.'));
         }
 
         return $this->redirect(['controller' => 'ProjectsComposites', 'action' => 'view', $material->composite_id]);
@@ -118,12 +123,13 @@ class ProjectsCompMaterialsController extends AppController
      * @param int $position New position inside composite
      * @return void
      */
-	public function reorder($id = null, $position = null) {
+    public function reorder($id = null, $position = null)
+    {
         $material = $this->ProjectsCompMaterials->get($id);
         $this->Authorization->Authorize($material, 'edit');
 
-		if (!empty($id) && $this->ProjectsCompMaterials->reorder($material, $position)) {
-			$this->autoRender = false;
-		}
-	}
+        if (!empty($id) && $this->ProjectsCompMaterials->reorder($material, $position)) {
+            $this->autoRender = false;
+        }
+    }
 }

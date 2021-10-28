@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace LilProjects\Controller;
 
-use LilProjects\Controller\AppController;
 use Cake\ORM\TableRegistry;
+use LilProjects\Lib\LilProjectsFuncs;
 
 /**
  * ProjectsComposites Controller
@@ -27,9 +27,12 @@ class ProjectsCompositesController extends AppController
             'contain' => ['CompositesMaterials'],
         ]);
 
+        $ProjectsTable = TableRegistry::get('LilProjects.Projects');
+        $project = $ProjectsTable->get($composite->project_id);
+
         $this->Authorization->Authorize($composite);
 
-        $this->set(compact('composite'));
+        $this->set(compact('composite', 'project'));
     }
 
     /**
@@ -63,7 +66,7 @@ class ProjectsCompositesController extends AppController
         if ($this->request->is(['patch', 'post', 'put'])) {
             $projectsComposite = $this->ProjectsComposites->patchEntity($projectsComposite, $this->request->getData());
             if ($this->ProjectsComposites->save($projectsComposite)) {
-                $this->Flash->success(__('The projects composite has been saved.'));
+                $this->Flash->success(__d('lil_projects', 'The projects composite has been saved.'));
 
                 $redirect = $this->getRequest()->getData('redirect');
                 if (!empty($redirect)) {
@@ -76,7 +79,7 @@ class ProjectsCompositesController extends AppController
                     $projectsComposite->project_id,
                     '?' => ['tab' => 'composites']]);
             }
-            $this->Flash->error(__('The projects composite could not be saved. Please, try again.'));
+            $this->Flash->error(__d('lil_projects', 'The projects composite could not be saved. Please, try again.'));
         }
 
         $project = TableRegistry::getTableLocator()->get('LilProjects.Projects')->get($projectsComposite->project_id);
@@ -87,11 +90,11 @@ class ProjectsCompositesController extends AppController
     /**
      * Delete method
      *
-     * @param string|null $id Projects Composite id.
+     * @param string $id Projects Composite id.
      * @return \Cake\Http\Response|null|void Redirects to index.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function delete($id = null)
+    public function delete($id)
     {
         $this->request->allowMethod(['post', 'delete', 'get']);
         $projectsComposite = $this->ProjectsComposites->get($id);
@@ -99,15 +102,51 @@ class ProjectsCompositesController extends AppController
         $this->Authorization->Authorize($projectsComposite);
 
         if ($this->ProjectsComposites->delete($projectsComposite)) {
-            $this->Flash->success(__('The projects composite has been deleted.'));
+            $this->Flash->success(__d('lil_projects', 'The projects composite has been deleted.'));
         } else {
-            $this->Flash->error(__('The projects composite could not be deleted. Please, try again.'));
+            $this->Flash->error(__d('lil_projects', 'The projects composite could not be deleted. Please, try again.'));
         }
 
         return $this->redirect([
-            'controller' => 'Projects', 
-            'action' => 'view', 
-            $projectsComposite->project_id, 
-            '?' => ['tab' => 'composites']]);
+            'controller' => 'Projects',
+            'action' => 'view',
+            $projectsComposite->project_id,
+            '?' => ['tab' => 'composites'],
+        ]);
+    }
+
+
+    /**
+     * Export method
+     *
+     * @param string $projectId Projects id.
+     * @return \Cake\Http\Response|null|void Redirects to index.
+     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
+     */
+    public function export($projectId)
+    {
+        $project = (TableRegistry::get('LilProjects.Projects'))->get($projectId);
+
+        $this->Authorization->Authorize($project, 'view');
+
+        $projectsComposites = $this->ProjectsComposites->find()
+            ->select()
+            ->contain(['CompositesMaterials'])
+            ->where(['project_id' => $project->id])
+            ->all();
+
+        $data = LilProjectsFuncs::ExportComposites2Word($projectsComposites);
+
+        $response = $this->response;
+        $response = $response->withStringBody($data);
+
+        $response = $response->withType('application/vnd.openxmlformats-officedocument.wordprocessingml');
+
+        // Optionally force file download
+        $response = $response->withDownload($project->title . '-Composites.docx');
+
+        // Return response object to prevent controller from trying to render
+        // a view.
+        return $response;
     }
 }

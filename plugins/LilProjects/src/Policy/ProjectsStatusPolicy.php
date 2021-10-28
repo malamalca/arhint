@@ -17,7 +17,7 @@ class ProjectsStatusPolicy
      */
     public function canEdit($user, $entity)
     {
-        return $entity->owner_id == $user->company_id;
+        return $entity->owner_id == $user->company_id && $user->hasRole('admin');
     }
 
     /**
@@ -29,6 +29,6 @@ class ProjectsStatusPolicy
      */
     public function canDelete($user, $entity)
     {
-        return $entity->owner_id == $user->company_id;
+        return $entity->owner_id == $user->company_id && $user->hasRole('admin');
     }
 }

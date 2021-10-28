@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace LilProjects\Policy;
 
+use Cake\ORM\TableRegistry;
+
 /**
  * ProjectsTable Policy Resolver
  */
@@ -17,6 +19,20 @@ class ProjectsTablePolicy
      */
     public function scopeIndex($user, $query)
     {
-        return $query->where(['Projects.owner_id' => $user->company_id]);
+        $conditions = ['Projects.owner_id' => $user->company_id];
+        if (!$user->hasRole('admin')) {
+            /** @var \LilProjects\Model\Table\ProjectsUsersTable $ProjectsUsersTable */
+            $ProjectsUsersTable = TableRegistry::getTableLocator()->get('LilProjects.ProjectsUsers');
+
+            $projectsList = $ProjectsUsersTable->find()
+                ->where(['user_id' => $user->id])
+                ->combine('project_id', 'user_id')
+                ->toArray();
+
+            $conditions['Projects.id IN'] = array_keys($projectsList);
+        }
+
+
+        return $query->where($conditions);
     }
 }

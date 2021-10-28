@@ -117,6 +117,14 @@ class TasksTable extends Table
             $ret['conditions']['Tasks.folder_id'] = $filter['folder'];
         }
 
+        if (!empty($filter['user'])) {
+            $ret['conditions'][]['OR'] = [
+                'Tasks.tasker_id IS' => null,
+                'Tasks.tasker_id' => $filter['user'],
+                'Tasks.user_id' => $filter['user'],
+            ];
+        }
+
         if (!empty($filter['due'])) {
             switch ($filter['due']) {
                 case 'today':
@@ -150,7 +158,7 @@ class TasksTable extends Table
                     break;
             }
         } else {
-            $ret['conditions']['OR'] = [
+            $ret['conditions'][]['OR'] = [
                 'Tasks.completed IS' => null,
                 'Tasks.completed >=' => (new Time('today'))->subDays(8),
             ];

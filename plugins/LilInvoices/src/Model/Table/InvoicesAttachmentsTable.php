@@ -117,10 +117,10 @@ class InvoicesAttachmentsTable extends Table
         if (
             !empty($options['uploadedFilename']) &&
             !empty($entity->filename) &&
-            file_exists($options['uploadedFilename'])
+            file_exists($options['uploadedFilename'][$entity->original])
         ) {
             $fileDest = Configure::read('LilInvoices.uploadFolder') . DS . $entity->filename;
-            $moved = copy($options['uploadedFilename'], $fileDest);
+            $moved = copy($options['uploadedFilename'][$entity->original], $fileDest);
             //unlink($options['uploadedFilename']);
         }
     }

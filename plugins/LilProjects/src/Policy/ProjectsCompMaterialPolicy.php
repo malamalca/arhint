@@ -14,15 +14,18 @@ class ProjectsCompMaterialPolicy
      * Authorize view action
      *
      * @param \App\Model\Entity\User $user User
-     * @param \LilProjects\Model\Entity\ProjectsLog $entity Entity
+     * @param \LilProjects\Model\Entity\ProjectsCompMaterial $entity Entity
      * @return bool
      */
     public function canView($user, $entity)
     {
+        /** @var \LilProjects\Model\Table\ProjectsCompositesTable $ProjectsCompositesTable */
+        $ProjectsCompositesTable = TableRegistry::getTableLocator()->get('LilProjects.ProjectsComposites');
+
+        $composite = $ProjectsCompositesTable->get($entity->composite_id);
+
         /** @var \LilProjects\Model\Table\ProjectsTable $ProjectsTable */
         $ProjectsTable = TableRegistry::getTableLocator()->get('LilProjects.Projects');
-
-        $composite = (TableRegistry::getTableLocator()->get('LilProjects.ProjectsComposites'))->get($entity->composite_id);
 
         return $ProjectsTable->isOwnedBy($composite->project_id, $user->company_id);
     }
@@ -31,15 +34,18 @@ class ProjectsCompMaterialPolicy
      * Authorize edit action
      *
      * @param \App\Model\Entity\User $user User
-     * @param \LilProjects\Model\Entity\ProjectsLog $entity Entity
+     * @param \LilProjects\Model\Entity\ProjectsCompMaterial $entity Entity
      * @return bool
      */
     public function canEdit($user, $entity)
     {
+        /** @var \LilProjects\Model\Table\ProjectsCompositesTable $ProjectsCompositesTable */
+        $ProjectsCompositesTable = TableRegistry::getTableLocator()->get('LilProjects.ProjectsComposites');
+
+        $composite = $ProjectsCompositesTable->get($entity->composite_id);
+
         /** @var \LilProjects\Model\Table\ProjectsTable $ProjectsTable */
         $ProjectsTable = TableRegistry::getTableLocator()->get('LilProjects.Projects');
-
-        $composite = (TableRegistry::getTableLocator()->get('LilProjects.ProjectsComposites'))->get($entity->composite_id);
 
         return $ProjectsTable->isOwnedBy($composite->project_id, $user->company_id);
     }
@@ -48,15 +54,18 @@ class ProjectsCompMaterialPolicy
      * Authorize delete action
      *
      * @param \App\Model\Entity\User $user User
-     * @param \LilProjects\Model\Entity\ProjectsLog $entity Entity
+     * @param \LilProjects\Model\Entity\ProjectsCompMaterial $entity Entity
      * @return bool
      */
     public function canDelete($user, $entity)
     {
+        /** @var \LilProjects\Model\Table\ProjectsCompositesTable $ProjectsCompositesTable */
+        $ProjectsCompositesTable = TableRegistry::getTableLocator()->get('LilProjects.ProjectsComposites');
+
+        $composite = $ProjectsCompositesTable->get($entity->composite_id);
+
         /** @var \LilProjects\Model\Table\ProjectsTable $ProjectsTable */
         $ProjectsTable = TableRegistry::getTableLocator()->get('LilProjects.Projects');
-
-        $composite = (TableRegistry::getTableLocator()->get('LilProjects.ProjectsComposites'))->get($entity->composite_id);
 
         return $ProjectsTable->isOwnedBy($composite->project_id, $user->company_id);
     }

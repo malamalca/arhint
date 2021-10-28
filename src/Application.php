@@ -65,7 +65,7 @@ class Application extends BaseApplication implements
          * Debug Kit should not be installed on a production system
          */
         if (Configure::read('debug') && (PHP_SAPI != 'cli')) {
-            //$this->addPlugin('DebugKit');
+            $this->addPlugin('DebugKit');
         }
 
         if (PHP_SAPI == 'cli') {
@@ -95,7 +95,7 @@ class Application extends BaseApplication implements
             //$builder->setExtensions(['json', 'aht', 'xml', 'pdf', 'txt', 'png']);
 
             $builder->connect('/', ['plugin' => 'LilProjects', 'controller' => 'Projects', 'action' => 'index']);
-            
+
             $builder->fallbacks();
         });
     }
@@ -276,8 +276,8 @@ class Application extends BaseApplication implements
      */
     public function getAuthorizationService(ServerRequestInterface $request): AuthorizationServiceInterface
     {
-        $resolver = new OrmResolver();
+        $ormResolver = new OrmResolver();
 
-        return new AuthorizationService($resolver);
+        return new AuthorizationService($ormResolver);
     }
 }

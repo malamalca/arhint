@@ -37,7 +37,8 @@ class ProjectsLogPolicy
         /** @var \LilProjects\Model\Table\ProjectsTable $ProjectsTable */
         $ProjectsTable = TableRegistry::getTableLocator()->get('LilProjects.Projects');
 
-        return $ProjectsTable->isOwnedBy($entity->project_id, $user->company_id);
+        return $ProjectsTable->isOwnedBy($entity->project_id, $user->company_id) &&
+            ($entity->user_id == $user->id || $user->hasRole('admin'));
     }
 
     /**
@@ -52,6 +53,7 @@ class ProjectsLogPolicy
         /** @var \LilProjects\Model\Table\ProjectsTable $ProjectsTable */
         $ProjectsTable = TableRegistry::getTableLocator()->get('LilProjects.Projects');
 
-        return $ProjectsTable->isOwnedBy($entity->project_id, $user->company_id);
+        return $ProjectsTable->isOwnedBy($entity->project_id, $user->company_id) &&
+            ($entity->user_id == $user->id || $user->hasRole('admin'));
     }
 }

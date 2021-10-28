@@ -6,18 +6,16 @@ namespace LilProjects\Model\Entity;
 use Cake\ORM\Entity;
 
 /**
- * ProjectsCompMaterial Entity
+ * ProjectsUser Entity
  *
  * @property string $id
- * @property string|null $composite_id
- * @property bool $is_group
- * @property int $sort_order
- * @property string|null $descript
- * @property string|null $thickness
+ * @property string|null $project_id
+ * @property string|null $user_id
  *
- * @property \LilProjects\Model\Entity\Composite $composite
+ * @property \LilProjects\Model\Entity\Project $project
+ * @property \LilProjects\Model\Entity\User $user
  */
-class ProjectsCompMaterial extends Entity
+class ProjectsUser extends Entity
 {
     /**
      * Fields that can be mass assigned using newEntity() or patchEntity().
@@ -29,11 +27,9 @@ class ProjectsCompMaterial extends Entity
      * @var array
      */
     protected $_accessible = [
-        'composite_id' => true,
-        'is_group' => true,
-        'sort_order' => true,
-        'descript' => true,
-        'thickness' => true,
-        'composite' => true,
+        'project_id' => true,
+        'user_id' => true,
+        'project' => true,
+        'user' => true,
     ];
 }

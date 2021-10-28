@@ -21,7 +21,7 @@ class LilExpensesSidebar
         $request = $event->getSubject()->getRequest();
         $currentUser = $event->getSubject()->getCurrentUser();
 
-        if (empty($currentUser)) {
+        if (empty($currentUser) || !$currentUser->hasRole('admin')) {
             return false;
         }
 

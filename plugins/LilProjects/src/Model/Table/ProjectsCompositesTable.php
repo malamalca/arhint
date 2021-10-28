@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace LilProjects\Model\Table;
 
-use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
@@ -12,7 +11,6 @@ use Cake\Validation\Validator;
  * ProjectsComposites Model
  *
  * @property \LilProjects\Model\Table\OwnersTable&\Cake\ORM\Association\BelongsTo $Owners
- *
  * @method \LilProjects\Model\Entity\ProjectsComposite newEmptyEntity()
  * @method \LilProjects\Model\Entity\ProjectsComposite newEntity(array $data, array $options = [])
  * @method \LilProjects\Model\Entity\ProjectsComposite[] newEntities(array $data, array $options = [])
@@ -51,7 +49,7 @@ class ProjectsCompositesTable extends Table
         $this->hasMany('CompositesMaterials', [
             'foreignKey' => 'composite_id',
             'className' => 'LilProjects.ProjectsCompMaterials',
-            'sort' => 'sort_order'
+            'sort' => 'sort_order',
         ]);
     }
 

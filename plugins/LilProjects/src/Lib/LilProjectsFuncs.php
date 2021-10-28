@@ -3,9 +3,12 @@ declare(strict_types=1);
 
 namespace LilProjects\Lib;
 
+use Cake\I18n\Number;
+
 class LilProjectsFuncs
 {
     protected const THUMB_SIZE = 50;
+
     /**
      * Return thumbnail image for specified project
      *
@@ -75,5 +78,103 @@ class LilProjectsFuncs
         imagedestroy($im);
 
         return $imageData;
+    }
+
+    /**
+     * Return word document with compositest
+     *
+     * @param mixed $projectsComposites Projects Composites list
+     * @return binary
+     */
+    public static function ExportComposites2Word($projectsComposites)
+    {
+        $phpWord = new \PhpOffice\PhpWord\PhpWord();
+
+        $tabs = [
+            new \PhpOffice\PhpWord\Style\Tab('left', 1000),
+            new \PhpOffice\PhpWord\Style\Tab('right', 7500),
+            new \PhpOffice\PhpWord\Style\Tab('left', 7800),
+        ];
+
+        // Define styles
+        $titleParagraphStyleName = 'Title Paragraph';
+        $phpWord->addParagraphStyle(
+            $titleParagraphStyleName,
+            ['tabs' => $tabs, 'borderBottomSize' => 6, 'spaceAfter' => 0],
+        );
+
+        $textParagraphStyleName = 'Text Paragraph';
+        $phpWord->addParagraphStyle(
+            $textParagraphStyleName,
+            ['tabs' => $tabs, 'spaceBefore' => 0, 'spaceAfter' => 0],
+        );
+
+        $footerParagraphStyleName = 'Footer Paragraph';
+        $phpWord->addParagraphStyle(
+            $footerParagraphStyleName,
+            ['tabs' => [
+                new \PhpOffice\PhpWord\Style\Tab('right', 6800),
+                new \PhpOffice\PhpWord\Style\Tab('right', 7500),
+                new \PhpOffice\PhpWord\Style\Tab('left', 7800),
+            ], 'borderTopSize' => 6, ],
+        );
+
+        $fontStyleTitle = 'Composite Title';
+        $phpWord->addFontStyle(
+            $fontStyleTitle,
+            ['name' => 'Open Sans Condensed', 'size' => 12, 'bold' => true, 'borderBottomSize' => 1]
+        );
+
+        $fontStyleMaterial = 'Composite Material';
+        $phpWord->addFontStyle(
+            $fontStyleMaterial,
+            ['name' => 'Open Sans Condensed Light', 'size' => 11, 'bold' => false]
+        );
+
+        $fontStyleFooter = 'Composite Footer';
+        $phpWord->addFontStyle(
+            $fontStyleFooter,
+            ['name' => 'Open Sans Condensed', 'size' => 11, 'bold' => true, 'borderBottomSize' => 1]
+        );
+
+        // New portrait section
+        $section = $phpWord->addSection();
+
+        foreach ($projectsComposites as $composite) {
+
+            $totalThickness = 0;
+            $section->addText(implode("\t", [$composite->no, $composite->title]), $fontStyleTitle, $titleParagraphStyleName);
+
+            foreach ($composite->composites_materials as $i => $material) {
+                $textlines = explode(PHP_EOL, $material->descript);
+                $section->addText(implode("\t", ['-', $textlines[0], Number::precision((float)$material->thickness, 2), 'cm']), $fontStyleMaterial, $textParagraphStyleName);
+
+                if (count($textlines) > 1) {
+                    array_shift($textlines);
+                    foreach ($textlines as $line) {
+                        $section->addText("\t" . $line, $fontStyleMaterial, $textParagraphStyleName);
+                    }
+                }
+
+                $totalThickness += $material->thickness;
+            }
+
+            $section->addText("\t" . implode("\t", [__d('lil_projects', 'Total Thickness') . ':', Number::precision($totalThickness, 2), 'cm']), $fontStyleFooter, $footerParagraphStyleName);
+
+            $section->addTextBreak(1, $fontStyleMaterial, $textParagraphStyleName);
+        }
+
+
+        // Save file
+        $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'Word2007');
+
+        ob_start();
+        $objWriter->save('php://output');
+        $ret = ob_get_contents();
+        ob_end_clean();
+
+        return $ret;
+
+        //$objWriter->save(TMP . DS . 'composites.docx');
     }
 }

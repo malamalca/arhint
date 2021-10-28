@@ -118,17 +118,37 @@ foreach ($tasks as $task) {
         } elseif ($this->Time->isPast($task->deadline)) {
             $dueSpanClass = 'lil-task-overdue';
         }
-        $dueSpan = sprintf(
+        $dueSpan = __d('lil_tasks', ' :: due {0}', sprintf(
             '<span class="%1$s">%2$s</span> ',
             $dueSpanClass,
             $dueDate
-        );
+        ));
     }
 
     if (!empty($task->completed)) {
         $panelClass .= ' lil-task-item-completed';
         $tickImage = $this->Html->image('/lil_tasks/img/tick_completed.png');
     }
+
+    $usersDescript = '';
+
+    if (empty($task->tasker_id)) {
+        if ($task->user_id != $this->getCurrentUser()->id) {
+            $usersDescript = __d('lil_tasks', '"{0}" to Anyone', h($users[$task->user_id]->name));
+        } else {
+            $usersDescript = __d('lil_tasks', 'Me to Anyone');
+        }
+    } else {
+        if ($task->user_id != $this->getCurrentUser()->id) {
+            $usersDescript = __d('lil_tasks', '"{0}" to Me', h($users[$task->user_id]->name));
+        }
+
+        if ($task->tasker_id != $this->getCurrentUser()->id) {
+            $usersDescript = __d('lil_tasks', '"{0}" from Me', h($users[$task->tasker_id]->name));
+        }
+
+    }
+
 
     $taskPanel = [
         'params' => ['class' => $panelClass],
@@ -159,6 +179,7 @@ foreach ($tasks as $task) {
                     'escape' => false,
                     'class' => 'lil-task-tick',
                 ]),
+
             'title' => $prioritySpan .
                 $this->getRequest()->is('mobile') ? h($task->title) : $this->Html->link(
                     $task->title,
@@ -172,7 +193,8 @@ foreach ($tasks as $task) {
                         'class' => 'lil-task-edit',
                     ]
                 ),
-            'descript' => sprintf('<div class="descript">%s</div>', $dueSpan . h($task->descript)),
+            'descript' => sprintf('<div class="userdue">%s</div>', $usersDescript . $dueSpan),
+            'descript2' => empty($task->descript) ? null : sprintf('<div class="descript">%s</div>', h($task->descript)),
         ],
     ];
 

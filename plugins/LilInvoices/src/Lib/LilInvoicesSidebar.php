@@ -28,30 +28,22 @@ class LilInvoicesSidebar
         $request = $event->getSubject()->getRequest();
         $currentUser = $event->getSubject()->getCurrentUser();
 
-        if (empty($currentUser)) {
+        if (empty($currentUser) || !$currentUser->hasRole('admin')) {
             return;
         }
 
-        if (empty($sidebar['documents'])) {
-            // there is no "ACCOUNTING SIDEBAR"
-            $invoices['title'] = __d('lil_invoices', 'Invoices');
-            $invoices['visible'] = !empty($currentUser);
-            $invoices['active'] = $request->getParam('plugin') == 'LilInvoices';
-            $invoices['url'] = [
-                'plugin' => 'LilInvoices',
-                'controller' => 'Invoices',
-                'action' => 'index',
-            ];
-            $invoices['items'] = [];
+        $invoices['title'] = __d('lil_invoices', 'Invoices');
+        $invoices['visible'] = !empty($currentUser);
+        $invoices['active'] = $request->getParam('plugin') == 'LilInvoices';
+        $invoices['url'] = [
+            'plugin' => 'LilInvoices',
+            'controller' => 'Invoices',
+            'action' => 'index',
+        ];
+        $invoices['items'] = [];
 
-            // insert into sidebar right after welcome panel
-            Lil::insertIntoArray($sidebar, ['documents' => $invoices], ['after' => 'welcome']);
-
-            $sidebar->append($invoices);
-        } else {
-            $sidebar['documents']['active'] = $sidebar['documents']['active'] ||
-                $request->getParam('plugin') == 'LilInvoices';
-        }
+        // insert into sidebar right after welcome panel
+        Lil::insertIntoArray($sidebar, ['documents' => $invoices], ['after' => 'welcome']);
 
         ////////////////////////////////////////////////////////////////////////////////////////
         if (empty($sidebar['documents']['items']['reports'])) {
