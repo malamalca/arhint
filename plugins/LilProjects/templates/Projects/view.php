@@ -137,7 +137,7 @@
                 'table' => [
                     'pre' => '<div id="tabc_composites" class="col s12">',
                     'post' => '</div>',
-                    'params' => ['class' => 'striped', 'id' => 'projects-composites'],
+                    'params' => ['class' => 'striped', 'id' => 'projects-composites', 'style' => 'max-width: 700px'],
                     'body' => ['rows' => []],
                 ],
             ];

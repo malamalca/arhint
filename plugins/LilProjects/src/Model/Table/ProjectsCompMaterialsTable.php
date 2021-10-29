@@ -110,7 +110,6 @@ class ProjectsCompMaterialsTable extends Table
         }
     }
 
-
     /**
      * afterSave method
      *
@@ -132,6 +131,7 @@ class ProjectsCompMaterialsTable extends Table
             );
         }
     }
+
     /**
      * afterDelete method
      *

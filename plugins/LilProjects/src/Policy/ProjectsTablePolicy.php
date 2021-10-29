@@ -32,7 +32,6 @@ class ProjectsTablePolicy
             $conditions['Projects.id IN'] = array_keys($projectsList);
         }
 
-
         return $query->where($conditions);
     }
 }

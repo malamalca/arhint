@@ -79,5 +79,4 @@ class LabelsControllerTest extends IntegrationTestCase
         $this->get('/lil_crm/labels/label?adrema=49a90cfe-fda4-49ca-b7ec-ca5534465431');
         $this->assertNoRedirect();
     }
-
 }

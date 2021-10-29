@@ -40,7 +40,16 @@ class LilProjectsFuncs
             $caption .= mb_substr($parts[count($parts) - 1], 0, 1);
 
             $fontFile = constant('WWW_ROOT') . 'font' . constant('DS') . 'arialbd.ttf';
-            imagettftext($newImage, (int)($thumbSize* 0.55), 0, 0, (int)(0.75 * $thumbSize), $textColor, $fontFile, strtoupper($caption));
+            imagettftext(
+                $newImage,
+                (int)($thumbSize * 0.55),
+                0,
+                0,
+                (int)(0.75 * $thumbSize),
+                $textColor,
+                $fontFile,
+                strtoupper($caption)
+            );
         } else {
             $im = imagecreatefromstring(base64_decode($project->ico));
             $width = imagesx($im);
@@ -77,8 +86,6 @@ class LilProjectsFuncs
             }
         }
 
-
-
         $im = $newImage;
 
         ob_start();
@@ -94,9 +101,9 @@ class LilProjectsFuncs
      * Return word document with compositest
      *
      * @param mixed $projectsComposites Projects Composites list
-     * @return binary
+     * @return string
      */
-    public static function ExportComposites2Word($projectsComposites)
+    public static function exportComposites2Word($projectsComposites)
     {
         $phpWord = new \PhpOffice\PhpWord\PhpWord();
 
@@ -151,13 +158,23 @@ class LilProjectsFuncs
         $section = $phpWord->addSection();
 
         foreach ($projectsComposites as $composite) {
-
             $totalThickness = 0;
-            $section->addText(implode("\t", [$composite->no, $composite->title]), $fontStyleTitle, $titleParagraphStyleName);
+            $section->addText(
+                implode("\t", [$composite->no, $composite->title]),
+                $fontStyleTitle,
+                $titleParagraphStyleName
+            );
 
             foreach ($composite->composites_materials as $i => $material) {
                 $textlines = explode(PHP_EOL, $material->descript);
-                $section->addText(implode("\t", ['-', $textlines[0], Number::precision((float)$material->thickness, 2), 'cm']), $fontStyleMaterial, $textParagraphStyleName);
+                $section->addText(
+                    implode(
+                        "\t",
+                        ['-', $textlines[0], Number::precision((float)$material->thickness, 2), 'cm']
+                    ),
+                    $fontStyleMaterial,
+                    $textParagraphStyleName
+                );
 
                 if (count($textlines) > 1) {
                     array_shift($textlines);
@@ -169,11 +186,17 @@ class LilProjectsFuncs
                 $totalThickness += $material->thickness;
             }
 
-            $section->addText("\t" . implode("\t", [__d('lil_projects', 'Total Thickness') . ':', Number::precision($totalThickness, 2), 'cm']), $fontStyleFooter, $footerParagraphStyleName);
+            $section->addText(
+                "\t" . implode(
+                    "\t",
+                    [__d('lil_projects', 'Total Thickness') . ':', Number::precision($totalThickness, 2), 'cm']
+                ),
+                $fontStyleFooter,
+                $footerParagraphStyleName
+            );
 
             $section->addTextBreak(1, $fontStyleMaterial, $textParagraphStyleName);
         }
-
 
         // Save file
         $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'Word2007');

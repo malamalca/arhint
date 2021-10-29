@@ -512,7 +512,7 @@ if (empty($invoice->invoices_attachments)) {
                     $atch->id,
                 ],
                 [
-                    'class' => 'AttachmentPreview'
+                    'class' => 'AttachmentPreview',
                 ]
             ),
             $this->Number->toReadableSize((int)$atch->filesize),

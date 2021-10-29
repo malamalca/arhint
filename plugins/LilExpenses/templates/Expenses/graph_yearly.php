@@ -64,7 +64,10 @@ echo $this->Lil->panels($graphPanels, 'LilExpenses.Expenses.graph_yearly');
 <script type="text/javascript">
 $(document).ready(function() {
     var year = <?= $year ?>;
-    var expensesUrl = "<?= Router::url(['action' => 'index', '?' => ['type' => $kind, 'year' => '__year__', 'month' => '__month__']], true) ?>";
+    var expensesUrl = "<?= Router::url([
+        'action' => 'index',
+        '?' => ['type' => $kind, 'year' => '__year__', 'month' => '__month__'],
+    ], true) ?>";
     var ctx = document.getElementById('expensesChart').getContext('2d');
     var myChart = new Chart(ctx, {
         type: 'line',

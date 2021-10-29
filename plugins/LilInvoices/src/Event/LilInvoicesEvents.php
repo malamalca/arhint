@@ -200,7 +200,10 @@ class LilInvoicesEvents implements EventListenerInterface
         if (!empty($elementTemplate)) {
             $invoicesPanels = [
                 //'invoices_title' => '<h3>' . __d('lil_invoices', 'Invoices') . '</h3>',
-                'invoices_table' => $view->element($elementTemplate, ['invoices' => $invoices, 'counters' => $counters]),
+                'invoices_table' => $view->element(
+                    $elementTemplate,
+                    ['invoices' => $invoices, 'counters' => $counters]
+                ),
             ];
 
             $view->Lil->insertIntoArray($panels->panels, $invoicesPanels);

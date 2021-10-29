@@ -115,7 +115,6 @@ class ProjectsCompositesController extends AppController
         ]);
     }
 
-
     /**
      * Export method
      *
@@ -125,7 +124,8 @@ class ProjectsCompositesController extends AppController
      */
     public function export($projectId)
     {
-        $project = (TableRegistry::get('LilProjects.Projects'))->get($projectId);
+        /** @var \LilProjects\Model\Entity\Project $project */
+        $project = TableRegistry::get('LilProjects.Projects')->get($projectId);
 
         $this->Authorization->Authorize($project, 'view');
 
@@ -135,10 +135,10 @@ class ProjectsCompositesController extends AppController
             ->where(['project_id' => $project->id])
             ->all();
 
-        $data = LilProjectsFuncs::ExportComposites2Word($projectsComposites);
+        $data = LilProjectsFuncs::exportComposites2Word($projectsComposites);
 
         $response = $this->response;
-        $response = $response->withStringBody($data);
+        $response = $response->withStringBody((string)$data);
 
         $response = $response->withType('application/vnd.openxmlformats-officedocument.wordprocessingml');
 

@@ -158,7 +158,8 @@ class InvoicesAttachmentsController extends AppController
                     unset($data['scanned']);
                 }
             } else {
-                $tmpNames[$this->getRequest()->getData('filename.name')] = $this->getRequest()->getData('filename.tmp_name');
+                $tmpNames[$this->getRequest()->getData('filename.name')] =
+                    $this->getRequest()->getData('filename.tmp_name');
             }
 
             $attachment = $this->InvoicesAttachments->patchEntity($attachment, $data);

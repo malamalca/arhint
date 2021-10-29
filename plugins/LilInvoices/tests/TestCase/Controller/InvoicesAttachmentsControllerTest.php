@@ -21,7 +21,7 @@ class InvoicesAttachmentsControllerTest extends IntegrationTestCase
         'Users' => 'app.Users',
         'Invoices' => 'plugin.LilInvoices.Invoices',
         'InvoicesAttachments' => 'plugin.LilInvoices.InvoicesAttachments',
-        'InvoicesCounters' => 'plugin.LilInvoices.InvoicesCounters'
+        'InvoicesCounters' => 'plugin.LilInvoices.InvoicesCounters',
     ];
 
     public function setUp(): void

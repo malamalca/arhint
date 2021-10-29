@@ -9,7 +9,7 @@
 
     $paymentsTable = [
         'parameters' => [
-            'width' => '100%', 'cellspacing' => 0, 'cellpadding' => 0, 'id' => 'InvoicesList', 'width' => '700',
+            'cellspacing' => 0, 'cellpadding' => 0, 'style' => 'max-width:700px;',
         ],
         'pre' => '<div id="tabc_invoices" class="col s12">',
         'post' => '</div>',
@@ -34,14 +34,14 @@
                     ['url' => $pagingUrl, 'direction' => $pagingDirection]
                 ),
             ],
-            'total' => [
+            /*'total' => [
                 'parameters' => ['class' => 'right-align'],
                 'html' => $this->Paginator->sort(
                     'total',
                     __d('lil_invoices', 'Total'),
                     ['url' => $pagingUrl, 'direction' => $pagingDirection]
                 ),
-            ],
+            ],*/
         ]]]],
         'foot' => ['rows' => [['columns' => [
             'actions' => [
@@ -59,14 +59,14 @@
                 'parameters' => ['class' => 'center-align'],
                 'html' => '',
             ],
-            'caption' => [
+            /*'caption' => [
                 'parameters' => ['class' => 'right-align'],
                 'html' => __d('lil_invoices', 'Total') . ':',
             ],
             'total' => [
                 'parameters' => ['class' => 'right-align'],
                 'html' => '',
-            ],
+            ],*/
          ]]]],
     ];
 
@@ -108,16 +108,16 @@
                 'parameters' => ['class' => 'center-align'],
                 'html' => (string)$invoice->dat_issue,
             ],
-            'total' => [
+            /*'total' => [
                 'parameters' => ['class' => 'right-align'],
                 'html' => $invoice->isInvoice() ? $this->Number->currency($invoice->total) : '',
-            ],
+            ],*/
         ];
         $total += $invoice->total;
     }
 
-    $paymentsTable['foot']['rows'][0]['columns']['total']['html'] =
-        $this->Number->currency($invoicesSum);
+    /*$paymentsTable['foot']['rows'][0]['columns']['total']['html'] =
+        $this->Number->currency($invoicesSum);*/
 
     echo $this->Lil->table($paymentsTable, 'LilInvoices.Element.invoices_list');
 //} else {

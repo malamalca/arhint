@@ -79,7 +79,7 @@ class ProjectsCompMaterialsController extends AppController
                     $material->composite_id,
                 ]);
             }
-            $this->Flash->error(__d('lil_projects', 'The projects comp material could not be saved. Please, try again.'));
+            $this->Flash->error(__d('lil_projects', 'The material could not be saved. Please, try again.'));
         }
 
         $ProjectsCompositesTable = TableRegistry::getTableLocator()->get('LilProjects.ProjectsComposites');
@@ -108,9 +108,9 @@ class ProjectsCompMaterialsController extends AppController
 
                 return;
             }
-            $this->Flash->success(__d('lil_projects', 'The projects comp material has been deleted.'));
+            $this->Flash->success(__d('lil_projects', 'The material has been deleted.'));
         } else {
-            $this->Flash->error(__d('lil_projects', 'The projects comp material could not be deleted. Please, try again.'));
+            $this->Flash->error(__d('lil_projects', 'The material could not be deleted. Please, try again.'));
         }
 
         return $this->redirect(['controller' => 'ProjectsComposites', 'action' => 'view', $material->composite_id]);

@@ -253,7 +253,10 @@ echo $this->Lil->index($admin_index, 'LilExpenses.Payments.index');
         $(".search-panel input").on("input", function(e) {
             var rx_term = new RegExp("__term__", "i");
             $.get(searchUrl.replace(rx_term, encodeURIComponent($(this).val())), function(response) {
-                let tBody = response.substring(response.indexOf("<table class=\"index"), response.indexOf("</table>")+8);
+                let tBody = response.substring(
+                    response.indexOf("<table class=\"index"),
+                    response.indexOf("</table>") + 8
+                );
                 $("#PaymentsIndex").html(tBody);
             });
         });

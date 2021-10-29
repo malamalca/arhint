@@ -47,7 +47,7 @@ class TasksController extends AppController
             ->order($params['order'])
             ->all();
 
-        /** @var \App\Model\Table\TasksFoldersTable $TasksFolders */
+        /** @var \App\Model\Table\UsersTable $UsersTable */
         $UsersTable = TableRegistry::get('App.Users');
         $users = $UsersTable->fetchForCompany($this->getCurrentUser()->get('company_id'));
 
@@ -102,7 +102,7 @@ class TasksController extends AppController
 
         $folders = $TasksFolders->listForOwner($this->getCurrentUser()->get('company_id'));
 
-        /** @var \App\Model\Table\TasksFoldersTable $TasksFolders */
+        /** @var \App\Model\Table\UsersTable $UsersTable */
         $UsersTable = TableRegistry::get('App.Users');
         $users = $UsersTable->fetchForCompany($this->getCurrentUser()->get('company_id'));
 

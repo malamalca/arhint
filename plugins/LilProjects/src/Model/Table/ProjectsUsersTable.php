@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace LilProjects\Model\Table;
 
-use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
@@ -13,7 +12,6 @@ use Cake\Validation\Validator;
  *
  * @property \LilProjects\Model\Table\ProjectsTable&\Cake\ORM\Association\BelongsTo $Projects
  * @property \LilProjects\Model\Table\UsersTable&\Cake\ORM\Association\BelongsTo $Users
- *
  * @method \LilProjects\Model\Entity\ProjectsUser newEmptyEntity()
  * @method \LilProjects\Model\Entity\ProjectsUser newEntity(array $data, array $options = [])
  * @method \LilProjects\Model\Entity\ProjectsUser[] newEntities(array $data, array $options = [])

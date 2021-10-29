@@ -156,7 +156,9 @@ if (empty($data)) {
                 (string)$expense->invoice->dat_expire;
             $tableFields['title'] = $expense->invoice->title;
 
-            $client = $counters[$expense->invoice->counter_id]->kind == 'issued' ? $expense->invoice->receiver : $expense->invoice->issuer;
+            $client = $counters[$expense->invoice->counter_id]->kind == 'issued' ?
+                $expense->invoice->receiver :
+                $expense->invoice->issuer;
             $tableFields['client'] = $client->title;
 
             $tableFields['total'] = $this->Number->currency($expense->invoice->total);
