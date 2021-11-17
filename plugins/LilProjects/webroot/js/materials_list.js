@@ -10,6 +10,7 @@ jQuery.fn.MaterialsList = function(options)
 		addUrl: "",
 		newItemTemplate: "",
 		checkFormulaUrl: "",
+        addFromLibraryUrl: "",
 		addTplItemDialogCaption: "Add item from template",
 		modifiedMessage: "Item has been modified. Exit without saving changes?",
 		confirmDeleteMessage: "Are you sure you want to delete this item?",
@@ -67,7 +68,7 @@ jQuery.fn.MaterialsList = function(options)
                 .replace(rx_class, ""));
 
 			$("div.descript", newRow).html($this.nl2br(data.descript));
-            
+
             if (data.is_group) {
                 $(newRow).addClass("material-group");
             } else {
@@ -130,7 +131,7 @@ jQuery.fn.MaterialsList = function(options)
 
 		$("button.add-material", row).click(function(e) {
 			e.preventDefault();
-			editor.show(row, null, $(row).index());
+			editor.show(row, null, false);
             $("div.add-material-bar", $(row)).hide();
 		});
 
@@ -139,6 +140,11 @@ jQuery.fn.MaterialsList = function(options)
 			editor.show(row, null, true);
             $("div.add-material-bar", $(row)).hide();
 		});
+
+        $("button.add-lookup", row).modalPopup({
+            "title": "Add Material From Library",
+            "url": options.addFromLibraryUrl
+        });
 	}
 
 	this.handleItemDragCtrlDown = function(event)
