@@ -29,7 +29,11 @@ class ProjectsTablePolicy
                 ->combine('project_id', 'user_id')
                 ->toArray();
 
-            $conditions['Projects.id IN'] = array_keys($projectsList);
+            if (empty($projectsList)) {
+                $conditions['Projects.id IS'] = null;
+            } else {
+                $conditions['Projects.id IN'] = array_keys($projectsList);
+            }
         }
 
         return $query->where($conditions);
