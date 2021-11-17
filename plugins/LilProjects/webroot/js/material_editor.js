@@ -110,7 +110,9 @@ MaterialEditor = function(p_options, p_anchor, p_data)
 				targetUrl = options.editUrl.replace(rx_id, materialId);
 			} else {
 				targetUrl = options.addUrl.replace(rx_order, $(p_anchor).index() + 1);
-                targetUrl = targetUrl + "&group=1"
+                if (isGroup) {
+                    targetUrl = targetUrl + "&group=1";
+                }
 			}
 
 			$.ajax({

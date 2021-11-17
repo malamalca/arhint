@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2020-04-25 09:52+0000\n"
+"POT-Creation-Date: 2021-10-30 06:13+0000\n"
 "PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
 "Last-Translator: NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
@@ -14,23 +14,23 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: Controller/InvoicesAttachmentsController.php:51
+#: Controller/InvoicesAttachmentsController.php:75
 msgid "No Attachments Found."
 msgstr ""
 
-#: Controller/InvoicesAttachmentsController.php:143
+#: Controller/InvoicesAttachmentsController.php:169
 msgid "The invoices attachment has been saved."
 msgstr ""
 
-#: Controller/InvoicesAttachmentsController.php:147
+#: Controller/InvoicesAttachmentsController.php:173
 msgid "The attachment could not be saved. Please, try again."
 msgstr ""
 
-#: Controller/InvoicesAttachmentsController.php:170
+#: Controller/InvoicesAttachmentsController.php:196
 msgid "The invoices attachment has been deleted."
 msgstr ""
 
-#: Controller/InvoicesAttachmentsController.php:172
+#: Controller/InvoicesAttachmentsController.php:198
 msgid "The attachment could not be deleted. Please, try again."
 msgstr ""
 
@@ -42,68 +42,68 @@ msgstr ""
 msgid "The client could not be saved. Please, try again."
 msgstr ""
 
-#: Controller/InvoicesController.php:79
+#: Controller/InvoicesController.php:80
 msgid "No counters found. Please activate or add a new one."
 msgstr ""
 
-#: Controller/InvoicesController.php:162
+#: Controller/InvoicesController.php:212
 msgid "Counter does not exist."
 msgstr ""
 
-#: Controller/InvoicesController.php:209
-#: Controller/InvoicesController.php:378
+#: Controller/InvoicesController.php:279
+#: Controller/InvoicesController.php:452
 msgid "The invoice has been saved."
 msgstr ""
 
-#: Controller/InvoicesController.php:224
+#: Controller/InvoicesController.php:299
 msgid "The invoice could not be saved. Please, try again."
 msgstr ""
 
-#: Controller/InvoicesController.php:271
+#: Controller/InvoicesController.php:341
 msgid "The invoice has been deleted."
 msgstr ""
 
-#: Controller/InvoicesController.php:273
+#: Controller/InvoicesController.php:343
 msgid "The invoice could not be deleted. Please, try again."
 msgstr ""
 
-#: Controller/InvoicesController.php:319
+#: Controller/InvoicesController.php:389
 msgid "The invoice has been signed."
 msgstr ""
 
-#: Controller/InvoicesController.php:328
+#: Controller/InvoicesController.php:398
 msgid "Signing invoice failed. Please, try again."
 msgstr ""
 
-#: Controller/InvoicesController.php:403
+#: Controller/InvoicesController.php:477
 msgid "The invoice(s) has been sent."
 msgstr ""
 
-#: Controller/InvoicesController.php:407
+#: Controller/InvoicesController.php:481
 msgid "Please correct all marked fields below."
 msgstr ""
 
-#: Controller/InvoicesController.php:479
+#: Controller/InvoicesController.php:556
 msgid "Error exporting to specified format."
 msgstr ""
 
-#: Controller/InvoicesController.php:573
+#: Controller/InvoicesController.php:650
 msgid "Invalid request."
 msgstr ""
 
-#: Controller/InvoicesCountersController.php:76
+#: Controller/InvoicesCountersController.php:79
 msgid "The invoices counter has been saved."
 msgstr ""
 
-#: Controller/InvoicesCountersController.php:81
+#: Controller/InvoicesCountersController.php:86
 msgid "The invoices counter could not be saved. Please, try again."
 msgstr ""
 
-#: Controller/InvoicesCountersController.php:105
+#: Controller/InvoicesCountersController.php:110
 msgid "The invoices counter has been deleted."
 msgstr ""
 
-#: Controller/InvoicesCountersController.php:107
+#: Controller/InvoicesCountersController.php:114
 msgid "The invoices counter could not be deleted. Please, try again."
 msgstr ""
 
@@ -171,53 +171,53 @@ msgstr ""
 msgid "The vat could not be deleted. Please, try again."
 msgstr ""
 
-#: Event/LilInvoicesEvents.php:42
-#: Event/LilInvoicesEvents.php:165
-#: Lib/LilInvoicesSidebar.php:36
+#: Event/LilInvoicesEvents.php:43
+#: Event/LilInvoicesEvents.php:185
+#: Lib/LilInvoicesSidebar.php:35
 msgid "Invoices"
 msgstr ""
 
-#: Event/LilInvoicesEvents.php:144
+#: Event/LilInvoicesEvents.php:155
 msgid "Add Invoice"
 msgstr ""
 
-#: Lib/LilInvoicesSidebar.php:57
+#: Lib/LilInvoicesSidebar.php:52
 msgid "Reports"
 msgstr ""
 
-#: Lib/LilInvoicesSidebar.php:67
+#: Lib/LilInvoicesSidebar.php:62
 msgid "List"
 msgstr ""
 
-#: Lib/LilInvoicesSidebar.php:82
+#: Lib/LilInvoicesSidebar.php:77
 msgid "Received Documents"
 msgstr ""
 
-#: Lib/LilInvoicesSidebar.php:88
+#: Lib/LilInvoicesSidebar.php:83
 msgid "Issued Documents"
 msgstr ""
 
-#: Lib/LilInvoicesSidebar.php:100
+#: Lib/LilInvoicesSidebar.php:95
 msgid "Lookups"
 msgstr ""
 
-#: Lib/LilInvoicesSidebar.php:121
+#: Lib/LilInvoicesSidebar.php:116
 #: Items/index.php:4
 msgid "Items"
 msgstr ""
 
-#: Lib/LilInvoicesSidebar.php:131
+#: Lib/LilInvoicesSidebar.php:126
 msgid "Invoices Counters"
 msgstr ""
 
-#: Lib/LilInvoicesSidebar.php:141
+#: Lib/LilInvoicesSidebar.php:136
 msgid "VAT levels"
 msgstr ""
 
-#: Lib/LilInvoicesSidebar.php:152
+#: Lib/LilInvoicesSidebar.php:147
 #: InvoicesCounters/edit.php:102
 #: InvoicesTemplates/index.php:4
-#: Invoices/view.php:150
+#: Invoices/view.php:159
 msgid "Templates"
 msgstr ""
 
@@ -240,21 +240,33 @@ msgstr ""
 #: InvoicesAttachments/add.php:48
 #: InvoicesClients/edit.php:185
 #: InvoicesCounters/edit.php:181
-#: InvoicesLinks/link.php:52
+#: InvoicesLinks/link.php:51
 #: InvoicesTemplates/edit.php:110
-#: Invoices/edit.php:239
-#: Invoices/templates.php:85
+#: Invoices/edit.php:258
+#: Invoices/templates.php:83
 #: Items/edit.php:104
 #: Vats/edit.php:51
 msgid "Save"
 msgstr ""
 
-#: InvoicesAttachments/scan.php:5
+#: InvoicesAttachments/scan.php:6
 msgid "Scan an Attachment"
 msgstr ""
 
-#: InvoicesAttachments/scan.php:39
+#: InvoicesAttachments/scan.php:40
+#: Invoices/edit.php:240
 msgid "Scan a Document"
+msgstr ""
+
+#: InvoicesAttachments/view.php:9
+#: Invoices/view.php:610
+msgid "Attachment Preview"
+msgstr ""
+
+#: InvoicesAttachments/view.php:12
+#: Invoices/preview.php:23
+#: Invoices/sign.php:24
+msgid "Back"
 msgstr ""
 
 #: InvoicesClients/edit.php:7
@@ -263,13 +275,13 @@ msgstr ""
 
 #: InvoicesClients/edit.php:32
 #: InvoicesCounters/edit.php:76
-#: InvoicesCounters/index.php:57
+#: InvoicesCounters/index.php:59
 #: InvoicesTemplates/edit.php:36
 #: InvoicesTemplates/index.php:21
-#: Invoices/edit.php:113
+#: Invoices/edit.php:116
 #: Invoices/index.php:97
-#: Invoices/pdf/report.php:19
-#: Invoices/view.php:204
+#: Invoices/pdf/report.php:16
+#: Invoices/view.php:213
 msgid "Title"
 msgstr ""
 
@@ -359,7 +371,7 @@ msgid "Add Counter"
 msgstr ""
 
 #: InvoicesCounters/edit.php:34
-#: Invoices/edit.php:107
+#: Invoices/edit.php:110
 msgid "Basics"
 msgstr ""
 
@@ -369,7 +381,7 @@ msgstr ""
 
 #: InvoicesCounters/edit.php:47
 #: Invoices/index.php:93
-#: Invoices/pdf/report.php:18
+#: Invoices/pdf/report.php:15
 msgid "Issued"
 msgstr ""
 
@@ -378,8 +390,8 @@ msgid "Received"
 msgstr ""
 
 #: InvoicesCounters/edit.php:61
-#: InvoicesCounters/index.php:58
-#: Invoices/edit.php:419
+#: InvoicesCounters/index.php:60
+#: Invoices/edit.php:438
 msgid "Type"
 msgstr ""
 
@@ -418,20 +430,20 @@ msgstr ""
 
 #: InvoicesCounters/edit.php:139
 #: InvoicesCounters/edit.php:171
-#: Invoices/templates.php:48
-#: Invoices/templates.php:75
+#: Invoices/templates.php:46
+#: Invoices/templates.php:73
 msgid "none"
 msgstr ""
 
 #: InvoicesCounters/edit.php:151
 #: InvoicesTemplates/edit.php:50
 #: InvoicesTemplates/edit.php:60
-#: Invoices/email.php:69
+#: Invoices/email.php:68
 msgid "Body"
 msgstr ""
 
 #: InvoicesCounters/edit.php:155
-#: Invoices/templates.php:62
+#: Invoices/templates.php:60
 msgid "default"
 msgstr ""
 
@@ -440,52 +452,52 @@ msgstr ""
 msgid "Footer"
 msgstr ""
 
-#: InvoicesCounters/index.php:8
-#: InvoicesCounters/index.php:13
+#: InvoicesCounters/index.php:9
+#: InvoicesCounters/index.php:14
 msgid "Active"
 msgstr ""
 
-#: InvoicesCounters/index.php:8
-#: InvoicesCounters/index.php:14
-#: InvoicesCounters/index.php:25
+#: InvoicesCounters/index.php:9
+#: InvoicesCounters/index.php:15
+#: InvoicesCounters/index.php:26
 msgid "All"
 msgstr ""
 
-#: InvoicesCounters/index.php:19
+#: InvoicesCounters/index.php:20
 msgid "all types"
 msgstr ""
 
-#: InvoicesCounters/index.php:36
+#: InvoicesCounters/index.php:37
 msgid "{0} counters of {1}"
 msgstr ""
 
-#: InvoicesCounters/index.php:42
+#: InvoicesCounters/index.php:43
 #: InvoicesTemplates/index.php:7
-#: Invoices/index.php:39
+#: Invoices/index.php:56
 #: Items/index.php:7
 #: Vats/index.php:7
 msgid "Add"
 msgstr ""
 
-#: InvoicesCounters/index.php:61
+#: InvoicesCounters/index.php:63
 msgid "Last no"
 msgstr ""
 
-#: InvoicesCounters/index.php:71
+#: InvoicesCounters/index.php:82
 msgid "N/A"
 msgstr ""
 
-#: InvoicesLinks/link.php:7
+#: InvoicesLinks/link.php:6
 msgid "Link Invoices"
 msgstr ""
 
-#: InvoicesLinks/link.php:40
+#: InvoicesLinks/link.php:39
 #: element/invoices_list.php:18
-#: element/invoices_projects_list.php:19
+#: element/invoices_projects_list.php:21
 msgid "Invoice"
 msgstr ""
 
-#: InvoicesLinks/link.php:41
+#: InvoicesLinks/link.php:40
 msgid "Invoice is required."
 msgstr ""
 
@@ -517,227 +529,222 @@ msgstr ""
 msgid "Preview"
 msgstr ""
 
-#: Invoices/edit.php:115
+#: Invoices/edit.php:118
 msgid "Please enter invoice's title."
 msgstr ""
 
-#: Invoices/edit.php:125
-#: Invoices/view.php:212
+#: Invoices/edit.php:128
+#: Invoices/view.php:221
 msgid "Receiver"
 msgstr ""
 
-#: Invoices/edit.php:125
-#: Invoices/view.php:212
+#: Invoices/edit.php:128
+#: Invoices/view.php:221
 msgid "Issuer"
 msgstr ""
 
-#: Invoices/edit.php:132
-#: Invoices/edit.php:136
+#: Invoices/edit.php:135
+#: Invoices/edit.php:139
 msgid "Please choose a client"
 msgstr ""
 
-#: Invoices/edit.php:142
+#: Invoices/edit.php:145
 msgid "Invoice no"
 msgstr ""
 
-#: Invoices/edit.php:142
+#: Invoices/edit.php:145
 msgid "Document no"
 msgstr ""
 
-#: Invoices/edit.php:151
+#: Invoices/edit.php:154
 msgid "Location"
 msgstr ""
 
-#: Invoices/edit.php:162
-#: Invoices/view.php:275
+#: Invoices/edit.php:165
+#: Invoices/index.php:105
+#: Invoices/view.php:284
 msgid "Project"
 msgstr ""
 
-#: Invoices/edit.php:166
+#: Invoices/edit.php:169
 msgid "no project"
 msgstr ""
 
-#: Invoices/edit.php:175
+#: Invoices/edit.php:179
 msgid "Dates"
 msgstr ""
 
-#: Invoices/edit.php:183
-#: Invoices/view.php:255
+#: Invoices/edit.php:187
+#: Invoices/view.php:264
 msgid "Date of issue"
 msgstr ""
 
-#: Invoices/edit.php:185
-#: Invoices/edit.php:306
-#: Invoices/edit.php:320
-#: Invoices/edit.php:451
-#: element/edit_items.php:71
-#: element/edit_items.php:87
-#: element/edit_items.php:103
-#: element/edit_items.php:120
-#: element/edit_items.php:137
+#: Invoices/edit.php:189
+#: Invoices/edit.php:325
+#: Invoices/edit.php:339
+#: Invoices/edit.php:470
+#: element/edit_items.php:72
+#: element/edit_items.php:88
+#: element/edit_items.php:104
+#: element/edit_items.php:121
+#: element/edit_items.php:138
 #: element/edit_tax.php:102
 msgid "Blank"
 msgstr ""
 
-#: Invoices/edit.php:197
-#: Invoices/view.php:361
-#: Invoices/view.php:445
-#: Invoices/view.php:553
+#: Invoices/edit.php:201
+#: Invoices/view.php:370
+#: Invoices/view.php:454
+#: Invoices/view.php:585
 #: Items/edit.php:30
-#: Items/index.php:21
+#: Items/index.php:20
 #: Vats/edit.php:30
 #: Vats/index.php:21
 #: element/edit_items.php:8
 msgid "Description"
 msgstr ""
 
-#: Invoices/edit.php:213
+#: Invoices/edit.php:217
 msgid "Archive"
 msgstr ""
 
-#: Invoices/edit.php:249
+#: Invoices/edit.php:268
 msgid "Add another invoice after saving this one"
 msgstr ""
 
-#: Invoices/edit.php:277
+#: Invoices/edit.php:296
 msgid "Buyer"
 msgstr ""
 
-#: Invoices/edit.php:288
+#: Invoices/edit.php:307
 msgid "Use different client for buyer."
 msgstr ""
 
-#: Invoices/edit.php:305
-#: Invoices/view.php:259
+#: Invoices/edit.php:324
+#: Invoices/view.php:268
 msgid "Service date"
 msgstr ""
 
-#: Invoices/edit.php:319
-#: Invoices/view.php:263
+#: Invoices/edit.php:338
+#: Invoices/view.php:272
 msgid "Expiration date"
 msgstr ""
 
-#: Invoices/edit.php:333
-#: Invoices/edit.php:347
-#: Invoices/view.php:400
+#: Invoices/edit.php:352
+#: Invoices/edit.php:366
+#: Invoices/view.php:409
 msgid "Analytics"
 msgstr ""
 
-#: Invoices/edit.php:340
-#: Invoices/index.php:109
-#: Invoices/pdf/report.php:22
-#: Invoices/view.php:288
-#: Invoices/view.php:449
+#: Invoices/edit.php:359
+#: Invoices/index.php:113
+#: Invoices/pdf/report.php:19
+#: Invoices/view.php:297
+#: Invoices/view.php:458
 #: element/invoices_list.php:32
 #: element/invoices_list.php:51
-#: element/invoices_projects_list.php:39
-#: element/invoices_projects_list.php:62
 msgid "Total"
 msgstr ""
 
-#: Invoices/edit.php:359
+#: Invoices/edit.php:378
 msgid "Taxes Analytics"
 msgstr ""
 
-#: Invoices/edit.php:369
+#: Invoices/edit.php:388
 msgid "Payment"
 msgstr ""
 
-#: Invoices/edit.php:376
+#: Invoices/edit.php:395
 msgid "Invoice must be payed."
 msgstr ""
 
-#: Invoices/edit.php:377
+#: Invoices/edit.php:396
 msgid "Auto transaction. No payment needed."
 msgstr ""
 
-#: Invoices/edit.php:378
+#: Invoices/edit.php:397
 msgid "Invoice payed in full."
 msgstr ""
 
-#: Invoices/edit.php:379
+#: Invoices/edit.php:398
 msgid "Other. No payment needed."
 msgstr ""
 
-#: Invoices/edit.php:385
+#: Invoices/edit.php:404
 msgid "Payment Kind"
 msgstr ""
 
-#: Invoices/edit.php:401
+#: Invoices/edit.php:420
 msgid "Sepa Type"
 msgstr ""
 
-#: Invoices/edit.php:404
+#: Invoices/edit.php:423
 msgid "Invalid type"
 msgstr ""
 
-#: Invoices/edit.php:421
-#: Invoices/edit.php:436
+#: Invoices/edit.php:440
+#: Invoices/edit.php:455
 msgid "Invalid format"
 msgstr ""
 
-#: Invoices/edit.php:434
+#: Invoices/edit.php:453
 msgid "MOD"
 msgstr ""
 
-#: Invoices/edit.php:449
+#: Invoices/edit.php:468
 msgid "Reference"
 msgstr ""
 
-#: Invoices/edit.php:459
+#: Invoices/edit.php:478
 msgid "Use 'OTHR' for unknown payment type. Use prefix and two numers for module (eg SI00)."
 msgstr ""
 
-#: Invoices/edit.php:508
+#: Invoices/edit.php:527
 msgid "Add a Company"
 msgstr ""
 
-#: Invoices/edit.php:509
+#: Invoices/edit.php:528
 msgid "Add a Person"
 msgstr ""
 
-#: Invoices/email.php:6
+#: Invoices/email.php:5
 msgid "Email Invoice"
 msgstr ""
 
-#: Invoices/email.php:26
+#: Invoices/email.php:25
 msgid "To"
 msgstr ""
 
-#: Invoices/email.php:37
+#: Invoices/email.php:36
 msgid "CC"
 msgstr ""
 
-#: Invoices/email.php:48
+#: Invoices/email.php:47
 msgid "Send CC to me ({0})"
 msgstr ""
 
-#: Invoices/email.php:58
+#: Invoices/email.php:57
 msgid "Subject"
 msgstr ""
 
-#: Invoices/email.php:77
-#: Invoices/view.php:102
+#: Invoices/email.php:76
+#: Invoices/view.php:101
 msgid "Send"
 msgstr ""
 
-#: Invoices/email.php:91
-#: Invoices/view.php:490
+#: Invoices/email.php:90
+#: Invoices/view.php:499
 msgid "Attachments"
 msgstr ""
 
-#: Invoices/index.php:19
+#: Invoices/index.php:35
 msgid "\"{2}\" from {0} to {1}"
 msgstr ""
 
-#: Invoices/index.php:49
+#: Invoices/index.php:66
 #: Invoices/report.php:121
-#: Invoices/view.php:93
+#: Invoices/view.php:92
 msgid "Print"
-msgstr ""
-
-#: Invoices/index.php:71
-msgid "Search"
 msgstr ""
 
 #: Invoices/index.php:86
@@ -745,48 +752,43 @@ msgid "Cnt"
 msgstr ""
 
 #: Invoices/index.php:89
-#: Invoices/pdf/report.php:17
+#: Invoices/pdf/report.php:14
 msgid "No"
 msgstr ""
 
 #: Invoices/index.php:101
-#: Invoices/pdf/report.php:20
+#: Invoices/pdf/report.php:17
 msgid "Client"
 msgstr ""
 
-#: Invoices/index.php:105
-#: Invoices/pdf/report.php:21
+#: Invoices/index.php:109
+#: Invoices/pdf/report.php:18
 msgid "Net Total"
 msgstr ""
 
-#: Invoices/index.php:132
+#: Invoices/index.php:139
 msgid "Total Sum"
 msgstr ""
 
-#: Invoices/index.php:163
+#: Invoices/index.php:175
 msgid "n/a"
 msgstr ""
 
-#: Invoices/pdf/report.php:11
+#: Invoices/pdf/report.php:8
 msgid "Invoices List"
 msgstr ""
 
-#: Invoices/pdf/report.php:29
+#: Invoices/pdf/report.php:26
 msgid "TOTAL"
 msgstr ""
 
-#: Invoices/preview.php:10
-#: Invoices/sign.php:11
+#: Invoices/preview.php:8
+#: Invoices/sign.php:9
 msgid "Invoices Preview"
 msgstr ""
 
-#: Invoices/preview.php:17
+#: Invoices/preview.php:15
 msgid "Invoice #%1$s"
-msgstr ""
-
-#: Invoices/preview.php:25
-#: Invoices/sign.php:26
-msgid "Back"
 msgstr ""
 
 #: Invoices/report.php:27
@@ -809,210 +811,214 @@ msgstr ""
 msgid "End"
 msgstr ""
 
-#: Invoices/sign.php:18
+#: Invoices/sign.php:16
 msgid "Sign Invoice #{0}"
 msgstr ""
 
-#: Invoices/sign.php:75
+#: Invoices/sign.php:73
 msgid "Datetime"
 msgstr ""
 
-#: Invoices/templates.php:6
+#: Invoices/templates.php:4
 msgid "Edit Templates for Invoice #{0}"
 msgstr ""
 
-#: Invoices/templates.php:46
+#: Invoices/templates.php:44
 msgid "Page Header"
 msgstr ""
 
-#: Invoices/templates.php:60
+#: Invoices/templates.php:58
 msgid "Page Body"
 msgstr ""
 
-#: Invoices/templates.php:73
+#: Invoices/templates.php:71
 msgid "Page Footer"
 msgstr ""
 
-#: Invoices/view.php:11
+#: Invoices/view.php:10
 msgid "{3} #{0} <span class=\"light nowrap\">({1} :: {2})</span>"
 msgstr ""
 
-#: Invoices/view.php:21
+#: Invoices/view.php:20
 msgid "Edit"
 msgstr ""
 
-#: Invoices/view.php:29
+#: Invoices/view.php:28
 msgid "Duplicate"
 msgstr ""
 
-#: Invoices/view.php:37
+#: Invoices/view.php:36
 msgid "Attach"
 msgstr ""
 
-#: Invoices/view.php:41
+#: Invoices/view.php:40
 msgid "File"
 msgstr ""
 
-#: Invoices/view.php:54
+#: Invoices/view.php:53
 msgid "Scan"
 msgstr ""
 
-#: Invoices/view.php:67
+#: Invoices/view.php:66
 msgid "Linked Invoice"
 msgstr ""
 
-#: Invoices/view.php:82
+#: Invoices/view.php:81
 msgid "Delete"
 msgstr ""
 
-#: Invoices/view.php:89
+#: Invoices/view.php:88
 msgid "Are you sure you want to delete this invoice?"
 msgstr ""
 
-#: Invoices/view.php:110
+#: Invoices/view.php:109
 msgid "Export"
 msgstr ""
 
-#: Invoices/view.php:114
+#: Invoices/view.php:113
 msgid "PDF"
 msgstr ""
 
-#: Invoices/view.php:124
+#: Invoices/view.php:123
 msgid "Sepa XML"
 msgstr ""
 
-#: Invoices/view.php:134
+#: Invoices/view.php:133
 msgid "eSlog"
 msgstr ""
 
-#: Invoices/view.php:146
+#: Invoices/view.php:143
+msgid "eSlog 2.0"
+msgstr ""
+
+#: Invoices/view.php:155
 msgid "Settings"
 msgstr ""
 
-#: Invoices/view.php:161
-#: Invoices/view.php:572
+#: Invoices/view.php:170
+#: Invoices/view.php:604
 msgid "Edit Issuer"
 msgstr ""
 
-#: Invoices/view.php:173
-#: Invoices/view.php:573
+#: Invoices/view.php:182
+#: Invoices/view.php:605
 msgid "Edit Receiver"
 msgstr ""
 
-#: Invoices/view.php:185
-#: Invoices/view.php:574
+#: Invoices/view.php:194
+#: Invoices/view.php:606
 msgid "Edit Buyer"
 msgstr ""
 
-#: Invoices/view.php:245
+#: Invoices/view.php:254
 msgid "TAX payee no."
 msgstr ""
 
-#: Invoices/view.php:245
+#: Invoices/view.php:254
 msgid "TAX no."
 msgstr ""
 
-#: Invoices/view.php:267
+#: Invoices/view.php:276
 msgid "Approval date"
 msgstr ""
 
-#: Invoices/view.php:362
+#: Invoices/view.php:371
 #: element/edit_items.php:9
 msgid "Quantity"
 msgstr ""
 
-#: Invoices/view.php:363
+#: Invoices/view.php:372
 #: Items/edit.php:54
-#: Items/index.php:27
+#: Items/index.php:26
 #: element/edit_items.php:10
 msgid "Unit"
 msgstr ""
 
-#: Invoices/view.php:364
+#: Invoices/view.php:373
 #: element/edit_items.php:11
 msgid "Price per Unit"
 msgstr ""
 
-#: Invoices/view.php:365
+#: Invoices/view.php:374
 #: element/edit_items.php:12
 msgid "Discount [%]"
 msgstr ""
 
-#: Invoices/view.php:366
+#: Invoices/view.php:375
 #: element/edit_items.php:13
 msgid "Unit Total"
 msgstr ""
 
-#: Invoices/view.php:367
+#: Invoices/view.php:376
 #: element/edit_items.php:14
 msgid "Tax [%]"
 msgstr ""
 
-#: Invoices/view.php:368
+#: Invoices/view.php:377
 #: element/edit_items.php:15
 #: element/edit_tax.php:12
 msgid "Total with Tax"
 msgstr ""
 
-#: Invoices/view.php:380
-#: Invoices/view.php:461
-#: element/edit_items.php:229
+#: Invoices/view.php:389
+#: Invoices/view.php:470
+#: element/edit_items.php:230
 #: element/edit_tax.php:147
 msgid "Grand Total"
 msgstr ""
 
-#: Invoices/view.php:446
+#: Invoices/view.php:455
 #: element/edit_tax.php:9
 msgid "VAT [%]"
 msgstr ""
 
-#: Invoices/view.php:447
+#: Invoices/view.php:456
 #: element/edit_tax.php:10
 msgid "Base"
 msgstr ""
 
-#: Invoices/view.php:448
+#: Invoices/view.php:457
 #: element/edit_tax.php:11
 msgid "Tax"
 msgstr ""
 
-#: Invoices/view.php:482
+#: Invoices/view.php:491
 msgid "VAT Analytics"
 msgstr ""
 
-#: Invoices/view.php:492
+#: Invoices/view.php:501
 msgid "No attachments found."
 msgstr ""
 
-#: Invoices/view.php:512
+#: Invoices/view.php:542
 msgid "Are you sure you want to delete this attachment"
 msgstr ""
 
-#: Invoices/view.php:520
+#: Invoices/view.php:552
 msgid "Linked Invoices"
 msgstr ""
 
-#: Invoices/view.php:522
+#: Invoices/view.php:554
 msgid "No linked invoices found."
 msgstr ""
 
-#: Invoices/view.php:544
+#: Invoices/view.php:576
 msgid "Are you sure you want to delete this link?"
 msgstr ""
 
-#: Invoices/view.php:561
+#: Invoices/view.php:593
 msgid "Edit Templates"
 msgstr ""
 
-#: Invoices/view.php:563
+#: Invoices/view.php:595
 msgid "Attach File"
 msgstr ""
 
-#: Invoices/view.php:564
+#: Invoices/view.php:596
 msgid "Link Invoice"
 msgstr ""
 
-#: Invoices/view.php:565
+#: Invoices/view.php:597
 msgid "Scan Invoice"
 msgstr ""
 
@@ -1030,7 +1036,7 @@ msgid "Description is required."
 msgstr ""
 
 #: Items/edit.php:43
-#: Items/index.php:24
+#: Items/index.php:23
 msgid "Qty"
 msgstr ""
 
@@ -1039,12 +1045,12 @@ msgid "pcs"
 msgstr ""
 
 #: Items/edit.php:67
-#: Items/index.php:31
+#: Items/index.php:30
 msgid "Discount"
 msgstr ""
 
 #: Items/edit.php:80
-#: Items/index.php:35
+#: Items/index.php:34
 msgid "Price"
 msgstr ""
 
@@ -1072,12 +1078,12 @@ msgstr ""
 msgid "Level"
 msgstr ""
 
-#: element/edit_items.php:202
+#: element/edit_items.php:203
 #: element/edit_tax.php:123
 msgid "Remove Item"
 msgstr ""
 
-#: element/edit_items.php:224
+#: element/edit_items.php:225
 msgid "Add new Item"
 msgstr ""
 
@@ -1090,16 +1096,15 @@ msgid "Add new Tax"
 msgstr ""
 
 #: element/invoices_list.php:24
-#: element/invoices_projects_list.php:31
+#: element/invoices_projects_list.php:33
 msgid "Date"
 msgstr ""
 
-#: element/invoices_list.php:96
-#: element/invoices_projects_list.php:124
+#: element/invoices_list.php:94
 msgid "No invoices for this Contact found."
 msgstr ""
 
-#: element/invoices_projects_list.php:100
+#: element/invoices_projects_list.php:101
 msgid "Download Attachment(s)"
 msgstr ""
 
