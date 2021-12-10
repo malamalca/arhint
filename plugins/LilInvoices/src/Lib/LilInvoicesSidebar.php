@@ -48,10 +48,6 @@ class LilInvoicesSidebar
             }
         );
 
-        if (count($counters) == 0) {
-            return;
-        }
-
         $invoices['title'] = __d('lil_invoices', 'Invoices');
         $invoices['visible'] = !empty($currentUser);
         $invoices['active'] = $request->getParam('plugin') == 'LilInvoices';

@@ -348,12 +348,13 @@ class Installer
 
             $adminPassword = (new DefaultPasswordHasher())->hash($adminPassword);
 
+            $userId = Text::uuid();
             $companyId = Text::uuid();
 
             $conn->execute(
-                'INSERT INTO users (company_id, name, email, username, passwd, privileges) VALUES (:company_id, :title, :email, :username, :pass, 2)',
-                ['company_id' => $companyId, 'title' => $adminName, 'email' => $adminEmail, 'username' => $adminUsername, 'pass' => $adminPassword],
-                ['company_id' => 'string', 'title' => 'string', 'email' => 'string', 'username' => 'string', 'pass' => 'string']
+                'INSERT INTO users (id, company_id, name, email, username, passwd, privileges) VALUES (:id, :company_id, :title, :email, :username, :pass, 2)',
+                ['id' => $userId, 'company_id' => $companyId, 'title' => $adminName, 'email' => $adminEmail, 'username' => $adminUsername, 'pass' => $adminPassword],
+                ['id' => 'string', 'company_id' => 'string', 'title' => 'string', 'email' => 'string', 'username' => 'string', 'pass' => 'string']
             );
 
             $conn->execute(
