@@ -9,6 +9,7 @@ use Cake\Core\PluginApplicationInterface;
 use Cake\Event\EventManager;
 use Cake\Http\MiddlewareQueue;
 use Cake\Routing\RouteBuilder;
+use Cake\Utility\Hash;
 use LilCrm\Event\LilCrmEvents;
 
 class Plugin extends BasePlugin
