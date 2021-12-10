@@ -122,10 +122,19 @@ class LilInvoicesExport
                         // PDF
                         $pageOptions = [];
                         if (!empty($invoice->tpl_header)) {
-                            $pdf->setHeaderHtml($this->_autop($invoice->tpl_header->body));
+                            $templateBody = $invoice->tpl_header->body;
+                            if (substr($templateBody, 0, 5) == 'data:') {
+                                $templateBody = '<img src="' . $templateBody . '" />';
+                            }
+                            $pdf->setHeaderHtml($this->_autop($templateBody));
                         }
                         if (!empty($invoice->tpl_footer)) {
-                            $pdf->setFooterHtml($this->_autop($invoice->tpl_footer->body));
+                            $templateBody = $invoice->tpl_footer->body;
+                            if (substr($templateBody, 0, 5) == 'data:') {
+                                $templateBody = '<img src="' . $templateBody . '" />';
+                            }
+
+                            $pdf->setFooterHtml($this->_autop($templateBody));
                         }
                         $pdf->newPage($this->toHtml($invoice, $outputHtml), $pageOptions);
                     }

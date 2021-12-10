@@ -65,11 +65,11 @@ class Application extends BaseApplication implements
          * Debug Kit should not be installed on a production system
          */
         if (Configure::read('debug') && (PHP_SAPI != 'cli')) {
-            $this->addPlugin('DebugKit');
-        }
-
-        if (PHP_SAPI == 'cli') {
-            $this->addPlugin('Migrations');
+            try {
+                $this->addPlugin('DebugKit');
+            } catch (MissingPluginException $e) {
+                // Do not halt if the plugin is missing
+            }
         }
 
         // Load more plugins here
@@ -92,8 +92,6 @@ class Application extends BaseApplication implements
         $routes->setRouteClass(DashedRoute::class);
 
         $routes->scope('/', function (RouteBuilder $builder) {
-            //$builder->setExtensions(['json', 'aht', 'xml', 'pdf', 'txt', 'png']);
-
             $builder->connect('/', ['plugin' => 'LilProjects', 'controller' => 'Projects', 'action' => 'index']);
 
             $builder->fallbacks();

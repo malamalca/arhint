@@ -34,7 +34,7 @@ return ['LilInvoices' => [
         'user-style-sheet' => dirname(dirname(__FILE__)) . DS . 'webroot' . DS . 'css' . DS . 'lil_invoices_pdf.css',
     ],
     'WKHTML2PDF' => [
-        'binary' => 'C:\bin\wkhtmltopdf\bin\wkhtmltopdf.exe',
+        'binary' => 'D:\bin\wkhtmltopdf\bin\wkhtmltopdf.exe',
         'no-outline', // Make Chrome not complain
         'print-media-type',
         'dpi' => 96,

@@ -53,7 +53,13 @@ class InvoicesTemplatesController extends AppController
 
         if ($this->getRequest()->is(['patch', 'post', 'put'])) {
             $template = $this->InvoicesTemplates->patchEntity($template, $this->getRequest()->getData());
-            $template->owner_id = $this->getCurrentUser()->get('company_id');
+
+            $attachment = $this->getRequest()->getData('body_file');
+            if (!empty($attachment['tmp_name']) && file_exists($attachment['tmp_name'])) {
+                $ext = strtolower(pathinfo($attachment['name'], PATHINFO_EXTENSION));
+                $template->body = 'data:image/' . $ext . ';base64,' .
+                    base64_encode(file_get_contents($attachment['tmp_name']));
+            }
 
             if ($this->InvoicesTemplates->save($template)) {
                 $this->Flash->success(__d('lil_invoices', 'The invoices template has been saved.'));

@@ -1,19 +1,21 @@
 <?php
 
-$attachedFooter = false;
-if (!empty($template->footer) && substr($template->footer, 0, 2) == '{"') {
-    $attachedFooter = json_decode($template->footer, true);
+$attachedImage = false;
+//data:image/png;base64,
+
+if (!empty($template->body) && substr($template->body, 0, 5) == 'data:') {
+    $attachedImage = true;
 }
 
 $templateEdit = [
     'title_for_layout' =>
         $template->id ? __d('lil_invoices', 'Edit Template') : __d('lil_invoices', 'Add Template'),
     'form' => [
+        'defaultHelper' => $this->Form,
         'pre' => '<div class="form" id="edit-template">',
         'post' => '</div>',
         'lines' => [
             'form_start' => [
-                'class' => $this->Form,
                 'method' => 'create',
                 'parameters' => ['model' => $template, ['type' => 'file']],
             ],
@@ -23,12 +25,10 @@ $templateEdit = [
                 'parameters' => ['field' => 'id'],
             ],
             'referer' => [
-                'class' => $this->Form,
                 'method' => 'hidden',
                 'parameters' => ['field' => 'referer'],
             ],
             'title' => [
-                'class' => $this->Form,
                 'method' => 'control',
                 'parameters' => [
                     'field' => 'title',
@@ -39,7 +39,6 @@ $templateEdit = [
                 ],
             ],
             'kind' => [
-                'class' => $this->Form,
                 'method' => 'control',
                 'parameters' => [
                     'field' => 'kind',
@@ -56,32 +55,28 @@ $templateEdit = [
             ],
 
             ////////////////////////////////////////////////////////////////////////////////////////
-            'fs_layout_body_div_start' => '<div>',
-            'fs_layout_body_label' => sprintf('<label for="template-body">%s:</label>', __d('lil_invoices', 'Body')),
+            'fs_layout_body_div_start' => sprintf('<div class="input-field%s">', $attachedImage ? ' invisible' : ''),
+            'fs_layout_body_label' => sprintf('<label for="template-body" class="active">%s:</label>', __d('lil_invoices', 'Body')),
             'body' => [
-                'class' => $this->Form,
                 'method' => 'textarea',
                 'parameters' => [
                     'field' => 'body', [
                         'id' => 'template-body',
-                        'class' => $attachedFooter ? 'invisible' : '',
-                        'disabled' => (bool)$attachedFooter,
-                        'value' => $attachedFooter ? '' : $template->body,
+                        'disabled' => (bool)$attachedImage,
+                        'value' => $attachedImage ? '' : $template->body,
                     ],
                 ],
             ],
-            'fs_body_img' => !$attachedFooter ? '' : sprintf(
-                '<div id="body-image-div"><img src="data:%1$s;base64,%2$s" style="width: 400px" /></div>',
-                $attachedFooter['type'],
-                $attachedFooter['image']
+            'fs_body_img' => !$attachedImage ? '' : sprintf(
+                '<div id="body-image-div"><img src="%s" style="width: 400px" /></div>',
+                $template->body
             ),
-            'fs_body_remove' => !$attachedFooter ? '' : sprintf(
+            'fs_body_remove' => !$attachedImage ? '' : sprintf(
                 '<div id="body-remove-div"><a href="javascript:void(0);" id="body-remove">%s</a></div>',
                 __d('lil_invoices', 'Remove image')
             ),
             'fs_layout_body_file_div_start' => '<div>',
             'body_file' => [
-                'class' => $this->Form,
                 'method' => 'file',
                 'parameters' => [
                     'field' => 'body_file', ['id' => 'body-picker'],
@@ -92,7 +87,6 @@ $templateEdit = [
             'fs_layout_end' => '</fieldset>',
 
             'main' => [
-                'class' => $this->Form,
                 'method' => 'control',
                 'parameters' => [
                     'field' => 'main',
@@ -104,14 +98,12 @@ $templateEdit = [
             ],
 
             'submit' => [
-                'class' => $this->Form,
                 'method' => 'submit',
                 'parameters' => [
                     'label' => __d('lil_invoices', 'Save'),
                 ],
             ],
             'form_end' => [
-                'class' => $this->Form,
                 'method' => 'end',
                 'parameters' => [],
             ],
@@ -122,7 +114,7 @@ $templateEdit = [
 echo $this->Lil->form($templateEdit, 'LilInvoices.InvoicesTemplates.edit');
 ?>
 <script type="text/javascript">
-    $(".invisible").hide();
+    $(".invisible textarea").hide();
 
     $(document).ready(function() {
 
