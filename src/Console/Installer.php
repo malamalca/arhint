@@ -94,6 +94,26 @@ class Installer
     }
 
     /**
+     * Does some routine UPDATE tasks so people don't have to.
+     *
+     * @param \Composer\Script\Event $event The composer event object.
+     * @throws \Exception Exception raised by validator.
+     * @return void
+     */
+    public static function postUpdate(Event $event)
+    {
+        $io = $event->getIO();
+        $rootDir = dirname(dirname(__DIR__));
+
+        static::executeMigrations($rootDir, $io, 'default');
+
+        $class = 'Cake\Codeception\Console\Installer';
+        if (class_exists($class)) {
+            $class::customizeCodeceptionBinary($event);
+        }
+    }
+
+    /**
      * Create config/app_local.php file if it does not exist.
      *
      * @param string $dir The application's root directory.
@@ -301,9 +321,10 @@ class Installer
      *
      * @param string $dir The application's root directory.
      * @param \Composer\IO\IOInterface $io IO interface to write to console.
+     * @param string $connection Connection name
      * @return void
      */
-    public static function executeMigrations($dir, $io)
+    public static function executeMigrations($dir, $io, $connection = 'install')
     {
         if (!defined('ROOT')) {
             define('ROOT', $dir);
@@ -313,11 +334,11 @@ class Installer
             define('DS', '/');
         }
 
-        $migrations = new Migrations(['connection' => 'install']);
+        $migrations = new Migrations(['connection' => $connection]);
         $migrations->migrate();
 
         foreach (static::PLUGINS as $pluginName) {
-            $migrations = new Migrations(['connection' => 'install', 'plugin' => $pluginName]);
+            $migrations = new Migrations(['connection' => $connection, 'plugin' => $pluginName]);
             $migrations->migrate();
         }
     }
