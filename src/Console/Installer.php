@@ -21,6 +21,8 @@ if (!defined('STDIN')) {
 }
 
 use Cake\Auth\DefaultPasswordHasher;
+use Cake\Core\Configure;
+use Cake\Core\Configure\Engine\PhpConfig;
 use Cake\Datasource\ConnectionManager;
 use Cake\Utility\Security;
 use Cake\Utility\Text;
@@ -105,7 +107,18 @@ class Installer
         $io = $event->getIO();
         $rootDir = dirname(dirname(__DIR__));
 
-        static::executeMigrations($rootDir, $io, 'default');
+        if (file_exists($rootDir . '/config/app_local.php')) {
+            $loader = require $rootDir . '/vendor/autoload.php';
+            require $rootDir . '/config/paths.php';
+
+            Configure::config('default', new PhpConfig());
+            Configure::load('app', 'default', false);
+            Configure::load('app_local', 'default');
+
+            ConnectionManager::setConfig('default', Configure::read('Datasources.default'));
+
+            static::executeMigrations($rootDir, $io, 'default');
+        }
 
         $class = 'Cake\Codeception\Console\Installer';
         if (class_exists($class)) {
@@ -351,7 +364,7 @@ class Installer
      */
     public static function createAdminUser($io)
     {
-        /** @var \Cake\Database\Connection $cm */
+        /** @var \Cake\Database\Connection $conn */
         $conn = ConnectionManager::get('install');
 
         if ($conn && $conn->connect()) {
