@@ -351,7 +351,7 @@ class Installer
             $companyId = Text::uuid();
 
             $conn->execute(
-                'INSERT INTO users (company_id, name, email, username, passwd, privileges) VALUES (:company, :title, :email, :username, :pass, 2)',
+                'INSERT INTO users (company_id, name, email, username, passwd, privileges) VALUES (:company_id, :title, :email, :username, :pass, 2)',
                 ['company_id' => $companyId, 'title' => $adminName, 'email' => $adminEmail, 'username' => $adminUsername, 'pass' => $adminPassword],
                 ['company_id' => 'string', 'title' => 'string', 'email' => 'string', 'username' => 'string', 'pass' => 'string']
             );
