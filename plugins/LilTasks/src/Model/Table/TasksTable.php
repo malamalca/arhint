@@ -39,7 +39,7 @@ class TasksTable extends Table
         $this->belongsTo('TasksFolders', [
             'foreignKey' => 'folder_id',
             'className' => 'LilTasks.TasksFolders',
-            'type' => 'INNER',
+            'joinType' => 'INNER',
         ]);
     }
 

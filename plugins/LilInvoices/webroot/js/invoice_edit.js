@@ -35,6 +35,7 @@ jQuery.fn.InvoiceEditor = function (options) {
 
         $("#invoice-" + target + "-email", $this).val(client.email);
         $("#invoice-" + target + "-phone", $this).val(client.phone);
+
     }
 
     this.collectClientData = function (target) {

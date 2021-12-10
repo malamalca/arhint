@@ -32,12 +32,12 @@ class PaymentsExpensesTable extends Table
         $this->belongsTo('Payments', [
             'foreignKey' => 'payment_id',
             'className' => 'LilExpenses.Payments',
-            'type' => 'INNER',
+            'joinType' => 'INNER',
         ]);
         $this->belongsTo('Expenses', [
             'foreignKey' => 'expense_id',
             'className' => 'LilExpenses.Expenses',
-            'type' => 'INNER',
+            'joinType' => 'INNER',
         ]);
     }
 

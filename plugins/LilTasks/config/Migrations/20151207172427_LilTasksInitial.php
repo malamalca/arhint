@@ -1,7 +1,7 @@
 <?php
 use Migrations\AbstractMigration;
 
-class Initial extends AbstractMigration
+class LilTasksInitial extends AbstractMigration
 {
     public function up()
     {
@@ -73,7 +73,7 @@ class Initial extends AbstractMigration
                 'null' => true,
             ])
             ->create();
-            
+
         $table = $this->table('tasks_folders', ['id' => false, 'primary_key' => ['id']]);
     	$table
             ->addColumn('id', 'uuid', [

@@ -72,7 +72,7 @@ class InvoicesController extends AppController
             $counter = $this->InvoicesCounters->get($filter['counter']);
         } else {
             $counter = $this->InvoicesCounters->findDefaultCounter(
-                $this->getCurrentUser()->get('company_id'),
+                $this->Authorization->applyScope($this->InvoicesCounters->find(), 'index'),
                 $this->getRequest()->getQuery('kind')
             );
             if (!$counter) {

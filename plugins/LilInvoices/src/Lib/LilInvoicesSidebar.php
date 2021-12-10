@@ -28,7 +28,27 @@ class LilInvoicesSidebar
         $request = $event->getSubject()->getRequest();
         $currentUser = $event->getSubject()->getCurrentUser();
 
-        if (empty($currentUser) || !$currentUser->hasRole('admin')) {
+        if (empty($currentUser)) {
+            return;
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        // Fetch counters
+        Cache::delete('LilInvoices.sidebarCounters.' . $currentUser->id);
+        $counters = Cache::remember(
+            'LilInvoices.sidebarCounters.' . $currentUser->id,
+            function () use ($controller) {
+                /** @var \LilInvoices\Model\Table\InvoicesCountersTable $InvoicesCounters */
+                $InvoicesCounters = TableRegistry::getTableLocator()->get('LilInvoices.InvoicesCounters');
+
+                return $controller->Authorization->applyScope($InvoicesCounters->find(), 'index')
+                    ->where(['active' => true])
+                    ->order(['active', 'kind DESC', 'title'])
+                    ->all();
+            }
+        );
+
+        if (count($counters) == 0) {
             return;
         }
 
@@ -157,21 +177,6 @@ class LilInvoicesSidebar
 
         // build counters submenu only when needed
         if (($request->getParam('plugin') == 'LilInvoices')) {
-            ////////////////////////////////////////////////////////////////////////////////////////
-            // Fetch counters
-            $counters = Cache::remember(
-                'LilInvoices.sidebarCounters.' . $controller->getCurrentUser()->id,
-                function () use ($controller) {
-                    /** @var \LilInvoices\Model\Table\InvoicesCountersTable $InvoicesCounters */
-                    $InvoicesCounters = TableRegistry::getTableLocator()->get('LilInvoices.InvoicesCounters');
-
-                    return $controller->Authorization->applyScope($InvoicesCounters->find(), 'index')
-                        ->where(['active' => true])
-                        ->order(['active', 'kind DESC', 'title'])
-                        ->all();
-                }
-            );
-
             // determine current counter
             $isActionIndex = $request->getParam('controller') == 'Invoices' && $request->getParam('action') == 'index';
             $currentCounter = $request->getQuery('counter');

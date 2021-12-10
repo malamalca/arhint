@@ -17,6 +17,20 @@ class InvoicesCountersTablePolicy
      */
     public function scopeIndex($user, $query)
     {
-        return $query->where(['InvoicesCounters.owner_id' => $user->company_id]);
+        $query->where(['InvoicesCounters.owner_id' => $user->company_id]);
+
+        if (!$user->hasRole('admin')) {
+            $query->join([
+                'table' => 'invoices_counters_users',
+                'alias' => 'c',
+                'type' => 'INNER',
+                'conditions' => [
+                    'c.counter_id = InvoicesCounters.id',
+                    'c.user_id' => $user->id
+                ],
+            ]);
+        }
+
+        return $query;
     }
 }

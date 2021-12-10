@@ -20,9 +20,12 @@ if (!defined('STDIN')) {
     define('STDIN', fopen('php://stdin', 'r'));
 }
 
+use Cake\Auth\DefaultPasswordHasher;
+use Cake\Datasource\ConnectionManager;
 use Cake\Utility\Security;
 use Composer\Script\Event;
 use Exception;
+use Migrations\Migrations;
 
 /**
  * Provides installation hooks for when this application is installed through
@@ -36,12 +39,24 @@ class Installer
     public const WRITABLE_DIRS = [
         'logs',
         'tmp',
+        'uploads',
         'tmp/cache',
         'tmp/cache/models',
         'tmp/cache/persistent',
         'tmp/cache/views',
         'tmp/sessions',
         'tmp/tests',
+    ];
+
+    /**
+     * An array of plugins
+     */
+    public const PLUGINS = [
+        'LilCrm',
+        'LilExpenses',
+        'LilInvoices',
+        'LilProjects',
+        'LilTasks',
     ];
 
     /**
@@ -62,6 +77,12 @@ class Installer
 
         static::setFolderPermissions($rootDir, $io);
         static::setSecuritySalt($rootDir, $io);
+
+        static::setDatabase($rootDir, $io);
+
+        static::executeMigrations($rootDir, $io);
+        static::createAdminUser($io);
+
 
         $class = 'Cake\Codeception\Console\Installer';
         if (class_exists($class)) {
@@ -242,5 +263,165 @@ class Installer
             return;
         }
         $io->write('Unable to update __APP_NAME__ value.');
+    }
+
+    /**
+     * Set database properties
+     *
+     * @param string $dir The application's root directory.
+     * @param \Composer\IO\IOInterface $io IO interface to write to console.
+     * @return void
+     */
+    public static function setDatabase($dir, $io)
+    {
+        $io->write('ENTER DATABASE CONNECTION');
+
+        $dbConnectSuccess = false;
+        while (!$dbConnectSuccess) {
+            $dbHost = $io->ask('<info>Enter database host ?</info> [<comment>localhost</comment>]? ', 'localhost');
+            $dbName = $io->ask('<info>Enter database name ?</info> [<comment>arhint</comment>]? ', 'arhint');
+            $dbUser = $io->ask('<info>Enter db user ?</info> ');
+            $dbPassword = $io->ask('<info>Enter db password ?</info> ');
+
+            $dbConnectSuccess = static::checkDbConnection($dbHost, $dbName, $dbUser, $dbPassword, $io);
+
+            if ($dbConnectSuccess) {
+                static::setDbConfigInFile($dbHost, $dbName, $dbUser, $dbPassword, $dir, 'app_local.php', $io);
+            } else {
+                $io->writeError('Cannot connect to mysql database. Please try again.');
+            }
+        }
+    }
+
+    /**
+     * Execute migrations to create tables.
+     *
+     * @param string $dir The application's root directory.
+     * @param \Composer\IO\IOInterface $io IO interface to write to console.
+     * @return void
+     */
+    public static function executeMigrations($dir, $io)
+    {
+        if (!defined('ROOT')) {
+            define('ROOT', $dir);
+        }
+
+        if (!defined('DS')) {
+            define('DS', '/');
+        }
+
+        $migrations = new Migrations(['connection' => 'install']);
+        $migrations->migrate();
+
+        foreach (static::PLUGINS as $pluginName) {
+            $migrations = new Migrations(['connection' => 'install', 'plugin' => $pluginName]);
+            $migrations->migrate();
+        }
+    }
+
+    /**
+     * Create admin user.
+     *
+     * @param \Composer\IO\IOInterface $io IO interface to write to console.
+     * @return void
+     */
+    public static function createAdminUser($io)
+    {
+        /** @var \Cake\Database\Connection $cm */
+        $conn = ConnectionManager::get('install');
+
+        if ($conn && $conn->connect()) {
+            $io->write('CREATE ADMIN USER');
+
+            $adminName = $io->ask('<info>Enter admin\'s display name ?</info> [<comment>Administrator</comment>]? ', 'Administrator');
+            $adminEmail = $io->ask('<info>Enter admin\'s email ?</info> ');
+
+            $adminUsername = $io->ask('<info>Enter admin\'s username ?</info> [<comment>admin</comment>]? ', 'admin');
+            $adminPassword = $io->ask('<info>Enter admin\'s password ?</info> ');
+
+            $adminPassword = (new DefaultPasswordHasher())->hash($adminPassword);
+
+            $conn->execute(
+                'INSERT INTO users (name, email, username, passwd) VALUES (:title, :email, :username, :pass)',
+                ['title' => $adminName, 'email' => $adminEmail, 'username' => $adminUsername, 'pass' => $adminPassword],
+                ['title' => 'string', 'email' => 'string', 'username' => 'string', 'pass' => 'string']
+            );
+        } else {
+            $io->writeError('Cannot connect to mysql database to create admin user');
+        }
+    }
+
+    /**
+     * Try to connect to database
+     *
+     * @param string $dbHost Database host.
+     * @param string $db Database name.
+     * @param string $dbUser Mysql username.
+     * @param string $dbPassword Mysql password.
+     * @param \Composer\IO\IOInterface $io IO interface to write to console.
+     * @return bool
+     */
+    public static function checkDbConnection($dbHost, $db, $dbUser, $dbPassword, $io)
+    {
+        try {
+            ConnectionManager::drop('install');
+
+            ConnectionManager::setConfig('install', [
+                'className' => 'Cake\Database\Connection',
+                'driver' => 'Cake\Database\Driver\Mysql',
+                'persistent' => false,
+                'host' => $dbHost,
+                'username' => $dbUser,
+                'password' => $dbPassword,
+                'database' => $db,
+                'timezone' => 'UTC',
+                'flags' => [],
+                'cacheMetadata' => true,
+                'log' => false,
+                'quoteIdentifiers' => true,
+                'url' => null,
+            ]);
+            /** @var \Cake\Database\Connection $connection */
+            $connection = ConnectionManager::get('install');
+            $result = $connection->connect();
+
+            return $result;
+        } catch (Exception $connectionError) {
+            $errorMsg = $connectionError->getMessage();
+            $io->writeError($errorMsg);
+        }
+
+        return false;
+    }
+
+    /**
+     * Set the dbconfig in a given file
+     *
+     * @param string $dbHost Database host.
+     * @param string $dbName Database name.
+     * @param string $dbUser Mysql username.
+     * @param string $dbPassword Mysql password.
+     * @param string $dir The application's root directory.
+     * @param string $file A path to a file relative to the application's root
+     * @param \Composer\IO\IOInterface $io IO interface to write to console.
+     * @return void
+     */
+    public static function setDbConfigInFile($dbHost, $dbName, $dbUser, $dbPassword, $dir, $file, $io)
+    {
+        $config = $dir . '/config/' . $file;
+        $content = file_get_contents($config);
+
+        $content = str_replace('__DBHOST__', $dbHost, $content, $count);
+        $content = str_replace('__DATABASE__', $dbName, $content, $count);
+        $content = str_replace('__DBUSER__', $dbUser, $content, $count);
+        $content = str_replace('__DBPASS__', $dbPassword, $content, $count);
+
+        $result = file_put_contents($config, $content);
+        if ($result) {
+            $io->write('Updated Datasources.default values in config/' . $file);
+
+            return;
+        }
+        $io->write('Unable to update Datasources.default values.');
     }
 }

@@ -55,6 +55,14 @@ jQuery.fn.InvoiceEditClient = function (options) {
             $("#invoice-" + target + "-phone", $this).val(client.primary_phone.phone);
         }
 
+        if ($("#invoice-location", $this).val().trim() == "") {
+            if (options.mode == "received" && target == "issuer") {
+                $("#invoice-location", $this).val(client.primary_address.city);
+            } else {
+
+            }
+        }
+
         M.updateTextFields()
     }
 

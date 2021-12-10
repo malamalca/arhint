@@ -120,16 +120,16 @@ class InvoicesCountersTable extends Table
     /**
      * findDefaultCounter method
      *
-     * @param string $ownerId Counter type :: issued, received or archived.
+     * @param object $query Query with applied scope
      * @param array $counterType Filter data from $params['url']['filter'].
      * @return mixed Counter data or false on failure.
      */
-    public function findDefaultCounter($ownerId, $counterType = [])
+    public function findDefaultCounter($query = null)
     {
         $params = ['order' => null, 'conditions' => []];
 
         // no counter specified; find first (or default) counter
-        $params['conditions'] = ['owner_id' => $ownerId, 'active' => true];
+        $params['conditions'] = ['active' => true];
         $params['order'] = ['active', 'kind DESC', 'title'];
 
         if (!empty($counterType)) {
@@ -140,8 +140,9 @@ class InvoicesCountersTable extends Table
             }
         }
 
-        $ret = $this
-            ->find()
+
+
+        $ret = $query
             ->select()
             ->where($params['conditions'])
             ->order($params['order'])
