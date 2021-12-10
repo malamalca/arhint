@@ -23,6 +23,7 @@ if (!defined('STDIN')) {
 use Cake\Auth\DefaultPasswordHasher;
 use Cake\Datasource\ConnectionManager;
 use Cake\Utility\Security;
+use Cake\Utility\Text;
 use Composer\Script\Event;
 use Exception;
 use Migrations\Migrations;
@@ -77,6 +78,8 @@ class Installer
 
         static::setFolderPermissions($rootDir, $io);
         static::setSecuritySalt($rootDir, $io);
+
+        static::setCookieKeyInFile($rootDir, $io);
 
         static::setDatabase($rootDir, $io);
 
@@ -339,12 +342,24 @@ class Installer
             $adminUsername = $io->ask('<info>Enter admin\'s username ?</info> [<comment>admin</comment>]? ', 'admin');
             $adminPassword = $io->ask('<info>Enter admin\'s password ?</info> ');
 
+            $companyTitle = $io->ask('<info>Enter Company Title ?</info> ');
+            $companyMatNo = $io->ask('<info>Enter Company Assigned No. ?</info> ');
+            $companyTaxNo = $io->ask('<info>Enter Company Tax No. ?</info> ');
+
             $adminPassword = (new DefaultPasswordHasher())->hash($adminPassword);
 
+            $companyId = Text::uuid();
+
             $conn->execute(
-                'INSERT INTO users (name, email, username, passwd) VALUES (:title, :email, :username, :pass)',
-                ['title' => $adminName, 'email' => $adminEmail, 'username' => $adminUsername, 'pass' => $adminPassword],
-                ['title' => 'string', 'email' => 'string', 'username' => 'string', 'pass' => 'string']
+                'INSERT INTO users (company_id, name, email, username, passwd, privileges) VALUES (:company, :title, :email, :username, :pass, 2)',
+                ['company_id' => $companyId, 'title' => $adminName, 'email' => $adminEmail, 'username' => $adminUsername, 'pass' => $adminPassword],
+                ['company_id' => 'string', 'title' => 'string', 'email' => 'string', 'username' => 'string', 'pass' => 'string']
+            );
+
+            $conn->execute(
+                'INSERT INTO contacts (id, owner_id, kind, title, mat_no, tax_no) VALUES (:id, :owner_id, "C", :title, :mat_no, :tax_no)',
+                ['id' => $companyId, 'owner_id' => $companyId, 'title' => $companyTitle, 'mat_no' => $companyMatNo, 'tax_no' => $companyTaxNo],
+                ['id' => 'string', 'owner_id' => 'string', 'title' => 'string', 'mat_no' => 'string', 'tax_no' => 'string']
             );
         } else {
             $io->writeError('Cannot connect to mysql database to create admin user');
@@ -423,5 +438,35 @@ class Installer
             return;
         }
         $io->write('Unable to update Datasources.default values.');
+    }
+
+    /**
+     * Set the security.cookieKey value in a given file
+     *
+     * @param string $dir The application's root directory.
+     * @param \Composer\IO\IOInterface $io IO interface to write to console.
+     * @param string $file A path to a file relative to the application's root
+     * @return void
+     */
+    public static function setCookieKeyInFile($dir, $io, $file = 'app_local.php')
+    {
+        $config = $dir . '/config/' . $file;
+        $content = file_get_contents($config);
+
+        $content = str_replace('__COOKIEKEY__', hash('sha256', Security::randomBytes(64)), $content, $count);
+
+        if ($count == 0) {
+            $io->write('No Security.cookieKey placeholder to replace.');
+
+            return;
+        }
+
+        $result = file_put_contents($config, $content);
+        if ($result) {
+            $io->write('Updated Security.cookieKey value in config/' . $file);
+
+            return;
+        }
+        $io->write('Unable to update Security.cookieKey value.');
     }
 }

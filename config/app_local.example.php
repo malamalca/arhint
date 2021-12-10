@@ -26,6 +26,7 @@ return [
      */
     'Security' => [
         'salt' => env('SECURITY_SALT', '__SALT__'),
+        'cookieKey' => env('COOKIE_KEY', '__COOKIEKEY__'),
     ],
 
     /*
