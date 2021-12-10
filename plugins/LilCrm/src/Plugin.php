@@ -26,6 +26,14 @@ class Plugin extends BasePlugin
     {
         Configure::load('LilCrm.config');
 
+        $defaults = require CONFIG . 'app_local.php';
+        if (isset($defaults['LilCrm'])) {
+            Configure::write(
+                'LilCrm',
+                Hash::merge((array)Configure::read('LilCrm'), (array)$defaults['LilCrm'])
+            );
+        }
+
         $LilCrmEvents = new LilCrmEvents();
         EventManager::instance()->on($LilCrmEvents);
     }

@@ -9,6 +9,7 @@ use Cake\Core\PluginApplicationInterface;
 use Cake\Event\EventManager;
 use Cake\Http\MiddlewareQueue;
 use Cake\Routing\RouteBuilder;
+use Cake\Utility\Hash;
 use LilInvoices\Event\LilInvoicesEvents;
 
 class Plugin extends BasePlugin
@@ -25,6 +26,13 @@ class Plugin extends BasePlugin
     public function bootstrap(PluginApplicationInterface $app): void
     {
         Configure::load('LilInvoices.config');
+        $defaults = require CONFIG . 'app_local.php';
+        if (isset($defaults['LilInvoices'])) {
+            Configure::write(
+                'LilInvoices',
+                Hash::merge((array)Configure::read('LilInvoices'), (array)$defaults['LilInvoices'])
+            );
+        }
 
         $LilInvoicesEvents = new LilInvoicesEvents();
         EventManager::instance()->on($LilInvoicesEvents);

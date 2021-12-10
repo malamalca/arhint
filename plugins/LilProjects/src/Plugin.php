@@ -26,6 +26,14 @@ class Plugin extends BasePlugin
     {
         Configure::load('LilProjects.config');
 
+        $defaults = require CONFIG . 'app_local.php';
+        if (isset($defaults['LilProjects'])) {
+            Configure::write(
+                'LilProjects',
+                Hash::merge((array)Configure::read('LilProjects'), (array)$defaults['LilProjects'])
+            );
+        }
+
         $LilProjectsEvents = new LilProjectsEvents();
         EventManager::instance()->on($LilProjectsEvents);
     }
