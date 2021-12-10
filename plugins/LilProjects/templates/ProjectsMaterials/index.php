@@ -49,7 +49,7 @@ foreach ($projectsMaterials as $material) {
     $tableIndex['table']['body']['rows'][]['columns'] = [
         'descript' => h($material->descript),
         'group' => h($groups[$material->group_id] ?? ''),
-        'thickness' => $this->Number->precision($material->thickness, 2),
+        'thickness' => $this->Number->precision((float)$material->thickness, 2),
         'actions' => [
             'parameters' => ['class' => 'right-align'],
             'html' => $this->Lil->editLink($material->id) . ' ' . $this->Lil->deleteLink($material->id),

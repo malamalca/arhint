@@ -129,8 +129,7 @@ class InvoicesController extends AppController
                     ->where(['active' => true])
                     ->order(['active', 'kind DESC', 'title'])
                     ->all();
-            },
-            'Lil'
+            }
         );
 
         $projects = [];
@@ -190,8 +189,7 @@ class InvoicesController extends AppController
                     ->where(['active' => true])
                     ->order(['active', 'kind DESC', 'title'])
                     ->all();
-            },
-            'Lil'
+            }
         );
 
         $currentCounter = $invoice->invoices_counter->id;

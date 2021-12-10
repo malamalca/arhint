@@ -51,8 +51,8 @@ foreach ($data as $invoice) {
 
     if ($counterId != $invoice->counter_id) {
         if (!empty($counterId)) {
-            $target['table']['foot']['rows'][0]['columns']['total']['html'] = $this->Number->precision($total, 2);
-            $target['table']['foot']['rows'][0]['columns']['net_total']['html'] = $this->Number->precision($netTotal, 2);
+            $target['table']['foot']['rows'][0]['columns']['total']['html'] = $this->Number->precision((float)$total, 2);
+            $target['table']['foot']['rows'][0]['columns']['net_total']['html'] = $this->Number->precision((float)$netTotal, 2);
 
             $total = 0;
             $netTotal = 0;
@@ -80,11 +80,11 @@ foreach ($data as $invoice) {
         ],
         'net_total' => [
             'parameters' => ['align' => 'right'],
-            'html' => $this->Number->precision($invoice->net_total, 2),
+            'html' => $this->Number->precision((float)$invoice->net_total, 2),
         ],
         'total' => [
             'parameters' => ['align' => 'right'],
-            'html' => $this->Number->precision($invoice->total, 2),
+            'html' => $this->Number->precision((float)$invoice->total, 2),
         ],
     ]];
 
@@ -95,8 +95,8 @@ foreach ($data as $invoice) {
 }
 
 if (sizeof($data) > 0) {
-    $target['table']['foot']['rows'][0]['columns']['total']['html'] = $this->Number->precision($total, 2);
-    $target['table']['foot']['rows'][0]['columns']['net_total']['html'] = $this->Number->precision($netTotal, 2);
+    $target['table']['foot']['rows'][0]['columns']['total']['html'] = $this->Number->precision((float)$total, 2);
+    $target['table']['foot']['rows'][0]['columns']['net_total']['html'] = $this->Number->precision((float)$netTotal, 2);
 }
 
 echo $this->Lil->panels($invoicesTable, 'LilInvoices.Invoices.report');

@@ -168,7 +168,7 @@ class LilExpenseHelper extends Helper
             $this->icon($expense),
             $title,
             (string)$expense->dat_happened,
-            $this->Number->precision($expense->total, 2)
+            $this->Number->precision((float)$expense->total, 2)
         );
 
         return $title;

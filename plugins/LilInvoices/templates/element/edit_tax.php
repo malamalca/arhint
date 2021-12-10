@@ -73,7 +73,7 @@ foreach ($invoices_taxes as $k => $invoices_tax) {
     $analytics['tax_' . $taxIx++] = '</td>';
 
     $analytics['tax_' . $taxIx++] = '<td class="td-invoices-tax-vat_percent right-align">';
-    $analytics['tax_' . $taxIx++] = sprintf('<span>%s</span>', $this->Number->precision($invoices_tax->vat_percent, 1));
+    $analytics['tax_' . $taxIx++] = sprintf('<span>%s</span>', $this->Number->precision((float)$invoices_tax->vat_percent, 1));
     $analytics['tax_' . $taxIx++] = [
         'class' => $this->Form,
         'method' => 'control',

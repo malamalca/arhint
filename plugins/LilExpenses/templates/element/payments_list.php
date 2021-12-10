@@ -60,7 +60,7 @@ if ($expense) {
             ],
             'amount' => [
                 'parameters' => ['class' => 'right-align'],
-                'html' => $this->Number->precision($p->amount, 2),
+                'html' => $this->Number->precision((float)$p->amount, 2),
             ],
             'edit' => [
                 'parameters' => ['class' => 'center-align'],
@@ -80,10 +80,10 @@ if ($expense) {
     }
 
     $paymentsTable['foot']['rows'][0]['columns']['total']['html'] =
-        $this->Number->precision($total, 2) . ' / ' .
+        $this->Number->precision((float)$total, 2) . ' / ' .
         sprintf(
             '<span%2$s>%1$s</span>',
-            $this->Number->precision($expense->total - $total, 2),
+            $this->Number->precision((float)$expense->total - $total, 2),
             $expense->total - $total < 0 ? ' class="negative"' : ''
         );
 

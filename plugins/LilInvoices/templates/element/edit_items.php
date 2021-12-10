@@ -153,7 +153,7 @@ foreach ($invoices_items as $k => $item) {
             ['type' => 'hidden', 'class' => 'invoices-item-id'],
         ],
     ];
-    $analytics['itm_' . $itmIx++] = sprintf('<span>%s</span>', $this->Number->precision($itemTotal, 2));
+    $analytics['itm_' . $itmIx++] = sprintf('<span>%s</span>', $this->Number->precision((float)$itemTotal, 2));
     $analytics['itm_' . $itmIx++] = '</td>';
 
     $analytics['itm_' . $itmIx++] = '<td class="td-invoices-item-vat right-align nowrap">';
@@ -196,7 +196,7 @@ foreach ($invoices_items as $k => $item) {
     $itemsGrandTotal += $lineTotal;
 
     $analytics['itm_' . $itmIx++] = '<td class="right-align td-invoices-item-line-total">' .
-        sprintf('<span>%s</span>', $this->Number->precision($lineTotal, 2)) .
+        sprintf('<span>%s</span>', $this->Number->precision((float)$lineTotal, 2)) .
         '</td>';
 
     $analytics['itm_' . $itmIx++] = sprintf('<td class="center-align">%s</td>', $this->Html->link(
@@ -228,9 +228,9 @@ foreach ($invoices_items as $k => $item) {
         )
     );
     $analytics['itm_' . $itmIx++] = sprintf('<th colspan="3" class="right-align">%1$s:</th>', __d('lil_invoices', 'Grand Total'));
-    $analytics['itm_' . $itmIx++] = sprintf('<th class="right-align" id="invoice-items-total">%s</th>', $this->Number->precision($itemsTotal, 2));
+    $analytics['itm_' . $itmIx++] = sprintf('<th class="right-align" id="invoice-items-total">%s</th>', $this->Number->precision((float)$itemsTotal, 2));
     $analytics['itm_' . $itmIx++] = '<th class="right-align">&nbsp;</th>';
-    $analytics['itm_' . $itmIx++] = sprintf('<th class="right-align" id="invoice-items-grand-total">%s</th>', $this->Number->precision($itemsGrandTotal, 2));
+    $analytics['itm_' . $itmIx++] = sprintf('<th class="right-align" id="invoice-items-grand-total">%s</th>', $this->Number->precision((float)$itemsGrandTotal, 2));
 
     $analytics['itm_' . $itmIx++] = '<th class="left-align"></th>';
     $analytics['itm_' . $itmIx++] = '</tr></tfoot>';

@@ -82,7 +82,7 @@ foreach ($counters as $counter) {
         'doc_type' => isset($documentTypes[$counter->doc_type]) ? h($documentTypes[$counter->doc_type]) : __d('lil_invoices', 'N/A'),
         'no' => [
             'parameters' => ['class' => 'right-align'],
-            'html' => $this->Number->precision($counter->counter, 0),
+            'html' => $this->Number->precision((float)$counter->counter, 0),
         ],
         'actions' => [
             'parameters' => ['class' => 'right-align'],
