@@ -34,7 +34,6 @@ class LilInvoicesSidebar
 
         ////////////////////////////////////////////////////////////////////////////////////////
         // Fetch counters
-        Cache::delete('LilInvoices.sidebarCounters.' . $currentUser->id);
         $counters = Cache::remember(
             'LilInvoices.sidebarCounters.' . $currentUser->id,
             function () use ($controller) {

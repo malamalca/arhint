@@ -37,7 +37,7 @@ $invoice_preview = [
                 'lines' => [
                     'form_start' => [
                         'method' => 'create',
-                        'parameters' => ['model' => $invoice, ['id' => 'InvoiceSign']],
+                        'parameters' => [$invoice, ['id' => 'InvoiceSign']],
                     ],
                     'id' => [
                         'method' => 'hidden',

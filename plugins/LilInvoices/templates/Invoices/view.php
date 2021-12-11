@@ -3,7 +3,6 @@ use Cake\Core\Configure;
 use Cake\Core\Plugin;
 use Cake\Utility\Text;
 
-$dateFormat = strtr(implode(Configure::read('Lil.dateSeparator'), str_split(Configure::read('Lil.dateFormat'))), ['Y' => 'yyyy', 'M' => 'MM', 'D' => 'dd']);
 $invoice->client = $invoice->invoices_counter->kind == 'issued' ? $invoice->receiver : $invoice->issuer;
 
 $invoiceView = [

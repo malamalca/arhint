@@ -130,7 +130,6 @@ class InvoicesController extends AppController
                     ->order(['active', 'kind DESC', 'title'])
                     ->all();
             },
-            'Lil'
         );
 
         $projects = [];
