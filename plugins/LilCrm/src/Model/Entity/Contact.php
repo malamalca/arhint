@@ -39,7 +39,7 @@ class Contact extends Entity
     /**
      * Fields that can be mass assigned using newEntity() or patchEntity().
      *
-     * @var array
+     * @var array<bool>
      */
     protected $_accessible = [
         '*' => true,

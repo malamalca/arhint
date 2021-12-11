@@ -4,7 +4,7 @@ parameters:
     checkGenericClassInNonGenericObjectType: false
     bootstrapFiles:
         - config/paths.php
-    excludes_analyse:
+    excludePaths:
         - src/Console/Installer.php
         - src/App/Controller/ErrorController.php
         - src/App/Command/ConsoleCommand.php
