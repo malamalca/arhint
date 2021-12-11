@@ -25,5 +25,4 @@ class UsersFixture extends TestFixture
             'modified' => '2020-01-12 19:40:23',
         ],
     ];
-
 }

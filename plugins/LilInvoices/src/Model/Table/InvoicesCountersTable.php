@@ -3,8 +3,6 @@ declare(strict_types=1);
 
 namespace LilInvoices\Model\Table;
 
-use Cake\Core\Configure;
-use Cake\ORM\Query;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 
