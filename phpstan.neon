@@ -2,6 +2,8 @@ parameters:
     level: 5
     checkMissingIterableValueType: false
     checkGenericClassInNonGenericObjectType: false
+    bootstrapFiles:
+        - config/paths.php
     excludes_analyse:
         - src/Console/Installer.php
         - src/App/Controller/ErrorController.php

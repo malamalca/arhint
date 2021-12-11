@@ -78,7 +78,7 @@ class LilExpenseHelper extends Helper
                         $link = sprintf(
                             $i_caption,
                             $link = $this->Html->link(
-                                $expense->invoice->no ? $expense->invoice->no : __d('lil_expenses', 'N/A'),
+                                !empty($expense->invoice->no) ? $expense->invoice->no : __d('lil_expenses', 'N/A'),
                                 [
                                     'plugin' => 'LilInvoices',
                                     'controller' => 'Invoices',

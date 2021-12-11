@@ -26,7 +26,7 @@ class InvoicesCountersTablePolicy
                 'type' => 'INNER',
                 'conditions' => [
                     'c.counter_id = InvoicesCounters.id',
-                    'c.user_id' => $user->id
+                    'c.user_id' => $user->id,
                 ],
             ]);
         }

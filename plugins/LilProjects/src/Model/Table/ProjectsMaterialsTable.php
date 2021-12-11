@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace LilProjects\Model\Table;
 
-use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
@@ -40,7 +39,6 @@ class ProjectsMaterialsTable extends Table
         $this->setTable('projects_materials');
         $this->setDisplayField('id');
         $this->setPrimaryKey('id');
-
     }
 
     /**
@@ -75,7 +73,6 @@ class ProjectsMaterialsTable extends Table
      */
     public function buildRules(RulesChecker $rules): RulesChecker
     {
-
         return $rules;
     }
 }

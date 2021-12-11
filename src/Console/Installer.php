@@ -43,6 +43,7 @@ class Installer
         'logs',
         'tmp',
         'uploads',
+        'uploads/invoices',
         'tmp/cache',
         'tmp/cache/models',
         'tmp/cache/persistent',
@@ -87,7 +88,6 @@ class Installer
 
         static::executeMigrations($rootDir, $io);
         static::createAdminUser($io);
-
 
         $class = 'Cake\Codeception\Console\Installer';
         if (class_exists($class)) {
@@ -370,7 +370,10 @@ class Installer
         if ($conn && $conn->connect()) {
             $io->write('CREATE ADMIN USER');
 
-            $adminName = $io->ask('<info>Enter admin\'s display name ?</info> [<comment>Administrator</comment>]? ', 'Administrator');
+            $adminName = $io->ask(
+                '<info>Enter admin\'s display name ?</info> [<comment>Administrator</comment>]? ',
+                'Administrator'
+            );
             $adminEmail = $io->ask('<info>Enter admin\'s email ?</info> ');
 
             $adminUsername = $io->ask('<info>Enter admin\'s username ?</info> [<comment>admin</comment>]? ', 'admin');
@@ -386,15 +389,43 @@ class Installer
             $companyId = Text::uuid();
 
             $conn->execute(
-                'INSERT INTO users (id, company_id, name, email, username, passwd, privileges) VALUES (:id, :company_id, :title, :email, :username, :pass, 2)',
-                ['id' => $userId, 'company_id' => $companyId, 'title' => $adminName, 'email' => $adminEmail, 'username' => $adminUsername, 'pass' => $adminPassword],
-                ['id' => 'string', 'company_id' => 'string', 'title' => 'string', 'email' => 'string', 'username' => 'string', 'pass' => 'string']
+                'INSERT INTO users (id, company_id, name, email, username, passwd, privileges) VALUES ' .
+                    '(:id, :company_id, :title, :email, :username, :pass, 2)',
+                [
+                    'id' => $userId,
+                    'company_id' => $companyId,
+                    'title' => $adminName,
+                    'email' => $adminEmail,
+                    'username' => $adminUsername,
+                    'pass' => $adminPassword,
+                ],
+                [
+                    'id' => 'string',
+                    'company_id' => 'string',
+                    'title' => 'string',
+                    'email' => 'string',
+                    'username' => 'string',
+                    'pass' => 'string',
+                ]
             );
 
             $conn->execute(
-                'INSERT INTO contacts (id, owner_id, kind, title, mat_no, tax_no) VALUES (:id, :owner_id, "C", :title, :mat_no, :tax_no)',
-                ['id' => $companyId, 'owner_id' => $companyId, 'title' => $companyTitle, 'mat_no' => $companyMatNo, 'tax_no' => $companyTaxNo],
-                ['id' => 'string', 'owner_id' => 'string', 'title' => 'string', 'mat_no' => 'string', 'tax_no' => 'string']
+                'INSERT INTO contacts (id, owner_id, kind, title, mat_no, tax_no) VALUES ' .
+                    '(:id, :owner_id, "C", :title, :mat_no, :tax_no)',
+                [
+                    'id' => $companyId,
+                    'owner_id' => $companyId,
+                    'title' => $companyTitle,
+                    'mat_no' => $companyMatNo,
+                    'tax_no' => $companyTaxNo,
+                ],
+                [
+                    'id' => 'string',
+                    'owner_id' => 'string',
+                    'title' => 'string',
+                    'mat_no' => 'string',
+                    'tax_no' => 'string',
+                ]
             );
         } else {
             $io->writeError('Cannot connect to mysql database to create admin user');

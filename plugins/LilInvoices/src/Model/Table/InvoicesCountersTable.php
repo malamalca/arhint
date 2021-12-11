@@ -121,10 +121,10 @@ class InvoicesCountersTable extends Table
      * findDefaultCounter method
      *
      * @param object $query Query with applied scope
-     * @param array $counterType Filter data from $params['url']['filter'].
+     * @param string|null $counterType Counter type
      * @return mixed Counter data or false on failure.
      */
-    public function findDefaultCounter($query = null)
+    public function findDefaultCounter($query = null, $counterType = null)
     {
         $params = ['order' => null, 'conditions' => []];
 
@@ -139,8 +139,6 @@ class InvoicesCountersTable extends Table
                 $params['conditions']['active'] = false;
             }
         }
-
-
 
         $ret = $query
             ->select()

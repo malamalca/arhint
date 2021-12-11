@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace LilProjects\Controller;
 
 use Cake\Core\Configure;
-use LilProjects\Controller\AppController;
 
 /**
  * ProjectsMaterials Controller
@@ -24,8 +23,6 @@ class ProjectsMaterialsController extends AppController
         parent::initialize();
         $this->loadComponent('Paginator');
     }
-
-
 
     /**
      * Index method

@@ -580,10 +580,10 @@ if (!empty($links)) {
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////
-// LINKS
-$invoiceView['panels']['text_title'] = sprintf('<h3>%s</h3>', __d('lil_invoices', 'Description'));
-$invoiceView['panels']['text_data'] = sprintf('<div id="invoice-descript-preview">%s</div>', $invoice->descript);
+if (!empty($invoice->descript)) {
+    $invoiceView['panels']['text_title'] = sprintf('<h3>%s</h3>', __d('lil_invoices', 'Description'));
+    $invoiceView['panels']['text_data'] = sprintf('<div id="invoice-descript-preview">%s</div>', $invoice->descript);
+}
 
 echo $this->Lil->panels($invoiceView, 'LilInvoices.Invoices.view');
 ?>
