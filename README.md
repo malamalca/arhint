@@ -1,6 +1,6 @@
 # ARHINT :: a simple ERP and CRM
 
-[![Build Status](https://img.shields.io/travis/cakephp/app/master.svg?style=flat-square)](https://travis-ci.com/malamalca/arhint)
+[![Build Status](https://app.travis-ci.com/malamalca/arhint.svg?branch=master)](https://app.travis-ci.com/malamalca/arhint)
 
 This is a simple costum ERP/CRM solution for a small company.
 
