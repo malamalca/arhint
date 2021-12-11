@@ -81,10 +81,6 @@ $invoices_index = [
         ],
         'head' => ['rows' => [
             1 => ['columns' => [
-                'cnt' => [
-                    'parameters' => ['class' => 'center-align hide-on-small-only'],
-                    'html' => $this->Paginator->sort('counter', __d('lil_invoices', 'Cnt')),
-                ],
                 'no' => [
                     'html' => $this->Paginator->sort('no', __d('lil_invoices', 'No')),
                 ],
@@ -115,10 +111,6 @@ $invoices_index = [
             ]],
         ]],
         'foot' => ['rows' => [0 => ['columns' => [
-            'cnt' => [
-                'parameters' => ['class' => 'hide-on-small-only'],
-                'html' => '',
-            ],
             'no' => [
                 'parameters' => ['class' => 'left-align '],
                 'html' => '<ul class="paginator">' . $this->Paginator->numbers([
@@ -158,14 +150,9 @@ $total = 0;
 $net_total = 0;
 $link_template = '<a href="' . Router::url(['action' => 'view', '__id__']) . '">__title__</a>';
 foreach ($data as $invoice) {
-    $client = $counter->kind == 'issued' ? $invoice->receiver : $invoice->issuer;
     $project = $projects[$invoice->project_id] ?? null;
 
     $invoices_index['table']['body']['rows'][]['columns'] = [
-        'cnt' => [
-            'parameters' => ['class' => 'center-align hide-on-small-only'],
-            'html' => h($invoice->counter),
-        ],
         'no' => [
             'parameters' => ['class' => 'nowrap'],
             'html' => '<div class="invoices-no">' .
@@ -179,7 +166,7 @@ foreach ($data as $invoice) {
                 sprintf(
                     '<div class="hide-on-med-and-up">%1$s<br />%2$s</div>',
                     (string)$invoice->dat_issue,
-                    h(empty($client) ? '' : $client->title)
+                    h($invoice->client['title'] ?? '')
                 ) . '</div>',
         ],
         'date' => [
@@ -195,7 +182,7 @@ foreach ($data as $invoice) {
         ],
         'client' => [
             'parameters' => ['class' => 'invoices-client left-align hide-on-small-only'],
-            'html' => '<div style="height: 20px; overflow: hidden; scroll: none;">' . h(empty($client) ? '' : $client->title) . '</div>',
+            'html' => '<div class="truncate">' . h($invoice->client['title'] ?? '') . '</div>',
         ],
         'project' => $counter->isInvoice() ? null : [
             'parameters' => ['class' => 'invoices-project left-align'],

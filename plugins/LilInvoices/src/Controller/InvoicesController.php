@@ -90,31 +90,32 @@ class InvoicesController extends AppController
         $filter['order'] = 'Invoices.counter DESC';
         $params = $this->Invoices->filter($filter);
 
-        $invoiceFields = ['id', 'no', 'counter', 'dat_issue', 'title', 'net_total', 'total', 'project_id',
-            'invoices_attachment_count'];
-        $clientFields = ['Issuers.title', 'Receivers.title'];
-        $params['contain'] = ['Issuers', 'Receivers'];
-
         $query = $this->Authorization->applyScope($this->Invoices->find())
-            ->select($invoiceFields)
-            ->contain($params['contain'])
-            ->where($params['conditions']);
-
-        // use original query for SUM()
-        $sumQuery = clone $query;
-        $invoicesTotals = $sumQuery->select([
-            'sumTotal' => $sumQuery->func()->sum('Invoices.total'),
-            'sumNetTotal' => $sumQuery->func()->sum('Invoices.net_total'),
-        ])
-            ->disableHydration()
-            ->first();
-
-        // add contain and order to original query
-        $query
-            ->select($clientFields)
+            ->select(['id', 'no', 'counter', 'dat_issue', 'title', 'net_total', 'total', 'project_id',
+                'invoices_attachment_count', 'client.title'])
+            ->join([
+                'table' => 'invoices_clients',
+                'alias' => 'client',
+                'type' => 'INNER',
+                'conditions' => [
+                    'client.invoice_id = Invoices.id',
+                    'client.kind' => $counter->kind == 'received' ? 'II' : 'IV',
+                ],
+            ])
+            ->where($params['conditions'])
             ->order($params['order']);
 
         $data = $this->paginate($query);
+
+        $sumQuery = $this->Authorization->applyScope($this->Invoices->find());
+        $invoicesTotals = $sumQuery
+            ->select([
+                'sumTotal' => $sumQuery->func()->sum('Invoices.total'),
+                'sumNetTotal' => $sumQuery->func()->sum('Invoices.net_total'),
+            ])
+            ->where($params['conditions'])
+            ->disableHydration()
+            ->first();
 
         $dateSpan = $this->Invoices->maxSpan($filter['counter']);
 
