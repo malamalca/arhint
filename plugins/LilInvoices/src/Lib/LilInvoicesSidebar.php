@@ -48,7 +48,7 @@ class LilInvoicesSidebar
         );
 
         $invoices['title'] = __d('lil_invoices', 'Invoices');
-        $invoices['visible'] = !empty($currentUser);
+        $invoices['visible'] = true;
         $invoices['active'] = $request->getParam('plugin') == 'LilInvoices';
         $invoices['url'] = [
             'plugin' => 'LilInvoices',

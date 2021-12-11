@@ -78,7 +78,7 @@ class LilTasksSidebar
         }
 
         $tasks['title'] = __d('lil_tasks', 'Tasks');
-        $tasks['visible'] = !empty($currentUser);
+        $tasks['visible'] = true;
         $tasks['active'] = $request->getParam('plugin') == 'LilTasks';
         $tasks['url'] = [
             'plugin' => 'LilTasks',

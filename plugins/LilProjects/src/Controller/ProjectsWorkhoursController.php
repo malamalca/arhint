@@ -178,7 +178,7 @@ class ProjectsWorkhoursController extends AppController
                             ->order('started DESC')
                             ->limit(1)
                             ->first();
-                            if (!empty($workhour) && ($workhour->project_id != $registration['project_id'])) {
+                            if ($workhour->project_id != $registration['project_id']) {
                                 unset($workhour);
                             }
                         }

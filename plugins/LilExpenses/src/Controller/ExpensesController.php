@@ -350,22 +350,20 @@ class ExpensesController extends AppController
             $payment = $this->Expenses->Payments->get($this->getRequest()->getData('payment_id'));
             $this->Authorization->authorize($payment, 'edit');
 
-            if (!empty($payment)) {
-                $payment->sepa_id = $this->getRequest()->getData('sepa_id');
+            $payment->sepa_id = $this->getRequest()->getData('sepa_id');
 
-                if ($this->Expenses->Payments->save($payment)) {
-                    if ($this->getRequest()->is('ajax')) {
-                        return $this->getResponse()
-                            ->withType('application/json')
-                            ->withStringBody(json_encode($payment));
-                    }
-
-                    $this->Flash->success(__d('lil_expenses', 'The payment has been saved.'));
-
-                    return $this->redirect(['action' => 'import_sepa']);
-                } else {
-                    $this->Flash->error(__d('lil_expenses', 'The expense could not be saved. Please, try again.'));
+            if ($this->Expenses->Payments->save($payment)) {
+                if ($this->getRequest()->is('ajax')) {
+                    return $this->getResponse()
+                        ->withType('application/json')
+                        ->withStringBody(json_encode($payment));
                 }
+
+                $this->Flash->success(__d('lil_expenses', 'The payment has been saved.'));
+
+                return $this->redirect(['action' => 'import_sepa']);
+            } else {
+                $this->Flash->error(__d('lil_expenses', 'The expense could not be saved. Please, try again.'));
             }
         } else {
             $this->Authorization->skipAuthorization();

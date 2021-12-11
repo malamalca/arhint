@@ -142,7 +142,7 @@ class UsersController extends AppController
             ->where(['reset_key' => $resetKey])
             ->first();
 
-        if (empty($user)) {
+        if ($user == null) {
             throw new NotFoundException(__('User does not exist.'));
         }
 

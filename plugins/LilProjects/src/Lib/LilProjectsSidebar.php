@@ -28,7 +28,7 @@ class LilProjectsSidebar
         }
 
         $sidebarProjects['title'] = __d('lil_projects', 'Projects');
-        $sidebarProjects['visible'] = !empty($currentUser);
+        $sidebarProjects['visible'] = true;
         $sidebarProjects['active'] = $request->getParam('plugin') == 'LilProjects';
         $sidebarProjects['url'] = [
             'plugin' => 'LilProjects',

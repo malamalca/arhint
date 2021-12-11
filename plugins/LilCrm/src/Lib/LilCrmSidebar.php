@@ -26,7 +26,7 @@ class LilCrmSidebar
         }
 
         $crm['title'] = __d('lil_crm', 'Costumers');
-        $crm['visible'] = !empty($currentUser);
+        $crm['visible'] = true;
         $crm['active'] = $request->getParam('plugin') == 'LilCrm';
         $crm['url'] = [
             'plugin' => 'LilCrm',

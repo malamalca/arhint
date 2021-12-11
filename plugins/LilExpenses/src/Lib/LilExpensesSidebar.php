@@ -26,7 +26,7 @@ class LilExpensesSidebar
         }
 
         $accounting['title'] = __d('lil_expenses', 'Accounting');
-        $accounting['visible'] = !empty($currentUser);
+        $accounting['visible'] = true;
         $accounting['active'] = $request->getParam('plugin') == 'LilExpenses';
         $accounting['url'] = [
             'plugin' => 'LilExpenses',

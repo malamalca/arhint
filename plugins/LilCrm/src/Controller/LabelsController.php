@@ -43,7 +43,7 @@ class LabelsController extends AppController
                 ->contain(['ContactsAddresses'])
                 ->all();
 
-            if (!empty($adremaId) && !in_array($adremaId, array_keys($adremas))) {
+            if (!in_array($adremaId, array_keys($adremas))) {
                 throw new NotFoundException(__d('lil_crm', 'Invalid adrema'));
             }
         }
