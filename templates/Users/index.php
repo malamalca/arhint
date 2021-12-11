@@ -25,7 +25,7 @@ $usersIndex = [
             'title' => __('Add'),
             'visible' => $this->getCurrentUser()->hasRole('admin'),
             'url' => [
-                'action' => 'add',
+                'action' => 'edit',
             ]
         ]
     ],

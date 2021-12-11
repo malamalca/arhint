@@ -77,7 +77,7 @@ class InvoicesCountersControllerTest extends IntegrationTestCase
             'active' => 1,
         ];
 
-        $this->get('lil_invoices/invoices-counters/add', $data);
+        $this->get('lil_invoices/invoices-counters/edit', $data);
         $this->assertRedirect();
 
         $this->login(USER_ADMIN);
@@ -85,7 +85,7 @@ class InvoicesCountersControllerTest extends IntegrationTestCase
         $this->enableSecurityToken();
         $this->enableCsrfToken();
 
-        $this->post('lil_invoices/invoices-counters/add', $data);
+        $this->post('lil_invoices/invoices-counters/edit', $data);
         $this->assertRedirect(['controller' => 'InvoicesCounters', 'action' => 'index']);
 
         $InvoicesCounters = TableRegistry::getTableLocator()->get('LilInvoices.InvoicesCounters');

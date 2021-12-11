@@ -46,7 +46,7 @@ class LilCrmSidebar
                 'params' => [],
                 'active' => in_array($request->getParam('controller'), ['Contacts']) &&
                             (empty($request->getQuery('kind')) || strtoupper($request->getQuery('kind', '')) == 'T') &&
-                            in_array($request->getParam('action'), ['add', 'index', 'edit', 'view']),
+                            in_array($request->getParam('action'), ['index', 'edit', 'view']),
                 'expand' => false,
                 'submenu' => [],
             ],

@@ -1,5 +1,5 @@
 <?php
-use Cake\I18n\Time;
+use Cake\I18n\FrozenTime;
 
 /**
  * This is tmtr_groups/admin_edit template file.
@@ -22,7 +22,7 @@ $years = []; for (
     $years[$i] = $i;
 }
 
-$time = new Time();
+$time = new FrozenTime();
 $report = [
     'title_for_layout' => __d('lil_invoices', 'REPORT: VATs'),
     'form' => [

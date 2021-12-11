@@ -99,18 +99,18 @@ class ContactsControllerTest extends IntegrationTestCase
             ],
         ];
 
-        $this->post('/lil_crm/Contacts/add/T', $data);
+        $this->post('/lil_crm/Contacts/edit?kind=T', $data);
         $this->assertResponseError();
 
         $this->login(USER_ADMIN);
 
-        $this->get('/lil_crm/Contacts/add/T');
+        $this->get('/lil_crm/Contacts/edit?kind=T');
         $this->assertResponseOk();
 
         $this->enableCsrfToken();
         $this->enableSecurityToken();
 
-        $this->post('/lil_crm/Contacts/add/T', $data);
+        $this->post('/lil_crm/Contacts/edit?kind=T', $data);
         $this->assertRedirectContains('/lil_crm/contacts/view/');
     }
 

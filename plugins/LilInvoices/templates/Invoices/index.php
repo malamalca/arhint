@@ -58,7 +58,7 @@ $invoices_index = [
             'url' => [
                 'plugin' => 'LilInvoices',
                 'controller' => 'invoices',
-                'action' => 'add',
+                'action' => 'edit',
                 '?' => ['counter' => $counter->id],
             ],
         ],

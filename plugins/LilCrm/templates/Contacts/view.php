@@ -63,8 +63,8 @@ if (!empty($job)) {
                         'url' => [
                             'plugin' => 'LilCrm',
                             'controller' => 'ContactsAddresses',
-                            'action' => 'add',
-                            $contact->id,
+                            'action' => 'edit',
+                            '?' => ['contact' => $contact->id],
                         ],
                         'params' => [
                             'class' => 'AddAddressLink',
@@ -77,8 +77,8 @@ if (!empty($job)) {
                         'url' => [
                             'plugin' => 'LilCrm',
                             'controller' => 'ContactsEmails',
-                            'action' => 'add',
-                            $contact->id,
+                            'action' => 'edit',
+                            '?' => ['contact' => $contact->id],
                         ],
                         'params' => [
                             'class' => 'AddEmailLink',
@@ -91,8 +91,8 @@ if (!empty($job)) {
                         'url' => [
                             'plugin' => 'LilCrm',
                             'controller' => 'ContactsPhones',
-                            'action' => 'add',
-                            $contact->id,
+                            'action' => 'edit',
+                            '?' => ['contact' => $contact->id],
                         ],
                         'params' => [
                             'class' => 'AddPhoneLink',
@@ -105,8 +105,8 @@ if (!empty($job)) {
                         'url' => [
                             'plugin' => 'LilCrm',
                             'controller' => 'contacts-accounts',
-                            'action' => 'add',
-                            $contact->id,
+                            'action' => 'edit',
+                            '?' => ['contact' => $contact->id],
                         ],
                         'params' => [
                             'class' => 'AddAccountLink',

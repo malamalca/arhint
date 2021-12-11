@@ -8,7 +8,7 @@
 
 <applet id="LilScanApplet" code="LilScanApplet" archive="<?php echo Router::url('/lil/LilScan.jar', true); ?>" width="1" height="1">
     <param name="separate_jvm" value="true">
-    <param name="uploadUrl" value="<?php echo Router::url(['action' => 'add', $invoice_id], true); ?>">
+    <param name="uploadUrl" value="<?php echo Router::url(['action' => 'edit', $invoice_id], true); ?>">
     <param name="field" value="filename">
     <param name="codebase_lookup" value="false">
 </applet>
@@ -20,7 +20,7 @@
             window.location.reload();
         }
     }
-    
+
     function LilInvoicesSelectSource()
     {
         if (typeof LilScanApplet != 'undefined' && LilScanApplet.isTwainEnabled()) LilScanApplet.selectDefaultSource();

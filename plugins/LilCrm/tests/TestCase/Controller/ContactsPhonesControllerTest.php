@@ -53,18 +53,18 @@ class ContactsPhonesControllerTest extends IntegrationTestCase
             'primary' => 0,
         ];
 
-        $this->post('/lil_crm/ContactsPhones/add/' . COMPANY_FIRST, $data);
+        $this->post('/lil_crm/ContactsPhones/edit?contact=' . COMPANY_FIRST, $data);
         $this->assertResponseError();
 
         $this->login(USER_ADMIN);
 
-        $this->get('/lil_crm/ContactsPhones/add/' . COMPANY_FIRST);
+        $this->get('/lil_crm/ContactsPhones/edit?contact=' . COMPANY_FIRST);
         $this->assertResponseOk();
 
         $this->enableCsrfToken();
         $this->enableSecurityToken();
 
-        $this->post(['plugin' => 'LilCrm', 'controller' => 'ContactsPhones', 'action' => 'add', COMPANY_FIRST], $data);
+        $this->post(['plugin' => 'LilCrm', 'controller' => 'ContactsPhones', 'action' => 'edit', '?' => ['contact' => COMPANY_FIRST]], $data);
         $this->assertRedirectContains('/lil_crm/contacts/view/' . COMPANY_FIRST);
     }
 

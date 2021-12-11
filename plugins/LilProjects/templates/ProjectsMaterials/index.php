@@ -10,7 +10,7 @@ $tableIndex = [
             'url' => [
                 'plugin' => 'LilProjects',
                 'controller' => 'ProjectsMaterials',
-                'action' => 'add',
+                'action' => 'edit',
             ],
         ],
     ],

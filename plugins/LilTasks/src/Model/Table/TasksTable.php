@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace LilTasks\Model\Table;
 
-use Cake\I18n\Time;
+use Cake\I18n\FrozenTime;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
@@ -128,19 +128,19 @@ class TasksTable extends Table
         if (!empty($filter['due'])) {
             switch ($filter['due']) {
                 case 'today':
-                    $ret['conditions']['Tasks.deadline >='] = new Time('today');
-                    $ret['conditions']['Tasks.deadline <'] = (new Time('today'))->addDay();
+                    $ret['conditions']['Tasks.deadline >='] = new FrozenTime('today');
+                    $ret['conditions']['Tasks.deadline <'] = (new FrozenTime('today'))->addDay();
                     break;
                 case 'tomorrow':
-                    $ret['conditions']['Tasks.deadline >='] = new Time('tomorrow');
-                    $ret['conditions']['Tasks.deadline <'] = (new Time('tomorrow'))->addDay();
+                    $ret['conditions']['Tasks.deadline >='] = new FrozenTime('tomorrow');
+                    $ret['conditions']['Tasks.deadline <'] = (new FrozenTime('tomorrow'))->addDay();
                     break;
                 case 'week':
-                    $ret['conditions']['Tasks.deadline >='] = (new Time('today'))->startOfWeek();
-                    $ret['conditions']['Tasks.deadline <'] = (new Time('today'))->startOfWeek()->addWeek();
+                    $ret['conditions']['Tasks.deadline >='] = (new FrozenTime('today'))->startOfWeek();
+                    $ret['conditions']['Tasks.deadline <'] = (new FrozenTime('today'))->startOfWeek()->addWeek();
                     break;
                 case 'morethan2days':
-                    $ret['conditions']['Tasks.deadline >='] = (new Time('tomorrow'))->addDay();
+                    $ret['conditions']['Tasks.deadline >='] = (new FrozenTime('tomorrow'))->addDay();
                     break;
                 case 'empty':
                     $ret['conditions']['Tasks.deadline IS'] = null;
@@ -160,7 +160,7 @@ class TasksTable extends Table
         } else {
             $ret['conditions'][]['OR'] = [
                 'Tasks.completed IS' => null,
-                'Tasks.completed >=' => (new Time('today'))->subDays(8),
+                'Tasks.completed >=' => (new FrozenTime('today'))->subDays(8),
             ];
         }
 

@@ -26,7 +26,7 @@ if ($expense) {
                 'parameters' => ['class' => 'left-align'],
                 'html' => $this->Html->link(
                     __d('lil_expenses', 'Add Payment'),
-                    ['plugin' => 'LilExpenses', 'controller' => 'Payments', 'action' => 'add',
+                    ['plugin' => 'LilExpenses', 'controller' => 'Payments', 'action' => 'edit',
                      '?' => ['expense' => $expense->id, 'amount' => $expense->total],
                     ],
                     ['id' => 'add-payment']

@@ -26,16 +26,6 @@ class ItemsController extends AppController
     }
 
     /**
-     * Add method
-     *
-     * @return void Redirects on successful add, renders view otherwise.
-     */
-    public function add()
-    {
-        $this->setAction('edit');
-    }
-
-    /**
      * Edit method
      *
      * @param string|null $id Item id.

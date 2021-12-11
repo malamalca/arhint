@@ -412,4 +412,8 @@ return [
         'appTitle' => 'ARHINT',
     ],
 
+    'DebugKit' => [
+        'ignoreAuthorization' => true,
+    ],
+
 ];

@@ -104,18 +104,19 @@ class InvoicesCountersTable extends Table
      * @param array $options Options array
      * @return \Cake\ORM\Query
      */
-    public function findInvoicesList(Query $query, array $options)
+    /*public function findInvoicesList(Query $query, array $options)
     {
         $invoicesTypes = (array)Configure::read('LilInvoices.invoiceDocTypes');
 
         $query->where(['doc_type IN' => $invoicesTypes]);
 
         $query->formatResults(function ($results) {
-            return $results->combine('id', 'title');
+            return $results
+                ->combine('id', 'title');
         });
 
         return $query;
-    }
+    }*/
 
     /**
      * findDefaultCounter method

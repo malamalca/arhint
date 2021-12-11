@@ -1,5 +1,5 @@
 <?php
-use Cake\I18n\Time;
+use Cake\I18n\FrozenTime;
 
 $editForm = [
     'title_for_layout' =>
@@ -50,7 +50,7 @@ $editForm = [
                             'text' => __d('lil_projects', 'Started') . ':',
                             'class' => 'active',
                         ],
-                        'default' => new Time(),
+                        'default' => new FrozenTime(),
                     ],
                 ],
             ],

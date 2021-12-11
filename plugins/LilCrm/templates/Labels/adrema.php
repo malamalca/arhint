@@ -87,7 +87,7 @@
                             [
                                 'plugin' => 'LilCrm',
                                 'controller' => 'Labels',
-                                'action' => 'addAddress',
+                                'action' => 'edit',
                                 '?' => ['adrema' => $adremaId],
                             ]
                         )
@@ -153,7 +153,7 @@
     if (!$adremas) {
         echo __d('lil_crm', 'No adremas found. Please {0}.', $this->Html->link(
             __d('lil_crm', 'add new adrema'),
-            ['controller' => 'adremas', 'action' => 'add']
+            ['controller' => 'adremas', 'action' => 'edit']
         ));
     } else {
         echo $this->Lil->form($label_select, 'LilCrm.Labels.adrema');

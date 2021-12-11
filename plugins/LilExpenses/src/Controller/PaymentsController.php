@@ -66,18 +66,6 @@ class PaymentsController extends AppController
     }
 
     /**
-     * Add method
-     *
-     * @return \Cake\Http\Response|null
-     */
-    public function add()
-    {
-        $ret = $this->setAction('edit');
-
-        return $ret;
-    }
-
-    /**
      * Edit method
      *
      * @param string|null $id Payment id.

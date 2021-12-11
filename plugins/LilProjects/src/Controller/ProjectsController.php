@@ -139,6 +139,7 @@ class ProjectsController extends AppController
             $users = TableRegistry::getTableLocator()->get('Users')->find()
                 ->select(['id', 'name'])
                 ->where(['id IN' => $userIds])
+                ->all()
                 ->combine('id', function ($entity) {
                     return $entity;
                 })
@@ -160,16 +161,6 @@ class ProjectsController extends AppController
             ->toArray();
 
         $this->set(compact('project', 'logs', 'users', 'composites', 'projectsStatuses', 'workDuration'));
-    }
-
-    /**
-     * Add method
-     *
-     * @return \Cake\Http\Response|void Redirects on successful add, renders view otherwise.
-     */
-    public function add()
-    {
-        $this->setAction('edit');
     }
 
     /**

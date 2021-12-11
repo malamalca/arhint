@@ -26,6 +26,7 @@ class ProjectsTablePolicy
 
             $projectsList = $ProjectsUsersTable->find()
                 ->where(['user_id' => $user->id])
+                ->all()
                 ->combine('project_id', 'user_id')
                 ->toArray();
 

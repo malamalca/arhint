@@ -112,16 +112,6 @@ class LabelsController extends AppController
     }
 
     /**
-     * addAddress method
-     *
-     * @return void
-     */
-    public function addAddress()
-    {
-        $this->setAction('editAddress');
-    }
-
-    /**
      * Edit method
      *
      * @param  string|null $id Address id.

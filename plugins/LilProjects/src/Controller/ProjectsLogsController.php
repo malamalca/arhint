@@ -14,16 +14,6 @@ use Cake\ORM\TableRegistry;
 class ProjectsLogsController extends AppController
 {
     /**
-     * Add method
-     *
-     * @return void
-     */
-    public function add()
-    {
-        $this->setAction('edit');
-    }
-
-    /**
      * Edit method
      *
      * @param string|null $id Projects Log id.

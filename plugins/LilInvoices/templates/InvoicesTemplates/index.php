@@ -9,7 +9,7 @@ $templatesIndex = [
             'url' => [
                 'plugin' => 'LilInvoices',
                 'controller' => 'InvoicesTemplates',
-                'action' => 'add',
+                'action' => 'edit',
             ],
         ],
     ],

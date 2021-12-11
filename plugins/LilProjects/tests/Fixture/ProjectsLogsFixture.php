@@ -9,28 +9,6 @@ use Cake\TestSuite\Fixture\TestFixture;
 class ProjectsLogsFixture extends TestFixture
 {
     /**
-     * Fields
-     *
-     * @var array
-     */
-    // @codingStandardsIgnoreStart
-    public $fields = [
-        'id' => ['type' => 'uuid', 'length' => null, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null],
-        'project_id' => ['type' => 'uuid', 'length' => null, 'null' => true, 'default' => null, 'comment' => '', 'precision' => null],
-        'user_id' => ['type' => 'uuid', 'length' => null, 'null' => true, 'default' => null, 'comment' => '', 'precision' => null],
-        'descript' => ['type' => 'text', 'length' => null, 'null' => true, 'default' => null, 'collate' => 'utf8mb4_unicode_ci', 'comment' => '', 'precision' => null],
-        'created' => ['type' => 'datetime', 'length' => null, 'null' => true, 'default' => null, 'comment' => '', 'precision' => null],
-        'modified' => ['type' => 'datetime', 'length' => null, 'null' => true, 'default' => null, 'comment' => '', 'precision' => null],
-        '_constraints' => [
-            'primary' => ['type' => 'primary', 'columns' => ['id'], 'length' => []],
-        ],
-        '_options' => [
-            'engine' => 'InnoDB',
-            'collation' => 'utf8mb4_unicode_ci'
-        ],
-    ];
-    // @codingStandardsIgnoreEnd
-    /**
      * Init method
      *
      * @return void

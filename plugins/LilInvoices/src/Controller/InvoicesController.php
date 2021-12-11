@@ -34,7 +34,7 @@ class InvoicesController extends AppController
         parent::beforeFilter($event);
 
         if (!empty($this->Security)) {
-            if (in_array($this->getRequest()->getParam('action'), ['add', 'edit', 'editPreview'])) {
+            if (in_array($this->getRequest()->getParam('action'), ['edit', 'editPreview'])) {
                 $this->Security->setConfig(
                     'unlockedFields',
                     ['invoices_taxes', 'invoices_items', 'receiver', 'buyer', 'issuer']
@@ -144,6 +144,7 @@ class InvoicesController extends AppController
             if (!empty($projectsIds)) {
                 $projects = $ProjectsTable->find()
                     ->where(['id IN' => $projectsIds])
+                    ->all()
                     ->combine('id', function ($entity) {
                         return $entity;
                     })
@@ -196,21 +197,6 @@ class InvoicesController extends AppController
         $currentCounter = $invoice->invoices_counter->id;
 
         $this->set(compact('invoice', 'counters', 'links', 'currentCounter'));
-
-        return null;
-    }
-
-    /**
-     * Add method
-     *
-     * @return \Cake\Http\Response|null
-     */
-    public function add()
-    {
-        if (!$this->getRequest()->getQuery('counter')) {
-            throw new NotFoundException(__d('lil_invoices', 'Counter does not exist.'));
-        }
-        $this->setAction('edit');
 
         return null;
     }

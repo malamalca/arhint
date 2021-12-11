@@ -17,8 +17,7 @@ class TasksFoldersTableTest extends TestCase
      * @var array
      */
     public $fixtures = [
-        'plugin.lil_tasks.tasks_folders',
-        'plugin.lil_tasks.owners'
+        'plugin.LilTasks.TasksFolders',
     ];
 
     /**
@@ -26,7 +25,7 @@ class TasksFoldersTableTest extends TestCase
      *
      * @return void
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $config = TableRegistry::exists('TasksFolders') ? [] : ['className' => 'LilTasks\Model\Table\TasksFoldersTable'];
@@ -38,7 +37,7 @@ class TasksFoldersTableTest extends TestCase
      *
      * @return void
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         unset($this->TasksFolders);
 

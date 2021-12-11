@@ -41,7 +41,7 @@ $invoiceView = [
                     'url' => [
                         'plugin' => 'LilInvoices',
                         'controller' => 'invoicesAttachments',
-                        'action' => 'add',
+                        'action' => 'edit',
                         $invoice->id,
                     ],
                     'params' => [
@@ -54,8 +54,9 @@ $invoiceView = [
                     'url' => [
                         'plugin' => 'LilInvoices',
                         'controller' => 'invoicesAttachments',
-                        'action' => 'scan',
+                        'action' => 'add',
                         $invoice->id,
+                        'scan'
                     ],
                     'params' => [
                         'id' => 'AttachScan',

@@ -17,18 +17,11 @@
             <directory>plugins/LilCrm/tests/TestCase/</directory>
             <directory>plugins/LilExpenses/tests/TestCase/</directory>
             <directory>plugins/LilInvoices/tests/TestCase/</directory>
+            <directory>plugins/LilProjects/tests/TestCase/</directory>
+            <directory>plugins/LilTasks/tests/TestCase/</directory>
         </testsuite>
         <!-- Add plugin test suites here. -->
     </testsuites>
-
-    <!-- Setup a listener for fixtures -->
-    <listeners>
-        <listener class="Cake\TestSuite\Fixture\FixtureInjector">
-            <arguments>
-                <object class="Cake\TestSuite\Fixture\FixtureManager"/>
-            </arguments>
-        </listener>
-    </listeners>
 
     <!-- Ignore vendor tests in code coverage reports -->
     <filter>
@@ -40,4 +33,8 @@
             </exclude>
         </whitelist>
     </filter>
+
+    <extensions>
+        <extension class="\Cake\TestSuite\Fixture\PHPUnitExtension" />
+    </extensions>
 </phpunit>

@@ -219,6 +219,7 @@ class ProjectsTable extends Table
                 return $query
                     ->where(['active' => true])
                     ->order(['no DESC', 'title'])
+                    ->all()
                     ->combine('id', function ($entity) {
                         return $entity;
                     })

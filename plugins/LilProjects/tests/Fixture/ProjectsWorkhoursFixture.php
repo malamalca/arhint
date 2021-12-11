@@ -9,30 +9,6 @@ use Cake\TestSuite\Fixture\TestFixture;
 class ProjectsWorkhoursFixture extends TestFixture
 {
     /**
-     * Fields
-     *
-     * @var array
-     */
-    // @codingStandardsIgnoreStart
-    public $fields = [
-        'id' => ['type' => 'uuid', 'length' => null, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null],
-        'project_id' => ['type' => 'uuid', 'length' => null, 'null' => true, 'default' => null, 'comment' => '', 'precision' => null],
-        'user_id' => ['type' => 'uuid', 'length' => null, 'null' => true, 'default' => null, 'comment' => '', 'precision' => null],
-        'started' => ['type' => 'datetime', 'length' => null, 'null' => true, 'default' => null, 'comment' => '', 'precision' => null],
-        'duration' => ['type' => 'integer', 'length' => 11, 'unsigned' => false, 'null' => false, 'default' => '0', 'comment' => '', 'precision' => null, 'autoIncrement' => null],
-        'created' => ['type' => 'datetime', 'length' => null, 'null' => true, 'default' => null, 'comment' => '', 'precision' => null],
-        'modified' => ['type' => 'datetime', 'length' => null, 'null' => true, 'default' => null, 'comment' => '', 'precision' => null],
-        '_constraints' => [
-            'primary' => ['type' => 'primary', 'columns' => ['id'], 'length' => []],
-        ],
-        '_options' => [
-            'engine' => 'InnoDB',
-            'collation' => 'utf8_unicode_ci'
-        ],
-    ];
-    // @codingStandardsIgnoreEnd
-
-    /**
      * Records
      *
      * @var array

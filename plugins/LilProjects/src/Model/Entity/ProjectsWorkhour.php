@@ -11,10 +11,10 @@ use Cake\ORM\Entity;
  * @property string $id
  * @property string $project_id
  * @property string $user_id
- * @property \Cake\I18n\Time $started
+ * @property \Cake\I18n\FrozenTime $started
  * @property int $duration
- * @property \Cake\I18n\Time $created
- * @property \Cake\I18n\Time $modified
+ * @property \Cake\I18n\FrozenTime $created
+ * @property \Cake\I18n\FrozenTime $modified
  *
  * @property \LilProjects\Model\Entity\Project $project
  * @property \LilProjects\Model\Entity\User $user

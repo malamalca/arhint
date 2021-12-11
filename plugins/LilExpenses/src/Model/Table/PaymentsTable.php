@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace LilExpenses\Model\Table;
 
-use Cake\I18n\Time;
+use Cake\I18n\FrozenTime;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
@@ -127,15 +127,15 @@ class PaymentsTable extends Table
                 };
             }
             if ($filter['span'] == 'fromto') {
-                $start = Time::parseDateTime($filter['start'], 'yyyy-MM-dd');
+                $start = FrozenTime::parseDateTime($filter['start'], 'yyyy-MM-dd');
                 if (!isset($filter['start']) || empty($start)) {
-                    $start = Time::parseDateTime(date('Y') . '-01-01', 'yyyy-MM-dd');
+                    $start = FrozenTime::parseDateTime(date('Y') . '-01-01', 'yyyy-MM-dd');
                 }
                 $filter['start'] = $ret['conditions']['Payments.dat_happened >='] = $start->i18nFormat('yyyy-MM-dd');
 
-                $end = Time::parseDateTime($filter['end'], 'yyyy-MM-dd');
+                $end = FrozenTime::parseDateTime($filter['end'], 'yyyy-MM-dd');
                 if (!isset($filter['end']) || empty($end)) {
-                    $end = Time::now();
+                    $end = FrozenTime::now();
                 }
                 $filter['end'] = $ret['conditions']['Payments.dat_happened <='] = $end->i18nFormat('yyyy-MM-dd');
             }

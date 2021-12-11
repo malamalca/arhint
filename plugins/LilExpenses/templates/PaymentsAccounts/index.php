@@ -8,7 +8,7 @@
                 'url' => [
                     'plugin' => 'LilExpenses',
                     'controller' => 'PaymentsAccounts',
-                    'action' => 'add',
+                    'action' => 'edit',
                 ],
             ],
         ],

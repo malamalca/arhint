@@ -36,16 +36,6 @@ class ProjectsCompositesController extends AppController
     }
 
     /**
-     * Add method
-     *
-     * @return \Cake\Http\Response|null|void Redirects on successful add, renders view otherwise.
-     */
-    public function add()
-    {
-        $this->setAction('edit');
-    }
-
-    /**
      * Edit method
      *
      * @param string|null $id Projects Composite id.

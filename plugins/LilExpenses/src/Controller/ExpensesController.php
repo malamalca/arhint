@@ -101,18 +101,6 @@ class ExpensesController extends AppController
     }
 
     /**
-     * Add method
-     *
-     * @return \Cake\Http\Response|null
-     */
-    public function add()
-    {
-        $ret = $this->setAction('edit');
-
-        return $ret;
-    }
-
-    /**
      * Edit method
      *
      * @param string|null $id Expense id.
@@ -206,6 +194,7 @@ class ExpensesController extends AppController
             $counters = $this->Authorization->applyScope($InvoicesCounters->find(), 'index')
                 ->where(['active' => true])
                 ->order(['kind', 'title'])
+                ->all()
                 ->combine('id', function ($entity) {
                     return $entity;
                 })

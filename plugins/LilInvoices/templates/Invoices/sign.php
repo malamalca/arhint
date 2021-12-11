@@ -1,5 +1,5 @@
 <?php
-use Cake\I18n\Time;
+use Cake\I18n\FrozenTime;
 use Cake\Routing\Router;
 
 $this->set('head_for_layout', false);
@@ -73,7 +73,7 @@ $invoice_preview = [
                                     'text' => __d('lil_invoices', 'Datetime') . ':',
                                     'class' => 'active',
                                 ],
-                                'default' => (new Time())->toDatetimeString(),
+                                'default' => (new FrozenTime())->toDatetimeString(),
                                 'readonly' => !$this->getCurrentUser()->hasRole('root'),
                             ],
                         ],

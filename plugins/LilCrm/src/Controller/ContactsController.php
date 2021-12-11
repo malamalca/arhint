@@ -97,18 +97,6 @@ class ContactsController extends AppController
     }
 
     /**
-     * Add method.
-     *
-     * @return mixed
-     */
-    public function add()
-    {
-        $ret = $this->setAction('edit');
-
-        return $ret;
-    }
-
-    /**
      * Edit method.
      *
      * @param  string|null $id Contact id.
@@ -259,6 +247,7 @@ class ContactsController extends AppController
                         ->where($conditions)
                         ->order('title')
                         ->limit(50)
+                        ->all()
                         ->combine('id', 'title')
                         ->toArray();
 

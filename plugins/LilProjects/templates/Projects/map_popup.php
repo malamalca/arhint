@@ -25,7 +25,7 @@
 
     $projectView['panels']['logs']['table']['body']['rows'][] = ['columns' => [
         h($currentUser['name']),
-        $this->Form->create(null, ['url' => ['controller' => 'ProjectsLogs', 'action' => 'add', 'project' => $project->id], 'id' => 'add-log']) .
+        $this->Form->create(null, ['url' => ['controller' => 'ProjectsLogs', 'action' => 'edit', 'project' => $project->id], 'id' => 'add-log']) .
         $this->Form->control('descript', ['type' => 'textarea', 'label' => false, 'rows' => 2]) .
         $this->Form->button(__d('lil_projects', 'Save'), ['id' => 'submit-logs-btn']) .
         $this->Form->end(),

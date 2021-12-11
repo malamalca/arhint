@@ -11,16 +11,6 @@ namespace LilCrm\Controller;
 class ContactsAccountsController extends AppController
 {
     /**
-     * Add method
-     *
-     * @return void
-     */
-    public function add()
-    {
-        $this->setAction('edit');
-    }
-
-    /**
      * Edit method
      *
      * @param  string|null $id Contacts Account id.
@@ -35,7 +25,7 @@ class ContactsAccountsController extends AppController
         } else {
             /** @var \LilCrm\Model\Entity\ContactsAccount $account */
             $account = $this->ContactsAccounts->newEmptyEntity();
-            $account->contact_id = $this->getRequest()->getParam('pass.0');
+            $account->contact_id = $this->getRequest()->getQuery('contact');
         }
 
         $this->Authorization->authorize($account);

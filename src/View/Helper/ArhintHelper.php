@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace App\View\Helper;
 
-use Cake\I18n\Date;
 use Cake\I18n\FrozenDate;
 use Cake\View\Helper;
 
@@ -117,10 +116,10 @@ class ArhintHelper extends Helper
         }
 
         $ret = [];
-        $aDate = new Date('2017-01-01'); // that was a sunday
+        $aDate = new FrozenDate('2017-01-01'); // that was a sunday
         for ($i = 0; $i < 7; $i++) {
             $ret[] = $aDate->i18nFormat($_format);
-            $aDate->addDays(1);
+            $aDate = $aDate->addDays(1);
         }
 
         return $ret;
@@ -229,7 +228,7 @@ class ArhintHelper extends Helper
     /**
      * Output date in format for css component
      *
-     * @param \Cake\I18n\Date|\Cake\I18n\FrozenDate $day Specified day.
+     * @param \Cake\I18n\FrozenDate $day Specified day.
      * @param bool $isHoliday Marks date as holiday. Defaults to false.
      * @return string
      */
@@ -252,7 +251,7 @@ class ArhintHelper extends Helper
     /**
      * Output hour
      *
-     * @param \Cake\I18n\Time|\Cake\I18n\FrozenTime|string $time Specified time.
+     * @param \Cake\I18n\FrozenTime|string $time Specified time.
      * @return string
      */
     public function timePanel($time)

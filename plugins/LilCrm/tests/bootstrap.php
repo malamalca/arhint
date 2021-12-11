@@ -1,6 +1,8 @@
 <?php
 declare(strict_types=1);
 
+use Migrations\TestSuite\Migrator;
+
 /**
  * Test suite bootstrap for LilCrm.
  *
@@ -24,3 +26,13 @@ unset($findRoot);
 
 chdir($root);
 require $root . '/config/bootstrap.php';
+
+$migrator = new Migrator();
+
+// Simple setup for with no plugins
+$migrator->run();
+
+// Run migrations for multiple plugins
+$migrator->run(['plugin' => 'LilCrm']);
+
+

@@ -1,6 +1,5 @@
 <?php
 use Cake\Core\Configure;
-use Cake\I18n\Time;
 use Cake\Routing\Router;
 
 $userForm = [

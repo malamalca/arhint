@@ -520,7 +520,7 @@ echo $this->Lil->form($invoiceEdit, 'LilInvoices.Invoices.edit');
             addContactDialogUrl: "<?= Router::url([
                 'plugin' => 'LilCrm',
                 'controller' => 'Contacts',
-                'action' => 'add',
+                'action' => 'edit',
                 '?' => ['kind' => '__kind__'],
             ]); ?>",
 

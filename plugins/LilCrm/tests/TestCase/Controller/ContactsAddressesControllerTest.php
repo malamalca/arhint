@@ -56,18 +56,18 @@ class ContactsAddressesControllerTest extends IntegrationTestCase
             'country' => 'Slovenia',
         ];
 
-        $this->post('/lil_crm/ContactsAddresses/add/' . COMPANY_FIRST, $data);
+        $this->post('/lil_crm/ContactsAddresses/edit?contact=' . COMPANY_FIRST, $data);
         $this->assertResponseError();
 
         $this->login(USER_ADMIN);
 
-        $this->get('/lil_crm/ContactsAddresses/add/' . COMPANY_FIRST);
+        $this->get('/lil_crm/ContactsAddresses/edit?contact=' . COMPANY_FIRST);
         $this->assertResponseOk();
 
         $this->enableCsrfToken();
         $this->enableSecurityToken();
 
-        $this->post(['plugin' => 'LilCrm', 'controller' => 'ContactsAddresses', 'action' => 'add', COMPANY_FIRST], $data);
+        $this->post(['plugin' => 'LilCrm', 'controller' => 'ContactsAddresses', 'action' => 'edit', '?' => ['contact' => COMPANY_FIRST]], $data);
         $this->assertRedirectContains('/lil_crm/contacts/view/' . COMPANY_FIRST);
     }
 

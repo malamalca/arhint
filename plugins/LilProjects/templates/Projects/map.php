@@ -9,7 +9,7 @@
                 'title' => __d('lil_projects', 'Add'),
                 'visible' => true,
                 'url' => [
-                    'action' => 'add',
+                    'action' => 'edit',
                 ],
             ],
         ],

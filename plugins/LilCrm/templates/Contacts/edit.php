@@ -173,7 +173,7 @@ if ($contact->kind != 'T') {
                         [
                             'plugin' => 'LilCrm',
                             'controller' => 'Contacts',
-                            'action' => 'add',
+                            'action' => 'edit',
                             '?' => ['kind' => 'C'],
                         ],
                         [

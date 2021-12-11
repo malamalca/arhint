@@ -10,7 +10,7 @@ $this->set('main_menu', [
         'url' => [
             'plugin' => 'LilCrm',
             'controller' => 'Contacts',
-            'action' => 'add',
+            'action' => 'edit',
             'kind' => $filter['kind'],
         ],
     ],
@@ -25,7 +25,7 @@ $contactsIndex = [
             'url' => [
                 'plugin' => 'LilCrm',
                 'controller' => 'Contacts',
-                'action' => 'add',
+                'action' => 'edit',
                 '?' => ['kind' => $filter['kind']],
             ],
         ],

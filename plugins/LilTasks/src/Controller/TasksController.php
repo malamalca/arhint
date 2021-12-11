@@ -5,7 +5,7 @@ namespace LilTasks\Controller;
 
 use Cake\Cache\Cache;
 use Cake\Http\Exception\NotFoundException;
-use Cake\I18n\Time;
+use Cake\I18n\FrozenTime;
 use Cake\ORM\TableRegistry;
 
 /**
@@ -52,18 +52,6 @@ class TasksController extends AppController
         $users = $UsersTable->fetchForCompany($this->getCurrentUser()->get('company_id'));
 
         $this->set(compact('tasks', 'filter', 'users'));
-    }
-
-    /**
-     * Add method
-     *
-     * @return mixed Redirects on successful add, renders view otherwise.
-     */
-    public function add()
-    {
-        $ret = $this->setAction('edit');
-
-        return $ret;
     }
 
     /**
@@ -119,7 +107,7 @@ class TasksController extends AppController
     {
         $task = $this->Tasks->get($id);
         if (empty($task->completed)) {
-            $task->completed = new Time();
+            $task->completed = new FrozenTime();
         } else {
             $task->completed = null;
         }

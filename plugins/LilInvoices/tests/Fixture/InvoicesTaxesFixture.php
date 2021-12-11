@@ -9,30 +9,6 @@ use Cake\TestSuite\Fixture\TestFixture;
 class InvoicesTaxesFixture extends TestFixture
 {
     /**
-     * Fields
-     *
-     * @var array
-     */
-    // @codingStandardsIgnoreStart
-    public $fields = [
-        'id' => ['type' => 'integer', 'length' => 11, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => '', 'autoIncrement' => true, 'precision' => null],
-        'invoice_id' => ['type' => 'uuid', 'length' => null, 'null' => true, 'default' => null, 'comment' => '', 'precision' => null],
-        'vat_id' => ['type' => 'uuid', 'length' => null, 'null' => true, 'default' => null, 'comment' => '', 'precision' => null],
-        'vat_title' => ['type' => 'string', 'length' => 255, 'null' => true, 'default' => null, 'comment' => '', 'precision' => null, 'fixed' => null],
-        'vat_percent' => ['type' => 'decimal', 'length' => 15, 'precision' => 2, 'unsigned' => false, 'null' => false, 'default' => '0.00', 'comment' => ''],
-        'base' => ['type' => 'decimal', 'length' => 15, 'precision' => 2, 'unsigned' => false, 'null' => false, 'default' => '0.00', 'comment' => ''],
-        'created' => ['type' => 'datetime', 'length' => null, 'null' => true, 'default' => null, 'comment' => '', 'precision' => null],
-        'modified' => ['type' => 'datetime', 'length' => null, 'null' => true, 'default' => null, 'comment' => '', 'precision' => null],
-        '_constraints' => [
-            'primary' => ['type' => 'primary', 'columns' => ['id'], 'length' => []],
-        ],
-        '_options' => [
-            'engine' => 'InnoDB', 'collation' => 'utf8_general_ci'
-        ],
-    ];
-    // @codingStandardsIgnoreEnd
-
-    /**
      * Records
      *
      * @var array

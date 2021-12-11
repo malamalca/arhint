@@ -104,17 +104,6 @@ class InvoicesAttachmentsController extends AppController
     /**
      * Add method
      *
-     * @param  string|null $invoiceId Invoices id.
-     * @return \Cake\Http\Response|null
-     */
-    public function scan($invoiceId = null)
-    {
-        return $this->setAction('add', $invoiceId, 'scan');
-    }
-
-    /**
-     * Add method
-     *
      * @param string $invoiceId Invoices id.
      * @param string $mode Mode - 'upload' or 'scan'
      * @return \Cake\Http\Response|null

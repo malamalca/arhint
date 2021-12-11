@@ -42,18 +42,6 @@ class InvoicesCountersController extends AppController
     }
 
     /**
-     * Add method
-     *
-     * @return \Cake\Http\Response|null
-     */
-    public function add()
-    {
-        $this->setAction('edit');
-
-        return null;
-    }
-
-    /**
      * Edit method
      *
      * @param string|null $id Invoices Counter id.

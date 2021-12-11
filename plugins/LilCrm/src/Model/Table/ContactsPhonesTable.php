@@ -31,9 +31,8 @@ class ContactsPhonesTable extends Table
         $this->setDisplayField('no');
         $this->setPrimaryKey('id');
         $this->addBehavior('Timestamp');
-        $this->belongsTo('Contacts', [
+        $this->belongsTo('LilCrm.Contacts', [
             'foreignKey' => 'contact_id',
-            'className' => 'LilCrm\Model\Table\ContactsTable',
             'joinType' => 'INNER',
         ]);
     }

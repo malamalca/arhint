@@ -12,8 +12,8 @@ use Cake\ORM\Entity;
  * @property string $owner_id
  * @property \LilTasks\Model\Entity\Owner $owner
  * @property string $title
- * @property \Cake\I18n\Time $created
- * @property \Cake\I18n\Time $modified
+ * @property \Cake\I18n\FrozenTime $created
+ * @property \Cake\I18n\FrozenTime $modified
  */
 class TasksFolder extends Entity
 {

@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace LilProjects\Controller;
 
 use Cake\Event\EventInterface;
-use Cake\I18n\Time;
+use Cake\I18n\FrozenTime;
 
 /**
  * ProjectsWorkhours Controller
@@ -54,16 +54,6 @@ class ProjectsWorkhoursController extends AppController
     }
 
     /**
-     * Add method
-     *
-     * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
-     */
-    public function add()
-    {
-        return $this->setAction('edit');
-    }
-
-    /**
      * Edit method
      *
      * @param string|null $id Projects Workhour id.
@@ -97,6 +87,7 @@ class ProjectsWorkhoursController extends AppController
         $projects = $this->Authorization->applyScope($this->ProjectsWorkhours->Projects->find(), 'index')
             ->where(['active' => true])
             ->order(['no DESC', 'title'])
+            ->all()
             ->combine('id', function ($entity) {
                 return $entity;
             })
@@ -150,9 +141,9 @@ class ProjectsWorkhoursController extends AppController
                     !empty($registration['project_id']) &&
                     isset($projects[$registration['project_id']]) &&
                     !empty($registration['datetime']) &&
-                    Time::parseDateTime($registration['datetime'], 'yyyy-MM-dd HH:mm:ss')
+                    FrozenTime::parseDateTime($registration['datetime'], 'yyyy-MM-dd HH:mm:ss')
                 ) {
-                    $registrationTime = Time::parseDateTime($registration['datetime'], 'yyyy-MM-dd HH:mm:ss');
+                    $registrationTime = FrozenTime::parseDateTime($registration['datetime'], 'yyyy-MM-dd HH:mm:ss');
 
                     if ($registration['mode'] == 'start') {
                         $workhour = $this->ProjectsWorkhours->newEmptyEntity();

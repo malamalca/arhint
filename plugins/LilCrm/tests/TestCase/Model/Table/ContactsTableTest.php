@@ -30,7 +30,7 @@ class ContactsTableTest extends TestCase
     {
         parent::setUp();
         $config = TableRegistry::exists('Contacts') ? [] : ['className' => 'LilCrm\Model\Table\ContactsTable'];
-        $this->Contacts = TableRegistry::getTableLocator()->get('Contacts', $config);
+        $this->Contacts = TableRegistry::getTableLocator()->get('LilCrm.Contacts', $config);
     }
 
     /**
@@ -53,6 +53,7 @@ class ContactsTableTest extends TestCase
     public function testTitleGeneration()
     {
         $contact = $this->Contacts->get('49a90cfe-fda4-49ca-b7ec-ca50783b5a45');
+
         $contact->name = 'Different';
         $contact->surname = 'Title';
         $contact = $this->Contacts->save($contact);

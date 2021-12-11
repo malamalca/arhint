@@ -45,7 +45,7 @@ $index = [
             'title' => __d('lil_projects', 'Add'),
             'visible' => $this->getCurrentUser()->hasRole('admin'),
             'url' => [
-                'action' => 'add',
+                'action' => 'edit',
             ],
         ],
     ],
@@ -108,7 +108,7 @@ foreach ($projects as $project) {
         ],
         'actions' => $this->Html->link(
             '<i class="material-icons chevron">chat_bubble_outline</i>',
-            ['controller' => 'ProjectsLogs', 'action' => 'add', '?' => ['project' => $project->id]],
+            ['controller' => 'ProjectsLogs', 'action' => 'edit', '?' => ['project' => $project->id]],
             ['escape' => false, 'class' => 'btn btn-small btn-floating add-projects-log']
         ),
         'log' => [

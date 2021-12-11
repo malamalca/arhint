@@ -1,6 +1,4 @@
 <?php
-    use Cake\I18n\Date;
-
     $pageTitle = __('User data for {0}', h($user->name));
 
     $userView = [

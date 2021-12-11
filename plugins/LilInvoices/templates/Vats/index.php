@@ -9,7 +9,7 @@ $vatIndex = [
             'url' => [
                 'plugin' => 'LilInvoices',
                 'controller' => 'vats',
-                'action' => 'add',
+                'action' => 'edit',
             ],
         ],
     ],

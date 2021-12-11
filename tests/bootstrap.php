@@ -17,6 +17,7 @@ declare(strict_types=1);
 
 use Cake\Core\Configure;
 use Cake\Datasource\ConnectionManager;
+use Migrations\TestSuite\Migrator;
 
 /**
  * Test runner bootstrap.
@@ -53,3 +54,13 @@ session_id('cli');
 
 define('USER_ADMIN', '048acacf-d87c-4088-a3a7-4bab30f6a040');
 define('COMPANY_FIRST', '8155426d-2302-4fa5-97de-e33cefb9d704');
+
+$migrator = new Migrator();
+$migrator->runMany([
+    ['connection' => 'test'],
+    ['plugin' => 'LilCrm'],
+    ['plugin' => 'LilInvoices'],
+    ['plugin' => 'LilExpenses'],
+    ['plugin' => 'LilProjects'],
+    ['plugin' => 'LilTasks'],
+]);

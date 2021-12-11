@@ -17,8 +17,8 @@ use Cake\ORM\Entity;
  * @property string $ico
  * @property string $colorize
  * @property bool $active
- * @property \Cake\I18n\Time $created
- * @property \Cake\I18n\Time $modified
+ * @property \Cake\I18n\FrozenTime $created
+ * @property \Cake\I18n\FrozenTime $modified
  *
  * @property \LilProjects\Model\Entity\Owner $owner
  */

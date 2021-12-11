@@ -60,7 +60,7 @@ class LilInvoicesSigner
     /**
      * Set signature datetime.
      *
-     * @param \Cake\I18n\Time|\Cake\I18n\FrozenTime $time Signature datetime.
+     * @param \Cake\I18n\FrozenTime $time Signature datetime.
      * @return bool
      */
     public function setSignatureDatetime($time)

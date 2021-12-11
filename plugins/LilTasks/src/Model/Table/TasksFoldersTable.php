@@ -121,6 +121,7 @@ class TasksFoldersTable extends Table
         $conditions = ['TasksFolders.owner_id' => $ownerId];
         $ret = $this->find()
             ->where($conditions)
+            ->all()
             ->combine('id', function ($entity) {
                 return $entity;
             })

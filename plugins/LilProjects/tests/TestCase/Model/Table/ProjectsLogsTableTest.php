@@ -27,7 +27,6 @@ class ProjectsLogsTableTest extends TestCase
     public $fixtures = [
         'plugin.LilProjects.ProjectsLogs',
         'plugin.LilProjects.Projects',
-        'plugin.LilProjects.Users',
     ];
 
     /**

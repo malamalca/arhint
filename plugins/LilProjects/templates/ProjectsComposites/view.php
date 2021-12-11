@@ -38,7 +38,7 @@
                 'visible' => true,
                 'url' => [
                     'controller' => 'ProjectsCompMaterials',
-                    'action' => 'add',
+                    'action' => 'edit',
                     '?' => ['composite' => $composite->id],
                 ],
                 'params' => ['id' => 'add-composite-material'],
@@ -120,7 +120,7 @@
             "newItemTemplate": <?= json_encode($itemTemplate) ?>,
             "addFromLibraryUrl": "<?= Router::url(['controller' => 'ProjectsMaterials', 'action' => 'lookup']) ?>",
             "editUrl": "<?= Router::url(['controller' => 'ProjectsCompMaterials', 'action' => 'edit', '__id__', 'material', '_ext' => 'aht']) ?>",
-            "addUrl": "<?= Router::url(['controller' => 'ProjectsCompMaterials', 'action' => 'add', 'material', '_ext' => 'aht', '?' => ['composite' => $composite->id, 'order' => '__order__']]) ?>",
+            "addUrl": "<?= Router::url(['controller' => 'ProjectsCompMaterials', 'action' => 'edit', 'material', '_ext' => 'aht', '?' => ['composite' => $composite->id, 'order' => '__order__']]) ?>",
             "reorderUrl": "<?= Router::url(['controller' => 'ProjectsCompMaterials', 'action' => 'reorder', '__id__', '__position__']) ?>",
             "deleteUrl": "<?= Router::url(['controller' => 'ProjectsCompMaterials', 'action' => 'delete', '__id__']) ?>",
         });

@@ -1,6 +1,6 @@
 <?php
 
-use Cake\I18n\Date;
+use Cake\I18n\FrozenDate;
 use Cake\Routing\Router;
 
 $linkUnfinished = $this->Html->link(
@@ -114,7 +114,7 @@ foreach ($importedPayments as $p) {
             'columns' => [
                 'date' => [
                     'parameters' => ['class' => 'center-align'],
-                    'html' => (string)Date::parse($p['date']),
+                    'html' => (string)FrozenDate::parse($p['date']),
                 ],
                 'amount' => [
                     'parameters' => ['class' => 'right-align' . ($p['kind'] == 'DBIT' ? ' negative' : '')],
@@ -172,7 +172,7 @@ echo $this->Lil->panels($report, 'LilExpenses.Expenses.import_sepa_step2');
 
         var urlPayExpense = "<?= Router::url([
             'controller' => 'Payments',
-            'action' => 'add',
+            'action' => 'edit',
             '?' => [
                 'sepa_id' => '__id__',
                 'date' => '__date__',
@@ -182,7 +182,7 @@ echo $this->Lil->panels($report, 'LilExpenses.Expenses.import_sepa_step2');
 
         var urlAddExpense = "<?= Router::url([
             'controller' => 'Expenses',
-            'action' => 'add',
+            'action' => 'edit',
             '?' => ['sepa_id' => '__id__', 'date' => '__date__', 'total' => '__amount__', 'title' => '__descript__'],
             ]) ?>";
 

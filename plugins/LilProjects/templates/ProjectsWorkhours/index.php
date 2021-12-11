@@ -23,7 +23,7 @@ $tableIndex = [
             'url' => [
                 'plugin' => 'LilProjects',
                 'controller' => 'ProjectsWorkhours',
-                'action' => 'add',
+                'action' => 'edit',
                 '?' => ['project' => $project->id ?: null],
             ],
         ],

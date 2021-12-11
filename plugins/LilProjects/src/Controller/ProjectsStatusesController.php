@@ -31,18 +31,6 @@ class ProjectsStatusesController extends AppController
     }
 
     /**
-     * Add method
-     *
-     * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
-     */
-    public function add()
-    {
-        $this->setAction('edit');
-
-        return null;
-    }
-
-    /**
      * Edit method
      *
      * @param string|null $id Projects Status id.

@@ -16,7 +16,7 @@ class ProjectsControllerTest extends IntegrationTestCase
      * @var array
      */
     public $fixtures = [
-        'plugin.lil_projects.projects',
+        'Projects' => 'plugin.LilProjects.Projects',
     ];
 
     /**

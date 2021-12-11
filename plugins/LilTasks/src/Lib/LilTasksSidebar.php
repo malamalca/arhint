@@ -42,6 +42,7 @@ class LilTasksSidebar
                     ->select(['id', 'folder_id', 'count' => $q->func()->count('*')])
                     ->andWhere($params['conditions'])
                     ->group('Tasks.folder_id')
+                    ->all()
                     ->combine('folder_id', 'count')
                     ->toArray();
 

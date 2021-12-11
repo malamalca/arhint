@@ -76,6 +76,7 @@ class LilInvoicesEvents implements EventListenerInterface
         $counters = $countersQuery
             ->select(['id', 'title', 'kind', 'active'])
             ->order(['kind', 'title'])
+            ->all()
             ->combine('id', function ($entity) {
                 return $entity;
             })
@@ -163,7 +164,7 @@ class LilInvoicesEvents implements EventListenerInterface
                             'url' => [
                                 'plugin' => 'LilInvoices',
                                 'controller' => 'Invoices',
-                                'action' => 'add',
+                                'action' => 'edit',
                                 '?' => [
                                     'counter' => $counter->id,
                                     'project' => $view->getRequest()->getParam('pass.0'),

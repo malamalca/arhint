@@ -1,6 +1,6 @@
 <?php
 
-use Cake\I18n\Time;
+use Cake\I18n\FrozenTime;
 
 $payment_edit = [
     'title_for_layout' => $expense->id ? __d('lil_expenses', 'Edit Expense') : __d('lil_expenses', 'Add Expense'),
@@ -53,7 +53,7 @@ $payment_edit = [
                     'type' => 'lil-date',
                     'label' => __d('lil_expenses', 'Date') . ':',
                     'error' => __d('lil_expenses', 'Date is required.'),
-                    'default' => $this->getRequest()->getQuery('date') ?: new Time(),
+                    'default' => $this->getRequest()->getQuery('date') ?: new FrozenTime(),
                 ]],
             ],
             'month' => [

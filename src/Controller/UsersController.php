@@ -214,18 +214,6 @@ class UsersController extends AppController
     }
 
     /**
-     * Add method
-     *
-     * @return \Cake\Http\Response|void|null
-     */
-    public function add()
-    {
-        $this->setAction('edit');
-
-        return null;
-    }
-
-    /**
      * Edit method
      *
      * @param string|null $id User id.

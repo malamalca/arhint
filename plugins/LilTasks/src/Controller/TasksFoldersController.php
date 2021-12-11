@@ -13,18 +13,6 @@ use Cake\Cache\Cache;
 class TasksFoldersController extends AppController
 {
     /**
-     * Add method
-     *
-     * @return mixed Redirects on successful add, renders view otherwise.
-     */
-    public function add()
-    {
-        $ret = $this->setAction('edit');
-
-        return $ret;
-    }
-
-    /**
      * Edit method
      *
      * @param string|null $id Task id.

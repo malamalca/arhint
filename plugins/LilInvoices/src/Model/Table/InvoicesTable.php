@@ -78,9 +78,8 @@ class InvoicesTable extends Table
             'className' => 'LilInvoices\Model\Table\InvoicesLinksTable',
             'dependant' => true,
         ]);
-        $this->hasMany('InvoicesAttachments', [
+        $this->hasMany('LilInvoices.InvoicesAttachments', [
             'foreignKey' => 'invoice_id',
-            'className' => 'LilInvoices\Model\Table\InvoicesAttachmentsTable',
             'dependant' => true,
         ]);
 

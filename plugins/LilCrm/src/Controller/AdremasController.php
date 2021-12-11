@@ -11,26 +11,6 @@ namespace LilCrm\Controller;
 class AdremasController extends AppController
 {
     /**
-     * Add method
-     *
-     * @return void
-     */
-    public function add()
-    {
-        $this->setAction('edit');
-    }
-
-    /**
-     * Duplicate method
-     *
-     * @return void
-     */
-    public function duplicate()
-    {
-        $this->setAction('edit');
-    }
-
-    /**
      * Edit method
      *
      * @param  string|null $id Adrema id.

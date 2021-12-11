@@ -23,6 +23,7 @@ class AdremasControllerTest extends TestCase
         'Adremas' => 'plugin.LilCrm.Adremas',
         'AdremasContacts' => 'plugin.LilCrm.AdremasContacts',
         'Users' => 'app.Users',
+        'InvoicesCounters' => 'plugin.LilInvoices.InvoicesCounters',
     ];
 
     public function setUp(): void
@@ -54,18 +55,18 @@ class AdremasControllerTest extends TestCase
             'title' => 'Test Add Adrema',
         ];
 
-        $this->post('/lil_crm/adremas/add', $data);
+        $this->post('/lil_crm/adremas/edit', $data);
         $this->assertResponseError();
 
         $this->login(USER_ADMIN);
 
-        $this->get('/lil_crm/adremas/add');
+        $this->get('/lil_crm/adremas/edit');
         $this->assertResponseOk();
 
         $this->enableCsrfToken();
         $this->enableSecurityToken();
 
-        $this->post(['plugin' => 'LilCrm', 'controller' => 'Adremas', 'action' => 'add'], $data);
+        $this->post(['plugin' => 'LilCrm', 'controller' => 'Adremas', 'action' => 'edit'], $data);
         $this->assertRedirectContains('/lil_crm/labels/adrema/');
     }
 

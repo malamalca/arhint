@@ -17,9 +17,7 @@ class TasksTableTest extends TestCase
      * @var array
      */
     public $fixtures = [
-        'plugin.lil_tasks.tasks',
-        'plugin.lil_tasks.owners',
-        'plugin.lil_tasks.foreigns'
+        'plugin.LilTasks.Tasks',
     ];
 
     /**
@@ -27,7 +25,7 @@ class TasksTableTest extends TestCase
      *
      * @return void
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $config = TableRegistry::exists('Tasks') ? [] : ['className' => 'LilTasks\Model\Table\TasksTable'];
@@ -39,7 +37,7 @@ class TasksTableTest extends TestCase
      *
      * @return void
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         unset($this->Tasks);
 

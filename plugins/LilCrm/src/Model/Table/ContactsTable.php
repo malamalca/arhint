@@ -50,27 +50,23 @@ class ContactsTable extends Table
             'className' => 'LilCrm\Model\Table\ContactsTable',
         ]);
 
-        $this->hasMany('ContactsEmails', [
+        $this->hasMany('LilCrm.ContactsEmails', [
             'dependent' => true,
             'sort' => 'ContactsEmails.primary DESC, ContactsEmails.email',
-            'className' => 'LilCrm\Model\Table\ContactsEmailsTable',
         ]);
 
-        $this->hasMany('ContactsPhones', [
+        $this->hasMany('LilCrm.ContactsPhones', [
             'dependent' => true,
-            'className' => 'LilCrm\Model\Table\ContactsPhonesTable',
         ]);
 
-        $this->hasMany('ContactsAddresses', [
+        $this->hasMany('LilCrm.ContactsAddresses', [
             'dependent' => true,
             'sort' => 'ContactsAddresses.primary DESC, ContactsAddresses.street',
-            'className' => 'LilCrm\Model\Table\ContactsAddressesTable',
         ]);
 
-        $this->hasMany('ContactsAccounts', [
+        $this->hasMany('LilCrm.ContactsAccounts', [
             'dependent' => true,
             'sort' => 'ContactsAccounts.primary DESC, ContactsAccounts.bic',
-            'className' => 'LilCrm\Model\Table\ContactsAccountsTable',
         ]);
 
         $this->hasOne('PrimaryAddresses', [

@@ -54,18 +54,18 @@ class ContactsAccountsControllerTest extends IntegrationTestCase
             'bic' => 'KREKSI22',
         ];
 
-        $this->post('/lil_crm/ContactsAccounts/add/' . COMPANY_FIRST, $data);
+        $this->post('/lil_crm/ContactsAccounts/edit?contact=' . COMPANY_FIRST, $data);
         $this->assertResponseError();
 
         $this->login(USER_ADMIN);
 
-        $this->get('/lil_crm/ContactsAccounts/add/' . COMPANY_FIRST);
+        $this->get('/lil_crm/ContactsAccounts/edit?contact=' . COMPANY_FIRST);
         $this->assertResponseOk();
 
         $this->enableCsrfToken();
         $this->enableSecurityToken();
 
-        $this->post(['plugin' => 'LilCrm', 'controller' => 'ContactsAccounts', 'action' => 'add', COMPANY_FIRST], $data);
+        $this->post(['plugin' => 'LilCrm', 'controller' => 'ContactsAccounts', 'action' => 'edit', '?' => ['contact' => COMPANY_FIRST]], $data);
         $this->assertRedirectContains('/lil_crm/contacts/view/' . COMPANY_FIRST);
     }
 

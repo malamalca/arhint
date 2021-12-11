@@ -9,7 +9,7 @@ $tableIndex = [
             'url' => [
                 'plugin' => 'LilProjects',
                 'controller' => 'ProjectsStatuses',
-                'action' => 'add',
+                'action' => 'edit',
             ],
         ],
     ],

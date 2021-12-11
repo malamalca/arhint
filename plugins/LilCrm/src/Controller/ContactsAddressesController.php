@@ -14,17 +14,6 @@ use Cake\Http\Exception\NotFoundException;
 class ContactsAddressesController extends AppController
 {
     /**
-     * Add method
-     *
-     * @param  string $contactId Contact uuid.
-     * @return void
-     */
-    public function add($contactId)
-    {
-        $this->setAction('edit');
-    }
-
-    /**
      * Edit method
      *
      * @param  string|null $id Contacts Address id.
@@ -39,7 +28,7 @@ class ContactsAddressesController extends AppController
         } else {
             /** @var \LilCrm\Model\Entity\ContactsAddress $address */
             $address = $this->ContactsAddresses->newEmptyEntity();
-            $address->contact_id = $this->getRequest()->getParam('pass.0');
+            $address->contact_id = $this->getRequest()->getQuery('contact');
         }
 
         $this->Authorization->authorize($address);

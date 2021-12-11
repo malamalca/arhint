@@ -33,7 +33,7 @@
                 'visible' => true,
                 'url' => [
                     'controller' => 'ProjectsLogs',
-                    'action' => 'add',
+                    'action' => 'edit',
                     '?' => ['project' => $project->id],
                 ],
                 'params' => ['id' => 'add-projects-log'],
@@ -43,7 +43,7 @@
                 'visible' => true,
                 'url' => [
                     'controller' => 'ProjectsComposites',
-                    'action' => 'add',
+                    'action' => 'edit',
                     '?' => ['project' => $project->id],
                 ],
                 'params' => ['id' => 'add-projects-composite'],
@@ -93,7 +93,7 @@
 
     /*$projectView['panels']['logs']['table']['body']['rows'][] = ['columns' => [
         h($this->getCurrentUser()->get('name')),
-        $this->Form->create(null, ['url' => ['controller' => 'ProjectsLogs', 'action' => 'add', '?' => ['project' => $project->id]], 'id' => 'add-log']) .
+        $this->Form->create(null, ['url' => ['controller' => 'ProjectsLogs', 'action' => 'edit', '?' => ['project' => $project->id]], 'id' => 'add-log']) .
         $this->Form->textarea('descript', ['rows' => 2]) .
         $this->Form->button(__d('lil_projects', 'Save'), ['id' => 'submit-logs-btn']) .
         $this->Form->end()

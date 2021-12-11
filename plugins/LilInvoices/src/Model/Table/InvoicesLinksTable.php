@@ -123,6 +123,7 @@ class InvoicesLinksTable extends Table
         $ret = [];
         $links = $this->find()
             ->where(['invoice_id' => $id])
+            ->all()
             ->combine('link_id', 'invoice_id')
             ->toArray();
 

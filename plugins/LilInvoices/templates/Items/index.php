@@ -8,7 +8,7 @@ $itemsIndex = [
             'visible' => $this->getCurrentUser()->hasRole('editor'),
             'url' => [
                 'controller' => 'Items',
-                'action' => 'add',
+                'action' => 'edit',
             ],
         ],
     ],

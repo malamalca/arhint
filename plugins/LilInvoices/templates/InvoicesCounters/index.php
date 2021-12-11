@@ -45,7 +45,7 @@ $countersIndex = [
             'url' => [
                 'plugin' => 'LilInvoices',
                 'controller' => 'InvoicesCounters',
-                'action' => 'add',
+                'action' => 'edit',
             ],
         ],
     ],

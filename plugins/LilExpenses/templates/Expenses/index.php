@@ -110,7 +110,7 @@ $admin_index = [
         'add' => [
             'title' => __d('lil_expenses', 'Add'),
             'visible' => true,
-            'url' => ['action' => 'add'],
+            'url' => ['action' => 'edit'],
         ],
     ],
     'actions' => ['lines' => [$hiddenControls, $popupKind, $popupMonths, $popupYears]],

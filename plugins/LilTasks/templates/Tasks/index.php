@@ -1,5 +1,5 @@
 <?php
-use Cake\I18n\Time;
+use Cake\I18n\FrozenTime;
 
 $folderTitle = null;
 $folderId = $this->getRequest()->getQuery('folder');
@@ -19,7 +19,7 @@ $tasksIndex = [
             'url' => [
                 'plugin' => 'LilTasks',
                 'controller' => 'Tasks',
-                'action' => 'add',
+                'action' => 'edit',
                 '?' => array_merge(
                     ['folder' => $this->getRequest()->getQuery('folder'), null],
                     ['due' => $this->getRequest()->getQuery('due', null)]
@@ -38,7 +38,7 @@ $tasksIndex = [
             'url' => [
                 'plugin' => 'LilTasks',
                 'controller' => 'TasksFolders',
-                'action' => 'add',
+                'action' => 'edit',
             ],
             'params' => [
                 'onclick' => $this->getRequest()->is('mobile') ? null : sprintf(
@@ -107,7 +107,7 @@ foreach ($tasks as $task) {
 
         if ($this->Time->isToday($task->deadline)) {
             $dueSpanClass = 'lil-task-duetoday';
-            if ($task->deadline->ne(new Time('today')) && $this->Time->isPast($task->deadline)) {
+            if ($task->deadline->ne(new FrozenTime('today')) && $this->Time->isPast($task->deadline)) {
                 $dueSpanClass = 'lil-task-overdue';
             } else {
                 // time equals 00:00:00

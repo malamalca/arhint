@@ -20,7 +20,7 @@ use Cake\Http\BaseApplication;
 use Cake\Http\Middleware\CsrfProtectionMiddleware;
 use Cake\Http\Middleware\EncryptedCookieMiddleware;
 use Cake\Http\MiddlewareQueue;
-use Cake\I18n\Time;
+use Cake\I18n\FrozenTime;
 use Cake\Routing\Middleware\AssetMiddleware;
 use Cake\Routing\Middleware\RoutingMiddleware;
 use Cake\Routing\Route\DashedRoute;
@@ -66,7 +66,7 @@ class Application extends BaseApplication implements
          */
         if (Configure::read('debug') && (PHP_SAPI != 'cli')) {
             try {
-                $this->addPlugin('DebugKit');
+                //$this->addPlugin('DebugKit');
             } catch (MissingPluginException $e) {
                 // Do not halt if the plugin is missing
             }
@@ -156,17 +156,6 @@ class Application extends BaseApplication implements
             ],
         ]));
 
-        if (Configure::read('debug')) {
-            // Disable authz for debugkit
-            $middlewareQueue->add(function ($req, $res, $next) {
-                if ($req->getParam('plugin') === 'DebugKit') {
-                    $req->getAttribute('authorization')->skipAuthorization();
-                }
-
-                return $next($req, $res);
-            });
-        }
-
         return $middlewareQueue;
     }
 
@@ -235,7 +224,7 @@ class Application extends BaseApplication implements
             'fields' => $fields,
             'cookie' => [
                 'name' => self::REMEMBERME_COOKIE_NAME,
-                'expires' => (new Time())->addDays(30),
+                'expires' => (new FrozenTime())->addDays(30),
             ],
             'loginUrl' => Router::url('/users/login'),
         ]);

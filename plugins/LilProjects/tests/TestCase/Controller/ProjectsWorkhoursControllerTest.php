@@ -16,9 +16,7 @@ class ProjectsWorkhoursControllerTest extends IntegrationTestCase
      * @var array
      */
     public $fixtures = [
-        'plugin.lil_projects.projects_workhours',
-        'plugin.lil_projects.projects',
-        'plugin.lil_projects.users',
+        'plugin.LilProjects.ProjectsWorkhours',
     ];
 
     /**

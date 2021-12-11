@@ -9,28 +9,6 @@ use Cake\TestSuite\Fixture\TestFixture;
 class VatsFixture extends TestFixture
 {
     /**
-     * Fields
-     *
-     * @var array
-     */
-    // @codingStandardsIgnoreStart
-    public $fields = [
-        'id' => ['type' => 'uuid', 'length' => null, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null],
-        'owner_id' => ['type' => 'uuid', 'length' => null, 'null' => true, 'default' => null, 'comment' => '', 'precision' => null, 'fixed' => null],
-        'descript' => ['type' => 'string', 'length' => 200, 'null' => true, 'default' => null, 'comment' => '', 'precision' => null, 'fixed' => null],
-        'percent' => ['type' => 'decimal', 'length' => 8, 'precision' => 1, 'unsigned' => false, 'null' => false, 'default' => '0.0', 'comment' => ''],
-        'created' => ['type' => 'datetime', 'length' => null, 'null' => true, 'default' => null, 'comment' => '', 'precision' => null],
-        'modified' => ['type' => 'datetime', 'length' => null, 'null' => true, 'default' => null, 'comment' => '', 'precision' => null],
-        '_constraints' => [
-            'primary' => ['type' => 'primary', 'columns' => ['id'], 'length' => []],
-        ],
-        '_options' => [
-            'engine' => 'InnoDB', 'collation' => 'utf8_general_ci'
-        ],
-    ];
-    // @codingStandardsIgnoreEnd
-
-    /**
      * Records
      *
      * @var array
