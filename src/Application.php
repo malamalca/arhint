@@ -66,7 +66,7 @@ class Application extends BaseApplication implements
          */
         if (Configure::read('debug') && (PHP_SAPI != 'cli')) {
             try {
-                //$this->addPlugin('DebugKit');
+                $this->addPlugin('DebugKit');
             } catch (MissingPluginException $e) {
                 // Do not halt if the plugin is missing
             }
