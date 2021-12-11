@@ -275,9 +275,13 @@ $invoiceView = [
                     'label' => __d('lil_invoices', 'Approval date') . ':',
                     'text' => (string)$invoice->dat_approval,
                 ],
+                4 => empty($invoice->dat_sign) ? null : [
+                    'label' => __d('lil_invoices', 'Sign date') . ':',
+                    'text' => (string)$invoice->dat_sign,
+                ],
             ],
         ],
-        'project' => !Plugin::isLoaded('LilProjects') ? null : [
+        'project' => !Plugin::isLoaded('LilProjects') || empty($invoice->project_id) ? null : [
             'lines' => [
                 [
                     'label' => __d('lil_invoices', 'Project') . ':',
@@ -495,10 +499,9 @@ if ($invoice->isInvoice()) {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 // ATTACHMENTS
-$invoiceView['panels']['attachments_title'] = sprintf('<h3>%s</h3>', __d('lil_invoices', 'Attachments'));
-if (empty($invoice->invoices_attachments)) {
-    $invoiceView['panels']['attachments_empty'] = sprintf('<div class="hint">%s</div>', __d('lil_invoices', 'No attachments found.'));
-} else {
+
+if (!empty($invoice->invoices_attachments)) {
+    $invoiceView['panels']['attachments_title'] = sprintf('<h3>%s</h3>', __d('lil_invoices', 'Attachments'));
     $i = 0;
     foreach ($invoice->invoices_attachments as $atch) {
         $invoiceView['panels']['attachments_' . $atch->id] = sprintf(
@@ -548,10 +551,8 @@ if (empty($invoice->invoices_attachments)) {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 // LINKS
-$invoiceView['panels']['links_title'] = sprintf('<h3>%s</h3>', __d('lil_invoices', 'Linked Invoices'));
-if (empty($links)) {
-    $invoiceView['panels']['links_empty'] = sprintf('<div class="hint">%s</div>', __d('lil_invoices', 'No linked invoices found.'));
-} else {
+if (!empty($links)) {
+    $invoiceView['panels']['links_title'] = sprintf('<h3>%s</h3>', __d('lil_invoices', 'Linked Invoices'));
     $i = 0;
     foreach ($links as $link) {
         $invoiceView['panels']['links_' . $link->id] = sprintf(

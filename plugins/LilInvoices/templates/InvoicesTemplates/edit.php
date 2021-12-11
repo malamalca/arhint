@@ -49,6 +49,7 @@ $templateEdit = [
                             'header' => __d('lil_invoices', 'Header'),
                             'footer' => __d('lil_invoices', 'Footer'),
                         ],
+                        'default' => 'body'
                     ],
                 ],
             ],

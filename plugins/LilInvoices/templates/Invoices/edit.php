@@ -604,6 +604,8 @@ echo $this->Lil->form($invoiceEdit, 'LilInvoices.Invoices.edit');
             e.preventDefault();
             return false;
         });
+
+        $("#invoice-title").focus();
     });
 
 

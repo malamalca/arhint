@@ -1,8 +1,8 @@
 <?php
 if ($expense) {
     $paymentsTable = [
-        'pre' => '<div class="row"><div class="col l8 m12">',
-        'post' => '</div></div>',
+        'pre' => '<div style="padding-left: 0; padding-right: 0; width: 100%; max-width: 700px;">',
+        'post' => '</div>',
         'parameters' => [
             'width' => '700', 'cellspacing' => 0, 'cellpadding' => 0, 'id' => 'PaymentsList',
         ],
