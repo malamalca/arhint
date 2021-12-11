@@ -33,7 +33,7 @@ foreach ($vats as $vat) {
         'descript' => h($vat->descript),
         'percent' => [
             'parameters' => ['class' => 'right-align'],
-            'html' => $this->Number->precision($vat->percent, 1),
+            'html' => $this->Number->precision((float)$vat->percent, 1),
         ],
         'actions' => !$this->getCurrentUser()->hasRole('editor') ? '' : [
             'parameters' => ['class' => 'right-align'],

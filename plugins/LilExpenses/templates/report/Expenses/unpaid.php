@@ -102,7 +102,7 @@ function initUnpaidInvoicesTableFoot(&$target_table, $column_total, $Number = nu
                 ],
                 [
                     'parameters' => ['class' => 'right-align', 'width' => '14%'],
-                    'html' => $Number->precision($column_total, 2),
+                    'html' => $Number->precision((float)$column_total, 2),
                 ],
             ],
         ],

@@ -58,7 +58,9 @@ class LilInvoicesSidebar
         $invoices['items'] = [];
 
         // insert into sidebar right after welcome panel
-        Lil::insertIntoArray($sidebar, ['documents' => $invoices], ['after' => 'welcome']);
+        //Lil::insertIntoArray($sidebar, ['documents' => $invoices], ['after' => 'welcome']);
+
+        $sidebar['documents'] = $invoices;
 
         ////////////////////////////////////////////////////////////////////////////////////////
         if (empty($sidebar['documents']['items']['reports'])) {

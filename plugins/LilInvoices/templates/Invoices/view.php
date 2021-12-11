@@ -331,7 +331,7 @@ if ($invoice->isInvoice()) {
             'descript' => h($itm['descript']),
             'qty' => [
                 'parameters' => ['class' => 'right-align'],
-                'html' => $this->Number->precision($itm->qty, 2),
+                'html' => $this->Number->precision((float)$itm->qty, 2),
             ],
             'unit' => [
                 'html' => h($itm['unit']),
@@ -342,7 +342,7 @@ if ($invoice->isInvoice()) {
             ],
             'discount' => [
                 'parameters' => ['class' => 'right-align'],
-                'html' => $this->Number->precision($itm->discount, 1),
+                'html' => $this->Number->precision((float)$itm->discount, 1),
             ],
             'item_total' => [
                 'parameters' => ['class' => 'right-align'],
@@ -350,7 +350,7 @@ if ($invoice->isInvoice()) {
             ],
             'tax' => [
                 'parameters' => ['class' => 'right-align'],
-                'html' => $this->Number->precision($itm->vat_percent, 1),
+                'html' => $this->Number->precision((float)$itm->vat_percent, 1),
             ],
             'line_total' => [
                 'parameters' => ['class' => 'right-align'],
@@ -424,7 +424,7 @@ if ($invoice->isInvoice()) {
             'descript' => h($itm->vat_title),
             'percent' => [
                 'parameters' => ['class' => 'right-align'],
-                'html' => $this->Number->precision($itm->vat_percent, 1),
+                'html' => $this->Number->precision((float)$itm->vat_percent, 1),
             ],
             'base' => [
                 'parameters' => ['class' => 'right-align'],

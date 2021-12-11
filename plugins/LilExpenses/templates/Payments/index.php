@@ -206,16 +206,16 @@ if (!empty($payments)) {
             ]),
             'payment' => [
                 'parameters' => ['class' => $p->amount < 0 ? 'right-align negative' : 'right-align positive'],
-                'html' => $this->Number->precision($p->amount, 2),
+                'html' => $this->Number->precision((float)$p->amount, 2),
             ],
         ],
         ];
     }
 }
 $admin_index['table']['foot']['rows'][0]['columns']['recap']['html'] =
-    '<span>' . $this->Number->precision($total_positive, 2) . '</span>' .
+    '<span>' . $this->Number->precision((float)$total_positive, 2) . '</span>' .
     '<span> / </span>' .
-    '<span class="negative">' . $this->Number->precision($total_negative, 2) . '</span>';
+    '<span class="negative">' . $this->Number->precision((float)$total_negative, 2) . '</span>';
 
 echo $this->Lil->index($admin_index, 'LilExpenses.Payments.index');
 

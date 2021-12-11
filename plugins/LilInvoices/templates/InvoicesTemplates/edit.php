@@ -17,10 +17,9 @@ $templateEdit = [
         'lines' => [
             'form_start' => [
                 'method' => 'create',
-                'parameters' => ['model' => $template, ['type' => 'file']],
+                'parameters' => [$template, ['type' => 'file']],
             ],
             'id' => [
-                'class' => $this->Form,
                 'method' => 'hidden',
                 'parameters' => ['field' => 'id'],
             ],

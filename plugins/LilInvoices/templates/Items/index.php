@@ -43,12 +43,12 @@ foreach ($items as $item) {
         'descript' => h($item->descript),
         'qty' => [
             'parameters' => ['class' => 'right-align'],
-            'html' => $this->Number->precision($item->qty, 2),
+            'html' => $this->Number->precision((float)$item->qty, 2),
         ],
         'unit' => h($item->unit),
         'discount' => [
             'parameters' => ['class' => 'right-align'],
-            'html' => $this->Number->precision($item->discount, 1),
+            'html' => $this->Number->precision((float)$item->discount, 1),
         ],
         'price' => [
             'parameters' => ['class' => 'right-align'],

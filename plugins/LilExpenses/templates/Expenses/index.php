@@ -187,11 +187,11 @@ if (!empty($expenses)) {
 
             'net_total' => [
                 'parameters' => ['class' => $e->net_total < 0 ? 'right-align negative' : 'right-align positive'],
-                'html' => $this->Number->precision($e->net_total, 2),
+                'html' => $this->Number->precision((float)$e->net_total, 2),
             ],
             'total' => [
                 'parameters' => ['class' => $e->total < 0 ? 'right-align negative' : 'right-align positive'],
-                'html' => $this->Number->precision($e->total, 2),
+                'html' => $this->Number->precision((float)$e->total, 2),
             ],
         ],
         ];
@@ -200,7 +200,7 @@ if (!empty($expenses)) {
 
 $admin_index['table']['foot']['rows'][0]['columns']['net_total']['html'] = $this->Number->currency($netSaldo) .
     '<br />' .
-    $this->Number->precision($positive, 2) .
+    $this->Number->precision((float)$positive, 2) .
     '/<span class="negative">' .
     $this->Number->currency($negative) .
     '</span>';
