@@ -497,6 +497,7 @@ echo $this->Lil->form($invoiceEdit, 'LilInvoices.Invoices.edit');
     // constants for scripts
     var itemsAutocompleteUrl = "<?= Router::url(['controller' => 'Items', 'action' => 'autocomplete']) ?>";
     var vatLevels = <?= json_encode($vatLevels ?? []) ?>;
+    var pmtDays = <?= (int)$counter->pmt_days ?>;
 
     $(document).ready(function() {
         $("#invoice-tax-table").InvoiceTaxEditor({
@@ -530,8 +531,16 @@ echo $this->Lil->form($invoiceEdit, 'LilInvoices.Invoices.edit');
 
         $("#invoice-dat-issue").change(function(dateText, inst) {
             let dateVal = $(this).val();
+            let dateF = new Date(dateVal);
+
+            dateF.setDate(dateF.getDate()+7);
+
+            var day = ("0" + dateF.getDate()).slice(-2);
+            var month = ("0" + (dateF.getMonth() + 1)).slice(-2);
+            var dueDate = dateF.getFullYear() + "-" + (month) + "-" + (day);
+
             if ($('#invoice-dat-service').val() == "") $('#invoice-dat-service').val(dateVal);
-            if ($('#invoice-dat-expire').val() == "") $('#invoice-dat-expire').val(dateVal);
+            if ($('#invoice-dat-expire').val() == "") $('#invoice-dat-expire').val(dueDate);
         });
 
         // EditPreview Javascript Code

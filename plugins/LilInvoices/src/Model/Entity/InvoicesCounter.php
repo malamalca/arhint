@@ -17,6 +17,9 @@ use Cake\ORM\Entity;
  * @property int $counter
  * @property string|null $title
  * @property string|null $mask
+ * @property string|null $pmt_mod
+ * @property string|null $pmt_ref
+ * @property int|null $pmt_days
  * @property string|null $template_descript
  * @property string|null $tpl_header_id
  * @property string|null $tpl_body_id
