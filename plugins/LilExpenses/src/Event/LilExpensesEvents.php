@@ -184,12 +184,12 @@ class LilExpensesEvents implements EventListenerInterface
                 $expense->dat_happened = $invoice->dat_issue;
                 switch ((int)$counter->expense) {
                     case 0:
-                        $expense->net_total = abs($invoice->net_total);
-                        $expense->total = abs($invoice->total);
+                        $expense->net_total = abs((float)$invoice->net_total);
+                        $expense->total = abs((float)$invoice->total);
                         break;
                     case 1:
-                        $expense->net_total = -abs($invoice->net_total);
-                        $expense->total = -abs($invoice->total);
+                        $expense->net_total = -abs((float)$invoice->net_total);
+                        $expense->total = -abs((float)$invoice->total);
                         break;
                 }
 

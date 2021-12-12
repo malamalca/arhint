@@ -87,7 +87,7 @@
                             [
                                 'plugin' => 'LilCrm',
                                 'controller' => 'Labels',
-                                'action' => 'edit',
+                                'action' => 'editAddress',
                                 '?' => ['adrema' => $adremaId],
                             ]
                         )

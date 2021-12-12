@@ -102,7 +102,9 @@ class ContactsAccountsTable extends Table
         if (!$this->exists(['contact_id' => $entity->contact_id, 'primary' => true])) {
             $entity->primary = true;
         }
-        $entity->iban = str_replace(' ', '', $entity->iban);
+        if (!empty($entity->iban)) {
+            $entity->iban = str_replace(' ', '', $entity->iban);
+        }
 
         if (!empty($entity->bic) && empty($entity->bank)) {
             $banks = Configure::read('LilCrm.banks');

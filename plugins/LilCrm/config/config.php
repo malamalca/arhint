@@ -75,7 +75,6 @@ $config = [
         'margin' => ['left' => 0, 'top' => 0, 'right' => 0],
         'form' => [
             'zip' => [
-                'class' => 'LilForm',
                 'method' => 'control',
                 'parameters' => [
                     'field' => 'sprejemna_posta',
@@ -85,7 +84,6 @@ $config = [
                 ],
             ],
             'date' => [
-                'class' => 'LilForm',
                 'method' => 'control',
                 'parameters' => [
                     'field' => 'datum',
@@ -95,7 +93,6 @@ $config = [
                 ],
             ],
             'address2' => [
-                'class' => 'LilForm',
                 'method' => 'control',
                 'parameters' => [
                     'field' => 'podnaslov',
@@ -115,7 +112,6 @@ $config = [
         'margin' => ['left' => 0, 'top' => 0, 'right' => 0],
         'form' => [
             'start_row' => [
-                'class' => 'LilForm',
                 'method' => 'control',
                 'parameters' => [
                     'field' => 'start_row',
@@ -126,7 +122,6 @@ $config = [
                 ],
             ],
             'start_col' => [
-                'class' => 'LilForm',
                 'method' => 'control',
                 'parameters' => [
                     'field' => 'start_col',

@@ -117,6 +117,10 @@ $editAddressForm = [
                     ],
                 ],
             ],
+            'country_unlock' => [
+                'method' => 'unlockField',
+                'parameters' => ['country'],
+            ],
             'submit' => [
                 'method' => 'submit',
                 'parameters' => [
@@ -160,6 +164,8 @@ echo $this->Lil->form($editAddressForm, 'LilCrm.Labels.edit_address');
                         $('#contact-address-zip').val(item.zip).attr('readonly', true);
                         $('#contact-address-city').val(item.city).attr('readonly', true);
                         $('#contact-address-country').val(item.country).attr('readonly', true);
+
+                        M.updateTextFields();
                     }
                 }
             });
