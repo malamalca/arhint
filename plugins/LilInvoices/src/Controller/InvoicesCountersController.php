@@ -34,8 +34,6 @@ class InvoicesCountersController extends AppController
             ->contain($params['contain']);
 
         $counters = $this->paginate($query, ['limit' => 10]);
-        //dd($counters);
-
         $this->set(compact('counters', 'filter'));
 
         return null;
