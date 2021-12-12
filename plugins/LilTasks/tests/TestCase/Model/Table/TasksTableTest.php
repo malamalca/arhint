@@ -29,7 +29,7 @@ class TasksTableTest extends TestCase
     {
         parent::setUp();
         $config = TableRegistry::exists('Tasks') ? [] : ['className' => 'LilTasks\Model\Table\TasksTable'];
-        $this->Tasks = TableRegistry::get('Tasks', $config);
+        $this->Tasks = TableRegistry::getTableLocator()->get('Tasks', $config);
     }
 
     /**

@@ -27,7 +27,7 @@ class ProjectsCompositesController extends AppController
             'contain' => ['CompositesMaterials'],
         ]);
 
-        $ProjectsTable = TableRegistry::get('LilProjects.Projects');
+        $ProjectsTable = TableRegistry::getTableLocator()->get('LilProjects.Projects');
         $project = $ProjectsTable->get($composite->project_id);
 
         $this->Authorization->Authorize($composite);
@@ -115,7 +115,7 @@ class ProjectsCompositesController extends AppController
     public function export($projectId)
     {
         /** @var \LilProjects\Model\Entity\Project $project */
-        $project = TableRegistry::get('LilProjects.Projects')->get($projectId);
+        $project = TableRegistry::getTableLocator()->get('LilProjects.Projects')->get($projectId);
 
         $this->Authorization->Authorize($project, 'view');
 

@@ -26,7 +26,7 @@ class TasksController extends AppController
         $filter['user'] = $this->getCurrentUser()->get('id');
 
         /** @var \LilTasks\Model\Table\TasksFoldersTable $TasksFolders */
-        $TasksFolders = TableRegistry::get('LilTasks.TasksFolders');
+        $TasksFolders = TableRegistry::getTableLocator()->get('LilTasks.TasksFolders');
 
         $folders = $TasksFolders->listForOwner($this->getCurrentUser()->get('company_id'));
 
@@ -48,7 +48,7 @@ class TasksController extends AppController
             ->all();
 
         /** @var \App\Model\Table\UsersTable $UsersTable */
-        $UsersTable = TableRegistry::get('App.Users');
+        $UsersTable = TableRegistry::getTableLocator()->get('App.Users');
         $users = $UsersTable->fetchForCompany($this->getCurrentUser()->get('company_id'));
 
         $this->set(compact('tasks', 'filter', 'users'));
@@ -86,12 +86,12 @@ class TasksController extends AppController
         }
 
         /** @var \LilTasks\Model\Table\TasksFoldersTable $TasksFolders */
-        $TasksFolders = TableRegistry::get('LilTasks.TasksFolders');
+        $TasksFolders = TableRegistry::getTableLocator()->get('LilTasks.TasksFolders');
 
         $folders = $TasksFolders->listForOwner($this->getCurrentUser()->get('company_id'));
 
         /** @var \App\Model\Table\UsersTable $UsersTable */
-        $UsersTable = TableRegistry::get('App.Users');
+        $UsersTable = TableRegistry::getTableLocator()->get('App.Users');
         $users = $UsersTable->fetchForCompany($this->getCurrentUser()->get('company_id'));
 
         $this->set(compact('task', 'folders', 'users'));

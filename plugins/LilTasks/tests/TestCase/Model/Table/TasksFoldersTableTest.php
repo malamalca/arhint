@@ -29,7 +29,7 @@ class TasksFoldersTableTest extends TestCase
     {
         parent::setUp();
         $config = TableRegistry::exists('TasksFolders') ? [] : ['className' => 'LilTasks\Model\Table\TasksFoldersTable'];
-        $this->TasksFolders = TableRegistry::get('TasksFolders', $config);
+        $this->TasksFolders = TableRegistry::getTableLocator()->get('TasksFolders', $config);
     }
 
     /**

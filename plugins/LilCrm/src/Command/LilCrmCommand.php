@@ -28,16 +28,16 @@ class LilCrmCommand extends Command
     {
         switch ($args->getArgumentAt(0)) {
             case 'deleteStaleRecords':
-                $ContactsEmails = TableRegistry::get('LilCrm.ContactsEmails');
+                $ContactsEmails = TableRegistry::getTableLocator()->get('LilCrm.ContactsEmails');
                 $this->deleteStaleRecords($ContactsEmails);
 
-                $ContactsAddresses = TableRegistry::get('LilCrm.ContactsAddresses');
+                $ContactsAddresses = TableRegistry::getTableLocator()->get('LilCrm.ContactsAddresses');
                 $this->deleteStaleRecords($ContactsAddresses);
 
-                $ContactsPhones = TableRegistry::get('LilCrm.ContactsPhones');
+                $ContactsPhones = TableRegistry::getTableLocator()->get('LilCrm.ContactsPhones');
                 $this->deleteStaleRecords($ContactsPhones);
 
-                $ContactsAccounts = TableRegistry::get('LilCrm.ContactsAccounts');
+                $ContactsAccounts = TableRegistry::getTableLocator()->get('LilCrm.ContactsAccounts');
                 $this->deleteStaleRecords($ContactsAccounts);
 
                 break;
@@ -57,13 +57,13 @@ class LilCrmCommand extends Command
      */
     public function findDuplicates(ConsoleIo $io)
     {
-        $ContactsTable = TableRegistry::get('LilCrm.Contacts');
-        $ContactsAccountsTable = TableRegistry::get('LilCrm.ContactsAccounts');
-        $ContactsAddressesTable = TableRegistry::get('LilCrm.ContactsAddresses');
-        $ContactsPhonesTable = TableRegistry::get('LilCrm.ContactsPhones');
-        $ContactsEmailsTable = TableRegistry::get('LilCrm.ContactsEmails');
+        $ContactsTable = TableRegistry::getTableLocator()->get('LilCrm.Contacts');
+        $ContactsAccountsTable = TableRegistry::getTableLocator()->get('LilCrm.ContactsAccounts');
+        $ContactsAddressesTable = TableRegistry::getTableLocator()->get('LilCrm.ContactsAddresses');
+        $ContactsPhonesTable = TableRegistry::getTableLocator()->get('LilCrm.ContactsPhones');
+        $ContactsEmailsTable = TableRegistry::getTableLocator()->get('LilCrm.ContactsEmails');
 
-        $InvoicesClients = TableRegistry::get('LilInvoices.InvoicesClients');
+        $InvoicesClients = TableRegistry::getTableLocator()->get('LilInvoices.InvoicesClients');
 
         $q = $ContactsTable->find();
 
@@ -176,7 +176,7 @@ class LilCrmCommand extends Command
      */
     private function deleteStaleRecords($class)
     {
-        $Contacts = TableRegistry::get('LilCrm.Contacts');
+        $Contacts = TableRegistry::getTableLocator()->get('LilCrm.Contacts');
 
         $q = $class->find();
 

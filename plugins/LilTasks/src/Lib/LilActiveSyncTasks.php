@@ -90,7 +90,7 @@ class LilActiveSyncTasks implements Syncroton_Data_IData
     public function getEntry(Syncroton_Model_SyncCollection $collection, $serverId)
     {
         /** @var \LilTasks\Model\Table\TasksTable $Tasks */
-        $Tasks = TableRegistry::get('LilTasks.Tasks');
+        $Tasks = TableRegistry::getTableLocator()->get('LilTasks.Tasks');
         $task = $Tasks->get($serverId, ['contain' => []]);
         if (!$task->owner_id == $this->_ownerId) {
             return false;
@@ -130,7 +130,7 @@ class LilActiveSyncTasks implements Syncroton_Data_IData
     {
         $folderId = $_folderId instanceof Syncroton_Model_IFolder ? $_folderId->serverId : $_folderId;
 
-        $Tasks = TableRegistry::get('LilTasks.Tasks');
+        $Tasks = TableRegistry::getTableLocator()->get('LilTasks.Tasks');
         $task = $Tasks->newEmptyEntity();
         $task->owner_id = $this->_ownerId;
         $task->folder_id = $folderId;
@@ -169,7 +169,7 @@ class LilActiveSyncTasks implements Syncroton_Data_IData
     {
         $folderId = $_folderId instanceof Syncroton_Model_IFolder ? $_folderId->serverId : $_folderId;
 
-        $Tasks = TableRegistry::get('LilTasks.Tasks');
+        $Tasks = TableRegistry::getTableLocator()->get('LilTasks.Tasks');
         $task = $Tasks->get($_serverId, ['contain' => []]);
         if (empty($task)) {
             $task = $Tasks->newEmptyEntity();
@@ -214,7 +214,7 @@ class LilActiveSyncTasks implements Syncroton_Data_IData
      */
     public function deleteEntry($_folderId, $_serverId, $_collectionData)
     {
-        $Tasks = TableRegistry::get('LilTasks.Tasks');
+        $Tasks = TableRegistry::getTableLocator()->get('LilTasks.Tasks');
         $task = $Tasks->get($_serverId);
         if (!$task->owner_id == $this->_ownerId) {
             throw new Syncroton_Exception_NotFound("entry $serverId not found");
@@ -234,7 +234,7 @@ class LilActiveSyncTasks implements Syncroton_Data_IData
      */
     public function getFolder($id)
     {
-        $TasksFolder = TableRegistry::get('LilTasks.TasksFolders');
+        $TasksFolder = TableRegistry::getTableLocator()->get('LilTasks.TasksFolders');
         $folder = $TasksFolder->get($id);
 
         if (!$folder) {
@@ -262,7 +262,7 @@ class LilActiveSyncTasks implements Syncroton_Data_IData
             throw new Syncroton_Exception_UnexpectedValue();
         }
 
-        $TasksFolder = TableRegistry::get('LilTasks.TasksFolders');
+        $TasksFolder = TableRegistry::getTableLocator()->get('LilTasks.TasksFolders');
         $f = $TasksFolder->newEntity();
         $f->owner_id = $this->_ownerId;
         $f->title = $folder->displayName;
@@ -285,7 +285,7 @@ class LilActiveSyncTasks implements Syncroton_Data_IData
         $folderId = $_folder->serverId;
         Log::write('debug', 'Folder id: ' . $folderId);
 
-        $TasksFolders = TableRegistry::get('LilTasks.TasksFolders');
+        $TasksFolders = TableRegistry::getTableLocator()->get('LilTasks.TasksFolders');
         $folder = $TasksFolders->get($folderId);
         if (empty($folder)) {
             $folder = $TasksFolders->newEmptyEntity();
@@ -316,7 +316,7 @@ class LilActiveSyncTasks implements Syncroton_Data_IData
     {
         $folderId = $_folderId instanceof Syncroton_Model_IFolder ? $_folderId->serverId : $_folderId;
 
-        $TasksFolders = TableRegistry::get('LilTasks.TasksFolders');
+        $TasksFolders = TableRegistry::getTableLocator()->get('LilTasks.TasksFolders');
         $folder = $TasksFolders->get($folderId);
         if (!$folder->owner_id == $this->_ownerId) {
             throw new Syncroton_Exception_NotFound(sprintf('folder %s not found', $_folderId));
@@ -351,7 +351,7 @@ class LilActiveSyncTasks implements Syncroton_Data_IData
     {
         $result = [];
 
-        $TasksFolders = TableRegistry::get('LilTasks.TasksFolders');
+        $TasksFolders = TableRegistry::getTableLocator()->get('LilTasks.TasksFolders');
         $query = $TasksFolders->find();
         $query
             ->select(['id', 'title'])
@@ -383,7 +383,7 @@ class LilActiveSyncTasks implements Syncroton_Data_IData
      */
     public function getChangedFolders(DateTime $startTimeStamp, DateTime $endTimeStamp)
     {
-        $TasksFolders = TableRegistry::get('LilTasks.TasksFolders');
+        $TasksFolders = TableRegistry::getTableLocator()->get('LilTasks.TasksFolders');
         $query = $TasksFolders->find();
 
         $query
@@ -425,7 +425,7 @@ class LilActiveSyncTasks implements Syncroton_Data_IData
     {
         $folderId = $_folderId instanceof Syncroton_Model_IFolder ? $_folderId->id : $_folderId;
 
-        $Tasks = TableRegistry::get('LilTasks.Tasks');
+        $Tasks = TableRegistry::getTableLocator()->get('LilTasks.Tasks');
         $ids = array_keys(
             $Tasks->find('list')
             ->select(['id'])
@@ -457,7 +457,7 @@ class LilActiveSyncTasks implements Syncroton_Data_IData
     ) {
         $folderId = $_folderId instanceof Syncroton_Model_IFolder ? $_folderId->id : $_folderId;
 
-        $Tasks = TableRegistry::get('LilTasks.Tasks');
+        $Tasks = TableRegistry::getTableLocator()->get('LilTasks.Tasks');
         $query = $Tasks->find('list');
 
         $query

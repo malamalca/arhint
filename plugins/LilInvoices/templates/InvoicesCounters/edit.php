@@ -123,6 +123,21 @@ $counter_edit = [
             ],
             'fs_templates_end' => '</fieldset>',
 
+            'fs_pmt_start' => '<fieldset id="payment-templates">',
+            'lg_pmt' => sprintf('<legend>%s</legend>', __d('lil_invoices', 'Payment Templates')),
+            'pmt_days' => [
+                'method' => 'control',
+                'parameters' => [
+                    'field' => 'pmt_days',
+                    'options' => [
+                        'label' => __d('lil_invoices', 'Days To Pay') . ':',
+                        'default' => '8',
+                    ],
+                ],
+            ],
+            'fs_pmt_end' => '</fieldset>',
+
+
             'fs_layout_start' => '<fieldset>',
             'lg_layout' => sprintf('<legend>%s</legend>', __d('lil_invoices', 'Default Layouts')),
             'tpl_header_id' => [
@@ -190,3 +205,15 @@ $counter_edit = [
 ];
 
 echo $this->Lil->form($counter_edit, 'LilInvoices.InvoicesCounters.edit');
+?>
+
+<script type="text/javascript">
+    var invoiceDocTypes = <?= json_encode(Configure::read('LilInvoices.invoiceDocTypes')) ?>;
+    $(document).ready(function() {
+        invoiceDocTypes.includes($(this).val()) ? $("#payment-templates").show() : $("#payment-templates").hide();
+
+        $("#counter-doc-type").change(function(e) {
+            invoiceDocTypes.includes($(this).val()) ? $("#payment-templates").show() : $("#payment-templates").hide();
+        });
+    });
+</script>

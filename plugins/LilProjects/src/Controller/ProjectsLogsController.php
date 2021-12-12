@@ -38,7 +38,7 @@ class ProjectsLogsController extends AppController
                 if ($this->getRequest()->is('ajax')) {
                     header('Content-Type: text/hml');
 
-                    $user = TableRegistry::get('Users')->get($projectsLog->user_id);
+                    $user = TableRegistry::getTableLocator()->get('Users')->get($projectsLog->user_id);
                     $this->set(compact('projectsLog', 'user'));
                     die($this->render('/element/projects_log'));
                 }

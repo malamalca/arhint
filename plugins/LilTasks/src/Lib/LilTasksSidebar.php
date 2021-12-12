@@ -20,7 +20,7 @@ class LilTasksSidebar
             'LilTasks.' . $userId . '.OpenTasks',
             function () use ($userId) {
                 /** @var \LilTasks\Model\Table\TasksTable $TasksTable */
-                $TasksTable = TableRegistry::get('LilTasks.Tasks');
+                $TasksTable = TableRegistry::getTableLocator()->get('LilTasks.Tasks');
 
                 $taskDues = ['today', 'tomorrow', 'morethan2days', 'empty'];
                 foreach ($taskDues as $due) {
@@ -193,7 +193,7 @@ class LilTasksSidebar
                 'LilTasks.' . $owner_id . '.Folders',
                 function () use ($owner_id, $openTasksCounters, $request) {
                     /** @var \LilTasks\Model\Table\TasksFoldersTable $TasksFolders */
-                    $TasksFolders = TableRegistry::get('LilTasks.TasksFolders');
+                    $TasksFolders = TableRegistry::getTableLocator()->get('LilTasks.TasksFolders');
 
                     $folders = $TasksFolders->findForOwner($owner_id);
 
