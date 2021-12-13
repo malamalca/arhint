@@ -36,7 +36,7 @@ Configure::write('App.fullBaseUrl', 'http://localhost');
 // DebugKit skips settings these connection config if PHP SAPI is CLI / PHPDBG.
 // But since PagesControllerTest is run with debug enabled and DebugKit is loaded
 // in application, without setting up these config DebugKit errors out.
-ConnectionManager::setConfig('test_debug_kit', [
+/*ConnectionManager::setConfig('test_debug_kit', [
     'className' => 'Cake\Database\Connection',
     'driver' => 'Cake\Database\Driver\Sqlite',
     'database' => TMP . 'debug_kit.sqlite',
@@ -45,7 +45,7 @@ ConnectionManager::setConfig('test_debug_kit', [
     'quoteIdentifiers' => false,
 ]);
 
-ConnectionManager::alias('test_debug_kit', 'debug_kit');
+ConnectionManager::alias('test_debug_kit', 'debug_kit');*/
 
 // Fixate sessionid early on, as php7.2+
 // does not allow the sessionid to be set after stdout
