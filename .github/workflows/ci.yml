@@ -102,9 +102,19 @@ jobs:
         path: ${{ steps.composer-cache.outputs.dir }}
         key: ${{ runner.os }}-composer-${{ steps.key-date.outputs.date }}-${{ hashFiles('composer.json') }}-${{ matrix.prefer-lowest }}
 
+    - name: Composer Install
+      run: |
+        if ${{ matrix.prefer-lowest == 'prefer-lowest' }}; then
+          composer update --prefer-lowest --prefer-stable
+        elif ${{ matrix.php-version == '8.1' }}; then
+          composer update --ignore-platform-reqs
+        else
+          composer update
+        fi
+
     - name: Run PHP CodeSniffer
       run: vendor/bin/phpcs --report=checkstyle src/ tests/ | cs2pr
 
     - name: Run phpstan
       if: success() || failure()
-      run: vendor/bin/phpstan analyse --error-format=github
+      run: vendor/bin/phpstan.phar analyse --error-format=github
