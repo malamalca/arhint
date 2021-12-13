@@ -43,7 +43,7 @@ class Installer
         'logs',
         'tmp',
         'uploads',
-        'uploads/invoices',
+        'uploads/Invoices',
         'tmp/cache',
         'tmp/cache/models',
         'tmp/cache/persistent',
