@@ -69,7 +69,7 @@ return [
          * The test connection is used during the test suite.
          */
         'test' => [
-            'host' => 'localhost',
+            'host' => '127.0.0.1',
             //'port' => 'non_standard_port_number',
             'username' => 'my_app',
             'password' => 'secret',
