@@ -16,7 +16,6 @@
         "cakephp/plugin-installer": "^1.3",
         "malamalca/lil": "^4.4",
         "mikehaertl/phpwkhtmltopdf": "2.0.*@dev",
-        "mobiledetect/mobiledetectlib": "^2.8",
         "phpoffice/phpword": "^0.18.2",
         "syncroton/syncroton": "dev-master",
         "tecnickcom/tcpdf": "dev-main",

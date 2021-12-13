@@ -170,7 +170,7 @@ Security::setSalt(Configure::consume('Security.salt'));
 /*
  * Setup detectors for mobile and tablet.
  */
-ServerRequest::addDetector('mobile', function ($request) {
+/*ServerRequest::addDetector('mobile', function ($request) {
     $detector = new \Detection\MobileDetect();
 
     return $detector->isMobile();
@@ -179,7 +179,7 @@ ServerRequest::addDetector('tablet', function ($request) {
     $detector = new \Detection\MobileDetect();
 
     return $detector->isTablet();
-});
+});*/
 ServerRequest::addDetector('lilScan', function ($request) {
     return $request->hasHeader('Lil-Scan');
 });
