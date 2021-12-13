@@ -26,9 +26,9 @@ jobs:
     - name: Setup MySQL
       uses: mirromutth/mysql-action@v1.1
       with:
-        mysql database: 'test_myapp'
-        mysql user: 'my_app'
-        mysql password: 'secret'
+        mysql database: test_myapp
+        mysql user: my_app
+        mysql password: secret
 
     - name: Setup PHP
       uses: shivammathur/setup-php@v2
