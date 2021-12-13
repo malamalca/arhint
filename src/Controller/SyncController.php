@@ -3,12 +3,12 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use Cake\Datasource\ConnectionManager;
+/*use Cake\Datasource\ConnectionManager;
 use Syncroton_Registry;
 use Zend_Db;
 use Zend_Log;
 use Zend_Log_Filter_Priority;
-use Zend_Log_Writer_Stream;
+use Zend_Log_Writer_Stream;*/
 
 /**
  * This controller is intended for Syncroton testing only!!
@@ -105,5 +105,7 @@ class SyncController extends AppController
             ->withStringBody($responseDoc->saveXML());
 
         return $response;/**/
+
+        return null;
     }
 }
