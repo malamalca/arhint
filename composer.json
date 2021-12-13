@@ -28,7 +28,8 @@
         "cakephp/debug_kit": "^4.5",
         "josegonzalez/dotenv": "^3.2",
         "phpstan/phpstan": "^0.12.3",
-        "phpunit/phpunit": "~8.5.0 || ^9.3"
+        "phpunit/phpunit": "~8.5.0 || ^9.3",
+        "vimeo/psalm": "^4.15"
     },
     "repositories": [{
         "type": "package",

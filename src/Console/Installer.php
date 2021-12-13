@@ -313,7 +313,8 @@ class Installer
         $io->write('ENTER DATABASE CONNECTION');
 
         $dbConnectSuccess = false;
-        while (!$dbConnectSuccess) {
+        $numRetries = 0;
+        while (!$dbConnectSuccess && $numRetries < 10) {
             $dbHost = $io->ask('<info>Enter database host ?</info> [<comment>localhost</comment>]? ', 'localhost');
             $dbName = $io->ask('<info>Enter database name ?</info> [<comment>arhint</comment>]? ', 'arhint');
             $dbUser = $io->ask('<info>Enter db user ?</info> ');
@@ -326,6 +327,8 @@ class Installer
             } else {
                 $io->writeError('Cannot connect to mysql database. Please try again.');
             }
+
+            $numRetries++;
         }
     }
 
