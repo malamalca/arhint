@@ -18,11 +18,11 @@ class SyncController extends AppController
     /**
      * index method
      *
-     * @return \Cake\Http\Response
+     * @return \Cake\Http\Response|null
      */
     public function index()
     {
-        $this->Authorization->skipAuthorization();
+        /*$this->Authorization->skipAuthorization();
 
         $conf = ConnectionManager::get('default')->config();
 
@@ -51,7 +51,7 @@ class SyncController extends AppController
         $folderSync = new \Syncroton_Command_FolderSync($doc, $device, $device->policykey);
         $folderSync->handle();*/
 
-        $doc = new \DOMDocument();
+        /*$doc = new \DOMDocument();
         $doc->loadXML('<?xml version="1.0" encoding="utf-8"?' . '>
 <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
 <Sync xmlns="uri:AirSync" xmlns:AirSyncBase="uri:AirSyncBase">
@@ -104,6 +104,6 @@ class SyncController extends AppController
             ->withType('xml')
             ->withStringBody($responseDoc->saveXML());
 
-        return $response;
+        return $response;/**/
     }
 }

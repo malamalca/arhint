@@ -67,7 +67,7 @@ class ArhintReport
      *
      * @param mixed $name Param name
      * @param mixed $arguments Set arguments
-     * @return mixed
+     * @return void
      */
     public function set($name, $arguments = null)
     {

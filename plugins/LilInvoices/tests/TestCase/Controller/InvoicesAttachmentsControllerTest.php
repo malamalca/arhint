@@ -47,17 +47,9 @@ class InvoicesAttachmentsControllerTest extends IntegrationTestCase
      */
     public function testView()
     {
-        $this->testAdd();
+        $this->login(USER_ADMIN);
 
-        $InvoicesAttachments = TableRegistry::getTableLocator()->get('LilInvoices.InvoicesAttachments');
-        $attachments = $InvoicesAttachments->find()
-            ->select()
-            ->where(['invoice_id' => 'd0d59a31-6de7-4eb4-8230-ca09113a7fe5'])
-            ->all();
-
-        $this->assertEquals($attachments->count(), 1);
-
-        $this->get('lil_invoices/invoices-attachments/view/' . $attachments->first()->id);
+        $this->get('lil_invoices/invoices-attachments/view/aef61652-7416-43b4-9bb4-198f5706ed74');
 
         $this->assertResponseOk();
     }
@@ -76,7 +68,7 @@ class InvoicesAttachmentsControllerTest extends IntegrationTestCase
             'id' => null,
             'invoice_id' => 'd0d59a31-6de7-4eb4-8230-ca09113a7fe5',
             'filename' => [
-                'name' => 'sunset.jpg',
+                'name' => 'sunset_uploaded.jpg',
                 'type' => 'image/jpg',
                 'size' => 100963,
                 'tmp_name' => dirname(__FILE__) . DS . 'data' . DS . 'sunset.jpg',
@@ -91,11 +83,17 @@ class InvoicesAttachmentsControllerTest extends IntegrationTestCase
         $this->assertRedirect(['controller' => 'Invoices', 'action' => 'view', 'd0d59a31-6de7-4eb4-8230-ca09113a7fe5']);
 
         $invoices = TableRegistry::getTableLocator()->get('LilInvoices.Invoices');
-        $invoice = $invoices->get('d0d59a31-6de7-4eb4-8230-ca09113a7fe5', ['contain' => ['InvoicesAttachments']]);
-        $this->assertEquals($invoice->invoices_attachment_count, 1);
+        $invoice = $invoices->get('d0d59a31-6de7-4eb4-8230-ca09113a7fe5');
+        $this->assertEquals($invoice->invoices_attachment_count, 2);
+
+        $invoicesAttachmentsTable = TableRegistry::getTableLocator()->get('LilInvoices.InvoicesAttachments');
+        $a = $invoicesAttachmentsTable->find()
+            ->select()
+            ->where(['original' => 'sunset_uploaded.jpg'])
+            ->first();
 
         $uploadFolder = Configure::read('LilInvoices.uploadFolder');
-        $this->assertTrue(file_exists($uploadFolder . DS . $invoice->invoices_attachments[0]->filename));
+        $this->assertTrue(file_exists($uploadFolder . DS . $a->filename));
     }
 
     /**
@@ -105,21 +103,9 @@ class InvoicesAttachmentsControllerTest extends IntegrationTestCase
      */
     public function testDelete()
     {
-        $this->testAdd();
-        $InvoicesAttachments = TableRegistry::getTableLocator()->get('LilInvoices.InvoicesAttachments');
-        $attachments = $InvoicesAttachments->find()
-            ->select()
-            ->where(['invoice_id' => 'd0d59a31-6de7-4eb4-8230-ca09113a7fe5'])
-            ->all();
+        $this->login(USER_ADMIN);
 
-        $this->assertEquals($attachments->count(), 1);
-
-        $uploadFolder = Configure::read('LilInvoices.uploadFolder');
-        $this->assertTrue(file_exists($uploadFolder . DS . $attachments->first()->filename));
-
-        $this->get('lil_invoices/invoices-attachments/delete/' . $attachments->first()->id);
-        $this->assertRedirect(['controller' => 'Invoices', 'action' => 'view', $attachments->first()->invoice_id]);
-
-        $this->assertFalse(file_exists($uploadFolder . DS . $attachments->first()->filename));
+        $this->get('lil_invoices/invoices-attachments/delete/aef61652-7416-43b4-9bb4-198f5706ed74');
+        $this->assertRedirect(['controller' => 'Invoices', 'action' => 'view', 'd0d59a31-6de7-4eb4-8230-ca09113a7fe5']);
     }
 }

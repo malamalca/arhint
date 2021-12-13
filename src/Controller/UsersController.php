@@ -10,7 +10,7 @@ use Cake\Http\Exception\NotFoundException;
  *
  * @property \App\Model\Table\UsersTable $Users
  * @property \Cake\Controller\Component\SecurityComponent $Security
- * @method \App\Model\Entity\User[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
+ * @method \Cake\Datasource\ResultSetInterface|\Cake\ORM\ResultSet paginate($object = null, array $settings = [])
  */
 class UsersController extends AppController
 {
@@ -27,7 +27,7 @@ class UsersController extends AppController
     /**
      * BeforeFilter method.
      *
-     * @param \Cake\Event\Event $event Cake Event object.
+     * @param \Cake\Event\EventInterface $event Cake Event object.
      * @return \Cake\Http\Response|void|null
      */
     public function beforeFilter($event)
@@ -202,7 +202,7 @@ class UsersController extends AppController
      * Immediatelly login as specified user
      *
      * @param string $id User id.
-     * @return \Cake\Http\Response
+     * @return \Cake\Http\Response|null
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     public function loginAs($id)
@@ -296,7 +296,7 @@ class UsersController extends AppController
      * Delete method
      *
      * @param string|null $id User id.
-     * @return \Cake\Http\Response Redirects to index.
+     * @return \Cake\Http\Response|null Redirects to index.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     public function delete($id = null)
