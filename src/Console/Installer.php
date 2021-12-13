@@ -84,10 +84,12 @@ class Installer
 
         static::setCookieKeyInFile($rootDir, $io);
 
-        static::setDatabase($rootDir, $io);
+        $connected = static::setDatabase($rootDir, $io);
 
-        static::executeMigrations($rootDir, $io);
-        static::createAdminUser($io);
+        if ($connected) {
+            static::executeMigrations($rootDir, $io);
+            static::createAdminUser($io);
+        }
 
         $class = 'Cake\Codeception\Console\Installer';
         if (class_exists($class)) {
@@ -306,7 +308,7 @@ class Installer
      *
      * @param string $dir The application's root directory.
      * @param \Composer\IO\IOInterface $io IO interface to write to console.
-     * @return void
+     * @return bool
      */
     public static function setDatabase($dir, $io)
     {
@@ -314,6 +316,7 @@ class Installer
 
         $dbConnectSuccess = false;
         $numRetries = 0;
+
         while (!$dbConnectSuccess && $numRetries < 10) {
             $dbHost = $io->ask('<info>Enter database host ?</info> [<comment>localhost</comment>]? ', 'localhost');
             $dbName = $io->ask('<info>Enter database name ?</info> [<comment>arhint</comment>]? ', 'arhint');
@@ -330,6 +333,8 @@ class Installer
 
             $numRetries++;
         }
+
+        return $dbConnectSuccess;
     }
 
     /**
