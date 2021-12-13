@@ -46,7 +46,7 @@ $invoiceEdit = [
                         'id' => 'invoice-edit-form',
                         'idPrefix' => 'invoice',
                         'url' => [
-                            'action' => $invoice->id ? 'edit' : 'add',
+                            'action' => 'edit',
                             $invoice->id,
                             '?' => ['counter' => $invoice->counter_id],
                         ],
@@ -213,7 +213,7 @@ $invoiceEdit = [
             'fs_descript_end' => '</fieldset>',
 
             ////////////////////////////////////////////////////////////////////////////////////
-            'fs_attachments_start' => '<fieldset>',
+            /*'fs_attachments_start' => '<fieldset>',
             'fs_attachments_legend' => sprintf('<legend>%s</legend>', __d('lil_invoices', 'Archive')),
             'file.name.0' => [
                 'method' => 'control',
@@ -249,7 +249,7 @@ $invoiceEdit = [
                 'method' => 'unlockField',
                 'parameters' => ['invoices_attachments.0.scanned'],
             ],
-            'fs_attachments_end' => '</fieldset>',
+            'fs_attachments_end' => '</fieldset>',*/
 
             ////////////////////////////////////////////////////////////////////////////////////
             'submit' => [

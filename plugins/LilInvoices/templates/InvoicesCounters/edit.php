@@ -210,7 +210,7 @@ echo $this->Lil->form($counter_edit, 'LilInvoices.InvoicesCounters.edit');
 <script type="text/javascript">
     var invoiceDocTypes = <?= json_encode(Configure::read('LilInvoices.invoiceDocTypes')) ?>;
     $(document).ready(function() {
-        invoiceDocTypes.includes($(this).val()) ? $("#payment-templates").show() : $("#payment-templates").hide();
+        invoiceDocTypes.includes($("#counter-doc-type").val()) ? $("#payment-templates").show() : $("#payment-templates").hide();
 
         $("#counter-doc-type").change(function(e) {
             invoiceDocTypes.includes($(this).val()) ? $("#payment-templates").show() : $("#payment-templates").hide();

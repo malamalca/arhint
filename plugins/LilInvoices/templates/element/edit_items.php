@@ -161,7 +161,11 @@ foreach ($invoices_items as $k => $item) {
         'method' => 'control',
         'parameters' => [
             'field' => 'invoices_items.' . $k . '.vat_title',
-            ['type' => 'hidden', 'value' => $item->vat_title, 'class' => 'invoices-item-vat_title'],
+            [
+                'type' => 'hidden',
+                'value' => $item->vat_title,
+                'class' => 'invoices-item-vat_title',
+            ],
         ],
     ];
     $analytics['itm_' . $itmIx++] = [
@@ -184,8 +188,8 @@ foreach ($invoices_items as $k => $item) {
                 'label' => false,
                 'value' => $item->vat_id,
                 'class' => 'invoices-item-vat_id browser-default',
-                'empty' => true,
                 'id' => 'invoice-invoices-items-' . $k . '-vat-id',
+                'empty' => true,
             ],
         ],
     ];
