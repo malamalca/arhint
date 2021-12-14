@@ -18,7 +18,7 @@ class UsersController extends AppController
      * BeforeFilter method.
      *
      * @param \Cake\Event\EventInterface $event Cake Event object.
-     * @return \Cake\Http\Response|void
+     * @return \Cake\Http\Response|void|null
      */
     public function beforeFilter($event)
     {
@@ -100,8 +100,11 @@ class UsersController extends AppController
                 ->first();
 
             if ($user != false) {
-                $this->Users->sendResetEmail($user);
-                $this->Flash->success(__('An email with password reset instructions has been sent.'));
+                $user->reset_key = uniqid();
+                if ($this->Users->save($user)) {
+                    $this->Users->sendResetEmail($user);
+                    $this->Flash->success(__('An email with password reset instructions has been sent.'));
+                }
             } else {
                 $this->Flash->error(__('No user with specified email has been found.'));
             }

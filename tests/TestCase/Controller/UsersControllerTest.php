@@ -83,6 +83,11 @@ class UsersControllerTest extends TestCase
         $this->enableCsrfToken();
         $this->enableRetainFlashMessages();
 
+        $model = $this->getMockForModel('Users', ['sendResetEmail']);
+        $model->expects($this->once())
+        ->method('sendResetEmail')
+        ->will($this->returnValue(true));
+
         $this->post('/users/reset', ['email' => 'admin@arhim.si']);
         $this->assertResponseOk();
         $this->assertFlashElement('flash/success');

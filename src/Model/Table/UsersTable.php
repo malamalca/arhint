@@ -228,24 +228,19 @@ class UsersTable extends Table
      */
     public function sendResetEmail($user)
     {
-        $user->reset_key = uniqid();
-        if ($this->save($user)) {
-            $email = new Mailer('default');
-            $email->setFrom([Configure::read('App.fromEmail.from') => Configure::read('App.fromEmail.name')]);
-            $email->setTo($user->email);
-            $email->setSubject(__('Password Reset'));
+        $email = new Mailer('default');
+        $email->setFrom([Configure::read('App.fromEmail.from') => Configure::read('App.fromEmail.name')]);
+        $email->setTo($user->email);
+        $email->setSubject(__('Password Reset'));
 
-            $email->viewBuilder()->setTemplate('reset');
-            $email->setEmailFormat('text');
-            $email->setViewVars(['reset_key' => $user->reset_key]);
-            $email->viewBuilder()->addHelper('Html');
+        $email->viewBuilder()->setTemplate('reset');
+        $email->setEmailFormat('text');
+        $email->setViewVars(['reset_key' => $user->reset_key]);
+        $email->viewBuilder()->addHelper('Html');
 
-            $ret = $email->send();
+        $ret = $email->send();
 
-            return (bool)$ret;
-        }
-
-        return false;
+        return (bool)$ret;
     }
 
     /**
