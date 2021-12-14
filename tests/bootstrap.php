@@ -53,6 +53,7 @@ ConnectionManager::alias('test_debug_kit', 'debug_kit');*/
 session_id('cli');
 
 define('USER_ADMIN', '048acacf-d87c-4088-a3a7-4bab30f6a040');
+define('USER_COMMON', '048acacf-d87c-4088-a3a7-4bab30f6a041');
 define('COMPANY_FIRST', '8155426d-2302-4fa5-97de-e33cefb9d704');
 
 $migrator = new Migrator();

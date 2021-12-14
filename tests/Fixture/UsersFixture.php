@@ -27,6 +27,19 @@ class UsersFixture extends TestFixture
                 'created' => '2020-01-12 19:40:23',
                 'modified' => '2020-01-12 19:40:23',
             ],
+            [
+                'id' => '048acacf-d87c-4088-a3a7-4bab30f6a041',
+                'company_id' => COMPANY_FIRST,
+                'name' => 'Regular User',
+                'username' => 'user',
+                'passwd' => (new DefaultPasswordHasher())->hash('password'),
+                'email' => 'user@arhim.si',
+                'reset_key' => null,
+                'privileges' => 10,
+                'active' => 1,
+                'created' => '2020-01-12 19:40:23',
+                'modified' => '2020-01-12 19:40:23',
+            ],
         ];
         parent::init();
     }
