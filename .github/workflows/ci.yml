@@ -124,6 +124,10 @@ jobs:
     - name: Run PHP CodeSniffer
       run: vendor/bin/phpcs --report=checkstyle --standard=vendor/cakephp/cakephp-codesniffer/CakePHP src/ tests/ plugins/LilExpenses/src/ plugins/LilCrm/src/ plugins/LilInvoices/src/ plugins/LilProjects/src/ plugins/LilTasks/src/ | cs2pr
 
+    - name: Run psalm
+      if: success() || failure()
+      run: vendor/bin/psalm.phar --output-format=github
+
     - name: Run phpstan
       if: success() || failure()
       run: vendor/bin/phpstan.phar analyse -l 5 src/ plugins/LilExpenses/src/ plugins/LilCrm/src/ plugins/LilInvoices/src/ plugins/LilProjects/src/ plugins/LilTasks/src/ --error-format=github
