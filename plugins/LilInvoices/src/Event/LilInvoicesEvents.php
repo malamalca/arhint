@@ -95,43 +95,41 @@ class LilInvoicesEvents implements EventListenerInterface
         $sort .= $view->getRequest()->getQuery('invoices.sort', 'dat_issue');
         $sort .= ' ' . $view->getRequest()->getQuery('invoices.direction', 'DESC');
 
-        $Invoices = TableRegistry::getTableLocator()->get('LilInvoices.Invoices');
-        $query = $Invoices->find();
 
+        $conditions = [];
         switch ($event->getName()) {
             case 'Lil.Panels.LilCrm.Contacts.view':
                 $matchingInvoices = TableRegistry::getTableLocator()->get('LilInvoices.InvoicesClients')->query()
                     ->select(['invoice_id'])
                     ->distinct()
                     ->where(['contact_id' => $panels->entity->id]);
-
-                $query->select(['id', 'no', 'counter_id', 'title', 'dat_issue', 'total', 'invoices_attachment_count']);
-                $query->where(['id IN' => $matchingInvoices]);
-                /*$query->where([
-                    'OR' => [
-                        'Buyers.contact_id' => $panels->entity->id,
-                        'Issuers.contact_id' => $panels->entity->id,
-                    ],
-                ])
-                ->contain(['Buyers', 'Issuers']);*/
+                $conditions['id IN'] = $matchingInvoices;
                 break;
             case 'Lil.Panels.LilProjects.Projects.view':
-                $query->where(['Invoices.project_id' => $panels->entity->id]);
+                $conditions['Invoices.project_id'] = $panels->entity->id;
                 break;
         }
 
+        $Invoices = TableRegistry::getTableLocator()->get('LilInvoices.Invoices');
+
         // fetch invoices
-        $query4Invoices = clone $query;
-        $invoices = $query4Invoices->order($sort)
+        $query = $Invoices->find();
+        $invoices = $query
+            ->select(['id', 'no', 'counter_id', 'title', 'dat_issue', 'total', 'invoices_attachment_count'])
+            ->where($conditions)
+            ->order($sort)
             ->limit($invoicesPerPage)
             ->page($page)
             ->all();
 
         // calculate total sum and number of invoices
-        $invoicesTotals = $query->select([
-            'invoicesSum' => $query->func()->sum('Invoices.total'),
-            'invoicesCount' => $query->func()->count('Invoices.id'),
-        ])
+        $query = $Invoices->find();
+        $invoicesTotals = $query
+            ->select([
+                'invoicesSum' => $query->func()->sum('Invoices.total'),
+                'invoicesCount' => $query->func()->count('Invoices.id'),
+            ])
+            ->where($conditions)
             ->disableHydration()
             ->first();
 
