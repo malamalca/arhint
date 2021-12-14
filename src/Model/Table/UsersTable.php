@@ -238,7 +238,7 @@ class UsersTable extends Table
             $email->viewBuilder()->setTemplate('reset');
             $email->setEmailFormat('text');
             $email->setViewVars(['reset_key' => $user->reset_key]);
-            $email->viewBuilder()->setHelpers(['Html']);
+            $email->viewBuilder()->addHelper('Html');
 
             $ret = $email->send();
 

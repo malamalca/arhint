@@ -15,20 +15,10 @@ use Cake\Http\Exception\NotFoundException;
 class UsersController extends AppController
 {
     /**
-     * Initialize function
-     *
-     * @return void
-     */
-    public function initialize(): void
-    {
-        parent::initialize();
-    }
-
-    /**
      * BeforeFilter method.
      *
      * @param \Cake\Event\EventInterface $event Cake Event object.
-     * @return \Cake\Http\Response|void|null
+     * @return \Cake\Http\Response|void
      */
     public function beforeFilter($event)
     {
@@ -39,8 +29,6 @@ class UsersController extends AppController
         if ($this->getRequest()->getParam('action') == 'login') {
             $this->Security->setConfig('validatePost', false);
         }
-
-        return null;
     }
 
     /**
