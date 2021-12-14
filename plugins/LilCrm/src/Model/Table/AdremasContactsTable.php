@@ -11,6 +11,7 @@ use Cake\Validation\Validator;
  * AdremasContacts Model
  *
  * @property \LilCrm\Model\Table\AdremasTable $Adremas
+ * @method \LilCrm\Model\Entity\AdremasContact get($primaryKey, array $options = [])
  */
 class AdremasContactsTable extends Table
 {

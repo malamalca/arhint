@@ -11,7 +11,7 @@ class LilProjectsEvents implements EventListenerInterface
     /**
      * Return implemented events array.
      *
-     * @return array
+     * @return array<string, mixed>
      */
     public function implementedEvents(): array
     {

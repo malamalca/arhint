@@ -48,7 +48,7 @@ class InvoicesCounter extends Entity
      */
     public function __toString(): string
     {
-        return $this->title;
+        return (string)$this->title;
     }
 
     /**

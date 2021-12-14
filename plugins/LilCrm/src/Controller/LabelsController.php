@@ -100,7 +100,9 @@ class LabelsController extends AppController
 
         $this->Authorization->authorize($adrema, 'view');
 
-        $addresses = TableRegistry::getTableLocator()->get('LilCrm.AdremasContacts')
+        /** @var \LilCrm\Model\Table\AdremasContactsTable $AdremasContactsTable */
+        $AdremasContactsTable = TableRegistry::getTableLocator()->get('LilCrm.AdremasContacts');
+        $addresses = $AdremasContactsTable
             ->find()
             ->where(['adrema_id' => $adrema->id])
             ->contain(['ContactsAddresses'])
@@ -120,11 +122,12 @@ class LabelsController extends AppController
      */
     public function editAddress($id = null)
     {
+        /** @var \LilCrm\Model\Table\AdremasContactsTable $AdremasContacts */
         $AdremasContacts = TableRegistry::getTableLocator()->get('LilCrm.AdremasContacts');
         if ($id) {
             $address = $AdremasContacts->get($id, ['contain' => ['ContactsAddresses']]);
             if (!empty($address->contacts_address)) {
-                $AdremasContacts->patchEntity($address, $address->contacts_address->toArray());
+                $AdremasContacts->patchEntity($address, (array)$address->contacts_address);
             }
         } else {
             /** @var \LilCrm\Model\Entity\AdremasContact $address */

@@ -11,10 +11,10 @@ use Cake\Validation\Validator;
  * InvoicesClients Model
  *
  * @property \Cake\ORM\Association\BelongsTo $Contacts
- * @method \LilInvoices\Model\Entity\InvoicesClient get(string $id)
- * @method \LilInvoices\Model\Entity\InvoicesClient newEntity(array $data = [])
+ * @method \LilInvoices\Model\Entity\InvoicesClient get($primaryKey, array $options = [])
+ * @method \LilInvoices\Model\Entity\InvoicesClient newEntity(array $data = [], array $options = [])
  * @method \LilInvoices\Model\Entity\InvoicesClient newEmptyEntity()
- * @method \LilInvoices\Model\Entity\InvoicesClient patchEntity($entity, array $data = [])
+ * @method \LilInvoices\Model\Entity\InvoicesClient patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
  */
 class InvoicesClientsTable extends Table
 {

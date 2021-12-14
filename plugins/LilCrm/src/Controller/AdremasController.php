@@ -29,6 +29,7 @@ class AdremasController extends AppController
         $this->Authorization->authorize($adrema);
 
         if ($this->getRequest()->is(['patch', 'post', 'put'])) {
+            /** @var \LilCrm\Model\Entity\Adrema $adrema */
             $adrema = $this->Adremas->patchEntity($adrema, $this->getRequest()->getData());
 
             if ($this->Adremas->save($adrema)) {

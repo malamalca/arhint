@@ -15,7 +15,7 @@ use Cake\Validation\Validator;
  *
  * @property \LilCrm\Model\Table\ContactsTable $Contacts
  * @method \LilCrm\Model\Entity\ContactsEmail newEmptyEntity()
- * @method \LilCrm\Model\Entity\ContactsEmail newEntity(array $data)
+ * @method \LilCrm\Model\Entity\ContactsEmail newEntity(array $data, array $options = [])
  */
 class ContactsEmailsTable extends Table
 {

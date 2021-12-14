@@ -16,7 +16,7 @@ use Cake\Validation\Validator;
  * @method \LilProjects\Model\Entity\ProjectsLog newEntity($data = null, array $options = [])
  * @method \LilProjects\Model\Entity\ProjectsLog newEmptyEntity(array $options = [])
  * @method \LilProjects\Model\Entity\ProjectsLog[] newEntities(array $data, array $options = [])
- * @method \LilProjects\Model\Entity\ProjectsLog|bool save(\Cake\Datasource\EntityInterface $entity, $options = [])
+ * @method \LilProjects\Model\Entity\ProjectsLog|false save(\Cake\Datasource\EntityInterface $entity, $options = [])
  * @method \LilProjects\Model\Entity\ProjectsLog saveOrFail(\Cake\Datasource\EntityInterface $entity, $options = [])
  * @method \LilProjects\Model\Entity\ProjectsLog patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
  * @method \LilProjects\Model\Entity\ProjectsLog[] patchEntities($entities, array $data, array $options = [])

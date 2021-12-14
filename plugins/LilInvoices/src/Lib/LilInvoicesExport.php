@@ -29,7 +29,7 @@ class LilInvoicesExport
      */
     public function __construct()
     {
-        $viewClass = 'Cake\View\XmlView';
+        $viewClass = \Cake\View\XmlView::class;
         $viewOptions = [];
 
         $this->view = new $viewClass(null, null, EventManager::instance(), []);

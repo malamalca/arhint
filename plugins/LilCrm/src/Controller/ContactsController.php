@@ -6,6 +6,7 @@ namespace LilCrm\Controller;
 use Cake\Core\Configure;
 use Cake\Http\Exception\NotFoundException;
 use SoapClient;
+use SoapFault;
 
 /**
  * Contacts Controller
@@ -303,10 +304,11 @@ class ContactsController extends AppController
         $this->Authorization->skipAuthorization();
 
         $search = ['iskalni_niz' => $ddv];
-        $client = new SoapClient('http://ddv.inetis.com/Iskalnik.asmx?WSDL');
         $data = [];
 
-        if ($client != null) {
+        try {
+            $client = new SoapClient('http://ddv.inetis.com/Iskalnik.asmx?WSDL');
+
             $result = $client->Isci($search);
             if (isset($result->IsciResult->anyType)) {
                 $result = $result->IsciResult->anyType->enc_value;
@@ -366,8 +368,6 @@ class ContactsController extends AppController
                 }
 
                 $data = $c;
-            } else {
-                throw new NotFoundException(__d('lil_crm', 'Soap call failed'));
             }
 
             $response = $this->response
@@ -375,7 +375,7 @@ class ContactsController extends AppController
                 ->withStringBody((string)json_encode($data));
 
             return $response;
-        } else {
+        } catch (SoapFault $e) {
             throw new NotFoundException(__d('lil_crm', 'Soap call failed'));
         }
     }

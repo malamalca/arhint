@@ -12,7 +12,7 @@ class LilCrmEvents implements EventListenerInterface
     /**
      * Return implemented events.
      *
-     * @return array
+     * @return array<string, mixed>
      */
     public function implementedEvents(): array
     {

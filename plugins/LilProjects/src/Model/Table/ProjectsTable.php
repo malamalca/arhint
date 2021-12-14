@@ -21,7 +21,7 @@ use LilProjects\Model\Entity\Project;
  * @method \LilProjects\Model\Entity\Project newEntity($data = null, array $options = [])
  * @method \LilProjects\Model\Entity\Project newEmptyEntity(array $options = [])
  * @method \LilProjects\Model\Entity\Project[] newEntities(array $data, array $options = [])
- * @method \LilProjects\Model\Entity\Project|bool save(\Cake\Datasource\EntityInterface $entity, $options = [])
+ * @method \LilProjects\Model\Entity\Project|false save(\Cake\Datasource\EntityInterface $entity, $options = [])
  * @method \LilProjects\Model\Entity\Project patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
  * @method \LilProjects\Model\Entity\Project[] patchEntities($entities, array $data, array $options = [])
  * @method \LilProjects\Model\Entity\Project findOrCreate($search, callable $callback = null, $options = [])

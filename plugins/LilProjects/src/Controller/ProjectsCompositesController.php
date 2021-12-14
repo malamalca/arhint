@@ -10,7 +10,7 @@ use LilProjects\Lib\LilProjectsFuncs;
  * ProjectsComposites Controller
  *
  * @property \LilProjects\Model\Table\ProjectsCompositesTable $ProjectsComposites
- * @method \LilProjects\Model\Entity\ProjectsComposite[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
+ * @method \Cake\Datasource\ResultSetInterface|\Cake\ORM\ResultSet paginate($object = null, array $settings = [])
  */
 class ProjectsCompositesController extends AppController
 {

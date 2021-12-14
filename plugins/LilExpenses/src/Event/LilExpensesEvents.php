@@ -15,7 +15,7 @@ class LilExpensesEvents implements EventListenerInterface
      * Setup event methods
      *
      * @access public
-     * @return array
+     * @return array<string, mixed>
      */
     public function implementedEvents(): array
     {
@@ -160,7 +160,7 @@ class LilExpensesEvents implements EventListenerInterface
      */
     public function createExpenseOnSave(Event $event, $invoice, ArrayObject $options)
     {
-        if (get_class($event->getSubject()) == 'LilInvoices\Model\Table\InvoicesTable') {
+        if (get_class($event->getSubject()) == \LilInvoices\Model\Table\InvoicesTable::class) {
             $counter = $event->getSubject()->InvoicesCounters->get($invoice->counter_id);
             if (($counter->expense === 0) || ($counter->expense === 1)) {
                 $Expenses = TableRegistry::getTableLocator()->get('LilExpenses.Expenses');

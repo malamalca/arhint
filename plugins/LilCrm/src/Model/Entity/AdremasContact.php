@@ -18,6 +18,7 @@ use Cake\ORM\Entity;
  * @property string|null $country
  * @property \Cake\I18n\FrozenTime|null $created
  * @property \Cake\I18n\FrozenTime|null $modified
+ * @property array|null $contacts_address
  */
 class AdremasContact extends Entity
 {

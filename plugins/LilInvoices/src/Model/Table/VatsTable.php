@@ -9,9 +9,9 @@ use Cake\Validation\Validator;
 /**
  * Vats Model
  *
- * @method \LilInvoices\Model\Entity\Vat get(string $id)
+ * @method \LilInvoices\Model\Entity\Vat get($primaryKey, array $options = [])
  * @method \LilInvoices\Model\Entity\Vat newEmptyEntity()
- * @method \LilInvoices\Model\Entity\Vat patchEntity($entity, array $data = [])
+ * @method \LilInvoices\Model\Entity\Vat patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
  */
 class VatsTable extends Table
 {

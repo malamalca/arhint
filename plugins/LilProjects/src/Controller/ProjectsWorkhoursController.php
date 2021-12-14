@@ -10,7 +10,7 @@ use Cake\I18n\FrozenTime;
  * ProjectsWorkhours Controller
  *
  * @property \LilProjects\Model\Table\ProjectsWorkhoursTable $ProjectsWorkhours
- * @method \LilProjects\Model\Entity\ProjectsWorkhour[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
+ * @method \Cake\Datasource\ResultSetInterface|\Cake\ORM\ResultSet paginate($object = null, array $settings = [])
  */
 class ProjectsWorkhoursController extends AppController
 {
@@ -40,6 +40,7 @@ class ProjectsWorkhoursController extends AppController
      */
     public function index()
     {
+        /** @var \LilProjects\Model\Entity\Project $project */
         $project = $this->ProjectsWorkhours->Projects->get($this->getRequest()->getQuery('project'));
         $this->Authorization->authorize($project, 'view');
 

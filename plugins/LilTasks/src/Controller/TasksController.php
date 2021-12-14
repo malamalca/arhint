@@ -127,7 +127,7 @@ class TasksController extends AppController
      * Delete method
      *
      * @param string|null $id Task id.
-     * @return \Cake\Http\Response Redirects to index.
+     * @return \Cake\Http\Response|null Redirects to index.
      */
     public function delete($id = null)
     {

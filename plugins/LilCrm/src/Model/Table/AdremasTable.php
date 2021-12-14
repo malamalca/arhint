@@ -11,7 +11,9 @@ use Cake\Validation\Validator;
  * Adremas Model
  *
  * @method \LilCrm\Model\Entity\Adrema newEmptyEntity()
- * @method \LilCrm\Model\Entity\Adrema newEntity(array $data)
+ * @method \LilCrm\Model\Entity\Adrema newEntity(array $data, array $options = [])
+ * @method \LilCrm\Model\Entity\Adrema get($primaryKey, array $options = [])
+ * @method \LilCrm\Model\Entity\Adrema patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
  */
 class AdremasTable extends Table
 {

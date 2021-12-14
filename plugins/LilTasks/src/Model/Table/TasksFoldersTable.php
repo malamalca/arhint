@@ -11,10 +11,10 @@ use Cake\Validation\Validator;
  * TasksFolders Model
  *
  * @property \Cake\ORM\Association\BelongsTo $Owners
- * @method \LilTasks\Model\Entity\TasksFolder get($primaryKey, $options = [])
+ * @method \LilTasks\Model\Entity\TasksFolder get($primaryKey, array $options = [])
  * @method \LilTasks\Model\Entity\TasksFolder newEntity($data = null, array $options = [])
  * @method \LilTasks\Model\Entity\TasksFolder newEmptyEntity(array $options = [])
- * @method \LilTasks\Model\Entity\TasksFolder patchEntity(\LilTasks\Model\Entity\TasksFolder $entity, array $data = [])
+ * @method \LilTasks\Model\Entity\TasksFolder patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
  */
 class TasksFoldersTable extends Table
 {

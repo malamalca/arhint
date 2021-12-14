@@ -9,7 +9,7 @@ use Cake\ORM\TableRegistry;
  * ProjectsLogs Controller
  *
  * @property \LilProjects\Model\Table\ProjectsLogsTable $ProjectsLogs
- * @method \LilProjects\Model\Entity\ProjectsLog[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
+ * @method \Cake\Datasource\ResultSetInterface|\Cake\ORM\ResultSet paginate($object = null, array $settings = [])
  */
 class ProjectsLogsController extends AppController
 {
@@ -40,7 +40,7 @@ class ProjectsLogsController extends AppController
 
                     $user = TableRegistry::getTableLocator()->get('Users')->get($projectsLog->user_id);
                     $this->set(compact('projectsLog', 'user'));
-                    die($this->render('/element/projects_log'));
+                    die((string)$this->render('/element/projects_log'));
                 }
 
                 $this->Flash->success(__d('lil_projects', 'The projects log has been saved.'));

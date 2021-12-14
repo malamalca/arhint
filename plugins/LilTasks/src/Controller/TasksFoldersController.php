@@ -49,7 +49,7 @@ class TasksFoldersController extends AppController
      * Delete method
      *
      * @param string|null $id Task id.
-     * @return \Cake\Http\Response Redirects to index.
+     * @return \Cake\Http\Response|void
      */
     public function delete($id = null)
     {

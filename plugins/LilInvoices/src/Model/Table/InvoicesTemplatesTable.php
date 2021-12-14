@@ -13,9 +13,9 @@ use Cake\Validation\Validator;
 /**
  * InvoicesTemplates Model
  *
- * @method \LilInvoices\Model\Entity\InvoicesTemplate get(string $id)
+ * @method \LilInvoices\Model\Entity\InvoicesTemplate get($primaryKey, array $options = [])
  * @method \LilInvoices\Model\Entity\InvoicesTemplate newEmptyEntity()
- * @method \LilInvoices\Model\Entity\InvoicesTemplate patchEntity($entity, array $data = [])
+ * @method \LilInvoices\Model\Entity\InvoicesTemplate patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
  */
 class InvoicesTemplatesTable extends Table
 {

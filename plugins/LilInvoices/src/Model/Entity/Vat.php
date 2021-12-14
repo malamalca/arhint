@@ -34,6 +34,6 @@ class Vat extends Entity
      */
     public function __toString(): string
     {
-        return $this->descript;
+        return (string)$this->descript;
     }
 }

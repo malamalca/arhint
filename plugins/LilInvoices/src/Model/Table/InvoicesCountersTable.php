@@ -9,9 +9,9 @@ use Cake\Validation\Validator;
 /**
  * InvoicesCounters Model
  *
- * @method \LilInvoices\Model\Entity\InvoicesCounter get(string $id)
+ * @method \LilInvoices\Model\Entity\InvoicesCounter get($primaryKey, array $options = [])
  * @method \LilInvoices\Model\Entity\InvoicesCounter newEmptyEntity()
- * @method \LilInvoices\Model\Entity\InvoicesCounter patchEntity($entity, array $data = [])
+ * @method \LilInvoices\Model\Entity\InvoicesCounter patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
  */
 class InvoicesCountersTable extends Table
 {

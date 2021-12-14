@@ -535,7 +535,7 @@ class ActiveSyncContacts implements Syncroton_Data_IData
                     $Contacts->ContactsPhones->delete($phone);
                     unset($c->contacts_phones[$k]);
                 }
-                $c->dirty('contacts_phones', true);
+                $c->setDirty('contacts_phones', true);
             }
         }
 
@@ -548,7 +548,7 @@ class ActiveSyncContacts implements Syncroton_Data_IData
                 $c->contacts_phones = [];
             }
             $c->contacts_phones[] = $aPhone;
-            $c->dirty('contacts_addresses', true);
+            $c->setDirty('contacts_addresses', true);
         }
 
         // Sync addresses
@@ -587,7 +587,7 @@ class ActiveSyncContacts implements Syncroton_Data_IData
                     $Contacts->ContactsAddresses->delete($address);
                     unset($c->contacts_addresses[$k]);
                 }
-                $c->dirty('contacts_addresses', true);
+                $c->setDirty('contacts_addresses', true);
             }
         }
 
@@ -603,7 +603,7 @@ class ActiveSyncContacts implements Syncroton_Data_IData
                 $c->contacts_addresses = [];
             }
             $c->contacts_addresses[] = $anAddress;
-            $c->dirty('contacts_addresses', true);
+            $c->setDirty('contacts_addresses', true);
         }
 
         //Log::write('debug', print_r($c->contacts_addresses, true));

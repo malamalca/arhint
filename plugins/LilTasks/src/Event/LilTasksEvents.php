@@ -11,7 +11,7 @@ class LilTasksEvents implements EventListenerInterface
     /**
      * List of implemented events
      *
-     * @return array
+     * @return array<string, mixed>
      */
     public function implementedEvents(): array
     {

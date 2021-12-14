@@ -9,7 +9,7 @@ use Cake\Core\Configure;
  * ProjectsMaterials Controller
  *
  * @property \LilProjects\Model\Table\ProjectsMaterialsTable $ProjectsMaterials
- * @method \LilProjects\Model\Entity\ProjectsMaterial[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
+ * @method \Cake\Datasource\ResultSetInterface|\Cake\ORM\ResultSet paginate($object = null, array $settings = [])
  */
 class ProjectsMaterialsController extends AppController
 {

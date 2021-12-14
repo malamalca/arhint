@@ -187,8 +187,8 @@ class LilCrmCommand extends Command
         foreach ($staleRecords as $rec) {
             $count = $Contacts->find()->select(['id'])->where(['id' => $rec->contact_id])->count();
             if ($count == 0) {
-                var_dump($rec);
-                //$class->delete($rec);
+                //var_dump($rec);
+                $class->delete($rec);
             }
         }
     }

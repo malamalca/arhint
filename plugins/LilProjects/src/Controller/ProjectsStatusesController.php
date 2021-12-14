@@ -9,7 +9,7 @@ use Cake\Cache\Cache;
  * ProjectsStatuses Controller
  *
  * @property \LilProjects\Model\Table\ProjectsStatusesTable $ProjectsStatuses
- * @method \LilProjects\Model\Entity\ProjectsStatus[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
+ * @method \Cake\Datasource\ResultSetInterface|\Cake\ORM\ResultSet paginate($object = null, array $settings = [])
  */
 class ProjectsStatusesController extends AppController
 {

@@ -50,6 +50,7 @@ use Cake\ORM\TableRegistry;
  * @property \LilInvoices\Model\Entity\InvoicesClient $receiver
  * @property array $invoices_items
  * @property array $invoices_taxes
+ * @property array $invoices_attachments
  *
  * @property array $deleteTaxesList
  * @property array $deleteItemsList

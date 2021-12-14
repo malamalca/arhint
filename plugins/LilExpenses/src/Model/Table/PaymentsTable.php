@@ -14,9 +14,9 @@ use Cake\Validation\Validator;
  * @property \LilExpenses\Model\Table\AccountsTable|\Cake\ORM\Association\BelongsTo $Accounts
  * @property \LilExpenses\Model\Table\ExpensesTable|\Cake\ORM\Association\BelongsToMany $Expenses
  * @property \LilExpenses\Model\Table\PaymentsAccountsTable|\Cake\ORM\Association\BelongsTo $PaymentsAccounts
- * @method \LilExpenses\Model\Entity\Payment get(string $id, array $settings = [])
+ * @method \LilExpenses\Model\Entity\Payment get($primaryKey, array $options = [])
  * @method \LilExpenses\Model\Entity\Payment newEmptyEntity()
- * @method \LilExpenses\Model\Entity\Payment newEntity(array $data)
+ * @method \LilExpenses\Model\Entity\Payment newEntity(array $data, array $options = [])
  */
 class PaymentsTable extends Table
 {
@@ -190,6 +190,7 @@ class PaymentsTable extends Table
     {
         $q = $this->find();
 
+        /** @var \LilExpenses\Model\Entity\Payment $r */
         $r = $q->select(['min_date' => $q->func()->min('dat_happened', ['string'])])
             ->where(['owner_id' => $ownerId])
             ->first();

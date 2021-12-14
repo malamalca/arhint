@@ -10,9 +10,9 @@ use Cake\Validation\Validator;
 /**
  * InvoicesTaxes Model
  *
- * @method \LilInvoices\Model\Entity\InvoicesTax get(string $id)
+ * @method \LilInvoices\Model\Entity\InvoicesTax get($primaryKey, array $options = [])
  * @method \LilInvoices\Model\Entity\InvoicesTax newEmptyEntity()
- * @method \LilInvoices\Model\Entity\InvoicesTax patchEntity($entity, array $data = [])
+ * @method \LilInvoices\Model\Entity\InvoicesTax patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
  */
 class InvoicesTaxesTable extends Table
 {

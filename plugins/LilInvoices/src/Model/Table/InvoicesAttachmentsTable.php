@@ -15,9 +15,9 @@ use Cake\Validation\Validator;
 /**
  * InvoicesAttachments Model
  *
- * @method \LilInvoices\Model\Entity\InvoicesAttachment get(string $id)
+ * @method \LilInvoices\Model\Entity\InvoicesAttachment get($primaryKey, array $options = [])
  * @method \LilInvoices\Model\Entity\InvoicesAttachment newEmptyEntity()
- * @method \LilInvoices\Model\Entity\InvoicesAttachment patchEntity($entity, array $data = [])
+ * @method \LilInvoices\Model\Entity\InvoicesAttachment patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
  */
 class InvoicesAttachmentsTable extends Table
 {

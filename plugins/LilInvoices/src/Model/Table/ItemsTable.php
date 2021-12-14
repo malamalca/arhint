@@ -11,9 +11,9 @@ use Cake\Validation\Validator;
  * Items Model
  *
  * @property \LilInvoices\Model\Table\VatsTable $Vats
- * @method \LilInvoices\Model\Entity\Item get(string $id)
+ * @method \LilInvoices\Model\Entity\Item get($primaryKey, array $options = [])
  * @method \LilInvoices\Model\Entity\Item newEmptyEntity()
- * @method \LilInvoices\Model\Entity\Item patchEntity($entity, array $data = [])
+ * @method \LilInvoices\Model\Entity\Item patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
  */
 class ItemsTable extends Table
 {

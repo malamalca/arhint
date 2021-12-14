@@ -20,6 +20,8 @@ class PaymentsController extends AppController
     public function index()
     {
         $ownerId = $this->getCurrentUser()->get('company_id');
+
+        /** @var array $filter */
         $filter = $this->getRequest()->getQuery();
 
         if ($this->getRequest()->is('ajax')) {

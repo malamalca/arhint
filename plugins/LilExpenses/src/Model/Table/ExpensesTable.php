@@ -17,9 +17,9 @@ use Cake\Validation\Validator;
  *
  * @property \LilExpenses\Model\Table\PaymentsTable $Payments
  * @property \LilInvoices\Model\Table\InvoicesTable $Invoices
- * @method \LilExpenses\Model\Entity\Expense get(string $id, array $data = [])
+ * @method \LilExpenses\Model\Entity\Expense get($primaryKey, array $options = [])
  * @method \LilExpenses\Model\Entity\Expense newEmptyEntity()
- * @method \LilExpenses\Model\Entity\Expense patchEntity($expense, array $data = [])
+ * @method \LilExpenses\Model\Entity\Expense patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
  */
 class ExpensesTable extends Table
 {
@@ -198,6 +198,7 @@ class ExpensesTable extends Table
     {
         $q = $this->find();
 
+        /** @var \LilExpenses\Model\Entity\Expense $r */
         $r = $q->select(['min_date' => $q->func()
             ->min('dat_happened', ['string'])])
             ->where(['owner_id' => $ownerId])

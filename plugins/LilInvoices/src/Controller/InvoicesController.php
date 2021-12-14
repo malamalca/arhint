@@ -248,7 +248,7 @@ class InvoicesController extends AppController
                     $tmpNames['scanned.pdf'] = $tmpName;
                 }
 
-                if (count($tmpNames) == 0) {
+                if (count($tmpNames) == 0 && isset($invoice->invoices_attachment)) {
                     unset($invoice->invoices_attachments);
                 }
 
@@ -559,6 +559,7 @@ class InvoicesController extends AppController
         $this->Authorization->skipAuthorization();
 
         if (!empty($this->getRequest()->getQuery('kind'))) {
+            /** @var array $filter */
             $filter = $this->getRequest()->getQuery();
 
             if ($filter['kind'] == 'span') {

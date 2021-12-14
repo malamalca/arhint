@@ -12,9 +12,9 @@ use Cake\Validation\Validator;
 /**
  * PaymentsAccounts Model
  *
- * @method \LilExpenses\Model\Entity\PaymentsAccount get(string $id)
+ * @method \LilExpenses\Model\Entity\PaymentsAccount get($primaryKey, array $options = [])
  * @method \LilExpenses\Model\Entity\PaymentsAccount newEmptyEntity()
- * @method \LilExpenses\Model\Entity\PaymentsAccount patchEntity($entity, array $data = [])
+ * @method \LilExpenses\Model\Entity\PaymentsAccount patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
  */
 class PaymentsAccountsTable extends Table
 {

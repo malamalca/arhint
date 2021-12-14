@@ -14,9 +14,9 @@ use Cake\Validation\Validator;
 /**
  * InvoicesLinks Model
  *
- * @method \LilInvoices\Model\Entity\InvoicesLink get(string $id)
+ * @method \LilInvoices\Model\Entity\InvoicesLink get($primaryKey, array $options = [])
  * @method \LilInvoices\Model\Entity\InvoicesLink newEmptyEntity()
- * @method \LilInvoices\Model\Entity\InvoicesLink patchEntity($entity, array $data = [])
+ * @method \LilInvoices\Model\Entity\InvoicesLink patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
  */
 class InvoicesLinksTable extends Table
 {
@@ -115,8 +115,8 @@ class InvoicesLinksTable extends Table
     /**
      * Fetch linked invoice for specified invoice's id.
      *
-     * @param string $id Invoice id;
-     * @return object
+     * @param string $id Invoice id
+     * @return \Cake\Datasource\ResultSetInterface|array
      */
     public function forInvoice($id)
     {
