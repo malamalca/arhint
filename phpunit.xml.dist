@@ -3,7 +3,11 @@
   <coverage>
     <include>
       <directory suffix=".php">src/</directory>
-      <directory suffix=".php">plugins/*/src/</directory>
+      <directory suffix=".php">plugins/LilCrm/src/</directory>
+      <directory suffix=".php">plugins/LilExpenses/src/</directory>
+      <directory suffix=".php">plugins/LilInvoices/src/</directory>
+      <directory suffix=".php">plugins/LilProjects/src/</directory>
+      <directory suffix=".php">plugins/LilTasks/src/</directory>
     </include>
     <exclude>
       <file>src/Console/Installer.php</file>
