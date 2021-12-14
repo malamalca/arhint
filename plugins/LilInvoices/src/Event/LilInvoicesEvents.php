@@ -95,7 +95,6 @@ class LilInvoicesEvents implements EventListenerInterface
         $sort .= $view->getRequest()->getQuery('invoices.sort', 'dat_issue');
         $sort .= ' ' . $view->getRequest()->getQuery('invoices.direction', 'DESC');
 
-
         $conditions = [];
         switch ($event->getName()) {
             case 'Lil.Panels.LilCrm.Contacts.view':

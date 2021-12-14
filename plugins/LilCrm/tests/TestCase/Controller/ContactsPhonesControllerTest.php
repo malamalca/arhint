@@ -58,7 +58,7 @@ class ContactsPhonesControllerTest extends IntegrationTestCase
 
         $this->login(USER_ADMIN);
 
-        $this->get('/lil_crm/ContactsPhones/edit?contact=' . COMPANY_FIRST);
+        $this->get('/lil_crm/contacts-phones/edit?contact=' . COMPANY_FIRST);
         $this->assertResponseOk();
 
         $this->enableCsrfToken();
