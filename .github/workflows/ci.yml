@@ -72,7 +72,15 @@ jobs:
 
     - name: Run PHPUnit
       run: |
-        vendor/bin/phpunit --verbose
+        if [[ ${{ matrix.php-version }} == '7.4' ]]; then
+          export CODECOVERAGE=1 && vendor/bin/phpunit --verbose --coverage-clover=coverage.xml
+        else
+          vendor/bin/phpunit
+        fi
+    - name: Submit code coverage
+      if: matrix.php-version == '7.4'
+      uses: codecov/codecov-action@v1
+
 
   cs-stan:
     name: Coding Standard & Static Analysis
