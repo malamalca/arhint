@@ -1,6 +1,7 @@
 # ARHINT :: a simple ERP and CRM
 
 [![CI](https://github.com/malamalca/arhint/actions/workflows/ci.yml/badge.svg)](https://github.com/malamalca/arhint/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/gh/malamalca/arhint/branch/master/graph/badge.svg?token=x40FDnnbCp)](https://codecov.io/gh/malamalca/arhint)
 
 This is a simple costum ERP/CRM solution for a small company.
 
