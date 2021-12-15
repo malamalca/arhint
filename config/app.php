@@ -244,7 +244,7 @@ return [
     'Email' => [
         'default' => [
             'transport' => 'default',
-            'from' => 'info@arhim.si',
+            'from' => 'email@example.com',
             /*
              * Will by default be set to config value of App.encoding, if that exists otherwise to UTF-8.
              */
