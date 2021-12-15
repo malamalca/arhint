@@ -104,6 +104,9 @@ $invoiceView = [
                 'action' => 'email',
                 '?' => ['id' => $invoice->id],
             ],
+            'params' => [
+                'id' => 'EmailInvoice',
+            ],
         ],
         'export' => [
             'title' => __d('lil_invoices', 'Export'),
@@ -592,6 +595,7 @@ echo $this->Lil->panels($invoiceView, 'LilInvoices.Invoices.view');
 <script type="text/javascript">
     $(document).ready(function() {
         $("#EditTemplates").modalPopup({title: "<?= __d('lil_invoices', 'Edit Templates') ?>"});
+        $("#EmailInvoice").modalPopup({title: "<?= __d('lil_invoices', 'Email Invoice') ?>"});
 
         $("#AttachFile").modalPopup({title: "<?= __d('lil_invoices', 'Attach File') ?>"});
         $("#AttachLink").modalPopup({title: "<?= __d('lil_invoices', 'Link Invoice') ?>"});

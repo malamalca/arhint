@@ -1,5 +1,6 @@
 <?php
 
+use Cake\Routing\Router;
 
 $send_invoice = [
     'title_for_layout' => __d('lil_invoices', 'Email Invoice'),
@@ -14,7 +15,7 @@ $send_invoice = [
             ],
             'referer' => [
                 'method' => 'hidden',
-                'parameters' => ['field' => 'referer'],
+                'parameters' => ['referer', ['id' => 'referer', 'default' => Router::url($this->getRequest()->referer(), true)]],
             ],
             'to' => [
                 'method' => 'control',
