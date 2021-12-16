@@ -14,6 +14,7 @@ use InvalidArgumentException;
 use LilInvoices\Form\EmailForm;
 use LilInvoices\Lib\LilInvoicesExport;
 use LilInvoices\Lib\LilInvoicesSigner;
+use LilInvoices\Lib\LilInvoicesUpnQr;
 
 /**
  * Invoices Controller
@@ -635,6 +636,27 @@ class InvoicesController extends AppController
         } else {
             throw new NotFoundException(__d('lil_invoices', 'Invalid request.'));
         }
+    }
+
+    /**
+     * Upnqr method
+     *
+     * @param string|null $id Invoice id.
+     * @return \Cake\Http\Response|null
+     * @throws \Cake\Http\Exception\NotFoundException When record not found.
+     */
+    public function upnqr($id = null)
+    {
+        $invoice = $this->Invoices->get($id);
+        $this->Authorization->authorize($invoice, 'view');
+
+        $imageData = LilInvoicesUpnQr::generateUpnQr($id);
+
+        $response = $this->response;
+        $response = $response->withStringBody($imageData);
+        $response = $response->withType('png');
+
+        return $response;
     }
 
     /**
