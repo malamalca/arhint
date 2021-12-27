@@ -37,7 +37,7 @@ class ExpensesController extends AppController
         }
 
         $params = array_merge_recursive([
-            'contain' => ['Invoices'],
+            'contain' => ['Documents'],
             'conditions' => [],
             'order' => 'Expenses.created DESC',
         ], $this->Expenses->filter($filter, $ownerId));
@@ -68,10 +68,10 @@ class ExpensesController extends AppController
                 ->where([
                     'OR' => [
                         'Expenses.title LIKE' => '%' . $term . '%',
-                        'Invoices.no LIKE' => $term . '%',
+                        'Documents.no LIKE' => $term . '%',
                     ],
                 ])
-                ->contain(['Invoices'])
+                ->contain(['Documents'])
                 ->all();
             $this->set(compact('expenses'));
         } else {
@@ -191,9 +191,9 @@ class ExpensesController extends AppController
         $this->Authorization->skipAuthorization();
 
         $counters = [];
-        if (Plugin::isLoaded('LilInvoices')) {
-            $InvoicesCounters = TableRegistry::getTableLocator()->get('LilInvoices.InvoicesCounters');
-            $counters = $this->Authorization->applyScope($InvoicesCounters->find(), 'index')
+        if (Plugin::isLoaded('Documents')) {
+            $DocumentsCounters = TableRegistry::getTableLocator()->get('Documents.DocumentsCounters');
+            $counters = $this->Authorization->applyScope($DocumentsCounters->find(), 'index')
                 ->where(['active' => true])
                 ->order(['kind', 'title'])
                 ->all()
@@ -230,13 +230,13 @@ class ExpensesController extends AppController
                 ->select([
                     'payments_total' => $paymentsQuery,
                 ])
-                ->select($this->Expenses->Invoices)
-                ->select($this->Expenses->Invoices->Issuers)
-                ->select($this->Expenses->Invoices->Receivers)
-                ->contain(['Invoices' => ['Issuers', 'Receivers']])
+                ->select($this->Expenses->Documents)
+                ->select($this->Expenses->Documents->Issuers)
+                ->select($this->Expenses->Documents->Receivers)
+                ->contain(['Documents' => ['Issuers', 'Receivers']])
                 ->where([
-                    'Expenses.model' => 'Invoice',
-                    'Invoices.counter_id IN' => (array)$filter['counter'],
+                    'Expenses.model' => 'Document',
+                    'Documents.counter_id IN' => (array)$filter['counter'],
                 ])
                 ->order('Expenses.dat_happened DESC')
                 ->having($query->newExpr()->add('ABS(Expenses.total - COALESCE(payments_total, 0)) > 0.01'));

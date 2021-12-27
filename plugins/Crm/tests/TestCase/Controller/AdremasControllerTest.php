@@ -23,7 +23,7 @@ class AdremasControllerTest extends TestCase
         'Adremas' => 'plugin.Crm.Adremas',
         'AdremasContacts' => 'plugin.Crm.AdremasContacts',
         'Users' => 'app.Users',
-        'InvoicesCounters' => 'plugin.LilInvoices.InvoicesCounters',
+        'DocumentsCounters' => 'plugin.Documents.DocumentsCounters',
     ];
 
     public function setUp(): void

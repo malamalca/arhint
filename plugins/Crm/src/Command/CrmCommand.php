@@ -63,7 +63,7 @@ class CrmCommand extends Command
         $ContactsPhonesTable = TableRegistry::getTableLocator()->get('Crm.ContactsPhones');
         $ContactsEmailsTable = TableRegistry::getTableLocator()->get('Crm.ContactsEmails');
 
-        $InvoicesClients = TableRegistry::getTableLocator()->get('LilInvoices.InvoicesClients');
+        $DocumentsClients = TableRegistry::getTableLocator()->get('Documents.DocumentsClients');
 
         $q = $ContactsTable->find();
 
@@ -149,7 +149,7 @@ class CrmCommand extends Command
                             }
                         }
 
-                        $InvoicesClients->updateAll(
+                        $DocumentsClients->updateAll(
                             ['contact_id' => $keepContact->id],
                             ['contact_id' => $disposeContact->id]
                         );

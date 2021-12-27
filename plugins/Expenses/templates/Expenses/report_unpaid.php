@@ -1,6 +1,6 @@
 <?php
 $report = [
-    'title_for_layout' => __d('expenses', 'REPORT: Unpaid Invoices'),
+    'title_for_layout' => __d('expenses', 'REPORT: Unpaid Documents'),
     'form' => [
         'defaultHelper' => $this->Form,
         'pre' => '<div class="form">',
@@ -56,7 +56,7 @@ $report = [
                 'method' => 'control',
                 'parameters' => ['overdue', [
                     'type' => 'checkbox',
-                    'label' => __d('expenses', 'Only overdue invoices'),
+                    'label' => __d('expenses', 'Only overdue documents'),
                 ]],
             ],
             'fs_kind_span_end' => '</fieldset>',

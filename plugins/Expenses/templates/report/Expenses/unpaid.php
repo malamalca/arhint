@@ -23,10 +23,10 @@ if (empty($filter['counter'])) {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 $analytics = [
-    'title_for_layout' => __d('expenses', 'Unpaid Invoices'),
+    'title_for_layout' => __d('expenses', 'Unpaid Documents'),
     'head_for_layout' => false,
     'panels' => [
-        sprintf('<h1>%s</h1>', __d('expenses', 'Unpaid Invoices')),
+        sprintf('<h1>%s</h1>', __d('expenses', 'Unpaid Documents')),
         empty($date_caption) ? null : $date_caption . '<br />',
         $counter_caption . '<br />',
     ],
@@ -38,7 +38,7 @@ $analytics = [
  * @param array $target_table Target table
  * @return void
  */
-function initUnpaidInvoicesTableHead(&$target_table)
+function initUnpaidDocumentsTableHead(&$target_table)
 {
     $target_table['parameters'] = [
         'width' => '100%',
@@ -91,7 +91,7 @@ function initUnpaidInvoicesTableHead(&$target_table)
  * @param object $Number Number helper
  * @return void
  */
-function initUnpaidInvoicesTableFoot(&$target_table, $column_total, $Number = null)
+function initUnpaidDocumentsTableFoot(&$target_table, $column_total, $Number = null)
 {
     $target_table['foot']['rows'] = [
         0 => [
@@ -117,7 +117,7 @@ $target = null;
 $counter_total = null;
 
 if (empty($data)) {
-    $analytics['panels'][] = sprintf('<div><i>%s</i></div>', __d('expenses', 'No invoices found'));
+    $analytics['panels'][] = sprintf('<div><i>%s</i></div>', __d('expenses', 'No documents found'));
 } else {
     foreach ($data as $expense) {
         $tableFields = [
@@ -129,44 +129,44 @@ if (empty($data)) {
             'total' => $this->Number->currency($expense->total),
         ];
 
-        if (!empty($expense->invoice)) {
-            if ($current_counter !== $expense->invoice->counter_id) {
+        if (!empty($expense->document)) {
+            if ($current_counter !== $expense->document->counter_id) {
                 // close table
                 if ($i > 0) {
-                    initUnpaidInvoicesTableFoot($target, $counter_total, $this->Number);
+                    initUnpaidDocumentsTableFoot($target, $counter_total, $this->Number);
                 }
 
-                $analytics['panels']['cntr_hr_' . $expense->invoice->counter_id] = sprintf(
+                $analytics['panels']['cntr_hr_' . $expense->document->counter_id] = sprintf(
                     '<h2>%s</h2>',
-                    h($counters[$expense->invoice->counter_id])
+                    h($counters[$expense->document->counter_id])
                 );
-                $analytics['panels']['cntr_' . $expense->invoice->counter_id]['table']['element'] = [];
-                $target =& $analytics['panels']['cntr_' . $expense->invoice->counter_id]['table'];
+                $analytics['panels']['cntr_' . $expense->document->counter_id]['table']['element'] = [];
+                $target =& $analytics['panels']['cntr_' . $expense->document->counter_id]['table'];
 
-                initUnpaidInvoicesTableHead($target);
+                initUnpaidDocumentsTableHead($target);
 
-                $current_counter = $expense->invoice->counter_id;
+                $current_counter = $expense->document->counter_id;
                 $counter_total = 0;
             }
 
-            $tableFields['counter'] = $expense->invoice->counter;
-            $tableFields['no'] = $expense->invoice->no;
-            $tableFields['issued'] = (string)$expense->invoice->dat_issue .
+            $tableFields['counter'] = $expense->document->counter;
+            $tableFields['no'] = $expense->document->no;
+            $tableFields['issued'] = (string)$expense->document->dat_issue .
                 '<br />' .
-                (string)$expense->invoice->dat_expire;
-            $tableFields['title'] = $expense->invoice->title;
+                (string)$expense->document->dat_expire;
+            $tableFields['title'] = $expense->document->title;
 
-            $client = $counters[$expense->invoice->counter_id]->kind == 'issued' ?
-                $expense->invoice->receiver :
-                $expense->invoice->issuer;
+            $client = $counters[$expense->document->counter_id]->kind == 'issued' ?
+                $expense->document->receiver :
+                $expense->document->issuer;
             $tableFields['client'] = $client->title;
 
-            $tableFields['total'] = $this->Number->currency($expense->invoice->total);
+            $tableFields['total'] = $this->Number->currency($expense->document->total);
         } elseif (empty($current_counter)) {
             $analytics['panels']['cntr_default']['table']['element'] = [];
             $target =& $analytics['panels']['cntr_default']['table'];
 
-            initUnpaidInvoicesTableHead($target);
+            initUnpaidDocumentsTableHead($target);
 
             $current_counter = 'default';
             $counter_total = 0;
@@ -216,7 +216,7 @@ if (empty($data)) {
 
         $i++;
     }
-    initUnpaidInvoicesTableFoot($target, $counter_total, $this->Number);
+    initUnpaidDocumentsTableFoot($target, $counter_total, $this->Number);
 }
 
 echo $this->Lil->panels($analytics);

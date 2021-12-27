@@ -26,13 +26,13 @@ use Cake\Routing\Middleware\RoutingMiddleware;
 use Cake\Routing\Route\DashedRoute;
 use Cake\Routing\RouteBuilder;
 use Cake\Routing\Router;
-use Lil\Plugin as LilPlugin;
 use Crm\Plugin as CrmPlugin;
+use Documents\Plugin as DocumentsPlugin;
 use Expenses\Plugin as ExpensesPlugin;
-use LilInvoices\Plugin as LilInvoicesPlugin;
+use Lil\Plugin as LilPlugin;
 use Projects\Plugin as ProjectsPlugin;
-use Tasks\Plugin as TasksPlugin;
 use Psr\Http\Message\ServerRequestInterface;
+use Tasks\Plugin as TasksPlugin;
 
 /**
  * Application setup class.
@@ -76,7 +76,7 @@ class Application extends BaseApplication implements
         $this->addPlugin(LilPlugin::class, ['bootstrap' => true, 'routes' => true]);
         $this->addPlugin(CrmPlugin::class, ['bootstrap' => true, 'routes' => true]);
         $this->addPlugin(ExpensesPlugin::class, ['bootstrap' => true, 'routes' => true]);
-        $this->addPlugin(LilInvoicesPlugin::class, ['bootstrap' => true, 'routes' => true]);
+        $this->addPlugin(DocumentsPlugin::class, ['bootstrap' => true, 'routes' => true]);
         $this->addPlugin(ProjectsPlugin::class, ['bootstrap' => true, 'routes' => true]);
         $this->addPlugin(TasksPlugin::class, ['bootstrap' => true, 'routes' => true]);
     }
@@ -109,7 +109,7 @@ class Application extends BaseApplication implements
         $csrf = new SessionCsrfProtectionMiddleware([]);
         $csrf->skipCheckCallback(function ($request) {
             if (
-                $request->getParam('controller') == 'Invoices' &&
+                $request->getParam('controller') == 'Documents' &&
                 $request->getParam('action') == 'edit' &&
                 $request->hasHeader('Lil-Scan')
             ) {

@@ -21,7 +21,7 @@ use Cake\ORM\Entity;
  * @property \Cake\I18n\FrozenTime|null $modified
  *
  * @property \App\Model\Entity\Expense $expense
- * @property \LilInvoices\Model\Entity\Invoice $invoice
+ * @property \Documents\Model\Entity\Document $document
  */
 class Expense extends Entity
 {

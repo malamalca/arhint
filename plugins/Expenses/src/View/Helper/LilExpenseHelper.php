@@ -27,11 +27,11 @@ class LilExpenseHelper extends Helper
         $icon = '';
         // linked models
         switch ($expense->model) {
-            case 'Invoice':
-                //if (!empty($expense->invoice->no)) {
-                    $icon = $this->Html->image('/expenses/img/invoice.png');
+            case 'Document':
+                //if (!empty($expense->document->no)) {
+                    $icon = $this->Html->image('/expenses/img/document.png');
                 //} else {
-                //  $icon = $this->Html->image('/expenses/img/invoice_error.png');
+                //  $icon = $this->Html->image('/expenses/img/document_error.png');
                 //}
                 break;
             default:
@@ -68,20 +68,20 @@ class LilExpenseHelper extends Helper
         // linked models
         if (!$forceExpenseView) {
             switch ($expense->model) {
-                case 'Invoice':
-                    if (!Plugin::isLoaded('LilInvoices')) {
+                case 'Document':
+                    if (!Plugin::isLoaded('Documents')) {
                         break;
                     }
                     $i_caption = '%1$s <span class="light">(%2$s)</span>';
 
-                    if (!empty($expense->invoice->no)) {
+                    if (!empty($expense->document->no)) {
                         $link = sprintf(
                             $i_caption,
                             $link = $this->Html->link(
-                                !empty($expense->invoice->no) ? $expense->invoice->no : __d('expenses', 'N/A'),
+                                !empty($expense->document->no) ? $expense->document->no : __d('expenses', 'N/A'),
                                 [
-                                    'plugin' => 'LilInvoices',
-                                    'controller' => 'Invoices',
+                                    'plugin' => 'Documents',
+                                    'controller' => 'Documents',
                                     'action' => 'view',
                                     $expense->foreign_id,
                                 ]
@@ -112,14 +112,14 @@ class LilExpenseHelper extends Helper
 
         // linked models
         switch ($expense->model) {
-            /*case 'Invoice':
+            /*case 'Document':
                 $i_caption = '%1$s <span class="light">(%2$s)</span>';
 
-                if (!empty($expense->invoice->no)) {
+                if (!empty($expense->document->no)) {
                     $title = sprintf(
                         $i_caption,
-                        $expense->invoice->no ? $expense->invoice->no : __d('expenses', 'N/A'),
-                        $expense->invoice->title
+                        $expense->document->no ? $expense->document->no : __d('expenses', 'N/A'),
+                        $expense->document->title
                     );
                 }
                 break;*/
@@ -150,14 +150,14 @@ class LilExpenseHelper extends Helper
 
         // linked models
         switch ($expense->model) {
-            /*case 'Invoice':
+            /*case 'Document':
                 $i_caption = '%1$s <span class="light">(%2$s)</span>';
 
-                if (!empty($expense->invoice->no)) {
+                if (!empty($expense->document->no)) {
                     $title = sprintf(
                         $i_caption,
-                        $expense->invoice->no ? $expense->invoice->no : __d('expenses', 'N/A'),
-                        $expense->invoice->title
+                        $expense->document->no ? $expense->document->no : __d('expenses', 'N/A'),
+                        $expense->document->title
                     );
                 }
                 break;*/

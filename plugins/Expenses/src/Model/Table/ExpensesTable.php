@@ -16,7 +16,7 @@ use Cake\Validation\Validator;
  * Expenses Model
  *
  * @property \Expenses\Model\Table\PaymentsTable $Payments
- * @property \LilInvoices\Model\Table\InvoicesTable $Invoices
+ * @property \Documents\Model\Table\DocumentsTable $Documents
  * @method \Expenses\Model\Entity\Expense get($primaryKey, array $options = [])
  * @method \Expenses\Model\Entity\Expense newEmptyEntity()
  * @method \Expenses\Model\Entity\Expense patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
@@ -46,10 +46,10 @@ class ExpensesTable extends Table
             'className' => 'Expenses.Payments',
         ]);
 
-        $this->belongsTo('Invoices', [
+        $this->belongsTo('Documents', [
             'foreignKey' => 'foreign_id',
-            'className' => 'LilInvoices.Invoices',
-            'conditions' => ['Expenses.model' => 'Invoice'],
+            'className' => 'Documents.Documents',
+            'conditions' => ['Expenses.model' => 'Document'],
         ]);
     }
 

@@ -26,12 +26,12 @@ class Plugin extends BasePlugin
         $ExpensesEvents = new ExpensesEvents();
         EventManager::instance()->on($ExpensesEvents);
 
-        if (!defined('Expenses_COUNTER_INCOME')) {
-            define('Expenses_COUNTER_INCOME', 0);
+        if (!defined('EXPENSES_COUNTER_INCOME')) {
+            define('EXPENSES_COUNTER_INCOME', 0);
         }
 
-        if (!defined('Expenses_COUNTER_EXPENSE')) {
-            define('Expenses_COUNTER_EXPENSE', 1);
+        if (!defined('EXPENSES_COUNTER_EXPENSE')) {
+            define('EXPENSES_COUNTER_EXPENSE', 1);
         }
     }
 

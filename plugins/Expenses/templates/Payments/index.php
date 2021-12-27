@@ -249,7 +249,7 @@ echo $this->Lil->index($admin_index, 'Expenses.Payments.index');
 
     $(document).ready(function() {
         ////////////////////////////////////////////////////////////////////////////////////////////
-        // Filter for invoices
+        // Filter for documents
         $(".search-panel input").on("input", function(e) {
             var rx_term = new RegExp("__term__", "i");
             $.get(searchUrl.replace(rx_term, encodeURIComponent($(this).val())), function(response) {

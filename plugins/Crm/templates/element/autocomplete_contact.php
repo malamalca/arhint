@@ -5,8 +5,8 @@ if (empty($autocomplete_client)) {
     $autocomplete_client = [];
 }
     $autocomplete_client = array_merge([
-        'title' => '#InvoiceClient',
-        'id' => '#InvoiceContactId',
+        'title' => '#DocumentClient',
+        'id' => '#DocumentContactId',
         'image' => '#ImageContactCheck',
         'url' => ['plugin' => 'Crm', 'controller' => 'Contacts', 'action' => 'autocomplete'],
         'kind' => null,

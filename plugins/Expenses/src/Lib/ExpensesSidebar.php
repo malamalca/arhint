@@ -68,7 +68,7 @@ class ExpensesSidebar
                 'submenu' => [
                     'payments_accounts' => [
                         'visible' => true,
-                        'title' => __d('expenses', 'Unpaid Invoices'),
+                        'title' => __d('expenses', 'Unpaid Documents'),
 
                         'url' => [
                             'plugin' => 'Expenses',

@@ -1,0 +1,185 @@
+/* EDIT INVOICE */
+#document-title, #document-receiver-title, #document-buyer-title, #document-issuer-title,
+#document-no, #document-location, #document-project-id,
+#document-total,
+#document-pmt-kind, #document-pmt-sepa-type, #document-pmt-descript {
+    width: 400px !important;
+}
+
+#document-dat-issue, #document-dat-service, #document-dat-expire {
+    width: auto !important;
+}
+
+#document-analytics-table,
+#document-tax-table,
+#document-dates-table,
+#document-items-table,
+table#DocumentsList {
+    max-width: 700px;
+}
+table#DocumentPayment {
+    width: 400px;
+}
+
+#document-analytics-table td,
+#document-tax-table td,
+#document-items-table td,
+#document-payments-table td,
+#DocumentPayment td,
+#document-dates-table td {
+    vertical-align: baseline;
+    padding: 0 !important;
+    padding-top: 7px !important;
+    padding-left: 3px !important;
+    padding-right: 3px !important;
+}
+
+#document-descript {
+    width: 750px;
+    box-sizing: border-box;
+    max-height: 300px;
+    min-height: 80px;
+    overflow-x: hidden; /* for Firefox (issue #5) */
+}
+
+.td-documents-item-total, .td-documents-item-line-total {
+    vertical-align: baseline !important;
+    line-height: 26px;
+}
+
+td.td-documents-item-vat {
+    vertical-align: baseline !important;
+}
+td.td-documents-item-vat select {
+    width: 150px !important;
+}
+
+.documents-item-vat-button, .documents-tax-vat-button {
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+}
+.documents-item-vat_id {
+    width: 50px;
+}
+
+.document-autocomplete-counter {
+    font-size: 80%;
+    color: #606060;
+}
+
+/* VIEW INVOICE */
+#document-view-items-table, #document-view-tax-table {
+    margin-left: 0px;
+    font-weight: normal;
+}
+
+#document-analytics-table, #view-document-payments, #document-taxes-table {
+    width: 700px !important;
+}
+
+#document-descript-preview {
+    max-width: 700px;
+    box-sizing: border-box;
+    max-height: 300px;
+    min-height: 80px;
+    overflow-x: hidden; /* for Firefox (issue #5) */
+}
+#document-descript-preview h1 {
+    font-size: 120%;
+    font-weight: bold !important;
+    margin-top: 30px;
+    margin-bottom: 10px;
+}
+#document-descript-preview h2 {
+    font-size: 110%;
+    font-weight: bold !important;
+    margin-top: 0px;
+    margin-bottom: 5px;
+}
+#document-descript-preview h3 {
+    font-size: 110%;
+    font-weight: bold !important;
+    margin-top: 0px;
+    margin-bottom: 5px;
+}
+#document-descript-preview strong {
+    font-weight: bold;
+}
+#document-descript-preview p {
+    margin-bottom: 10px;
+}
+#document-descript-preview td {
+    padding: 3px;
+    border: solid 1px #404040;
+}
+
+#document-foot {
+    width: 460px !important;
+}
+
+iframe#document-view {
+    width: 100%;
+    height: 99%;
+    border: none;
+}
+
+.td-documents-item-descript div.input-field {
+    margin: 0;
+}
+.td-documents-item-descript div.input-field input {
+    height: 32px !important;
+}
+
+/* EDIT COUNTER */
+#counter-kind, #counter-title, #counter-tpl-title, #counter-mask,
+#counter-counter, #counter-expense,
+#counter-template-descript,
+#counter-tpl-header-id, #counter-tpl-body-id, #counter-tpl-footer-id, #counter-doc-type
+{
+    width: 400px !important;
+}
+
+/* EDIT TEMPLATE */
+#edit-template input#title {
+    width: 700px;
+}
+#edit-template textarea#template-body {
+    width: 700px;
+    height: 300px;
+    white-space: pre;
+    word-wrap: normal;
+    overflow-x: scroll;
+    font-family: courier, monospace;
+    font-size: 12px;
+     -moz-tab-size:4; -o-tab-size:4; -webkit-tab-size:4; tab-size:4;
+}
+
+
+/*  INVOICES INDEX */
+#AdminDocumentsIndex div.documents-no {
+    display: block;
+    max-width: 180px;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+#AdminDocumentsIndex td.documents-net_total,
+#AdminDocumentsIndex td.documents-total {
+    width: 100px !important;
+    max-width: 100px !important;
+}
+#AdminDocumentsIndex td.documents-client,
+#AdminDocumentsIndex td.documents-project,
+#AdminDocumentsIndex td.documents-title {
+    max-width: 300px !important;
+}
+
+/* ADDRESS */
+#client-address-zip {
+    width: 50px;
+    margin-right: 5px;
+}
+#client-address-city {
+    width: 170px;
+}

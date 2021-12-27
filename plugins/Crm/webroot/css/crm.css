@@ -1,0 +1,148 @@
+/* VIEW CONTACT */
+#main h1 {
+    height: 36px;
+    overflow: hidden;
+}
+div#contact-view-descript {
+    font-family: Cambria, Georgia, serif;
+    font-size: 1em;
+    font-weight: normal;
+    background-color: #fafafa;
+
+    padding: 10px;
+    padding-left: 20px;
+    margin-bottom: 20px;
+    margin-top: -10px;
+    margin-left: -20px;
+    margin-right: -20px;
+}
+div#contact-logo {
+    display: block;
+    float: right;
+    margin-top: -63px;
+}
+
+
+div#contact-view-modified * {
+    font-size: 10px;
+}
+
+div#PanelViewContactEmployees {
+    margin-left: 0px;
+}
+
+div#PanelViewContactEmployees table {
+    max-width: 700px;
+}
+
+#ContactsIndexTable td.contact-name {
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+#ContactsIndexTable td.contact-name a {
+    text-decoration: none;
+}
+#ContactsIndexTable td.contact-name a.big {
+    display: block;
+    max-width: 450px;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    font-size: 20px;
+}
+#ContactsIndexTable td.contact-name div.contact-employer,
+#ContactsIndexTable td.contact-name div.contact-descript {
+    display: block;
+    max-width: 280px;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
+/* EDIT CONTACT */
+input#contact-tax-no {
+    width: 150px !important;
+}
+img#magic-tax-lookup {
+    height: 30px !important;
+    line-height: 30px !important;
+    padding: 6px !important;
+}
+/*div#edit-contact-name, div#edit-contact-surname {
+    display: block;
+    float: left;
+    clear: none;
+    width: 200px;
+}
+div#edit-contact-name input, div#edit-contact-surname input {
+    width: 150px;
+}
+#contact-title, #contact-company-title, #contact-job {
+    width: 350px;
+}
+div#contact-descript {
+    clear: left;
+}
+#contact-descript {
+    width: 350px;
+    height: 45px;
+    resize: vertical;
+}
+#contact-primary-address-street, #contact-primary-address-country-code {
+    width: 350px;
+}
+#contact-email-email {
+    width: 300px;
+}
+#magic-tax-lookup {
+    cursor: pointer;
+}
+
+fieldset#PrimaryAddress, fieldset#PrimaryAccount, fieldset#PrimaryEmail, fieldset#PrimaryPhone {
+    display: block;
+    float: left;
+    clear: none;
+    width: 300px;
+}
+fieldset#PrimaryEmail {
+    clear: left !important;
+}*/
+
+/* ADDRESS */
+#contact-address-zip {
+    width: 50px;
+    margin-right: 5px;
+}
+#contact-address-city {
+    width: 170px;
+}
+/*#contact-address-title,
+#contact-address-street,
+#contact-address-country-code {
+    width: 310px;
+}*/
+
+
+/* Adrema */
+table#crm-adrema {
+    width: 600px;
+}
+.td-adrema-title {
+    width: 25%;
+}
+.td-adrema-street {
+    width: 30%;
+}
+.td-adrema-city {
+    width: 20%;
+}
+.td-adrema-zip {
+    width: 12%;
+}
+.td-adrema-country-code {
+    width: 13%;
+}

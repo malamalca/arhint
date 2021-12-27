@@ -22,8 +22,8 @@ class ExpensesEvents implements EventListenerInterface
         return [
             'View.beforeRender' => 'addScripts',
             'Lil.Sidebar.beforeRender' => 'modifySidebar',
-            'Lil.Form.LilInvoices.InvoicesCounters.edit' => 'modifyCountersForm',
-            'Lil.Panels.LilInvoices.Invoices.view' => 'modifyInvoicesView',
+            'Lil.Form.Documents.DocumentsCounters.edit' => 'modifyCountersForm',
+            'Lil.Panels.Documents.Documents.view' => 'modifyDocumentsView',
             'Model.afterSave' => 'createExpenseOnSave',
         ];
     }
@@ -64,7 +64,7 @@ class ExpensesEvents implements EventListenerInterface
     }
 
     /**
-     * Adds income/expense field to invoices counters form.
+     * Adds income/expense field to documents counters form.
      *
      * @param \Cake\Event\Event $event Event object
      * @param \Lil\Lib\LilForm $form Form array
@@ -85,8 +85,8 @@ class ExpensesEvents implements EventListenerInterface
                     ],
                     'type' => 'select',
                     'options' => [
-                        constant('Expenses_COUNTER_INCOME') => __d('expenses', 'Income'),
-                        constant('Expenses_COUNTER_EXPENSE') => __d('expenses', 'Expense'),
+                        constant('EXPENSES_COUNTER_INCOME') => __d('expenses', 'Income'),
+                        constant('EXPENSES_COUNTER_EXPENSE') => __d('expenses', 'Expense'),
                     ],
                     'empty' => __d('expenses', 'Neither expense nor income'),
                     'class' => 'browser-default',
@@ -101,32 +101,32 @@ class ExpensesEvents implements EventListenerInterface
     }
 
     /**
-     * Add payments table to Invoices View action
+     * Add payments table to Documents View action
      *
      * @param \Cake\Event\Event $event Event object
      * @param \Lil\Lib\LilPanels $panels Panels array
      * @return \Lil\Lib\LilPanels
      */
-    public function modifyInvoicesView(Event $event, $panels)
+    public function modifyDocumentsView(Event $event, $panels)
     {
         $view = $event->getSubject();
 
-        $invoice = $panels->entity;
+        $document = $panels->entity;
 
-        if ($invoice->isInvoice()) {
-            /** @var \LilInvoices\Model\Table\InvoicesCountersTable $InvoicesCounters */
-            $InvoicesCounters = TableRegistry::getTableLocator()->get('LilInvoices.InvoicesCounters');
-            $counter = $InvoicesCounters->get($invoice->counter_id);
+        if ($document->isInvoice()) {
+            /** @var \Documents\Model\Table\DocumentsCountersTable $DocumentsCounters */
+            $DocumentsCounters = TableRegistry::getTableLocator()->get('Documents.DocumentsCounters');
+            $counter = $DocumentsCounters->get($document->counter_id);
 
             if (!is_null($counter->expense)) {
                 $expenses = TableRegistry::getTableLocator()->get('Expenses.Expenses')->find()
-                    ->where(['model' => 'Invoice', 'foreign_id' => $invoice->id])
+                    ->where(['model' => 'Document', 'foreign_id' => $document->id])
                     ->contain(['Payments'])
                     ->all();
 
                 /** @var \Expenses\Model\Table\PaymentsAccountsTable $PaymentsAccountsTable */
                 $PaymentsAccountsTable = TableRegistry::getTableLocator()->get('Expenses.PaymentsAccounts');
-                $accounts = $PaymentsAccountsTable->listForOwner($invoice->owner_id);
+                $accounts = $PaymentsAccountsTable->listForOwner($document->owner_id);
 
                 $paymentsPanels = [
                     'payments_title' => '<h3>' . __d('expenses', 'Payments') . '</h3>',
@@ -139,7 +139,7 @@ class ExpensesEvents implements EventListenerInterface
                 if ($expenses->count() > 1) {
                     $paymentsPanels['payments_warning'] = sprintf(
                         '<div class="error">%s</div>',
-                        __d('expenses', 'WARNING: There are multiple expenses for this invoice!')
+                        __d('expenses', 'WARNING: There are multiple expenses for this document!')
                     );
                 }
 
@@ -151,24 +151,24 @@ class ExpensesEvents implements EventListenerInterface
     }
 
     /**
-     * Create Expense on InvoicesCounter "expense" field set to "expense" or "income"
+     * Create Expense on DocumentsCounter "expense" field set to "expense" or "income"
      *
      * @param \Cake\Event\Event $event Event object
-     * @param \LilInvoices\Model\Entity\Invoice $invoice Entity object
+     * @param \Documents\Model\Entity\Document $document Entity object
      * @param \ArrayObject $options Options array
      * @return void
      */
-    public function createExpenseOnSave(Event $event, $invoice, ArrayObject $options)
+    public function createExpenseOnSave(Event $event, $document, ArrayObject $options)
     {
-        if (get_class($event->getSubject()) == \LilInvoices\Model\Table\InvoicesTable::class) {
-            $counter = $event->getSubject()->InvoicesCounters->get($invoice->counter_id);
+        if (get_class($event->getSubject()) == \Documents\Model\Table\DocumentsTable::class) {
+            $counter = $event->getSubject()->DocumentsCounters->get($document->counter_id);
             if (($counter->expense === 0) || ($counter->expense === 1)) {
                 $Expenses = TableRegistry::getTableLocator()->get('Expenses.Expenses');
 
-                if (!$invoice->isNew()) {
+                if (!$document->isNew()) {
                     /** @var \Expenses\Model\Entity\Expense $expense */
                     $expense = $Expenses->find()
-                        ->where(['foreign_id' => $invoice->id])
+                        ->where(['foreign_id' => $document->id])
                         ->first();
                 }
 
@@ -177,19 +177,19 @@ class ExpensesEvents implements EventListenerInterface
                     $expense = $Expenses->newEmptyEntity();
                 }
 
-                $expense->owner_id = $invoice->owner_id;
-                $expense->model = 'Invoice';
-                $expense->foreign_id = $invoice->id;
-                $expense->title = $invoice->title;
-                $expense->dat_happened = $invoice->dat_issue;
+                $expense->owner_id = $document->owner_id;
+                $expense->model = 'Document';
+                $expense->foreign_id = $document->id;
+                $expense->title = $document->title;
+                $expense->dat_happened = $document->dat_issue;
                 switch ((int)$counter->expense) {
                     case 0:
-                        $expense->net_total = abs((float)$invoice->net_total);
-                        $expense->total = abs((float)$invoice->total);
+                        $expense->net_total = abs((float)$document->net_total);
+                        $expense->total = abs((float)$document->total);
                         break;
                     case 1:
-                        $expense->net_total = -abs((float)$invoice->net_total);
-                        $expense->total = -abs((float)$invoice->total);
+                        $expense->net_total = -abs((float)$document->net_total);
+                        $expense->total = -abs((float)$document->total);
                         break;
                 }
 

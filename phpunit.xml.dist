@@ -5,7 +5,7 @@
       <directory suffix=".php">src/</directory>
       <directory suffix=".php">plugins/Crm/src/</directory>
       <directory suffix=".php">plugins/Expenses/src/</directory>
-      <directory suffix=".php">plugins/LilInvoices/src/</directory>
+      <directory suffix=".php">plugins/Documents/src/</directory>
       <directory suffix=".php">plugins/Projects/src/</directory>
       <directory suffix=".php">plugins/Tasks/src/</directory>
     </include>
@@ -23,7 +23,7 @@
       <directory>tests/TestCase/</directory>
       <directory>plugins/Crm/tests/TestCase/</directory>
       <directory>plugins/Expenses/tests/TestCase/</directory>
-      <directory>plugins/LilInvoices/tests/TestCase/</directory>
+      <directory>plugins/Documents/tests/TestCase/</directory>
       <directory>plugins/Projects/tests/TestCase/</directory>
       <directory>plugins/Tasks/tests/TestCase/</directory>
     </testsuite>

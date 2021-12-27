@@ -58,7 +58,7 @@ class Installer
     public const PLUGINS = [
         'Crm',
         'Expenses',
-        'LilInvoices',
+        'Documents',
         'Projects',
         'Tasks',
     ];
