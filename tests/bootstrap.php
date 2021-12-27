@@ -61,7 +61,7 @@ $migrator->runMany([
     ['connection' => 'test'],
     ['plugin' => 'Crm'],
     ['plugin' => 'LilInvoices'],
-    ['plugin' => 'LilExpenses'],
+    ['plugin' => 'Expenses'],
     ['plugin' => 'Projects'],
     ['plugin' => 'Tasks'],
 ]);

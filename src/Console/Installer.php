@@ -57,7 +57,7 @@ class Installer
      */
     public const PLUGINS = [
         'Crm',
-        'LilExpenses',
+        'Expenses',
         'LilInvoices',
         'Projects',
         'Tasks',

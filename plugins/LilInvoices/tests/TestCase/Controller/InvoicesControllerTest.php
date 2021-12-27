@@ -30,10 +30,10 @@ class InvoicesControllerTest extends IntegrationTestCase
         'InvoicesClients' => 'plugin.LilInvoices.InvoicesClients',
         'Vats' => 'plugin.LilInvoices.Vats',
         'Items' => 'plugin.LilInvoices.Items',
-        'Expenses' => 'plugin.LilExpenses.Expenses',
-        'Payments' => 'plugin.LilExpenses.Payments',
-        'PaymentsExpenses' => 'plugin.LilExpenses.PaymentsExpenses',
-        'PaymentsAccounts' => 'plugin.LilExpenses.PaymentsAccounts',
+        'Expenses' => 'plugin.Expenses.Expenses',
+        'Payments' => 'plugin.Expenses.Payments',
+        'PaymentsExpenses' => 'plugin.Expenses.PaymentsExpenses',
+        'PaymentsAccounts' => 'plugin.Expenses.PaymentsAccounts',
         'Projects' => 'plugin.Projects.Projects',
     ];
 
