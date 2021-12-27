@@ -3,7 +3,7 @@
   <coverage>
     <include>
       <directory suffix=".php">src/</directory>
-      <directory suffix=".php">plugins/LilCrm/src/</directory>
+      <directory suffix=".php">plugins/Crm/src/</directory>
       <directory suffix=".php">plugins/LilExpenses/src/</directory>
       <directory suffix=".php">plugins/LilInvoices/src/</directory>
       <directory suffix=".php">plugins/Projects/src/</directory>
@@ -21,7 +21,7 @@
   <testsuites>
     <testsuite name="app">
       <directory>tests/TestCase/</directory>
-      <directory>plugins/LilCrm/tests/TestCase/</directory>
+      <directory>plugins/Crm/tests/TestCase/</directory>
       <directory>plugins/LilExpenses/tests/TestCase/</directory>
       <directory>plugins/LilInvoices/tests/TestCase/</directory>
       <directory>plugins/Projects/tests/TestCase/</directory>

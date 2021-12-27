@@ -8,14 +8,14 @@
 >
     <projectFiles>
         <directory name="src" />
-        <directory name="plugins/LilCrm/src" />
+        <directory name="plugins/Crm/src" />
         <directory name="plugins/LilExpenses/src" />
         <directory name="plugins/LilInvoices/src" />
         <directory name="plugins/Projects/src" />
         <directory name="plugins/Tasks/src" />
         <ignoreFiles>
             <directory name="vendor" />
-            <file name="plugins/LilCrm/src/Lib/ActiveSyncContacts.php" />
+            <file name="plugins/Crm/src/Lib/ActiveSyncContacts.php" />
             <file name="plugins/Tasks/src/Lib/LilActiveSyncTasks.php" />
         </ignoreFiles>
     </projectFiles>

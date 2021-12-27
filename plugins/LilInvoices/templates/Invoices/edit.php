@@ -487,7 +487,7 @@ echo $this->Html->script('/LilInvoices/js/invoice_edit_taxes');
 echo $this->Html->script('/LilInvoices/js/invoice_edit_items');
 echo $this->Html->script('/LilInvoices/js/invoiceEditClient');
 echo $this->Html->script('/LilInvoices/js/tinymce/tinymce.min.js');
-echo $this->Html->css('/LilCrm/css/lil_crm');
+echo $this->Html->css('/Crm/css/crm');
 
 echo $this->Lil->form($invoiceEdit, 'LilInvoices.Invoices.edit');
 ?>
@@ -510,16 +510,16 @@ echo $this->Lil->form($invoiceEdit, 'LilInvoices.Invoices.edit');
 
         $("#invoice-edit-form").InvoiceEditClient({
             mode: "<?= $counter->kind;?>",
-            clientCheckedIconUrl: "<?= Router::url('/lil_crm/img/ico_contact_check.gif'); ?>",
+            clientCheckedIconUrl: "<?= Router::url('/crm/img/ico_contact_check.gif'); ?>",
 
             clientAutoCompleteUrl: "<?= Router::url([
-                'plugin' => 'LilCrm',
+                'plugin' => 'Crm',
                 'controller' => 'Contacts',
                 'action' => 'autocomplete',
                 '?' => ['detailed' => true],
             ]); ?>",
             addContactDialogUrl: "<?= Router::url([
-                'plugin' => 'LilCrm',
+                'plugin' => 'Crm',
                 'controller' => 'Contacts',
                 'action' => 'edit',
                 '?' => ['kind' => '__kind__'],

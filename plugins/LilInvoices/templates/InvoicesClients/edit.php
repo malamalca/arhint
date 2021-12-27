@@ -105,12 +105,12 @@ $clientEdit = [
                     'field' => 'country_code',
                     'options' => [
                         'type' => 'select',
-                        'options' => Configure::read('LilCrm.countries'),
+                        'options' => Configure::read('Crm.countries'),
                         'label' => [
                             'text' => __d('lil_invoices', 'Country') . ':',
                             'class' => 'active',
                         ],
-                        'default' => Configure::read('LilCrm.defaultCountry'),
+                        'default' => Configure::read('Crm.defaultCountry'),
                         'empty' => true,
                         'class' => 'browser-default',
                     ],
@@ -200,7 +200,7 @@ echo $this->Lil->form($clientEdit, 'LilInvoices.InvoicesClients.edit');
         $("#client-address-zip").autocomplete({
             autoFocus: true,
             source: "<?php echo Router::url([
-                'plugin' => 'LilCrm',
+                'plugin' => 'Crm',
                 'controller' => 'ContactsAddresses',
                 'action' => 'autocomplete-zip-city',
                 'zip',
@@ -216,7 +216,7 @@ echo $this->Lil->form($clientEdit, 'LilInvoices.InvoicesClients.edit');
         $('#client-address-city').autocomplete({
             autoFocus: true,
             source: "<?php echo Router::url([
-                'plugin' => 'LilCrm',
+                'plugin' => 'Crm',
                 'controller' => 'ContactsAddresses',
                 'action' => 'autocomplete-zip-city',
                 'city',

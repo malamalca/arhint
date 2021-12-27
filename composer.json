@@ -54,7 +54,7 @@
         "psr-4": {
             "App\\": "src/",
             "Lil\\": "vendor/malamalca/Lil/src/",
-            "LilCrm\\": "plugins/LilCrm/src/",
+            "Crm\\": "plugins/Crm/src/",
             "LilExpenses\\": "plugins/LilExpenses/src/",
             "LilInvoices\\": "plugins/LilInvoices/src/",
             "Projects\\": "plugins/Projects/src/",
@@ -66,7 +66,7 @@
             "App\\Test\\": "tests\\",
             "Cake\\Test\\": "vendor\\cakephp\\cakephp\\tests\\",
             "Lil\\Test\\": "vendor\\malamalca\\Lil\\tests\\",
-            "LilCrm\\Test\\": "plugins\\LilCrm\\tests\\",
+            "Crm\\Test\\": "plugins\\Crm\\tests\\",
             "LilExpenses\\Test\\": "plugins\\LilExpenses\\tests\\",
             "LilInvoices\\Test\\": "plugins\\LilInvoices\\tests\\",
             "Projects\\Test\\": "plugins\\Projects\\tests\\",
@@ -82,9 +82,9 @@
             "@cs-check",
             "@stan"
         ],
-        "cs-check": "phpcs --colors -p --standard=vendor/cakephp/cakephp-codesniffer/CakePHP src/ tests/ plugins/LilExpenses/src/ plugins/LilCrm/src/ plugins/LilInvoices/src/ plugins/Projects/src/ plugins/Tasks/src/",
+        "cs-check": "phpcs --colors -p --standard=vendor/cakephp/cakephp-codesniffer/CakePHP src/ tests/ plugins/LilExpenses/src/ plugins/Crm/src/ plugins/LilInvoices/src/ plugins/Projects/src/ plugins/Tasks/src/",
         "cs-fix": "phpcbf --colors --standard=vendor/cakephp/cakephp-codesniffer/CakePHP src/ tests/",
-        "stan": "phpstan analyse -l 5 src/ plugins/LilExpenses/src/ plugins/LilCrm/src/ plugins/LilInvoices/src/ plugins/Projects/src/ plugins/Tasks/src/",
+        "stan": "phpstan analyse -l 5 src/ plugins/LilExpenses/src/ plugins/Crm/src/ plugins/LilInvoices/src/ plugins/Projects/src/ plugins/Tasks/src/",
         "test": "phpunit --colors=always"
     },
     "prefer-stable": true,

@@ -54,12 +54,12 @@ class InvoicesClient extends Entity
         $this->contact_id = $user->company_id;
 
         if (empty($user->company)) {
-            /** @var \LilCrm\Model\Entity\Contact $company */
-            $company = TableRegistry::getTableLocator()->get('LilCrm.Contacts')->get($user->company_id, [
+            /** @var \Crm\Model\Entity\Contact $company */
+            $company = TableRegistry::getTableLocator()->get('Crm.Contacts')->get($user->company_id, [
                 'contain' => ['PrimaryAddresses', 'PrimaryAccounts'],
             ]);
         } else {
-            /** @var \LilCrm\Model\Entity\Contact $company */
+            /** @var \Crm\Model\Entity\Contact $company */
             $company = $user->company;
         }
         $this->title = $company->title;

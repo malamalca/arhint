@@ -27,7 +27,7 @@ use Cake\Routing\Route\DashedRoute;
 use Cake\Routing\RouteBuilder;
 use Cake\Routing\Router;
 use Lil\Plugin as LilPlugin;
-use LilCrm\Plugin as LilCrmPlugin;
+use Crm\Plugin as CrmPlugin;
 use LilExpenses\Plugin as LilExpensesPlugin;
 use LilInvoices\Plugin as LilInvoicesPlugin;
 use Projects\Plugin as ProjectsPlugin;
@@ -74,7 +74,7 @@ class Application extends BaseApplication implements
 
         // Load more plugins here
         $this->addPlugin(LilPlugin::class, ['bootstrap' => true, 'routes' => true]);
-        $this->addPlugin(LilCrmPlugin::class, ['bootstrap' => true, 'routes' => true]);
+        $this->addPlugin(CrmPlugin::class, ['bootstrap' => true, 'routes' => true]);
         $this->addPlugin(LilExpensesPlugin::class, ['bootstrap' => true, 'routes' => true]);
         $this->addPlugin(LilInvoicesPlugin::class, ['bootstrap' => true, 'routes' => true]);
         $this->addPlugin(ProjectsPlugin::class, ['bootstrap' => true, 'routes' => true]);

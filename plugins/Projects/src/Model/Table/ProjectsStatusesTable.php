@@ -48,7 +48,7 @@ class ProjectsStatusesTable extends Table
 
         $this->belongsTo('Companies', [
             'foreignKey' => 'owner_id',
-            'className' => 'LilCrm.Contacts',
+            'className' => 'Crm.Contacts',
         ]);
     }
 

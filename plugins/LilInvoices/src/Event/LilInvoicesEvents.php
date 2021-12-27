@@ -21,7 +21,7 @@ class LilInvoicesEvents implements EventListenerInterface
             //'Controller.initialize' => 'enableClientEditing',
             'View.beforeRender' => 'addScripts',
             'Lil.Sidebar.beforeRender' => 'modifySidebar',
-            'Lil.Panels.LilCrm.Contacts.view' => 'showInvoicesTable',
+            'Lil.Panels.Crm.Contacts.view' => 'showInvoicesTable',
             'Lil.Panels.Projects.Projects.view' => 'showInvoicesTable',
         ];
     }
@@ -97,7 +97,7 @@ class LilInvoicesEvents implements EventListenerInterface
 
         $conditions = [];
         switch ($event->getName()) {
-            case 'Lil.Panels.LilCrm.Contacts.view':
+            case 'Lil.Panels.Crm.Contacts.view':
                 $matchingInvoices = TableRegistry::getTableLocator()->get('LilInvoices.InvoicesClients')->query()
                     ->select(['invoice_id'])
                     ->distinct()

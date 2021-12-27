@@ -59,7 +59,7 @@ define('COMPANY_FIRST', '8155426d-2302-4fa5-97de-e33cefb9d704');
 $migrator = new Migrator();
 $migrator->runMany([
     ['connection' => 'test'],
-    ['plugin' => 'LilCrm'],
+    ['plugin' => 'Crm'],
     ['plugin' => 'LilInvoices'],
     ['plugin' => 'LilExpenses'],
     ['plugin' => 'Projects'],

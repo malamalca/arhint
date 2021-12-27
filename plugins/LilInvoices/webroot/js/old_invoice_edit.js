@@ -1,6 +1,6 @@
 jQuery.fn.InvoiceEditor = function (options) {
     var default_options = {
-        clientCheckedIconUrl: "/lil_crm/img/ico_contact_check.gif",
+        clientCheckedIconUrl: "/crm/img/ico_contact_check.gif",
         clientAutoCompleteUrl: "",
 
         cbSameClientId: "#invoice-client-buyer-toggle",

@@ -18,9 +18,9 @@ class InvoicesControllerTest extends IntegrationTestCase
      */
     public $fixtures = [
         'Users' => 'app.Users',
-        'Contacts' => 'plugin.LilCrm.Contacts',
-        'ContactsAddresses' => 'plugin.LilCrm.ContactsAddresses',
-        'ContactsAccounts' => 'plugin.LilCrm.ContactsAccounts',
+        'Contacts' => 'plugin.Crm.Contacts',
+        'ContactsAddresses' => 'plugin.Crm.ContactsAddresses',
+        'ContactsAccounts' => 'plugin.Crm.ContactsAccounts',
         'Invoices' => 'plugin.LilInvoices.Invoices',
         'InvoicesCounters' => 'plugin.LilInvoices.InvoicesCounters',
         'InvoicesAttachments' => 'plugin.LilInvoices.InvoicesAttachments',

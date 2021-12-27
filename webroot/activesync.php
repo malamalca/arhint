@@ -57,7 +57,7 @@ if (Configure::read('debug')) {
     Syncroton_Registry::set('loggerBackend', new Zend_Log($writer));
 }
 
-Syncroton_Registry::setContactsDataClass('\LilCrm\Lib\ActiveSyncContacts');
+Syncroton_Registry::setContactsDataClass('\Crm\Lib\ActiveSyncContacts');
 Syncroton_Registry::setTasksDataClass('\Tasks\Lib\ActiveSyncTasks');
 //Syncroton_Registry::setCalendarDataClass('Syncroton_Data_Calendar');
 //Syncroton_Registry::setEmailDataClass('Syncroton_Data_Email');

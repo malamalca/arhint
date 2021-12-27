@@ -38,7 +38,7 @@ class SyncController extends AppController
         $writer->addFilter(new Zend_Log_Filter_Priority(Zend_Log::DEBUG));
         Syncroton_Registry::set('loggerBackend', new Zend_Log($writer));
 
-        Syncroton_Registry::setContactsDataClass('\LilCrm\Lib\ActiveSyncContacts');
+        Syncroton_Registry::setContactsDataClass('\Crm\Lib\ActiveSyncContacts');
 
         $device = Syncroton_Registry::getDeviceBackend()->getUserDevice('miha.nahtigal', 'ApplC33JKLWDDTWD');
 

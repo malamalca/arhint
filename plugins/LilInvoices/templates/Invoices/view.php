@@ -228,7 +228,7 @@ $invoiceView = [
                             $this->Html->link(
                                 $this->Html->image('/lil_invoices/img/goto.gif'),
                                 [
-                                    'plugin' => 'LilCrm',
+                                    'plugin' => 'Crm',
                                     'controller' => 'contacts',
                                     'action' => 'view',
                                     $invoice->client->contact_id,

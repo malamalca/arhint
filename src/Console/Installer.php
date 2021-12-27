@@ -56,7 +56,7 @@ class Installer
      * An array of plugins
      */
     public const PLUGINS = [
-        'LilCrm',
+        'Crm',
         'LilExpenses',
         'LilInvoices',
         'Projects',
