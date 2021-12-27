@@ -190,7 +190,7 @@ foreach ($data as $invoice) {
                 ($project ? $this->Html->link(
                     $project,
                     [
-                        'plugin' => 'LilProjects',
+                        'plugin' => 'Projects',
                         'controller' => 'projects',
                         'action' => 'view',
                         $project->id,

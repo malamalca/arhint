@@ -11,7 +11,7 @@
         <directory name="plugins/LilCrm/src" />
         <directory name="plugins/LilExpenses/src" />
         <directory name="plugins/LilInvoices/src" />
-        <directory name="plugins/LilProjects/src" />
+        <directory name="plugins/Projects/src" />
         <directory name="plugins/Tasks/src" />
         <ignoreFiles>
             <directory name="vendor" />

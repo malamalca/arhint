@@ -156,7 +156,7 @@ $invoiceEdit = [
                     ],
                 ],
             ],
-            'project' => !Plugin::isLoaded('LilProjects') ? null : [
+            'project' => !Plugin::isLoaded('Projects') ? null : [
                 'method' => 'control',
                 'parameters' => [
                     'field' => 'project_id', [

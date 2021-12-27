@@ -96,10 +96,10 @@ class InvoicesTable extends Table
             'className' => 'LilInvoices\Model\Table\InvoicesTemplatesTable',
         ]);
 
-        if (Plugin::isLoaded('LilProjects')) {
+        if (Plugin::isLoaded('Projects')) {
             $this->belongsTo('Projects', [
                 'foreignKey' => 'project_id',
-                'className' => 'LilProjects\Model\Table\ProjectsTable',
+                'className' => 'Projects\Model\Table\ProjectsTable',
             ]);
         }
     }

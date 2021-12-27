@@ -135,9 +135,9 @@ class InvoicesController extends AppController
         );
 
         $projects = [];
-        if (Plugin::isLoaded('LilProjects')) {
-            /** @var \LilProjects\Model\Table\ProjectsTable $ProjectsTable */
-            $ProjectsTable = TableRegistry::getTableLocator()->get('LilProjects.Projects');
+        if (Plugin::isLoaded('Projects')) {
+            /** @var \Projects\Model\Table\ProjectsTable $ProjectsTable */
+            $ProjectsTable = TableRegistry::getTableLocator()->get('Projects.Projects');
 
             $projectsIds = array_filter(array_unique($data->extract('project_id')->toList()));
 
@@ -171,7 +171,7 @@ class InvoicesController extends AppController
             'Issuers', 'Buyers', 'Receivers',
             'InvoicesCounters', 'InvoicesItems', 'InvoicesTaxes', 'InvoicesAttachments',
         ];
-        if (Plugin::isLoaded('LilProjects')) {
+        if (Plugin::isLoaded('Projects')) {
             $containTables[] = 'Projects';
         }
         $invoice = $this->Invoices->get($id, ['contain' => $containTables]);
@@ -293,9 +293,9 @@ class InvoicesController extends AppController
             ->first();
 
         $projects = [];
-        if (Plugin::isLoaded('LilProjects')) {
-            /** @var \LilProjects\Model\Table\ProjectsTable $ProjectsTable */
-            $ProjectsTable = TableRegistry::getTableLocator()->get('LilProjects.Projects');
+        if (Plugin::isLoaded('Projects')) {
+            /** @var \Projects\Model\Table\ProjectsTable $ProjectsTable */
+            $ProjectsTable = TableRegistry::getTableLocator()->get('Projects.Projects');
             $projectsQuery = $this->Authorization->applyScope($ProjectsTable->find(), 'index');
             $projects = $ProjectsTable->findForOwner($this->getCurrentUser()->company_id, $projectsQuery);
         }

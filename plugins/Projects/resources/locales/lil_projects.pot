@@ -1,0 +1,346 @@
+# LANGUAGE translation of CakePHP Application
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"POT-Creation-Date: 2021-10-26 16:22+0000\n"
+"PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
+"Last-Translator: NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+
+#: Controller/ProjectsCompMaterialsController.php:73
+msgid "The projects comp material has been saved."
+msgstr ""
+
+#: Controller/ProjectsCompMaterialsController.php:81
+msgid "The projects comp material could not be saved. Please, try again."
+msgstr ""
+
+#: Controller/ProjectsCompMaterialsController.php:110
+msgid "The projects comp material has been deleted."
+msgstr ""
+
+#: Controller/ProjectsCompMaterialsController.php:112
+msgid "The projects comp material could not be deleted. Please, try again."
+msgstr ""
+
+#: Controller/ProjectsCompositesController.php:68
+msgid "The projects composite has been saved."
+msgstr ""
+
+#: Controller/ProjectsCompositesController.php:81
+msgid "The projects composite could not be saved. Please, try again."
+msgstr ""
+
+#: Controller/ProjectsCompositesController.php:104
+msgid "The projects composite has been deleted."
+msgstr ""
+
+#: Controller/ProjectsCompositesController.php:106
+msgid "The projects composite could not be deleted. Please, try again."
+msgstr ""
+
+#: Controller/ProjectsController.php:210
+msgid "The project has been saved."
+msgstr ""
+
+#: Controller/ProjectsController.php:218
+msgid "The project could not be saved. Please, try again."
+msgstr ""
+
+#: Controller/ProjectsController.php:243
+msgid "The project has been deleted."
+msgstr ""
+
+#: Controller/ProjectsController.php:245
+msgid "The project could not be deleted. Please, try again."
+msgstr ""
+
+#: Controller/ProjectsLogsController.php:56
+msgid "The projects log has been saved."
+msgstr ""
+
+#: Controller/ProjectsLogsController.php:65
+msgid "The projects log could not be saved. Please, try again."
+msgstr ""
+
+#: Controller/ProjectsLogsController.php:88
+msgid "The projects log has been deleted."
+msgstr ""
+
+#: Controller/ProjectsLogsController.php:90
+msgid "The projects log could not be deleted. Please, try again."
+msgstr ""
+
+#: Controller/ProjectsStatusesController.php:68
+msgid "The projects status has been saved."
+msgstr ""
+
+#: Controller/ProjectsStatusesController.php:72
+msgid "The projects status could not be saved. Please, try again."
+msgstr ""
+
+#: Controller/ProjectsStatusesController.php:93
+msgid "The projects status has been deleted."
+msgstr ""
+
+#: Controller/ProjectsStatusesController.php:95
+msgid "The projects status could not be deleted. Please, try again."
+msgstr ""
+
+#: Controller/ProjectsWorkhoursController.php:90
+msgid "The projects workhour has been saved."
+msgstr ""
+
+#: Controller/ProjectsWorkhoursController.php:94
+msgid "The projects workhour could not be saved. Please, try again."
+msgstr ""
+
+#: Controller/ProjectsWorkhoursController.php:123
+msgid "The projects workhour has been deleted."
+msgstr ""
+
+#: Controller/ProjectsWorkhoursController.php:125
+msgid "The projects workhour could not be deleted. Please, try again."
+msgstr ""
+
+#: Event/ProjectsEvents.php:38
+#: Lib/ProjectsSidebar.php:30
+#: Lib/ProjectsSidebar.php:41
+msgid "Projects"
+msgstr ""
+
+#: Lib/ProjectsSidebar.php:52
+msgid "Lookups"
+msgstr ""
+
+#: Lib/ProjectsSidebar.php:58
+#: ProjectsStatuses/index.php:4
+msgid "Statuses"
+msgstr ""
+
+#: ProjectsCompMaterials/aht/edit.php:56
+#: ProjectsCompMaterials/edit.php:56
+#: ProjectsComposites/edit.php:55
+#: ProjectsLogs/edit.php:50
+#: ProjectsStatuses/edit.php:35
+#: ProjectsWorkhours/edit.php:73
+#: Projects/edit.php:127
+#: Projects/map_popup.php:30
+msgid "Save"
+msgstr ""
+
+#: ProjectsCompMaterials/edit.php:9
+msgid "Edit Material"
+msgstr ""
+
+#: ProjectsCompMaterials/edit.php:9
+#: ProjectsComposites/view.php:37
+msgid "Add Material"
+msgstr ""
+
+#: ProjectsCompMaterials/edit.php:37
+msgid "Description"
+msgstr ""
+
+#: ProjectsCompMaterials/edit.php:48
+msgid "Thickness [cm]"
+msgstr ""
+
+#: ProjectsComposites/edit.php:9
+msgid "Edit Composite"
+msgstr ""
+
+#: ProjectsComposites/edit.php:9
+#: Projects/view.php:35
+#: Projects/view.php:171
+msgid "Add Composite"
+msgstr ""
+
+#: ProjectsComposites/edit.php:37
+#: Projects/edit.php:36
+msgid "No."
+msgstr ""
+
+#: ProjectsComposites/edit.php:47
+msgid "Composite Name"
+msgstr ""
+
+#: ProjectsComposites/view.php:18
+#: Projects/view.php:6
+msgid "Edit"
+msgstr ""
+
+#: ProjectsComposites/view.php:26
+#: Projects/view.php:14
+msgid "Delete"
+msgstr ""
+
+#: ProjectsComposites/view.php:33
+msgid "Are you sure you want to delete this composite?"
+msgstr ""
+
+#: ProjectsComposites/view.php:56
+msgid "Export to Word"
+msgstr ""
+
+#: ProjectsComposites/view.php:96
+msgid "Total thickness"
+msgstr ""
+
+#: ProjectsLogs/edit.php:9
+msgid "Edit Log"
+msgstr ""
+
+#: ProjectsLogs/edit.php:9
+#: Projects/index.php:144
+#: Projects/index.php:156
+#: Projects/view.php:25
+#: Projects/view.php:165
+msgid "Add Log"
+msgstr ""
+
+#: ProjectsStatuses/edit.php:4
+msgid "Edit Project Status"
+msgstr ""
+
+#: ProjectsStatuses/edit.php:4
+msgid "Add Project Status"
+msgstr ""
+
+#: ProjectsStatuses/edit.php:27
+#: ProjectsStatuses/index.php:21
+#: Projects/edit.php:47
+#: Projects/index.php:62
+msgid "Title"
+msgstr ""
+
+#: ProjectsStatuses/edit.php:28
+msgid "Title is required."
+msgstr ""
+
+#: ProjectsStatuses/index.php:7
+#: ProjectsWorkhours/index.php:12
+#: Projects/index.php:45
+#: Projects/map.php:9
+msgid "Add"
+msgstr ""
+
+#: ProjectsWorkhours/edit.php:6
+msgid "Edit Project Workhour"
+msgstr ""
+
+#: ProjectsWorkhours/edit.php:6
+msgid "Add Project Workhour"
+msgstr ""
+
+#: ProjectsWorkhours/edit.php:36
+msgid "Project"
+msgstr ""
+
+#: ProjectsWorkhours/edit.php:50
+#: ProjectsWorkhours/index.php:28
+msgid "Started"
+msgstr ""
+
+#: ProjectsWorkhours/edit.php:64
+#: ProjectsWorkhours/index.php:29
+msgid "Duration"
+msgstr ""
+
+#: ProjectsWorkhours/index.php:3
+msgid "Workhours"
+msgstr ""
+
+#: ProjectsWorkhours/index.php:5
+msgid "Workhours for \"{0}\""
+msgstr ""
+
+#: ProjectsWorkhours/index.php:27
+msgid "User"
+msgstr ""
+
+#: Projects/edit.php:7
+msgid "Edit Project"
+msgstr ""
+
+#: Projects/edit.php:7
+msgid "Add Project"
+msgstr ""
+
+#: Projects/edit.php:59
+#: Projects/index.php:63
+#: Projects/view.php:54
+msgid "Status"
+msgstr ""
+
+#: Projects/edit.php:62
+msgid "status"
+msgstr ""
+
+#: Projects/edit.php:73
+#: Projects/index.php:7
+#: Projects/index.php:12
+msgid "Active"
+msgstr ""
+
+#: Projects/edit.php:85
+msgid "Latitude"
+msgstr ""
+
+#: Projects/edit.php:96
+msgid "Longitude"
+msgstr ""
+
+#: Projects/edit.php:119
+msgid "Colorize"
+msgstr ""
+
+#: Projects/index.php:7
+#: Projects/index.php:13
+msgid "All"
+msgstr ""
+
+#: Projects/index.php:20
+#: Projects/index.php:25
+msgid "All Statuses"
+msgstr ""
+
+#: Projects/index.php:40
+msgid "{0} Projects for {1}"
+msgstr ""
+
+#: Projects/index.php:65
+msgid "Last Log"
+msgstr ""
+
+#: Projects/map.php:6
+msgid "Projects Map"
+msgstr ""
+
+#: Projects/view.php:21
+msgid "Are you sure you want to delete this project?"
+msgstr ""
+
+#: Projects/view.php:58
+msgid "Work Duration"
+msgstr ""
+
+#: Projects/view.php:72
+msgid "Logs"
+msgstr ""
+
+#: Projects/view.php:78
+msgid "Composites"
+msgstr ""
+
+#: Projects/view.php:116
+msgid "delete"
+msgstr ""
+

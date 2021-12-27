@@ -22,7 +22,7 @@ class LilInvoicesEvents implements EventListenerInterface
             'View.beforeRender' => 'addScripts',
             'Lil.Sidebar.beforeRender' => 'modifySidebar',
             'Lil.Panels.LilCrm.Contacts.view' => 'showInvoicesTable',
-            'Lil.Panels.LilProjects.Projects.view' => 'showInvoicesTable',
+            'Lil.Panels.Projects.Projects.view' => 'showInvoicesTable',
         ];
     }
 
@@ -104,7 +104,7 @@ class LilInvoicesEvents implements EventListenerInterface
                     ->where(['contact_id' => $panels->entity->id]);
                 $conditions['id IN'] = $matchingInvoices;
                 break;
-            case 'Lil.Panels.LilProjects.Projects.view':
+            case 'Lil.Panels.Projects.Projects.view':
                 $conditions['Invoices.project_id'] = $panels->entity->id;
                 break;
         }
@@ -148,7 +148,7 @@ class LilInvoicesEvents implements EventListenerInterface
 
         // create Lil panels
         switch ($view->getRequest()->getParam('plugin')) {
-            case 'LilProjects':
+            case 'Projects':
                 $panels->menu['add_invoice'] = [
                     'title' => __d('lil_invoices', 'Add Invoice'),
                     'visible' => true,

@@ -285,12 +285,12 @@ $invoiceView = [
                 ],
             ],
         ],
-        'project' => !Plugin::isLoaded('LilProjects') || empty($invoice->project_id) ? null : [
+        'project' => !Plugin::isLoaded('Projects') || empty($invoice->project_id) ? null : [
             'lines' => [
                 [
                     'label' => __d('lil_invoices', 'Project') . ':',
                     'text' => $this->Html->link((string)$invoice->project, [
-                        'plugin' => 'LilProjects',
+                        'plugin' => 'Projects',
                         'controller' => 'Projects',
                         'action' => 'view',
                         $invoice->project_id,

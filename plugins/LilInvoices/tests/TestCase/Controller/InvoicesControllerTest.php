@@ -34,7 +34,7 @@ class InvoicesControllerTest extends IntegrationTestCase
         'Payments' => 'plugin.LilExpenses.Payments',
         'PaymentsExpenses' => 'plugin.LilExpenses.PaymentsExpenses',
         'PaymentsAccounts' => 'plugin.LilExpenses.PaymentsAccounts',
-        'Projects' => 'plugin.LilProjects.Projects',
+        'Projects' => 'plugin.Projects.Projects',
     ];
 
     public function setUp(): void

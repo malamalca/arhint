@@ -59,7 +59,7 @@ class Installer
         'LilCrm',
         'LilExpenses',
         'LilInvoices',
-        'LilProjects',
+        'Projects',
         'Tasks',
     ];
 
