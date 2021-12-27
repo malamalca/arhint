@@ -60,7 +60,7 @@ class Installer
         'LilExpenses',
         'LilInvoices',
         'LilProjects',
-        'LilTasks',
+        'Tasks',
     ];
 
     /**

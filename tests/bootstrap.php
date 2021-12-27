@@ -63,5 +63,5 @@ $migrator->runMany([
     ['plugin' => 'LilInvoices'],
     ['plugin' => 'LilExpenses'],
     ['plugin' => 'LilProjects'],
-    ['plugin' => 'LilTasks'],
+    ['plugin' => 'Tasks'],
 ]);

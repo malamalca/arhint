@@ -11,4 +11,4 @@ parameters:
         - src/App/Controller/PagesController.php
         - src/Controller/SyncController.php
         - plugins/LilCrm/src/Lib/ActiveSyncContacts.php
-        - plugins/LilTasks/src/Lib/LilActiveSyncTasks.php
+        - plugins/Tasks/src/Lib/LilActiveSyncTasks.php

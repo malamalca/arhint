@@ -58,7 +58,7 @@
             "LilExpenses\\": "plugins/LilExpenses/src/",
             "LilInvoices\\": "plugins/LilInvoices/src/",
             "LilProjects\\": "plugins/LilProjects/src/",
-            "LilTasks\\": "plugins/LilTasks/src/"
+            "Tasks\\": "plugins/Tasks/src/"
         }
     },
     "autoload-dev": {
@@ -70,7 +70,7 @@
             "LilExpenses\\Test\\": "plugins\\LilExpenses\\tests\\",
             "LilInvoices\\Test\\": "plugins\\LilInvoices\\tests\\",
             "LilProjects\\Test\\": "plugins\\LilProjects\\tests\\",
-            "LilTasks\\Test\\": "plugins\\LilTasks\\tests\\"
+            "Tasks\\Test\\": "plugins\\Tasks\\tests\\"
         }
     },
     "scripts": {
@@ -82,14 +82,19 @@
             "@cs-check",
             "@stan"
         ],
-        "cs-check": "phpcs --colors -p --standard=vendor/cakephp/cakephp-codesniffer/CakePHP src/ tests/ plugins/LilExpenses/src/ plugins/LilCrm/src/ plugins/LilInvoices/src/ plugins/LilProjects/src/ plugins/LilTasks/src/",
+        "cs-check": "phpcs --colors -p --standard=vendor/cakephp/cakephp-codesniffer/CakePHP src/ tests/ plugins/LilExpenses/src/ plugins/LilCrm/src/ plugins/LilInvoices/src/ plugins/LilProjects/src/ plugins/Tasks/src/",
         "cs-fix": "phpcbf --colors --standard=vendor/cakephp/cakephp-codesniffer/CakePHP src/ tests/",
-        "stan": "phpstan analyse -l 5 src/ plugins/LilExpenses/src/ plugins/LilCrm/src/ plugins/LilInvoices/src/ plugins/LilProjects/src/ plugins/LilTasks/src/",
+        "stan": "phpstan analyse -l 5 src/ plugins/LilExpenses/src/ plugins/LilCrm/src/ plugins/LilInvoices/src/ plugins/LilProjects/src/ plugins/Tasks/src/",
         "test": "phpunit --colors=always"
     },
     "prefer-stable": true,
     "config": {
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "composer/package-versions-deprecated": true,
+            "cakephp/plugin-installer": true
+        }
     },
     "minimum-stability": "dev"
 }

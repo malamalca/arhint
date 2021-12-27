@@ -7,7 +7,7 @@
       <directory suffix=".php">plugins/LilExpenses/src/</directory>
       <directory suffix=".php">plugins/LilInvoices/src/</directory>
       <directory suffix=".php">plugins/LilProjects/src/</directory>
-      <directory suffix=".php">plugins/LilTasks/src/</directory>
+      <directory suffix=".php">plugins/Tasks/src/</directory>
     </include>
     <exclude>
       <file>src/Console/Installer.php</file>
@@ -25,7 +25,7 @@
       <directory>plugins/LilExpenses/tests/TestCase/</directory>
       <directory>plugins/LilInvoices/tests/TestCase/</directory>
       <directory>plugins/LilProjects/tests/TestCase/</directory>
-      <directory>plugins/LilTasks/tests/TestCase/</directory>
+      <directory>plugins/Tasks/tests/TestCase/</directory>
     </testsuite>
     <!-- Add plugin test suites here. -->
   </testsuites>
