@@ -14,13 +14,13 @@
         "cakephp/cakephp": "^4.3.2",
         "cakephp/migrations": "^3.4",
         "cakephp/plugin-installer": "^1.3",
-        "chillerlan/php-qrcode": "dev-main",
         "malamalca/lil": "^4.5",
         "mikehaertl/phpwkhtmltopdf": "2.0.*@dev",
         "phpoffice/phpword": "^0.18.2",
         "syncroton/syncroton": "dev-master",
         "tecnickcom/tcpdf": "dev-main",
-        "zendframework/zendframework1": "1.12.*"
+        "zendframework/zendframework1": "1.12.*",
+        "krivart/php-qr-code": "dev-master"
     },
     "require-dev": {
         "cakephp/bake": "^2.6",
@@ -31,18 +31,24 @@
         "phpunit/phpunit": "~8.5.0 || ^9.3",
         "vimeo/psalm": "^4.15"
     },
-    "repositories": [{
-        "type": "package",
-        "package": {
-            "version": "dev-master",
-            "name": "syncroton/syncroton",
-            "source": {
-                "url": "https://github.com/tine20/syncroton.git",
-                "type": "git",
-                "reference": "master"
+    "repositories": [
+        {
+            "type": "package",
+            "package": {
+                "version": "dev-master",
+                "name": "syncroton/syncroton",
+                "source": {
+                    "url": "https://github.com/tine20/syncroton.git",
+                    "type": "git",
+                    "reference": "master"
+                }
             }
+        },
+        {
+            "type": "vcs",
+            "url": "git@github.com:malamalca/Qr-Code.git"
         }
-    }],
+    ],
     "suggest": {
         "markstory/asset_compress": "An asset compression plugin which provides file concatenation and a flexible filter system for preprocessing and minification.",
         "dereuromark/cakephp-ide-helper": "After baking your code, this keeps your annotations in sync with the code evolving from there on for maximum IDE and PHPStan/Psalm compatibility."

@@ -4,8 +4,12 @@ declare(strict_types=1);
 namespace Documents\Lib;
 
 use Cake\ORM\TableRegistry;
-use chillerlan\QRCode\QRCode;
-use chillerlan\QRCode\QROptions;
+use KrivArt\QrCode\Ecl;
+use KrivArt\QrCode\Output\Png;
+use KrivArt\QrCode\QrCode;
+use KrivArt\QrCode\QrSegment;
+//use chillerlan\QRCode\QRCode;
+//use chillerlan\QRCode\QROptions;
 
 class DocumentsUpnQr
 {
@@ -61,7 +65,30 @@ class DocumentsUpnQr
         // Convert data to ISO 8859-2 charset
         $qrString = iconv('UTF-8', 'ISO-8859-2', $qrString);
 
-        $options = new QROptions([
+        // Get byte array of all characters
+        $qrString = unpack('C*', $qrString);
+
+        //require dirname(__FILE__) . DS . 'qrcodegen.php';
+
+        $eci = QrSegment::makeEci(4);
+        $segs = QrSegment::makeBytes($qrString);
+
+        $finalQr = QrCode::encodeSegments(
+            [$eci, $segs],
+            new Ecl(Ecl::MEDIUM),
+            15, // min qr version
+            15, // max qr version
+            -1, // mask auto
+            false // boost ecc
+        );
+
+        $qrPng = new Png($finalQr); // default 512x512
+
+        ob_start();
+        $qrPng->output();
+        $qrPng = ob_get_clean();
+
+        /*$options = new QROptions([
             'version' => 15,
             'outputType' => QRCode::OUTPUT_IMAGE_PNG,
             'eccLevel' => QRCode::ECC_M,
@@ -71,7 +98,7 @@ class DocumentsUpnQr
 
         // invoke a fresh QRCode instance
         $qrcode = (new QRCode($options))->addEciDesignator(4);
-        $qrPng = $qrcode->render($qrString);
+        $qrPng = $qrcode->render($qrString);*/
 
         return $qrPng;
     }
