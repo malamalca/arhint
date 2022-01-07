@@ -62,7 +62,6 @@ $templateEdit = [
                 'parameters' => [
                     'field' => 'body', [
                         'id' => 'template-body',
-                        'disabled' => (bool)$attachedImage,
                         'value' => $attachedImage ? '' : $template->body,
                     ],
                 ],
@@ -121,7 +120,7 @@ echo $this->Lil->form($templateEdit, 'Documents.DocumentsTemplates.edit');
         $("a#body-remove").click(function() {
             $("#body-image-div").remove();
             $("#body-remove-div").remove();
-            $("#template-body").show().prop("disabled", "");
+            $("#template-body").show();
         });
 
 
