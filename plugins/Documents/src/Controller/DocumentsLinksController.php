@@ -16,7 +16,7 @@ class DocumentsLinksController extends AppController
      * BeforeFilter event handler
      *
      * @param \Cake\Event\EventInterface $event Event interface
-     * @return void
+     * @return \Cake\Http\Response|void
      */
     public function beforeFilter(EventInterface $event)
     {
@@ -63,10 +63,10 @@ class DocumentsLinksController extends AppController
      */
     public function delete($documentId, $id)
     {
-        $DocumentsLink = $this->DocumentsLinks->get($id);
+        $documentsLink = $this->DocumentsLinks->get($id);
         $this->Authorization->skipAuthorization();
 
-        if ($this->DocumentsLinks->delete($DocumentsLink)) {
+        if ($this->DocumentsLinks->delete($documentsLink)) {
             $this->Flash->success(__d('documents', 'The documents link has been deleted.'));
         } else {
             $this->Flash->error(__d('documents', 'The documents link could not be deleted. Please, try again.'));
