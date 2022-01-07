@@ -32,9 +32,8 @@ class DocumentsLinksTable extends Table
         $this->setDisplayField('id');
         $this->setPrimaryKey('id');
         $this->addBehavior('Timestamp');
-        $this->belongsTo('Documents', [
+        $this->belongsTo('Documents.Documents', [
             'foreignKey' => 'document_id',
-            'className' => 'Documents\Model\Table\DocumentsTable',
         ]);
     }
 
@@ -98,18 +97,22 @@ class DocumentsLinksTable extends Table
      *
      * @param string $id1 First document's id
      * @param string $id2 Second document's id
-     * @return bool
+     * @return string|false
      */
     public function two($id1, $id2)
     {
         $link_id = Text::uuid();
         $link = $this->newEntity(['document_id' => $id1, 'link_id' => $link_id]);
-        $this->save($link);
+        $ret1 = $this->save($link);
 
         $link = $this->newEntity(['document_id' => $id2, 'link_id' => $link_id]);
-        $this->save($link);
+        $ret2 = $this->save($link);
 
-        return true;
+        if ((bool)$ret1 && (bool)$ret2) {
+            return $link_id;
+        } else {
+            return false;
+        }
     }
 
     /**

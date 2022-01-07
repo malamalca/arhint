@@ -71,7 +71,7 @@ echo $this->Lil->form($data, 'Documents.DocumentsLinks.link');
         M.AutocompleteAjax.init(el, {
             source: '<?php echo Router::url([
                 'plugin' => 'Documents',
-                'controller' => 'documents',
+                'controller' => 'Documents',
                 'action' => 'autocomplete',
             ], true); ?>',
             onSearch: function() {

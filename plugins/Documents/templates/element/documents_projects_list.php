@@ -84,7 +84,7 @@
                     '#' . $document->no . ' - ' . $document->title,
                     [
                         'plugin' => 'Documents',
-                        'controller' => 'documents',
+                        'controller' => 'Documents',
                         'action' => 'view',
                         $document->id,
                     ]

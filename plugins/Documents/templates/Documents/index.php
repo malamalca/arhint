@@ -57,7 +57,7 @@ $documents_index = [
             'visible' => $counter->active && $this->getCurrentUser()->hasRole('editor'),
             'url' => [
                 'plugin' => 'Documents',
-                'controller' => 'documents',
+                'controller' => 'Documents',
                 'action' => 'edit',
                 '?' => ['counter' => $counter->id],
             ],
@@ -67,7 +67,7 @@ $documents_index = [
             'visible' => true,
             'url' => [
                 'plugin' => 'Documents',
-                'controller' => 'documents',
+                'controller' => 'Documents',
                 'action' => 'preview',
                 '?' => array_merge($filter, ['search' => '__term__']),
             ],
@@ -221,7 +221,7 @@ echo $this->Lil->index($documents_index, 'Documents.Documents.index');
 <script type="text/javascript">
     var startEndUrl = "<?php echo Router::url([
         'plugin' => 'Documents',
-        'controller' => 'documents',
+        'controller' => 'Documents',
         'action' => 'index',
         '?' => array_merge($this->request->getQuery(), ['start' => '__start__', 'end' => '__end__']),
     ]); ?>";

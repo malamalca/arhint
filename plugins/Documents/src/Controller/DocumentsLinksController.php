@@ -16,7 +16,7 @@ class DocumentsLinksController extends AppController
      * BeforeFilter event handler
      *
      * @param \Cake\Event\EventInterface $event Event interface
-     * @return \Cake\Http\Response|null
+     * @return void
      */
     public function beforeFilter(EventInterface $event)
     {
@@ -30,8 +30,6 @@ class DocumentsLinksController extends AppController
                 );
             }
         }
-
-        return null;
     }
 
     /**
@@ -45,10 +43,10 @@ class DocumentsLinksController extends AppController
         $this->Authorization->skipAuthorization();
 
         if ($this->getRequest()->is(['patch', 'post', 'put'])) {
-            if ($this->DocumentsLinks->two($documentId, $this->getRequest()->getData('document_id'))) {
+            if ((bool)$this->DocumentsLinks->two($documentId, $this->getRequest()->getData('document_id'))) {
                 $this->Flash->success(__d('documents', 'Documents have been successfully linked.'));
 
-                return $this->redirect(['controller' => 'documents', 'action' => 'view', $documentId]);
+                return $this->redirect(['controller' => 'Documents', 'action' => 'view', $documentId]);
             }
         }
 
@@ -74,6 +72,6 @@ class DocumentsLinksController extends AppController
             $this->Flash->error(__d('documents', 'The documents link could not be deleted. Please, try again.'));
         }
 
-        return $this->redirect(['controller' => 'documents', 'action' => 'view', $documentId]);
+        return $this->redirect(['controller' => 'Documents', 'action' => 'view', $documentId]);
     }
 }

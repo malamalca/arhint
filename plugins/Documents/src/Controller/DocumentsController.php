@@ -96,11 +96,11 @@ class DocumentsController extends AppController
                 'attachments_count', 'client.title'])
             ->join([
                 'table' => 'documents_clients',
-                'alias' => 'client',
+                'alias' => 'Client',
                 'type' => 'INNER',
                 'conditions' => [
-                    'client.document_id = Documents.id',
-                    'client.kind' => $counter->kind == 'received' ? 'II' : 'IV',
+                    'Client.document_id = Documents.id',
+                    'Client.kind' => $counter->kind == 'received' ? 'II' : 'IV',
                 ],
             ])
             ->where($params['conditions'])
@@ -113,6 +113,15 @@ class DocumentsController extends AppController
             ->select([
                 'sumTotal' => $sumQuery->func()->sum('Documents.total'),
                 'sumNetTotal' => $sumQuery->func()->sum('Documents.net_total'),
+            ])
+            ->join([
+                'table' => 'documents_clients',
+                'alias' => 'Client',
+                'type' => 'INNER',
+                'conditions' => [
+                    'Client.document_id = Documents.id',
+                    'Client.kind' => $counter->kind == 'received' ? 'II' : 'IV',
+                ],
             ])
             ->where($params['conditions'])
             ->disableHydration()
