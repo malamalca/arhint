@@ -233,6 +233,8 @@ echo $this->Lil->index($documents_index, 'Documents.Documents.index');
         '?' => array_merge($this->request->getQuery(), ['search' => '__term__']),
     ]); ?>";
 
+    var searchTimer = null;
+
     function filterByDate(dateText, startOrEnd) {
         var rx_start = new RegExp("__start__", "i");
         var rx_end = new RegExp("__end__", "i");
@@ -248,16 +250,27 @@ echo $this->Lil->index($documents_index, 'Documents.Documents.index');
         document.location.href = targetUrl;
     }
 
+    function searchDocuments()
+    {
+        var rx_term = new RegExp("__term__", "i");
+        $.get(searchUrl.replace(rx_term, encodeURIComponent($(".search-panel input").val())), function(response) {
+            let tBody = response
+                .substring(response.indexOf("<table class=\"index"), response.indexOf("</table>")+8);
+            $("#AdminDocumentsIndex").html(tBody);
+        });
+    }
+
     $(document).ready(function() {
         ////////////////////////////////////////////////////////////////////////////////////////////
         // Filter for documents
         $(".search-panel input").on("input", function(e) {
-            var rx_term = new RegExp("__term__", "i");
-            $.get(searchUrl.replace(rx_term, encodeURIComponent($(this).val())), function(response) {
-                let tBody = response
-                    .substring(response.indexOf("<table class=\"index"), response.indexOf("</table>")+8);
-                $("#AdminDocumentsIndex").html(tBody);
-            });
+            if ($(this).val().length > 1) {
+                if (searchTimer) {
+                    window.clearTimeout(searchTimer);
+                    searchTimer = null;
+                }
+                searchTimer = window.setTimeout(searchDocuments, 500);
+            }
         }).focus();
 
 
