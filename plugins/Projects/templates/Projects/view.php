@@ -38,16 +38,6 @@
                 ],
                 'params' => ['id' => 'add-projects-log'],
             ],
-            'composite' => [
-                'title' => __d('projects', 'Add Composite'),
-                'visible' => true,
-                'url' => [
-                    'controller' => 'ProjectsComposites',
-                    'action' => 'edit',
-                    '?' => ['project' => $project->id],
-                ],
-                'params' => ['id' => 'add-projects-composite'],
-            ],
         ],
         'entity' => $project,
         'panels' => [
@@ -78,12 +68,6 @@
                     $this->Url->build([$project->id, '?' => ['tab' => 'logs']]),
                     __d('projects', 'Logs'),
                     $this->getRequest()->getQuery('tab') == 'logs' ? ' class="active"' : ''
-                ),
-                'composites' => sprintf(
-                    '<li class="tab col"><a href="%1$s" target="_self"%3$s>%2$s</a></li>',
-                    $this->Url->build([$project->id, '?' => ['tab' => 'composites']]),
-                    __d('projects', 'Composites'),
-                    $this->getRequest()->getQuery('tab') == 'composites' ? ' class="active"' : ''
                 ),
                 'post' => '</ul></div>',
             ]],
@@ -131,50 +115,6 @@
             }
             $this->Lil->insertIntoArray($projectView['panels'], ['logs' => $table], ['before' => 'tabs_end']);
             break;
-        case 'composites':
-            $table = [
-                'params' => ['id' => 'projects-composites'],
-                'table' => [
-                    'pre' => '<div id="tabc_composites" class="col s12">',
-                    'post' => '</div>',
-                    'params' => ['class' => 'striped', 'id' => 'projects-composites', 'style' => 'max-width: 700px'],
-                    'body' => ['rows' => []],
-                ],
-            ];
-            foreach ($composites as $composite) {
-                $table['table']['body']['rows'][] = ['columns' => [
-                    'no' => h($composite->no),
-                    'title' => $this->Html->link($composite->title, ['controller' => 'ProjectsComposites', 'action' => 'view', $composite->id]),
-                    'actions' =>  [
-                        'params' => ['class' => 'actions'],
-                        'html' =>
-                            (!$this->getCurrentUser()->hasRole('editor') ? '' : (
-                                $this->Lil->editLink(
-                                    ['controller' => 'ProjectsComposites', 'action' => 'edit', $composite->id],
-                                    ['class' => 'edit-projects-composite'],
-                                ) . ' ' .
-                                $this->Lil->deleteLink(['controller' => 'ProjectsComposites', 'action' => 'delete', $composite->id])
-                            )),
-                    ]
-                ]];
-            }
-            $this->Lil->insertIntoArray(
-                $projectView['panels'],
-                [
-                    'composites' => $table,
-                    'export' => $this->Html->link(
-                        __d('projects', 'Export to Word'),
-                        [
-                            'controller' => 'ProjectsComposites',
-                            'action' => 'export',
-                            $project->id,
-                        ],
-                        ['class' => 'btn']
-                    )
-                ],
-                ['before' => 'tabs_end']
-            );
-            break;
     }
 
     echo $this->Lil->panels($projectView, 'Projects.Projects.view');
@@ -185,18 +125,6 @@
             $(this).modalPopup({
                 title: "<?= __d('projects', 'Add Log') ?>",
                 onOpen: function(popup) { $("#projects-logs-descript", popup).focus(); }
-            });
-        });
-        $("#add-projects-composite").each(function() {
-            $(this).modalPopup({
-                title: "<?= __d('projects', 'Add Composite') ?>",
-                onOpen: function(popup) { $("#projects-composites-no", popup).focus(); }
-            });
-        });
-        $(".edit-projects-composite").each(function() {
-            $(this).modalPopup({
-                title: "<?= __d('projects', 'Edit Composite') ?>",
-                onOpen: function(popup) { $("#projects-composites-no", popup).focus(); }
             });
         });
     });
