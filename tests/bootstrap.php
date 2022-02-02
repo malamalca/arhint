@@ -64,4 +64,5 @@ $migrator->runMany([
     ['plugin' => 'Expenses'],
     ['plugin' => 'Projects'],
     ['plugin' => 'Tasks'],
+    ['plugin' => 'Calendar'],
 ]);

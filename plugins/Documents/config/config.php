@@ -29,6 +29,7 @@ return ['Documents' => [
     'sepaTypes' => $sepaTypes,
     'documentTypes' => $documentTypes,
     'invoiceDocTypes' => ['IV', 'AAB', 'CD'],
+    'travelOrderDocTypes' => ['TO'],
     'pdfEngine' => 'WKHTML2PDF',
     'TCPDF' => [
         'user-style-sheet' => dirname(dirname(__FILE__)) . DS . 'webroot' . DS . 'css' . DS . 'documents_pdf.css',

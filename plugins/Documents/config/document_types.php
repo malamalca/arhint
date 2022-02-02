@@ -27,4 +27,6 @@
         'SZ' => __d('documents', 'SZ - Specification number'),
         'VN' => __d('documents', 'VN - Order number (supplier)'),
         'ZAH' => __d('documents', 'ZAH - Payment claim for insurance company*'),
+
+        'TO' => __d('documents', 'TO - Travel Order'),
     ];

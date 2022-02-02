@@ -12,3 +12,4 @@ parameters:
         - src/Controller/SyncController.php
         - plugins/Crm/src/Lib/ActiveSyncContacts.php
         - plugins/Tasks/src/Lib/ActiveSyncTasks.php
+        - plugins/Calendar/src/Lib/ActiveSyncCalendar.php

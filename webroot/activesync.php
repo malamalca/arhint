@@ -59,7 +59,7 @@ if (Configure::read('debug')) {
 
 Syncroton_Registry::setContactsDataClass('\Crm\Lib\ActiveSyncContacts');
 Syncroton_Registry::setTasksDataClass('\Tasks\Lib\ActiveSyncTasks');
-//Syncroton_Registry::setCalendarDataClass('Syncroton_Data_Calendar');
+Syncroton_Registry::setCalendarDataClass('\Calendar\Lib\ActiveSyncCalendar');
 //Syncroton_Registry::setEmailDataClass('Syncroton_Data_Email');
 
 $server = new Syncroton_Server($_SERVER['PHP_AUTH_USER']);

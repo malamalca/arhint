@@ -8,6 +8,7 @@
       <directory suffix=".php">plugins/Documents/src/</directory>
       <directory suffix=".php">plugins/Projects/src/</directory>
       <directory suffix=".php">plugins/Tasks/src/</directory>
+      <directory suffix=".php">plugins/Calendar/src/</directory>
     </include>
     <exclude>
       <file>src/Console/Installer.php</file>
@@ -26,6 +27,7 @@
       <directory>plugins/Documents/tests/TestCase/</directory>
       <directory>plugins/Projects/tests/TestCase/</directory>
       <directory>plugins/Tasks/tests/TestCase/</directory>
+      <directory>plugins/Calendar/tests/TestCase/</directory>
     </testsuite>
     <!-- Add plugin test suites here. -->
   </testsuites>

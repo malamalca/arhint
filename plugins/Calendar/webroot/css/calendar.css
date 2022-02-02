@@ -1,0 +1,123 @@
+div.calendar-box {
+    display: block;
+    float: left;
+    width: 14%;
+
+    height: 7rem;
+    padding: 0;
+    margin: 0;
+}
+div.calendar-box.head {
+    font-size: 120%;
+    text-align: center;
+    height: auto;
+    border-top: solid 1px #e0e0e0;
+    border-bottom: solid 1px #a0a0a0;
+}
+div.calendar-box.head.sunday {
+    border-right: solid 1px #e0e0e0;
+}
+
+div.calendar-day.prev-month,
+div.calendar-day.next-month {
+    color: #c0c0c0;
+}
+div.calendar-day {
+    position: relative;
+    cursor: pointer;
+    user-select: none;
+}
+div.calendar-day div.day-bg {
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    width: 100%;
+    height: 100%;
+    border-left: solid 1px #e0e0e0;
+    border-bottom: solid 1px #e0e0e0;
+    z-index: -1;
+}
+div.calendar-day.sunday div.day-bg {
+    background-color: #f0f0f0;
+    border-right: solid 1px #e0e0e0;
+}
+
+div.calendar-day.saturday div.day-bg {
+    background-color: #f0f0f0;
+}
+
+div.calendar-day.today div.day-bg {
+    background-color: #ffcdd2;
+}
+
+div.calendar-day > div.day-no {
+    display: block;
+    width: 24px;
+    text-align: center;
+    padding-right: 3px;
+    color: #ffffff;
+    background-color: #606060;
+    margin-bottom: 1px;
+}
+div.calendar-day.prev-month > div.day-no,
+div.calendar-day.next-month > div.day-no {
+    background-color: #e0e0e0;
+}
+
+div.calendar-day a.event,
+div.calendar-day a.more-events {
+    display: block;
+    padding: 1px;
+    font-size: 80%;
+    line-height: normal !important;
+}
+div.calendar-day ul.dropdown-more-events li {
+    min-height: auto !important;
+}
+div.calendar-day a.event span.bullet {
+    color: blue;
+    font-size: bolder;
+}
+
+div.calendar-day a.event.allday {
+    width: 100%;
+    background-color: aquamarine;
+}
+
+div.calendar-day a.event.datespan {
+    background-color: rgba(0, 127, 255, 0.5);
+    border: solid 1px rgba(0, 127, 255, 0.5);
+    color: #ffffff;
+    margin-left: 2px;
+    margin-right: 2px;
+}
+div.calendar-day a.event.datespan-1 {
+    width: 100%;
+}
+div.calendar-day a.event.datespan-2 {
+    width: 200%;
+}
+div.calendar-day a.event.datespan-3 {
+    width: 300%;
+}
+div.calendar-day a.event.datespan-4 {
+    width: 400%;
+}
+div.calendar-day a.event.datespan-5 {
+    width: 500%;
+}
+div.calendar-day a.event.datespan-6 {
+    width: 600%;
+}
+div.calendar-day a.event.datespan-7 {
+    width: 700%;
+}
+
+div.calendar-day a.event.datespan-start {
+    border-top-left-radius: 6px;
+    border-bottom-left-radius: 6px;
+}
+div.calendar-day a.event.datespan-end {
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
+}

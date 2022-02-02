@@ -146,12 +146,6 @@ class ProjectsController extends AppController
                 ->toArray();
         }
 
-        $composites = TableRegistry::getTableLocator()->get('Projects.ProjectsComposites')->find()
-            ->select()
-            ->where(['project_id' => $id])
-            ->order('ProjectsComposites.no')
-            ->all();
-
         if ($this->getRequest()->is('ajax')) {
             $this->viewBuilder()->setTemplate('map_popup');
         }
@@ -160,7 +154,7 @@ class ProjectsController extends AppController
             ->order(['title'])
             ->toArray();
 
-        $this->set(compact('project', 'logs', 'users', 'composites', 'projectsStatuses', 'workDuration'));
+        $this->set(compact('project', 'logs', 'users', 'projectsStatuses', 'workDuration'));
     }
 
     /**

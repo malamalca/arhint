@@ -4,6 +4,8 @@ jQuery.fn.modalPopup = function(p_options) {
         title: "",
         url: $(this).prop("href"),
         processSubmit: false,
+        popupOnClick: true,
+        popupOnDblClick: false,
         onJson: null,
         onHtml: null,
         onBeforeRequest: null,
@@ -154,5 +156,10 @@ jQuery.fn.modalPopup = function(p_options) {
         }
     });
 
-    $(this).on("click", $this.onClick);
+    if ($this.options.popupOnClick) {
+        $(this).on("click", $this.onClick);
+    }
+    if ($this.options.popupOnDblClick) {
+        $(this).on("dblclick", $this.onClick);
+    }
 }

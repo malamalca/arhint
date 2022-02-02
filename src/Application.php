@@ -79,6 +79,7 @@ class Application extends BaseApplication implements
         $this->addPlugin(DocumentsPlugin::class, ['bootstrap' => true, 'routes' => true]);
         $this->addPlugin(ProjectsPlugin::class, ['bootstrap' => true, 'routes' => true]);
         $this->addPlugin(TasksPlugin::class, ['bootstrap' => true, 'routes' => true]);
+        $this->addPlugin('Calendar');
     }
 
     /**

@@ -29,8 +29,8 @@
 
         'usersPicker' => '<div class="input-field userspicker">{{content}}</div>',
 
-        /*'button' => '<button class="btn btn-default"{{attrs}}>{{text}}</button>',
-        'input' => '<input type="{{type}}" name="{{name}}" class="form-control"{{attrs}}/>',
+        'button' => '<button class="btn btn-default"{{attrs}}>{{text}}</button>',
+        /*'input' => '<input type="{{type}}" name="{{name}}" class="form-control"{{attrs}}/>',
         'formStart' => '<form class="form-horizontal"{{attrs}}>',
         'inputSubmit' => '<input type="{{type}}" class="btn btn-primary"{{attrs}}/>',
         'inputContainer' => '<div class="form-group bmd-form-group {{type}}{{required}}">{{content}}</div>',

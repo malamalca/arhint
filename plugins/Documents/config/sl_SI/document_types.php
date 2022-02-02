@@ -27,4 +27,6 @@
         'VN' => 'Naročilo dobavitelja',
         'ZAH' => 'Zahtevek za plačilo',
         'PON' => 'Ponudba',
+
+        'TO' => 'Potni nalog',
     ];

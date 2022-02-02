@@ -213,7 +213,7 @@ $documentEdit = [
             'fs_descript_end' => '</fieldset>',
 
             ////////////////////////////////////////////////////////////////////////////////////
-            /*'fs_attachments_start' => '<fieldset>',
+            'fs_attachments_start' => '<fieldset>',
             'fs_attachments_legend' => sprintf('<legend>%s</legend>', __d('documents', 'Archive')),
             'file.name.0' => [
                 'method' => 'control',
@@ -249,7 +249,7 @@ $documentEdit = [
                 'method' => 'unlockField',
                 'parameters' => ['documents_attachments.0.scanned'],
             ],
-            'fs_attachments_end' => '</fieldset>',*/
+            'fs_attachments_end' => '</fieldset>',
 
             ////////////////////////////////////////////////////////////////////////////////////
             'submit' => [
