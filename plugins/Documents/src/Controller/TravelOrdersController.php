@@ -11,7 +11,6 @@ use Cake\ORM\TableRegistry;
  *
  * @property \Documents\Model\Table\TravelOrdersTable $TravelOrders
  * @property \Documents\Model\Table\DocumentsCountersTable $DocumentsCounters
- * @method \Documents\Model\Entity\TravelOrder[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
 class TravelOrdersController extends AppController
 {
