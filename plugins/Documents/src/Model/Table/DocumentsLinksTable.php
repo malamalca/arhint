@@ -32,7 +32,7 @@ class DocumentsLinksTable extends Table
         $this->setDisplayField('id');
         $this->setPrimaryKey('id');
         $this->addBehavior('Timestamp');
-        $this->belongsTo('Documents.Documents', [
+        $this->belongsTo('Documents.Invoices', [
             'foreignKey' => 'document_id',
         ]);
     }
@@ -66,7 +66,7 @@ class DocumentsLinksTable extends Table
     public function buildRules(RulesChecker $rules): RulesChecker
     {
         //$rules->add($rules->existsIn(['link_id'], 'Links'));
-        $rules->add($rules->existsIn(['document_id'], 'Documents'));
+        $rules->add($rules->existsIn(['document_id'], 'Invoices'));
 
         return $rules;
     }

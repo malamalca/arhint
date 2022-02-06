@@ -52,7 +52,7 @@ class DocumentsSidebar
         $documents['active'] = $request->getParam('plugin') == 'Documents';
         $documents['url'] = [
             'plugin' => 'Documents',
-            'controller' => 'Documents',
+            'controller' => 'Invoices',
             'action' => 'index',
         ];
         $documents['items'] = [];
@@ -79,7 +79,7 @@ class DocumentsSidebar
             'title' => __d('documents', 'List'),
             'url' => [
                 'plugin' => 'Documents',
-                'controller' => 'Documents',
+                'controller' => 'Invoices',
                 'action' => 'report',
             ],
             'active' => $request->getParam('controller') == 'Documents' && $request->getParam('action') == 'report',
@@ -198,7 +198,7 @@ class DocumentsSidebar
                     'title' => $c->title,
                     'url' => [
                         'plugin' => 'Documents',
-                        'controller' => 'Documents',
+                        'controller' => 'Invoices',
                         'action' => 'index',
                         '?' => ['counter' => $c->id],
                     ],

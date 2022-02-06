@@ -111,22 +111,22 @@ class ExpensesEvents implements EventListenerInterface
     {
         $view = $event->getSubject();
 
-        $document = $panels->entity;
+        $invoice = $panels->entity;
 
-        if ($document->isInvoice()) {
+        if ($invoice->isInvoice()) {
             /** @var \Documents\Model\Table\DocumentsCountersTable $DocumentsCounters */
             $DocumentsCounters = TableRegistry::getTableLocator()->get('Documents.DocumentsCounters');
-            $counter = $DocumentsCounters->get($document->counter_id);
+            $counter = $DocumentsCounters->get($invoice->counter_id);
 
             if (!is_null($counter->expense)) {
                 $expenses = TableRegistry::getTableLocator()->get('Expenses.Expenses')->find()
-                    ->where(['model' => 'Document', 'foreign_id' => $document->id])
+                    ->where(['model' => 'Document', 'foreign_id' => $invoice->id])
                     ->contain(['Payments'])
                     ->all();
 
                 /** @var \Expenses\Model\Table\PaymentsAccountsTable $PaymentsAccountsTable */
                 $PaymentsAccountsTable = TableRegistry::getTableLocator()->get('Expenses.PaymentsAccounts');
-                $accounts = $PaymentsAccountsTable->listForOwner($document->owner_id);
+                $accounts = $PaymentsAccountsTable->listForOwner($invoice->owner_id);
 
                 $paymentsPanels = [
                     'payments_title' => '<h3>' . __d('expenses', 'Payments') . '</h3>',
@@ -154,21 +154,21 @@ class ExpensesEvents implements EventListenerInterface
      * Create Expense on DocumentsCounter "expense" field set to "expense" or "income"
      *
      * @param \Cake\Event\Event $event Event object
-     * @param \Documents\Model\Entity\Document $document Entity object
+     * @param \Documents\Model\Entity\Invoice $invoice Entity object
      * @param \ArrayObject $options Options array
      * @return void
      */
-    public function createExpenseOnSave(Event $event, $document, ArrayObject $options)
+    public function createExpenseOnSave(Event $event, $invoice, ArrayObject $options)
     {
-        if (get_class($event->getSubject()) == \Documents\Model\Table\DocumentsTable::class) {
-            $counter = $event->getSubject()->DocumentsCounters->get($document->counter_id);
+        if (get_class($event->getSubject()) == \Documents\Model\Table\InvoicesTable::class) {
+            $counter = $event->getSubject()->DocumentsCounters->get($invoice->counter_id);
             if (($counter->expense === 0) || ($counter->expense === 1)) {
                 $Expenses = TableRegistry::getTableLocator()->get('Expenses.Expenses');
 
-                if (!$document->isNew()) {
+                if (!$invoice->isNew()) {
                     /** @var \Expenses\Model\Entity\Expense $expense */
                     $expense = $Expenses->find()
-                        ->where(['foreign_id' => $document->id])
+                        ->where(['foreign_id' => $invoice->id])
                         ->first();
                 }
 
@@ -177,19 +177,19 @@ class ExpensesEvents implements EventListenerInterface
                     $expense = $Expenses->newEmptyEntity();
                 }
 
-                $expense->owner_id = $document->owner_id;
+                $expense->owner_id = $invoice->owner_id;
                 $expense->model = 'Document';
-                $expense->foreign_id = $document->id;
-                $expense->title = $document->title;
-                $expense->dat_happened = $document->dat_issue;
+                $expense->foreign_id = $invoice->id;
+                $expense->title = $invoice->title;
+                $expense->dat_happened = $invoice->dat_issue;
                 switch ((int)$counter->expense) {
                     case 0:
-                        $expense->net_total = abs((float)$document->net_total);
-                        $expense->total = abs((float)$document->total);
+                        $expense->net_total = abs((float)$invoice->net_total);
+                        $expense->total = abs((float)$invoice->total);
                         break;
                     case 1:
-                        $expense->net_total = -abs((float)$document->net_total);
-                        $expense->total = -abs((float)$document->total);
+                        $expense->net_total = -abs((float)$invoice->net_total);
+                        $expense->total = -abs((float)$invoice->total);
                         break;
                 }
 

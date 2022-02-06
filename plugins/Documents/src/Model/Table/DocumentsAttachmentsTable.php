@@ -110,9 +110,9 @@ class DocumentsAttachmentsTable extends Table
      */
     public function afterSave(Event $event, Entity $entity, ArrayObject $options)
     {
-        $documents = TableRegistry::getTableLocator()->get('Documents.Documents');
+        $InvoicesTable = TableRegistry::getTableLocator()->get('Documents.Invoices');
         $attachmentCount = $this->find()->where(['document_id' => $entity->document_id])->count();
-        $documents->updateAll(['attachments_count' => $attachmentCount], ['id' => $entity->document_id]);
+        $InvoicesTable->updateAll(['attachments_count' => $attachmentCount], ['id' => $entity->document_id]);
 
         if (
             !empty($options['uploadedFilename']) &&
@@ -153,9 +153,9 @@ class DocumentsAttachmentsTable extends Table
         /** @var \Documents\Model\Entity\DocumentsAttachment $entity */
         $entity = $this->get($entityId);
 
-        /** @var \Documents\Model\Table\DocumentsTable $DocumentsTable */
-        $DocumentsTable = TableRegistry::getTableLocator()->get('Documents.Documents');
+        /** @var \Documents\Model\Table\InvoicesTable $InvoicesTable */
+        $InvoicesTable = TableRegistry::getTableLocator()->get('Documents.Invoices');
 
-        return $DocumentsTable->isOwnedBy($entity->document_id, $ownerId);
+        return $InvoicesTable->isOwnedBy($entity->document_id, $ownerId);
     }
 }

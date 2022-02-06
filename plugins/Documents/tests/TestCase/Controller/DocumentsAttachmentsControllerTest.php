@@ -19,7 +19,7 @@ class DocumentsAttachmentsControllerTest extends IntegrationTestCase
      */
     public $fixtures = [
         'Users' => 'app.Users',
-        'Documents' => 'plugin.Documents.Documents',
+        'Invoices' => 'plugin.Documents.Invoices',
         'DocumentsAttachments' => 'plugin.Documents.DocumentsAttachments',
         'DocumentsCounters' => 'plugin.Documents.DocumentsCounters',
     ];
@@ -80,11 +80,11 @@ class DocumentsAttachmentsControllerTest extends IntegrationTestCase
 
         $this->post('documents/documents-attachments/add/d0d59a31-6de7-4eb4-8230-ca09113a7fe5', $data);
 
-        $this->assertRedirect(['controller' => 'Documents', 'action' => 'view', 'd0d59a31-6de7-4eb4-8230-ca09113a7fe5']);
+        $this->assertRedirect(['controller' => 'Invoices', 'action' => 'view', 'd0d59a31-6de7-4eb4-8230-ca09113a7fe5']);
 
-        $documents = TableRegistry::getTableLocator()->get('Documents.Documents');
-        $document = $documents->get('d0d59a31-6de7-4eb4-8230-ca09113a7fe5');
-        $this->assertEquals($document->attachments_count, 2);
+        $Invoices = TableRegistry::getTableLocator()->get('Documents.Invoices');
+        $invoice = $Invoices->get('d0d59a31-6de7-4eb4-8230-ca09113a7fe5');
+        $this->assertEquals($invoice->attachments_count, 2);
 
         $DocumentsAttachmentsTable = TableRegistry::getTableLocator()->get('Documents.DocumentsAttachments');
         $a = $DocumentsAttachmentsTable->find()
@@ -106,6 +106,6 @@ class DocumentsAttachmentsControllerTest extends IntegrationTestCase
         $this->login(USER_ADMIN);
 
         $this->get('documents/documents-attachments/delete/aef61652-7416-43b4-9bb4-198f5706ed74');
-        $this->assertRedirect(['controller' => 'Documents', 'action' => 'view', 'd0d59a31-6de7-4eb4-8230-ca09113a7fe5']);
+        $this->assertRedirect(['controller' => 'Invoices', 'action' => 'view', 'd0d59a31-6de7-4eb4-8230-ca09113a7fe5']);
     }
 }

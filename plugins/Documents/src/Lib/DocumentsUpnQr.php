@@ -16,15 +16,15 @@ class DocumentsUpnQr
     /**
      * Generates UpnQr code for specified document
      *
-     * @param string $documentId Document id
+     * @param string $invoiceId Document id
      * @return string
      */
-    public static function generateUpnQr($documentId)
+    public static function generateUpnQr($invoiceId)
     {
-        /** @var \Documents\Model\Table\DocumentsTable $DocumentsTable */
-        $DocumentsTable = TableRegistry::getTableLocator()->get('Documents.Documents');
+        /** @var \Documents\Model\Table\InvoicesTable $InvoicesTable */
+        $InvoicesTable = TableRegistry::getTableLocator()->get('Documents.Invoices');
 
-        $document = $DocumentsTable->get($documentId, ['contain' => ['Receivers', 'Issuers']]);
+        $invoice = $InvoicesTable->get($invoiceId, ['contain' => ['Receivers', 'Issuers']]);
 
         $qrDelim = chr(10);
         $qrData = [
@@ -33,24 +33,24 @@ class DocumentsUpnQr
             'polog' => '',
             'dvig' => '',
             'referenca_placnika' => '',
-            'ime_placnika' => mb_substr($document->receiver->title, 0, 33),
-            'ulica_placnika' => mb_substr($document->receiver->street, 0, 33),
-            'kraj_placnika' => mb_substr($document->receiver->city, 0, 33),
-            'znesek' => sprintf('%011d', $document->total * 100),
+            'ime_placnika' => mb_substr($invoice->receiver->title, 0, 33),
+            'ulica_placnika' => mb_substr($invoice->receiver->street, 0, 33),
+            'kraj_placnika' => mb_substr($invoice->receiver->city, 0, 33),
+            'znesek' => sprintf('%011d', $invoice->total * 100),
             'datum_placila' => '',
             'nujno' => '',
-            'koda_namena' => $document->pmt_sepa_type,
-            'namen_placila' => mb_substr($document->title, 0, 42),
-            'rok_placila' => $document->dat_expire->i18nFormat('dd.MM.yyyy'),
-            'iban_prejemnika' => $document->issuer->iban,
+            'koda_namena' => $invoice->pmt_sepa_type,
+            'namen_placila' => mb_substr($invoice->title, 0, 42),
+            'rok_placila' => $invoice->dat_expire->i18nFormat('dd.MM.yyyy'),
+            'iban_prejemnika' => $invoice->issuer->iban,
             'referenca_prejemnika' => mb_substr(
-                $document->pmt_type . $document->pmt_module . $document->pmt_ref,
+                $invoice->pmt_type . $invoice->pmt_module . $invoice->pmt_ref,
                 0,
                 22
             ),
-            'ime_prejemnika' => mb_substr($document->issuer->title, 0, 33),
-            'ulica_prejemnika' => mb_substr($document->issuer->street, 0, 33),
-            'kraj_prejemnika' => mb_substr($document->issuer->city, 0, 33),
+            'ime_prejemnika' => mb_substr($invoice->issuer->title, 0, 33),
+            'ulica_prejemnika' => mb_substr($invoice->issuer->street, 0, 33),
+            'kraj_prejemnika' => mb_substr($invoice->issuer->city, 0, 33),
         ];
 
         $checksum = 0;

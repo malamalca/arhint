@@ -74,14 +74,14 @@ class LilExpenseHelper extends Helper
                     }
                     $i_caption = '%1$s <span class="light">(%2$s)</span>';
 
-                    if (!empty($expense->document->no)) {
+                    if (!empty($expense->invoice->no)) {
                         $link = sprintf(
                             $i_caption,
                             $link = $this->Html->link(
-                                !empty($expense->document->no) ? $expense->document->no : __d('expenses', 'N/A'),
+                                !empty($expense->invoice->no) ? $expense->invoice->no : __d('expenses', 'N/A'),
                                 [
                                     'plugin' => 'Documents',
-                                    'controller' => 'Documents',
+                                    'controller' => 'Invoices',
                                     'action' => 'view',
                                     $expense->foreign_id,
                                 ]

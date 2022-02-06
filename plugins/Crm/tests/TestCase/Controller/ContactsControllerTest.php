@@ -24,7 +24,7 @@ class ContactsControllerTest extends IntegrationTestCase
         'ContactsAddresses' => 'plugin.Crm.ContactsAddresses',
         'ContactsAccounts' => 'plugin.Crm.ContactsAccounts',
         'DocumentsCounters' => 'plugin.Documents.DocumentsCounters',
-        'Documents' => 'plugin.Documents.Documents',
+        'Invoices' => 'plugin.Documents.Invoices',
         'DocumentsClients' => 'plugin.Documents.DocumentsClients',
     ];
 

@@ -31,9 +31,9 @@ class VatsTable extends Table
             'foreignKey' => 'vat_id',
             'className' => 'Documents\Model\Table\DocumentsItemsTable',
         ]);
-        $this->hasMany('DocumentsTaxes', [
+        $this->hasMany('InvoicesTaxes', [
             'foreignKey' => 'vat_id',
-            'className' => 'Documents\Model\Table\DocumentsTaxesTable',
+            'className' => 'Documents\Model\Table\InvoicesTaxesTable',
         ]);
         $this->hasMany('Items', [
             'foreignKey' => 'vat_id',

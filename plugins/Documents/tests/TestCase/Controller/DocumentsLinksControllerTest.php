@@ -20,7 +20,7 @@ class DocumentsLinksControllerTest extends IntegrationTestCase
     public $fixtures = [
         'Users' => 'app.Users',
         'DocumentsLinks' => 'plugin.Documents.DocumentsLinks',
-        'Documents' => 'plugin.Documents.Documents',
+        'Invoices' => 'plugin.Documents.Invoices',
     ];
 
     private function login($userId)

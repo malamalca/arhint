@@ -33,7 +33,8 @@ class DocumentsExport
         $viewOptions = [];
 
         $this->view = new $viewClass(null, null, EventManager::instance(), []);
-        $this->view->setTemplatePath('Documents');
+        $this->view->setTemplatePath('Invoices');
+        $this->view->setPlugin('Documents');
         $this->view->loadHelper('Lil.Lil');
     }
 
@@ -47,31 +48,31 @@ class DocumentsExport
     {
         $conditions = [];
         if (!empty($filter['id'])) {
-            $conditions['Documents.id IN'] = (array)$filter['id'];
+            $conditions['Invoices.id IN'] = (array)$filter['id'];
         }
 
-        /** @var \Documents\Model\Table\DocumentsTable $Documents */
-        $Documents = TableRegistry::getTableLocator()->get('Documents.Documents');
-        $params = $Documents->filter($filter);
+        /** @var \Documents\Model\Table\InvoicesTable $Invoices */
+        $Invoices = TableRegistry::getTableLocator()->get('Documents.Invoices');
+        $params = $Invoices->filter($filter);
 
         $defaultParams = [
             'conditions' => $conditions,
             'contain' => [
-                'DocumentsItems',
+                'InvoicesItems',
                 'DocumentsCounters',
-                'DocumentsTaxes',
+                'InvoicesTaxes',
                 'Receivers',
                 'Buyers',
                 'Issuers',
                 'DocumentsAttachments',
-                'DocumentsLinks' => ['Documents'],
+                'DocumentsLinks' => ['Invoices'],
                 'TplHeaders', 'TplBodies', 'TplFooters',
             ],
-            'order' => ['Documents.counter'],
+            'order' => ['Invoices.counter'],
         ];
 
         $params = array_merge_recursive($defaultParams, $params);
-        $documents = $Documents
+        $documents = $Invoices
             ->find()
             ->where($params['conditions'])
             ->contain($params['contain'])
@@ -84,10 +85,10 @@ class DocumentsExport
      * export method
      *
      * @param string $ext Export extension.
-     * @param array $documents Array of documents
+     * @param array $invoices Array of invoices
      * @return mixed
      */
-    public function export($ext, $documents)
+    public function export($ext, $invoices)
     {
         $result = null;
 
@@ -105,12 +106,12 @@ class DocumentsExport
 
                 $responseHtml = '';
 
-                foreach ($documents as $document) {
-                    $this->view->set('documents', [0 => $document]);
+                foreach ($invoices as $invoice) {
+                    $this->view->set('invoices', [0 => $invoice]);
 
-                    $this->view->setTemplate('Documents.generic');
-                    if (in_array($document->doc_type, Configure::read('Documents.invoiceDocTypes'))) {
-                        $this->view->setTemplate('Documents.eslog');
+                    $this->view->setTemplate('generic');
+                    if (in_array($invoice->doc_type, Configure::read('Documents.invoiceDocTypes'))) {
+                        $this->view->setTemplate('eslog');
                     }
 
                     $outputHtml = $this->view->render();
@@ -121,8 +122,8 @@ class DocumentsExport
                     if ($ext == 'pdf') {
                         // PDF
                         $pageOptions = [];
-                        if (!empty($document->tpl_header)) {
-                            $templateBody = $document->tpl_header->body;
+                        if (!empty($invoice->tpl_header)) {
+                            $templateBody = $invoice->tpl_header->body;
                             if (substr($templateBody, 0, 5) == 'data:') {
                                 $templateBody = json_encode([
                                     'image' => substr($templateBody, strpos($templateBody, ',') + 1),
@@ -132,8 +133,8 @@ class DocumentsExport
                             }
                             $pdf->setHeaderHtml($templateBody);
                         }
-                        if (!empty($document->tpl_footer)) {
-                            $templateBody = $document->tpl_footer->body;
+                        if (!empty($invoice->tpl_footer)) {
+                            $templateBody = $invoice->tpl_footer->body;
                             if (substr($templateBody, 0, 5) == 'data:') {
                                 $templateBody = json_encode([
                                     'image' => substr($templateBody, strpos($templateBody, ',') + 1),
@@ -144,13 +145,13 @@ class DocumentsExport
 
                             $pdf->setFooterHtml($templateBody);
                         }
-                        $pdf->newPage($this->toHtml($document, $outputHtml), $pageOptions);
+                        $pdf->newPage($this->toHtml($invoice, $outputHtml), $pageOptions);
                     }
                 }
 
                 if (in_array($ext, ['html', 'xml', 'eslog'])) {
                     if ($ext == 'html') {
-                        $result = $this->toHtml($documents[0], $responseHtml);
+                        $result = $this->toHtml($invoices[0], $responseHtml);
                     } else {
                         $result = $responseHtml;
                     }
@@ -167,10 +168,10 @@ class DocumentsExport
                 break;
             case 'eslog20':
                 $responseHtml = '';
-                foreach ($documents as $document) {
-                    $this->view->set('documents', [0 => $document]);
-                    $this->view->setTemplate('Documents.generic');
-                    $this->view->setTemplate('Documents.eslog20');
+                foreach ($invoices as $invoice) {
+                    $this->view->set('invoices', [0 => $invoice]);
+                    $this->view->setTemplate('generic');
+                    $this->view->setTemplate('eslog20');
 
                     $responseHtml .= $this->view->render();
                 }
@@ -178,10 +179,10 @@ class DocumentsExport
                 $result = $responseHtml;
                 break;
             default:
-                $this->view->set(compact('documents'));
-                $viewCtp = 'Documents.eslog';
+                $this->view->set(compact('invoices'));
+                $viewCtp = 'eslog';
                 if ($ext == 'sepa') {
-                    $viewCtp = 'Documents.sepa';
+                    $viewCtp = 'sepa';
                 }
                 $result = $this->view->render($viewCtp);
         }

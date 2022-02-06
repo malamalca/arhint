@@ -91,7 +91,7 @@ class DocumentsEvents implements EventListenerInterface
         $page = (int)$view->getRequest()->getQuery('documents.page', 1);
 
         // prepare query
-        $sort = 'Documents.';
+        $sort = 'Invoices.';
         $sort .= $view->getRequest()->getQuery('documents.sort', 'dat_issue');
         $sort .= ' ' . $view->getRequest()->getQuery('documents.direction', 'DESC');
 
@@ -109,11 +109,11 @@ class DocumentsEvents implements EventListenerInterface
                 break;
         }
 
-        $Documents = TableRegistry::getTableLocator()->get('Documents.Documents');
+        $InvoicesTable = TableRegistry::getTableLocator()->get('Documents.Invoices');
 
         // fetch documents
-        $query = $Documents->find();
-        $documents = $query
+        $query = $InvoicesTable->find();
+        $invoices = $query
             ->select(['id', 'no', 'counter_id', 'title', 'dat_issue', 'total', 'attachments_count'])
             ->where($conditions)
             ->order($sort)
@@ -122,11 +122,11 @@ class DocumentsEvents implements EventListenerInterface
             ->all();
 
         // calculate total sum and number of documents
-        $query = $Documents->find();
+        $query = $InvoicesTable->find();
         $documentsTotals = $query
             ->select([
-                'documentsSum' => $query->func()->sum('Documents.total'),
-                'documentsCount' => $query->func()->count('Documents.id'),
+                'documentsSum' => $query->func()->sum('Invoices.total'),
+                'documentsCount' => $query->func()->count('Invoices.id'),
             ])
             ->where($conditions)
             ->disableHydration()
@@ -160,7 +160,7 @@ class DocumentsEvents implements EventListenerInterface
                             'title' => $counter->title,
                             'url' => [
                                 'plugin' => 'Documents',
-                                'controller' => 'Documents',
+                                'controller' => 'Invoices',
                                 'action' => 'edit',
                                 '?' => [
                                     'counter' => $counter->id,
@@ -199,7 +199,7 @@ class DocumentsEvents implements EventListenerInterface
             $documentsPanels = [
                 'documents_table' => $view->element(
                     $elementTemplate,
-                    ['documents' => $documents, 'counters' => $counters]
+                    ['documents' => $invoices, 'counters' => $counters]
                 ),
             ];
 

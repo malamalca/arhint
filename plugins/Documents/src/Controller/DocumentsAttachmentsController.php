@@ -160,7 +160,7 @@ class DocumentsAttachmentsController extends AppController
                 if ($this->DocumentsAttachments->save($attachment, ['uploadedFilename' => $tmpNames])) {
                     $this->Flash->success(__d('documents', 'The documents attachment has been saved.'));
 
-                    return $this->redirect(['controller' => 'Documents', 'action' => 'view', $attachment->document_id]);
+                    return $this->redirect(['controller' => 'Invoices', 'action' => 'view', $attachment->document_id]);
                 } else {
                     $this->Flash->error(__d('documents', 'The attachment could not be saved. Please, try again.'));
                 }
@@ -190,6 +190,6 @@ class DocumentsAttachmentsController extends AppController
             $this->Flash->error(__d('documents', 'The attachment could not be deleted. Please, try again.'));
         }
 
-        return $this->redirect(['controller' => 'Documents', 'action' => 'view', $attachment->document_id]);
+        return $this->redirect(['controller' => 'Invoices', 'action' => 'view', $attachment->document_id]);
     }
 }

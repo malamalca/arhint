@@ -19,10 +19,10 @@ class DocumentsAttachmentPolicy
      */
     public function canView($user, $entity)
     {
-        /** @var \Documents\Model\Table\DocumentsTable $DocumentsTable */
-        $DocumentsTable = TableRegistry::getTableLocator()->get('Documents.Documents');
+        /** @var \Documents\Model\Table\InvoicesTable $InvoicesTable */
+        $InvoicesTable = TableRegistry::getTableLocator()->get('Documents.Invoices');
 
-        return $DocumentsTable->isOwnedBy($entity->document_id, $user->company_id);
+        return $InvoicesTable->isOwnedBy($entity->document_id, $user->company_id);
     }
 
     /**
@@ -34,10 +34,10 @@ class DocumentsAttachmentPolicy
      */
     public function canEdit($user, $entity)
     {
-        /** @var \Documents\Model\Table\DocumentsTable $DocumentsTable */
-        $DocumentsTable = TableRegistry::getTableLocator()->get('Documents.Documents');
+        /** @var \Documents\Model\Table\InvoicesTable $InvoicesTable */
+        $InvoicesTable = TableRegistry::getTableLocator()->get('Documents.Invoices');
 
-        return $DocumentsTable->isOwnedBy($entity->document_id, $user->company_id) && $user->hasRole('editor');
+        return $InvoicesTable->isOwnedBy($entity->document_id, $user->company_id) && $user->hasRole('editor');
     }
 
     /**
@@ -49,9 +49,9 @@ class DocumentsAttachmentPolicy
      */
     public function canDelete($user, $entity)
     {
-        /** @var \Documents\Model\Table\DocumentsTable $DocumentsTable */
-        $DocumentsTable = TableRegistry::getTableLocator()->get('Documents.Documents');
+        /** @var \Documents\Model\Table\InvoicesTable $InvoicesTable */
+        $InvoicesTable = TableRegistry::getTableLocator()->get('Documents.Invoices');
 
-        return $DocumentsTable->isOwnedBy($entity->document_id, $user->company_id) && $user->hasRole('editor');
+        return $InvoicesTable->isOwnedBy($entity->document_id, $user->company_id) && $user->hasRole('editor');
     }
 }
