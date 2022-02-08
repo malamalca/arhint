@@ -63,7 +63,7 @@ foreach ($invoices as $invoice) {
     }
 
     // IV - prejemnik
-    if ($invoice->documents_counter->kind == 'issued') {
+    if ($invoice->documents_counter->direction == 'issued') {
         $transformed['IzdaniDokumenti']['Dokument'][$i]['PodatkiPodjetja'][2] =
             $transformed['IzdaniDokumenti']['Dokument'][$i]['PodatkiPodjetja'][0];
     } else {

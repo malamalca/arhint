@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Documents\Model\Table;
 
+use Cake\Cache\Cache;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 
@@ -40,7 +41,7 @@ class DocumentsCountersTable extends Table
         $validator
             ->add('id', 'valid', ['rule' => 'uuid'])
             ->allowEmptyString('id', 'create')
-            ->allowEmptyString('kind')
+            ->allowEmptyString('direction')
             ->add('counter', 'valid', ['rule' => 'numeric'])
             ->requirePresence('counter', 'create')
             ->notEmptyString('counter')
@@ -96,44 +97,46 @@ class DocumentsCountersTable extends Table
     }
 
     /**
-     * findDocumentsList costum finder
+     * Fetch counters from cache
      *
-     * @param \Cake\ORM\Query $query Query object
-     * @param array $options Options array
-     * @return \Cake\ORM\Query
+     * @param string $userId Users id
+     * @param object $scopedQuery Query with applied scope
+     * @return mixed $counters
      */
-    /*public function findDocumentsList(Query $query, array $options)
+    public function rememberForUser($userId, $scopedQuery)
     {
-        $documentsTypes = (array)Configure::read('Documents.invoiceDocTypes');
+        $counters = Cache::remember(
+            'Documents.sidebarCounters.' . $userId,
+            function () use ($scopedQuery) {
+                return $scopedQuery
+                    ->where(['active' => true])
+                    ->order(['active', 'direction DESC', 'title'])
+                    ->all();
+            }
+        );
 
-        $query->where(['doc_type IN' => $documentsTypes]);
-
-        $query->formatResults(function ($results) {
-            return $results
-                ->combine('id', 'title');
-        });
-
-        return $query;
-    }*/
+        return $counters;
+    }
 
     /**
      * findDefaultCounter method
      *
      * @param object $query Query with applied scope
+     * @param string $kind Counter kind (document, invoice, travelorder)
      * @param string|null $counterType Counter type
      * @return mixed Counter data or false on failure.
      */
-    public function findDefaultCounter($query = null, $counterType = null)
+    public function findDefaultCounter($query, $kind, $counterType = null)
     {
         $params = ['order' => null, 'conditions' => []];
 
         // no counter specified; find first (or default) counter
-        $params['conditions'] = ['active' => true];
-        $params['order'] = ['active', 'kind DESC', 'title'];
+        $params['conditions'] = ['active' => true, 'kind' => $kind];
+        $params['order'] = ['active', 'direction DESC', 'title'];
 
         if (!empty($counterType)) {
             if (in_array($counterType, ['received', 'issued', 'other'])) {
-                $params['conditions']['kind'] = $counterType;
+                $params['conditions']['direction'] = $counterType;
             } elseif ($counterType == 'archived') {
                 $params['conditions']['active'] = false;
             }

@@ -47,7 +47,7 @@ $def = $documentsTable['panels']['list']['lines']['default'];
 unset($documentsTable['panels']['list']['lines']['default']);
 
 foreach ($data as $document) {
-    $client = $document->documents_counter->kind == 'issued' ? $document->receiver : $document->issuer;
+    $client = $document->documents_counter->direction == 'issued' ? $document->receiver : $document->issuer;
 
     if ($counterId != $document->counter_id) {
         if (!empty($counterId)) {

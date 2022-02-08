@@ -53,7 +53,7 @@ class ContactsController extends AppController
 
         $params = array_merge_recursive(
             [
-                'contain' => ['ContactsEmails', 'ContactsPhones', 'PrimaryAddresses', 'Companies'],
+                'contain' => ['ContactsEmails', 'ContactsPhones', 'PrimaryAddresses', 'PrimaryPhones', 'Companies'],
                 'conditions' => [],
                 'order' => 'Contacts.title',
             ],

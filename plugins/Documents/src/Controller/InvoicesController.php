@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Documents\Controller;
 
-use Cake\Cache\Cache;
 use Cake\Core\Plugin;
 use Cake\Event\EventInterface;
 use Cake\Http\Exception\NotFoundException;
@@ -74,7 +73,8 @@ class InvoicesController extends AppController
         } else {
             $counter = $this->DocumentsCounters->findDefaultCounter(
                 $this->Authorization->applyScope($this->DocumentsCounters->find(), 'index'),
-                $this->getRequest()->getQuery('kind')
+                'invoice',
+                $this->getRequest()->getQuery('direction')
             );
             if (!$counter) {
                 $this->Authorization->skipAuthorization();
@@ -100,7 +100,7 @@ class InvoicesController extends AppController
                 'type' => 'INNER',
                 'conditions' => [
                     'Client.document_id = Invoices.id',
-                    'Client.kind' => $counter->kind == 'received' ? 'II' : 'IV',
+                    'Client.kind' => $counter->direction == 'received' ? 'II' : 'IV',
                 ],
             ])
             ->where($params['conditions'])
@@ -120,7 +120,7 @@ class InvoicesController extends AppController
                 'type' => 'INNER',
                 'conditions' => [
                     'Client.document_id = Invoices.id',
-                    'Client.kind' => $counter->kind == 'received' ? 'II' : 'IV',
+                    'Client.kind' => $counter->direction == 'received' ? 'II' : 'IV',
                 ],
             ])
             ->where($params['conditions'])
@@ -129,18 +129,9 @@ class InvoicesController extends AppController
 
         $dateSpan = $this->Invoices->maxSpan($filter['counter']);
 
-        $counters = [];
-        $controller = $this;
-        $counters = Cache::remember(
-            'Documents.sidebarCounters.' . $this->getCurrentUser()->id,
-            function () use ($controller) {
-                $DocumentsCounters = TableRegistry::getTableLocator()->get('Documents.DocumentsCounters');
-
-                return $controller->Authorization->applyScope($DocumentsCounters->find(), 'index')
-                    ->where(['active' => true])
-                    ->order(['active', 'kind DESC', 'title'])
-                    ->all();
-            }
+        $counters = $this->DocumentsCounters->rememberForUser(
+            $this->getCurrentUser()->id,
+            $this->Authorization->applyScope($this->DocumentsCounters->find(), 'index')
         );
 
         $projects = [];
@@ -191,17 +182,11 @@ class InvoicesController extends AppController
         $LinksTable = TableRegistry::getTableLocator()->get('Documents.DocumentsLinks');
         $links = $LinksTable->forDocument($id);
 
-        $controller = $this;
-        $counters = Cache::remember(
-            'Documents.sidebarCounters.' . $this->getCurrentUser()->id,
-            function () use ($controller) {
-                $DocumentsCounters = TableRegistry::getTableLocator()->get('Documents.DocumentsCounters');
-
-                return $controller->Authorization->applyScope($DocumentsCounters->find(), 'index')
-                    ->where(['active' => true])
-                    ->order(['active', 'kind DESC', 'title'])
-                    ->all();
-            }
+        /** @var \Documents\Model\Table\DocumentsCountersTable $DocumentsCounters */
+        $DocumentsCounters = TableRegistry::getTableLocator()->get('Documents.DocumentsCounters');
+        $counters = $DocumentsCounters->rememberForUser(
+            $this->getCurrentUser()->id,
+            $this->Authorization->applyScope($DocumentsCounters->find(), 'index')
         );
 
         $currentCounter = $invoice->documents_counter->id;
@@ -752,7 +737,7 @@ class InvoicesController extends AppController
                 $invoice->counter_id = $invoice->documents_counter->id;
                 $invoice->doc_type = $invoice->documents_counter->doc_type;
 
-                switch ($invoice->documents_counter->kind) {
+                switch ($invoice->documents_counter->direction) {
                     case 'issued':
                         $invoice->issuer->patchWithAuth($this->getCurrentUser());
                         break;

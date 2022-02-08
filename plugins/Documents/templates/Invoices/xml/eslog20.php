@@ -221,7 +221,7 @@ foreach ((array)$invoices as $invoice) {
     $total_base = 0;
     $total_tax = 0;
     $total_grand = 0;
-    if ($invoice->documents_counter->kind == 'issued') {
+    if ($invoice->documents_counter->direction == 'issued') {
         if (!empty($invoice->invoices_items)) {
             $j = 1;
             $tax_spec = [];

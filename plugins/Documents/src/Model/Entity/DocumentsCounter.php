@@ -12,6 +12,7 @@ use Cake\ORM\Entity;
  * @property string $id
  * @property string|null $owner_id
  * @property string|null $kind
+ * @property string|null $direction
  * @property string|null $doc_type
  * @property int|null $expense
  * @property int $counter

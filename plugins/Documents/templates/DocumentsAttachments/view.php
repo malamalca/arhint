@@ -19,10 +19,10 @@ $attachmentPreview = [
     ],
     'entity' => $a,
     'panels' => [
-       sprintf('<iframe id="document-view" src="%s"></iframe>', $action),
+       sprintf('<iframe id="attachment-view" src="%s"></iframe>', $action),
     ],
 ];
 
 echo $this->Lil->panels($attachmentPreview, 'Documents.DocumentsAttachments.view');
 
-$this->Lil->jsReady('$("#document-view").height(window.innerHeight - $("#document-view").offset().top - 30);');
+$this->Lil->jsReady('$("#attachment-view").height(window.innerHeight - $("#attachment-view").offset().top - 30);');

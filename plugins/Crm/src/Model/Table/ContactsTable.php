@@ -196,6 +196,7 @@ class ContactsTable extends Table
         if (!empty($filter['search'])) {
             $ret['conditions']['OR'] = [
                 'Contacts.title LIKE' => '%' . $filter['search'] . '%',
+                'PrimaryPhones.no LIKE' => '%' . $filter['search'] . '%',
             ];
         }
 

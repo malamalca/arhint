@@ -74,8 +74,8 @@ class DocumentsEvents implements EventListenerInterface
         $countersQuery = $DocumentsCounters->find();
         $identity->applyScope('index', $countersQuery);
         $counters = $countersQuery
-            ->select(['id', 'title', 'kind', 'active'])
-            ->order(['kind', 'title'])
+            ->select(['id', 'title', 'direction', 'active'])
+            ->order(['direction', 'title'])
             ->all()
             ->combine('id', function ($entity) {
                 return $entity;
@@ -87,13 +87,13 @@ class DocumentsEvents implements EventListenerInterface
         }
 
         // fetch documents
-        $documentsPerPage = 5;
-        $page = (int)$view->getRequest()->getQuery('documents.page', 1);
+        $invoicesPerPage = 5;
+        $page = (int)$view->getRequest()->getQuery('invoices.page', 1);
 
         // prepare query
         $sort = 'Invoices.';
-        $sort .= $view->getRequest()->getQuery('documents.sort', 'dat_issue');
-        $sort .= ' ' . $view->getRequest()->getQuery('documents.direction', 'DESC');
+        $sort .= $view->getRequest()->getQuery('invoices.sort', 'dat_issue');
+        $sort .= ' ' . $view->getRequest()->getQuery('invoices.direction', 'DESC');
 
         $conditions = [];
         switch ($event->getName()) {
@@ -105,28 +105,28 @@ class DocumentsEvents implements EventListenerInterface
                 $conditions['id IN'] = $matchingDocuments;
                 break;
             case 'Lil.Panels.Projects.Projects.view':
-                $conditions['Documents.project_id'] = $panels->entity->id;
+                $conditions['Invoices.project_id'] = $panels->entity->id;
                 break;
         }
 
         $InvoicesTable = TableRegistry::getTableLocator()->get('Documents.Invoices');
 
-        // fetch documents
+        // fetch invoices
         $query = $InvoicesTable->find();
         $invoices = $query
             ->select(['id', 'no', 'counter_id', 'title', 'dat_issue', 'total', 'attachments_count'])
             ->where($conditions)
             ->order($sort)
-            ->limit($documentsPerPage)
+            ->limit($invoicesPerPage)
             ->page($page)
             ->all();
 
-        // calculate total sum and number of documents
+        // calculate total sum and number of invoices
         $query = $InvoicesTable->find();
-        $documentsTotals = $query
+        $invoicesTotals = $query
             ->select([
-                'documentsSum' => $query->func()->sum('Invoices.total'),
-                'documentsCount' => $query->func()->count('Invoices.id'),
+                'invoicesSum' => $query->func()->sum('Invoices.total'),
+                'invoicesCount' => $query->func()->count('Invoices.id'),
             ])
             ->where($conditions)
             ->disableHydration()
@@ -134,29 +134,29 @@ class DocumentsEvents implements EventListenerInterface
 
         // set view variables
         $view->set('entityId', $view->getRequest()->getParam('pass.0'));
-        $view->set('documentsSum', $documentsTotals['documentsSum']);
+        $view->set('invoicesSum', $invoicesTotals['invoicesSum']);
 
         // set paging data
         $view->setRequest($view->getRequest()->withAttribute(
             'paging',
-            ['Documents' => [
-                'pageCount' => (int)(ceil($documentsTotals['documentsCount'] / $documentsPerPage)),
+            ['Invoices' => [
+                'pageCount' => (int)(ceil($invoicesTotals['invoicesCount'] / $invoicesPerPage)),
                 'page' => $page,
-                'scope' => 'documents',
+                'scope' => 'invoices',
             ]]
         ));
 
         // create Lil panels
         switch ($view->getRequest()->getParam('plugin')) {
             case 'Projects':
-                $panels->menu['add_document'] = [
-                    'title' => __d('documents', 'Add Document'),
+                $panels->menu['add_invoice'] = [
+                    'title' => __d('documents', 'Add Invoice'),
                     'visible' => true,
                     'submenu' => [],
                 ];
                 foreach ($counters as $counter) {
                     if ($counter->active) {
-                        $panels->menu['add_document']['submenu'][] = [
+                        $panels->menu['add_invoice']['submenu'][] = [
                             'title' => $counter->title,
                             'url' => [
                                 'plugin' => 'Documents',
@@ -172,38 +172,38 @@ class DocumentsEvents implements EventListenerInterface
                     }
                 }
 
-                if ($view->getRequest()->getQuery('tab') == 'documents') {
-                    $elementTemplate = 'Documents.documents_projects_list';
+                if ($view->getRequest()->getQuery('tab') == 'invoices') {
+                    $elementTemplate = 'Documents.invoices_projects_list';
                 }
 
                 // add documents table
-                $documentsTab = sprintf(
+                $invoicesTab = sprintf(
                     '<li class="tab col"><a href="%1$s" target="_self"%3$s>%2$s</a></li>',
-                    $view->Url->build([$view->getRequest()->getParam('pass.0'), '?' => ['tab' => 'documents']]),
-                    __d('documents', 'Documents'),
-                    $view->getRequest()->getQuery('tab') == 'documents' ? ' class="active"' : ''
+                    $view->Url->build([$view->getRequest()->getParam('pass.0'), '?' => ['tab' => 'invoices']]),
+                    __d('documents', 'Invoices'),
+                    $view->getRequest()->getQuery('tab') == 'invoices' ? ' class="active"' : ''
                 );
 
                 $view->Lil->insertIntoArray(
                     $panels->panels['tabs']['lines'],
-                    ['documents' => $documentsTab],
+                    ['invoices' => $invoicesTab],
                     ['before' => 'post']
                 );
 
                 break;
             default:
-                $elementTemplate = 'Documents.documents_list';
+                $elementTemplate = 'Documents.invoices_list';
         }
 
         if (!empty($elementTemplate)) {
-            $documentsPanels = [
-                'documents_table' => $view->element(
+            $invoicesPanels = [
+                'invoices_table' => $view->element(
                     $elementTemplate,
-                    ['documents' => $invoices, 'counters' => $counters]
+                    ['invoices' => $invoices, 'counters' => $counters]
                 ),
             ];
 
-            $view->Lil->insertIntoArray($panels->panels, $documentsPanels);
+            $view->Lil->insertIntoArray($panels->panels, $invoicesPanels);
         }
 
         return $panels;

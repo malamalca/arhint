@@ -133,7 +133,7 @@ class DocumentsLinksTable extends Table
         if (!empty($links)) {
             $ret = $this->find()
                 ->where(['document_id !=' => $id, 'link_id IN' => array_keys($links)])
-                ->contain(['Documents'])
+                ->contain(['Invoices'])
                 ->all();
         }
 

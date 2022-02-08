@@ -3,7 +3,7 @@ use Cake\Core\Configure;
 use Cake\Core\Plugin;
 use Cake\Utility\Text;
 
-$invoice->client = $invoice->documents_counter->kind == 'issued' ? $invoice->receiver : $invoice->issuer;
+$invoice->client = $invoice->documents_counter->direction == 'issued' ? $invoice->receiver : $invoice->issuer;
 
 $invoiceView = [
     'title_for_layout' => __d(
@@ -221,7 +221,7 @@ $invoiceView = [
             'id' => 'invoice-client',
             'lines' => [
                 'client.title' => [
-                    'label' => ($invoice->documents_counter->kind == 'issued' ? __d('documents', 'Receiver') : __d('documents', 'Issuer')) . ':',
+                    'label' => ($invoice->documents_counter->direction == 'issued' ? __d('documents', 'Receiver') : __d('documents', 'Issuer')) . ':',
                     'text' =>
                         h($invoice->client->title) . '&nbsp;' . (
                         empty($invoice->client->contact_id) ? '' :
@@ -412,7 +412,7 @@ if ($invoice->isInvoice()) {
         ],
     ];
 
-    if ($invoice->documents_counter->kind == 'issued') {
+    if ($invoice->documents_counter->direction == 'issued') {
         $invoiceView['panels']['items_title'] = sprintf('<h3>%s</h3>', __d('documents', 'Analytics'));
         $invoiceView['panels']['items']['id'] = 'invoice-view-items-table';
         $invoiceView['panels']['items']['table'] = $items;
@@ -494,7 +494,7 @@ if ($invoice->isInvoice()) {
         ],
     ];
 
-    if ($invoice->documents_counter->kind == 'received') {
+    if ($invoice->documents_counter->direction == 'received') {
         $invoiceView['panels']['vat_title'] = sprintf('<h3>%s</h3>', __d('documents', 'VAT Analytics'));
         $invoiceView['panels']['vat']['id'] = 'invoice-view-tax-table';
         $invoiceView['panels']['vat']['table'] = $taxes;
@@ -513,7 +513,7 @@ if (!empty($invoice->documents_attachments)) {
             $this->Html->link(
                 $atch['original'],
                 [
-                    'controller' => 'DocumentAttachments',
+                    'controller' => 'DocumentsAttachments',
                     'action' => 'view',
                     $atch->id,
                 ],
@@ -525,7 +525,7 @@ if (!empty($invoice->documents_attachments)) {
             $this->Html->link(
                 '<i class="material-icons">get_app</i>',
                 [
-                    'controller' => 'DocumentAttachments',
+                    'controller' => 'DocumentsAttachments',
                     'action' => 'download',
                     $atch->id,
                     1,
@@ -539,7 +539,7 @@ if (!empty($invoice->documents_attachments)) {
             $this->Html->link(
                 '<i class="material-icons">delete</i>',
                 [
-                    'controller' => 'DocumentAttachments',
+                    'controller' => 'DocumentsAttachments',
                     'action' => 'delete',
                     $atch->id,
                 ],
@@ -616,10 +616,10 @@ echo $this->Lil->panels($invoiceView, 'Documents.Invoices.view');
                 title: "<?= __d('documents', 'Attachment Preview') ?>",
                 onOpen: function(popup) {
                     $(popup).height(window.innerHeight);
-                    $("#invoice-view", popup).height($(popup).innerHeight() - 125);
+                    $("#attachment-view", popup).height($(popup).innerHeight() - 125);
                 },
                 onResize: function(popup) {
-                    $("#invoice-view", popup).height($(popup).innerHeight() - 125);
+                    $("#attachment-view", popup).height($(popup).innerHeight() - 125);
                 }
             });
         });

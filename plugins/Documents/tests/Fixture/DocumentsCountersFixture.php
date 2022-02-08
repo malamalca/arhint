@@ -17,7 +17,8 @@ class DocumentsCountersFixture extends TestFixture
         [
             'id' => '1d53bc5b-de2d-4e85-b13b-81b39a97fc88',
             'owner_id' => '8155426d-2302-4fa5-97de-e33cefb9d704',
-            'kind' => 'received',
+            'kind' => 'invoice',
+            'direction' => 'received',
             'doc_type' => null,
             'expense' => 1,
             'counter' => 1,
@@ -33,7 +34,8 @@ class DocumentsCountersFixture extends TestFixture
         [
             'id' => '1d53bc5b-de2d-4e85-b13b-81b39a97fc89',
             'owner_id' => '7d5c7465-9487-4203-ae67-ddb191c42816',
-            'kind' => 'issued',
+            'kind' => 'invoice',
+            'direction' => 'issued',
             'doc_type' => null,
             'expense' => 1,
             'counter' => 1,

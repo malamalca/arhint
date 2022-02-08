@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Documents\Controller;
 
-use Cake\Cache\Cache;
 use Cake\ORM\TableRegistry;
 
 /**
@@ -29,7 +28,8 @@ class TravelOrdersController extends AppController
         } else {
             $counter = $this->DocumentsCounters->findDefaultCounter(
                 $this->Authorization->applyScope($this->DocumentsCounters->find(), 'index'),
-                $this->getRequest()->getQuery('kind')
+                'travelorder',
+                $this->getRequest()->getQuery('direction')
             );
             if (!$counter) {
                 $this->Authorization->skipAuthorization();
@@ -55,18 +55,9 @@ class TravelOrdersController extends AppController
 
         $dateSpan = $this->TravelOrders->maxSpan($filter['counter']);
 
-        $counters = [];
-        $controller = $this;
-        $counters = Cache::remember(
-            'Documents.sidebarCounters.' . $this->getCurrentUser()->id,
-            function () use ($controller) {
-                $DocumentsCounters = TableRegistry::getTableLocator()->get('Documents.DocumentsCounters');
-
-                return $controller->Authorization->applyScope($DocumentsCounters->find(), 'index')
-                    ->where(['active' => true])
-                    ->order(['active', 'kind DESC', 'title'])
-                    ->all();
-            }
+        $counters = $this->DocumentsCounters->rememberForUser(
+            $this->getCurrentUser()->id,
+            $this->Authorization->applyScope($this->DocumentsCounters->find())
         );
 
         $this->set(compact('data', 'filter', 'counter', 'dateSpan', 'counters'));
@@ -127,11 +118,11 @@ class TravelOrdersController extends AppController
         if ($this->request->is(['patch', 'post', 'put'])) {
             $travelOrder = $this->TravelOrders->patchEntity($travelOrder, $this->request->getData());
             if ($this->TravelOrders->save($travelOrder)) {
-                $this->Flash->success(__('The travel order has been saved.'));
+                $this->Flash->success(__d('documents', 'The travel order has been saved.'));
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The travel order could not be saved. Please, try again.'));
+            $this->Flash->error(__d('documents', 'The travel order could not be saved. Please, try again.'));
         }
 
         $counter = $travelOrder->documents_counter;
@@ -155,9 +146,9 @@ class TravelOrdersController extends AppController
         $this->request->allowMethod(['post', 'delete', 'get']);
         $travelOrder = $this->TravelOrders->get($id);
         if ($this->TravelOrders->delete($travelOrder)) {
-            $this->Flash->success(__('The travel order has been deleted.'));
+            $this->Flash->success(__d('documents', 'The travel order has been deleted.'));
         } else {
-            $this->Flash->error(__('The travel order could not be deleted. Please, try again.'));
+            $this->Flash->error(__d('documents', 'The travel order could not be deleted. Please, try again.'));
         }
 
         return $this->redirect(['action' => 'index']);

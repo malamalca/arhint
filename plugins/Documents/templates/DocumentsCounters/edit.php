@@ -44,6 +44,25 @@ $counter_edit = [
                             'class' => 'active',
                         ],
                         'options' => [
+                            'D' => __d('documents', 'Documents'),
+                            'I' => __d('documents', 'Invoices'),
+                            'T' => __d('documents', 'Travel Orders'),
+                        ],
+                        'class' => 'browser-default',
+                    ],
+                ],
+            ],
+            'direction' => [
+                'method' => 'control',
+                'parameters' => [
+                    'field' => 'direction',
+                    'options' => [
+                        'type' => 'select',
+                        'label' => [
+                            'text' => __d('documents', 'Direction') . ':',
+                            'class' => 'active',
+                        ],
+                        'options' => [
                             'issued' => __d('documents', 'Issued'),
                             'received' => __d('documents', 'Received'),
                         ],

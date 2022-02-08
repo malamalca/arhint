@@ -79,7 +79,7 @@
                     'VrstaBesedila' => 'ZZZ',
                     'Besedilo' => [
                         'Tekst1' => 'VRSTA_DOKUMENTA',
-                        'Tekst2' => $invoice->documents_counter->kind,
+                        'Tekst2' => $invoice->documents_counter->direction,
                     ],
                 ],
                 3 => [
@@ -171,7 +171,7 @@
         }
 
         // IV - prejemnik
-        if ($invoice->documents_counter->kind == 'issued') {
+        if ($invoice->documents_counter->direction == 'issued') {
             $transformed['IzdaniRacunEnostavni']['Racun'][$i]['PodatkiPodjetja'][2] =
             $transformed['IzdaniRacunEnostavni']['Racun'][$i]['PodatkiPodjetja'][0];
         } else {
@@ -187,7 +187,7 @@
         $total_base = 0;
         $total_tax = 0;
         $total_grand = 0;
-        if ($invoice->documents_counter->kind == 'issued') {
+        if ($invoice->documents_counter->direction == 'issued') {
             if (!empty($invoice->invoices_items)) {
                 $transformed['IzdaniRacunEnostavni']['Racun'][$i]['PostavkeRacuna'] = [];
 

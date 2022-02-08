@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2021-12-27 10:44+0000\n"
+"POT-Creation-Date: 2022-02-07 07:45+0000\n"
 "PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
 "Last-Translator: NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
@@ -42,51 +42,6 @@ msgstr ""
 msgid "The client could not be saved. Please, try again."
 msgstr ""
 
-#: ./plugins/Documents/src/Controller/DocumentsController.php:81
-msgid "No counters found. Please activate or add a new one."
-msgstr ""
-
-#: ./plugins/Documents/src/Controller/DocumentsController.php:272
-#: ./plugins/Documents/src/Controller/DocumentsController.php:445
-msgid "The document has been saved."
-msgstr ""
-
-#: ./plugins/Documents/src/Controller/DocumentsController.php:292
-msgid "The document could not be saved. Please, try again."
-msgstr ""
-
-#: ./plugins/Documents/src/Controller/DocumentsController.php:334
-msgid "The document has been deleted."
-msgstr ""
-
-#: ./plugins/Documents/src/Controller/DocumentsController.php:336
-msgid "The document could not be deleted. Please, try again."
-msgstr ""
-
-#: ./plugins/Documents/src/Controller/DocumentsController.php:382
-msgid "The document has been signed."
-msgstr ""
-
-#: ./plugins/Documents/src/Controller/DocumentsController.php:391
-msgid "Signing document failed. Please, try again."
-msgstr ""
-
-#: ./plugins/Documents/src/Controller/DocumentsController.php:470
-msgid "The document(s) has been sent."
-msgstr ""
-
-#: ./plugins/Documents/src/Controller/DocumentsController.php:474
-msgid "Please correct all marked fields below."
-msgstr ""
-
-#: ./plugins/Documents/src/Controller/DocumentsController.php:550
-msgid "Error exporting to specified format."
-msgstr ""
-
-#: ./plugins/Documents/src/Controller/DocumentsController.php:645
-msgid "Invalid request."
-msgstr ""
-
 #: ./plugins/Documents/src/Controller/DocumentsCountersController.php:65
 msgid "The documents counter has been saved."
 msgstr ""
@@ -103,15 +58,15 @@ msgstr ""
 msgid "The documents counter could not be deleted. Please, try again."
 msgstr ""
 
-#: ./plugins/Documents/src/Controller/DocumentsLinksController.php:49
+#: ./plugins/Documents/src/Controller/DocumentsLinksController.php:47
 msgid "Documents have been successfully linked."
 msgstr ""
 
-#: ./plugins/Documents/src/Controller/DocumentsLinksController.php:72
+#: ./plugins/Documents/src/Controller/DocumentsLinksController.php:70
 msgid "The documents link has been deleted."
 msgstr ""
 
-#: ./plugins/Documents/src/Controller/DocumentsLinksController.php:74
+#: ./plugins/Documents/src/Controller/DocumentsLinksController.php:72
 msgid "The documents link could not be deleted. Please, try again."
 msgstr ""
 
@@ -129,6 +84,52 @@ msgstr ""
 
 #: ./plugins/Documents/src/Controller/DocumentsTemplatesController.php:85
 msgid "The documents template could not be deleted. Please, try again."
+msgstr ""
+
+#: ./plugins/Documents/src/Controller/InvoicesController.php:81
+#: ./plugins/Documents/src/Controller/TravelOrdersController.php:36
+msgid "No counters found. Please activate or add a new one."
+msgstr ""
+
+#: ./plugins/Documents/src/Controller/InvoicesController.php:281
+#: ./plugins/Documents/src/Controller/InvoicesController.php:454
+msgid "The document has been saved."
+msgstr ""
+
+#: ./plugins/Documents/src/Controller/InvoicesController.php:301
+msgid "The document could not be saved. Please, try again."
+msgstr ""
+
+#: ./plugins/Documents/src/Controller/InvoicesController.php:343
+msgid "The invoice has been deleted."
+msgstr ""
+
+#: ./plugins/Documents/src/Controller/InvoicesController.php:345
+msgid "The invoice could not be deleted. Please, try again."
+msgstr ""
+
+#: ./plugins/Documents/src/Controller/InvoicesController.php:391
+msgid "The document has been signed."
+msgstr ""
+
+#: ./plugins/Documents/src/Controller/InvoicesController.php:400
+msgid "Signing document failed. Please, try again."
+msgstr ""
+
+#: ./plugins/Documents/src/Controller/InvoicesController.php:479
+msgid "The document(s) has been sent."
+msgstr ""
+
+#: ./plugins/Documents/src/Controller/InvoicesController.php:483
+msgid "Please correct all marked fields below."
+msgstr ""
+
+#: ./plugins/Documents/src/Controller/InvoicesController.php:559
+msgid "Error exporting to specified format."
+msgstr ""
+
+#: ./plugins/Documents/src/Controller/InvoicesController.php:654
+msgid "Invalid request."
 msgstr ""
 
 #: ./plugins/Documents/src/Controller/ItemsController.php:51
@@ -168,13 +169,17 @@ msgid "The vat could not be deleted. Please, try again."
 msgstr ""
 
 #: ./plugins/Documents/src/Event/DocumentsEvents.php:43
-#: ./plugins/Documents/src/Event/DocumentsEvents.php:183
 #: ./plugins/Documents/src/Lib/DocumentsSidebar.php:50
 msgid "Documents"
 msgstr ""
 
 #: ./plugins/Documents/src/Event/DocumentsEvents.php:153
-msgid "Add Document"
+msgid "Add Invoice"
+msgstr ""
+
+#: ./plugins/Documents/src/Event/DocumentsEvents.php:183
+#: ./plugins/Documents/templates/element/invoices_list.php:18
+msgid "Invoices"
 msgstr ""
 
 #: ./plugins/Documents/src/Lib/DocumentsSidebar.php:69
@@ -213,7 +218,7 @@ msgstr ""
 #: ./plugins/Documents/src/Lib/DocumentsSidebar.php:164
 #: ./plugins/Documents/templates/DocumentsCounters/edit.php:102
 #: ./plugins/Documents/templates/DocumentsTemplates/index.php:4
-#: ./plugins/Documents/templates/Documents/view.php:162
+#: ./plugins/Documents/templates/Invoices/view.php:162
 msgid "Templates"
 msgstr ""
 
@@ -237,10 +242,11 @@ msgstr ""
 #: ./plugins/Documents/templates/DocumentsClients/edit.php:185
 #: ./plugins/Documents/templates/DocumentsCounters/edit.php:196
 #: ./plugins/Documents/templates/DocumentsLinks/link.php:51
-#: ./plugins/Documents/templates/DocumentsTemplates/edit.php:103
-#: ./plugins/Documents/templates/Documents/edit.php:258
-#: ./plugins/Documents/templates/Documents/templates.php:83
+#: ./plugins/Documents/templates/DocumentsTemplates/edit.php:102
+#: ./plugins/Documents/templates/Invoices/edit.php:258
+#: ./plugins/Documents/templates/Invoices/templates.php:83
 #: ./plugins/Documents/templates/Items/edit.php:104
+#: ./plugins/Documents/templates/TravelOrders/edit.php:313
 #: ./plugins/Documents/templates/Vats/edit.php:51
 msgid "Save"
 msgstr ""
@@ -250,17 +256,18 @@ msgid "Scan an Attachment"
 msgstr ""
 
 #: ./plugins/Documents/templates/DocumentsAttachments/scan.php:40
+#: ./plugins/Documents/templates/Invoices/edit.php:240
 msgid "Scan a Document"
 msgstr ""
 
 #: ./plugins/Documents/templates/DocumentsAttachments/view.php:9
-#: ./plugins/Documents/templates/Documents/view.php:615
+#: ./plugins/Documents/templates/Invoices/view.php:616
 msgid "Attachment Preview"
 msgstr ""
 
 #: ./plugins/Documents/templates/DocumentsAttachments/view.php:12
-#: ./plugins/Documents/templates/Documents/preview.php:23
-#: ./plugins/Documents/templates/Documents/sign.php:24
+#: ./plugins/Documents/templates/Invoices/preview.php:23
+#: ./plugins/Documents/templates/Invoices/sign.php:24
 msgid "Back"
 msgstr ""
 
@@ -273,10 +280,10 @@ msgstr ""
 #: ./plugins/Documents/templates/DocumentsCounters/index.php:59
 #: ./plugins/Documents/templates/DocumentsTemplates/edit.php:35
 #: ./plugins/Documents/templates/DocumentsTemplates/index.php:21
-#: ./plugins/Documents/templates/Documents/edit.php:116
-#: ./plugins/Documents/templates/Documents/index.php:93
-#: ./plugins/Documents/templates/Documents/pdf/report.php:16
-#: ./plugins/Documents/templates/Documents/view.php:216
+#: ./plugins/Documents/templates/Invoices/edit.php:116
+#: ./plugins/Documents/templates/Invoices/index.php:93
+#: ./plugins/Documents/templates/Invoices/pdf/report.php:16
+#: ./plugins/Documents/templates/Invoices/view.php:216
 msgid "Title"
 msgstr ""
 
@@ -366,7 +373,8 @@ msgid "Add Counter"
 msgstr ""
 
 #: ./plugins/Documents/templates/DocumentsCounters/edit.php:34
-#: ./plugins/Documents/templates/Documents/edit.php:110
+#: ./plugins/Documents/templates/Invoices/edit.php:110
+#: ./plugins/Documents/templates/TravelOrders/edit.php:101
 msgid "Basics"
 msgstr ""
 
@@ -375,8 +383,9 @@ msgid "Kind"
 msgstr ""
 
 #: ./plugins/Documents/templates/DocumentsCounters/edit.php:47
-#: ./plugins/Documents/templates/Documents/index.php:89
-#: ./plugins/Documents/templates/Documents/pdf/report.php:15
+#: ./plugins/Documents/templates/Invoices/index.php:89
+#: ./plugins/Documents/templates/Invoices/pdf/report.php:15
+#: ./plugins/Documents/templates/TravelOrders/index.php:89
 msgid "Issued"
 msgstr ""
 
@@ -386,7 +395,7 @@ msgstr ""
 
 #: ./plugins/Documents/templates/DocumentsCounters/edit.php:61
 #: ./plugins/Documents/templates/DocumentsCounters/index.php:60
-#: ./plugins/Documents/templates/Documents/edit.php:438
+#: ./plugins/Documents/templates/Invoices/edit.php:438
 msgid "Type"
 msgstr ""
 
@@ -433,20 +442,20 @@ msgstr ""
 
 #: ./plugins/Documents/templates/DocumentsCounters/edit.php:154
 #: ./plugins/Documents/templates/DocumentsCounters/edit.php:186
-#: ./plugins/Documents/templates/Documents/templates.php:46
-#: ./plugins/Documents/templates/Documents/templates.php:73
+#: ./plugins/Documents/templates/Invoices/templates.php:46
+#: ./plugins/Documents/templates/Invoices/templates.php:73
 msgid "none"
 msgstr ""
 
 #: ./plugins/Documents/templates/DocumentsCounters/edit.php:166
 #: ./plugins/Documents/templates/DocumentsTemplates/edit.php:48
 #: ./plugins/Documents/templates/DocumentsTemplates/edit.php:59
-#: ./plugins/Documents/templates/Documents/email.php:69
+#: ./plugins/Documents/templates/Invoices/email.php:69
 msgid "Body"
 msgstr ""
 
 #: ./plugins/Documents/templates/DocumentsCounters/edit.php:170
-#: ./plugins/Documents/templates/Documents/templates.php:60
+#: ./plugins/Documents/templates/Invoices/templates.php:60
 msgid "default"
 msgstr ""
 
@@ -476,8 +485,9 @@ msgstr ""
 
 #: ./plugins/Documents/templates/DocumentsCounters/index.php:43
 #: ./plugins/Documents/templates/DocumentsTemplates/index.php:7
-#: ./plugins/Documents/templates/Documents/index.php:56
+#: ./plugins/Documents/templates/Invoices/index.php:56
 #: ./plugins/Documents/templates/Items/index.php:7
+#: ./plugins/Documents/templates/TravelOrders/index.php:56
 #: ./plugins/Documents/templates/Vats/index.php:7
 msgid "Add"
 msgstr ""
@@ -495,8 +505,6 @@ msgid "Link Documents"
 msgstr ""
 
 #: ./plugins/Documents/templates/DocumentsLinks/link.php:39
-#: ./plugins/Documents/templates/element/documents_list.php:18
-#: ./plugins/Documents/templates/element/documents_projects_list.php:24
 msgid "Document"
 msgstr ""
 
@@ -512,76 +520,79 @@ msgstr ""
 msgid "Add Template"
 msgstr ""
 
-#: ./plugins/Documents/templates/DocumentsTemplates/edit.php:76
+#: ./plugins/Documents/templates/DocumentsTemplates/edit.php:75
 msgid "Remove image"
 msgstr ""
 
-#: ./plugins/Documents/templates/DocumentsTemplates/edit.php:95
+#: ./plugins/Documents/templates/DocumentsTemplates/edit.php:94
 msgid "This is default template"
 msgstr ""
 
-#: ./plugins/Documents/templates/Documents/edit.php:9
+#: ./plugins/Documents/templates/Invoices/edit.php:9
 msgid "Add an Document #{0} <span class=\"light\">({1})</span>"
 msgstr ""
 
-#: ./plugins/Documents/templates/Documents/edit.php:16
+#: ./plugins/Documents/templates/Invoices/edit.php:16
 msgid "Edit an Document #{0} <span class=\"light\">({1})</span>"
 msgstr ""
 
-#: ./plugins/Documents/templates/Documents/edit.php:28
+#: ./plugins/Documents/templates/Invoices/edit.php:28
+#: ./plugins/Documents/templates/TravelOrders/edit.php:24
 msgid "Preview"
 msgstr ""
 
-#: ./plugins/Documents/templates/Documents/edit.php:118
+#: ./plugins/Documents/templates/Invoices/edit.php:118
 msgid "Please enter document's title."
 msgstr ""
 
-#: ./plugins/Documents/templates/Documents/edit.php:128
-#: ./plugins/Documents/templates/Documents/view.php:224
+#: ./plugins/Documents/templates/Invoices/edit.php:128
+#: ./plugins/Documents/templates/Invoices/view.php:224
 msgid "Receiver"
 msgstr ""
 
-#: ./plugins/Documents/templates/Documents/edit.php:128
-#: ./plugins/Documents/templates/Documents/view.php:224
+#: ./plugins/Documents/templates/Invoices/edit.php:128
+#: ./plugins/Documents/templates/Invoices/view.php:224
 msgid "Issuer"
 msgstr ""
 
-#: ./plugins/Documents/templates/Documents/edit.php:135
-#: ./plugins/Documents/templates/Documents/edit.php:139
+#: ./plugins/Documents/templates/Invoices/edit.php:135
+#: ./plugins/Documents/templates/Invoices/edit.php:139
 msgid "Please choose a client"
 msgstr ""
 
-#: ./plugins/Documents/templates/Documents/edit.php:145
+#: ./plugins/Documents/templates/Invoices/edit.php:145
+#: ./plugins/Documents/templates/TravelOrders/edit.php:106
 msgid "Document no"
 msgstr ""
 
-#: ./plugins/Documents/templates/Documents/edit.php:154
+#: ./plugins/Documents/templates/Invoices/edit.php:154
+#: ./plugins/Documents/templates/TravelOrders/edit.php:116
 msgid "Location"
 msgstr ""
 
-#: ./plugins/Documents/templates/Documents/edit.php:165
-#: ./plugins/Documents/templates/Documents/index.php:101
-#: ./plugins/Documents/templates/Documents/view.php:291
+#: ./plugins/Documents/templates/Invoices/edit.php:165
+#: ./plugins/Documents/templates/Invoices/index.php:101
+#: ./plugins/Documents/templates/Invoices/view.php:291
 msgid "Project"
 msgstr ""
 
-#: ./plugins/Documents/templates/Documents/edit.php:169
+#: ./plugins/Documents/templates/Invoices/edit.php:169
 msgid "no project"
 msgstr ""
 
-#: ./plugins/Documents/templates/Documents/edit.php:179
+#: ./plugins/Documents/templates/Invoices/edit.php:179
 msgid "Dates"
 msgstr ""
 
-#: ./plugins/Documents/templates/Documents/edit.php:187
-#: ./plugins/Documents/templates/Documents/view.php:267
+#: ./plugins/Documents/templates/Invoices/edit.php:187
+#: ./plugins/Documents/templates/Invoices/view.php:267
 msgid "Date of issue"
 msgstr ""
 
-#: ./plugins/Documents/templates/Documents/edit.php:189
-#: ./plugins/Documents/templates/Documents/edit.php:325
-#: ./plugins/Documents/templates/Documents/edit.php:339
-#: ./plugins/Documents/templates/Documents/edit.php:470
+#: ./plugins/Documents/templates/Invoices/edit.php:189
+#: ./plugins/Documents/templates/Invoices/edit.php:325
+#: ./plugins/Documents/templates/Invoices/edit.php:339
+#: ./plugins/Documents/templates/Invoices/edit.php:470
 #: ./plugins/Documents/templates/element/edit_items.php:72
 #: ./plugins/Documents/templates/element/edit_items.php:88
 #: ./plugins/Documents/templates/element/edit_items.php:104
@@ -591,10 +602,10 @@ msgstr ""
 msgid "Blank"
 msgstr ""
 
-#: ./plugins/Documents/templates/Documents/edit.php:201
-#: ./plugins/Documents/templates/Documents/view.php:377
-#: ./plugins/Documents/templates/Documents/view.php:461
-#: ./plugins/Documents/templates/Documents/view.php:588
+#: ./plugins/Documents/templates/Invoices/edit.php:201
+#: ./plugins/Documents/templates/Invoices/view.php:377
+#: ./plugins/Documents/templates/Invoices/view.php:461
+#: ./plugins/Documents/templates/Invoices/view.php:589
 #: ./plugins/Documents/templates/Items/edit.php:30
 #: ./plugins/Documents/templates/Items/index.php:20
 #: ./plugins/Documents/templates/Vats/edit.php:30
@@ -603,410 +614,423 @@ msgstr ""
 msgid "Description"
 msgstr ""
 
-#: ./plugins/Documents/templates/Documents/edit.php:268
+#: ./plugins/Documents/templates/Invoices/edit.php:217
+msgid "Archive"
+msgstr ""
+
+#: ./plugins/Documents/templates/Invoices/edit.php:268
 msgid "Add another document after saving this one"
 msgstr ""
 
-#: ./plugins/Documents/templates/Documents/edit.php:296
+#: ./plugins/Documents/templates/Invoices/edit.php:296
 msgid "Buyer"
 msgstr ""
 
-#: ./plugins/Documents/templates/Documents/edit.php:307
+#: ./plugins/Documents/templates/Invoices/edit.php:307
 msgid "Use different client for buyer."
 msgstr ""
 
-#: ./plugins/Documents/templates/Documents/edit.php:324
-#: ./plugins/Documents/templates/Documents/view.php:271
+#: ./plugins/Documents/templates/Invoices/edit.php:324
+#: ./plugins/Documents/templates/Invoices/view.php:271
 msgid "Service date"
 msgstr ""
 
-#: ./plugins/Documents/templates/Documents/edit.php:338
-#: ./plugins/Documents/templates/Documents/view.php:275
+#: ./plugins/Documents/templates/Invoices/edit.php:338
+#: ./plugins/Documents/templates/Invoices/view.php:275
 msgid "Expiration date"
 msgstr ""
 
-#: ./plugins/Documents/templates/Documents/edit.php:352
-#: ./plugins/Documents/templates/Documents/edit.php:366
-#: ./plugins/Documents/templates/Documents/view.php:416
+#: ./plugins/Documents/templates/Invoices/edit.php:352
+#: ./plugins/Documents/templates/Invoices/edit.php:366
+#: ./plugins/Documents/templates/Invoices/view.php:416
 msgid "Analytics"
 msgstr ""
 
-#: ./plugins/Documents/templates/Documents/edit.php:359
-#: ./plugins/Documents/templates/Documents/index.php:109
-#: ./plugins/Documents/templates/Documents/pdf/report.php:19
-#: ./plugins/Documents/templates/Documents/view.php:304
-#: ./plugins/Documents/templates/Documents/view.php:465
-#: ./plugins/Documents/templates/element/documents_list.php:32
-#: ./plugins/Documents/templates/element/documents_list.php:51
+#: ./plugins/Documents/templates/Invoices/edit.php:359
+#: ./plugins/Documents/templates/Invoices/index.php:109
+#: ./plugins/Documents/templates/Invoices/pdf/report.php:19
+#: ./plugins/Documents/templates/Invoices/view.php:304
+#: ./plugins/Documents/templates/Invoices/view.php:465
+#: ./plugins/Documents/templates/TravelOrders/index.php:101
+#: ./plugins/Documents/templates/element/invoices_list.php:32
+#: ./plugins/Documents/templates/element/invoices_list.php:51
 msgid "Total"
 msgstr ""
 
-#: ./plugins/Documents/templates/Documents/edit.php:378
+#: ./plugins/Documents/templates/Invoices/edit.php:378
 msgid "Taxes Analytics"
 msgstr ""
 
-#: ./plugins/Documents/templates/Documents/edit.php:388
+#: ./plugins/Documents/templates/Invoices/edit.php:388
 msgid "Payment"
 msgstr ""
 
-#: ./plugins/Documents/templates/Documents/edit.php:395
+#: ./plugins/Documents/templates/Invoices/edit.php:395
 msgid "Document must be payed."
 msgstr ""
 
-#: ./plugins/Documents/templates/Documents/edit.php:396
+#: ./plugins/Documents/templates/Invoices/edit.php:396
 msgid "Auto transaction. No payment needed."
 msgstr ""
 
-#: ./plugins/Documents/templates/Documents/edit.php:397
+#: ./plugins/Documents/templates/Invoices/edit.php:397
 msgid "Document payed in full."
 msgstr ""
 
-#: ./plugins/Documents/templates/Documents/edit.php:398
+#: ./plugins/Documents/templates/Invoices/edit.php:398
 msgid "Other. No payment needed."
 msgstr ""
 
-#: ./plugins/Documents/templates/Documents/edit.php:404
+#: ./plugins/Documents/templates/Invoices/edit.php:404
 msgid "Payment Kind"
 msgstr ""
 
-#: ./plugins/Documents/templates/Documents/edit.php:420
+#: ./plugins/Documents/templates/Invoices/edit.php:420
 msgid "Sepa Type"
 msgstr ""
 
-#: ./plugins/Documents/templates/Documents/edit.php:423
+#: ./plugins/Documents/templates/Invoices/edit.php:423
 msgid "Invalid type"
 msgstr ""
 
-#: ./plugins/Documents/templates/Documents/edit.php:440
-#: ./plugins/Documents/templates/Documents/edit.php:455
+#: ./plugins/Documents/templates/Invoices/edit.php:440
+#: ./plugins/Documents/templates/Invoices/edit.php:455
 msgid "Invalid format"
 msgstr ""
 
-#: ./plugins/Documents/templates/Documents/edit.php:453
+#: ./plugins/Documents/templates/Invoices/edit.php:453
 msgid "MOD"
 msgstr ""
 
-#: ./plugins/Documents/templates/Documents/edit.php:468
+#: ./plugins/Documents/templates/Invoices/edit.php:468
 msgid "Reference"
 msgstr ""
 
-#: ./plugins/Documents/templates/Documents/edit.php:478
+#: ./plugins/Documents/templates/Invoices/edit.php:478
 msgid "Use 'OTHR' for unknown payment type. Use prefix and two numers for module (eg SI00)."
 msgstr ""
 
-#: ./plugins/Documents/templates/Documents/edit.php:528
+#: ./plugins/Documents/templates/Invoices/edit.php:528
 msgid "Add a Company"
 msgstr ""
 
-#: ./plugins/Documents/templates/Documents/edit.php:529
+#: ./plugins/Documents/templates/Invoices/edit.php:529
 msgid "Add a Person"
 msgstr ""
 
-#: ./plugins/Documents/templates/Documents/email.php:6
-#: ./plugins/Documents/templates/Documents/view.php:598
+#: ./plugins/Documents/templates/Invoices/email.php:6
+#: ./plugins/Documents/templates/Invoices/view.php:599
 msgid "Email Document"
 msgstr ""
 
-#: ./plugins/Documents/templates/Documents/email.php:26
+#: ./plugins/Documents/templates/Invoices/email.php:26
 msgid "To"
 msgstr ""
 
-#: ./plugins/Documents/templates/Documents/email.php:37
+#: ./plugins/Documents/templates/Invoices/email.php:37
 msgid "CC"
 msgstr ""
 
-#: ./plugins/Documents/templates/Documents/email.php:48
+#: ./plugins/Documents/templates/Invoices/email.php:48
 msgid "Send CC to me ({0})"
 msgstr ""
 
-#: ./plugins/Documents/templates/Documents/email.php:58
+#: ./plugins/Documents/templates/Invoices/email.php:58
 msgid "Subject"
 msgstr ""
 
-#: ./plugins/Documents/templates/Documents/email.php:77
-#: ./plugins/Documents/templates/Documents/view.php:101
+#: ./plugins/Documents/templates/Invoices/email.php:77
+#: ./plugins/Documents/templates/Invoices/view.php:101
 msgid "Send"
 msgstr ""
 
-#: ./plugins/Documents/templates/Documents/email.php:91
-#: ./plugins/Documents/templates/Documents/view.php:508
+#: ./plugins/Documents/templates/Invoices/email.php:91
+#: ./plugins/Documents/templates/Invoices/view.php:508
 msgid "Attachments"
 msgstr ""
 
-#: ./plugins/Documents/templates/Documents/index.php:35
+#: ./plugins/Documents/templates/Invoices/index.php:35
+#: ./plugins/Documents/templates/TravelOrders/index.php:35
 msgid "\"{2}\" from {0} to {1}"
 msgstr ""
 
-#: ./plugins/Documents/templates/Documents/index.php:66
-#: ./plugins/Documents/templates/Documents/report.php:121
-#: ./plugins/Documents/templates/Documents/view.php:92
+#: ./plugins/Documents/templates/Invoices/index.php:66
+#: ./plugins/Documents/templates/Invoices/report.php:121
+#: ./plugins/Documents/templates/Invoices/view.php:92
+#: ./plugins/Documents/templates/TravelOrders/index.php:66
 msgid "Print"
 msgstr ""
 
-#: ./plugins/Documents/templates/Documents/index.php:85
-#: ./plugins/Documents/templates/Documents/pdf/report.php:14
+#: ./plugins/Documents/templates/Invoices/index.php:85
+#: ./plugins/Documents/templates/Invoices/pdf/report.php:14
+#: ./plugins/Documents/templates/TravelOrders/index.php:85
 msgid "No"
 msgstr ""
 
-#: ./plugins/Documents/templates/Documents/index.php:97
-#: ./plugins/Documents/templates/Documents/pdf/report.php:17
+#: ./plugins/Documents/templates/Invoices/index.php:97
+#: ./plugins/Documents/templates/Invoices/pdf/report.php:17
 msgid "Client"
 msgstr ""
 
-#: ./plugins/Documents/templates/Documents/index.php:105
-#: ./plugins/Documents/templates/Documents/pdf/report.php:18
+#: ./plugins/Documents/templates/Invoices/index.php:105
+#: ./plugins/Documents/templates/Invoices/pdf/report.php:18
 msgid "Net Total"
 msgstr ""
 
-#: ./plugins/Documents/templates/Documents/index.php:131
+#: ./plugins/Documents/templates/Invoices/index.php:131
+#: ./plugins/Documents/templates/TravelOrders/index.php:123
 msgid "Total Sum"
 msgstr ""
 
-#: ./plugins/Documents/templates/Documents/index.php:162
+#: ./plugins/Documents/templates/Invoices/index.php:162
+#: ./plugins/Documents/templates/TravelOrders/index.php:143
 msgid "n/a"
 msgstr ""
 
-#: ./plugins/Documents/templates/Documents/pdf/report.php:8
+#: ./plugins/Documents/templates/Invoices/pdf/report.php:8
 msgid "Documents List"
 msgstr ""
 
-#: ./plugins/Documents/templates/Documents/pdf/report.php:26
+#: ./plugins/Documents/templates/Invoices/pdf/report.php:26
 msgid "TOTAL"
 msgstr ""
 
-#: ./plugins/Documents/templates/Documents/preview.php:8
-#: ./plugins/Documents/templates/Documents/sign.php:9
-msgid "Documents Preview"
+#: ./plugins/Documents/templates/Invoices/preview.php:8
+msgid "Invoice Preview"
 msgstr ""
 
-#: ./plugins/Documents/templates/Documents/preview.php:15
-msgid "Document #%1$s"
+#: ./plugins/Documents/templates/Invoices/preview.php:15
+msgid "Invoice #%1$s"
 msgstr ""
 
-#: ./plugins/Documents/templates/Documents/report.php:27
+#: ./plugins/Documents/templates/Invoices/report.php:27
 msgid "REPORT: VATs"
 msgstr ""
 
-#: ./plugins/Documents/templates/Documents/report.php:43
+#: ./plugins/Documents/templates/Invoices/report.php:43
 msgid "Specify Month"
 msgstr ""
 
-#: ./plugins/Documents/templates/Documents/report.php:87
+#: ./plugins/Documents/templates/Invoices/report.php:87
 msgid "From - to Date"
 msgstr ""
 
-#: ./plugins/Documents/templates/Documents/report.php:100
+#: ./plugins/Documents/templates/Invoices/report.php:100
 msgid "Start"
 msgstr ""
 
-#: ./plugins/Documents/templates/Documents/report.php:111
+#: ./plugins/Documents/templates/Invoices/report.php:111
 msgid "End"
 msgstr ""
 
-#: ./plugins/Documents/templates/Documents/sign.php:16
-msgid "Sign Document #{0}"
+#: ./plugins/Documents/templates/Invoices/sign.php:9
+msgid "Invoices Preview"
 msgstr ""
 
-#: ./plugins/Documents/templates/Documents/sign.php:73
+#: ./plugins/Documents/templates/Invoices/sign.php:16
+msgid "Sign Invoice #{0}"
+msgstr ""
+
+#: ./plugins/Documents/templates/Invoices/sign.php:73
 msgid "Datetime"
 msgstr ""
 
-#: ./plugins/Documents/templates/Documents/templates.php:4
+#: ./plugins/Documents/templates/Invoices/templates.php:4
 msgid "Edit Templates for Document #{0}"
 msgstr ""
 
-#: ./plugins/Documents/templates/Documents/templates.php:44
+#: ./plugins/Documents/templates/Invoices/templates.php:44
 msgid "Page Header"
 msgstr ""
 
-#: ./plugins/Documents/templates/Documents/templates.php:58
+#: ./plugins/Documents/templates/Invoices/templates.php:58
 msgid "Page Body"
 msgstr ""
 
-#: ./plugins/Documents/templates/Documents/templates.php:71
+#: ./plugins/Documents/templates/Invoices/templates.php:71
 msgid "Page Footer"
 msgstr ""
 
-#: ./plugins/Documents/templates/Documents/view.php:9
+#: ./plugins/Documents/templates/Invoices/view.php:9
 msgid "{3} #{0} <span class=\"light nowrap\">({1} :: {2})</span>"
 msgstr ""
 
-#: ./plugins/Documents/templates/Documents/view.php:19
+#: ./plugins/Documents/templates/Invoices/view.php:19
 msgid "Edit"
 msgstr ""
 
-#: ./plugins/Documents/templates/Documents/view.php:27
+#: ./plugins/Documents/templates/Invoices/view.php:27
 msgid "Duplicate"
 msgstr ""
 
-#: ./plugins/Documents/templates/Documents/view.php:35
+#: ./plugins/Documents/templates/Invoices/view.php:35
 msgid "Attach"
 msgstr ""
 
-#: ./plugins/Documents/templates/Documents/view.php:39
+#: ./plugins/Documents/templates/Invoices/view.php:39
 msgid "File"
 msgstr ""
 
-#: ./plugins/Documents/templates/Documents/view.php:52
+#: ./plugins/Documents/templates/Invoices/view.php:52
 msgid "Scan"
 msgstr ""
 
-#: ./plugins/Documents/templates/Documents/view.php:66
+#: ./plugins/Documents/templates/Invoices/view.php:66
 msgid "Linked Document"
 msgstr ""
 
-#: ./plugins/Documents/templates/Documents/view.php:81
+#: ./plugins/Documents/templates/Invoices/view.php:81
 msgid "Delete"
 msgstr ""
 
-#: ./plugins/Documents/templates/Documents/view.php:88
+#: ./plugins/Documents/templates/Invoices/view.php:88
 msgid "Are you sure you want to delete this document?"
 msgstr ""
 
-#: ./plugins/Documents/templates/Documents/view.php:112
+#: ./plugins/Documents/templates/Invoices/view.php:112
 msgid "Export"
 msgstr ""
 
-#: ./plugins/Documents/templates/Documents/view.php:116
+#: ./plugins/Documents/templates/Invoices/view.php:116
 msgid "PDF"
 msgstr ""
 
-#: ./plugins/Documents/templates/Documents/view.php:126
+#: ./plugins/Documents/templates/Invoices/view.php:126
 msgid "Sepa XML"
 msgstr ""
 
-#: ./plugins/Documents/templates/Documents/view.php:136
+#: ./plugins/Documents/templates/Invoices/view.php:136
 msgid "eSlog"
 msgstr ""
 
-#: ./plugins/Documents/templates/Documents/view.php:146
+#: ./plugins/Documents/templates/Invoices/view.php:146
 msgid "eSlog 2.0"
 msgstr ""
 
-#: ./plugins/Documents/templates/Documents/view.php:158
+#: ./plugins/Documents/templates/Invoices/view.php:158
 msgid "Settings"
 msgstr ""
 
-#: ./plugins/Documents/templates/Documents/view.php:173
-#: ./plugins/Documents/templates/Documents/view.php:609
+#: ./plugins/Documents/templates/Invoices/view.php:173
+#: ./plugins/Documents/templates/Invoices/view.php:610
 msgid "Edit Issuer"
 msgstr ""
 
-#: ./plugins/Documents/templates/Documents/view.php:185
-#: ./plugins/Documents/templates/Documents/view.php:610
+#: ./plugins/Documents/templates/Invoices/view.php:185
+#: ./plugins/Documents/templates/Invoices/view.php:611
 msgid "Edit Receiver"
 msgstr ""
 
-#: ./plugins/Documents/templates/Documents/view.php:197
-#: ./plugins/Documents/templates/Documents/view.php:611
+#: ./plugins/Documents/templates/Invoices/view.php:197
+#: ./plugins/Documents/templates/Invoices/view.php:612
 msgid "Edit Buyer"
 msgstr ""
 
-#: ./plugins/Documents/templates/Documents/view.php:257
+#: ./plugins/Documents/templates/Invoices/view.php:257
 msgid "TAX payee no."
 msgstr ""
 
-#: ./plugins/Documents/templates/Documents/view.php:257
+#: ./plugins/Documents/templates/Invoices/view.php:257
 msgid "TAX no."
 msgstr ""
 
-#: ./plugins/Documents/templates/Documents/view.php:279
+#: ./plugins/Documents/templates/Invoices/view.php:279
 msgid "Approval date"
 msgstr ""
 
-#: ./plugins/Documents/templates/Documents/view.php:283
+#: ./plugins/Documents/templates/Invoices/view.php:283
 msgid "Sign date"
 msgstr ""
 
-#: ./plugins/Documents/templates/Documents/view.php:378
+#: ./plugins/Documents/templates/Invoices/view.php:378
 #: ./plugins/Documents/templates/element/edit_items.php:9
 msgid "Quantity"
 msgstr ""
 
-#: ./plugins/Documents/templates/Documents/view.php:379
+#: ./plugins/Documents/templates/Invoices/view.php:379
 #: ./plugins/Documents/templates/Items/edit.php:54
 #: ./plugins/Documents/templates/Items/index.php:26
 #: ./plugins/Documents/templates/element/edit_items.php:10
 msgid "Unit"
 msgstr ""
 
-#: ./plugins/Documents/templates/Documents/view.php:380
+#: ./plugins/Documents/templates/Invoices/view.php:380
 #: ./plugins/Documents/templates/element/edit_items.php:11
 msgid "Price per Unit"
 msgstr ""
 
-#: ./plugins/Documents/templates/Documents/view.php:381
+#: ./plugins/Documents/templates/Invoices/view.php:381
 #: ./plugins/Documents/templates/element/edit_items.php:12
 msgid "Discount [%]"
 msgstr ""
 
-#: ./plugins/Documents/templates/Documents/view.php:382
+#: ./plugins/Documents/templates/Invoices/view.php:382
 #: ./plugins/Documents/templates/element/edit_items.php:13
 msgid "Unit Total"
 msgstr ""
 
-#: ./plugins/Documents/templates/Documents/view.php:383
+#: ./plugins/Documents/templates/Invoices/view.php:383
 #: ./plugins/Documents/templates/element/edit_items.php:14
 msgid "Tax [%]"
 msgstr ""
 
-#: ./plugins/Documents/templates/Documents/view.php:384
+#: ./plugins/Documents/templates/Invoices/view.php:384
 #: ./plugins/Documents/templates/element/edit_items.php:15
 #: ./plugins/Documents/templates/element/edit_tax.php:12
 msgid "Total with Tax"
 msgstr ""
 
-#: ./plugins/Documents/templates/Documents/view.php:396
-#: ./plugins/Documents/templates/Documents/view.php:477
+#: ./plugins/Documents/templates/Invoices/view.php:396
+#: ./plugins/Documents/templates/Invoices/view.php:477
 #: ./plugins/Documents/templates/element/edit_items.php:234
 #: ./plugins/Documents/templates/element/edit_tax.php:147
 msgid "Grand Total"
 msgstr ""
 
-#: ./plugins/Documents/templates/Documents/view.php:462
+#: ./plugins/Documents/templates/Invoices/view.php:462
 #: ./plugins/Documents/templates/element/edit_tax.php:9
 msgid "VAT [%]"
 msgstr ""
 
-#: ./plugins/Documents/templates/Documents/view.php:463
+#: ./plugins/Documents/templates/Invoices/view.php:463
 #: ./plugins/Documents/templates/element/edit_tax.php:10
 msgid "Base"
 msgstr ""
 
-#: ./plugins/Documents/templates/Documents/view.php:464
+#: ./plugins/Documents/templates/Invoices/view.php:464
 #: ./plugins/Documents/templates/element/edit_tax.php:11
 msgid "Tax"
 msgstr ""
 
-#: ./plugins/Documents/templates/Documents/view.php:498
+#: ./plugins/Documents/templates/Invoices/view.php:498
 msgid "VAT Analytics"
 msgstr ""
 
-#: ./plugins/Documents/templates/Documents/view.php:548
+#: ./plugins/Documents/templates/Invoices/view.php:548
 msgid "Are you sure you want to delete this attachment"
 msgstr ""
 
-#: ./plugins/Documents/templates/Documents/view.php:559
+#: ./plugins/Documents/templates/Invoices/view.php:559
 msgid "Linked Documents"
 msgstr ""
 
-#: ./plugins/Documents/templates/Documents/view.php:580
+#: ./plugins/Documents/templates/Invoices/view.php:581
 msgid "Are you sure you want to delete this link?"
 msgstr ""
 
-#: ./plugins/Documents/templates/Documents/view.php:597
+#: ./plugins/Documents/templates/Invoices/view.php:598
 msgid "Edit Templates"
 msgstr ""
 
-#: ./plugins/Documents/templates/Documents/view.php:600
+#: ./plugins/Documents/templates/Invoices/view.php:601
 msgid "Attach File"
 msgstr ""
 
-#: ./plugins/Documents/templates/Documents/view.php:601
+#: ./plugins/Documents/templates/Invoices/view.php:602
 msgid "Link Document"
 msgstr ""
 
-#: ./plugins/Documents/templates/Documents/view.php:602
+#: ./plugins/Documents/templates/Invoices/view.php:603
 msgid "Scan Document"
 msgstr ""
 
@@ -1046,6 +1070,110 @@ msgstr ""
 msgid "Vat"
 msgstr ""
 
+#: ./plugins/Documents/templates/TravelOrders/edit.php:5
+msgid "Add a Travel Order #{0} <span class=\"light\">({1})</span>"
+msgstr ""
+
+#: ./plugins/Documents/templates/TravelOrders/edit.php:12
+msgid "Edit a Travel Order #{0} <span class=\"light\">({1})</span>"
+msgstr ""
+
+#: ./plugins/Documents/templates/TravelOrders/edit.php:118
+msgid "Please enter location."
+msgstr ""
+
+#: ./plugins/Documents/templates/TravelOrders/edit.php:128
+#: ./plugins/Documents/templates/element/invoices_list.php:24
+#: ./plugins/Documents/templates/element/invoices_projects_list.php:36
+msgid "Date"
+msgstr ""
+
+#: ./plugins/Documents/templates/TravelOrders/edit.php:131
+msgid "Please date of order."
+msgstr ""
+
+#: ./plugins/Documents/templates/TravelOrders/edit.php:140
+msgid "Travel Details"
+msgstr ""
+
+#: ./plugins/Documents/templates/TravelOrders/edit.php:150
+msgid "Traveller"
+msgstr ""
+
+#: ./plugins/Documents/templates/TravelOrders/edit.php:169
+msgid "Travel ordered by"
+msgstr ""
+
+#: ./plugins/Documents/templates/TravelOrders/edit.php:179
+msgid "Travel Description"
+msgstr ""
+
+#: ./plugins/Documents/templates/TravelOrders/edit.php:186
+msgid "Enter travel route (eg. New York - Jersey - New York)"
+msgstr ""
+
+#: ./plugins/Documents/templates/TravelOrders/edit.php:193
+msgid "Travel Task"
+msgstr ""
+
+#: ./plugins/Documents/templates/TravelOrders/edit.php:202
+msgid "Travel Task Date"
+msgstr ""
+
+#: ./plugins/Documents/templates/TravelOrders/edit.php:213
+msgid "Travel Departure"
+msgstr ""
+
+#: ./plugins/Documents/templates/TravelOrders/edit.php:226
+msgid "Travel Arrival"
+msgstr ""
+
+#: ./plugins/Documents/templates/TravelOrders/edit.php:236
+msgid "Vehicle"
+msgstr ""
+
+#: ./plugins/Documents/templates/TravelOrders/edit.php:242
+msgid "Vehicle's name"
+msgstr ""
+
+#: ./plugins/Documents/templates/TravelOrders/edit.php:251
+msgid "Vehicle's Registration"
+msgstr ""
+
+#: ./plugins/Documents/templates/TravelOrders/edit.php:260
+msgid "Vehicle's Owner"
+msgstr ""
+
+#: ./plugins/Documents/templates/TravelOrders/edit.php:268
+#: ./plugins/Documents/templates/TravelOrders/edit.php:294
+msgid "Travel Advance"
+msgstr ""
+
+#: ./plugins/Documents/templates/TravelOrders/edit.php:275
+msgid "Travel's Payer"
+msgstr ""
+
+#: ./plugins/Documents/templates/TravelOrders/edit.php:282
+#: ./plugins/Documents/templates/TravelOrders/edit.php:286
+msgid "Please choose a payer"
+msgstr ""
+
+#: ./plugins/Documents/templates/TravelOrders/edit.php:303
+msgid "Date of Advance Payment"
+msgstr ""
+
+#: ./plugins/Documents/templates/TravelOrders/edit.php:323
+msgid "Add another travel order after saving this one"
+msgstr ""
+
+#: ./plugins/Documents/templates/TravelOrders/index.php:93
+msgid "Descript"
+msgstr ""
+
+#: ./plugins/Documents/templates/TravelOrders/index.php:97
+msgid "Employee"
+msgstr ""
+
 #: ./plugins/Documents/templates/Vats/edit.php:4
 msgid "Edit Vat"
 msgstr ""
@@ -1066,19 +1194,6 @@ msgstr ""
 msgid "Level"
 msgstr ""
 
-#: ./plugins/Documents/templates/element/documents_list.php:24
-#: ./plugins/Documents/templates/element/documents_projects_list.php:36
-msgid "Date"
-msgstr ""
-
-#: ./plugins/Documents/templates/element/documents_list.php:94
-msgid "No documents for this Contact found."
-msgstr ""
-
-#: ./plugins/Documents/templates/element/documents_projects_list.php:104
-msgid "Download Attachment(s)"
-msgstr ""
-
 #: ./plugins/Documents/templates/element/edit_items.php:207
 #: ./plugins/Documents/templates/element/edit_tax.php:123
 msgid "Remove Item"
@@ -1094,5 +1209,17 @@ msgstr ""
 
 #: ./plugins/Documents/templates/element/edit_tax.php:142
 msgid "Add new Tax"
+msgstr ""
+
+#: ./plugins/Documents/templates/element/invoices_list.php:94
+msgid "No invoices for this Contact found."
+msgstr ""
+
+#: ./plugins/Documents/templates/element/invoices_projects_list.php:24
+msgid "Invoice"
+msgstr ""
+
+#: ./plugins/Documents/templates/element/invoices_projects_list.php:104
+msgid "Download Attachment(s)"
 msgstr ""
 

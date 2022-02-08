@@ -23,7 +23,7 @@ class ExpensesEvents implements EventListenerInterface
             'View.beforeRender' => 'addScripts',
             'Lil.Sidebar.beforeRender' => 'modifySidebar',
             'Lil.Form.Documents.DocumentsCounters.edit' => 'modifyCountersForm',
-            'Lil.Panels.Documents.Documents.view' => 'modifyDocumentsView',
+            'Lil.Panels.Documents.Invoices.view' => 'modifyDocumentsView',
             'Model.afterSave' => 'createExpenseOnSave',
         ];
     }

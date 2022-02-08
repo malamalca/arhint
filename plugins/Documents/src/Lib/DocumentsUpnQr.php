@@ -86,20 +86,8 @@ class DocumentsUpnQr
 
         ob_start();
         $qrPng->output();
-        $qrPng = ob_get_clean();
+        $result = ob_get_clean();
 
-        /*$options = new QROptions([
-            'version' => 15,
-            'outputType' => QRCode::OUTPUT_IMAGE_PNG,
-            'eccLevel' => QRCode::ECC_M,
-            'imageBase64' => false,
-            'imageTransparent' => false,
-        ]);
-
-        // invoke a fresh QRCode instance
-        $qrcode = (new QRCode($options))->addEciDesignator(4);
-        $qrPng = $qrcode->render($qrString);*/
-
-        return $qrPng;
+        return $result;
     }
 }

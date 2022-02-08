@@ -3,7 +3,7 @@ use Cake\Core\Configure;
 use Cake\Core\Plugin;
 use Cake\Routing\Router;
 
-$client = $counter->kind == 'issued' ? 'receiver' : 'issuer';
+$client = $counter->direction == 'issued' ? 'receiver' : 'issuer';
 
 if ($invoice->isNew()) {
     $layoutTitle = __d(
@@ -125,7 +125,7 @@ $documentEdit = [
                 'parameters' => [
                     'field' => $client . '.title',
                     [
-                        'label' => ($counter->kind == 'issued' ? __d('documents', 'Receiver') : __d('documents', 'Issuer')) . ':',
+                        'label' => ($counter->direction == 'issued' ? __d('documents', 'Receiver') : __d('documents', 'Issuer')) . ':',
                         'autocomplete' => 'off',
                     ],
                 ],
@@ -288,17 +288,17 @@ if ($invoice->isInvoice()) {
     // additional client "buyer" - INVOICES ONLY
     $clientBuyer = clientFields('buyer', $invoice->buyer) +
     [
-        'client_buyer_start' => $counter->kind == 'received' ? null : '<div id="buyer-wrapper">',
-        'client_buyer' => $counter->kind == 'received' ? null : [
+        'client_buyer_start' => $counter->direction == 'received' ? null : '<div id="buyer-wrapper">',
+        'client_buyer' => $counter->direction == 'received' ? null : [
             'method' => 'control',
             'parameters' => [
                 'field' => 'buyer.title',
                 ['label' => __d('documents', 'Buyer') . ':'],
             ],
         ],
-        'client_buyer_end' => $counter->kind == 'received' ? null : '</div>',
+        'client_buyer_end' => $counter->direction == 'received' ? null : '</div>',
 
-        'client_buyer_toggle' => $counter->kind == 'received' ? null : [
+        'client_buyer_toggle' => $counter->direction == 'received' ? null : [
             'method' => 'control',
             'parameters' => [
                 'field' => 'client-buyer-toggle', [
@@ -347,7 +347,7 @@ if ($invoice->isInvoice()) {
     ////////////////////////////////////////////////////////////////////////////////////////////////
     // analytics and taxes
     $analytics = [];
-    if ($invoice->isInvoice() && $counter->kind == 'received') {
+    if ($invoice->isInvoice() && $counter->direction == 'received') {
         $analytics['fs_analytics_start'] = '<fieldset>';
         $analytics['fs_analytics_legend'] = sprintf('<legend>%s</legend>', __d('documents', 'Analytics'));
         $analytics['analytics'] = [
@@ -361,7 +361,7 @@ if ($invoice->isInvoice()) {
             ],
         ];
         $analytics['fs_analytics_end'] = '</fieldset>';
-    } elseif ($counter->kind == 'issued') {
+    } elseif ($counter->direction == 'issued') {
         $analytics['fs_analytics_start'] = '<fieldset>';
         $analytics['fs_analytics_legend'] = sprintf('<legend>%s</legend>', __d('documents', 'Analytics'));
         require dirname(dirname(__FILE__)) . DS . 'element' . DS . 'edit_items.php';
@@ -373,7 +373,7 @@ if ($invoice->isInvoice()) {
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    if (in_array($counter->kind, ['received'])) {
+    if (in_array($counter->direction, ['received'])) {
         $analytics['fs_tax_start'] = '<fieldset>';
         $analytics['fs_tax_legend'] = sprintf('<legend>%s</legend>', __d('documents', 'Taxes Analytics'));
         require dirname(dirname(__FILE__)) . DS . 'element' . DS . 'edit_tax.php';
@@ -483,9 +483,9 @@ if ($invoice->isInvoice()) {
     $this->Lil->insertIntoArray($documentEdit['form']['lines'], $paymentDetails, ['before' => 'fs_descript_start']);
 }
 
-echo $this->Html->script('/Documents/js/invoice_edit_taxes');
-echo $this->Html->script('/Documents/js/invoice_edit_items');
-echo $this->Html->script('/Documents/js/documentEditClient');
+echo $this->Html->script('/Documents/js/invoiceEditTaxes');
+echo $this->Html->script('/Documents/js/invoiceEditItems');
+echo $this->Html->script('/Documents/js/invoiceEditClient');
 echo $this->Html->script('/Documents/js/tinymce/tinymce.min.js');
 echo $this->Html->css('/Crm/css/crm');
 
@@ -508,8 +508,8 @@ echo $this->Lil->form($documentEdit, 'Documents.Invoices.edit');
             itemsAutocompleteUrl: itemsAutocompleteUrl
         });
 
-        $("#invoice-edit-form").DocumentEditClient({
-            mode: "<?= $counter->kind;?>",
+        $("#invoice-edit-form").InvoiceEditClient({
+            mode: "<?= $counter->direction;?>",
             clientCheckedIconUrl: "<?= Router::url('/crm/img/ico_contact_check.gif'); ?>",
 
             clientAutoCompleteUrl: "<?= Router::url([

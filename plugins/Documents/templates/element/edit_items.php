@@ -2,7 +2,7 @@
 $itmIx = 0;
 $analytics['itm_' . $itmIx++] =
     '<div class="index2">' .
-    '<table cellspacing="0" cellpadding="0" id="document-items-table" class="index-static">' .
+    '<table cellspacing="0" cellpadding="0" id="invoice-items-table" class="index-static">' .
     '<thead><tr>' .
     sprintf('<th class="actions">%s</th>', $this->Html->image('/documents/img/link.gif')) .
     sprintf('<th class="left-align">%s</th>', __d('documents', 'Description')) .
@@ -22,9 +22,9 @@ $itemsGrandTotal = 0;
 $itemsTotal = 0;
 
 // create empty item if one does not exist
-$documents_items = $document->documents_items;
-if (empty($documents_items)) {
-    $documents_items[] = (object)[
+$invoices_items = $invoice->invoices_items;
+if (empty($invoices_items)) {
+    $invoices_items[] = (object)[
         'id' => null, 'item_id' => null, 'vat_id' => null, 'vat_percent' => 0, 'vat_title' => '',
         'price' => null, 'discount' => null, 'qty' => null,
     ];
@@ -35,7 +35,7 @@ foreach ($vatLevels as $vat) {
     $vatOptions[$vat->id] = $vat->descript;
 }
 
-foreach ($documents_items as $k => $item) {
+foreach ($invoices_items as $k => $item) {
     $analytics['itm_' . $itmIx++] = '<tr>';
 
     $analytics['itm_' . $itmIx++] = '<td class="center actions">';
@@ -45,29 +45,29 @@ foreach ($documents_items as $k => $item) {
     ]);
     $analytics['itm_' . $itmIx++] = '</td>';
 
-    $analytics['itm_' . $itmIx++] = '<td class="td-documents-item-descript">';
+    $analytics['itm_' . $itmIx++] = '<td class="td-invoices-item-descript">';
     $analytics['itm_' . $itmIx++] = [
         'method' => 'control',
         'parameters' => [
-            'field' => 'documents_items.' . $k . '.item_id',
-            ['type' => 'hidden', 'class' => 'documents-item-item_id'],
+            'field' => 'invoices_items.' . $k . '.item_id',
+            ['type' => 'hidden', 'class' => 'invoices-item-item_id'],
         ],
     ];
     $analytics['itm_' . $itmIx++] = [
         'method' => 'control',
         'parameters' => [
-            'field' => 'documents_items.' . $k . '.document_id',
-            ['type' => 'hidden', 'class' => 'documents-item-document_id'],
+            'field' => 'invoices_items.' . $k . '.invoice_id',
+            ['type' => 'hidden', 'class' => 'invoices-item-invoice_id'],
         ],
     ];
     $analytics['itm_' . $itmIx++] = [
         'method' => 'control',
         'parameters' => [
-            'field' => 'documents_items.' . $k . '.descript', [
+            'field' => 'invoices_items.' . $k . '.descript', [
                 'type' => 'text',
                 'label' => false,
                 'size' => 30,
-                'class' => 'documents-item-descript',
+                'class' => 'invoices-item-descript',
                 'autocomplete' => 'off',
                 'error' => __d('documents', 'Blank'),
             ],
@@ -75,68 +75,68 @@ foreach ($documents_items as $k => $item) {
     ];
     $analytics['itm_' . $itmIx++] = '</td>';
 
-    $analytics['itm_' . $itmIx++] = '<td class="td-documents-item-qty right-align">';
+    $analytics['itm_' . $itmIx++] = '<td class="td-invoices-item-qty right-align">';
     $analytics['itm_' . $itmIx++] = [
         'method' => 'number',
         'parameters' => [
-            'field' => 'documents_items.' . $k . '.qty', [
+            'field' => 'invoices_items.' . $k . '.qty', [
                 'type' => 'number',
                 'step' => '0.01',
                 'label' => false,
                 'size' => 5,
-                'class' => 'documents-item-qty',
+                'class' => 'invoices-item-qty',
                 'error' => __d('documents', 'Blank'),
-                'id' => 'document-documents-items-' . $k . '-qty',
+                'id' => 'invoice-invoices-items-' . $k . '-qty',
             ],
         ],
     ];
     $analytics['itm_' . $itmIx++] = '</td>';
 
-    $analytics['itm_' . $itmIx++] = '<td class="td-documents-item-unit right-align">';
+    $analytics['itm_' . $itmIx++] = '<td class="td-documentinvoices-item-unit right-align">';
     $analytics['itm_' . $itmIx++] = [
         'method' => 'text',
         'parameters' => [
-            'field' => 'documents_items.' . $k . '.unit', [
+            'field' => 'invoices_items.' . $k . '.unit', [
                 'type' => 'text',
                 'label' => false,
                 'size' => 5,
-                'class' => 'documents-item-unit',
+                'class' => 'invoices-item-unit',
                 'error' => __d('documents', 'Blank'),
-                'id' => 'document-documents-items-' . $k . '-unit',
+                'id' => 'invoice-invoices-items-' . $k . '-unit',
             ],
         ],
     ];
     $analytics['itm_' . $itmIx++] = '</td>';
 
-    $analytics['itm_' . $itmIx++] = '<td class="td-documents-item-price right-align">';
+    $analytics['itm_' . $itmIx++] = '<td class="td-invoices-item-price right-align">';
     $analytics['itm_' . $itmIx++] = [
         'method' => 'number',
         'parameters' => [
-            'field' => 'documents_items.' . $k . '.price', [
+            'field' => 'invoices_items.' . $k . '.price', [
                 'type' => 'number',
                 'step' => 0.01,
                 'label' => false,
                 'size' => 12,
-                'class' => 'documents-item-price',
+                'class' => 'invoices-item-price',
                 'error' => __d('documents', 'Blank'),
-                'id' => 'document-documents-items-' . $k . '-price',
+                'id' => 'invoice-invoices-items-' . $k . '-price',
             ],
         ],
     ];
     $analytics['itm_' . $itmIx++] = '</td>';
 
-    $analytics['itm_' . $itmIx++] = '<td class="td-documents-item-discount right-align">';
+    $analytics['itm_' . $itmIx++] = '<td class="td-invoices-item-discount right-align">';
     $analytics['itm_' . $itmIx++] = [
         'method' => 'number',
         'parameters' => [
-            'field' => 'documents_items.' . $k . '.discount', [
+            'field' => 'invoices_items.' . $k . '.discount', [
                 'type' => 'number',
                 'step' => 0.1,
                 'label' => false,
                 'size' => 5,
-                'class' => 'documents-item-discount',
+                'class' => 'invoices-item-discount',
                 'error' => __d('documents', 'Blank'),
-                'id' => 'document-documents-items-' . $k . '-discount',
+                'id' => 'invoice-invoices-items-' . $k . '-discount',
             ],
         ],
     ];
@@ -145,50 +145,50 @@ foreach ($documents_items as $k => $item) {
     $itemTotal = round(round($item->price * (100 - $item->discount) / 100, 4) * $item->qty, 2);
     $itemsTotal += $itemTotal;
 
-    $analytics['itm_' . $itmIx++] = '<td class="td-documents-item-total right-align">';
+    $analytics['itm_' . $itmIx++] = '<td class="td-invoices-item-total right-align">';
     $analytics['itm_' . $itmIx++] = [
         'method' => 'control',
         'parameters' => [
-            'field' => 'documents_items.' . $k . '.id',
-            ['type' => 'hidden', 'class' => 'documents-item-id'],
+            'field' => 'invoices_items.' . $k . '.id',
+            ['type' => 'hidden', 'class' => 'invoices-item-id'],
         ],
     ];
     $analytics['itm_' . $itmIx++] = sprintf('<span>%s</span>', $this->Number->precision((float)$itemTotal, 2));
     $analytics['itm_' . $itmIx++] = '</td>';
 
-    $analytics['itm_' . $itmIx++] = '<td class="td-documents-item-vat right-align nowrap">';
+    $analytics['itm_' . $itmIx++] = '<td class="td-invoices-item-vat right-align nowrap">';
     $analytics['itm_' . $itmIx++] = [
         'method' => 'control',
         'parameters' => [
-            'field' => 'documents_items.' . $k . '.vat_title',
+            'field' => 'invoices_items.' . $k . '.vat_title',
             [
                 'type' => 'hidden',
                 'value' => $item->vat_title,
-                'class' => 'documents-item-vat_title',
+                'class' => 'invoices-item-vat_title',
             ],
         ],
     ];
     $analytics['itm_' . $itmIx++] = [
         'method' => 'control',
         'parameters' => [
-            'field' => 'documents_items.' . $k . '.vat_percent', [
+            'field' => 'invoices_items.' . $k . '.vat_percent', [
                 'type' => 'hidden',
                 'value' => $item->vat_percent,
-                'class' => 'documents-item-vat_percent',
+                'class' => 'invoices-item-vat_percent',
             ],
         ],
     ];
     $analytics['itm_' . $itmIx++] = [
         'method' => 'select',
         'parameters' => [
-            'field' => 'documents_items.' . $k . '.vat_id',
+            'field' => 'invoices_items.' . $k . '.vat_id',
             $vatOptions,
             [
                 'type' => 'select',
                 'label' => false,
                 'value' => $item->vat_id,
-                'class' => 'documents-item-vat_id browser-default',
-                'id' => 'document-documents-items-' . $k . '-vat-id',
+                'class' => 'invoices-item-vat_id browser-default',
+                'id' => 'invoice-invoices-items-' . $k . '-vat-id',
                 'empty' => true,
             ],
         ],
@@ -199,7 +199,7 @@ foreach ($documents_items as $k => $item) {
     $lineTotal = $itemTotal + round($itemTotal * $item->vat_percent / 100, 2);
     $itemsGrandTotal += $lineTotal;
 
-    $analytics['itm_' . $itmIx++] = '<td class="right-align td-documents-item-line-total">' .
+    $analytics['itm_' . $itmIx++] = '<td class="right-align td-invoices-item-line-total">' .
         sprintf('<span>%s</span>', $this->Number->precision((float)$lineTotal, 2)) .
         '</td>';
 
@@ -207,13 +207,13 @@ foreach ($documents_items as $k => $item) {
         $this->Html->image('/documents/img/remove.gif', ['alt' => __d('documents', 'Remove Item')]),
         [
             'plugin' => 'Documents',
-            'controller' => 'documents-items',
+            'controller' => 'invoices-items',
             'action' => 'delete',
             $item->id,
         ],
         [
             'escape' => false,
-            'class' => 'documents-item-remove',
+            'class' => 'invoices-item-remove',
         ]
     ));
 
@@ -228,13 +228,13 @@ foreach ($documents_items as $k => $item) {
         $this->Html->link(
             __d('documents', 'Add new Item'),
             'javascript:void(0);',
-            ['id' => 'add-document-item-row']
+            ['id' => 'add-invoices-item-row']
         )
     );
     $analytics['itm_' . $itmIx++] = sprintf('<th colspan="3" class="right-align">%1$s:</th>', __d('documents', 'Grand Total'));
-    $analytics['itm_' . $itmIx++] = sprintf('<th class="right-align" id="document-items-total">%s</th>', $this->Number->precision((float)$itemsTotal, 2));
+    $analytics['itm_' . $itmIx++] = sprintf('<th class="right-align" id="invoice-items-total">%s</th>', $this->Number->precision((float)$itemsTotal, 2));
     $analytics['itm_' . $itmIx++] = '<th class="right-align">&nbsp;</th>';
-    $analytics['itm_' . $itmIx++] = sprintf('<th class="right-align" id="document-items-grand-total">%s</th>', $this->Number->precision((float)$itemsGrandTotal, 2));
+    $analytics['itm_' . $itmIx++] = sprintf('<th class="right-align" id="invoice-items-grand-total">%s</th>', $this->Number->precision((float)$itemsGrandTotal, 2));
 
     $analytics['itm_' . $itmIx++] = '<th class="left-align"></th>';
     $analytics['itm_' . $itmIx++] = '</tr></tfoot>';

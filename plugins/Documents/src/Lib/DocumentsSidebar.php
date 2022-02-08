@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Documents\Lib;
 
-use Cake\Cache\Cache;
 use Cake\ORM\TableRegistry;
 use Lil\Lib\Lil;
 
@@ -34,17 +33,13 @@ class DocumentsSidebar
 
         ////////////////////////////////////////////////////////////////////////////////////////
         // Fetch counters
-        $counters = Cache::remember(
-            'Documents.sidebarCounters.' . $currentUser->id,
-            function () use ($controller) {
-                /** @var \Documents\Model\Table\DocumentsCountersTable $DocumentsCounters */
-                $DocumentsCounters = TableRegistry::getTableLocator()->get('Documents.DocumentsCounters');
 
-                return $controller->Authorization->applyScope($DocumentsCounters->find(), 'index')
-                    ->where(['active' => true])
-                    ->order(['active', 'kind DESC', 'title'])
-                    ->all();
-            }
+        /** @var \Documents\Model\Table\DocumentsCountersTable $DocumentsCounters */
+        $DocumentsCounters = TableRegistry::getTableLocator()->get('Documents.DocumentsCounters');
+
+        $counters = $DocumentsCounters->rememberForUser(
+            $currentUser->id,
+            $controller->Authorization->applyScope($DocumentsCounters->find(), 'index')
         );
 
         $documents['title'] = __d('documents', 'Documents');
@@ -190,10 +185,10 @@ class DocumentsSidebar
             // build submenus
             foreach ($counters as $i => $c) {
                 if ($currentCounter == $c->id) {
-                    $sidebar['documents']['items'][$c->kind]['active'] = true;
+                    $sidebar['documents']['items'][$c->direction]['active'] = true;
                 }
 
-                $sidebar['documents']['items'][$c->kind]['submenu'][$c->id] = [
+                $sidebar['documents']['items'][$c->direction]['submenu'][$c->id] = [
                     'visible' => true,
                     'title' => $c->title,
                     'url' => [
