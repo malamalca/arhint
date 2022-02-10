@@ -2,12 +2,9 @@
 use Cake\Core\Configure;
 use Cake\Utility\Xml;
 
-$transformed = ['Document' => [
-    'xmlns:xs4xs' => 'http://www.w3.org/2001/XMLSchema',
-    'xmlns:in' => 'http://uri.etsi.org/01903/v1.1.1#',
-    'xmlns:io' => 'http://www.w3.org/2001/XMLSchema-instance',
-    'xmlns:xsi' => 'http://www.w3.org/2001/XMLSchema-instance',
+$transformed = ['Invoice' => [
     '@xmlns' => 'urn:eslog:2.00',
+    'xmlns:xsi' => 'http://www.w3.org/2001/XMLSchema-instance',
 ]];
 
 // find bank name for current users' company
@@ -16,7 +13,7 @@ $docTypes = Configure::read('Documents.documentTypes');
 
 $i = 0;
 foreach ((array)$invoices as $invoice) {
-    $transformed['Document']['M_INVOIC'][$i] = [
+    $transformed['Invoice']['M_INVOIC'][$i] = [
         '@Id' => 'data',
         // message header
         'S_UNH' => [
@@ -270,7 +267,7 @@ foreach ((array)$invoices as $invoice) {
                         $em = 'C62'; // unit
                 }
 
-                $transformed['Document']['M_INVOIC'][$i]['G_SG26'] = [
+                $transformed['Invoice']['M_INVOIC'][$i]['G_SG26'] = [
                     'S_LIN' => [
                         'D_1082' => $j, // številka vrstice
                     ],
@@ -355,7 +352,7 @@ foreach ((array)$invoices as $invoice) {
         }
     }
 
-    $transformed['Document']['M_INVOIC'][$i]['G_SG50'] = [
+    $transformed['Invoice']['M_INVOIC'][$i]['G_SG50'] = [
         0 => [
             'S_MOA' => [
                 'C_C516' => [
@@ -421,11 +418,11 @@ foreach ((array)$invoices as $invoice) {
         ],
     ];
 
-    $transformed['Document']['M_INVOIC'][$i]['G_SG52'] = [];
+    $transformed['Invoice']['M_INVOIC'][$i]['G_SG52'] = [];
 
     if (isset($tax_spec)) {
         foreach ($tax_spec as $vat_id => $vat_data) {
-            $transformed['Document']['M_INVOIC'][$i]['G_SG52'][] = [
+            $transformed['Invoice']['M_INVOIC'][$i]['G_SG52'][] = [
                 'S_TAX' => [
                     'D_5283' => '7',
                     'C_C241' => [

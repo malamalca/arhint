@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Documents\Model\Entity;
 
-use Cake\Core\Configure;
 use Cake\ORM\Entity;
 
 /**
@@ -59,6 +58,7 @@ class DocumentsCounter extends Entity
      */
     public function isInvoice()
     {
-        return in_array($this->doc_type, (array)Configure::read('Documents.invoiceDocTypes'));
+        //return in_array($this->doc_type, (array)Configure::read('Documents.invoiceDocTypes'));
+        return $this->kind == 'invoices';
     }
 }

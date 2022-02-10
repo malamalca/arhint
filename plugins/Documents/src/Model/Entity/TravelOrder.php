@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Documents\Model\Entity;
 
 use Cake\ORM\Entity;
+use Cake\ORM\TableRegistry;
 
 /**
  * TravelOrder Entity
@@ -19,6 +20,7 @@ use Cake\ORM\Entity;
  * @property string|null $tpl_body_id
  * @property string|null $tpl_footer_id
  * @property int $attachment_count
+ * @property int|null $counter
  * @property string|null $no
  * @property \Cake\I18n\FrozenDate|null $dat_order
  * @property string|null $location
@@ -37,6 +39,7 @@ use Cake\ORM\Entity;
  * @property \Cake\I18n\FrozenTime|null $modified
  *
  * @property \Documents\Model\Entity\DocumentsCounter $documents_counter
+ * @property \Documents\Model\Entity\DocumentsClient $payer
  */
 class TravelOrder extends Entity
 {
@@ -85,4 +88,27 @@ class TravelOrder extends Entity
         'tpl_body' => true,
         'tpl_footer' => true,
     ];
+
+    /**
+     * Populates "counter" and "no" fields from counter data. Increases
+     *
+     * @return void
+     */
+    public function getNextCounterNo()
+    {
+        /** @var \Documents\Model\Table\DocumentsCountersTable $DocumentsCounters */
+        $DocumentsCounters = TableRegistry::getTableLocator()->get('Documents.DocumentsCounters');
+
+        // update documents counter
+        $counter = $DocumentsCounters->get($this->counter_id);
+        $this->counter = $counter->counter + 1;
+
+        // generate documents' `no` according to counter's `mask`
+        if (!empty($counter->mask)) {
+            $this->no = $DocumentsCounters->generateNo($counter->toArray());
+        }
+
+        // update counter
+        $DocumentsCounters->updateAll(['counter' => $counter->counter + 1], ['id' => $counter->id]);
+    }
 }

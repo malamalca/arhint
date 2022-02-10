@@ -45,6 +45,11 @@ class CreateTravelOrders extends AbstractMigration
                 'limit' => null,
                 'null' => false,
             ])
+            ->addColumn('project_id', 'uuid', [
+                'default' => null,
+                'limit' => null,
+                'null' => false,
+            ])
             ->addColumn('tpl_header_id', 'uuid', [
                 'default' => null,
                 'limit' => null,

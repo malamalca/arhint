@@ -1,5 +1,5 @@
 <?php
-            use Cake\Utility\Xml;
+    use Cake\Utility\Xml;
 
     $transformed = ['Document' => [
         'xmlns:' => 'urn:iso:std:iso:20022:tech:xsd:pain.001.001.03',
@@ -9,17 +9,19 @@
         ],
     ]];
 
+    $user = $this->getRequest()->getAttribute('identity');
+
     $transformed['Document']['CstmrCdtTrfInitn']['GrpHdr'] = [
         'MsgId'   => date('Y-m-d') . 'T' . date('G:i:s/u'),
         'CreDtTm' => strftime('%Y-%m-%dT%H:%M:%S'),                 // creation date time :: 2011-12-10T09:28:24
         'NbOfTxs' => sizeof($invoices),                             // število transakcij v paketu
         'CtrlSum'   => '123.00',                                    // kontrolna vsota vseh transkacij
         'InitgPty' => [                                        // Podatki o iniciatorju plačila.
-            'Nm' => '',
+            'Nm' => $user->name,
             'Id' => [
                 'OrgId' => [
                     'Othr' => [
-                        //'Id' => h($currentUser['company']['tax_no']),
+                        'Id' => substr($user->id, 0, 35),
                         'SchmeNm' => ['Cd' => 'TXID'],
                     ],
                 ],
@@ -41,7 +43,7 @@
                     'Prtry' => 'SEPA',                                                           // • »SEPA« (SEPA nalog), • »BN02« • »PP02« • »KOMP« • »VP70« • »VP70EU« • »PRENOS« (PPT prenos sredstev)
                 ],
             ],
-            'ReqdExctnDt' => $invoice->dat_expire->toIso8601String(),                           // Datum izvršitve
+            'ReqdExctnDt' => $invoice->dat_expire->toDateString(),                           // Datum izvršitve
             'Dbtr' => [                                                                    // Podatki o nalogodajalcu
                 'Nm' => h($invoice->receiver->title),
                 'PstlAdr' => [

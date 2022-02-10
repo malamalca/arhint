@@ -133,6 +133,7 @@ $documents_index = [
 $total = 0;
 $link_template = '<a href="' . Router::url(['action' => 'view', '__id__']) . '">__title__</a>';
 foreach ($data as $travelOrder) {
+
     $documents_index['table']['body']['rows'][]['columns'] = [
         'no' => [
             'parameters' => ['class' => 'nowrap'],
@@ -152,20 +153,20 @@ foreach ($data as $travelOrder) {
         ],
         'date' => [
             'parameters' => ['class' => 'center-align nowrap hide-on-small-only'],
-            'html' => $this->Arhint->calendarDay($document->dat_order),
+            'html' => $this->Arhint->calendarDay($travelOrder->dat_order),
         ],
         'title' => [
             'parameters' => ['class' => 'documents-title left-align hide-on-small-only'],
-            'html' => h($document->title) .
+            'html' => h($travelOrder->title) .
                 // attachment
-                ($document->attachments_count == 0 ? '' :
+                ($travelOrder->attachments_count == 0 ? '' :
                     ' ' . $this->Html->image('/documents/img/attachment.png')),
         ],
         'client' => [
             'parameters' => ['class' => 'documents-client left-align hide-on-small-only'],
-            'html' => '<div class="truncate">' . h($document->client['title'] ?? '') . '</div>',
+            'html' => '<div class="truncate">' . h($travelOrder->client['title'] ?? '') . '</div>',
         ],
-        'project' => $counter->isInvoice() ? null : [
+        'project' => empty($project) ? null : [
             'parameters' => ['class' => 'documents-project left-align'],
             'html' => '<div style="height: 20px; overflow: hidden; scroll: none;">' .
                 ($project ? $this->Html->link(
@@ -181,14 +182,14 @@ foreach ($data as $travelOrder) {
         ],
         'net_total' => !$counter->isInvoice() ? null : [
             'parameters' => ['class' => 'documents-net_total right-align nowrap hide-on-small-only'],
-            'html' => $this->Number->currency($document->net_total),
+            'html' => $this->Number->currency($travelOrder->net_total),
         ],
         'total' => !$counter->isInvoice() ? null : [
             'parameters' => ['class' => 'documents-total right-align nowrap'],
-            'html' => $this->Number->currency($document->total),
+            'html' => $this->Number->currency($travelOrder->total),
         ],
     ];
-    $total += $document->total;
+    $total += $travelOrder->total;
 }
 
 //$documents_index['table']['foot']['rows'][0]['columns']['total']['html'] = $this->Number->currency($documentsTotals['sumTotal']);

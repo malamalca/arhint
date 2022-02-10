@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Documents\Controller;
 
+use Cake\Core\Plugin;
 use Cake\ORM\TableRegistry;
 
 /**
@@ -11,8 +12,13 @@ use Cake\ORM\TableRegistry;
  * @property \Documents\Model\Table\TravelOrdersTable $TravelOrders
  * @property \Documents\Model\Table\DocumentsCountersTable $DocumentsCounters
  */
-class TravelOrdersController extends AppController
+class TravelOrdersController extends BaseDocumentsController
 {
+    /**
+     * @var string $documentsScope
+     */
+    public $documentsScope = 'TravelOrders';
+
     /**
      * Index method
      *
@@ -20,28 +26,14 @@ class TravelOrdersController extends AppController
      */
     public function index()
     {
-        $filter = (array)$this->getRequest()->getQuery();
+        /** @var \Documents\Model\Entity\DocumentsCounter|\Cake\Http\Response $counter */
+        $counter = parent::index();
 
-        $this->loadModel('Documents.DocumentsCounters');
-        if (!empty($filter['counter'])) {
-            $counter = $this->DocumentsCounters->get($filter['counter']);
-        } else {
-            $counter = $this->DocumentsCounters->findDefaultCounter(
-                $this->Authorization->applyScope($this->DocumentsCounters->find(), 'index'),
-                'travelorder',
-                $this->getRequest()->getQuery('direction')
-            );
-            if (!$counter) {
-                $this->Authorization->skipAuthorization();
-                $this->Flash->error(__d('documents', 'No counters found. Please activate or add a new one.'));
-
-                return $this->redirect(['controller' => 'DocumentsCounters']);
-            }
+        if ($counter instanceof \Cake\Http\Response) {
+            return $counter;
         }
 
-        $this->Authorization->authorize($counter, 'view');
-
-        // fetch documents
+        // fetch travel orders
         $filter['counter'] = $counter->id;
         $filter['order'] = 'TravelOrders.counter DESC';
         $params = $this->TravelOrders->filter($filter);
@@ -55,12 +47,7 @@ class TravelOrdersController extends AppController
 
         $dateSpan = $this->TravelOrders->maxSpan($filter['counter']);
 
-        $counters = $this->DocumentsCounters->rememberForUser(
-            $this->getCurrentUser()->id,
-            $this->Authorization->applyScope($this->DocumentsCounters->find())
-        );
-
-        $this->set(compact('data', 'filter', 'counter', 'dateSpan', 'counters'));
+        $this->set(compact('data', 'dateSpan'));
 
         return null;
     }
@@ -74,11 +61,12 @@ class TravelOrdersController extends AppController
      */
     public function view($id = null)
     {
-        $travelOrder = $this->TravelOrders->get($id, [
-            'contain' => [],
-        ]);
+        $containTables = ['DocumentsCounters'];
+        if (Plugin::isLoaded('Projects')) {
+            $containTables[] = 'Projects';
+        }
 
-        $this->set(compact('travelOrder'));
+        parent::view($id, $containTables);
     }
 
     /**
@@ -90,67 +78,29 @@ class TravelOrdersController extends AppController
      */
     public function edit($id = null)
     {
-        if ($id) {
-            $travelOrder = $this->TravelOrders->get($id, [
-                'contain' => ['DocumentsCounters', 'Payers'],
-            ]);
-        } else {
-            // new entity
-            $travelOrder = $this->TravelOrders->newEmptyEntity();
-            $travelOrder->owner_id = $this->getCurrentUser()->get('company_id');
+        $containTables = [];
 
-            $counterId = $this->getRequest()->getQuery('counter');
-            if (empty($counterId)) {
-                $counterId = $this->getRequest()->getData('counter_id');
-            }
+        $document = $this->TravelOrders->parseRequest($this->getRequest(), $id);
 
-            /** @var \Documents\Model\Table\DocumentsCountersTable $DocumentsCounters */
-            $DocumentsCounters = TableRegistry::getTableLocator()->get('Documents.DocumentsCounters');
+        parent::edit($document, $containTables);
 
-            $travelOrder->documents_counter = $DocumentsCounters->get($counterId);
-            $travelOrder->counter_id = $travelOrder->documents_counter->id;
+        // for sidebar
+        $this->set('currentCounter', $document->documents_counter->id);
 
-            $travelOrder->no = $DocumentsCounters->generateNo($travelOrder->counter_id);
+        $projects = [];
+        if (Plugin::isLoaded('Projects')) {
+            /** @var \Projects\Model\Table\ProjectsTable $ProjectsTable */
+            $ProjectsTable = TableRegistry::getTableLocator()->get('Projects.Projects');
+            $projectsQuery = $this->Authorization->applyScope($ProjectsTable->find(), 'index');
+            $projects = $ProjectsTable->findForOwner($this->getCurrentUser()->company_id, $projectsQuery);
         }
-
-        $this->Authorization->authorize($travelOrder);
-
-        if ($this->request->is(['patch', 'post', 'put'])) {
-            $travelOrder = $this->TravelOrders->patchEntity($travelOrder, $this->request->getData());
-            if ($this->TravelOrders->save($travelOrder)) {
-                $this->Flash->success(__d('documents', 'The travel order has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__d('documents', 'The travel order could not be saved. Please, try again.'));
-        }
-
-        $counter = $travelOrder->documents_counter;
 
         /** @var \App\Model\Table\UsersTable $UsersTable */
-        $UsersTable = TableRegistry::getTableLocator()->get('Users');
+        $UsersTable = TableRegistry::getTableLocator()->get('App.Users');
         $users = $UsersTable->fetchForCompany($this->getCurrentUser()->get('company_id'));
 
-        $this->set(compact('travelOrder', 'counter', 'users'));
-    }
+        $this->set(compact('projects', 'users'));
 
-    /**
-     * Delete method
-     *
-     * @param string|null $id Travel Order id.
-     * @return \Cake\Http\Response|null|void Redirects to index.
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function delete($id = null)
-    {
-        $this->request->allowMethod(['post', 'delete', 'get']);
-        $travelOrder = $this->TravelOrders->get($id);
-        if ($this->TravelOrders->delete($travelOrder)) {
-            $this->Flash->success(__d('documents', 'The travel order has been deleted.'));
-        } else {
-            $this->Flash->error(__d('documents', 'The travel order could not be deleted. Please, try again.'));
-        }
-
-        return $this->redirect(['action' => 'index']);
+        return null;
     }
 }

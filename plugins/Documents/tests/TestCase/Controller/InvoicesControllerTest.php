@@ -68,6 +68,20 @@ class InvoicesControllerTest extends IntegrationTestCase
     }
 
     /**
+     * Test index search method
+     *
+     * @return void
+     */
+    public function testIndexSearch()
+    {
+        // Set session data
+        $this->login(USER_ADMIN);
+
+        $this->get('documents/invoices/index?counter=1d53bc5b-de2d-4e85-b13b-81b39a97fc88&search=test');
+        $this->assertResponseOk();
+    }
+
+    /**
      * Test view method
      *
      * @return void
@@ -231,7 +245,7 @@ class InvoicesControllerTest extends IntegrationTestCase
 
         $this->assertResponseSuccess();
         $this->assertContentType('application/json');
-        $this->assertResponseContains('{"invoice":{');
+        $this->assertResponseContains('{"document":{');
 
         //dd((string)$this->_response->getBody());
 

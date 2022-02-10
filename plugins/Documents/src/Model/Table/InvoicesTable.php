@@ -10,6 +10,7 @@ use Cake\I18n\FrozenDate;
 use Cake\ORM\Entity;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
+use Cake\ORM\TableRegistry;
 use Cake\Validation\Validator;
 
 /**
@@ -57,25 +58,21 @@ class InvoicesTable extends Table
             'dependent' => true,
         ]);
 
-        $this->belongsTo('DocumentsCounters', [
+        $this->belongsTo('Documents.DocumentsCounters', [
             'foreignKey' => 'counter_id',
-            'className' => 'Documents\Model\Table\DocumentsCountersTable',
         ]);
-        $this->hasMany('InvoicesItems', [
+        $this->hasMany('Documents.InvoicesItems', [
             'foreignKey' => 'invoice_id',
-            'className' => 'Documents\Model\Table\InvoicesItemsTable',
             'dependant' => true,
             'saveStrategy' => 'replace',
         ]);
-        $this->hasMany('InvoicesTaxes', [
+        $this->hasMany('Documents.InvoicesTaxes', [
             'foreignKey' => 'invoice_id',
-            'className' => 'Documents\Model\Table\InvoicesTaxesTable',
             'dependant' => true,
             'saveStrategy' => 'replace',
         ]);
-        $this->hasMany('DocumentsLinks', [
+        $this->hasMany('Documents.DocumentsLinks', [
             'foreignKey' => 'document_id',
-            'className' => 'Documents\Model\Table\DocumentsLinksTable',
             'dependant' => true,
         ]);
         $this->hasMany('Documents.DocumentsAttachments', [
@@ -318,5 +315,99 @@ class InvoicesTable extends Table
         }
 
         return $ret;
+    }
+
+    /**
+     * parseRequest method
+     *
+     * @param \Cake\Http\ServerRequest $request Request object
+     * @param string|null $id Document id.
+     * @return \Documents\Model\Entity\Invoice
+     */
+    public function parseRequest($request, $id = null)
+    {
+        if (!empty($id)) {
+            $invoice = $this->get($id, ['contain' => ['Issuers', 'Buyers', 'Receivers',
+                'InvoicesTaxes', 'InvoicesItems', 'DocumentsCounters']]);
+        } else {
+            /** @var \Documents\Model\Table\DocumentsClientsTable $DocumentsClients */
+            $DocumentsClients = TableRegistry::getTableLocator()->get('Documents.DocumentsClients');
+            /** @var \Documents\Model\Table\DocumentsCountersTable $DocumentsCounters */
+            $DocumentsCounters = TableRegistry::getTableLocator()->get('Documents.DocumentsCounters');
+
+            $sourceId = $request->getQuery('duplicate');
+            if (!empty($sourceId)) {
+                // clone
+                $invoice = $this->get($sourceId, ['contain' => ['Issuers', 'Buyers', 'Receivers',
+                    'InvoicesTaxes', 'InvoicesItems', 'DocumentsCounters']]);
+
+                $invoice->setNew(true);
+                unset($invoice->id);
+
+                foreach ($invoice->invoices_items as &$item) {
+                    $item->setNew(true);
+                    unset($item->id);
+                    unset($item->document_id);
+                }
+
+                foreach ($invoice->invoices_taxes as &$tax) {
+                    $tax->setNew(true);
+                    unset($tax->id);
+                    unset($tax->document_id);
+                }
+
+                $invoice->issuer->setNew(true);
+                unset($invoice->issuer->id);
+                unset($invoice->issuer->document_id);
+
+                $invoice->buyer->setNew(true);
+                unset($invoice->buyer->id);
+                unset($invoice->buyer->document_id);
+
+                $invoice->receiver->setNew(true);
+                unset($invoice->receiver->id);
+                unset($invoice->receiver->document_id);
+
+                $counterId = $request->getQuery('counter', $invoice->counter_id);
+
+                $invoice->documents_counter = $DocumentsCounters->get($counterId);
+
+                $invoice->counter_id = $invoice->documents_counter->id;
+                $invoice->doc_type = $invoice->documents_counter->doc_type;
+            } else {
+                // new entity
+                $invoice = $this->newEmptyEntity();
+
+                $invoice->owner_id = $request->getAttribute('identity')->get('company_id');
+
+                $invoice->issuer = $DocumentsClients->newEntity(['kind' => 'II']);
+                $invoice->receiver = $DocumentsClients->newEntity(['kind' => 'IV']);
+                $invoice->buyer = $DocumentsClients->newEntity(['kind' => 'BY']);
+
+                $counterId = $request->getQuery('counter');
+                if (empty($counterId)) {
+                    $counterId = $request->getData('counter_id');
+                }
+
+                $invoice->documents_counter = $DocumentsCounters->get($counterId);
+
+                $invoice->counter_id = $invoice->documents_counter->id;
+                $invoice->doc_type = $invoice->documents_counter->doc_type;
+
+                switch ($invoice->documents_counter->direction) {
+                    case 'issued':
+                        $invoice->issuer->patchWithAuth($request->getAttribute('identity'));
+                        break;
+                    case 'received':
+                        $invoice->receiver->patchWithAuth($request->getAttribute('identity'));
+                        $invoice->buyer->patchWithAuth($request->getAttribute('identity'));
+                        break;
+                }
+            }
+
+            $invoice->no = $DocumentsCounters->generateNo($invoice->counter_id);
+        }
+
+        return $invoice;
     }
 }

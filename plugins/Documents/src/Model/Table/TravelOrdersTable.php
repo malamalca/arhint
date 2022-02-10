@@ -3,9 +3,11 @@ declare(strict_types=1);
 
 namespace Documents\Model\Table;
 
+use Cake\Core\Plugin;
 use Cake\I18n\FrozenDate;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
+use Cake\ORM\TableRegistry;
 use Cake\Validation\Validator;
 
 /**
@@ -73,6 +75,13 @@ class TravelOrdersTable extends Table
             'foreignKey' => 'counter_id',
             'className' => 'Documents\Model\Table\DocumentsCountersTable',
         ]);
+
+        if (Plugin::isLoaded('Projects')) {
+            $this->belongsTo('Projects', [
+                'foreignKey' => 'project_id',
+                'className' => 'Projects\Model\Table\ProjectsTable',
+            ]);
+        }
     }
 
     /**
@@ -238,9 +247,6 @@ class TravelOrdersTable extends Table
         }
 
         // override all conditions if Document.id is set
-        if (!empty($filter['order'])) {
-            $ret['conditions'] = ['TravelOrders.id' => $filter['order']];
-        }
         if (!empty($filter['id'])) {
             $ret['conditions'] = ['TravelOrders.id' => $filter['id']];
         }
@@ -302,5 +308,53 @@ class TravelOrdersTable extends Table
         }
 
         return $ret;
+    }
+
+    /**
+     * Creates entity by parsing request
+     *
+     * @param \Cake\Http\ServerRequest $request Request object
+     * @param string|null $id Document id.
+     * @return \Documents\Model\Entity\TravelOrder
+     */
+    public function parseRequest($request, $id = null)
+    {
+        if (!empty($id)) {
+            $document = $this->get($id);
+        } else {
+            /** @var \Documents\Model\Table\DocumentsClientsTable $DocumentsClients */
+            $DocumentsClients = TableRegistry::getTableLocator()->get('Documents.DocumentsClients');
+            /** @var \Documents\Model\Table\DocumentsCountersTable $DocumentsCounters */
+            $DocumentsCounters = TableRegistry::getTableLocator()->get('Documents.DocumentsCounters');
+
+            $sourceId = $request->getQuery('duplicate');
+            if (!empty($sourceId)) {
+                // clone
+                $document = $this->get($sourceId, ['contain' => ['DocumentsCounters']]);
+
+                $document->setNew(true);
+                unset($document->id);
+
+                $document->payer->setNew(true);
+                unset($document->payer->id);
+                unset($document->payer->document_id);
+
+                $counterId = $request->getQuery('counter', $document->counter_id);
+            } else {
+                // new entity
+                $document = $this->newEmptyEntity();
+
+                $document->owner_id = $request->getAttribute('identity')->get('company_id');
+                $document->payer = $DocumentsClients->newEntity(['kind' => 'IV']);
+
+                $counterId = $request->getQuery('counter');
+            }
+
+            $document->documents_counter = $DocumentsCounters->get($counterId);
+            $document->counter_id = $document->documents_counter->id;
+            $document->no = $DocumentsCounters->generateNo($document->counter_id);
+        }
+
+        return $document;
     }
 }

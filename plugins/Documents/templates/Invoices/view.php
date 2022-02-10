@@ -3,24 +3,24 @@ use Cake\Core\Configure;
 use Cake\Core\Plugin;
 use Cake\Utility\Text;
 
-$invoice->client = $invoice->documents_counter->direction == 'issued' ? $invoice->receiver : $invoice->issuer;
+$document->client = $document->documents_counter->direction == 'issued' ? $document->receiver : $document->issuer;
 
 $invoiceView = [
     'title_for_layout' => __d(
         'documents',
         '{3} #{0} <span class="light nowrap">({1} :: {2})</span>',
-        h($invoice->no),
-        h($invoice->documents_counter->title),
-        h($invoice->counter),
-        h($invoice->tpl_title)
+        h($document->no),
+        h($document->documents_counter->title),
+        h($document->counter),
+        h($document->tpl_title)
     ),
     'menu' => [
         'edit' => [
             'title' => __d('documents', 'Edit'),
-            'visible' => $invoice->documents_counter->active && $this->getCurrentUser()->hasRole('editor'),
+            'visible' => $document->documents_counter->active && $this->getCurrentUser()->hasRole('editor'),
             'url' => [
                 'action' => 'edit',
-                $invoice->id,
+                $document->id,
             ],
         ],
         'duplicate' => [
@@ -28,7 +28,7 @@ $invoiceView = [
             'visible' => $this->getCurrentUser()->hasRole('editor'),
             'url' => [
                 'action' => 'edit',
-                '?' => ['duplicate' => $invoice->id],
+                '?' => ['duplicate' => $document->id],
             ],
         ],
         'attach' => [
@@ -42,7 +42,7 @@ $invoiceView = [
                         'plugin' => 'Documents',
                         'controller' => 'DocumentsAttachments',
                         'action' => 'add',
-                        $invoice->id,
+                        $document->id,
                     ],
                     'params' => [
                         'id' => 'AttachFile',
@@ -55,7 +55,7 @@ $invoiceView = [
                         'plugin' => 'Documents',
                         'controller' => 'DocumentsAttachments',
                         'action' => 'add',
-                        $invoice->id,
+                        $document->id,
                         'scan'
                     ],
                     'params' => [
@@ -69,7 +69,7 @@ $invoiceView = [
                         'plugin' => 'Documents',
                         'controller' => 'DocumentsLinks',
                         'action' => 'link',
-                        $invoice->id,
+                        $document->id,
                     ],
                     'params' => [
                         'id' => 'AttachLink',
@@ -79,10 +79,10 @@ $invoiceView = [
         ],
         'delete' => [
             'title' => __d('documents', 'Delete'),
-            'visible' => $invoice->documents_counter->active && $this->getCurrentUser()->hasRole('editor'),
+            'visible' => $document->documents_counter->active && $this->getCurrentUser()->hasRole('editor'),
             'url' => [
                 'action' => 'delete',
-                $invoice->id,
+                $document->id,
             ],
             'params' => [
                 'confirm' => __d('documents', 'Are you sure you want to delete this document?'),
@@ -93,8 +93,8 @@ $invoiceView = [
             'visible' => true,
             'url' => [
                 'action' => 'preview',
-                $invoice->id,
-                $invoice->no,
+                $document->id,
+                $document->no,
             ],
         ],
         'email' => [
@@ -102,7 +102,7 @@ $invoiceView = [
             'visible' => true,
             'url' => [
                 'action' => 'email',
-                '?' => ['id' => $invoice->id],
+                '?' => ['id' => $document->id],
             ],
             'params' => [
                 'id' => 'EmailDocument',
@@ -117,38 +117,38 @@ $invoiceView = [
                     'visible' => true,
                     'url' => [
                         'action' => 'export',
-                        $invoice->id,
-                        Text::slug($invoice->title) . '.pdf',
+                        $document->id,
+                        Text::slug($document->title) . '.pdf',
                         '?' => ['download' => 1],
                     ],
                 ],
-                'sepaxml' => !$invoice->isInvoice() ? null : [
+                'sepaxml' => !$document->isInvoice() ? null : [
                     'title' => __d('documents', 'Sepa XML'),
                     'visible' => true,
                     'url' => [
                         'action' => 'export',
-                        $invoice->id,
-                        Text::slug($invoice->title) . '.sepa.xml',
+                        $document->id,
+                        Text::slug($document->title) . '.sepa.xml',
                         '?' => ['download' => 1],
                     ],
                 ],
-                'eslog' => !$invoice->isInvoice() ? null : [
+                'eslog' => !$document->isInvoice() ? null : [
                     'title' => __d('documents', 'eSlog'),
                     'visible' => true,
                     'url' => [
                         'action' => 'export',
-                        $invoice->id,
-                        Text::slug($invoice->title) . '.eslog.xml',
+                        $document->id,
+                        Text::slug($document->title) . '.eslog.xml',
                         '?' => ['download' => 1],
                     ],
                 ],
-                'eslog20' => !$invoice->isInvoice() ? null : [
+                'eslog20' => !$document->isInvoice() ? null : [
                     'title' => __d('documents', 'eSlog 2.0'),
                     'visible' => true,
                     'url' => [
                         'action' => 'export',
-                        $invoice->id,
-                        Text::slug($invoice->title) . '.eslog20.xml',
+                        $document->id,
+                        Text::slug($document->title) . '.eslog20.xml',
                         '?' => ['download' => 1],
                     ],
                 ],
@@ -163,43 +163,43 @@ $invoiceView = [
                     'visible' => true,
                     'url' => [
                         'action' => 'templates',
-                        $invoice->id,
+                        $document->id,
                     ],
                     'params' => [
                         'id' => 'EditTemplates',
                     ],
                 ],
-                'issuer' => empty($invoice->issuer) ? null : [
+                'issuer' => empty($document->issuer) ? null : [
                     'title' => __d('documents', 'Edit Issuer'),
                     'visible' => true,
                     'url' => [
                         'controller' => 'DocumentsClients',
                         'action' => 'edit',
-                        $invoice->issuer->id ?? '',
+                        $document->issuer->id ?? '',
                     ],
                     'params' => [
                         'id' => 'EditIssuer',
                     ],
                 ],
-                'receiver' => empty($invoice->receiver) ? null : [
+                'receiver' => empty($document->receiver) ? null : [
                     'title' => __d('documents', 'Edit Receiver'),
                     'visible' => true,
                     'url' => [
                         'controller' => 'DocumentsClients',
                         'action' => 'edit',
-                        $invoice->receiver->id ?? '',
+                        $document->receiver->id ?? '',
                     ],
                     'params' => [
                         'id' => 'EditReceiver',
                     ],
                 ],
-                'buyer' => empty($invoice->buyer) ? null : [
+                'buyer' => empty($document->buyer) ? null : [
                     'title' => __d('documents', 'Edit Buyer'),
                     'visible' => true,
                     'url' => [
                         'controller' => 'DocumentsClients',
                         'action' => 'edit',
-                        $invoice->buyer->id ?? '',
+                        $document->buyer->id ?? '',
                     ],
                     'params' => [
                         'id' => 'EditBuyer',
@@ -208,54 +208,54 @@ $invoiceView = [
             ],
         ],
     ],
-    'entity' => $invoice,
+    'entity' => $document,
     'panels' => [
         'title' => [
             'id' => 'invoice-title',
             'lines' => [[
                 'label' => __d('documents', 'Title') . ':',
-                'text' => h($invoice->title),
+                'text' => h($document->title),
             ]],
         ],
         'client' => [
             'id' => 'invoice-client',
             'lines' => [
                 'client.title' => [
-                    'label' => ($invoice->documents_counter->direction == 'issued' ? __d('documents', 'Receiver') : __d('documents', 'Issuer')) . ':',
+                    'label' => ($document->documents_counter->direction == 'issued' ? __d('documents', 'Receiver') : __d('documents', 'Issuer')) . ':',
                     'text' =>
-                        h($invoice->client->title) . '&nbsp;' . (
-                        empty($invoice->client->contact_id) ? '' :
+                        h($document->client->title) . '&nbsp;' . (
+                        empty($document->client->contact_id) ? '' :
                             $this->Html->link(
                                 $this->Html->image('/documents/img/goto.gif'),
                                 [
                                     'plugin' => 'Crm',
                                     'controller' => 'contacts',
                                     'action' => 'view',
-                                    $invoice->client->contact_id,
+                                    $document->client->contact_id,
                                 ],
                                 ['escape' => false]
                             )
                         ),
                 ],
-                'client-address' => empty($invoice->client->primary_address) ? null : [
+                'client-address' => empty($document->client->primary_address) ? null : [
                     'label' => '&nbsp;',
                     'text' =>
                         implode(', ', array_filter([
-                            h($invoice->client->primary_address->street),
+                            h($document->client->primary_address->street),
                             h(implode(
                                 ' ',
                                 [
-                                    $invoice->client->primary_address->zip,
-                                    $invoice->client->primary_address->city,
+                                    $document->client->primary_address->zip,
+                                    $document->client->primary_address->city,
                                 ]
                             )),
-                            h($invoice->client->primary_address->country),
+                            h($document->client->primary_address->country),
                         ])),
                 ],
-                'client-tax_no' => empty($invoice->client->tax_no) ? null : [
+                'client-tax_no' => empty($document->client->tax_no) ? null : [
                     'label' => '&nbsp;',
-                    'text' => ($invoice->client->tax_status ? __d('documents', 'TAX payee no.') : __d('documents', 'TAX no.')) . ' ' .
-                        h($invoice->client->tax_no),
+                    'text' => ($document->client->tax_status ? __d('documents', 'TAX payee no.') : __d('documents', 'TAX no.')) . ' ' .
+                        h($document->client->tax_no),
                 ],
             ],
         ],
@@ -265,44 +265,44 @@ $invoiceView = [
             'lines' => [
                 0 => [
                     'label' => __d('documents', 'Date of issue') . ':',
-                    'text' => (string)$invoice->dat_issue,
+                    'text' => (string)$document->dat_issue,
                 ],
-                1 => !$invoice->isInvoice() ? null : [
+                1 => !$document->isInvoice() ? null : [
                     'label' => __d('documents', 'Service date') . ':',
-                    'text' => (string)$invoice->dat_service,
+                    'text' => (string)$document->dat_service,
                 ],
-                2 => !$invoice->isInvoice() ? null : [
+                2 => !$document->isInvoice() ? null : [
                     'label' => __d('documents', 'Expiration date') . ':',
-                    'text' => (string)$invoice->dat_expire,
+                    'text' => (string)$document->dat_expire,
                 ],
-                3 => empty($invoice->dat_approval) ? null : [
+                3 => empty($document->dat_approval) ? null : [
                     'label' => __d('documents', 'Approval date') . ':',
-                    'text' => (string)$invoice->dat_approval,
+                    'text' => (string)$document->dat_approval,
                 ],
-                4 => empty($invoice->dat_sign) ? null : [
+                4 => empty($document->dat_sign) ? null : [
                     'label' => __d('documents', 'Sign date') . ':',
-                    'text' => (string)$invoice->dat_sign,
+                    'text' => (string)$document->dat_sign,
                 ],
             ],
         ],
-        'project' => !Plugin::isLoaded('Projects') || empty($invoice->project_id) ? null : [
+        'project' => !Plugin::isLoaded('Projects') || empty($document->project_id) ? null : [
             'lines' => [
                 [
                     'label' => __d('documents', 'Project') . ':',
-                    'text' => $this->Html->link((string)$invoice->project, [
+                    'text' => $this->Html->link((string)$document->project, [
                         'plugin' => 'Projects',
                         'controller' => 'Projects',
                         'action' => 'view',
-                        $invoice->project_id,
+                        $document->project_id,
                     ]) . ' &nbsp;',
                 ],
             ],
         ],
-        'total' => !$invoice->isInvoice() ? null : [
+        'total' => !$document->isInvoice() ? null : [
             'id' => 'invoice-total',
             'lines' => [[
                 'label' => __d('documents', 'Total') . ':',
-                'text' => $this->Number->currency($invoice->total),
+                'text' => $this->Number->currency($document->total),
             ]],
         ],
     ],
@@ -316,18 +316,18 @@ foreach ($counters as $cntr) {
         'url' => [
             'controller' => 'Invoices',
             'action' => 'edit',
-            '?' => ['duplicate' => $invoice->id, 'counter' => $cntr->id],
+            '?' => ['duplicate' => $document->id, 'counter' => $cntr->id],
         ],
     ];
 }
 
-if ($invoice->isInvoice()) {
+if ($document->isInvoice()) {
     ////////////////////////////////////////////////////////////////////////////////////////////////
     // ITEMS
     $itemsBody = [];
     $itemsTotal = 0;
     $grandTotal = 0;
-    foreach ($invoice->invoices_items as $itm) {
+    foreach ($document->invoices_items as $itm) {
         $itemsPrice = round($itm->price * $itm->qty, 4);
         $discount = round($itemsPrice * $itm->discount / 100, 4);
         $itemTotal = $itemsPrice - $discount;
@@ -412,7 +412,7 @@ if ($invoice->isInvoice()) {
         ],
     ];
 
-    if ($invoice->documents_counter->direction == 'issued') {
+    if ($document->documents_counter->direction == 'issued') {
         $invoiceView['panels']['items_title'] = sprintf('<h3>%s</h3>', __d('documents', 'Analytics'));
         $invoiceView['panels']['items']['id'] = 'invoice-view-items-table';
         $invoiceView['panels']['items']['table'] = $items;
@@ -424,7 +424,7 @@ if ($invoice->isInvoice()) {
     $baseTotal = 0;
     $taxTotal = 0;
     $grandTotal = 0;
-    foreach ($invoice->invoices_taxes as $itm) {
+    foreach ($document->invoices_taxes as $itm) {
         $tax = round($itm->base * $itm->vat_percent / 100, 2);
         $lineTotal = round($itm->base + $tax, 2);
 
@@ -494,7 +494,7 @@ if ($invoice->isInvoice()) {
         ],
     ];
 
-    if ($invoice->documents_counter->direction == 'received') {
+    if ($document->documents_counter->direction == 'received') {
         $invoiceView['panels']['vat_title'] = sprintf('<h3>%s</h3>', __d('documents', 'VAT Analytics'));
         $invoiceView['panels']['vat']['id'] = 'invoice-view-tax-table';
         $invoiceView['panels']['vat']['table'] = $taxes;
@@ -504,10 +504,10 @@ if ($invoice->isInvoice()) {
 ////////////////////////////////////////////////////////////////////////////////////////////////
 // ATTACHMENTS
 
-if (!empty($invoice->documents_attachments)) {
+if (!empty($document->documents_attachments)) {
     $invoiceView['panels']['attachments_title'] = sprintf('<h3>%s</h3>', __d('documents', 'Attachments'));
     $i = 0;
-    foreach ($invoice->documents_attachments as $atch) {
+    foreach ($document->documents_attachments as $atch) {
         $invoiceView['panels']['attachments_' . $atch->id] = sprintf(
             '<div>%1$s (%2$s) %3$s</div>',
             $this->Html->link(
@@ -573,7 +573,7 @@ if (!empty($links)) {
                 [
                     'controller' => 'DocumentsLinks',
                     'action' => 'delete',
-                    $invoice->id,
+                    $document->id,
                     $link->id,
                 ],
                 [
@@ -585,9 +585,9 @@ if (!empty($links)) {
     }
 }
 
-if (!empty($invoice->descript)) {
+if (!empty($document->descript)) {
     $invoiceView['panels']['text_title'] = sprintf('<h3>%s</h3>', __d('documents', 'Description'));
-    $invoiceView['panels']['text_data'] = sprintf('<div id="invoice-descript-preview">%s</div>', $invoice->descript);
+    $invoiceView['panels']['text_data'] = sprintf('<div id="invoice-descript-preview">%s</div>', $document->descript);
 }
 
 echo $this->Lil->panels($invoiceView, 'Documents.Invoices.view');

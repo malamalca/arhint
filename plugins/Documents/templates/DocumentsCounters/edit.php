@@ -44,9 +44,9 @@ $counter_edit = [
                             'class' => 'active',
                         ],
                         'options' => [
-                            'D' => __d('documents', 'Documents'),
-                            'I' => __d('documents', 'Invoices'),
-                            'T' => __d('documents', 'Travel Orders'),
+                            'documents' => __d('documents', 'Documents'),
+                            'invoices' => __d('documents', 'Invoices'),
+                            'travelorders' => __d('documents', 'Travel Orders'),
                         ],
                         'class' => 'browser-default',
                     ],

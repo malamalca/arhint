@@ -1,7 +1,9 @@
 <?php
 use Cake\I18n\FrozenDate;
 
-if ($travelOrder->isNew()) {
+$counter = $document->documents_counter;
+
+if ($document->isNew()) {
     $layoutTitle = __d(
         'documents',
         'Add a Travel Order #{0} <span class="light">({1})</span>',
@@ -37,14 +39,14 @@ $documentEdit = [
             'form_start' => [
                 'method' => 'create',
                 'parameters' => [
-                    $travelOrder, [
+                    $document, [
                         'type' => 'file',
                         'id' => 'travel_orders-edit-form',
                         'idPrefix' => 'travel_order',
                         'url' => [
                             'action' => 'edit',
-                            $travelOrder->id,
-                            '?' => ['counter' => $travelOrder->counter_id],
+                            $document->id,
+                            '?' => ['counter' => $document->counter_id],
                         ],
                     ],
                 ],

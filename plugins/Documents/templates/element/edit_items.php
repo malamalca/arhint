@@ -22,7 +22,7 @@ $itemsGrandTotal = 0;
 $itemsTotal = 0;
 
 // create empty item if one does not exist
-$invoices_items = $invoice->invoices_items;
+$invoices_items = $document->invoices_items;
 if (empty($invoices_items)) {
     $invoices_items[] = (object)[
         'id' => null, 'item_id' => null, 'vat_id' => null, 'vat_percent' => 0, 'vat_title' => '',

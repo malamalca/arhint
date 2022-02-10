@@ -19,7 +19,7 @@ $taxGrandTotal = 0;
 $taxTotal = 0;
 $taxBaseTotal = 0;
 
-$invoices_taxes = $invoice->invoices_taxes;
+$invoices_taxes = $document->invoices_taxes;
 
 if (empty($invoices_taxes)) {
     $invoices_taxes[] = (object)['id' => null, 'vat_id' => null,

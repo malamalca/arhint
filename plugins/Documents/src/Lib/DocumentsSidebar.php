@@ -31,17 +31,6 @@ class DocumentsSidebar
             return;
         }
 
-        ////////////////////////////////////////////////////////////////////////////////////////
-        // Fetch counters
-
-        /** @var \Documents\Model\Table\DocumentsCountersTable $DocumentsCounters */
-        $DocumentsCounters = TableRegistry::getTableLocator()->get('Documents.DocumentsCounters');
-
-        $counters = $DocumentsCounters->rememberForUser(
-            $currentUser->id,
-            $controller->Authorization->applyScope($DocumentsCounters->find(), 'index')
-        );
-
         $documents['title'] = __d('documents', 'Documents');
         $documents['visible'] = true;
         $documents['active'] = $request->getParam('plugin') == 'Documents';
@@ -52,9 +41,6 @@ class DocumentsSidebar
         ];
         $documents['items'] = [];
 
-        // insert into sidebar right after welcome panel
-        //Lil::insertIntoArray($sidebar, ['documents' => $documents], ['after' => 'welcome']);
-
         $sidebar['documents'] = $documents;
 
         ////////////////////////////////////////////////////////////////////////////////////////
@@ -64,7 +50,7 @@ class DocumentsSidebar
                 'title' => __d('documents', 'Reports'),
                 'url' => false,
                 'params' => [],
-                'active' => $request->getParam('controller') == 'Documents' && $request->getParam('action') == 'report',
+                'active' => $request->getParam('controller') == 'Invoices' && $request->getParam('action') == 'report',
                 'submenu' => [],
             ];
         }
@@ -77,14 +63,32 @@ class DocumentsSidebar
                 'controller' => 'Invoices',
                 'action' => 'report',
             ],
-            'active' => $request->getParam('controller') == 'Documents' && $request->getParam('action') == 'report',
+            'active' => $request->getParam('controller') == 'Invoices' && $request->getParam('action') == 'report',
         ];
 
         ////////////////////////////////////////////////////////////////////////////////////////
         Lil::insertIntoArray(
             $sidebar['documents']['items'],
             [
-                'received' => [
+                'documents' => [
+                    'visible' => true,
+                    'title' => __d('documents', 'Documents'),
+                    'url' => null,
+                    'active' => false,
+                ],
+                'invoices' => [
+                    'visible' => true,
+                    'title' => __d('documents', 'Invoices'),
+                    'url' => null,
+                    'active' => false,
+                ],
+                'travelorders' => [
+                    'visible' => true,
+                    'title' => __d('documents', 'Travel Orders'),
+                    'url' => null,
+                    'active' => false,
+                ],
+                /*'received' => [
                     'visible' => true,
                     'title' => __d('documents', 'Received Documents'),
                     'url' => false,
@@ -95,7 +99,7 @@ class DocumentsSidebar
                     'title' => __d('documents', 'Issued Documents'),
                     'url' => false,
                     'active' => false,
-                ],
+                ],*/
             ],
             ['before' => 'reports']
         );
@@ -169,8 +173,19 @@ class DocumentsSidebar
 
         // build counters submenu only when needed
         if (($request->getParam('plugin') == 'Documents')) {
+            ////////////////////////////////////////////////////////////////////////////////////////
+            // Fetch counters
+
+            /** @var \Documents\Model\Table\DocumentsCountersTable $DocumentsCounters */
+            $DocumentsCounters = TableRegistry::getTableLocator()->get('Documents.DocumentsCounters');
+
+            $counters = $DocumentsCounters->rememberForUser(
+                $currentUser->id,
+                $controller->Authorization->applyScope($DocumentsCounters->find(), 'index')
+            );
+
             // determine current counter
-            $isActionIndex = $request->getParam('controller') == 'Documents' && $request->getParam('action') == 'index';
+            $isActionIndex = $request->getParam('controller') == 'Invoices' && $request->getParam('action') == 'index';
             $currentCounter = $request->getQuery('counter');
             if (empty($currentCounter)) {
                 $currentCounter = $request->getQuery('filter.counter');
@@ -185,15 +200,26 @@ class DocumentsSidebar
             // build submenus
             foreach ($counters as $i => $c) {
                 if ($currentCounter == $c->id) {
-                    $sidebar['documents']['items'][$c->direction]['active'] = true;
+                    $sidebar['documents']['items'][$c->kind]['active'] = true;
                 }
 
-                $sidebar['documents']['items'][$c->direction]['submenu'][$c->id] = [
+                switch ($c->kind) {
+                    case 'invoices':
+                        $controllerName = 'Invoices';
+                        break;
+                    case 'travelorders':
+                        $controllerName = 'TravelOrders';
+                        break;
+                    default:
+                        $controllerName = 'Invoices';
+                }
+
+                $sidebar['documents']['items'][$c->kind]['submenu'][$c->id] = [
                     'visible' => true,
                     'title' => $c->title,
                     'url' => [
                         'plugin' => 'Documents',
-                        'controller' => 'Invoices',
+                        'controller' => $controllerName,
                         'action' => 'index',
                         '?' => ['counter' => $c->id],
                     ],

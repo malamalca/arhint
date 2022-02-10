@@ -3,9 +3,10 @@ use Cake\Core\Configure;
 use Cake\Core\Plugin;
 use Cake\Routing\Router;
 
-$client = $counter->direction == 'issued' ? 'receiver' : 'issuer';
+$client = $document->documents_counter->direction == 'issued' ? 'receiver' : 'issuer';
+$counter = $document->documents_counter;
 
-if ($invoice->isNew()) {
+if ($document->isNew()) {
     $layoutTitle = __d(
         'documents',
         'Add an Document #{0} <span class="light">({1})</span>',
@@ -16,8 +17,8 @@ if ($invoice->isNew()) {
     $layoutTitle = __d(
         'documents',
         'Edit an Document #{0} <span class="light">({1})</span>',
-        $invoice->counter,
-        h($invoice->title)
+        $document->counter  ,
+        h($counter->title)
     );
 }
 
@@ -41,14 +42,14 @@ $documentEdit = [
             'form_start' => [
                 'method' => 'create',
                 'parameters' => [
-                    $invoice, [
+                    $document, [
                         'type' => 'file',
                         'id' => 'invoice-edit-form',
                         'idPrefix' => 'invoice',
                         'url' => [
                             'action' => 'edit',
-                            $invoice->id,
-                            '?' => ['counter' => $invoice->counter_id],
+                            $document->id,
+                            '?' => ['counter' => $document->counter_id],
                         ],
                     ],
                 ],
@@ -142,7 +143,7 @@ $documentEdit = [
                 'method' => 'control',
                 'parameters' => [
                     'field' => 'no', [
-                        'label' => ($invoice->isInvoice() ? __d('documents', 'Document no') : __d('documents', 'Document no')) . ':',
+                        'label' => ($document->isInvoice() ? __d('documents', 'Document no') : __d('documents', 'Document no')) . ':',
                         'disabled' => !empty($counter->mask),
                     ],
                 ],
@@ -152,7 +153,7 @@ $documentEdit = [
                 'parameters' => [
                     'field' => 'location', [
                         'label' => __d('documents', 'Location') . ':',
-                        'default' => $invoice->issuer->city,
+                        'default' => $document->issuer->city,
                     ],
                 ],
             ],
@@ -280,13 +281,13 @@ $documentEdit = [
 ////////////////////////////////////////////////////////////////////////////////////////////////
 // hidden client fields
 require dirname(dirname(__FILE__)) . DS . 'element' . DS . 'edit_client.php';
-$this->Lil->insertIntoArray($documentEdit['form']['lines'], clientFields('receiver', $invoice->receiver), ['after' => 'client_error']);
-$this->Lil->insertIntoArray($documentEdit['form']['lines'], clientFields('issuer', $invoice->receiver), ['after' => 'client_error']);
+$this->Lil->insertIntoArray($documentEdit['form']['lines'], clientFields('receiver', $document->receiver), ['after' => 'client_error']);
+$this->Lil->insertIntoArray($documentEdit['form']['lines'], clientFields('issuer', $document->receiver), ['after' => 'client_error']);
 
-if ($invoice->isInvoice()) {
+if ($document->isInvoice()) {
     ////////////////////////////////////////////////////////////////////////////////////////////////
     // additional client "buyer" - INVOICES ONLY
-    $clientBuyer = clientFields('buyer', $invoice->buyer) +
+    $clientBuyer = clientFields('buyer', $document->buyer) +
     [
         'client_buyer_start' => $counter->direction == 'received' ? null : '<div id="buyer-wrapper">',
         'client_buyer' => $counter->direction == 'received' ? null : [
@@ -303,7 +304,7 @@ if ($invoice->isInvoice()) {
             'parameters' => [
                 'field' => 'client-buyer-toggle', [
                     'type' => 'checkbox',
-                    'checked' => $invoice->buyer->contact_id != $invoice->receiver->contact_id,
+                    'checked' => $document->buyer->contact_id != $document->receiver->contact_id,
                     'label' => ' ' . __d('documents', 'Use different client for buyer.'),
                 ],
             ],
@@ -347,7 +348,7 @@ if ($invoice->isInvoice()) {
     ////////////////////////////////////////////////////////////////////////////////////////////////
     // analytics and taxes
     $analytics = [];
-    if ($invoice->isInvoice() && $counter->direction == 'received') {
+    if ($document->isInvoice() && $counter->direction == 'received') {
         $analytics['fs_analytics_start'] = '<fieldset>';
         $analytics['fs_analytics_legend'] = sprintf('<legend>%s</legend>', __d('documents', 'Analytics'));
         $analytics['analytics'] = [
