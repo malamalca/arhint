@@ -34,6 +34,15 @@ class CrmSidebar
             'action' => 'index',
         ];
 
+        $contactKind = $request->getQuery('kind');
+        if (!$contactKind) {
+            $contact = $event->getSubject()->viewBuilder()->getVar('contact');
+            $contactKind = $contact->kind ?? '';
+        }
+        if (!$contactKind && in_array($request->getParam('action'), ['index', 'edit', 'view'])) {
+            $contactKind = 'T';
+        }
+
         $crm['items'] = [
             'contacts' => [
                 'visible' => true,
@@ -45,8 +54,7 @@ class CrmSidebar
                 ],
                 'params' => [],
                 'active' => in_array($request->getParam('controller'), ['Contacts']) &&
-                            (empty($request->getQuery('kind')) || strtoupper($request->getQuery('kind', '')) == 'T') &&
-                            in_array($request->getParam('action'), ['index', 'edit', 'view']),
+                            (strtoupper($contactKind) == 'T'),
                 'expand' => false,
                 'submenu' => [],
             ],
@@ -61,7 +69,7 @@ class CrmSidebar
                 ],
                 'params' => [],
                 'active' => in_array($request->getParam('controller'), ['Contacts']) &&
-                            (strtoupper($request->getQuery('kind', 'T')) == 'C'),
+                            (strtoupper($contactKind) == 'C'),
                 'expand' => false,
                 'submenu' => [],
             ],
@@ -74,7 +82,7 @@ class CrmSidebar
                     'action' => 'adrema',
                 ],
                 'params' => [],
-                'active' => in_array($request->getParam('controller'), ['Labels']),
+                'active' => in_array($request->getParam('controller'), ['Labels', 'Adremas']),
                 'expand' => false,
                 'submenu' => [],
             ],
