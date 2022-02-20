@@ -59,6 +59,11 @@ class ActiveSyncCalendar implements Syncroton_Data_IData
     protected $_userId;
 
     /**
+     * @var string|null
+     */
+    protected $_calendarName = 'Arhint Calendar';
+
+    /**
      * The constructor
      *
      * @param \Syncroton_Model_IDevice $_device Device interface
@@ -92,7 +97,8 @@ class ActiveSyncCalendar implements Syncroton_Data_IData
         /** @var \Calendar\Model\Table\EventsTable $EventsTable */
         $EventsTable = TableRegistry::getTableLocator()->get('Calendar.Events');
         $event = $EventsTable->get($serverId, ['contain' => []]);
-        if (!$event->owner_id == $this->_ownerId) {
+
+        if (!$event->calendar_id == $this->_ownerId) {
             return false;
         }
 
@@ -104,10 +110,10 @@ class ActiveSyncCalendar implements Syncroton_Data_IData
         $entry = new Syncroton_Model_Event();
         $entry->subject = $event->title;
         $entry->location = $event->location;
-        $entry->allDayEvent = $event->all_day;
+        $entry->allDayEvent = $event->all_day ? 1 : 0;
 
-        $entry->startTime = $event->dat_start;
-        $entry->endTime = $event->dat_start;
+        $entry->startTime = $event->dat_start ? new \DateTime($event->dat_start->toDateTimeString()) : '';
+        $entry->endTime = $event->dat_end ? new \DateTime($event->dat_end->toDateTimeString()) : '';
         $entry->reminder = $event->reminder;
         //recurrence
 
@@ -115,6 +121,8 @@ class ActiveSyncCalendar implements Syncroton_Data_IData
 
         $entry->body = new Syncroton_Model_EmailBody();
         $entry->body->data = $event->body;
+
+        //Log::write('debug', 'Get Entry: ' . print_r($entry, true));
 
         return $entry;
     }
@@ -140,11 +148,11 @@ class ActiveSyncCalendar implements Syncroton_Data_IData
         $event->location = $_entry->location;
         $event->body = $_entry->body->data;
 
-        $event->all_day = $entry->allDayEvent;
+        $event->all_day = (bool)$_entry->allDayEvent;
 
-        $event->dat_start = $entry->startTime;
-        $event->dat_start = $entry->endTime;
-        $event->reminder = $entry->reminder;
+        $event->dat_start = $_entry->startTime;
+        $event->dat_end = $_entry->endTime;
+        $event->reminder = $_entry->reminder;
 
         if (!$EventsTable->save($event)) {
             Log::write('debug', 'Error creating Event ' . $event->title);
@@ -177,13 +185,15 @@ class ActiveSyncCalendar implements Syncroton_Data_IData
 
         $event->title = $_entry->subject;
         $event->location = $_entry->location;
-        $event->body = $_entry->body->data;
+        $event->body = $_entry->body->data ?? null;
 
-        $event->all_day = $entry->allDayEvent;
+        $event->all_day = (bool)$_entry->allDayEvent;
 
-        $event->dat_start = $entry->startTime;
-        $event->dat_start = $entry->endTime;
-        $event->reminder = $entry->reminder;
+        $event->dat_start = $_entry->startTime;
+        $event->dat_end = $_entry->endTime;
+        $event->reminder = $_entry->reminder;
+
+        Log::write('debug', print_r($_entry, true));
 
         ////////////////////////////////////////////////////////////////////////////////////////////
         if (!$EventsTable->save($event)) {
@@ -227,7 +237,7 @@ class ActiveSyncCalendar implements Syncroton_Data_IData
     {
         return new Syncroton_Model_Folder([
             'serverId' => 'calendar',
-            'displayName' => 'User Calendar',
+            'displayName' => $this->_calendarName,
             'type' => Syncroton_Command_FolderSync::FOLDERTYPE_CALENDAR,
             'parentId' => '0',
         ]);
@@ -299,7 +309,7 @@ class ActiveSyncCalendar implements Syncroton_Data_IData
         $result = [
             'calendar' => new Syncroton_Model_Folder([
                 'serverId' => 'calendar',
-                'displayName' => 'User Calendar',
+                'displayName' => $this->_calendarName,
                 'type' => Syncroton_Command_FolderSync::FOLDERTYPE_CALENDAR,
                 'parentId' => '0',
             ]),
@@ -320,7 +330,7 @@ class ActiveSyncCalendar implements Syncroton_Data_IData
         $result = [
             'contacts' => new Syncroton_Model_Folder([
                 'serverId' => 'calendar',
-                'displayName' => 'Users Calendar',
+                'displayName' => $this->_calendarName,
                 'type' => Syncroton_Command_FolderSync::FOLDERTYPE_CALENDAR,
                 'parentId' => '0',
             ]),
@@ -346,10 +356,12 @@ class ActiveSyncCalendar implements Syncroton_Data_IData
             ->select(['id'])
             ->where([
                 'calendar_id' => $this->_userId,
-                'folder_id' => $folderId,
+                //'folder_id' => $folderId,
             ])
             ->toArray()
         );
+
+        //Log::write('debug', 'getServerEntries: ' . print_r($ids, true));
 
         return $ids;
     }
@@ -379,7 +391,7 @@ class ActiveSyncCalendar implements Syncroton_Data_IData
             ->select(['id'])
             ->where([
                 'calendar_id' => $this->_userId,
-                'folder_id' => $folderId,
+                //'folder_id' => $folderId,
                 'modified >' => $_startTimeStamp->format('Y-m-d H:i:s'),
             ]);
 
@@ -389,7 +401,7 @@ class ActiveSyncCalendar implements Syncroton_Data_IData
 
         $ids = array_keys($query->toArray());
 
-        //Log::write('debug', 'Get changed entries: ' . print_r($ids, true));
+        Log::write('debug', 'Get changed entries: ' . print_r($ids, true));
 
         return $ids;
     }

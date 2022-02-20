@@ -25,6 +25,11 @@ class CreateEvents extends AbstractMigration
             'limit' => null,
             'null' => true,
         ])
+        ->addColumn('folder_id', 'uuid', [
+            'default' => null,
+            'limit' => null,
+            'null' => true,
+        ])
         ->addColumn('title', 'string', [
             'default' => null,
             'limit' => 200,
