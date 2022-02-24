@@ -120,7 +120,7 @@ class ExpensesEvents implements EventListenerInterface
 
             if (!is_null($counter->expense)) {
                 $expenses = TableRegistry::getTableLocator()->get('Expenses.Expenses')->find()
-                    ->where(['model' => 'Document', 'foreign_id' => $invoice->id])
+                    ->where(['model' => 'Invoice', 'foreign_id' => $invoice->id])
                     ->contain(['Payments'])
                     ->all();
 
@@ -178,7 +178,7 @@ class ExpensesEvents implements EventListenerInterface
                 }
 
                 $expense->owner_id = $invoice->owner_id;
-                $expense->model = 'Document';
+                $expense->model = 'Invoice';
                 $expense->foreign_id = $invoice->id;
                 $expense->title = $invoice->title;
                 $expense->dat_happened = $invoice->dat_issue;

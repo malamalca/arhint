@@ -194,7 +194,7 @@ class ExpensesController extends AppController
         if (Plugin::isLoaded('Documents')) {
             $DocumentsCounters = TableRegistry::getTableLocator()->get('Documents.DocumentsCounters');
             $counters = $this->Authorization->applyScope($DocumentsCounters->find(), 'index')
-                ->where(['active' => true])
+                ->where(['active' => true, 'kind' => 'invoices'])
                 ->order(['kind', 'title'])
                 ->all()
                 ->combine('id', function ($entity) {
@@ -235,7 +235,7 @@ class ExpensesController extends AppController
                 ->select($this->Expenses->Invoices->Receivers)
                 ->contain(['Invoices' => ['Issuers', 'Receivers']])
                 ->where([
-                    'Expenses.model' => 'Document',
+                    'Expenses.model' => 'Invoice',
                     'Invoices.counter_id IN' => (array)$filter['counter'],
                 ])
                 ->order('Expenses.dat_happened DESC')
