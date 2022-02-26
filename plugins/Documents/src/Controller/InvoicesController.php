@@ -103,6 +103,26 @@ class InvoicesController extends BaseDocumentsController
 
         $this->set(compact('data', 'dateSpan', 'invoicesTotals'));
 
+        $projects = [];
+        if (Plugin::isLoaded('Projects')) {
+            /** @var \Projects\Model\Table\ProjectsTable $ProjectsTable */
+            $ProjectsTable = TableRegistry::getTableLocator()->get('Projects.Projects');
+
+            $projectsIds = array_filter(array_unique($data->extract('project_id')->toList()));
+
+            $projects = [];
+            if (!empty($projectsIds)) {
+                $projects = $ProjectsTable->find()
+                    ->where(['id IN' => $projectsIds])
+                    ->all()
+                    ->combine('id', function ($entity) {
+                        return $entity;
+                    })
+                    ->toArray();
+            }
+        }
+        $this->set(compact('data', 'dateSpan', 'projects'));
+
         return null;
     }
 
