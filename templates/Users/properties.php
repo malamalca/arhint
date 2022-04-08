@@ -40,6 +40,13 @@ $userForm = [
                     'label' => __('Email') . ':',
                 ]]
             ],
+            'login_redirect' => [
+                'method' => 'control',
+                'parameters' => ['login_redirect', [
+                    'type' => 'text',
+                    'label' => __('Login Redirect') . ':',
+                ]]
+            ],
             'avatar' => [
                 'method' => 'control',
                 'parameters' => [

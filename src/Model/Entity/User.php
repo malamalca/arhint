@@ -19,6 +19,7 @@ use Cake\ORM\Entity;
  * @property string|null $reset_key
  * @property int $privileges
  * @property bool $active
+ * @property string|null $login_redirect
  * @property string|null $avatar
  * @property \Cake\I18n\FrozenTime|null $created
  * @property \Cake\I18n\FrozenTime|null $modified
@@ -45,6 +46,8 @@ class User extends Entity implements IdentityInterface
         'reset_key' => true,
         'privileges' => true,
         'active' => true,
+        'avatar' => true,
+        'login_redirect' => true,
         'created' => true,
         'modified' => true,
         'company' => true,
