@@ -19,10 +19,10 @@ class DocumentsLinkPolicy
      */
     public function canLink($user, $entity)
     {
-        /** @var \Documents\Model\Table\InvoicesTable $InvoicesTable */
-        $InvoicesTable = TableRegistry::getTableLocator()->get('Documents.Invoices');
+        /** @var \Documents\Model\Table\DocumentsLinksTable $DocumentsLinksTable */
+        $DocumentsLinksTable = TableRegistry::getTableLocator()->get('Documents.DocumentsLinks');
 
-        return $InvoicesTable->isOwnedBy($entity->document_id, $user->id) && $user->hasRole('editor');
+        return $DocumentsLinksTable->isOwnedBy($entity, $user->id) && $user->hasRole('editor');
     }
 
     /**
@@ -34,9 +34,9 @@ class DocumentsLinkPolicy
      */
     public function canDelete($user, $entity)
     {
-        /** @var \Documents\Model\Table\InvoicesTable $InvoicesTable */
-        $InvoicesTable = TableRegistry::getTableLocator()->get('Documents.Invoices');
+        /** @var \Documents\Model\Table\DocumentsLinksTable $DocumentsLinksTable */
+        $DocumentsLinksTable = TableRegistry::getTableLocator()->get('Documents.DocumentsLinks');
 
-        return $InvoicesTable->isOwnedBy($entity->document_id, $user->id) && $user->hasRole('editor');
+        return $DocumentsLinksTable->isOwnedBy($entity, $user->id) && $user->hasRole('editor');
     }
 }

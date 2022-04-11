@@ -19,12 +19,21 @@ $data = [
             ],
             'referer' => [
                 'method' => 'hidden',
-                'parameters' => ['field' => 'referer'],
+                'parameters' => ['referer', ['default' => Router::url($this->getRequest()->referer(), true)]],
             ],
             'document_id' => [
                 'method' => 'control',
                 'parameters' => [
                     'field' => 'document_id',
+                    'options' => [
+                        'type' => 'hidden',
+                    ],
+                ],
+            ],
+            'model' => [
+                'method' => 'control',
+                'parameters' => [
+                    'field' => 'model',
                     'options' => [
                         'type' => 'hidden',
                     ],
@@ -76,11 +85,13 @@ echo $this->Lil->form($data, 'Documents.DocumentsLinks.link');
             ], true); ?>',
             onSearch: function() {
                 $('#document-id').val('');
+                $('#model').val('');
                 $('#image-check').hide();
             },
             onSelect: function(item) {
                 $('#title').val(item.label);
                 $('#document-id').val(item.value);
+                $('#model').val(item.model);
                 $('#image-check').show();
             },
             onRenderItem: function(li, item) {

@@ -7,7 +7,7 @@ namespace Calendar\Controller;
  * Events Controller
  *
  * @property \Calendar\Model\Table\EventsTable $Events
- * @method \Calendar\Model\Entity\Event[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
+ * @method \Cake\Datasource\ResultSetInterface|\Cake\ORM\ResultSet paginate($object = null, array $settings = [])
  */
 class EventsController extends AppController
 {

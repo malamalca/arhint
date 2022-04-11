@@ -78,9 +78,10 @@ class DocumentsAttachmentsControllerTest extends IntegrationTestCase
         $this->enableSecurityToken();
         $this->enableCsrfToken();
 
-        $this->post('documents/documents-attachments/add/d0d59a31-6de7-4eb4-8230-ca09113a7fe5', $data);
+        $this->post('documents/documents-attachments/add/Invoice/d0d59a31-6de7-4eb4-8230-ca09113a7fe5', $data);
 
-        $this->assertRedirect(['controller' => 'Invoices', 'action' => 'view', 'd0d59a31-6de7-4eb4-8230-ca09113a7fe5']);
+        //$this->assertRedirect(['controller' => 'Invoices', 'action' => 'view', 'd0d59a31-6de7-4eb4-8230-ca09113a7fe5']);
+        $this->assertRedirect(['controller' => 'DocumentsAttachments', 'action' => 'index']);
 
         $Invoices = TableRegistry::getTableLocator()->get('Documents.Invoices');
         $invoice = $Invoices->get('d0d59a31-6de7-4eb4-8230-ca09113a7fe5');
@@ -106,6 +107,7 @@ class DocumentsAttachmentsControllerTest extends IntegrationTestCase
         $this->login(USER_ADMIN);
 
         $this->get('documents/documents-attachments/delete/aef61652-7416-43b4-9bb4-198f5706ed74');
-        $this->assertRedirect(['controller' => 'Invoices', 'action' => 'view', 'd0d59a31-6de7-4eb4-8230-ca09113a7fe5']);
+        $this->assertRedirect(['controller' => 'DocumentsAttachments', 'action' => 'index']);
+        //$this->assertRedirect(['controller' => 'Invoices', 'action' => 'view', 'd0d59a31-6de7-4eb4-8230-ca09113a7fe5']);
     }
 }

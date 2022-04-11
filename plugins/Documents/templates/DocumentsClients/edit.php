@@ -22,7 +22,7 @@ $clientEdit = [
             ],
             'referer' => [
                 'method' => 'hidden',
-                'parameters' => ['field' => 'referer'],
+                'parameters' => ['referer', ['default' => Router::url($this->getRequest()->referer(), true)]],
             ],
             'title' => [
                 'method' => 'control',

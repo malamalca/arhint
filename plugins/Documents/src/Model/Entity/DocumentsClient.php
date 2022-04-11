@@ -12,6 +12,7 @@ use Cake\ORM\TableRegistry;
  * @property string $id
  * @property string|null $document_id
  * @property string|null $contact_id
+ * @property string|null $model
  * @property string|null $kind
  * @property string|null $title
  * @property string|null $street

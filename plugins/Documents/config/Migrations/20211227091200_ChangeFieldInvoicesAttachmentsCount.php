@@ -2,7 +2,6 @@
 declare(strict_types=1);
 
 use Migrations\AbstractMigration;
-use Phinx\Db\Adapter\MysqlAdapter;
 
 class ChangeFieldInvoicesAttachmentsCount extends AbstractMigration
 {

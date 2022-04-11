@@ -81,6 +81,15 @@ $documentEdit = [
                     ],
                 ],
             ],
+            'status' => [
+                'method' => 'control',
+                'parameters' => [
+                    'status', [
+                        'type' => 'hidden',
+                        'value' => 'new',
+                    ],
+                ],
+            ],
             'duplicate' => [
                 'method' => 'control',
                 'parameters' => ['duplicate', ['type' => 'hidden']],
@@ -99,7 +108,7 @@ $documentEdit = [
             ],
 
             ////////////////////////////////////////////////////////////////////////////////////
-            'fs_basic_start' => '<fieldset>',
+           /* 'fs_basic_start' => '<fieldset>',
             'fs_basic_legend' => sprintf('<legend>%s</legend>', __d('documents', 'Basics')),
             'no' => [
                 'method' => 'control',
@@ -122,10 +131,10 @@ $documentEdit = [
                     ],
                 ],
             ],
-            'dat_order' => [
+            'dat_issue' => [
                 'method' => 'control',
                 'parameters' => [
-                    'dat_order',
+                    'dat_issue',
                     [
                         'label' => __d('documents', 'Date') . ':',
                         'default' => new FrozenDate(),
@@ -135,7 +144,7 @@ $documentEdit = [
                     ],
                 ],
             ],
-            'fs_basic_end' => '</fieldset>', // basics
+            'fs_basic_end' => '</fieldset>', // basics*/
 
             ////////////////////////////////////////////////////////////////////////////////////
             'tror_travel_start' => '<fieldset>',
@@ -163,13 +172,32 @@ $documentEdit = [
                         ],
                 ],
             ],
-            'taskee' => [
+            /*'taskee' => [
                 'method' => 'control',
                 'parameters' => [
                     'taskee',
                     [
                         'label' => __d('documents', 'Travel ordered by') . ':',
                         'default' => $this->getCurrentUser()->get('name'),
+                    ],
+                ],
+            ],*/
+            'dat_task' => [
+                'method' => 'control',
+                'parameters' => [
+                    'dat_task',
+                    [
+                        'label' => __d('documents', 'Travel Task Date') . ':',
+                        'default' => new FrozenDate(),
+                    ],
+                ],
+            ],
+            'title' => [
+                'method' => 'control',
+                'parameters' => [
+                    'title',
+                    [
+                        'label' => __d('documents', 'Travel Task') . ':',
                     ],
                 ],
             ],
@@ -187,34 +215,16 @@ $documentEdit = [
                 '<div class="helper-text">%s</div>',
                 __d('documents', 'Enter travel route (eg. New York - Jersey - New York)')
             ),
-            'task' => [
-                'method' => 'control',
-                'parameters' => [
-                    'task',
-                    [
-                        'label' => __d('documents', 'Travel Task') . ':',
-                    ],
-                ],
-            ],
-            'dat_task' => [
-                'method' => 'control',
-                'parameters' => [
-                    'dat_task',
-                    [
-                        'label' => __d('documents', 'Travel Task Date') . ':',
-                    ],
-                ],
-                ],
             'departure' => [
                 'method' => 'control',
                 'parameters' => [
                     'departure',
                     [
-                        'step' => 5,
+                        'step' => 60,
                         'label' => [
                             'text' => __d('documents', 'Travel Departure') . ':',
                             'class' => 'active',
-                        ]
+                        ],
                     ],
                 ],
                 ],
@@ -223,11 +233,11 @@ $documentEdit = [
                 'parameters' => [
                     'field' => 'arrival',
                     'options' => [
-                        'step' => 5,
+                        'step' => 60,
                         'label' => [
-                            'label' => __d('documents', 'Travel Arrival') . ':',
+                            'text' => __d('documents', 'Travel Arrival') . ':',
                             'class' => 'active',
-                        ]
+                        ],
                     ],
                 ],
             ],
@@ -269,7 +279,7 @@ $documentEdit = [
             'tror_expenses_start' => '<fieldset>',
             'tror_expenses_legend' => sprintf('<legend>%s</legend>', __d('documents', 'Travel Advance')),
 
-            'client' => [
+            /*'client' => [
                 'method' => 'control',
                 'parameters' => [
                     'field' => 'payer.title',
@@ -286,14 +296,14 @@ $documentEdit = [
             'client_kind_error' => [
                 'method' => 'error',
                 'parameters' => ['payer.kind', __d('documents', 'Please choose a payer')],
-            ],
+            ],*/
 
             'advance' => [
                 'method' => 'control',
                 'parameters' => [
                     'advance',
                     [
-                        'label' => __d('documents', 'Travel Advance') . ':',
+                        'label' => __d('documents', 'Amount [€]') . ':',
                     ],
                 ],
             ],
@@ -310,7 +320,7 @@ $documentEdit = [
 
             ////////////////////////////////////////////////////////////////////////////////////
             'submit' => [
-                'method' => 'submit',
+                'method' => 'button',
                 'parameters' => [
                     __d('documents', 'Save'),
                 ],

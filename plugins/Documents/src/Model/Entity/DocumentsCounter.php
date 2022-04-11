@@ -59,6 +59,6 @@ class DocumentsCounter extends Entity
     public function isInvoice()
     {
         //return in_array($this->doc_type, (array)Configure::read('Documents.invoiceDocTypes'));
-        return $this->kind == 'invoices';
+        return $this->kind == 'Invoices';
     }
 }

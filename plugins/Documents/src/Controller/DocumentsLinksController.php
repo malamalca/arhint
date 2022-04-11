@@ -26,7 +26,7 @@ class DocumentsLinksController extends AppController
             if (in_array($this->getRequest()->getParam('action'), ['link'])) {
                 $this->Security->setConfig(
                     'unlockedFields',
-                    ['document_id']
+                    ['document_id', 'model']
                 );
             }
         }
@@ -35,18 +35,30 @@ class DocumentsLinksController extends AppController
     /**
      * Link method
      *
+     * @param string $model Document model
      * @param string $documentId Document id.
      * @return \Cake\Http\Response|null
      */
-    public function link($documentId = null)
+    public function link($model, $documentId = null)
     {
         $this->Authorization->skipAuthorization();
 
         if ($this->getRequest()->is(['patch', 'post', 'put'])) {
-            if ((bool)$this->DocumentsLinks->two($documentId, $this->getRequest()->getData('document_id'))) {
+            if (
+                (bool)$this->DocumentsLinks->two(
+                    $model,
+                    $documentId,
+                    $this->getRequest()->getData('model'),
+                    $this->getRequest()->getData('document_id')
+                )
+            ) {
                 $this->Flash->success(__d('documents', 'Documents have been successfully linked.'));
 
-                return $this->redirect(['controller' => 'Documents', 'action' => 'view', $documentId]);
+                $referer = $this->getRequest()->getData('referer');
+
+                return $this->redirect(!empty($referer) ? $referer : ['action' => 'index']);
+            } else {
+                $this->Flash->error(__d('documents', 'The link could not be established. Please, try again.'));
             }
         }
 
@@ -72,6 +84,6 @@ class DocumentsLinksController extends AppController
             $this->Flash->error(__d('documents', 'The documents link could not be deleted. Please, try again.'));
         }
 
-        return $this->redirect(['controller' => 'Documents', 'action' => 'view', $documentId]);
+        return $this->redirect($this->getRequest()->referer() ?? ['action' => 'index']);
     }
 }

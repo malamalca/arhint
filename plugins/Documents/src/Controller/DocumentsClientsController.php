@@ -29,7 +29,7 @@ class DocumentsClientsController extends AppController
             if ($this->DocumentsClients->save($client)) {
                 $this->Flash->success(__d('documents', 'The client has been saved.'));
 
-                return $this->redirect(['controller' => 'Invoices', 'action' => 'view', $client->document_id]);
+                return $this->redirect($this->getRequest()->getData('referer') ?? ['action' => 'index']);
             } else {
                 $this->Flash->error(__d('documents', 'The client could not be saved. Please, try again.'));
             }

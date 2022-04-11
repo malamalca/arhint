@@ -113,7 +113,7 @@ class ExpensesEvents implements EventListenerInterface
 
         $invoice = $panels->entity;
 
-        if ($invoice->isInvoice()) {
+        if (get_class($event->getSubject()) == \Documents\Model\Table\InvoicesTable::class && $invoice->isInvoice()) {
             /** @var \Documents\Model\Table\DocumentsCountersTable $DocumentsCounters */
             $DocumentsCounters = TableRegistry::getTableLocator()->get('Documents.DocumentsCounters');
             $counter = $DocumentsCounters->get($invoice->counter_id);
@@ -154,21 +154,34 @@ class ExpensesEvents implements EventListenerInterface
      * Create Expense on DocumentsCounter "expense" field set to "expense" or "income"
      *
      * @param \Cake\Event\Event $event Event object
-     * @param \Documents\Model\Entity\Invoice $invoice Entity object
+     * @param \Documents\Model\Entity\Invoice|\Documents\Model\Entity\TravelOrder $entity Entity object
      * @param \ArrayObject $options Options array
      * @return void
      */
-    public function createExpenseOnSave(Event $event, $invoice, ArrayObject $options)
+    public function createExpenseOnSave(Event $event, $entity, ArrayObject $options)
     {
+        switch (get_class($event->getSubject())) {
+            case \Documents\Model\Table\InvoicesTable::class:
+                $modelName = 'Invoice';
+                break;
+            case \Documents\Model\Table\TravelOrdersTable::class:
+                $modelName = 'TravelOrder';
+                break;
+            default:
+                return;
+        }
+
         if (get_class($event->getSubject()) == \Documents\Model\Table\InvoicesTable::class) {
-            $counter = $event->getSubject()->DocumentsCounters->get($invoice->counter_id);
+            $counter = $event->getSubject()->DocumentsCounters->get($entity->counter_id);
+
             if (($counter->expense === 0) || ($counter->expense === 1)) {
+                /** @var \Expenses\Model\Table\ExpensesTable $Expenses */
                 $Expenses = TableRegistry::getTableLocator()->get('Expenses.Expenses');
 
-                if (!$invoice->isNew()) {
+                if (!$entity->isNew()) {
                     /** @var \Expenses\Model\Entity\Expense $expense */
                     $expense = $Expenses->find()
-                        ->where(['foreign_id' => $invoice->id])
+                        ->where(['foreign_id' => $entity->id])
                         ->first();
                 }
 
@@ -177,19 +190,19 @@ class ExpensesEvents implements EventListenerInterface
                     $expense = $Expenses->newEmptyEntity();
                 }
 
-                $expense->owner_id = $invoice->owner_id;
-                $expense->model = 'Invoice';
-                $expense->foreign_id = $invoice->id;
-                $expense->title = $invoice->title;
-                $expense->dat_happened = $invoice->dat_issue;
+                $expense->owner_id = $entity->owner_id;
+                $expense->model = $modelName;
+                $expense->foreign_id = $entity->id;
+                $expense->title = $entity->title;
+                $expense->dat_happened = $entity->dat_issue;
                 switch ((int)$counter->expense) {
                     case 0:
-                        $expense->net_total = abs((float)$invoice->net_total);
-                        $expense->total = abs((float)$invoice->total);
+                        $expense->net_total = abs((float)$entity->net_total);
+                        $expense->total = abs((float)$entity->total);
                         break;
                     case 1:
-                        $expense->net_total = -abs((float)$invoice->net_total);
-                        $expense->total = -abs((float)$invoice->total);
+                        $expense->net_total = -abs((float)$entity->net_total);
+                        $expense->total = -abs((float)$entity->total);
                         break;
                 }
 

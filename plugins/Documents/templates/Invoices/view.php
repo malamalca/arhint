@@ -1,5 +1,4 @@
 <?php
-use Cake\Core\Configure;
 use Cake\Core\Plugin;
 use Cake\Utility\Text;
 
@@ -42,6 +41,7 @@ $invoiceView = [
                         'plugin' => 'Documents',
                         'controller' => 'DocumentsAttachments',
                         'action' => 'add',
+                        'Invoice',
                         $document->id,
                     ],
                     'params' => [
@@ -55,8 +55,9 @@ $invoiceView = [
                         'plugin' => 'Documents',
                         'controller' => 'DocumentsAttachments',
                         'action' => 'add',
+                        'Invoice',
                         $document->id,
-                        'scan'
+                        'scan',
                     ],
                     'params' => [
                         'id' => 'AttachScan',
@@ -69,6 +70,7 @@ $invoiceView = [
                         'plugin' => 'Documents',
                         'controller' => 'DocumentsLinks',
                         'action' => 'link',
+                        'Invoice',
                         $document->id,
                     ],
                     'params' => [

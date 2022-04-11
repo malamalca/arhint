@@ -5,6 +5,7 @@ namespace Documents\Model\Table;
 
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
+use Cake\ORM\TableRegistry;
 use Cake\Validation\Validator;
 
 /**
@@ -86,5 +87,31 @@ class DocumentsClientsTable extends Table
         //$rules->add($rules->isUnique(['email']));
         //$rules->add($rules->existsIn(['contact_id'], 'Contacts'));
         return $rules;
+    }
+
+    /**
+     * Checks if entity belongs to user.
+     *
+     * @param \Documents\Model\Entity\DocumentsClient $entity Entity Id.
+     * @param string $ownerId User Id.
+     * @return bool
+     */
+    public function isOwnedBy($entity, $ownerId)
+    {
+        switch ($entity->model) {
+            case 'Document':
+                /** @var \Documents\Model\Table\DocumentsTable $ModelTable */
+                $ModelTable = TableRegistry::getTableLocator()->get('Documents.Documents');
+                break;
+            case 'TravelOrder':
+                /** @var \Documents\Model\Table\TravelOrdersTable $ModelTable */
+                $ModelTable = TableRegistry::getTableLocator()->get('Documents.TravelOrders');
+                break;
+            default:
+                /** @var \Documents\Model\Table\InvoicesTable $ModelTable */
+                $ModelTable = TableRegistry::getTableLocator()->get('Documents.Invoices');
+        }
+
+        return $ModelTable->isOwnedBy($entity->document_id, $ownerId);
     }
 }

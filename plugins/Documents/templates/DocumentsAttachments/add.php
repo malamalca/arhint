@@ -1,32 +1,31 @@
 <?php
+
+use Cake\Routing\Router;
+
 $attachment_add = [
     'title_for_layout' => __d('documents', 'Add Attachment'),
     'form' => [
+        'defaultHelper' => $this->Form,
         'pre' => '<div class="form">',
         'post' => '</div>',
         'lines' => [
             'form_start' => [
-                'class' => $this->Form,
                 'method' => 'create',
                 'parameters' => [$attachment, ['type' => 'file']],
             ],
             'referer' => [
-                'class' => $this->Form,
                 'method' => 'hidden',
-                'parameters' => ['field' => 'referer'],
+                'parameters' => ['referer', ['default' => Router::url($this->getRequest()->referer(), true)]],
             ],
             'id' => [
-                'class' => $this->Form,
                 'method' => 'hidden',
-                'parameters' => ['field' => 'id'],
+                'parameters' => ['id'],
             ],
             'document_id' => [
-                'class' => $this->Form,
                 'method' => 'hidden',
-                'parameters' => ['field' => 'document_id', ['default' => $attachment->id]],
+                'parameters' => ['document_id', ['default' => $attachment->id]],
             ],
             'filename' => [
-                'class' => $this->Form,
                 'method' => 'control',
                 'parameters' => [
                     'field' => 'filename',
@@ -42,14 +41,12 @@ $attachment_add = [
                 ],
             ],
             'submit' => [
-                'class' => $this->Form,
                 'method' => 'submit',
                 'parameters' => [
                     'label' => __d('documents', 'Save'),
                 ],
             ],
             'form_end' => [
-                'class' => $this->Form,
                 'method' => 'end',
                 'parameters' => [],
             ],

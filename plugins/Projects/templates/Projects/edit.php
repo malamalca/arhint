@@ -24,7 +24,7 @@ $editForm = [
             ],
             'redirect' => [
                 'method' => 'hidden',
-                'parameters' => ['redirect', ['default' => base64_encode($this->getRequest()->referer())]],
+                'parameters' => ['redirect', ['default' => base64_encode($this->getRequest()->referer() ?? '')]],
             ],
 
             'no' => [

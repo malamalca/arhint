@@ -28,6 +28,7 @@ class CalendarSidebar
             return;
         }
 
+        $calendar = [];
         $calendar['title'] = __d('calendar', 'Calendar');
         $calendar['visible'] = true;
         $calendar['active'] = $request->getParam('plugin') == 'Calendar';

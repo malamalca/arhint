@@ -236,7 +236,7 @@ if (!empty($job)) {
             $contact_view['panels']['accounts']['lines'][] = [
                 'label' => __d('crm', 'Account') . ' / ' . $acc_title . ':',
                 'text' => implode(' ', [
-                    implode(' ', str_split($account->iban, 4)),
+                    implode(' ', str_split($account->iban ?? '', 4)),
                     $this->Lil->editLink([
                         'controller' => 'ContactsAccounts',
                         'action' => 'edit',

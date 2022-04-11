@@ -22,10 +22,10 @@ use Cake\ORM\TableRegistry;
  * @property int $attachment_count
  * @property int|null $counter
  * @property string|null $no
- * @property \Cake\I18n\FrozenDate|null $dat_order
+ * @property \Cake\I18n\FrozenDate|null $dat_issue
  * @property string|null $location
  * @property string|null $descript
- * @property string|null $task
+ * @property string|null $title
  * @property string|null $taskee
  * @property \Cake\I18n\FrozenDate|null $dat_task
  * @property \Cake\I18n\FrozenTime|null $departure
@@ -34,7 +34,8 @@ use Cake\ORM\TableRegistry;
  * @property string|null $vehicle_owner
  * @property string|null $advance
  * @property \Cake\I18n\FrozenDate|null $dat_advance
- * @property string|null $total
+ * @property float|null $net_total
+ * @property float|null $total
  * @property \Cake\I18n\FrozenTime|null $created
  * @property \Cake\I18n\FrozenTime|null $modified
  *
@@ -65,10 +66,10 @@ class TravelOrder extends Entity
         'attachment_count' => true,
         'counter' => true,
         'no' => true,
-        'dat_order' => true,
+        'dat_issue' => true,
         'location' => true,
         'descript' => true,
-        'task' => true,
+        'title' => true,
         'taskee' => true,
         'dat_task' => true,
         'departure' => true,
@@ -77,6 +78,7 @@ class TravelOrder extends Entity
         'vehicle_owner' => true,
         'advance' => true,
         'dat_advance' => true,
+        'net_total' => true,
         'total' => true,
         'created' => true,
         'modified' => true,

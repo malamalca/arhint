@@ -8,6 +8,7 @@ use Cake\Event\Event;
 use Cake\ORM\Entity;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
+use Cake\ORM\TableRegistry;
 use Cake\Utility\Text;
 use Cake\Validation\Validator;
 
@@ -32,7 +33,11 @@ class DocumentsLinksTable extends Table
         $this->setDisplayField('id');
         $this->setPrimaryKey('id');
         $this->addBehavior('Timestamp');
+
         $this->belongsTo('Documents.Invoices', [
+            'foreignKey' => 'document_id',
+        ]);
+        $this->belongsTo('Documents.Documents', [
             'foreignKey' => 'document_id',
         ]);
     }
@@ -65,8 +70,25 @@ class DocumentsLinksTable extends Table
      */
     public function buildRules(RulesChecker $rules): RulesChecker
     {
-        //$rules->add($rules->existsIn(['link_id'], 'Links'));
-        $rules->add($rules->existsIn(['document_id'], 'Invoices'));
+        /*$rules->add(function ($entity, $options) use($rules) {
+            if (get_class($entity) == \Documents\Model\Entity\Invoice::class) {
+                $rule = $rules->existsIn(['document_id'], 'Invoices');
+                return $rule();
+            }
+
+            if (get_class($entity) == \Documents\Model\Entity\Document::class) {
+                $rule = $rules->existsIn(['document_id'], 'Documents');
+                return $rule();
+            }
+
+            if (get_class($entity) == \Documents\Model\Entity\TravelOrder::class) {
+                $rule = $rules->existsIn(['document_id'], 'TravelOrders');
+                return $rule();
+            }
+
+            return false;
+
+        }, 'userExists');*/
 
         return $rules;
     }
@@ -95,18 +117,31 @@ class DocumentsLinksTable extends Table
     /**
      * Links two documents
      *
+     * @param string $model First document's model
      * @param string $id1 First document's id
+     * @param string $model2 Second document's model
      * @param string $id2 Second document's id
      * @return string|false
      */
-    public function two($id1, $id2)
+    public function two($model, $id1, $model2, $id2)
     {
         $link_id = Text::uuid();
-        $link = $this->newEntity(['document_id' => $id1, 'link_id' => $link_id]);
-        $ret1 = $this->save($link);
+        $link1 = $this->newEntity([
+            'link_id' => $link_id,
+            'document_id' => $id1,
+            'model' => $model,
+        ]);
+        $ret1 = $this->save($link1);
 
-        $link = $this->newEntity(['document_id' => $id2, 'link_id' => $link_id]);
-        $ret2 = $this->save($link);
+        $ret2 = false;
+        if ($ret1) {
+            $link2 = $this->newEntity([
+                'link_id' => $link_id,
+                'document_id' => $id2,
+                'model' => $model2,
+            ]);
+            $ret2 = $this->save($link2);
+        }
 
         if ((bool)$ret1 && (bool)$ret2) {
             return $link_id;
@@ -119,9 +154,10 @@ class DocumentsLinksTable extends Table
      * Fetch linked document for specified document's id.
      *
      * @param string $id Document id
+     * @param string $documentScope Scope
      * @return \Cake\Datasource\ResultSetInterface|array
      */
-    public function forDocument($id)
+    public function forDocument($id, $documentScope)
     {
         $ret = [];
         $links = $this->find()
@@ -133,10 +169,36 @@ class DocumentsLinksTable extends Table
         if (!empty($links)) {
             $ret = $this->find()
                 ->where(['document_id !=' => $id, 'link_id IN' => array_keys($links)])
-                ->contain(['Invoices'])
+                ->contain([$documentScope])
                 ->all();
         }
 
         return $ret;
+    }
+
+    /**
+     * Checks if entity belongs to user.
+     *
+     * @param \Documents\Model\Entity\DocumentsLink $entity Entity
+     * @param string $ownerId User Id.
+     * @return bool
+     */
+    public function isOwnedBy($entity, $ownerId)
+    {
+        switch ($entity->model) {
+            case 'Document':
+                /** @var \Documents\Model\Table\DocumentsTable $ModelTable */
+                $ModelTable = TableRegistry::getTableLocator()->get('Documents.Documents');
+                break;
+            case 'TravelOrder':
+                /** @var \Documents\Model\Table\TravelOrdersTable $ModelTable */
+                $ModelTable = TableRegistry::getTableLocator()->get('Documents.TravelOrders');
+                break;
+            default:
+                /** @var \Documents\Model\Table\InvoicesTable $ModelTable */
+                $ModelTable = TableRegistry::getTableLocator()->get('Documents.Invoices');
+        }
+
+        return $ModelTable->isOwnedBy($entity->document_id, $ownerId);
     }
 }

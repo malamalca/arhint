@@ -5,7 +5,7 @@
         $entityId,
         '?' => [
             'tab' => 'invoices',
-        ]
+        ],
     ];
     $pagingDirection = $this->getRequest()->getQuery('invoices.direction', 'asc');
     $pagingDirection = $pagingDirection == 'asc' ? 'desc' : null;

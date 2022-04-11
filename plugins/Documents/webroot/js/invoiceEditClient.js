@@ -59,7 +59,6 @@ jQuery.fn.InvoiceEditClient = function (options) {
             if (options.mode == "received" && target == "issuer") {
                 $("#invoice-location", $this).val(client.primary_address.city);
             } else {
-
             }
         }
 

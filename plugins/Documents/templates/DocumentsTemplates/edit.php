@@ -49,7 +49,7 @@ $templateEdit = [
                             'header' => __d('documents', 'Header'),
                             'footer' => __d('documents', 'Footer'),
                         ],
-                        'default' => 'body'
+                        'default' => 'body',
                     ],
                 ],
             ],

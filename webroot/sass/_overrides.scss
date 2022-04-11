@@ -316,3 +316,8 @@ input.form-error {
     background-color: #ffebee !important;
     color: #d32f2f !important;
 }
+
+div.input-field.date input,
+div.input-field.datetime input {
+    width: auto !important;
+}

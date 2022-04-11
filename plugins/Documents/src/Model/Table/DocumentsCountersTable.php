@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Documents\Model\Table;
 
 use Cake\Cache\Cache;
+use Cake\I18n\FrozenDate;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 
@@ -84,8 +85,8 @@ class DocumentsCountersTable extends Table
             $ret = strtr(
                 $data['mask'],
                 [
-                    '[[year]]' => strftime('%Y'),
-                    '[[month]]' => strftime('%m'),
+                    '[[year]]' => (new FrozenDate())->i18nFormat('yyyy'),
+                    '[[month]]' => (new FrozenDate())->i18nFormat('MM'),
                     '[[no]]' => (int)$data['counter'] + 1,
                     '[[no.2]]' => str_pad((string)((int)$data['counter'] + 1), 2, '0', STR_PAD_LEFT),
                     '[[no.3]]' => str_pad((string)((int)$data['counter'] + 1), 3, '0', STR_PAD_LEFT),

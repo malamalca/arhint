@@ -144,18 +144,26 @@ class DocumentsAttachmentsTable extends Table
     /**
      * Checks if entity belongs to user.
      *
-     * @param string $entityId Entity Id.
+     * @param \Documents\Model\Entity\DocumentsAttachment $entity Entity.
      * @param string $ownerId User Id.
      * @return bool
      */
-    public function isOwnedBy($entityId, $ownerId)
+    public function isOwnedBy($entity, $ownerId)
     {
-        /** @var \Documents\Model\Entity\DocumentsAttachment $entity */
-        $entity = $this->get($entityId);
+        switch ($entity->model) {
+            case 'Document':
+                /** @var \Documents\Model\Table\DocumentsTable $ModelTable */
+                $ModelTable = TableRegistry::getTableLocator()->get('Documents.Documents');
+                break;
+            case 'TravelOrder':
+                /** @var \Documents\Model\Table\TravelOrdersTable $ModelTable */
+                $ModelTable = TableRegistry::getTableLocator()->get('Documents.TravelOrders');
+                break;
+            default:
+                /** @var \Documents\Model\Table\InvoicesTable $ModelTable */
+                $ModelTable = TableRegistry::getTableLocator()->get('Documents.Invoices');
+        }
 
-        /** @var \Documents\Model\Table\InvoicesTable $InvoicesTable */
-        $InvoicesTable = TableRegistry::getTableLocator()->get('Documents.Invoices');
-
-        return $InvoicesTable->isOwnedBy($entity->document_id, $ownerId);
+        return $ModelTable->isOwnedBy($entity->document_id, $ownerId);
     }
 }

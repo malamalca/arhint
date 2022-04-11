@@ -86,11 +86,11 @@ $documents_index = [
                 ],
                 'date' => [
                     'parameters' => ['class' => 'center-align hide-on-small-only'],
-                    'html' => $this->Paginator->sort('dat_issue', __d('documents', 'Issued')),
+                    'html' => $this->Paginator->sort('dat_task', __d('documents', 'Date')),
                 ],
-                'descript' => [
+                'task' => [
                     'parameters' => ['class' => 'left-align hide-on-small-only'],
-                    'html' => $this->Paginator->sort('title', __d('documents', 'Descript')),
+                    'html' => $this->Paginator->sort('title', __d('documents', 'Task')),
                 ],
                 'employee' => [
                     'parameters' => ['class' => 'left-align hide-on-small-only'],
@@ -133,7 +133,6 @@ $documents_index = [
 $total = 0;
 $link_template = '<a href="' . Router::url(['action' => 'view', '__id__']) . '">__title__</a>';
 foreach ($data as $travelOrder) {
-
     $documents_index['table']['body']['rows'][]['columns'] = [
         'no' => [
             'parameters' => ['class' => 'nowrap'],
@@ -147,24 +146,25 @@ foreach ($data as $travelOrder) {
                 ) .
                 sprintf(
                     '<div class="hide-on-med-and-up">%1$s<br />%2$s</div>',
-                    (string)$travelOrder->dat_order,
+                    (string)$travelOrder->dat_task,
                     h($document->client['title'] ?? '')
                 ) . '</div>',
         ],
         'date' => [
             'parameters' => ['class' => 'center-align nowrap hide-on-small-only'],
-            'html' => $this->Arhint->calendarDay($travelOrder->dat_order),
+            'html' => $this->Arhint->calendarDay($travelOrder->dat_task),
         ],
-        'title' => [
+        'task' => [
             'parameters' => ['class' => 'documents-title left-align hide-on-small-only'],
-            'html' => h($travelOrder->title) .
+            'html' => h($travelOrder->title) . '<div class="small">' . h($travelOrder->descript) . '</div>' .
+                '<div class="small">' . h($travelOrder->departure) . '</div>' .
                 // attachment
                 ($travelOrder->attachments_count == 0 ? '' :
                     ' ' . $this->Html->image('/documents/img/attachment.png')),
         ],
         'client' => [
             'parameters' => ['class' => 'documents-client left-align hide-on-small-only'],
-            'html' => '<div class="truncate">' . h($travelOrder->client['title'] ?? '') . '</div>',
+            'html' => '<div class="truncate">' . h($travelOrder->employee->name ?? '') . '</div>',
         ],
         'project' => empty($project) ? null : [
             'parameters' => ['class' => 'documents-project left-align'],

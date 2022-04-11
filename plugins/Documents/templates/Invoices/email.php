@@ -39,13 +39,13 @@ $send_document = [
                     ],
                 ],
             ],
-            'cc_me' => empty($currentUser['email']) ? null : [
+            'cc_me' => !$this->getCurrentUser()->get('email') ? null : [
                 'method' => 'control',
                 'parameters' => [
                     'field' => 'cc_me',
                     'options' => [
                         'type' => 'checkbox',
-                        'label' => __d('documents', 'Send CC to me ({0})', $currentUser['email']),
+                        'label' => __d('documents', 'Send CC to me ({0})', $this->getCurrentUser()->get('email')),
                     ],
                 ],
             ],

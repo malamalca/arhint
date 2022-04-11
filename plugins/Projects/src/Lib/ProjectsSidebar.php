@@ -51,7 +51,7 @@ class ProjectsSidebar
                 'visible' => $currentUser->hasRole('admin'),
                 'title' => __d('projects', 'Lookups'),
                 'url' => false,
-                'active' => in_array($request->getParam('controller'), ['ProjectsStatuses', 'ProjectsMaterials']),
+                'active' => in_array($request->getParam('controller'), ['ProjectsStatuses',]),
                 'submenu' => [
                     'projects_statuses' => [
                         'visible' => true,
@@ -63,17 +63,6 @@ class ProjectsSidebar
                             'action' => 'index',
                         ],
                         'active' => $request->getParam('controller') == 'ProjectsStatuses',
-                    ],
-                    'projects_materials' => [
-                        'visible' => true,
-                        'title' => __d('projects', 'Materials'),
-
-                        'url' => [
-                            'plugin' => 'Projects',
-                            'controller' => 'ProjectsMaterials',
-                            'action' => 'index',
-                        ],
-                        'active' => $request->getParam('controller') == 'ProjectsMaterials',
                     ],
                 ],
             ],

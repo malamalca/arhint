@@ -17,7 +17,7 @@ if ($document->isNew()) {
     $layoutTitle = __d(
         'documents',
         'Edit an Document #{0} <span class="light">({1})</span>',
-        $document->counter  ,
+        $document->counter,
         h($counter->title)
     );
 }
@@ -281,13 +281,13 @@ $documentEdit = [
 ////////////////////////////////////////////////////////////////////////////////////////////////
 // hidden client fields
 require dirname(dirname(__FILE__)) . DS . 'element' . DS . 'edit_client.php';
-$this->Lil->insertIntoArray($documentEdit['form']['lines'], clientFields('receiver', $document->receiver), ['after' => 'client_error']);
-$this->Lil->insertIntoArray($documentEdit['form']['lines'], clientFields('issuer', $document->receiver), ['after' => 'client_error']);
+$this->Lil->insertIntoArray($documentEdit['form']['lines'], clientFields('receiver', 'Invoice'), ['after' => 'client_error']);
+$this->Lil->insertIntoArray($documentEdit['form']['lines'], clientFields('issuer', 'Invoice'), ['after' => 'client_error']);
 
 if ($document->isInvoice()) {
     ////////////////////////////////////////////////////////////////////////////////////////////////
     // additional client "buyer" - INVOICES ONLY
-    $clientBuyer = clientFields('buyer', $document->buyer) +
+    $clientBuyer = clientFields('buyer', 'Invoice') +
     [
         'client_buyer_start' => $counter->direction == 'received' ? null : '<div id="buyer-wrapper">',
         'client_buyer' => $counter->direction == 'received' ? null : [

@@ -101,8 +101,6 @@ class InvoicesController extends BaseDocumentsController
 
         $dateSpan = $this->Invoices->maxSpan($filter['counter']);
 
-        $this->set(compact('data', 'dateSpan', 'invoicesTotals'));
-
         $projects = [];
         if (Plugin::isLoaded('Projects')) {
             /** @var \Projects\Model\Table\ProjectsTable $ProjectsTable */
@@ -121,7 +119,8 @@ class InvoicesController extends BaseDocumentsController
                     ->toArray();
             }
         }
-        $this->set(compact('data', 'dateSpan', 'projects'));
+
+        $this->set(compact('data', 'dateSpan', 'invoicesTotals', 'projects'));
 
         return null;
     }

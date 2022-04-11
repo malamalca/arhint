@@ -7,6 +7,7 @@ use Cake\Event\EventInterface;
 use Cake\Http\Exception\NotFoundException;
 use Cake\I18n\FrozenTime;
 use Cake\ORM\TableRegistry;
+use Cake\Utility\Inflector;
 use Cake\Utility\Text;
 use Documents\Form\EmailForm;
 use Documents\Lib\DocumentsExport;
@@ -109,7 +110,7 @@ class BaseDocumentsController extends AppController
 
         /** @var \Documents\Model\Table\DocumentsLinksTable $LinksTable */
         $LinksTable = TableRegistry::getTableLocator()->get('Documents.DocumentsLinks');
-        $links = $LinksTable->forDocument($id);
+        $links = $LinksTable->forDocument($id, $this->documentsScope);
 
         /** @var \Documents\Model\Table\DocumentsCountersTable $DocumentsCounters */
         $DocumentsCounters = TableRegistry::getTableLocator()->get('Documents.DocumentsCounters');
@@ -432,7 +433,10 @@ class BaseDocumentsController extends AppController
             $filter = array_merge($filter, ['id' => $id]);
         }
 
-        $Exporter = new DocumentsExport();
+        $ExporterClass = '\\Documents\\Lib\\' . $this->documentsScope . 'Export';
+        //$Exporter = new InvoicesExport();
+
+        $Exporter = new ($ExporterClass)();
         $documents = $Exporter->find($filter);
         $this->Authorization->applyScope($documents, 'index');
         $documents = $documents->toArray();
@@ -541,6 +545,7 @@ class BaseDocumentsController extends AppController
                     'label' => $i->title,
                     'value' => $i->id,
                     'no' => $i->no,
+                    'model' => Inflector::singularize($this->documentsScope),
                     'counter' => $i->documents_counter->title,
                 ];
             }

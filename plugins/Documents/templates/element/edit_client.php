@@ -1,9 +1,15 @@
 <?php
 
-function clientFields($kind, $client, $lock = true)
+function clientFields($kind, $model, $lock = true)
 {
     $defType = 'hidden';
     $ret = [
+        $kind . '-model' => [
+            'method' => 'control',
+            'parameters' => [
+                'field' => $kind . '.model', ['type' => $defType, 'value' => $model],
+            ],
+        ],
         $kind . '-contact_id' => [
             'method' => 'control',
             'parameters' => [

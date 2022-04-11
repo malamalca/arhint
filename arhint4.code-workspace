@@ -10,7 +10,7 @@
             {
                 "match": ".*\\.scss$",
                 "notMatch": "[\\\\\\/]t[^\\\\\\/]*\\.scss$",
-                "command": "C:\\bin\\dart-sass\\sass.bat --style=compressed ${workspaceFolder}\\webroot\\sass\\main.scss ${workspaceFolder}\\webroot\\css\\main.css",
+                "command": "D:\\bin\\dart-sass\\sass.bat --style=compressed ${workspaceFolder}\\webroot\\sass\\main.scss ${workspaceFolder}\\webroot\\css\\main.css",
                 "runIn": "terminal",
                 "runningStatusMessage": "Compiling CSS",
                 "finishStatusMessage": "CSS compiled"

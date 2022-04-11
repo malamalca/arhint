@@ -19,10 +19,10 @@ class DocumentsClientPolicy
      */
     public function canView($user, $entity)
     {
-        /** @var \Documents\Model\Table\InvoicesTable $InvoicesTable */
-        $InvoicesTable = TableRegistry::getTableLocator()->get('Documents.Invoices');
+        /** @var \Documents\Model\Table\DocumentsClientsTable $DocumentsClientsTable */
+        $DocumentsClientsTable = TableRegistry::getTableLocator()->get('Documents.DocumentsClients');
 
-        return $InvoicesTable->isOwnedBy($entity->document_id, $user->company_id);
+        return $DocumentsClientsTable->isOwnedBy($entity, $user->company_id);
     }
 
     /**
@@ -34,9 +34,9 @@ class DocumentsClientPolicy
      */
     public function canEdit($user, $entity)
     {
-        /** @var \Documents\Model\Table\InvoicesTable $InvoicesTable */
-        $InvoicesTable = TableRegistry::getTableLocator()->get('Documents.Invoices');
+        /** @var \Documents\Model\Table\DocumentsClientsTable $DocumentsClientsTable */
+        $DocumentsClientsTable = TableRegistry::getTableLocator()->get('Documents.DocumentsClients');
 
-        return $InvoicesTable->isOwnedBy($entity->document_id, $user->company_id) && $user->hasRole('editor');
+        return $DocumentsClientsTable->isOwnedBy($entity, $user->company_id) && $user->hasRole('editor');
     }
 }

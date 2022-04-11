@@ -39,7 +39,8 @@ class TravelOrdersController extends BaseDocumentsController
         $params = $this->TravelOrders->filter($filter);
 
         $query = $this->Authorization->applyScope($this->TravelOrders->find())
-            ->select(['id', 'no', 'counter', 'dat_order', 'location', 'total', 'attachments_count'])
+            ->select(['id', 'no', 'dat_task', 'title', 'descript', 'total', 'departure', 'arrival', 'Employees.name'])
+            ->contain(['Employees'])
             ->where($params['conditions'])
             ->order($params['order']);
 

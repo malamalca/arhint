@@ -61,10 +61,37 @@ class Installer
         'Documents',
         'Projects',
         'Tasks',
+        'Calendar',
     ];
 
     /**
      * Does some routine installation tasks so people don't have to.
+     *
+     * @param \Composer\Script\Event $event The composer event object.
+     * @throws \Exception Exception raised by validator.
+     * @return void
+     */
+    public static function createUser(Event $event)
+    {
+        $io = $event->getIO();
+        $rootDir = dirname(dirname(__DIR__));
+
+        if (file_exists($rootDir . '/config/app_local.php')) {
+            $loader = require $rootDir . '/vendor/autoload.php';
+            require $rootDir . '/config/paths.php';
+
+            Configure::config('default', new PhpConfig());
+            Configure::load('app', 'default', false);
+            Configure::load('app_local', 'default');
+
+            ConnectionManager::setConfig('default', Configure::read('Datasources.default'));
+
+            static::createAdminUser($io, 'default');
+        }
+    }
+
+    /**
+     * Init database
      *
      * @param \Composer\Script\Event $event The composer event object.
      * @throws \Exception Exception raised by validator.
@@ -356,24 +383,25 @@ class Installer
         }
 
         $migrations = new Migrations(['connection' => $connection]);
-        $migrations->migrate();
+        /*$migrations->migrate();
 
         foreach (static::PLUGINS as $pluginName) {
             $migrations = new Migrations(['connection' => $connection, 'plugin' => $pluginName]);
             $migrations->migrate();
-        }
+        }*/
     }
 
     /**
      * Create admin user.
      *
      * @param \Composer\IO\IOInterface $io IO interface to write to console.
+     * @param string $connection Connection name
      * @return void
      */
-    public static function createAdminUser($io)
+    public static function createAdminUser($io, $connection = 'install')
     {
         /** @var \Cake\Database\Connection $conn */
-        $conn = ConnectionManager::get('install');
+        $conn = ConnectionManager::get($connection);
 
         if ($conn && $conn->connect()) {
             $io->write('CREATE ADMIN USER');

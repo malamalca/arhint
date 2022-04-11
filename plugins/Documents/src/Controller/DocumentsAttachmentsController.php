@@ -107,11 +107,12 @@ class DocumentsAttachmentsController extends AppController
     /**
      * Add method
      *
+     * @param string $model Documents model (Document, Invoice, TravelOrder)
      * @param string $documentId Documents id.
      * @param string $mode Mode - 'upload' or 'scan'
      * @return \Cake\Http\Response|null
      */
-    public function add($documentId, $mode = 'upload')
+    public function add($model, $documentId, $mode = 'upload')
     {
         $uploadDir = Configure::read('Documents.uploadFolder');
         if (!is_writable($uploadDir)) {
@@ -128,6 +129,7 @@ class DocumentsAttachmentsController extends AppController
 
         $attachment = $this->DocumentsAttachments->newEmptyEntity();
         $attachment->document_id = $documentId;
+        $attachment->model = $model;
 
         $this->Authorization->authorize($attachment, 'edit');
 
@@ -160,7 +162,7 @@ class DocumentsAttachmentsController extends AppController
                 if ($this->DocumentsAttachments->save($attachment, ['uploadedFilename' => $tmpNames])) {
                     $this->Flash->success(__d('documents', 'The documents attachment has been saved.'));
 
-                    return $this->redirect(['controller' => 'Invoices', 'action' => 'view', $attachment->document_id]);
+                    return $this->redirect($this->getRequest()->getData('referer') ?? ['action' => 'index']);
                 } else {
                     $this->Flash->error(__d('documents', 'The attachment could not be saved. Please, try again.'));
                 }
@@ -190,6 +192,6 @@ class DocumentsAttachmentsController extends AppController
             $this->Flash->error(__d('documents', 'The attachment could not be deleted. Please, try again.'));
         }
 
-        return $this->redirect(['controller' => 'Invoices', 'action' => 'view', $attachment->document_id]);
+        return $this->redirect($this->getRequest()->referer() ?? ['action' => 'index']);
     }
 }

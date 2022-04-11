@@ -44,6 +44,7 @@ class UsersController extends AppController
 
         // regardless of POST or GET, redirect if user is logged in
         if ($result->isValid()) {
+            /** @var \App\Model\Entity\User $user */
             $user = $this->Authentication->getIdentity();
 
             /*$this->loadModel('AuditLogins');

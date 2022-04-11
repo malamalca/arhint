@@ -60,7 +60,7 @@ class TravelOrdersTable extends Table
         ]);
 
         $this->belongsTo('Employees', [
-            'className' => 'Documents\Model\Table\DocumentsClientsTable',
+            'className' => 'App\Model\Table\UsersTable',
             'foreignKey' => 'employee_id',
             'dependent' => true,
         ]);
@@ -69,11 +69,6 @@ class TravelOrdersTable extends Table
             'className' => 'Documents\Model\Table\DocumentsClientsTable',
             'foreignKey' => 'payer_id',
             'dependent' => true,
-        ]);
-
-        $this->belongsTo('DocumentsCounters', [
-            'foreignKey' => 'counter_id',
-            'className' => 'Documents\Model\Table\DocumentsCountersTable',
         ]);
 
         if (Plugin::isLoaded('Projects')) {
@@ -106,17 +101,13 @@ class TravelOrdersTable extends Table
             ->notEmptyString('attachment_count');
 
         $validator
-            ->integer('counter')
-            ->allowEmptyString('counter');
-
-        $validator
             ->scalar('no')
             ->maxLength('no', 50)
             ->allowEmptyString('no');
 
         $validator
-            ->date('dat_order')
-            ->allowEmptyDate('dat_order');
+            ->date('dat_issue')
+            ->allowEmptyDate('dat_issue');
 
         $validator
             ->scalar('location')
@@ -128,9 +119,9 @@ class TravelOrdersTable extends Table
             ->allowEmptyString('descript');
 
         $validator
-            ->scalar('task')
-            ->maxLength('task', 200)
-            ->allowEmptyString('task');
+            ->scalar('title')
+            ->maxLength('title', 200)
+            ->notEmptyString('title');
 
         $validator
             ->scalar('taskee')
@@ -139,7 +130,7 @@ class TravelOrdersTable extends Table
 
         $validator
             ->date('dat_task')
-            ->allowEmptyDate('dat_task');
+            ->notEmptyDate('dat_task');
 
         $validator
             ->dateTime('departure')
@@ -225,22 +216,22 @@ class TravelOrdersTable extends Table
         if (isset($filter['start'])) {
             $filter['start'] = FrozenDate::parseDate($filter['start'], 'yyyy-MM-dd');
             if (!empty($filter['start'])) {
-                $ret['conditions']['TravelOrders.dat_order >='] = $filter['start'];
+                $ret['conditions']['TravelOrders.dat_task >='] = $filter['start'];
             }
         }
 
         if (isset($filter['end'])) {
             $filter['end'] = FrozenDate::parseDate($filter['end'], 'yyyy-MM-dd');
             if (!empty($filter['end'])) {
-                $ret['conditions']['TravelOrders.dat_order <='] = $filter['end'];
+                $ret['conditions']['TravelOrders.dat_task <='] = $filter['end'];
             }
         }
 
         if (isset($filter['month'])) {
             $start = FrozenDate::parseDate($filter['month'] . '-01', 'yyyy-MM-dd');
             if (!empty($start)) {
-                $ret['conditions']['TravelOrders.dat_order >='] = $start;
-                $ret['conditions']['TravelOrders.dat_order <'] = $start->addMonth();
+                $ret['conditions']['TravelOrders.dat_task >='] = $start;
+                $ret['conditions']['TravelOrders.dat_task <'] = $start->addMonth();
                 $filter['start'] = $start;
                 $filter['end'] = $start->addMonth()->subDays(1);
             }
@@ -290,8 +281,8 @@ class TravelOrdersTable extends Table
         $query = $this->find();
         $query
             ->select([
-                'start' => $query->func()->min('TravelOrders.dat_order', ['string']),
-                'end' => $query->func()->max('TravelOrders.dat_order', ['string']),
+                'start' => $query->func()->min('TravelOrders.dat_task', ['string']),
+                'end' => $query->func()->max('TravelOrders.dat_task', ['string']),
             ])
             ->where(['TravelOrders.counter_id' => $counterId]);
         $ret = $query->first()->toArray();
@@ -320,7 +311,7 @@ class TravelOrdersTable extends Table
     public function parseRequest($request, $id = null)
     {
         if (!empty($id)) {
-            $document = $this->get($id);
+            $document = $this->get($id, ['contain' => ['DocumentsCounters']]);
         } else {
             /** @var \Documents\Model\Table\DocumentsClientsTable $DocumentsClients */
             $DocumentsClients = TableRegistry::getTableLocator()->get('Documents.DocumentsClients');
@@ -345,7 +336,7 @@ class TravelOrdersTable extends Table
                 $document = $this->newEmptyEntity();
 
                 $document->owner_id = $request->getAttribute('identity')->get('company_id');
-                $document->payer = $DocumentsClients->newEntity(['kind' => 'IV']);
+                //$document->payer = $DocumentsClients->newEntity(['kind' => 'IV']);
 
                 $counterId = $request->getQuery('counter');
             }

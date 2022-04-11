@@ -44,9 +44,9 @@ $counter_edit = [
                             'class' => 'active',
                         ],
                         'options' => [
-                            'documents' => __d('documents', 'Documents'),
-                            'invoices' => __d('documents', 'Invoices'),
-                            'travelorders' => __d('documents', 'Travel Orders'),
+                            'Documents' => __d('documents', 'Documents'),
+                            'Invoices' => __d('documents', 'Invoices'),
+                            'TravelOrders' => __d('documents', 'Travel Orders'),
                         ],
                         'class' => 'browser-default',
                     ],
@@ -155,7 +155,6 @@ $counter_edit = [
                 ],
             ],
             'fs_pmt_end' => '</fieldset>',
-
 
             'fs_layout_start' => '<fieldset>',
             'lg_layout' => sprintf('<legend>%s</legend>', __d('documents', 'Default Layouts')),

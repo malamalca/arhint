@@ -1,8 +1,6 @@
 <?php
-use Cake\Routing\Router;
 
 $this->set('head_for_layout', false);
-
 
 $invoicePreview = [
     'title_for_layout' => __d('documents', 'Invoice validation'),
@@ -17,7 +15,7 @@ $invoicePreview = [
         ],
     ],
     'panels' => [
-       'errors' => ['lines' => []]
+       'errors' => ['lines' => []],
     ],
 ];
 
@@ -30,4 +28,3 @@ if (empty($errors)) {
 }
 
 echo $this->Lil->panels($invoicePreview, 'Documents.Invoices.validate');
-

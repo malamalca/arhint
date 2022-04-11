@@ -10,6 +10,7 @@ use Cake\ORM\Entity;
  *
  * @property string $id
  * @property string|null $document_id
+ * @property string|null $model
  * @property string|null $filename
  * @property string|null $original
  * @property string|null $ext

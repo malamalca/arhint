@@ -36,7 +36,7 @@ class DocumentsSidebar
         $documents['active'] = $request->getParam('plugin') == 'Documents';
         $documents['url'] = [
             'plugin' => 'Documents',
-            'controller' => 'Invoices',
+            'controller' => 'Documents',
             'action' => 'index',
         ];
         $documents['items'] = [];
@@ -185,7 +185,7 @@ class DocumentsSidebar
             );
 
             // determine current counter
-            $isActionIndex = $request->getParam('controller') == 'Invoices' && $request->getParam('action') == 'index';
+            $isActionIndex = $request->getParam('controller') == 'Documents' && $request->getParam('action') == 'index';
             $currentCounter = $request->getQuery('counter');
             if (empty($currentCounter)) {
                 $currentCounter = $request->getQuery('filter.counter');
@@ -200,21 +200,12 @@ class DocumentsSidebar
             // build submenus
             foreach ($counters as $i => $c) {
                 if ($currentCounter == $c->id) {
-                    $sidebar['documents']['items'][$c->kind]['active'] = true;
+                    $sidebar['documents']['items'][strtolower($c->kind)]['active'] = true;
                 }
 
-                switch ($c->kind) {
-                    case 'invoices':
-                        $controllerName = 'Invoices';
-                        break;
-                    case 'travelorders':
-                        $controllerName = 'TravelOrders';
-                        break;
-                    default:
-                        $controllerName = 'Invoices';
-                }
+                $controllerName = $c->kind;
 
-                $sidebar['documents']['items'][$c->kind]['submenu'][$c->id] = [
+                $sidebar['documents']['items'][strtolower($c->kind)]['submenu'][$c->id] = [
                     'visible' => true,
                     'title' => $c->title,
                     'url' => [

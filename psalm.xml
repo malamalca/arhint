@@ -17,6 +17,7 @@
             <directory name="vendor" />
             <file name="plugins/Crm/src/Lib/ActiveSyncContacts.php" />
             <file name="plugins/Tasks/src/Lib/ActiveSyncTasks.php" />
+            <file name="plugins/Calendar/src/Lib/ActiveSyncCalendar.php" />
         </ignoreFiles>
     </projectFiles>
     <stubs>
