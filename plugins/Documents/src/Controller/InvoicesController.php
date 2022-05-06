@@ -6,6 +6,7 @@ namespace Documents\Controller;
 use Cake\Core\Plugin;
 use Cake\Event\EventInterface;
 use Cake\ORM\TableRegistry;
+use Cake\Routing\Router;
 use Documents\Lib\DocumentsExport;
 use Documents\Lib\DocumentsUpnQr;
 
@@ -64,7 +65,7 @@ class InvoicesController extends BaseDocumentsController
         $params = $this->Invoices->filter($filter);
 
         $query = $this->Authorization->applyScope($this->Invoices->find())
-            ->select(['id', 'no', 'counter', 'dat_issue', 'title', 'net_total', 'total', 'project_id',
+            ->select(['id', 'no', 'counter', 'counter_id', 'dat_issue', 'title', 'net_total', 'total', 'project_id',
                 'attachments_count', 'client.title'])
             ->join([
                 'table' => 'documents_clients',
@@ -121,6 +122,50 @@ class InvoicesController extends BaseDocumentsController
         }
 
         $this->set(compact('data', 'dateSpan', 'invoicesTotals', 'projects'));
+
+        return null;
+    }
+
+    /**
+     * List method
+     *
+     * @return \Cake\Http\Response|null
+     */
+    public function list()
+    {
+        $sourceRequest = Router::reverseToArray(Router::getRouteCollection()->parse($this->getRequest()->getQuery('source')));
+        
+        $filter = [];
+        switch ($sourceRequest['plugin']) {
+            case 'Projects':
+                $filter['project'] = $sourceRequest[0] ?? null;
+                break;
+            case 'Crm':
+                $filter['contact'] = $sourceRequest[0] ?? null;
+                break;
+        }
+
+        $params = $this->Invoices->filter($filter);
+
+        $query = $this->Authorization->applyScope($this->Invoices->find(), 'index')
+            ->select(['id', 'no', 'counter', 'counter_id', 'dat_issue', 'title', 'net_total', 'total', 'project_id',
+                'attachments_count'])
+            ->where($params['conditions'])
+            ->order($params['order']);
+
+        $data = $this->paginate($query, ['limit' => 5]);
+
+        $sumQuery = $this->Authorization->applyScope($this->Invoices->find(), 'index');
+        $invoicesTotals = $sumQuery
+            ->select([
+                'sumTotal' => $sumQuery->func()->sum('Invoices.total'),
+                'sumNetTotal' => $sumQuery->func()->sum('Invoices.net_total'),
+            ])
+            ->where($params['conditions'])
+            ->disableHydration()
+            ->first();
+
+        $this->set(compact('data', 'invoicesTotals', 'sourceRequest'));
 
         return null;
     }

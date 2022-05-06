@@ -302,6 +302,11 @@ if (!empty($job)) {
         $contact_view['panels']['employees']['lines'][] = $this->Lil->table($employees_table);
     }
 
+    $contact_view['panels']['tabs'] = ['lines' => [
+        'pre' => '<div class="row view-panel"><div class="col s12"><ul class="tabs">',
+        'post' => '</ul></div>',
+    ]];
+
     ////////////////////////////////////////////////////////////////////////////////////////////////
     echo $this->Lil->panels($contact_view, 'Crm.Contacts.view');
 

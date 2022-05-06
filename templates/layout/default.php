@@ -17,7 +17,7 @@ use Cake\Routing\Router;
     <?= $this->fetch('meta') ?>
     <?= $this->fetch('css') ?>
 
-    <?= $this->Html->script('/lil/js/jquery.min.js') ?>
+    <?= $this->Html->script('/js/jquery/jquery-3.6.0.min.js') ?>
     <?= $this->Html->script('/js/vendor/Materialize/bin/materialize.min.js') ?>
     <?= $this->Html->script('/lil/js/lil_float.js') ?>
     <?= $this->Html->script('/lil/js/lil_date.js') ?>
@@ -62,14 +62,18 @@ use Cake\Routing\Router;
                     ) ?>
                     </a>
                     <?php
-                    if ($this->getCurrentUser() && $this->getCurrentUser()->get('id')) {
-                        $isUserProperties = $this->getRequest()->getParam('controller') == 'Users' &&
-                            $this->getRequest()->getParam('action') == 'properties';
-                        ?>
+                        if ($this->getCurrentUser() && $this->getCurrentUser()->get('id')) {
+                            $isUserProperties = $this->getRequest()->getParam('controller') == 'Users' &&
+                                $this->getRequest()->getParam('action') == 'properties';
+                            $isUtils = $this->getRequest()->getParam('controller') == 'Utils';
+                    ?>
                     <div class="sidenav-user-title"><?= h($this->getCurrentUser()->get('name')) ?></div>
-                    <ul class="collection" id="user-settings" style="display: <?= $isUserProperties ? 'default' : 'none' ?>">
+                    <ul class="collection" id="user-settings" style="display: <?= $isUserProperties || $isUtils ? 'default' : 'none' ?>">
                         <li class="<?= $isUserProperties ? 'active' : '' ?>">
                             <?= $this->Html->link(__('Settings'), ['plugin' => false, 'controller' => 'Users', 'action' => 'properties']) ?>
+                        </li>
+                        <li class="<?= $isUtils ? 'active' : '' ?>">
+                            <?= $this->Html->link(__('Utils'), ['plugin' => false, 'controller' => 'Utils', 'action' => 'pdfSign']) ?>
                         </li>
                         <li><?= $this->Html->link(__('Logout'), ['plugin' => false, 'controller' => 'Users', 'action' => 'logout']) ?></li>
                     </ul>

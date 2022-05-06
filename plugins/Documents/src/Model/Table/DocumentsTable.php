@@ -222,12 +222,30 @@ class DocumentsTable extends Table
             }
         }
 
+        if (!empty($filter['contact_id'])) {
+            $matchingDocuments = TableRegistry::getTableLocator()->get('Documents.DocumentsClients')->query()
+                ->select(['document_id'])
+                ->distinct()
+                ->where(['contact_id' => $filter['contact_id']]);
+                $ret['conditions'][]['Documents.id IN'] = $matchingDocuments;
+        }
+
+        if (!empty($filter['project'])) {
+            $ret['conditions'][]['Documents.project_id'] = $filter['project'];
+        }
+
         $ret['contain'] = [];
 
         if (isset($filter['sort'])) {
             $ret['order'] = [];
         } else {
             $ret['order'] = $filter['order'] ?? [];
+        }
+
+        if (isset($filter['limit'])) {
+            $ret['limit'] = $filter['limit'];
+        } else {
+            $ret['limit'] = null;
         }
 
         return $ret;

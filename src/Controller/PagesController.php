@@ -103,8 +103,8 @@ class PagesController extends AppController
     {
         $this->Authorization->skipAuthorization();
 
-        $fileName = preg_replace('/[^a-z0-9]+/', '-', strtolower($fileName));
-
+        $fileName = preg_replace('/[^a-z0-9_() ]+/', '-', strtolower(urldecode($fileName)));
+        
         if (!file_exists(constant('TMP') . $fileName . '.pdf')) {
             throw new NotFoundException();
         }

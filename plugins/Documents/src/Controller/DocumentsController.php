@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Documents\Controller;
 
 use Cake\Core\Plugin;
+use Cake\Routing\Router;
 use Cake\ORM\TableRegistry;
 
 /**
@@ -76,6 +77,40 @@ class DocumentsController extends BaseDocumentsController
         }
 
         $this->set(compact('data', 'dateSpan', 'projects'));
+
+        return null;
+    }
+
+    /**
+     * List method
+     *
+     * @return \Cake\Http\Response|null
+     */
+    public function list()
+    {
+        $sourceRequest = Router::reverseToArray(Router::getRouteCollection()->parse($this->getRequest()->getQuery('source')));
+        
+        $filter = [];
+        switch ($sourceRequest['plugin']) {
+            case 'Projects':
+                $filter['project'] = $sourceRequest[0] ?? null;
+                break;
+            case 'Crm':
+                $filter['contact'] = $sourceRequest[0] ?? null;
+                break;
+        }
+
+        $params = $this->Documents->filter($filter);
+
+        $query = $this->Authorization->applyScope($this->Documents->find(), 'index')
+            ->select(['id', 'no', 'counter', 'counter_id', 'dat_issue', 'title', 'project_id',
+                'attachments_count'])
+            ->where($params['conditions'])
+            ->order($params['order']);
+
+        $data = $this->paginate($query, ['limit' => 5]);
+        
+        $this->set(compact('data', 'sourceRequest'));
 
         return null;
     }

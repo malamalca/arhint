@@ -110,7 +110,7 @@ class Application extends BaseApplication implements
         $csrf = new SessionCsrfProtectionMiddleware([]);
         $csrf->skipCheckCallback(function ($request) {
             if (
-                $request->getParam('controller') == 'Invoices' &&
+                in_array($request->getParam('controller'), ['Invoices', 'Documents']) &&
                 $request->getParam('action') == 'edit' &&
                 $request->hasHeader('Lil-Scan')
             ) {
@@ -247,7 +247,7 @@ class Application extends BaseApplication implements
         }
 
         if (
-            $params['controller'] == 'Invoices' &&
+            in_array($params['controller'], ['Invoices', 'Documents']) &&
             $params['action'] == 'edit'
         ) {
             $service->loadAuthenticator('Authentication.HttpBasic');

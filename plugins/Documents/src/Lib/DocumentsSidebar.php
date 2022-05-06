@@ -46,7 +46,7 @@ class DocumentsSidebar
         ////////////////////////////////////////////////////////////////////////////////////////
         if (empty($sidebar['documents']['items']['reports'])) {
             $sidebar['documents']['items']['reports'] = [
-                'visible' => true,
+                'visible' => $currentUser->hasRole('admin'),
                 'title' => __d('documents', 'Reports'),
                 'url' => false,
                 'params' => [],
@@ -107,7 +107,7 @@ class DocumentsSidebar
         // LOOKUPS SIDEBAR SUBMENU
         if (empty($sidebar['documents']['items']['lookups'])) {
             $sidebar['documents']['items']['lookups'] = [
-                'visible' => true,
+                'visible' => $currentUser->hasRole('admin'),
                 'title' => __d('documents', 'Lookups'),
                 'url' => false,
                 'params' => [],

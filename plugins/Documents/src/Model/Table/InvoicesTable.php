@@ -271,6 +271,18 @@ class InvoicesTable extends Table
             }
         }
 
+        if (!empty($filter['contact_id'])) {
+            $matchingDocuments = TableRegistry::getTableLocator()->get('Documents.DocumentsClients')->query()
+                ->select(['document_id'])
+                ->distinct()
+                ->where(['contact_id' => $filter['contact_id']]);
+                $ret['conditions'][]['Invoices.id IN'] = $matchingDocuments;
+        }
+
+        if (!empty($filter['project'])) {
+            $ret['conditions'][]['Invoices.project_id'] = $filter['project'];
+        }
+
         $ret['contain'] = ['Issuers', 'Receivers', 'Buyers'];
 
         if (isset($filter['sort'])) {
@@ -279,6 +291,12 @@ class InvoicesTable extends Table
             $ret['order'] = $filter['order'] ?? [];
         }
 
+        if (isset($filter['limit'])) {
+            $ret['limit'] = $filter['limit'];
+        } else {
+            $ret['limit'] = null;
+        }
+        
         return $ret;
     }
 

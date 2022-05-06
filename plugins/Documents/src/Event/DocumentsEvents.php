@@ -65,7 +65,7 @@ class DocumentsEvents implements EventListenerInterface
      */
     public function showDocumentsTable($event, $panels)
     {
-        $view = $event->getSubject();
+        /*$view = $event->getSubject();
         $view->loadHelper('Paginator');
         $identity = $view->getRequest()->getAttribute('identity');
 
@@ -86,7 +86,7 @@ class DocumentsEvents implements EventListenerInterface
             return $panels;
         }
 
-        // fetch documents
+        // fetch invoices
         $invoicesPerPage = 5;
         $page = (int)$view->getRequest()->getQuery('invoices.page', 1);
 
@@ -204,6 +204,68 @@ class DocumentsEvents implements EventListenerInterface
             ];
 
             $view->Lil->insertIntoArray($panels->panels, $invoicesPanels);
+        }
+
+        return $panels;*/
+
+        $view = $event->getSubject();
+
+        $invoicesTab = sprintf(
+            '<li class="tab col"><a href="%1$s" target="_self"%3$s>%2$s</a></li>',
+            $view->Url->build([$view->getRequest()->getParam('pass.0'), '?' => ['tab' => 'invoices']]),
+            __d('documents', 'Invoices'),
+            $view->getRequest()->getQuery('tab') == 'invoices' ? ' class="active"' : ''
+        );
+
+        $documentsTab = sprintf(
+            '<li class="tab col"><a href="%1$s" target="_self"%3$s>%2$s</a></li>',
+            $view->Url->build([$view->getRequest()->getParam('pass.0'), '?' => ['tab' => 'documents']]),
+            __d('documents', 'Documents'),
+            $view->getRequest()->getQuery('tab') == 'documents' ? ' class="active"' : ''
+        );
+
+        $view->Lil->insertIntoArray(
+            $panels->panels['tabs']['lines'],
+            ['documents' => $documentsTab, 'invoices' => $invoicesTab],
+            ['before' => 'post']
+        );
+
+        //$url = $view->getRequest()->getRequestTarget();
+        $sourceRequest = Router::reverseToArray($view->getRequest());
+        unset($sourceRequest['?']['page']);
+        unset($sourceRequest['?']['sort']);
+        unset($sourceRequest['?']['direction']);
+
+        $url = Router::normalize($sourceRequest);
+        $params = [
+            'source' => $url,
+            'page' => $view->getRequest()->getQuery('page'),
+            'sort' => $view->getRequest()->getQuery('sort'),
+            'direction' => $view->getRequest()->getQuery('direction'),
+        ];
+
+        if ($view->getRequest()->getQuery('tab') == 'invoices') {
+            // invoices tab panel
+            $invoicesPanels = [
+                'invoices_table' => '<div id="tab-content-invoices"></div>',
+            ];
+
+            $view->Lil->insertIntoArray($panels->panels, $invoicesPanels);
+
+            $url = Router::url(['plugin' => 'Documents', 'controller' => 'Invoices', 'action' => 'list', '_ext' => 'aht', '?' => $params]);
+            $view->Lil->jsReady('$.get("' . $url . '", function(data) { $("#tab-content-invoices").html(data); });');
+        }
+
+        if ($view->getRequest()->getQuery('tab') == 'documents') {
+            // documents tab panel
+            $documentsPanels = [
+                'documents_table' => '<div id="tab-content-documents"></div>',
+            ];
+
+            $view->Lil->insertIntoArray($panels->panels, $documentsPanels);
+
+            $url = Router::url(['plugin' => 'Documents', 'controller' => 'Documents', 'action' => 'list', '_ext' => 'aht', '?' => $params]);
+            $view->Lil->jsReady('$.get("' . $url . '", function(data) { $("#tab-content-documents").html(data); });');
         }
 
         return $panels;

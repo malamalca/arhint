@@ -64,8 +64,14 @@ class BaseDocumentsController extends AppController
         $filter = (array)$this->getRequest()->getQuery();
 
         $this->loadModel('Documents.DocumentsCounters');
+        $counters = $this->DocumentsCounters->rememberForUser(
+            $this->getCurrentUser()->id,
+            $this->Authorization->applyScope($this->DocumentsCounters->find(), 'index')
+        );
+
         if (!empty($filter['counter'])) {
             $counter = $this->DocumentsCounters->get($filter['counter']);
+            $this->Authorization->authorize($counter, 'view');
         } else {
             $counter = $this->DocumentsCounters->findDefaultCounter(
                 $this->Authorization->applyScope($this->DocumentsCounters->find(), 'index'),
@@ -79,13 +85,6 @@ class BaseDocumentsController extends AppController
                 return $this->redirect(['controller' => 'DocumentsCounters']);
             }
         }
-
-        $this->Authorization->authorize($counter, 'view');
-
-        $counters = $this->DocumentsCounters->rememberForUser(
-            $this->getCurrentUser()->id,
-            $this->Authorization->applyScope($this->DocumentsCounters->find(), 'index')
-        );
 
         $this->set(compact('filter', 'counter', 'counters'));
 
