@@ -140,6 +140,7 @@ class UsersController extends AppController
 
         if ($this->getRequest()->is(['patch', 'post', 'put'])) {
             $this->Users->patchEntity($user, $this->getRequest()->getData(), ['validate' => 'resetPassword']);
+            $user->passwd = $this->getRequest()->getData('passwd');
 
             if (!$user->getErrors() && $this->Users->save($user)) {
                 $this->Flash->success(__('Password has been changed.'));

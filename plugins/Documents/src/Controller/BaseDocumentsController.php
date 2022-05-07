@@ -435,7 +435,7 @@ class BaseDocumentsController extends AppController
         $ExporterClass = '\\Documents\\Lib\\' . $this->documentsScope . 'Export';
         //$Exporter = new InvoicesExport();
 
-        $Exporter = new ($ExporterClass)();
+        $Exporter = new $ExporterClass();
         $documents = $Exporter->find($filter);
         $this->Authorization->applyScope($documents, 'index');
         $documents = $documents->toArray();

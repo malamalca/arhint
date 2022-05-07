@@ -419,9 +419,4 @@ return [
     'Ghostscript' => [
         'executable' => 'D:\bin\Ghostscript\gswin64c.exe'
     ],
-
-    'PDFSign' => [
-        'executable' => '"C:\Program Files\Java\jre1.8.0_181\bin\java.exe" -jar C:\bin\PortableSigner\PortableSigner.jar -n -s "%3$s" -p %4$s -o "%2$s" -t "%1$s"'
-    ],
-
 ];

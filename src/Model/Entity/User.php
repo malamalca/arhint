@@ -41,7 +41,6 @@ class User extends Entity implements IdentityInterface
         'company_id' => true,
         'name' => true,
         'username' => true,
-        'passwd' => true,
         'email' => true,
         'reset_key' => true,
         'privileges' => true,
@@ -78,7 +77,7 @@ class User extends Entity implements IdentityInterface
      * @param string $password Users password.
      * @return string|bool
      */
-    protected function _setPasswd($password)
+    protected function _setPasswd(string $password) : ?string
     {
         return (new DefaultPasswordHasher())->hash($password);
     }
