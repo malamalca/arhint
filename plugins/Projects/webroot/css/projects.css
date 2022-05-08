@@ -25,6 +25,10 @@ textarea#projects-logs-descript {
     width: 600px;
 }
 
+#ProjectsWorkhoursList {
+    width: 750px;
+}
+
 .view-panel#projects-logs {
     margin: 0;
 }

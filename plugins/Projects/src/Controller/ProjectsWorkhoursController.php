@@ -5,6 +5,8 @@ namespace Projects\Controller;
 
 use Cake\Event\EventInterface;
 use Cake\I18n\FrozenTime;
+use Cake\ORM\TableRegistry;
+use Cake\Routing\Router;
 
 /**
  * ProjectsWorkhours Controller
@@ -55,6 +57,36 @@ class ProjectsWorkhoursController extends AppController
     }
 
     /**
+     * List method
+     *
+     * @return \Cake\Http\Response|null
+     */
+    public function list()
+    {
+        $sourceRequest = Router::reverseToArray(Router::getRouteCollection()->parse($this->getRequest()->getQuery('source')));
+        
+        $filter = [];
+        $filter['project'] = $sourceRequest[0] ?? null;
+
+        $params = $this->ProjectsWorkhours->filter($filter);
+
+        $query = $this->Authorization->applyScope($this->ProjectsWorkhours->find(), 'index')
+            ->select(['id', 'project_id', 'user_id', 'started', 'duration'])
+            ->where($params['conditions'])
+            ->order($params['order']);
+
+        $data = $this->paginate($query, ['limit' => 5]);
+
+        /** @var \App\Model\Table\UsersTable $UsersTable */
+        $UsersTable = TableRegistry::getTableLocator()->get('App.Users');
+        $users = $UsersTable->fetchForCompany($this->getCurrentUser()->get('company_id'), ['inactive' => true]);
+        
+        $this->set(compact('data', 'sourceRequest', 'users'));
+
+        return null;
+    }
+
+    /**
      * Edit method
      *
      * @param string|null $id Projects Workhour id.
@@ -80,7 +112,8 @@ class ProjectsWorkhoursController extends AppController
             if ($this->ProjectsWorkhours->save($projectsWorkhour)) {
                 $this->Flash->success(__d('projects', 'The projects workhour has been saved.'));
 
-                return $this->redirect(['action' => 'index', '?' => ['project' => $projectsWorkhour->project_id]]);
+                $referer = $this->getRequest()->getData('referer');
+                return $this->redirect($referer ?? ['action' => 'index', '?' => ['project' => $projectsWorkhour->project_id]]);
             }
             $this->Flash->error(__d('projects', 'The projects workhour could not be saved. Please, try again.'));
         }
@@ -117,7 +150,7 @@ class ProjectsWorkhoursController extends AppController
             $this->Flash->error(__d('projects', 'The projects workhour could not be deleted. Please, try again.'));
         }
 
-        return $this->redirect(['action' => 'index', '?' => ['project' => $projectsWorkhour->project_id]]);
+        return $this->redirect($this->getRequest()->referer());
     }
 
     /**

@@ -96,7 +96,7 @@ class DocumentsController extends BaseDocumentsController
                 $filter['project'] = $sourceRequest[0] ?? null;
                 break;
             case 'Crm':
-                $filter['contact'] = $sourceRequest[0] ?? null;
+                $filter['contact_id'] = $sourceRequest[0] ?? null;
                 break;
         }
 

@@ -97,9 +97,46 @@ class ProjectsWorkhoursTable extends Table
     {
         $query = $this->find();
         $data = $query->select(['totalDuration' => $query->func()->sum('duration')])
+            ->where(['project_id' => $projectId])
             ->disableHydration()
             ->first();
 
         return $data['totalDuration'];
     }
+
+    /**
+     * filter method
+     *
+     * @param array $filter Filter data.
+     * @return array
+     */
+    public function filter(&$filter)
+    {
+        $ret = ['conditions' => [], 'contain' => []];
+
+        if (!empty($filter['id'])) {
+            $ret['conditions'] = ['ProjectsWorkhours.id' => $filter['id']];
+        }
+
+        if (!empty($filter['project'])) {
+            $ret['conditions'][]['ProjectsWorkhours.project_id'] = $filter['project'];
+        }
+
+        $ret['contain'] = [];
+
+        if (isset($filter['sort'])) {
+            $ret['order'] = [];
+        } else {
+            $ret['order'] = $filter['order'] ?? [];
+        }
+
+        if (isset($filter['limit'])) {
+            $ret['limit'] = $filter['limit'];
+        } else {
+            $ret['limit'] = null;
+        }
+
+        return $ret;
+    }
+
 }

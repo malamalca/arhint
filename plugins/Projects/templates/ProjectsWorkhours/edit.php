@@ -1,5 +1,6 @@
 <?php
 use Cake\I18n\FrozenTime;
+use Cake\Routing\Router;
 
 $editForm = [
     'title_for_layout' =>
@@ -23,9 +24,13 @@ $editForm = [
             ],
             'referer' => [
                 'method' => 'hidden',
-                'parameters' => ['field' => 'referer'],
+                'parameters' => ['referer', ['id' => 'referer', 'default' => Router::url($this->getRequest()->referer(), true)]],
             ],
-            'project' => [
+            'project_id' => !$this->getRequest()->getQuery('project') ? null : [
+                'method' => 'hidden',
+                'parameters' => ['field' => 'project_id'],
+            ],
+            'project' => $this->getRequest()->getQuery('project') ? null : [
                 'method' => 'control',
                 'parameters' => [
                     'field' => 'project_id',
@@ -68,9 +73,10 @@ $editForm = [
                 ],
             ],
             'submit' => [
-                'method' => 'submit',
+                'method' => 'button',
                 'parameters' => [
-                    'label' => __d('projects', 'Save'),
+                    __d('projects', 'Save'),
+                    ['type' => 'submit'],
                 ],
             ],
             'form_end' => [

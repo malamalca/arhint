@@ -173,7 +173,7 @@ foreach ($contacts as $contact) {
                 'html' =>
                 sprintf('<div class="hide-on-med-and-up" style="display: block; float: right">%s</div>', $phones) .
                 $this->Html->link(
-                    $contact->title,
+                    empty($contact->title) ? 'N/A' : $contact->title,
                     ['action' => 'view', $contact->id],
                     ['class' => 'big contact-name', 'title' => $contact->title]
                 ) . $job . $address . $descript,

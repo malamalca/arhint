@@ -45,9 +45,10 @@ $editForm = [
             ],
 
             'submit' => [
-                'method' => 'submit',
+                'method' => 'button',
                 'parameters' => [
-                    'label' => __d('projects', 'Save'),
+                    __d('projects', 'Save'),
+                    ['type' => 'submit'],
                 ],
             ],
             'form_end' => [
