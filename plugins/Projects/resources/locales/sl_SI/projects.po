@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Arhint::Projects\n"
-"POT-Creation-Date: 2021-10-26 16:15+0000\n"
-"PO-Revision-Date: 2021-10-26 18:17+0200\n"
+"POT-Creation-Date: 2021-10-26 16:22+0000\n"
+"PO-Revision-Date: 2022-05-08 08:46+0200\n"
 "Last-Translator: \n"
 "Language-Team: info@arhim.si\n"
 "Language: sl_SI\n"
@@ -14,7 +14,55 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n"
 "%100==4 ? 2 : 3);\n"
-"X-Generator: Poedit 2.2.1\n"
+"X-Generator: Poedit 3.0.1\n"
+
+#: Controller/ProjectsCompMaterialsController.php:73
+#, fuzzy
+#| msgid "The projects log has been saved."
+msgid "The projects comp material has been saved."
+msgstr "Zapis je shranjen."
+
+#: Controller/ProjectsCompMaterialsController.php:81
+#, fuzzy
+#| msgid "The projects log could not be saved. Please, try again."
+msgid "The projects comp material could not be saved. Please, try again."
+msgstr "Zapisa ni mogoče shraniti. Preverite vpisane podatke."
+
+#: Controller/ProjectsCompMaterialsController.php:110
+#, fuzzy
+#| msgid "The projects log has been deleted."
+msgid "The projects comp material has been deleted."
+msgstr "Zapis je izbrisan."
+
+#: Controller/ProjectsCompMaterialsController.php:112
+#, fuzzy
+#| msgid "The projects log could not be deleted. Please, try again."
+msgid "The projects comp material could not be deleted. Please, try again."
+msgstr "Zapisa ni mogoče izbrisati."
+
+#: Controller/ProjectsCompositesController.php:68
+#, fuzzy
+#| msgid "The projects log has been saved."
+msgid "The projects composite has been saved."
+msgstr "Zapis je shranjen."
+
+#: Controller/ProjectsCompositesController.php:81
+#, fuzzy
+#| msgid "The projects log could not be saved. Please, try again."
+msgid "The projects composite could not be saved. Please, try again."
+msgstr "Zapisa ni mogoče shraniti. Preverite vpisane podatke."
+
+#: Controller/ProjectsCompositesController.php:104
+#, fuzzy
+#| msgid "The projects log has been deleted."
+msgid "The projects composite has been deleted."
+msgstr "Zapis je izbrisan."
+
+#: Controller/ProjectsCompositesController.php:106
+#, fuzzy
+#| msgid "The projects log could not be deleted. Please, try again."
+msgid "The projects composite could not be deleted. Please, try again."
+msgstr "Zapisa ni mogoče izbrisati."
 
 #: Controller/ProjectsController.php:210
 msgid "The project has been saved."
@@ -144,7 +192,11 @@ msgstr "Briši"
 msgid "Are you sure you want to delete this composite?"
 msgstr "Ste prepričani, da želite izbrisati sestavo?"
 
-#: ProjectsComposites/view.php:91
+#: ProjectsComposites/view.php:56
+msgid "Export to Word"
+msgstr "Izvoz v Word"
+
+#: ProjectsComposites/view.php:96
 msgid "Total thickness"
 msgstr "Skupna debeline"
 

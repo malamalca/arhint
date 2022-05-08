@@ -244,9 +244,12 @@ $documentEdit = [
 
             ////////////////////////////////////////////////////////////////////////////////////
             'submit' => [
-                'method' => 'submit',
+                'method' => 'button',
                 'parameters' => [
                     __d('documents', 'Save'),
+                    [
+                        'type' => 'submit',
+                    ],
                 ],
             ],
 

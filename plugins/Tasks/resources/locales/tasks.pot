@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2021-09-08 17:32+0000\n"
+"POT-Creation-Date: 2022-05-08 06:34+0000\n"
 "PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
 "Last-Translator: NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
@@ -14,186 +14,182 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: Controller/TasksController.php:34
+#: ./plugins/Tasks/src/Controller/TasksController.php:34
 msgid "Folder does not exist."
 msgstr ""
 
-#: Controller/TasksController.php:90
+#: ./plugins/Tasks/src/Controller/TasksController.php:78
 msgid "The task has been saved."
 msgstr ""
 
-#: Controller/TasksController.php:96
-#: Controller/TasksController.php:130
+#: ./plugins/Tasks/src/Controller/TasksController.php:84
+#: ./plugins/Tasks/src/Controller/TasksController.php:118
 msgid "The task could not be saved. Please, try again."
 msgstr ""
 
-#: Controller/TasksController.php:151
+#: ./plugins/Tasks/src/Controller/TasksController.php:139
 msgid "The task has been deleted."
 msgstr ""
 
-#: Controller/TasksController.php:155
+#: ./plugins/Tasks/src/Controller/TasksController.php:143
 msgid "The task could not be deleted. Please, try again."
 msgstr ""
 
-#: Controller/TasksFoldersController.php:49
+#: ./plugins/Tasks/src/Controller/TasksFoldersController.php:37
 msgid "The folder has been saved."
 msgstr ""
 
-#: Controller/TasksFoldersController.php:53
+#: ./plugins/Tasks/src/Controller/TasksFoldersController.php:41
 msgid "The folder could not be saved. Please, try again."
 msgstr ""
 
-#: Controller/TasksFoldersController.php:75
+#: ./plugins/Tasks/src/Controller/TasksFoldersController.php:63
 msgid "The folder has been deleted."
 msgstr ""
 
-#: Controller/TasksFoldersController.php:77
+#: ./plugins/Tasks/src/Controller/TasksFoldersController.php:65
 msgid "The folder could not be deleted. Please, try again."
 msgstr ""
 
-#: Event/TasksEvents.php:42
-#: Lib/TasksSidebar.php:80
-#: Tasks/index.php:11
-#: Tasks/index.php:78
+#: ./plugins/Tasks/src/Event/TasksEvents.php:42
+#: ./plugins/Tasks/src/Lib/TasksSidebar.php:81
+#: ./plugins/Tasks/templates/Tasks/index.php:11
+#: ./plugins/Tasks/templates/Tasks/index.php:78
 msgid "Tasks"
 msgstr ""
 
-#: Lib/TasksSidebar.php:98
+#: ./plugins/Tasks/src/Lib/TasksSidebar.php:99
 msgid "Filters"
 msgstr ""
 
-#: Lib/TasksSidebar.php:105
+#: ./plugins/Tasks/src/Lib/TasksSidebar.php:106
 msgid "Today's Tasks"
 msgstr ""
 
-#: Lib/TasksSidebar.php:118
+#: ./plugins/Tasks/src/Lib/TasksSidebar.php:119
 msgid "Tomorrow's Tasks"
 msgstr ""
 
-#: Lib/TasksSidebar.php:131
+#: ./plugins/Tasks/src/Lib/TasksSidebar.php:132
 msgid "Further on"
 msgstr ""
 
-#: Lib/TasksSidebar.php:144
+#: ./plugins/Tasks/src/Lib/TasksSidebar.php:145
 msgid "No Due Date"
 msgstr ""
 
-#: Lib/TasksSidebar.php:157
+#: ./plugins/Tasks/src/Lib/TasksSidebar.php:158
 msgid "All Tasks"
 msgstr ""
 
-#: Lib/TasksSidebar.php:169
+#: ./plugins/Tasks/src/Lib/TasksSidebar.php:170
 msgid "Completed Tasks"
 msgstr ""
 
-#: Lib/TasksSidebar.php:182
-msgid "Folders"
-msgstr ""
-
-#: TasksFolders/edit.php:4
+#: ./plugins/Tasks/templates/TasksFolders/edit.php:4
 msgid "Edit Task List"
 msgstr ""
 
-#: TasksFolders/edit.php:4
+#: ./plugins/Tasks/templates/TasksFolders/edit.php:4
 msgid "Add Task List"
 msgstr ""
 
-#: TasksFolders/edit.php:7
-#: Tasks/edit.php:20
-#: Tasks/index.php:67
-#: Tasks/index.php:163
+#: ./plugins/Tasks/templates/TasksFolders/edit.php:7
+#: ./plugins/Tasks/templates/Tasks/edit.php:20
+#: ./plugins/Tasks/templates/Tasks/index.php:67
+#: ./plugins/Tasks/templates/Tasks/index.php:163
 msgid "Delete"
 msgstr ""
 
-#: TasksFolders/edit.php:16
-#: Tasks/index.php:74
+#: ./plugins/Tasks/templates/TasksFolders/edit.php:16
+#: ./plugins/Tasks/templates/Tasks/index.php:74
 msgid "Are you sure you want to delete this folder?"
 msgstr ""
 
-#: TasksFolders/edit.php:43
-#: Tasks/edit.php:60
+#: ./plugins/Tasks/templates/TasksFolders/edit.php:43
+#: ./plugins/Tasks/templates/Tasks/edit.php:60
 msgid "Title"
 msgstr ""
 
-#: TasksFolders/edit.php:52
-#: Tasks/edit.php:123
+#: ./plugins/Tasks/templates/TasksFolders/edit.php:52
+#: ./plugins/Tasks/templates/Tasks/edit.php:123
 msgid "Save"
 msgstr ""
 
-#: Tasks/edit.php:17
+#: ./plugins/Tasks/templates/Tasks/edit.php:17
 msgid "Edit Task"
 msgstr ""
 
-#: Tasks/edit.php:17
-#: Tasks/index.php:17
-#: Tasks/index.php:31
+#: ./plugins/Tasks/templates/Tasks/edit.php:17
+#: ./plugins/Tasks/templates/Tasks/index.php:17
+#: ./plugins/Tasks/templates/Tasks/index.php:31
 msgid "Add Task"
 msgstr ""
 
-#: Tasks/edit.php:29
-#: Tasks/index.php:170
+#: ./plugins/Tasks/templates/Tasks/edit.php:29
+#: ./plugins/Tasks/templates/Tasks/index.php:170
 msgid "Are you sure you want to delete this task?"
 msgstr ""
 
-#: Tasks/edit.php:71
+#: ./plugins/Tasks/templates/Tasks/edit.php:71
 msgid "Due Date"
 msgstr ""
 
-#: Tasks/edit.php:83
+#: ./plugins/Tasks/templates/Tasks/edit.php:83
 msgid "Assigned To"
 msgstr ""
 
-#: Tasks/edit.php:86
+#: ./plugins/Tasks/templates/Tasks/edit.php:86
 msgid "anyone"
 msgstr ""
 
-#: Tasks/edit.php:99
+#: ./plugins/Tasks/templates/Tasks/edit.php:99
 msgid "Notes"
 msgstr ""
 
-#: Tasks/edit.php:110
+#: ./plugins/Tasks/templates/Tasks/edit.php:110
 msgid "List"
 msgstr ""
 
-#: Tasks/index.php:36
+#: ./plugins/Tasks/templates/Tasks/index.php:36
 msgid "Add List"
 msgstr ""
 
-#: Tasks/index.php:46
+#: ./plugins/Tasks/templates/Tasks/index.php:46
 msgid "Add Folder"
 msgstr ""
 
-#: Tasks/index.php:61
-#: Tasks/index.php:157
-#: Tasks/index.php:216
+#: ./plugins/Tasks/templates/Tasks/index.php:61
+#: ./plugins/Tasks/templates/Tasks/index.php:157
+#: ./plugins/Tasks/templates/Tasks/index.php:216
 msgid "Edit"
 msgstr ""
 
-#: Tasks/index.php:114
+#: ./plugins/Tasks/templates/Tasks/index.php:114
 msgid "today"
 msgstr ""
 
-#: Tasks/index.php:117
+#: ./plugins/Tasks/templates/Tasks/index.php:117
 msgid "tomorrow"
 msgstr ""
 
-#: Tasks/index.php:121
+#: ./plugins/Tasks/templates/Tasks/index.php:121
 msgid " :: due {0}"
 msgstr ""
 
-#: Tasks/index.php:137
+#: ./plugins/Tasks/templates/Tasks/index.php:137
 msgid "\"{0}\" to Anyone"
 msgstr ""
 
-#: Tasks/index.php:139
+#: ./plugins/Tasks/templates/Tasks/index.php:139
 msgid "Me to Anyone"
 msgstr ""
 
-#: Tasks/index.php:143
+#: ./plugins/Tasks/templates/Tasks/index.php:143
 msgid "\"{0}\" to Me"
 msgstr ""
 
-#: Tasks/index.php:147
+#: ./plugins/Tasks/templates/Tasks/index.php:147
 msgid "\"{0}\" from Me"
 msgstr ""
 

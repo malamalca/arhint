@@ -67,6 +67,10 @@ td.td-invoices-item-vat select {
     color: #606060;
 }
 
+.autocomplete-content {
+    min-width: 400px !important;
+}
+
 /* VIEW INVOICE */
 #invoice-view-items-table, #invoice-view-tax-table {
     margin-left: 0px;

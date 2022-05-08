@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2022-02-02 16:23+0000\n"
+"POT-Creation-Date: 2022-05-08 06:35+0000\n"
 "PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
 "Last-Translator: NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
@@ -14,26 +14,26 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: ./plugins/Calendar/src/Controller/EventsController.php:81
-#: ./plugins/Calendar/src/Controller/EventsController.php:117
+#: ./plugins/Calendar/src/Controller/EventsController.php:79
+#: ./plugins/Calendar/src/Controller/EventsController.php:115
 msgid "The event has been deleted."
 msgstr ""
 
-#: ./plugins/Calendar/src/Controller/EventsController.php:83
-#: ./plugins/Calendar/src/Controller/EventsController.php:119
+#: ./plugins/Calendar/src/Controller/EventsController.php:81
+#: ./plugins/Calendar/src/Controller/EventsController.php:117
 msgid "The event could not be deleted. Please, try again."
 msgstr ""
 
-#: ./plugins/Calendar/src/Controller/EventsController.php:93
+#: ./plugins/Calendar/src/Controller/EventsController.php:91
 msgid "The event has been saved."
 msgstr ""
 
-#: ./plugins/Calendar/src/Controller/EventsController.php:99
+#: ./plugins/Calendar/src/Controller/EventsController.php:97
 msgid "The event could not be saved. Please, try again."
 msgstr ""
 
 #: ./plugins/Calendar/src/Event/CalendarEvents.php:42
-#: ./plugins/Calendar/src/Lib/CalendarSidebar.php:34
+#: ./plugins/Calendar/src/Lib/CalendarSidebar.php:32
 msgid "Calendar"
 msgstr ""
 
@@ -50,7 +50,7 @@ msgid "Add Event"
 msgstr ""
 
 #: ./plugins/Calendar/templates/Events/edit.php:22
-#: ./plugins/Calendar/templates/Events/edit.php:122
+#: ./plugins/Calendar/templates/Events/edit.php:147
 msgid "Delete"
 msgstr ""
 
@@ -78,11 +78,59 @@ msgstr ""
 msgid "Ends"
 msgstr ""
 
-#: ./plugins/Calendar/templates/Events/edit.php:115
-msgid "Save"
+#: ./plugins/Calendar/templates/Events/edit.php:116
+msgid "Alert"
+msgstr ""
+
+#: ./plugins/Calendar/templates/Events/edit.php:120
+msgid "None"
+msgstr ""
+
+#: ./plugins/Calendar/templates/Events/edit.php:122
+msgid "At time of event"
+msgstr ""
+
+#: ./plugins/Calendar/templates/Events/edit.php:123
+msgid "5 minutes before"
+msgstr ""
+
+#: ./plugins/Calendar/templates/Events/edit.php:124
+msgid "10 minutes before"
+msgstr ""
+
+#: ./plugins/Calendar/templates/Events/edit.php:125
+msgid "15 minutes before"
+msgstr ""
+
+#: ./plugins/Calendar/templates/Events/edit.php:126
+msgid "30 minutes before"
 msgstr ""
 
 #: ./plugins/Calendar/templates/Events/edit.php:127
+msgid "1 hour before"
+msgstr ""
+
+#: ./plugins/Calendar/templates/Events/edit.php:128
+msgid "2 hours before"
+msgstr ""
+
+#: ./plugins/Calendar/templates/Events/edit.php:129
+msgid "1 day before"
+msgstr ""
+
+#: ./plugins/Calendar/templates/Events/edit.php:130
+msgid "2 days before"
+msgstr ""
+
+#: ./plugins/Calendar/templates/Events/edit.php:131
+msgid "1 week before"
+msgstr ""
+
+#: ./plugins/Calendar/templates/Events/edit.php:140
+msgid "Save"
+msgstr ""
+
+#: ./plugins/Calendar/templates/Events/edit.php:152
 msgid "Are you sure?"
 msgstr ""
 

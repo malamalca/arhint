@@ -4,37 +4,38 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2022-02-02 16:23+0000\n"
-"PO-Revision-Date: 2022-02-02 17:26+0100\n"
+"POT-Creation-Date: 2022-05-08 06:35+0000\n"
+"PO-Revision-Date: 2022-05-08 08:42+0200\n"
+"Last-Translator: \n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
+"Language: sl_SI\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100>=3 && n%100<=4 ? 2 : 3);\n"
-"X-Generator: Poedit 2.2.1\n"
-"Last-Translator: \n"
-"Language: sl_SI\n"
+"Plural-Forms: nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100>=3 && n"
+"%100<=4 ? 2 : 3);\n"
+"X-Generator: Poedit 3.0.1\n"
 
-#: plugins/Calendar/src/Controller/EventsController.php:81
-#: plugins/Calendar/src/Controller/EventsController.php:117
+#: plugins/Calendar/src/Controller/EventsController.php:79
+#: plugins/Calendar/src/Controller/EventsController.php:115
 msgid "The event has been deleted."
 msgstr "Dogodek je izbrisan."
 
-#: plugins/Calendar/src/Controller/EventsController.php:83
-#: plugins/Calendar/src/Controller/EventsController.php:119
+#: plugins/Calendar/src/Controller/EventsController.php:81
+#: plugins/Calendar/src/Controller/EventsController.php:117
 msgid "The event could not be deleted. Please, try again."
 msgstr "Dogodka ni mogoče izbrisati. Poizkusite ponovno."
 
-#: plugins/Calendar/src/Controller/EventsController.php:93
+#: plugins/Calendar/src/Controller/EventsController.php:91
 msgid "The event has been saved."
 msgstr "Dogodek je shranjen."
 
-#: plugins/Calendar/src/Controller/EventsController.php:99
+#: plugins/Calendar/src/Controller/EventsController.php:97
 msgid "The event could not be saved. Please, try again."
 msgstr "Dogodka ni mogoče shraniti. Preverite vpisana polja."
 
 #: plugins/Calendar/src/Event/CalendarEvents.php:42
-#: plugins/Calendar/src/Lib/CalendarSidebar.php:34
+#: plugins/Calendar/src/Lib/CalendarSidebar.php:32
 msgid "Calendar"
 msgstr "Koledar"
 
@@ -51,7 +52,7 @@ msgid "Add Event"
 msgstr "Nov dogodek"
 
 #: plugins/Calendar/templates/Events/edit.php:22
-#: plugins/Calendar/templates/Events/edit.php:122
+#: plugins/Calendar/templates/Events/edit.php:147
 msgid "Delete"
 msgstr "Briši"
 
@@ -79,11 +80,59 @@ msgstr "Začetek"
 msgid "Ends"
 msgstr "Konec"
 
-#: plugins/Calendar/templates/Events/edit.php:115
+#: plugins/Calendar/templates/Events/edit.php:116
+msgid "Alert"
+msgstr "Alarm"
+
+#: plugins/Calendar/templates/Events/edit.php:120
+msgid "None"
+msgstr "Brez"
+
+#: plugins/Calendar/templates/Events/edit.php:122
+msgid "At time of event"
+msgstr "V času dogodka"
+
+#: plugins/Calendar/templates/Events/edit.php:123
+msgid "5 minutes before"
+msgstr "5 minut prej"
+
+#: plugins/Calendar/templates/Events/edit.php:124
+msgid "10 minutes before"
+msgstr "10 minut prej"
+
+#: plugins/Calendar/templates/Events/edit.php:125
+msgid "15 minutes before"
+msgstr "15 minut prej"
+
+#: plugins/Calendar/templates/Events/edit.php:126
+msgid "30 minutes before"
+msgstr "30 minut prej"
+
+#: plugins/Calendar/templates/Events/edit.php:127
+msgid "1 hour before"
+msgstr "1 uro prej"
+
+#: plugins/Calendar/templates/Events/edit.php:128
+msgid "2 hours before"
+msgstr "2 uri prej"
+
+#: plugins/Calendar/templates/Events/edit.php:129
+msgid "1 day before"
+msgstr "1 dan prej"
+
+#: plugins/Calendar/templates/Events/edit.php:130
+msgid "2 days before"
+msgstr "2 dni prej"
+
+#: plugins/Calendar/templates/Events/edit.php:131
+msgid "1 week before"
+msgstr "1 teden prej"
+
+#: plugins/Calendar/templates/Events/edit.php:140
 msgid "Save"
 msgstr "Shrani"
 
-#: plugins/Calendar/templates/Events/edit.php:127
+#: plugins/Calendar/templates/Events/edit.php:152
 msgid "Are you sure?"
 msgstr "Ste prepričani?"
 
