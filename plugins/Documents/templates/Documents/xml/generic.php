@@ -1,13 +1,13 @@
 <?php
-            use Cake\Utility\Xml;
+use Cake\Utility\Xml;
 
-    $Lil = $this->loadHelper('Lil.Lil');
+$Lil = $this->loadHelper('Lil.Lil');
 
-    $transformed = ['Dokumenti' => []];
+$transformed = ['IzdaniDokumenti' => []];
 
-    $i = 0;
+$i = 0;
 foreach ($documents as $document) {
-    $transformed['Dokumenti']['Dokument'][$i] = [
+    $transformed['IzdaniDokumenti']['Dokument'][$i] = [
         '@Id' => 'data',
 
         'NazivLokacije' => substr(h($document->location), 0, 70),
@@ -54,17 +54,17 @@ foreach ($documents as $document) {
                 ],
             ];
 
-            $transformed['Dokumenti']['Dokument'][$i]['PodatkiPodjetja'][] = $clientData;
+            $transformed['IzdaniDokumenti']['Dokument'][$i]['PodatkiPodjetja'][] = $clientData;
         }
     }
 
     // besedilo
-    $transformed['Dokumenti']['Dokument'][$i]['Besedilo'] = $document->descript;
+    $transformed['IzdaniDokumenti']['Dokument'][$i]['Besedilo'] = $document->descript;
 }
 
-    $XmlObject = Xml::fromArray($transformed, ['format' => 'tags', 'return' => 'domdocument', 'pretty' => true]);
+$XmlObject = Xml::fromArray($transformed, ['format' => 'tags', 'return' => 'domdocument', 'pretty' => true]);
 
-    $besedila = $XmlObject->getElementsByTagName('Besedilo');
+$besedila = $XmlObject->getElementsByTagName('Besedilo');
 
 foreach ($besedila as $besedilo) {
     $cDataBesedilo = $XmlObject->createCDATASection($besedilo->nodeValue);
@@ -72,4 +72,4 @@ foreach ($besedila as $besedilo) {
     $besedilo->appendChild($cDataBesedilo);
 }
 
-    echo $XmlObject->saveXML();
+echo $XmlObject->saveXML();

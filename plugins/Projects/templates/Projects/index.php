@@ -63,11 +63,12 @@ $index = [
                 'status' => ['params' => ['class' => 'center hide-on-small-only'], 'html' => __d('projects', 'Status')],
                 'actions' => '',
                 'log' => ['params' => ['class' => 'left'], 'html' => __d('projects', 'Last Log')],
+                'actions2' => '',
             ],
         ]]],
         'foot' => ['rows' => [['columns' => [
             'paginator' => [
-                'params' => ['colspan' => 5],
+                'params' => ['colspan' => 6],
                 'html' => '<ul class="paginator">' . $this->Paginator->numbers([
                     'first' => '<<',
                     'last' => '>>',
@@ -114,7 +115,8 @@ foreach ($projects as $project) {
         'log' => [
             'params' => ['class' => 'last-log'],
             'html' => $lastLogDescript,
-        ]
+        ],
+        'actions2' => $this->Lil->editLink($project->id),
     ];
 }
 

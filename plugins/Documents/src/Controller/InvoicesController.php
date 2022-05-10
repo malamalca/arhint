@@ -7,7 +7,7 @@ use Cake\Core\Plugin;
 use Cake\Event\EventInterface;
 use Cake\ORM\TableRegistry;
 use Cake\Routing\Router;
-use Documents\Lib\DocumentsExport;
+use Documents\Lib\InvoicesExport;
 use Documents\Lib\DocumentsUpnQr;
 
 /**
@@ -276,7 +276,8 @@ class InvoicesController extends BaseDocumentsController
         }
         $filter = ['id' => $id];
 
-        $Exporter = new DocumentsExport();
+        $Exporter = new InvoicesExport();
+
         $documents = $Exporter->find($filter);
         $this->Authorization->applyScope($documents, 'index');
 

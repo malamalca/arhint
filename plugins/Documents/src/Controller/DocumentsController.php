@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Documents\Controller;
 
 use Cake\Core\Plugin;
+use Cake\Event\EventInterface;
 use Cake\Routing\Router;
 use Cake\ORM\TableRegistry;
 
@@ -19,6 +20,28 @@ class DocumentsController extends BaseDocumentsController
      * @var string $documentsScope
      */
     public $documentsScope = 'Documents';
+
+    /**
+     * BeforeFilter event handler
+     *
+     * @param \Cake\Event\EventInterface $event Event interface
+     * @return \Cake\Http\Response|null
+     */
+    public function beforeFilter(EventInterface $event)
+    {
+        parent::beforeFilter($event);
+
+        if (!empty($this->Security)) {
+            if (in_array($this->getRequest()->getParam('action'), ['edit', 'editPreview'])) {
+                $this->Security->setConfig(
+                    'unlockedFields',
+                    ['receiver', 'issuer']
+                );
+            }
+        }
+
+        return null;
+    }
 
     /**
      * Index method

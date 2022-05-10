@@ -36,7 +36,7 @@ class DocumentsSidebar
         $documents['active'] = $request->getParam('plugin') == 'Documents';
         $documents['url'] = [
             'plugin' => 'Documents',
-            'controller' => 'Documents',
+            'controller' => 'Invoices',
             'action' => 'index',
         ];
         $documents['items'] = [];

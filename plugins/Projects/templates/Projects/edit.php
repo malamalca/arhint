@@ -2,6 +2,7 @@
 /**
  * This is admin_edit template file.
  */
+
 $editForm = [
     'title_for_layout' =>
         $project->id ? __d('projects', 'Edit Project') : __d('projects', 'Add Project'),
@@ -35,6 +36,9 @@ $editForm = [
                         'type' => 'text',
                         'label' => __d('projects', 'No.') . ':',
                         'autofocus',
+                        'error' => [
+                            'uniqueNumber' => __d('projects', 'No already exists'),
+                        ],
                     ],
                 ],
             ],

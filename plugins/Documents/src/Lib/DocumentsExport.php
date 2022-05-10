@@ -3,11 +3,13 @@ declare(strict_types=1);
 
 namespace Documents\Lib;
 
+use Cake\Core\Configure;
 use Cake\Core\Plugin;
 use Cake\Event\Event;
 use Cake\Event\EventManager;
 use Cake\Http\Response;
 use Cake\ORM\TableRegistry;
+use Lil\Lib\LilPdfFactory;
 
 class DocumentsExport
 {
@@ -89,8 +91,15 @@ class DocumentsExport
 
         switch ($ext) {
             case 'pdf':
-                break;
             case 'xml':
+                $pdf = null;
+
+                if ($ext == 'pdf') {
+                    $pdfEngine = Configure::read('Documents.pdfEngine');
+                    $pdfOptions = Configure::read('Documents.' . $pdfEngine);
+                    $pdf = LilPdfFactory::create($pdfEngine, (array)$pdfOptions);
+                }
+
                 $responseHtml = '';
 
                 foreach ($data as $document) {
@@ -102,12 +111,48 @@ class DocumentsExport
                     if (in_array($ext, ['html', 'xml'])) {
                         $responseHtml .= $outputHtml;
                     }
+
+                    if ($ext == 'pdf') {
+                        // PDF
+                        $pageOptions = [];
+                        if (!empty($document->tpl_header)) {
+                            $templateBody = $document->tpl_header->body;
+                            if (substr($templateBody, 0, 5) == 'data:') {
+                                $templateBody = json_encode([
+                                    'image' => substr($templateBody, strpos($templateBody, ',') + 1),
+                                ]);
+                            } else {
+                                $templateBody = $this->_autop($templateBody);
+                            }
+                            $pdf->setHeaderHtml($templateBody);
+                        }
+                        if (!empty($document->tpl_footer)) {
+                            $templateBody = $document->tpl_footer->body;
+                            if (substr($templateBody, 0, 5) == 'data:') {
+                                $templateBody = json_encode([
+                                    'image' => substr($templateBody, strpos($templateBody, ',') + 1),
+                                ]);
+                            } else {
+                                $templateBody = $this->_autop($templateBody);
+                            }
+
+                            $pdf->setFooterHtml($templateBody);
+                        }
+                        $pdf->newPage($this->toHtml($document, $outputHtml), $pageOptions);
+                    }
                 }
 
                 if ($ext == 'html') {
                     $result = $this->toHtml($data[0], $responseHtml);
                 } else {
-                    $result = $responseHtml;
+                    $tmpFilename = constant('TMP') . uniqid('xml2pdf') . '.pdf';
+                    if (!$pdf->saveAs($tmpFilename)) {
+                        $this->lastError = $pdf->getError();
+
+                        return false;
+                    }
+                    $result = file_get_contents($tmpFilename);
+                    unlink($tmpFilename);
                 }
                 break;
         }
@@ -166,9 +211,6 @@ class DocumentsExport
             $xsl->loadXml($document->tpl_body->body, LIBXML_NOCDATA);
         } else {
             $xsltTpl = Plugin::path('Documents') . DS . 'webroot' . DS . 'doc_default.xslt';
-            if ($document->isInvoice()) {
-                $xsltTpl = Plugin::path('Documents') . DS . 'webroot' . DS . 'doc_eslog.xslt';
-            }
             $xsl->load($xsltTpl, LIBXML_NOCDATA);
         }
 
@@ -176,11 +218,13 @@ class DocumentsExport
         $xslt->importStylesheet($xsl);
 
         $xml = new \DOMDocument();
+
         $xml->loadXML($eslogXml);
 
         $result = $xslt->transformToXml($xml);
+
         $event = new Event(
-            'Documents.Invoices.Export.Html',
+            'Documents.Documents.Export.Html',
             $document,
             [$result]
         );
@@ -191,5 +235,64 @@ class DocumentsExport
         }
 
         return $result;
+    }
+
+    /**
+     * Replaces double line-breaks with paragraph elements.
+     *
+     * A group of regex replaces used to identify text formatted with newlines and
+     * replace double line-breaks with HTML paragraph tags. The remaining
+     * line-breaks after conversion become <<br />> tags, unless $br is set to '0'
+     * or 'false'.
+     *
+     * @since 0.71
+     * @param string $pee The text which has to be formatted.
+     * @param int|bool $br Optional. If set, this will convert all remaining line-breaks after paragraphing. Default true.
+     * @return string Text which has been converted into correct paragraph tags.
+     */
+    private function _autop($pee, $br = 1)
+    {
+        if (trim($pee) === '') {
+            return '';
+        }
+        $pee = $pee . "\n"; // just to make things a little easier, pad the end
+        $pee = preg_replace('|<br />\s*<br />|', "\n\n", $pee);
+        // Space things out a little
+        $allblocks = '(?:table|thead|tfoot|caption|col|colgroup|tbody|tr|td|th|div|dl|dd|dt|ul|ol|li|pre|select|form' .
+            '|map|area|blockquote|address|math|style|input|p|h[1-6]|hr)';
+        $pee = preg_replace('!(<' . $allblocks . '[^>]*>)!', "\n$1", $pee);
+        $pee = preg_replace('!(</' . $allblocks . '>)!', "$1\n\n", $pee);
+        $pee = str_replace(["\r\n", "\r"], "\n", $pee); // cross-platform newlines
+        if (strpos($pee, '<object') !== false) {
+            $pee = preg_replace('|\s*<param([^>]*)>\s*|', '<param$1>', $pee); // no pee inside object/embed
+            $pee = preg_replace('|\s*</embed>\s*|', '</embed>', $pee);
+        }
+        $pee = preg_replace("/\n\n+/", "\n\n", $pee); // take care of duplicates
+        // make paragraphs, including one at the end
+        $pees = preg_split('/\n\s*\n/', $pee, -1, PREG_SPLIT_NO_EMPTY);
+        $pee = '';
+        foreach ($pees as $tinkle) {
+            $pee .= '<p>' . trim($tinkle, "\n") . "</p>\n";
+        }
+        $pee = preg_replace('|<p>\s*</p>|', '', $pee); // under certain strange conditions it could create a P of entirely whitespace
+        $pee = preg_replace('!<p>([^<]+)</(div|address|form)>!', '<p>$1</p></$2>', $pee);
+        $pee = preg_replace('!<p>\s*(</?' . $allblocks . '[^>]*>)\s*</p>!', '$1', $pee); // don't pee all over a tag
+        $pee = preg_replace('|<p>(<li.+?)</p>|', '$1', $pee); // problem with nested lists
+        $pee = preg_replace('|<p><blockquote([^>]*)>|i', '<blockquote$1><p>', $pee);
+        $pee = str_replace('</blockquote></p>', '</p></blockquote>', $pee);
+        $pee = preg_replace('!<p>\s*(</?' . $allblocks . '[^>]*>)!', '$1', $pee);
+        $pee = preg_replace('!(</?' . $allblocks . '[^>]*>)\s*</p>!', '$1', $pee);
+        if ($br) {
+            $pee = preg_replace_callback('/<(script|style).*?<\/\\1>/s', function ($matches) {
+                return str_replace("\n", '<PreserveNewline />', $matches[0]);
+            }, $pee);
+            $pee = preg_replace('|(?<!<br />)\s*\n|', "<br />\n", $pee); // optionally make line breaks
+            $pee = str_replace('<PreserveNewline />', "\n", $pee);
+        }
+        $pee = preg_replace('!(</?' . $allblocks . '[^>]*>)\s*<br />!', '$1', $pee);
+        $pee = preg_replace('!<br />(\s*</?(?:p|li|div|dl|dd|dt|th|pre|td|ul|ol)[^>]*>)!', '$1', $pee);
+        $pee = preg_replace("|\n</p>$|", '</p>', $pee);
+
+        return $pee;
     }
 }

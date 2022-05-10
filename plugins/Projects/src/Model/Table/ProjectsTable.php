@@ -124,6 +124,8 @@ class ProjectsTable extends Table
             return $projectsCount == 0;
         }, 'usedInProjectsWorkhours');
 
+        $rules->add($rules->isUnique(['owner_id', 'no']), 'uniqueNumber', ['errorField' => 'no']);
+
         return $rules;
     }
 

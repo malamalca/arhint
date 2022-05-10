@@ -1,7 +1,7 @@
 <?php
-    $this->loadHelper('Expenses.LilExpense');
+$this->loadHelper('Expenses.LilExpense');
 
-    $ret = [];
+$ret = [];
 foreach ($expenses as $exp) {
     $ret[] = [
         'id' => $exp->id,
@@ -13,4 +13,4 @@ foreach ($expenses as $exp) {
     ];
 }
 
-    echo json_encode($ret);
+echo json_encode($ret);

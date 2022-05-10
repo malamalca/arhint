@@ -36,11 +36,12 @@ class UtilsController extends AppController
             $gsParams = '-dBATCH -dNOPAUSE -sDEVICE=pdfwrite -sOutputFile="%2$s" %1$s';
 
             if ($this->getRequest()->getData('pdfa')) {
-                $gsParams = '-dPDFA -sColorConversionStrategy=UseDeviceIndependentColor -dPDFACompatibilityPolicy=2 ' . $gsParams;
+                $gsParams = '-dPDFA -dBATCH -dNOPAUSE -sDEVICE=pdfwrite -sColorConversionStrategy=UseDeviceIndependentColor -dPDFACompatibilityPolicy=2 -sOutputFile="%2$s" %1$s';
             }
 
             $sourcePDF = '';
             $files = $this->getRequest()->getData('file');
+
             foreach ($files as $file) {
                 if (is_file($file['tmp_name'])) {
                     $sourcePDF .= '"' . $file['tmp_name'] . '" ';
@@ -49,12 +50,16 @@ class UtilsController extends AppController
 
             $outputPDF = $this->getRequest()->getData('filename');
 
-            if ($ret = shell_exec(escapeshellcmd(sprintf('"' . $gsProgram . '" ' . $gsParams, $sourcePDF, TMP . $outputPDF)))) {
+            $command = sprintf('"' . $gsProgram . '" ' . $gsParams, $sourcePDF, TMP . $outputPDF);
+
+            ///dd($command);
+
+            if ($ret = shell_exec($command)) {
                 $response = $this->getResponse()
                     ->withType('application/json')
                     ->withStringBody(json_encode(['filename' => $outputPDF]));
 
-                return $response;
+                    return $response;
             } else {
                 throw new BadRequestException('Error processing pdf files.');
             }
@@ -159,9 +164,14 @@ class UtilsController extends AppController
 
                 $position = [ ];
                 
-                $imageData = $this->signature($certdata, $this->getRequest()->getData('pass'));
-                $image = TMP . uniqid() . '.png';
-                file_put_contents($image, $imageData);
+                $signatureFile = $this->getRequest()->getData('signature');
+                if (!empty($signatureFile['tmp_name']) && is_file($signatureFile['tmp_name'])) {
+                    $image = $signatureFile['tmp_name'];
+                } else {
+                    $imageData = $this->signature($certdata, $this->getRequest()->getData('pass'));
+                    $image = TMP . uniqid() . '.png';
+                    file_put_contents($image, $imageData);
+                }
 
                 $imagesize = @getimagesize($image);
                 if ($imagesize === false) {

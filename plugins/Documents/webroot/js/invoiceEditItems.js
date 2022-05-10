@@ -87,7 +87,7 @@ jQuery.fn.InvoiceItemEditor = function (pOptions) {
         $this.clearRow(rowClone);
 
         var i = 0;
-        while ($('input#invoice-invoices-items-' + i + '-id').size() > 0) {
+        while ($('input#invoice-invoices-items-' + i + '-id').length > 0) {
             i++;
         }
         $this.renumberRow(rowClone, 0, i);

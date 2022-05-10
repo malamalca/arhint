@@ -87,7 +87,7 @@ jQuery.fn.InvoiceTaxEditor = function (options) {
         $this.clearInvoiceTaxRow(rowClone);
 
         var i = 0;
-        while ($('input#invoice-invoices-taxes-' + i + '-id').size() > 0) {
+        while ($('input#invoice-invoices-taxes-' + i + '-id').length > 0) {
             i++;
         }
         $this.renumberInvoiceTaxRow(rowClone, 0, i);
@@ -105,7 +105,7 @@ jQuery.fn.InvoiceTaxEditor = function (options) {
     this.onRemoveButtonClick = function () {
         var row = $(this).closest('tr');
 
-        if ($('tbody:last > tr', $this).size() > 1) {
+        if ($('tbody:last > tr', $this).length > 1) {
             $(row).remove(); // we have to remove row so we know how many rows are actually visible
         } else {
             $this.clearInvoiceTaxRow(row);

@@ -59,6 +59,16 @@ $uploadForm = [
                     ],
                 ]],
             ],
+            'signature' => [
+                'method' => 'control',
+                'parameters' => ['signature', [
+                    'type' => 'file',
+                    'label' => [
+                        'text' => __('Signature') . ':',
+                        'class' => 'active',
+                    ],
+                ]],
+            ],
             'page' => [
                 'method' => 'control',
                 'parameters' => ['page', [

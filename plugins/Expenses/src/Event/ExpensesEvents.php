@@ -113,38 +113,36 @@ class ExpensesEvents implements EventListenerInterface
 
         $invoice = $panels->entity;
 
-        if (get_class($event->getSubject()) == \Documents\Model\Table\InvoicesTable::class && $invoice->isInvoice()) {
-            /** @var \Documents\Model\Table\DocumentsCountersTable $DocumentsCounters */
-            $DocumentsCounters = TableRegistry::getTableLocator()->get('Documents.DocumentsCounters');
-            $counter = $DocumentsCounters->get($invoice->counter_id);
+        /** @var \Documents\Model\Table\DocumentsCountersTable $DocumentsCounters */
+        $DocumentsCounters = TableRegistry::getTableLocator()->get('Documents.DocumentsCounters');
+        $counter = $DocumentsCounters->get($invoice->counter_id);
 
-            if (!is_null($counter->expense)) {
-                $expenses = TableRegistry::getTableLocator()->get('Expenses.Expenses')->find()
-                    ->where(['model' => 'Invoice', 'foreign_id' => $invoice->id])
-                    ->contain(['Payments'])
-                    ->all();
+        if (!is_null($counter->expense)) {
+            $expenses = TableRegistry::getTableLocator()->get('Expenses.Expenses')->find()
+                ->where(['model' => 'Invoice', 'foreign_id' => $invoice->id])
+                ->contain(['Payments'])
+                ->all();
 
-                /** @var \Expenses\Model\Table\PaymentsAccountsTable $PaymentsAccountsTable */
-                $PaymentsAccountsTable = TableRegistry::getTableLocator()->get('Expenses.PaymentsAccounts');
-                $accounts = $PaymentsAccountsTable->listForOwner($invoice->owner_id);
+            /** @var \Expenses\Model\Table\PaymentsAccountsTable $PaymentsAccountsTable */
+            $PaymentsAccountsTable = TableRegistry::getTableLocator()->get('Expenses.PaymentsAccounts');
+            $accounts = $PaymentsAccountsTable->listForOwner($invoice->owner_id);
 
-                $paymentsPanels = [
-                    'payments_title' => '<h3>' . __d('expenses', 'Payments') . '</h3>',
-                    'payments_table' => $view->element('Expenses.payments_list', [
-                        'expense' => $expenses->first(),
-                        'accounts' => $accounts,
-                    ]),
-                ];
+            $paymentsPanels = [
+                'payments_title' => '<h3>' . __d('expenses', 'Payments') . '</h3>',
+                'payments_table' => $view->element('Expenses.payments_list', [
+                    'expense' => $expenses->first(),
+                    'accounts' => $accounts,
+                ]),
+            ];
 
-                if ($expenses->count() > 1) {
-                    $paymentsPanels['payments_warning'] = sprintf(
-                        '<div class="error">%s</div>',
-                        __d('expenses', 'WARNING: There are multiple expenses for this document!')
-                    );
-                }
-
-                $view->Lil->insertIntoArray($panels->panels, $paymentsPanels);
+            if ($expenses->count() > 1) {
+                $paymentsPanels['payments_warning'] = sprintf(
+                    '<div class="error">%s</div>',
+                    __d('expenses', 'WARNING: There are multiple expenses for this document!')
+                );
             }
+
+            $view->Lil->insertIntoArray($panels->panels, $paymentsPanels);
         }
 
         return $panels;
