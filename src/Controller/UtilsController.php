@@ -15,6 +15,12 @@ use ddn\sapp\PDFDoc;
  */
 class UtilsController extends AppController
 {
+    /**
+     * BeforeFilter event handler
+     *
+     * @param \Cake\Event\EventInterface $event Event interface
+     * @return \Cake\Http\Response|null
+     */
     public function beforeFilter(EventInterface $event)
     {
         parent::beforeFilter($event);
@@ -36,7 +42,9 @@ class UtilsController extends AppController
             $gsParams = '-dBATCH -dNOPAUSE -sDEVICE=pdfwrite -sOutputFile="%2$s" %1$s';
 
             if ($this->getRequest()->getData('pdfa')) {
-                $gsParams = '-dPDFA -dBATCH -dNOPAUSE -sDEVICE=pdfwrite -sColorConversionStrategy=UseDeviceIndependentColor -dPDFACompatibilityPolicy=2 -sOutputFile="%2$s" %1$s';
+                $gsParams = '-dPDFA -dBATCH -dNOPAUSE -sDEVICE=pdfwrite ' .
+                    '-sColorConversionStrategy=UseDeviceIndependentColor -dPDFACompatibilityPolicy=2 ' .
+                    '-sOutputFile="%2$s" %1$s';
             }
 
             $sourcePDF = '';
@@ -53,8 +61,8 @@ class UtilsController extends AppController
             $command = sprintf('"' . $gsProgram . '" ' . $gsParams, $sourcePDF, TMP . $outputPDF);
 
             ///dd($command);
-
-            if ($ret = shell_exec($command)) {
+            $ret = shell_exec($command);
+            if ($ret) {
                 $response = $this->getResponse()
                     ->withType('application/json')
                     ->withStringBody(json_encode(['filename' => $outputPDF]));
@@ -87,8 +95,8 @@ class UtilsController extends AppController
         $transparent = imagecolorallocate($newImage, 240, 240, 240);
         $gray = imagecolorallocatealpha($newImage, 200, 200, 200, 0);
         imagefilledrectangle($newImage, $leftWidth, 0, $thumbSizeX, $thumbSizeY, $transparent);
-        imagefilledrectangle($newImage, 0, 0, $leftWidth-1, $thumbSizeY, $gray);
-        imagefilledrectangle($newImage, 0, 0, $thumbSizeX-1, 20, $gray);
+        imagefilledrectangle($newImage, 0, 0, $leftWidth - 1, $thumbSizeY, $gray);
+        imagefilledrectangle($newImage, 0, 0, $thumbSizeX - 1, 20, $gray);
 
         $textColor = '#000000';
         $textColor = imagecolorallocatealpha(
@@ -103,8 +111,9 @@ class UtilsController extends AppController
         imagettftext($newImage, 10, 0, 5, 15, $textColor, $fontFile, 'DOKUMENT JE ELEKTRONSKO PODPISAN');
 
         imagettftext($newImage, 10, 0, 5, 35, $textColor, $fontFile, 'Podpisnik:');
-        imagettftext($newImage, 10, 0, $leftWidth + 5, 35, $textColor, $fontFile, $certData['subject']['O'] . ' (' . $certData['subject']['GN'] . ' ' . $certData['subject']['SN'] . ')');
-        
+        imagettftext($newImage, 10, 0, $leftWidth + 5, 35, $textColor, $fontFile, $certData['subject']['O'] . 
+            ' (' . $certData['subject']['GN'] . ' ' . $certData['subject']['SN'] . ')');
+
         imagettftext($newImage, 10, 0, 5, 50, $textColor, $fontFile, 'Izdajatelj:');
         imagettftext($newImage, 10, 0, $leftWidth + 5, 50, $textColor, $fontFile, $certData['issuer']['CN']);
 
@@ -142,7 +151,7 @@ class UtilsController extends AppController
     {
         $this->Authorization->skipAuthorization();
 
-        define("__TMP_FOLDER", TMP);
+        define('__TMP_FOLDER', TMP);
 
         if ($this->getRequest()->is(['patch', 'post', 'put'])) {
             $file = $this->getRequest()->getData('file');
@@ -151,9 +160,9 @@ class UtilsController extends AppController
             $pdfContents = file_get_contents($file['tmp_name']);
             $pdfObj = PDFDoc::from_string($pdfContents);
 
-            if ($pdfObj === false)
+            if ($pdfObj === false) {
                 throw new BadRequestException('Error processing pdf files.');
-            else {
+            } else {
                 $pdfSignedContents = false;
 
                 if ($ret = openssl_pkcs12_read(file_get_contents($cert['tmp_name']), $certdata, $this->getRequest()->getData('pass'))) {
@@ -163,7 +172,7 @@ class UtilsController extends AppController
                 }
 
                 $position = [ ];
-                
+
                 $signatureFile = $this->getRequest()->getData('signature');
                 if (!empty($signatureFile['tmp_name']) && is_file($signatureFile['tmp_name'])) {
                     $image = $signatureFile['tmp_name'];
@@ -176,20 +185,22 @@ class UtilsController extends AppController
                 $imagesize = @getimagesize($image);
                 if ($imagesize === false) {
                     fwrite(STDERR, "failed to open the image $image");
+
                     return;
                 }
                 $pagesize = $pdfObj->get_page_size(0);
-                if ($pagesize === false)
-                    return p_error("failed to get page size");
+                if ($pagesize === false) {
+                    return p_error('failed to get page size');
+                }
 
-                $pagesize = explode(" ", $pagesize[0]->val());
+                $pagesize = explode(' ', $pagesize[0]->val());
                 // Calculate the position of the image according to its size and the size of the page;
                 //   the idea is to keep the aspect ratio and center the image in the page with a size
                 //   of 1/3 of the size of the page.
-                $p_x = intval("". $pagesize[0]);
-                $p_y = intval("". $pagesize[1]);
-                $p_w = intval("". $pagesize[2]) - $p_x;
-                $p_h = intval("". $pagesize[3]) - $p_y;
+                $p_x = intval('' . $pagesize[0]);
+                $p_y = intval('' . $pagesize[1]);
+                $p_w = intval('' . $pagesize[2]) - $p_x;
+                $p_h = intval('' . $pagesize[3]) - $p_y;
                 $i_w = $imagesize[0];
                 $i_h = $imagesize[1];
 
@@ -201,8 +212,8 @@ class UtilsController extends AppController
                 $i_h = $imagesize[1] / 2;
 
                 //$p_x = $p_w / 3;
-                $p_x = $p_x + round($p_w * ($this->getRequest()->getData('x')/100));
-                $p_y = $p_y + round($p_h * ($this->getRequest()->getData('y')/100));
+                $p_x = $p_x + round($p_w * $this->getRequest()->getData('x') / 100);
+                $p_y = $p_y + round($p_h * $this->getRequest()->getData('y') / 100);
                 //$p_y = $p_h / 3;
 
                 // Set the image appearance and the certificate file
@@ -217,9 +228,9 @@ class UtilsController extends AppController
                 if ($res) {
                     $pdfSignedContents = $pdfObj->to_pdf_file_s(true);
 
-                    if ($pdfSignedContents === false)
+                    if ($pdfSignedContents === false) {
                         throw new BadRequestException('Error signing pdf files.');
-                    else {
+                    } else {
                         $signedFilename = substr($file['name'], 0, -4) . '_signed.pdf';
                         file_put_contents(TMP . $signedFilename, $pdfSignedContents);
 

@@ -138,5 +138,4 @@ class ProjectsWorkhoursTable extends Table
 
         return $ret;
     }
-
 }

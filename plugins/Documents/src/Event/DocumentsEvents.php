@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace Documents\Event;
 
 use Cake\Event\EventListenerInterface;
-use Cake\ORM\TableRegistry;
 use Cake\Routing\Router;
 use Documents\Lib\DocumentsSidebar;
 

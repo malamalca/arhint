@@ -215,6 +215,10 @@ class InvoicesControllerTest extends IntegrationTestCase
         // External program has to send a valid header
         $this->configRequest([
             'headers' => ['Lil-Scan' => 'Valid'],
+            //'environment' => [
+            //    'PHP_AUTH_USER' => 'admin',
+            //    'PHP_AUTH_PW' => 'pass',
+            //]
         ]);
         // Set session data
         $this->login(USER_ADMIN);

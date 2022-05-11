@@ -5,8 +5,8 @@ namespace Documents\Controller;
 
 use Cake\Core\Plugin;
 use Cake\Event\EventInterface;
-use Cake\Routing\Router;
 use Cake\ORM\TableRegistry;
+use Cake\Routing\Router;
 
 /**
  * Documents Controller
@@ -112,7 +112,7 @@ class DocumentsController extends BaseDocumentsController
     public function list()
     {
         $sourceRequest = Router::reverseToArray(Router::getRouteCollection()->parse($this->getRequest()->getQuery('source')));
-        
+
         $filter = [];
         switch ($sourceRequest['plugin']) {
             case 'Projects':
@@ -132,7 +132,7 @@ class DocumentsController extends BaseDocumentsController
             ->order($params['order']);
 
         $data = $this->paginate($query, ['limit' => 5]);
-        
+
         $this->set(compact('data', 'sourceRequest'));
 
         return null;

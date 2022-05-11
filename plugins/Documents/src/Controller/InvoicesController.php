@@ -7,8 +7,8 @@ use Cake\Core\Plugin;
 use Cake\Event\EventInterface;
 use Cake\ORM\TableRegistry;
 use Cake\Routing\Router;
-use Documents\Lib\InvoicesExport;
 use Documents\Lib\DocumentsUpnQr;
+use Documents\Lib\InvoicesExport;
 
 /**
  * Invoices Controller
@@ -134,7 +134,7 @@ class InvoicesController extends BaseDocumentsController
     public function list()
     {
         $sourceRequest = Router::reverseToArray(Router::getRouteCollection()->parse($this->getRequest()->getQuery('source')));
-        
+
         $filter = [];
         switch ($sourceRequest['plugin']) {
             case 'Projects':

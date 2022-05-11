@@ -296,7 +296,7 @@ class InvoicesTable extends Table
         } else {
             $ret['limit'] = null;
         }
-        
+
         return $ret;
     }
 

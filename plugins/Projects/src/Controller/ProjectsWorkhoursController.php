@@ -63,8 +63,9 @@ class ProjectsWorkhoursController extends AppController
      */
     public function list()
     {
-        $sourceRequest = Router::reverseToArray(Router::getRouteCollection()->parse($this->getRequest()->getQuery('source')));
-        
+        $parsedRoute = Router::getRouteCollection()->parse($this->getRequest()->getQuery('source'));
+        $sourceRequest = Router::reverseToArray($parsedRoute);
+
         $filter = [];
         $filter['project'] = $sourceRequest[0] ?? null;
 
@@ -80,7 +81,7 @@ class ProjectsWorkhoursController extends AppController
         /** @var \App\Model\Table\UsersTable $UsersTable */
         $UsersTable = TableRegistry::getTableLocator()->get('App.Users');
         $users = $UsersTable->fetchForCompany($this->getCurrentUser()->get('company_id'), ['inactive' => true]);
-        
+
         $this->set(compact('data', 'sourceRequest', 'users'));
 
         return null;
@@ -113,7 +114,10 @@ class ProjectsWorkhoursController extends AppController
                 $this->Flash->success(__d('projects', 'The projects workhour has been saved.'));
 
                 $referer = $this->getRequest()->getData('referer');
-                return $this->redirect($referer ?? ['action' => 'index', '?' => ['project' => $projectsWorkhour->project_id]]);
+
+                return $this->redirect(
+                    $referer ?? ['action' => 'index', '?' => ['project' => $projectsWorkhour->project_id]]
+                );
             }
             $this->Flash->error(__d('projects', 'The projects workhour could not be saved. Please, try again.'));
         }
