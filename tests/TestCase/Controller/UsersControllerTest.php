@@ -253,6 +253,8 @@ class UsersControllerTest extends TestCase
         ];
         $this->post('/users/edit/' . USER_ADMIN, $data);
         $this->assertRedirect('/users/view/' . USER_ADMIN);
+
+        $user = TableRegistry::getTableLocator()->get('Users')->get(USER_ADMIN);
         $this->assertTrue($this->checkPassword(USER_ADMIN, 'newpass'));
     }
 

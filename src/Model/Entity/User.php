@@ -41,6 +41,7 @@ class User extends Entity implements IdentityInterface
         'company_id' => true,
         'name' => true,
         'username' => true,
+        'passwd' => true,
         'email' => true,
         'reset_key' => true,
         'privileges' => true,
