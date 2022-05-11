@@ -26,6 +26,8 @@ class UtilsController extends AppController
         parent::beforeFilter($event);
 
         $this->Security->setConfig('validatePost', false);
+
+        return null;
     }
 
     /**
@@ -76,6 +78,12 @@ class UtilsController extends AppController
         return null;
     }
 
+    /**
+     * Create signature image
+     *
+     * @param array $data Certificate data
+     * @return string
+     */
     public function signature($data = null)
     {
         $certData = $data;
@@ -111,7 +119,7 @@ class UtilsController extends AppController
         imagettftext($newImage, 10, 0, 5, 15, $textColor, $fontFile, 'DOKUMENT JE ELEKTRONSKO PODPISAN');
 
         imagettftext($newImage, 10, 0, 5, 35, $textColor, $fontFile, 'Podpisnik:');
-        imagettftext($newImage, 10, 0, $leftWidth + 5, 35, $textColor, $fontFile, $certData['subject']['O'] . 
+        imagettftext($newImage, 10, 0, $leftWidth + 5, 35, $textColor, $fontFile, $certData['subject']['O'] .
             ' (' . $certData['subject']['GN'] . ' ' . $certData['subject']['SN'] . ')');
 
         imagettftext($newImage, 10, 0, 5, 50, $textColor, $fontFile, 'Izdajatelj:');
@@ -120,8 +128,9 @@ class UtilsController extends AppController
         imagettftext($newImage, 10, 0, 5, 65, $textColor, $fontFile, 'Št. certifikata: ');
         imagettftext($newImage, 10, 0, $leftWidth + 5, 65, $textColor, $fontFile, $certData['serialNumberHex']);
 
+        $certValidity = (string)(new FrozenDate($certData['validTo_time_t']));
         imagettftext($newImage, 10, 0, 5, 80, $textColor, $fontFile, 'Veljavnost:');
-        imagettftext($newImage, 10, 0, $leftWidth + 5, 80, $textColor, $fontFile, (string)(new FrozenDate($certData['validTo_time_t'])));
+        imagettftext($newImage, 10, 0, $leftWidth + 5, 80, $textColor, $fontFile, $certValidity);
 
         imagettftext($newImage, 10, 0, 5, 95, $textColor, $fontFile, 'Čas podpisa:');
         imagettftext($newImage, 10, 0, $leftWidth + 5, 95, $textColor, $fontFile, (string)(new FrozenTime()));
@@ -145,7 +154,7 @@ class UtilsController extends AppController
     /**
      * Base function for signing pdf files
      *
-     * @return void
+     * @return \Cake\Http\Response|null
      */
     public function pdfSign()
     {
@@ -165,7 +174,9 @@ class UtilsController extends AppController
             } else {
                 $pdfSignedContents = false;
 
-                if ($ret = openssl_pkcs12_read(file_get_contents($cert['tmp_name']), $certdata, $this->getRequest()->getData('pass'))) {
+                $certBinary = file_get_contents($cert['tmp_name']);
+                $ret = openssl_pkcs12_read($certBinary, $certdata, $this->getRequest()->getData('pass'));
+                if ($ret) {
                     $certdata = openssl_x509_parse($certdata['cert'], true);
                 } else {
                     throw new BadRequestException('Certificate Error.');
@@ -177,20 +188,18 @@ class UtilsController extends AppController
                 if (!empty($signatureFile['tmp_name']) && is_file($signatureFile['tmp_name'])) {
                     $image = $signatureFile['tmp_name'];
                 } else {
-                    $imageData = $this->signature($certdata, $this->getRequest()->getData('pass'));
+                    $imageData = $this->signature($certdata);
                     $image = TMP . uniqid() . '.png';
                     file_put_contents($image, $imageData);
                 }
 
-                $imagesize = @getimagesize($image);
+                $imagesize = getimagesize($image);
                 if ($imagesize === false) {
-                    fwrite(STDERR, "failed to open the image $image");
-
-                    return;
+                    throw new BadRequestException('Filed to open image ' . $image);
                 }
                 $pagesize = $pdfObj->get_page_size(0);
                 if ($pagesize === false) {
-                    return p_error('failed to get page size');
+                    throw new BadRequestException('Failed to get PDF page size');
                 }
 
                 $pagesize = explode(' ', $pagesize[0]->val());
@@ -241,5 +250,7 @@ class UtilsController extends AppController
                 }
             }
         }
+        
+        return null;
     }
 }

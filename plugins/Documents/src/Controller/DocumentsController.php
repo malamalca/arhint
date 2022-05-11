@@ -112,7 +112,9 @@ class DocumentsController extends BaseDocumentsController
      */
     public function list()
     {
-        $sourceRequest = Router::reverseToArray(Router::getRouteCollection()->parse($this->getRequest()->getQuery('source')));
+        $sourceRequest = Router::reverseToArray(
+            Router::getRouteCollection()->parse($this->getRequest()->getQuery('source'))
+        );
 
         $filter = [];
         switch ($sourceRequest['plugin']) {
@@ -186,6 +188,6 @@ class DocumentsController extends BaseDocumentsController
 
         $this->set(compact('projects', 'users'));
 
-        return parent::edit($document, $containTables);;
+        return parent::edit($document, $containTables);
     }
 }

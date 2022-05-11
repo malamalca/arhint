@@ -134,7 +134,9 @@ class InvoicesController extends BaseDocumentsController
      */
     public function list()
     {
-        $sourceRequest = Router::reverseToArray(Router::getRouteCollection()->parse($this->getRequest()->getQuery('source')));
+        $sourceRequest = Router::reverseToArray(
+            Router::getRouteCollection()->parse($this->getRequest()->getQuery('source'))
+        );
 
         $filter = [];
         switch ($sourceRequest['plugin']) {

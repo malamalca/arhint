@@ -110,7 +110,13 @@ class DocumentsEvents implements EventListenerInterface
 
             $view->Lil->insertIntoArray($panels->panels, $invoicesPanels);
 
-            $url = Router::url(['plugin' => 'Documents', 'controller' => 'Invoices', 'action' => 'list', '_ext' => 'aht', '?' => $params]);
+            $url = Router::url([
+                'plugin' => 'Documents',
+                'controller' => 'Invoices',
+                'action' => 'list',
+                '_ext' => 'aht',
+                '?' => $params,
+            ]);
             $view->Lil->jsReady('$.get("' . $url . '", function(data) { $("#tab-content-invoices").html(data); });');
         }
 
@@ -122,7 +128,13 @@ class DocumentsEvents implements EventListenerInterface
 
             $view->Lil->insertIntoArray($panels->panels, $documentsPanels);
 
-            $url = Router::url(['plugin' => 'Documents', 'controller' => 'Documents', 'action' => 'list', '_ext' => 'aht', '?' => $params]);
+            $url = Router::url([
+                'plugin' => 'Documents',
+                'controller' => 'Documents',
+                'action' => 'list',
+                '_ext' => 'aht',
+                '?' => $params,
+            ]);
             $view->Lil->jsReady('$.get("' . $url . '", function(data) { $("#tab-content-documents").html(data); });');
         }
 
