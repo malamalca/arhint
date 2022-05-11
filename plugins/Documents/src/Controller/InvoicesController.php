@@ -60,6 +60,7 @@ class InvoicesController extends BaseDocumentsController
         }
 
         // fetch invoices
+        $filter = $this->getRequest()->getQuery();
         $filter['counter'] = $counter->id;
         $filter['order'] = 'Invoices.counter DESC';
         $params = $this->Invoices->filter($filter);
@@ -121,7 +122,7 @@ class InvoicesController extends BaseDocumentsController
             }
         }
 
-        $this->set(compact('data', 'dateSpan', 'invoicesTotals', 'projects'));
+        $this->set(compact('data', 'filter', 'dateSpan', 'invoicesTotals', 'projects'));
 
         return null;
     }

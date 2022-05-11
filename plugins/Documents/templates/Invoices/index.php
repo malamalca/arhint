@@ -7,13 +7,12 @@ $end_span = empty($filter['end']) ? $dateSpan['end'] : $filter['end'];
 $startLink = $this->Html->link(
     (string)$start_span,
     ['action' => 'filter'],
-    ['id' => 'lil-invoices-link-date-start', 'class' => 'nowrap']
+    ['id' => 'lil-invoices-link-date-start', 'class' => 'nowrap'],
 );
 $endLink = $this->Html->link(
     (string)$end_span,
     ['action' => 'filter'],
-    ['id' => 'lil-invoices-link-date-end'],
-    ['class' => 'dropdown-trigger no-autoinit nowrap', 'data-target' => 'lil-invoices-input-date-end']
+    ['id' => 'lil-invoices-link-date-end', 'class' => 'nowrap'],
 );
 
 $counterLink = $this->Html->link(
@@ -287,7 +286,7 @@ echo $this->Lil->index($invoicesIndex, 'Documents.Invoices.index');
             }
         });
         $("#lil-invoices-link-date-start").click(function() {
-            $("#lil-documents-input-date-start").datepicker("open");
+            $("#lil-invoices-input-date-start").datepicker("open");
             return false;
         });
 
