@@ -226,6 +226,16 @@ $documentEdit = [
                     ],
                 ],
             ],
+            'file.model.0' => [
+                'method' => 'control',
+                'parameters' => [
+                    'field' => 'documents_attachments.0.model',
+                    'options' => [
+                        'type' => 'hidden',
+                        'value' => 'Invoice',
+                    ],
+                ],
+            ],
             'file.document_id.0' => [
                 'method' => 'control',
                 'parameters' => [

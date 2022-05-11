@@ -326,6 +326,9 @@ class DocumentsTable extends Table
                 $document = $this->newEmptyEntity();
                 $document->owner_id = $request->getAttribute('identity')->get('company_id');
                 $counterId = $request->getQuery('counter');
+                if (empty($counterId)) {
+                    $counterId = $request->getData('counter_id');
+                }
                 $document->documents_counter = $DocumentsCounters->get($counterId);
 
                 $document->issuer = $DocumentsClients->newEntity(['kind' => 'II']);

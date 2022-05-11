@@ -225,6 +225,16 @@ $documentEdit = [
                     ],
                 ],
             ],
+            'file.model.0' => [
+                'method' => 'control',
+                'parameters' => [
+                    'field' => 'documents_attachments.0.model',
+                    'options' => [
+                        'type' => 'hidden',
+                        'value' => 'Document',
+                    ],
+                ],
+            ],
             'file.scan.button' => [
                 'method' => 'button',
                 'parameters' => [

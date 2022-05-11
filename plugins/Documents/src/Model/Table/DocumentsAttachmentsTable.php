@@ -110,9 +110,19 @@ class DocumentsAttachmentsTable extends Table
      */
     public function afterSave(Event $event, Entity $entity, ArrayObject $options)
     {
-        $InvoicesTable = TableRegistry::getTableLocator()->get('Documents.Invoices');
-        $attachmentCount = $this->find()->where(['document_id' => $entity->document_id])->count();
-        $InvoicesTable->updateAll(['attachments_count' => $attachmentCount], ['id' => $entity->document_id]);
+        switch ($entity->model) {
+            case 'Invoice':
+                $InvoicesTable = TableRegistry::getTableLocator()->get('Documents.Invoices');
+                break;
+            case 'Document':
+                $InvoicesTable = TableRegistry::getTableLocator()->get('Documents.Documents');
+                break;
+        }
+
+        if (!empty($InvoicesTable)) {
+            $attachmentCount = $this->find()->where(['document_id' => $entity->document_id])->count();
+            $InvoicesTable->updateAll(['attachments_count' => $attachmentCount], ['id' => $entity->document_id]);
+        }
 
         if (
             !empty($options['uploadedFilename']) &&

@@ -58,6 +58,7 @@ class DocumentsController extends BaseDocumentsController
         }
 
         // fetch documents
+        $filter = $this->getRequest()->getQuery();
         $filter['counter'] = $counter->id;
         $filter['order'] = 'Documents.counter DESC';
         $params = $this->Documents->filter($filter);
@@ -99,7 +100,7 @@ class DocumentsController extends BaseDocumentsController
             }
         }
 
-        $this->set(compact('data', 'dateSpan', 'projects'));
+        $this->set(compact('data', 'dateSpan', 'filter', 'projects'));
 
         return null;
     }
@@ -168,8 +169,6 @@ class DocumentsController extends BaseDocumentsController
 
         $document = $this->Documents->parseRequest($this->getRequest(), $id);
 
-        parent::edit($document, $containTables);
-
         // for sidebar
         $this->set('currentCounter', $document->documents_counter->id);
 
@@ -187,6 +186,6 @@ class DocumentsController extends BaseDocumentsController
 
         $this->set(compact('projects', 'users'));
 
-        return null;
+        return parent::edit($document, $containTables);;
     }
 }
