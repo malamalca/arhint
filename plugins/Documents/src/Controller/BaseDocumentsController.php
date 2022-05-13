@@ -176,6 +176,21 @@ class BaseDocumentsController extends AppController
                     unset($document->documents_attachments);
                 }
 
+                if (!empty($document->documents_attachments)) {
+                    $attachmentsModel = null;
+                    switch ($this->documentsScope) {
+                        case 'Invoices':
+                            $attachmentsModel = 'Invoice';
+                            break;
+                        case 'Documents':
+                            $attachmentsModel = 'Document';
+                            break;
+                    }
+                    foreach ($document->documents_attachments as $k => $attachment) {
+                        $document->documents_attachments[$k]['model'] = $attachmentsModel;
+                    }
+                }
+
                 if (
                     $this->{$this->documentsScope}->save($document, [
                         'uploadedFilename' => $tmpNames,

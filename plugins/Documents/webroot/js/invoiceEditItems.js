@@ -116,7 +116,7 @@ jQuery.fn.InvoiceItemEditor = function (pOptions) {
     this.onRemoveButtonClick = function () {
         var row = $(this).closest('tr');
 
-        if ($('tbody:last > tr', $this).size() > 1) {
+        if ($('tbody:last > tr', $this).length > 1) {
             $(row).remove(); // we have to remove row so we know how many rows are actually visible
         } else {
             $this.clearRow(row);

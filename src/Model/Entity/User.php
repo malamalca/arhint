@@ -76,7 +76,7 @@ class User extends Entity implements IdentityInterface
      * Set password method.
      *
      * @param string $password Users password.
-     * @return string|null
+     * @return string|false
      */
     protected function _setPasswd(string $password): ?string
     {
