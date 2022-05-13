@@ -63,7 +63,7 @@ class ProjectsWorkhoursController extends AppController
      */
     public function list()
     {
-        $request = new \Cake\Http\ServerRequest(['url' => $this->getRequest()->getQuery('source')]);  
+        $request = new \Cake\Http\ServerRequest(['url' => $this->getRequest()->getQuery('source')]);
         $sourceRequest = Router::parseRequest($request);
 
         $filter = [];

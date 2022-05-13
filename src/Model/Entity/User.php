@@ -80,7 +80,8 @@ class User extends Entity implements IdentityInterface
      */
     protected function _setPasswd(string $password): ?string
     {
-        $ret = (new DefaultPasswordHasher())->hash($password); 
+        $ret = (new DefaultPasswordHasher())->hash($password);
+
         return $ret === false ? null : $ret;
     }
 

@@ -49,7 +49,6 @@ class UtilsController extends AppController
                     '-sOutputFile=%2$s %1$s';
             }
 
-            
             $files = $this->getRequest()->getData('file');
 
             $sourcePDF = [];
@@ -62,7 +61,8 @@ class UtilsController extends AppController
 
             $outputPDF = $this->getRequest()->getData('filename');
 
-            $command = sprintf(escapeshellarg($gsProgram) . ' ' . $gsParams, implode(' ', $sourcePDF), escapeshellarg(TMP . $outputPDF));
+            $command = escapeshellarg($gsProgram) . ' ' . $gsParams;
+            $command = sprintf($command, implode(' ', $sourcePDF), escapeshellarg(TMP . $outputPDF));
 
             $ret = exec($command);
             if ($ret) {
