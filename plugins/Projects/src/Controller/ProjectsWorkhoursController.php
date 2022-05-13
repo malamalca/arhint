@@ -63,11 +63,11 @@ class ProjectsWorkhoursController extends AppController
      */
     public function list()
     {
-        $parsedRoute = Router::getRouteCollection()->parse($this->getRequest()->getQuery('source'));
-        $sourceRequest = Router::reverseToArray($parsedRoute);
+        $request = new \Cake\Http\ServerRequest(['url' => $this->getRequest()->getQuery('source')]);  
+        $sourceRequest = Router::parseRequest($request);
 
         $filter = [];
-        $filter['project'] = $sourceRequest[0] ?? null;
+        $filter['project'] = $sourceRequest['pass'][0] ?? null;
 
         $params = $this->ProjectsWorkhours->filter($filter);
 

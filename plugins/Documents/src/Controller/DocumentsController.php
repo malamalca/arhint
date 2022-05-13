@@ -58,7 +58,8 @@ class DocumentsController extends BaseDocumentsController
         }
 
         // fetch documents
-        $filter = $this->getRequest()->getQuery();
+        $filter = [];
+        $filter = array_merge($filter, $this->getRequest()->getQuery());
         $filter['counter'] = $counter->id;
         $filter['order'] = 'Documents.counter DESC';
         $params = $this->Documents->filter($filter);
@@ -112,17 +113,16 @@ class DocumentsController extends BaseDocumentsController
      */
     public function list()
     {
-        $sourceRequest = Router::reverseToArray(
-            Router::getRouteCollection()->parse($this->getRequest()->getQuery('source'))
-        );
+        $request = new \Cake\Http\ServerRequest(['url' => $this->getRequest()->getQuery('source')]);  
+        $sourceRequest = Router::parseRequest($request);
 
         $filter = [];
         switch ($sourceRequest['plugin']) {
             case 'Projects':
-                $filter['project'] = $sourceRequest[0] ?? null;
+                $filter['project'] = $sourceRequest['pass'][0] ?? null;
                 break;
             case 'Crm':
-                $filter['contact_id'] = $sourceRequest[0] ?? null;
+                $filter['contact_id'] = $sourceRequest['pass'][0] ?? null;
                 break;
         }
 

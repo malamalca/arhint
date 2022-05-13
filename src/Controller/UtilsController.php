@@ -41,29 +41,30 @@ class UtilsController extends AppController
 
         if ($this->getRequest()->is(['patch', 'post', 'put'])) {
             $gsProgram = Configure::read('Ghostscript.executable');
-            $gsParams = '-dBATCH -dNOPAUSE -sDEVICE=pdfwrite -sOutputFile="%2$s" %1$s';
+            $gsParams = '-dBATCH -dNOPAUSE -sDEVICE=pdfwrite -sOutputFile=%2$s %1$s';
 
             if ($this->getRequest()->getData('pdfa')) {
                 $gsParams = '-dPDFA -dBATCH -dNOPAUSE -sDEVICE=pdfwrite ' .
                     '-sColorConversionStrategy=UseDeviceIndependentColor -dPDFACompatibilityPolicy=2 ' .
-                    '-sOutputFile="%2$s" %1$s';
+                    '-sOutputFile=%2$s %1$s';
             }
 
-            $sourcePDF = '';
+            
             $files = $this->getRequest()->getData('file');
 
+            $sourcePDF = [];
             foreach ($files as $file) {
                 if (is_file($file['tmp_name'])) {
-                    $sourcePDF .= '"' . $file['tmp_name'] . '" ';
+                    //$sourcePDF .= '"' . $file['tmp_name'] . '" ';
+                    $sourcePDF[] = escapeshellarg($file['tmp_name']);
                 }
             }
 
             $outputPDF = $this->getRequest()->getData('filename');
 
-            $command = sprintf('"' . $gsProgram . '" ' . $gsParams, $sourcePDF, TMP . $outputPDF);
+            $command = sprintf(escapeshellarg($gsProgram) . ' ' . $gsParams, implode(' ', $sourcePDF), escapeshellarg(TMP . $outputPDF));
 
-            ///dd($command);
-            $ret = shell_exec($command);
+            $ret = exec($command);
             if ($ret) {
                 $response = $this->getResponse()
                     ->withType('application/json')

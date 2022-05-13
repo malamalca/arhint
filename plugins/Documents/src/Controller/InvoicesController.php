@@ -60,7 +60,7 @@ class InvoicesController extends BaseDocumentsController
         }
 
         // fetch invoices
-        $filter = $this->getRequest()->getQuery();
+        $filter = (array)$this->getRequest()->getQuery();
         $filter['counter'] = $counter->id;
         $filter['order'] = 'Invoices.counter DESC';
         $params = $this->Invoices->filter($filter);
@@ -134,17 +134,16 @@ class InvoicesController extends BaseDocumentsController
      */
     public function list()
     {
-        $sourceRequest = Router::reverseToArray(
-            Router::getRouteCollection()->parse($this->getRequest()->getQuery('source'))
-        );
+        $request = new \Cake\Http\ServerRequest(['url' => $this->getRequest()->getQuery('source')]);  
+        $sourceRequest = Router::parseRequest($request);
 
         $filter = [];
         switch ($sourceRequest['plugin']) {
             case 'Projects':
-                $filter['project'] = $sourceRequest[0] ?? null;
+                $filter['project'] = $sourceRequest['pass'][0] ?? null;
                 break;
             case 'Crm':
-                $filter['contact_id'] = $sourceRequest[0] ?? null;
+                $filter['contact_id'] = $sourceRequest['pass'][0] ?? null;
                 break;
         }
 
