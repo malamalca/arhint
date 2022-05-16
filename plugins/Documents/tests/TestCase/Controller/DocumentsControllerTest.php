@@ -259,7 +259,7 @@ class DocumentsControllerTest extends IntegrationTestCase
         $this->enableSecurityToken();
         $this->enableCsrfToken();
 
-        $this->post('documents/documents/edit/d0d59a31-6de7-4eb4-8230-ca09113a7fe5?counter=1d53bc5b-de2d-4e85-b13b-81b39a97fc90', $data);
+        $this->post('documents/documents/edit/d0d59a31-6de7-4eb4-8230-ca09113a7fe6?counter=1d53bc5b-de2d-4e85-b13b-81b39a97fc90', $data);
         $this->assertRedirect(['action' => 'view', 'd0d59a31-6de7-4eb4-8230-ca09113a7fe6']);
 
         $Documents = TableRegistry::getTableLocator()->get('Documents.Documents');
