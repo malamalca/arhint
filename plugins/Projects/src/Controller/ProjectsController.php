@@ -114,7 +114,7 @@ class ProjectsController extends AppController
      */
     public function view($id = null)
     {
-        $project = $this->Projects->get($id);
+        $project = $this->Projects->get($id, ['contain' => 'Users']);
 
         $this->Authorization->authorize($project);
 
@@ -210,6 +210,102 @@ class ProjectsController extends AppController
         $this->set(compact('project', 'projectStatuses'));
 
         return null;
+    }
+
+    /**
+     * User method
+     *
+     * @param string $ProjectId Project id.
+     * @param string|null $userId User id.
+     * @return \Cake\Http\Response|null Redirects on successful edit, renders view otherwise.
+     * @throws \Cake\Http\Exception\NotFoundException When record not found.
+     */
+    public function user($projectId, $userId = null)
+    {
+        $project = $this->Projects->get($projectId);
+        $this->Authorization->authorize($project);
+
+        $ProjectsUsersTable = TableRegistry::getTableLocator()->get('Projects.ProjectsUsers');
+
+        $projectsUser = null;
+        if ($userId) {
+            $projectsUser = $ProjectsUsersTable->find()
+                ->select()
+                ->where(['project_id' => $projectId, 'user_id' => $userId])
+                ->first();
+        }
+
+        if (!$projectsUser) {
+            $projectsUser = $ProjectsUsersTable->newEmptyEntity();
+            $projectsUser->project_id = $projectId;
+        }
+
+        if ($this->getRequest()->is(['patch', 'post', 'put'])) {
+            $projectsUser = $ProjectsUsersTable->patchEntity($projectsUser, $this->getRequest()->getData());
+
+            if ($ProjectsUsersTable->save($projectsUser)) {
+                $this->Flash->success(__d('projects', 'The project user has been saved.'));
+                $redirect = $this->getRequest()->getData('redirect');
+                if (!empty($redirect)) {
+                    return $this->redirect(base64_decode($redirect));
+                }
+
+                return $this->redirect(['action' => 'view', $project->id, '?' => ['tab' => 'users']]);
+            }
+            $this->Flash->error(__d('projects', 'The project user could not be saved. Please, try again.'));
+        }
+
+        /** @var \App\Model\Table\UsersTable $UsersTable */
+        $UsersTable = TableRegistry::getTableLocator()->get('App.Users');
+        $users = $UsersTable->fetchForCompany($this->getCurrentUser()->get('company_id'));
+        foreach ($users as $i => $user) {
+            if ($user->hasRole('admin')) {
+                unset($users[$i]);
+            }
+        }
+        if (count($users) == 0) {
+            $this->Flash->error(__d('projects', 'No users found.'));
+
+            return $this->redirect(['action' => 'view', $project->id, '?' => ['tab' => 'users']]);
+        }
+
+        $this->set(compact('projectsUser', 'users'));
+
+        return null;
+    }
+
+    /**
+     * Delete user method
+     *
+     * @param string|null $id Project id.
+     * @return \Cake\Http\Response|null Redirects to index.
+     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
+     */
+    public function deleteUser($projectId, $userId)
+    {
+        $this->getRequest()->allowMethod(['post', 'delete', 'get']);
+        $project = $this->Projects->get($projectId);
+        $this->Authorization->authorize($project, 'delete');
+
+        $ProjectsUsersTable = TableRegistry::getTableLocator()->get('Projects.ProjectsUsers');
+        $projectsUser = $ProjectsUsersTable->find()
+            ->select()
+            ->where(['project_id' => $projectId, 'user_id' => $userId])
+            ->first();
+
+        if (!$projectsUser) {
+            $this->Flash->error(__d('projects', 'No link found.'));
+
+            return $this->redirect(['action' => 'view', $project->id, '?' => ['tab' => 'users']]);
+        }
+
+        if ($ProjectsUsersTable->delete($projectsUser)) {
+            $this->Flash->success(__d('projects', 'The project user has been deleted.'));
+        } else {
+            $this->Flash->error(__d('projects', 'The project user could not be deleted. Please, try again.'));
+        }
+
+        return $this->redirect(['action' => 'view', $project->id, '?' => ['tab' => 'users']]);
     }
 
     /**

@@ -50,13 +50,19 @@ $projectView = [
             ],
             'params' => ['id' => 'add-projects-workhour'],
         ],
+        'users' => [
+            'title' => __d('projects', 'Add User'),
+            'visible' => true,
+            'url' => [
+                'controller' => 'Projects',
+                'action' => 'user',
+                $project->id,
+            ],
+            'params' => ['id' => 'add-projects-user'],
+        ],
     ],
     'entity' => $project,
     'panels' => [
-        //'logo' => sprintf(
-        //    '<div id="project-logo">%1$s</div>',
-        //    $this->Html->image(['action' => 'picture', $project->id])
-        //),
         'properties' => [
             'lines' => [
                 'status' => [
@@ -87,6 +93,12 @@ $projectView = [
                 __d('projects', 'Workhours'),
                 $this->getRequest()->getQuery('tab') == 'workhours' ? ' class="active"' : ''
             ),
+            'users' => !$this->getCurrentUser()->hasRole('admin') ? null : sprintf(
+                '<li class="tab col"><a href="%1$s" target="_self"%3$s>%2$s</a></li>',
+                $this->Url->build([$project->id, '?' => ['tab' => 'users']]),
+                __d('projects', 'Users'),
+                $this->getRequest()->getQuery('tab') == 'users' ? ' class="active"' : ''
+            ),
             'post' => '</ul></div>',
         ]],
         'tabs_end' => '</div>',
@@ -98,32 +110,42 @@ $this->set('tab', $activeTab);
 
 switch ($activeTab) {
     case 'logs':
-        $table = [
-            'params' => ['id' => 'projects-logs'],
-            'table' => [
-                'pre' => '<div id="tabc_logs" class="col s12">',
-                'post' => '</div>',
-                'params' => ['class' => 'striped', 'id' => 'projects-logs'],
-                'body' => ['rows' => []],
-            ],
-        ];
-        foreach ($logs as $log) {
-            $table['table']['body']['rows'][] = ['columns' => [
-                'user' => h($users[$log->user_id]->name),
-                'descript' =>
-                    sprintf(
-                        '<div class="logs-header">%2$s %1$s</div>',
-                        $this->Time->i18nFormat($log->created),
-                        $this->getCurrentUser()->hasRole('admin') || ($this->getCurrentUser()->id == $log->user_id) ?
-                            $this->Html->link(
-                                __d('projects', 'delete'),
-                                ['controller' => 'ProjectsLogs', 'action' => 'delete', $log->id]
-                            )
-                            :
-                            ''
-                    ) .
-                    $this->Lil->autop($log->descript),
-            ]];
+        if ($logs->isEmpty()) {
+            $table = [
+                'params' => ['id' => 'projects-logs'],
+                'lines' => [
+                    __d('projects', 'No logs found.'),
+                ],
+            ];
+        } else {
+            $table = [
+                'params' => ['id' => 'projects-logs'],
+                'table' => [
+                    'pre' => '<div id="tabc_logs" class="col s12">',
+                    'post' => '</div>',
+                    'params' => ['class' => 'striped', 'id' => 'projects-logs'],
+                    'body' => ['rows' => []],
+                ],
+            ];
+            foreach ($logs as $log) {
+                $table['table']['body']['rows'][] = ['columns' => [
+                    'user' => h($users[$log->user_id]->name),
+                    'descript' =>
+                        sprintf(
+                            '<div class="logs-header">%2$s %1$s</div>',
+                            $this->Time->i18nFormat($log->created),
+                            $this->getCurrentUser()->hasRole('admin') || ($this->getCurrentUser()->id == $log->user_id) ?
+                                $this->Html->link(
+                                    __d('projects', 'delete'),
+                                    ['controller' => 'ProjectsLogs', 'action' => 'delete', $log->id]
+                                )
+                                :
+                                ''
+                        ) .
+                        $log->descript .
+                        strip_tags($log->descript, ['a', 'strong', 'em', 'span', 'sub', 'sup', 'table', 'tr', 'td', 'p', 'pre', 'blockquote', 'img']),
+                ]];
+            }
         }
         $this->Lil->insertIntoArray($projectView['panels'], ['logs' => $table], ['before' => 'tabs_end']);
         break;
@@ -151,6 +173,36 @@ switch ($activeTab) {
         $url = Router::url(['plugin' => 'Projects', 'controller' => 'ProjectsWorkhours', 'action' => 'list', '_ext' => 'aht', '?' => $params]);
         $this->Lil->jsReady('$.get("' . $url . '", function(data) { $("#tab-content-workhours").html(data); });');
 
+        break;
+    case 'users':
+        if (!$this->getCurrentUser()->hasRole('admin')) {
+            break;
+        }
+        if (count($project->users) == 0) {
+            $table = [
+                'params' => ['id' => 'projects-users'],
+                'lines' => [
+                    __d('projects', 'No users found.'),
+                ],
+            ];
+        } else {
+            $table = [
+                'params' => ['id' => 'projects-users'],
+                'table' => [
+                    'pre' => '<div id="tabc_users" class="col s12">',
+                    'post' => '</div>',
+                    'params' => ['class' => 'striped', 'id' => 'list-projects-users'],
+                    'body' => ['rows' => []],
+                ],
+            ];
+            foreach ($project->users as $user) {
+                $table['table']['body']['rows'][] = ['columns' => [
+                    'user' => h($user->name),
+                    'actions' => $this->Lil->deleteLink(['action' => 'deleteUser', $project->id, $user->id]),
+                ]];
+            }
+        }
+        $this->Lil->insertIntoArray($projectView['panels'], ['users' => $table], ['before' => 'tabs_end']);
         break;
 }
 

@@ -60,6 +60,11 @@ class ProjectsTable extends Table
             'className' => 'Projects.ProjectsLogs',
         ]);
 
+        $this->belongsToMany('Users', [
+            'joinTable' => 'projects_users',
+        ]);
+
+
         $this->hasOne('LastLog', [
             'foreignKey' => false,
             'className' => 'Projects.ProjectsLogs',

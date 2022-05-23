@@ -62,7 +62,9 @@ class ProjectsUsersTable extends Table
     {
         $validator
             ->uuid('id')
-            ->allowEmptyString('id', null, 'create');
+            ->allowEmptyString('id', null, 'create')
+            ->notEmptyString('project_id')
+            ->notEmptyString('user_id');
 
         return $validator;
     }

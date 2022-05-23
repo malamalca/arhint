@@ -84,8 +84,8 @@ foreach ($projects as $project) {
     $lastLogDescript = '';
     if (!empty($project->last_log)) {
         $lastLogDescript = sprintf(
-            '<span class="small">%2$s, %3$s</span><div>%1$s</div>',
-            h($project->last_log->descript),
+            '<span class="small">%2$s, %3$s</span><div class="truncate">%1$s</div>',
+            h(strip_tags($project->last_log->descript)),
             $project->last_log->created,
             $project->last_log->user->name
         );

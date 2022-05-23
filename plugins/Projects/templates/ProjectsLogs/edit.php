@@ -34,12 +34,11 @@ $editForm = [
             ],
 
             'descript' => [
-                'method' => 'control',
+                'method' => 'textarea',
                 'parameters' => [
                     'descript',
                     [
-                        'type' => 'textarea',
-                        'label' => false,
+                        'id' => 'projects-logs-descript',
                     ],
                 ],
             ],
@@ -57,7 +56,7 @@ $editForm = [
         ],
     ],
 ];
-$this->Lil->jsReady('$("#descript").focus();');
+//$this->Lil->jsReady('$("#projects-logs-descript").focus();');
 echo $this->Lil->form($editForm, 'Projects.ProjectsLogs.edit');
 echo $this->Html->script('/Documents/js/tinymce/tinymce.min.js');
 ?>
@@ -66,7 +65,7 @@ echo $this->Html->script('/Documents/js/tinymce/tinymce.min.js');
         // HTML Wysiwyg Javascript Code
         //$('textarea#document-descript').textareaAutoSize();
         tinymce.init({
-            selector:'textarea#projects-logs-descript',
+            selector:'#projects-logs-descript',
             menubar:false,
             statusbar: false,
             toolbar: "undo redo | styleselect | bold italic underline subscript superscript | bullist numlist | indent outdent | pagebreak | pasteword table image",
@@ -76,7 +75,7 @@ echo $this->Html->script('/Documents/js/tinymce/tinymce.min.js');
             autoresize_max_height: 350,
             width: "700px"
         });
-        tinymce.execCommand('mceFocus',false,'projects-logs-descript');
+        //tinymce.execCommand('mceFocus',false,'projects-logs-descript');
 
     })
 </script>

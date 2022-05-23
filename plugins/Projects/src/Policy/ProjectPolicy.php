@@ -33,6 +33,18 @@ class ProjectPolicy
     }
 
     /**
+     * Authorize user action
+     *
+     * @param \App\Model\Entity\User $user User
+     * @param \Projects\Model\Entity\Project $entity Entity
+     * @return bool
+     */
+    public function canUser($user, $entity)
+    {
+        return $entity->owner_id == $user->company_id && $user->hasRole('admin');
+    }
+
+    /**
      * Authorize delete action
      *
      * @param \App\Model\Entity\User $user User

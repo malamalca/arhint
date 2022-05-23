@@ -33,6 +33,7 @@ textarea#projects-logs-descript {
     margin: 0;
 }
 
+.view-panel#projects-users table,
 .view-panel#projects-logs table {
     width: 750px;
     border-top: solid 1px #A8A8A8;
