@@ -77,11 +77,12 @@ $documents_index = [
     'table' => [
         'pre' => $this->Arhint->searchPanel($this->getRequest()->getQuery('search', '')),
         'parameters' => [
-            'width' => '100%', 'cellspacing' => 0, 'cellpadding' => 0, 'id' => 'AdminDocumentsIndex',
+            'width' => '100%', 'cellspacing' => 0, 'cellpadding' => 0, 'id' => 'AdminInvoicesIndex',
         ],
         'head' => ['rows' => [
             1 => ['columns' => [
                 'no' => [
+                    'parameters' => ['class' => 'left-align hide-on-small-only'],
                     'html' => $this->Paginator->sort('no', __d('documents', 'No')),
                 ],
                 'date' => [
@@ -104,7 +105,7 @@ $documents_index = [
         ]],
         'foot' => ['rows' => [0 => ['columns' => [
             'no' => [
-                'parameters' => ['class' => 'left-align '],
+                'parameters' => ['class' => 'left-align', 'colspan' => 2],
                 'html' => '<ul class="paginator">' . $this->Paginator->numbers([
                     'first' => '<<',
                     'last' => '>>',
@@ -129,7 +130,7 @@ foreach ($data as $document) {
     $documents_index['table']['body']['rows'][]['columns'] = [
         'no' => [
             'parameters' => ['class' => 'nowrap'],
-            'html' => '<div class="documents-no">' .
+            'html' => '<div class="invoices-no">' .
                 strtr(
                     $link_template,
                     [

@@ -114,9 +114,9 @@ class DocumentsController extends BaseDocumentsController
     public function list()
     {
         $request = new \Cake\Http\ServerRequest(['url' => $this->getRequest()->getQuery('source')]);
+
         $sourceRequest = Router::parseRequest($request);
 
-        $filter = [];
         switch ($sourceRequest['plugin']) {
             case 'Projects':
                 $filter['project'] = $sourceRequest['pass'][0] ?? null;
@@ -125,6 +125,10 @@ class DocumentsController extends BaseDocumentsController
                 $filter['contact_id'] = $sourceRequest['pass'][0] ?? null;
                 break;
         }
+
+        $sourceRequest = array_merge($sourceRequest, $sourceRequest['pass']);
+        unset($sourceRequest['_matchedRoute']);
+        unset($sourceRequest['pass']);
 
         $params = $this->Documents->filter($filter);
 

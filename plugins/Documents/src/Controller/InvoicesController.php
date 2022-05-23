@@ -147,6 +147,10 @@ class InvoicesController extends BaseDocumentsController
                 break;
         }
 
+        $sourceRequest = array_merge($sourceRequest, $sourceRequest['pass']);
+        unset($sourceRequest['_matchedRoute']);
+        unset($sourceRequest['pass']);
+
         $params = $this->Invoices->filter($filter);
 
         $query = $this->Authorization->applyScope($this->Invoices->find(), 'index')
