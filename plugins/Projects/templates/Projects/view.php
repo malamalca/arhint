@@ -52,7 +52,7 @@ $projectView = [
         ],
         'users' => [
             'title' => __d('projects', 'Add User'),
-            'visible' => true,
+            'visible' => $this->getCurrentUser()->hasRole('admin'),
             'url' => [
                 'controller' => 'Projects',
                 'action' => 'user',
