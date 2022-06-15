@@ -117,6 +117,8 @@ class DocumentsController extends BaseDocumentsController
 
         $sourceRequest = Router::parseRequest($request);
 
+        $filter = [];
+        $filter['order'] = $this->getRequest()->getQuery('sort') ? null : 'dat_issue DESC';
         switch ($sourceRequest['plugin']) {
             case 'Projects':
                 $filter['project'] = $sourceRequest['pass'][0] ?? null;

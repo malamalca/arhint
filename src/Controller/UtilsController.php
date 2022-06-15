@@ -172,6 +172,25 @@ class UtilsController extends AppController
             $pdfObj = PDFDoc::from_string($pdfContents);
 
             if ($pdfObj === false) {
+                $gsProgram = Configure::read('Ghostscript.executable');
+                $gsParams = '-dBATCH -dNOPAUSE -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -sOutputFile=%2$s %1$s';
+
+                $outputPDF = $this->getRequest()->getData('filename');
+                $tmpPDF = tempnam(constant('TMP'), 'Sign') . '.pdf';
+
+                $command = escapeshellarg($gsProgram) . ' ' . $gsParams;
+                $command = sprintf($command, escapeshellarg($file['tmp_name']), escapeshellarg($tmpPDF));
+
+                $ret = exec($command);
+                if ($ret) {
+                    $pdfContents = file_get_contents($tmpPDF);
+                    $pdfObj = PDFDoc::from_string($pdfContents);
+                } else {
+                    throw new BadRequestException('Error processing pdf files.');
+                }
+            }
+            
+            if ($pdfObj === false) {
                 throw new BadRequestException('Error processing pdf files.');
             } else {
                 $pdfSignedContents = false;
