@@ -37,6 +37,6 @@ class DocumentsClientPolicy
         /** @var \Documents\Model\Table\DocumentsClientsTable $DocumentsClientsTable */
         $DocumentsClientsTable = TableRegistry::getTableLocator()->get('Documents.DocumentsClients');
 
-        return $DocumentsClientsTable->isOwnedBy($entity, $user->company_id) && $user->hasRole('editor');
+        return /*$DocumentsClientsTable->isOwnedBy($entity, $user->company_id) && */$user->hasRole('editor');
     }
 }
