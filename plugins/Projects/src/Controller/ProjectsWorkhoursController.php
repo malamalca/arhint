@@ -42,18 +42,48 @@ class ProjectsWorkhoursController extends AppController
      */
     public function index()
     {
-        /** @var \Projects\Model\Entity\Project $project */
-        $project = $this->ProjectsWorkhours->Projects->get($this->getRequest()->getQuery('project'));
-        $this->Authorization->authorize($project, 'view');
+        $this->Authorization->skipAuthorization();
 
+        $filter = $this->getRequest()->getQuery();
+        if (!$this->getCurrentUser()->hasRole('admin')) {
+            $filter['user'] = $this->getRequest()->getQuery('user');
+        }
+
+        $params = $this->ProjectsWorkhours->filter($filter);
         $query = $this->ProjectsWorkhours->find()
-            ->where(['project_id' => $project->id])
-            ->contain(['Users'])
-            ->order(['started DESC']);
+            ->where($params['conditions']);
 
-        $projectsWorkhours = $this->paginate($query);
 
-        $this->set(compact('projectsWorkhours', 'project'));
+        $sumQuery = clone $query;
+        $totalDuration = $sumQuery
+            ->select([
+                'sumDurations' => $sumQuery->func()->sum('duration'),
+            ])
+            ->disableHydration()
+            ->first();
+        $totalDuration = $totalDuration['sumDurations'];
+
+        $projectsWorkhours = $this->paginate($query, ['order' => ['started' => 'DESC']]);
+
+        if ($this->getCurrentUser()->hasRole('admin')) {
+            /** @var \App\Model\Table\UsersTable $UsersTable */
+            $UsersTable = TableRegistry::getTableLocator()->get('App.Users');
+            $users = $UsersTable->fetchForCompany($this->getCurrentUser()->get('company_id'));
+        } else {
+            $users[$this->getCurrentUser()->get('id')] = $this->getCurrentUser()->getOriginalData();
+        }
+
+        $projects = $this->Authorization->applyScope($this->ProjectsWorkhours->Projects->find(), 'index')
+            ->where(['active' => true])
+            ->order(['no DESC', 'title'])
+            ->all()
+            ->combine('id', function ($entity) {
+                return $entity;
+            })
+            ->toArray();
+
+
+        $this->set(compact('projectsWorkhours', 'filter', 'users', 'projects', 'totalDuration'));
     }
 
     /**
@@ -66,17 +96,20 @@ class ProjectsWorkhoursController extends AppController
         $request = new \Cake\Http\ServerRequest(['url' => $this->getRequest()->getQuery('source')]);
         $sourceRequest = Router::parseRequest($request);
 
+        $sourceRequest = array_merge($sourceRequest, $sourceRequest['pass']);
+        unset($sourceRequest['_matchedRoute']);
+        unset($sourceRequest['pass']);
+
         $filter = [];
         $filter['project'] = $sourceRequest['pass'][0] ?? null;
 
         $params = $this->ProjectsWorkhours->filter($filter);
 
         $query = $this->Authorization->applyScope($this->ProjectsWorkhours->find(), 'index')
-            ->select(['id', 'project_id', 'user_id', 'started', 'duration'])
-            ->where($params['conditions'])
-            ->order($params['order']);
+            ->select(['id', 'project_id', 'user_id', 'started', 'duration', 'dat_confirmed'])
+            ->where($params['conditions']);
 
-        $data = $this->paginate($query, ['limit' => 5]);
+        $data = $this->paginate($query, ['limit' => 5, 'order' => ['started' => 'desc']]);
 
         /** @var \App\Model\Table\UsersTable $UsersTable */
         $UsersTable = TableRegistry::getTableLocator()->get('App.Users');
@@ -223,5 +256,15 @@ class ProjectsWorkhoursController extends AppController
         }
 
         return $this->getResponse();
+    }
+
+    /**
+     * Do a report
+     *
+     * @return \Cake\Http\Response|null
+     */
+    public function report()
+    {
+
     }
 }

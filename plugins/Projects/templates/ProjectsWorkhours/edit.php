@@ -72,6 +72,19 @@ $editForm = [
                     ],
                 ],
             ],
+            'descript' => [
+                'method' => 'control',
+                'parameters' => [
+                    'field' => 'descript',
+                    'options' => [
+                        'type' => 'textarea',
+                        'label' => [
+                            'text' => __d('projects', 'Description') . ':',
+                            'class' => 'active',
+                        ],
+                    ],
+                ],
+            ],
             'submit' => [
                 'method' => 'button',
                 'parameters' => [

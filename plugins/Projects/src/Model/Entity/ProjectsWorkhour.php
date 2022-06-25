@@ -13,6 +13,8 @@ use Cake\ORM\Entity;
  * @property string $user_id
  * @property \Cake\I18n\FrozenTime $started
  * @property int $duration
+ * @property \Cake\I18n\FrozenDate $dat_confirmed
+ * @property string $descript
  * @property \Cake\I18n\FrozenTime $created
  * @property \Cake\I18n\FrozenTime $modified
  *
@@ -35,6 +37,8 @@ class ProjectsWorkhour extends Entity
         'user_id' => true,
         'started' => true,
         'duration' => true,
+        'dat_confirmed' => true,
+        'descript' => true,
         'created' => true,
         'modified' => true,
         'project' => true,

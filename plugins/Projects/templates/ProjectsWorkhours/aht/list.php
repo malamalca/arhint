@@ -57,6 +57,9 @@ if ($data->count() > 0) {
     $total = 0;
 
     foreach ($data as $workhour) {
+        $canEdit = $this->getCurrentUser()->hasRole('admin') || 
+            (empty($workhour->dat_confirmed) && ($this->getCurrentUser()->id == $workhour->user_id));
+
         $workhoursTable['body']['rows'][]['columns'] = [
             'user' => [
                 'parameters' => ['class' => 'left-align'],
@@ -71,9 +74,9 @@ if ($data->count() > 0) {
                 'html' => $this->Arhint->duration($workhour->duration),
             ],
             'actions' => [
-                'html' => $this->getCurrentUser()->hasRole('admin') || ($this->getCurrentUser()->id == $workhour->user_id) ?
-                    $this->Lil->deleteLink($workhour->id) : null
-            ]
+                'parameters' => ['class' => 'center-align'],
+                'html' => !$canEdit ? ' <i class="material-icons">lock_outline</i>' : $this->Lil->deleteLink($workhour->id),
+            ],
         ];
 
         $total += $workhour->duration;

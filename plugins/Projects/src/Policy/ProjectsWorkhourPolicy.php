@@ -19,6 +19,10 @@ class ProjectsWorkhourPolicy
      */
     public function canEdit($user, $entity)
     {
+        if (!$user->hasRole('admin') && !empty($entity->dat_confirmed)) {
+            return false;
+        }
+
         /** @var \Projects\Model\Table\ProjectsTable $ProjectsTable */
         $ProjectsTable = TableRegistry::getTableLocator()->get('Projects.Projects');
 
@@ -34,6 +38,10 @@ class ProjectsWorkhourPolicy
      */
     public function canDelete($user, $entity)
     {
+        if (!$user->hasRole('admin') && !empty($entity->dat_confirmed)) {
+            return false;
+        }
+
         /** @var \Projects\Model\Table\ProjectsTable $ProjectsTable */
         $ProjectsTable = TableRegistry::getTableLocator()->get('Projects.Projects');
 

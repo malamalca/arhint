@@ -67,6 +67,9 @@ class ProjectsWorkhoursTable extends Table
             ->allowEmptyString('started');
 
         $validator
+            ->notEmptyString('descript');
+
+        $validator
             ->integer('duration');
 
         return $validator;
@@ -119,7 +122,11 @@ class ProjectsWorkhoursTable extends Table
         }
 
         if (!empty($filter['project'])) {
-            $ret['conditions'][]['ProjectsWorkhours.project_id'] = $filter['project'];
+            $ret['conditions'][]['ProjectsWorkhours.project_id IN'] = (array)$filter['project'];
+        }
+
+        if (!empty($filter['user'])) {
+            $ret['conditions'][]['ProjectsWorkhours.user_id IN'] = (array)$filter['user'];
         }
 
         $ret['contain'] = [];
