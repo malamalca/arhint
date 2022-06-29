@@ -49,13 +49,13 @@ use Cake\Routing\Router;
                     <a href="<?= Router::url('/', true) ?>" class="sidenav-avatar">
                     <?= $this->Html->image(
                         Router::url(
-                            [
+                            array_filter([
                                 'plugin' => false,
                                 'controller' => 'Users',
                                 'action' => 'avatar',
                                 $this->getCurrentUser() ? $this->getCurrentUser()->get('id') : null,
                                 '_ext' => 'png',
-                            ],
+                            ]),
                             true
                         ),
                         ['class' => 'circle']

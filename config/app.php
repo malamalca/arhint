@@ -186,7 +186,7 @@ return [
      */
     'Error' => [
         'errorLevel' => E_ALL,
-        'exceptionRenderer' => ExceptionRenderer::class,
+        //'exceptionRenderer' => ExceptionRenderer::class,
         'skipLog' => [],
         'log' => true,
         'trace' => true,

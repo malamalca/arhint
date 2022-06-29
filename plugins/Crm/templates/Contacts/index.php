@@ -31,8 +31,7 @@ $contactsIndex = [
         ],
     ],
     'table' => [
-        'pre' => '<div class="index">' . PHP_EOL,
-        'post' => '</div>',
+        'pre' => $this->Arhint->searchPanel($this->getRequest()->getQuery('search', '')),
         'parameters' => [
             'cellspacing' => 0,
             'cellpadding' => 0,
@@ -40,20 +39,6 @@ $contactsIndex = [
         ],
         'head' => [
             'rows' => [
-                [
-                    'columns' => [
-                        'search' => [
-                            'params' => ['colspan' => 2, 'class' => 'input-field'],
-                            'html' => sprintf('<input placeholder="%s" id="SearchBox" />', __d('crm', 'Search')),
-                        ],
-                        'pagination' => [
-                            'params' => ['colspan' => 2, 'class' => 'right-align hide-on-small-only'],
-                            'html' => '<ul class="paginator">' . $this->Paginator->numbers([
-                                'first' => '<<',
-                                'last' => '>>',
-                                'modulus' => 3]) . '</ul>'],
-                    ],
-                ],
                 [
                 'columns' => [
                     'title' => [
@@ -204,7 +189,7 @@ echo $this->Lil->index($contactsIndex, 'Crm.Contacts.index');
         '__id__', '__syncable__',
     ]); ?>";
 
-    var ajaxSearchUrl = "<?php echo Router::url([
+    var searchUrl = "<?php echo Router::url([
         'plugin' => 'Crm',
         'controller' => 'Contacts',
         'action' => 'index',
@@ -239,27 +224,19 @@ echo $this->Lil->index($contactsIndex, 'Crm.Contacts.index');
 
     function searchContacts()
     {
-        let rx_term = new RegExp("__term__", "i");
-        let searchTerm = $("#SearchBox").val();
-
-        $.get(ajaxSearchUrl.replace(rx_term, encodeURIComponent(searchTerm)), function(response) {
-            let tBody = response.substring(response.indexOf("<tbody>")+7, response.indexOf("</tbody>"));
-            $("#ContactsIndexTable tbody").html(tBody);
-
+        var rx_term = new RegExp("__term__", "i");
+        $.get(searchUrl.replace(rx_term, encodeURIComponent($(".search-panel input").val())), function(response) {
+            let tBody = response
+                .substring(response.indexOf("<table class=\"index"), response.indexOf("</table>")+8);
+            $("#ContactsIndexTable").html(tBody);
             $(".toggle-syncable").click(onToggleSyncable);
-
-            let paginator = response.substring(
-                response.indexOf("<ul class=\"paginator\">")+22,
-                response.indexOf("</ul>", response.indexOf("<ul class=\"paginator\">"))
-            );
-            $("#ContactsIndexTable ul.paginator").html(paginator);
         });
     }
 
     $(document).ready(function() {
         $(".toggle-syncable").click(onToggleSyncable);
 
-        $("#SearchBox").on("input", function(e) {
+        $(".search-panel input").on("input", function(e) {
             if ($(this).val().length > 1) {
                 if (searchTimer) {
                     window.clearTimeout(searchTimer);
@@ -267,6 +244,6 @@ echo $this->Lil->index($contactsIndex, 'Crm.Contacts.index');
                 }
                 searchTimer = window.setTimeout(searchContacts, 500);
             }
-        });
+        }).focus();
     });
 </script>

@@ -15,12 +15,14 @@ use Authorization\Middleware\AuthorizationMiddleware;
 use Authorization\Policy\OrmResolver;
 use Cake\Core\Configure;
 use Cake\Core\Exception\MissingPluginException;
+use Cake\Datasource\FactoryLocator;
 use Cake\Error\Middleware\ErrorHandlerMiddleware;
 use Cake\Http\BaseApplication;
 use Cake\Http\Middleware\EncryptedCookieMiddleware;
 use Cake\Http\Middleware\SessionCsrfProtectionMiddleware;
 use Cake\Http\MiddlewareQueue;
 use Cake\I18n\FrozenTime;
+use Cake\ORM\Locator\TableLocator;
 use Cake\Routing\Middleware\AssetMiddleware;
 use Cake\Routing\Middleware\RoutingMiddleware;
 use Cake\Routing\Route\DashedRoute;
@@ -58,6 +60,11 @@ class Application extends BaseApplication implements
 
         if (PHP_SAPI === 'cli') {
             $this->bootstrapCli();
+        } else {
+            FactoryLocator::add(
+                'Table',
+                (new TableLocator())->allowFallbackClass(false)
+            );
         }
 
         /*
@@ -79,7 +86,7 @@ class Application extends BaseApplication implements
         $this->addPlugin(DocumentsPlugin::class, ['bootstrap' => true, 'routes' => true]);
         $this->addPlugin(ProjectsPlugin::class, ['bootstrap' => true, 'routes' => true]);
         $this->addPlugin(TasksPlugin::class, ['bootstrap' => true, 'routes' => true]);
-        $this->addPlugin('Calendar');
+        $this->addPlugin('Calendar', ['bootstrap' => true, 'routes' => true]);
     }
 
     /**
@@ -169,15 +176,10 @@ class Application extends BaseApplication implements
      */
     protected function bootstrapCli(): void
     {
-        try {
-            $this->addPlugin('Bake');
-        } catch (MissingPluginException $e) {
-            // Do not halt if the plugin is missing
-        }
+        $this->addOptionalPlugin('Cake/Repl');
+        $this->addOptionalPlugin('Bake');
 
         $this->addPlugin('Migrations');
-
-        // Load more plugins here
     }
 
     /**

@@ -92,6 +92,7 @@ class DocumentsExport
         switch ($ext) {
             case 'pdf':
             case 'xml':
+            case 'html':
                 $pdf = null;
 
                 if ($ext == 'pdf') {

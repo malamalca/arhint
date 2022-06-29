@@ -1,18 +1,17 @@
 <?php
 declare(strict_types=1);
 
-namespace Calendar;
+namespace Tester;
 
-use Cake\Console\CommandCollection;
 use Cake\Core\BasePlugin;
+use Cake\Core\ContainerInterface;
 use Cake\Core\PluginApplicationInterface;
-use Cake\Event\EventManager;
 use Cake\Http\MiddlewareQueue;
 use Cake\Routing\RouteBuilder;
-use Calendar\Event\CalendarEvents;
+use Cake\Console\CommandCollection;
 
 /**
- * Plugin for Calendar
+ * Plugin for Tester
  */
 class Plugin extends BasePlugin
 {
@@ -27,8 +26,6 @@ class Plugin extends BasePlugin
      */
     public function bootstrap(PluginApplicationInterface $app): void
     {
-        $CalendarEvents = new CalendarEvents();
-        EventManager::instance()->on($CalendarEvents);
     }
 
     /**
@@ -43,9 +40,11 @@ class Plugin extends BasePlugin
     public function routes(RouteBuilder $routes): void
     {
         $routes->plugin(
-            'Calendar',
-            ['path' => '/calendar'],
+            'Tester',
+            ['path' => '/tester'],
             function (RouteBuilder $builder) {
+                // Add custom routes here
+
                 $builder->fallbacks();
             }
         );
@@ -71,12 +70,24 @@ class Plugin extends BasePlugin
      * @param \Cake\Console\CommandCollection $commands The command collection to update.
      * @return \Cake\Console\CommandCollection
      */
-    public function console(CommandCollection $commands): CommandCollection
+    public function console(CommandCollection $commands) : CommandCollection
     {
         // Add your commands here
 
         $commands = parent::console($commands);
 
         return $commands;
+    }
+
+    /**
+     * Register application container services.
+     *
+     * @param \Cake\Core\ContainerInterface $container The Container to update.
+     * @return void
+     * @link https://book.cakephp.org/4/en/development/dependency-injection.html#dependency-injection
+     */
+    public function services(ContainerInterface $container): void
+    {
+        // Add your services here
     }
 }

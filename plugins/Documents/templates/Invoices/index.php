@@ -24,7 +24,9 @@ $popupCounters = [];
 foreach ($counters as $cntr) {
     $menuItem = [
         'title' => h($cntr->title),
-        'url' => ['?' => array_merge($this->getRequest()->getQuery(), ['counter' => $cntr->id])],
+        'url' => [
+            'controller' => $cntr->kind,
+            '?' => array_merge($this->getRequest()->getQuery(), ['counter' => $cntr->id])],
         'active' => $this->getRequest()->getQuery('counter') == $cntr->id,
     ];
     $popupCounters['items'][] = $menuItem;

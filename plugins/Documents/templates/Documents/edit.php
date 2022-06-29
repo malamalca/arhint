@@ -4,6 +4,7 @@ use Cake\Routing\Router;
 
 $client = $document->documents_counter->direction == 'issued' ? 'receiver' : 'issuer';
 $counter = $document->documents_counter;
+$this->set('currentCounter', $counter->id);
 
 if ($document->isNew()) {
     $layoutTitle = __d(
@@ -45,11 +46,11 @@ $documentEdit = [
                         'type' => 'file',
                         'id' => 'invoice-edit-form',
                         'idPrefix' => 'invoice',
-                        'url' => [
+                        'url' => array_filter([
                             'action' => 'edit',
                             $document->id,
                             '?' => ['counter' => $document->counter_id],
-                        ],
+                        ]),
                     ],
                 ],
             ],

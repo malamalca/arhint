@@ -215,7 +215,7 @@ class ProjectsController extends AppController
     /**
      * User method
      *
-     * @param string $ProjectId Project id.
+     * @param string $projectId Project id.
      * @param string|null $userId User id.
      * @return \Cake\Http\Response|null Redirects on successful edit, renders view otherwise.
      * @throws \Cake\Http\Exception\NotFoundException When record not found.
@@ -225,6 +225,7 @@ class ProjectsController extends AppController
         $project = $this->Projects->get($projectId);
         $this->Authorization->authorize($project);
 
+        /** @var \Projects\Model\Table\ProjectsUsersTable $ProjectsUsersTable */
         $ProjectsUsersTable = TableRegistry::getTableLocator()->get('Projects.ProjectsUsers');
 
         $projectsUser = null;
@@ -277,7 +278,8 @@ class ProjectsController extends AppController
     /**
      * Delete user method
      *
-     * @param string|null $id Project id.
+     * @param string $projectId Project id.
+     * @param string $userId User id.
      * @return \Cake\Http\Response|null Redirects to index.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */

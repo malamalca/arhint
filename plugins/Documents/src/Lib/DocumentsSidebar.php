@@ -88,18 +88,6 @@ class DocumentsSidebar
                     'url' => null,
                     'active' => false,
                 ],
-                /*'received' => [
-                    'visible' => true,
-                    'title' => __d('documents', 'Received Documents'),
-                    'url' => false,
-                    'active' => false,
-                ],
-                'issued' => [
-                    'visible' => true,
-                    'title' => __d('documents', 'Issued Documents'),
-                    'url' => false,
-                    'active' => false,
-                ],*/
             ],
             ['before' => 'reports']
         );

@@ -64,7 +64,6 @@ class ProjectsTable extends Table
             'joinTable' => 'projects_users',
         ]);
 
-
         $this->hasOne('LastLog', [
             'foreignKey' => false,
             'className' => 'Projects.ProjectsLogs',

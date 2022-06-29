@@ -46,11 +46,11 @@ $documentEdit = [
                         'type' => 'file',
                         'id' => 'invoice-edit-form',
                         'idPrefix' => 'invoice',
-                        'url' => [
+                        'url' => array_filter([
                             'action' => 'edit',
                             $document->id,
                             '?' => ['counter' => $document->counter_id],
-                        ],
+                        ]),
                     ],
                 ],
             ],

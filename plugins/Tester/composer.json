@@ -1,0 +1,24 @@
+{
+    "name": "your-name-here/tester",
+    "description": "Tester plugin for CakePHP",
+    "type": "cakephp-plugin",
+    "license": "MIT",
+    "require": {
+        "php": ">=7.2",
+        "cakephp/cakephp": "^4.4"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^8.5 || ^9.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "Tester\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tester\\Test\\": "tests/",
+            "Cake\\Test\\": "vendor/cakephp/cakephp/tests/"
+        }
+    }
+}

@@ -80,6 +80,9 @@ jQuery.fn.modalPopup = function(p_options) {
     // Do an ajax form post
     this.popupFormSubmit = function(e)
     {
+        if (typeof tinymce != undefined) {
+            tinymce.triggerSave(true, true);
+        }
         $.post(
             $("form", $this.popup).prop("action"),
             $("form", $this.popup).serialize(),

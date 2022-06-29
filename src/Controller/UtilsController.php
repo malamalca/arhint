@@ -189,7 +189,7 @@ class UtilsController extends AppController
                     throw new BadRequestException('Error processing pdf files.');
                 }
             }
-            
+
             if ($pdfObj === false) {
                 throw new BadRequestException('Error processing pdf files.');
             } else {

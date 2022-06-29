@@ -164,6 +164,10 @@ class ArhintReport
             $result = $result->withDownload($options['filename'] . '.' . $this->ext);
         }
 
+        if ($options['autop']) {
+            $result = $this->_autop($data);
+        }
+
         return $result;
     }
 

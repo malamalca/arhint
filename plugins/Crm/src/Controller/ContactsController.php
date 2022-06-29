@@ -16,17 +16,6 @@ use SoapFault;
 class ContactsController extends AppController
 {
     /**
-     * Initialize function
-     *
-     * @return void
-     */
-    public function initialize(): void
-    {
-        parent::initialize();
-        $this->loadComponent('Paginator');
-    }
-
-    /**
      * Index method
      *
      * @return void
@@ -65,7 +54,7 @@ class ContactsController extends AppController
             ->contain($params['contain'])
             ->order($params['order']);
 
-        $contacts = $this->Paginator->paginate($query, ['limit' => 20]);
+        $contacts = $this->paginate($query, ['limit' => 20]);
 
         // redirect when only single contact found
         if (count($contacts) == 1 && !empty($filter['search'])) {

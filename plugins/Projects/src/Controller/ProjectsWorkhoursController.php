@@ -53,7 +53,6 @@ class ProjectsWorkhoursController extends AppController
         $query = $this->ProjectsWorkhours->find()
             ->where($params['conditions']);
 
-
         $sumQuery = clone $query;
         $totalDuration = $sumQuery
             ->select([
@@ -81,7 +80,6 @@ class ProjectsWorkhoursController extends AppController
                 return $entity;
             })
             ->toArray();
-
 
         $this->set(compact('projectsWorkhours', 'filter', 'users', 'projects', 'totalDuration'));
     }
@@ -256,15 +254,5 @@ class ProjectsWorkhoursController extends AppController
         }
 
         return $this->getResponse();
-    }
-
-    /**
-     * Do a report
-     *
-     * @return \Cake\Http\Response|null
-     */
-    public function report()
-    {
-
     }
 }

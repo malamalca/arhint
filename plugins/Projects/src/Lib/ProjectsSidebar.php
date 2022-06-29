@@ -52,7 +52,8 @@ class ProjectsSidebar
                 'title' => __d('projects', 'Reports'),
                 'url' => false,
                 'params' => [],
-                'active' => $request->getParam('controller') == 'ProjectsWorkhours' && $request->getParam('action') == 'report',
+                'active' => $request->getParam('controller') == 'ProjectsWorkhours' &&
+                    $request->getParam('action') == 'report',
                 'submenu' => [
                     'report' => [
                         'visible' => true,
@@ -62,7 +63,8 @@ class ProjectsSidebar
                             'controller' => 'ProjectsWorkhours',
                             'action' => 'report',
                         ],
-                        'active' => $request->getParam('controller') == 'ProjectsWorkhours' && $request->getParam('action') == 'report',
+                        'active' => $request->getParam('controller') == 'ProjectsWorkhours' &&
+                            $request->getParam('action') == 'report',
                     ],
                 ],
             ],

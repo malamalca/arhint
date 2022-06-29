@@ -75,6 +75,7 @@ $editForm = [
                     [
                         'type' => 'checkbox',
                         'label' => __d('projects', 'Active'),
+                        'default' => true,
                     ],
                 ],
             ],

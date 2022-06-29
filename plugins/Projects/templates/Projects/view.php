@@ -142,7 +142,7 @@ switch ($activeTab) {
                                 :
                                 ''
                         ) .
-                        $log->descript .
+                        //$log->descript
                         strip_tags($log->descript, ['a', 'strong', 'em', 'span', 'sub', 'sup', 'table', 'tr', 'td', 'p', 'pre', 'blockquote', 'img']),
                 ]];
             }
