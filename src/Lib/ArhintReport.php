@@ -149,7 +149,7 @@ class ArhintReport
      *
      * @param string $data Result of Export funtion.
      * @param array $options Export options
-     * @return \Cake\Http\Response
+     * @return \Cake\Http\Response|string
      */
     public function response($data, $options = [])
     {

@@ -44,7 +44,7 @@ class ProjectsWorkhoursController extends AppController
     {
         $this->Authorization->skipAuthorization();
 
-        $filter = $this->getRequest()->getQuery();
+        $filter = (array)$this->getRequest()->getQuery();
         if (!$this->getCurrentUser()->hasRole('admin')) {
             $filter['user'] = $this->getRequest()->getQuery('user');
         }
