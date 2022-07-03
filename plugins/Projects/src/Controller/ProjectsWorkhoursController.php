@@ -42,15 +42,13 @@ class ProjectsWorkhoursController extends AppController
      */
     public function index()
     {
-        $this->Authorization->skipAuthorization();
-
         $filter = (array)$this->getRequest()->getQuery();
         if (!$this->getCurrentUser()->hasRole('admin')) {
             $filter['user'] = $this->getRequest()->getQuery('user');
         }
 
         $params = $this->ProjectsWorkhours->filter($filter);
-        $query = $this->ProjectsWorkhours->find()
+        $query = $this->Authorization->applyScope($this->ProjectsWorkhours->find(), 'index')
             ->where($params['conditions']);
 
         $sumQuery = clone $query;
@@ -91,12 +89,16 @@ class ProjectsWorkhoursController extends AppController
      */
     public function list()
     {
-        $request = new \Cake\Http\ServerRequest(['url' => $this->getRequest()->getQuery('source')]);
-        $sourceRequest = Router::parseRequest($request);
+        $sourceUrl = $this->getRequest()->getQuery('source');
+        $sourceRequest = [];
+        if (!empty($sourceUrl)) {
+            $request = new \Cake\Http\ServerRequest(['url' => $this->getRequest()->getQuery('source')]);
+            $sourceRequest = Router::parseRequest($request);
 
-        $sourceRequest = array_merge($sourceRequest, $sourceRequest['pass']);
-        unset($sourceRequest['_matchedRoute']);
-        unset($sourceRequest['pass']);
+            $sourceRequest = array_merge($sourceRequest, $sourceRequest['pass']);
+            unset($sourceRequest['_matchedRoute']);
+            unset($sourceRequest['pass']);
+        }
 
         $filter = [];
         $filter['project'] = $sourceRequest['pass'][0] ?? null;
@@ -214,40 +216,40 @@ class ProjectsWorkhoursController extends AppController
                 ) {
                     $registrationTime = FrozenTime::parseDateTime($registration['datetime'], 'yyyy-MM-dd HH:mm:ss');
 
-                    if ($registration['mode'] == 'start') {
-                        $workhour = $this->ProjectsWorkhours->newEmptyEntity();
-                        $workhour->user_id = $this->getCurrentUser()->get('id');
-                        $workhour->project_id = $registration['project_id'];
-                        $workhour->started = $registrationTime;
-
-                        $this->ProjectsWorkhours->save($workhour);
-                    }
-
-                    if ($registration['mode'] == 'stop') {
-                        if (!empty($workhour)) {
-                            // previously saved workhour in the same loop exists
-                            if ($workhour->project_id != $registration['project_id']) {
-                                unset($workhour);
-                            }
-                        } else {
-                            // select last workhour
-                            /** @var \Projects\Model\Entity\ProjectsWorkhour $workhour */
-                            $workhour = $this->ProjectsWorkhours->find()
-                            ->select()
-                            ->where(['user_id' => $this->getCurrentUser()->get('id')])
-                            ->order('started DESC')
-                            ->limit(1)
-                            ->first();
-                            if ($workhour->project_id != $registration['project_id']) {
-                                unset($workhour);
-                            }
-                        }
-                        // calculate work duration
-                        if (!empty($workhour)) {
-                            $workhour->duration = $registrationTime->diffInSeconds($workhour->started);
+                    switch ($registration['mode']) {
+                        case 'start':
+                            $workhour = $this->ProjectsWorkhours->newEmptyEntity();
+                            $workhour->user_id = $this->getCurrentUser()->get('id');
+                            $workhour->project_id = $registration['project_id'];
+                            $workhour->started = $registrationTime;
                             $this->ProjectsWorkhours->save($workhour);
-                            unset($workhour);
-                        }
+                            break;
+                        case 'stop':
+                            if (!empty($workhour)) {
+                                // previously saved workhour in the same loop exists
+                                if ($workhour->project_id != $registration['project_id']) {
+                                    unset($workhour);
+                                }
+                            } else {
+                                // select last workhour
+                                /** @var \Projects\Model\Entity\ProjectsWorkhour $workhour */
+                                $workhour = $this->ProjectsWorkhours->find()
+                                    ->select()
+                                    ->where(['user_id' => $this->getCurrentUser()->get('id')])
+                                    ->order('started DESC')
+                                    ->limit(1)
+                                    ->first();
+                                    if ($workhour->project_id != $registration['project_id']) {
+                                        unset($workhour);
+                                    }
+                            }
+                            // calculate work duration
+                            if (!empty($workhour)) {
+                                $workhour->duration = $registrationTime->diffInSeconds($workhour->started);
+                                $this->ProjectsWorkhours->save($workhour);
+                                unset($workhour);
+                            }
+                            break;
                     }
                 }
             }

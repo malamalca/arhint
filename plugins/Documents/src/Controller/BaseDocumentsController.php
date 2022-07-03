@@ -66,7 +66,8 @@ class BaseDocumentsController extends AppController
         $this->loadModel('Documents.DocumentsCounters');
         $counters = $this->DocumentsCounters->rememberForUser(
             $this->getCurrentUser()->id,
-            $this->Authorization->applyScope($this->DocumentsCounters->find(), 'index')
+            $this->Authorization->applyScope($this->DocumentsCounters->find(), 'index'),
+            $this->documentsScope
         );
 
         if (!empty($filter['counter'])) {
@@ -115,7 +116,8 @@ class BaseDocumentsController extends AppController
         $DocumentsCounters = TableRegistry::getTableLocator()->get('Documents.DocumentsCounters');
         $counters = $DocumentsCounters->rememberForUser(
             $this->getCurrentUser()->id,
-            $this->Authorization->applyScope($DocumentsCounters->find(), 'index')
+            $this->Authorization->applyScope($DocumentsCounters->find(), 'index'),
+            $this->documentsScope
         );
 
         $currentCounter = $document->documents_counter->id;

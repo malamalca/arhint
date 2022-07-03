@@ -92,12 +92,14 @@
         "check": [
             "@test",
             "@cs-check",
-            "@stan"
+            "@stan",
+            "@psalm"
         ],
         "cs-check": "phpcs --colors -p --standard=vendor/cakephp/cakephp-codesniffer/CakePHP src/ tests/ plugins/Expenses/src/ plugins/Crm/src/ plugins/Documents/src/ plugins/Projects/src/ plugins/Tasks/src/ plugins/Calendar/src/",
         "cs-fix": "phpcbf --colors --standard=vendor/cakephp/cakephp-codesniffer/CakePHP src/ tests/ plugins/Expenses/src/ plugins/Crm/src/ plugins/Documents/src/ plugins/Projects/src/ plugins/Tasks/src/ plugins/Calendar/src/",
         "stan": "phpstan analyse -l 5 src/ plugins/Expenses/src/ plugins/Crm/src/ plugins/Documents/src/ plugins/Projects/src/ plugins/Tasks/src/ plugins/Calendar/src",
-        "test": "phpunit --colors=always"
+        "test": "phpunit --colors=always",
+        "psalm": "psalm"
     },
     "prefer-stable": true,
     "config": {

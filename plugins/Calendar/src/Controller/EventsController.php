@@ -52,6 +52,8 @@ class EventsController extends AppController
     {
         $event = $this->Events->get($id);
 
+        $this->Authorization->authorize($event);
+
         $this->set(compact('event'));
     }
 
@@ -109,8 +111,10 @@ class EventsController extends AppController
      */
     public function delete($id = null)
     {
-        $this->request->allowMethod(['post', 'delete']);
+        $this->request->allowMethod(['post', 'delete', 'get']);
         $event = $this->Events->get($id);
+        $this->Authorization->authorize($event);
+
         if ($this->Events->delete($event)) {
             $this->Flash->success(__d('calendar', 'The event has been deleted.'));
         } else {

@@ -58,7 +58,7 @@ class ProjectsController extends AppController
      */
     public function map()
     {
-        $projects = $this->Authorization->applyScope($this->Projects->find())
+        $projects = $this->Authorization->applyScope($this->Projects->find(), 'index')
             ->select()
             ->where([
                 'active' => true,
@@ -193,12 +193,12 @@ class ProjectsController extends AppController
 
             if ($this->Projects->save($project)) {
                 $this->Flash->success(__d('projects', 'The project has been saved.'));
-                $redirect = $this->getRequest()->getData('redirect');
+                $redirect = $this->getRequest()->getData('redirect', null);
                 if (!empty($redirect)) {
                     return $this->redirect(base64_decode($redirect));
                 }
 
-                return $this->redirect(['action' => 'index']);
+                return $this->redirect(['action' => 'view', $project->id]);
             }
             $this->Flash->error(__d('projects', 'The project could not be saved. Please, try again.'));
         }
@@ -246,7 +246,7 @@ class ProjectsController extends AppController
 
             if ($ProjectsUsersTable->save($projectsUser)) {
                 $this->Flash->success(__d('projects', 'The project user has been saved.'));
-                $redirect = $this->getRequest()->getData('redirect');
+                $redirect = $this->getRequest()->getData('redirect', null);
                 if (!empty($redirect)) {
                     return $this->redirect(base64_decode($redirect));
                 }

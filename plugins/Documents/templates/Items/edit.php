@@ -3,26 +3,27 @@ $itemEdit = [
     'title_for_layout' =>
         $item->id ? __d('documents', 'Edit Item') : __d('documents', 'Add Item'),
     'form' => [
+        'defaultHelper' => $this->Form,
         'pre' => '<div class="form">',
         'post' => '</div>',
         'lines' => [
             'form_start' => [
-                'class' => $this->Form,
                 'method' => 'create',
                 'parameters' => ['model' => $item],
             ],
             'id' => [
-                'class' => $this->Form,
                 'method' => 'hidden',
                 'parameters' => ['field' => 'id'],
             ],
+            'owner_id' => [
+                'method' => 'hidden',
+                'parameters' => ['field' => 'owner_id'],
+            ],
             'referer' => [
-                'class' => $this->Form,
                 'method' => 'hidden',
                 'parameters' => ['field' => 'referer'],
             ],
             'descript' => [
-                'class' => $this->Form,
                 'method' => 'control',
                 'parameters' => [
                     'field' => 'descript',
@@ -33,7 +34,6 @@ $itemEdit = [
                 ],
             ],
             'qty' => [
-                'class' => $this->Form,
                 'method' => 'control',
                 'parameters' => [
                     'field' => 'qty',
@@ -46,7 +46,6 @@ $itemEdit = [
                 ],
             ],
             'unit' => [
-                'class' => $this->Form,
                 'method' => 'control',
                 'parameters' => [
                     'field' => 'unit',
@@ -57,7 +56,6 @@ $itemEdit = [
                 ],
             ],
             'discount' => [
-                'class' => $this->Form,
                 'method' => 'control',
                 'parameters' => [
                     'field' => 'discount',
@@ -70,7 +68,6 @@ $itemEdit = [
                 ],
             ],
             'price' => [
-                'class' => $this->Form,
                 'method' => 'control',
                 'parameters' => [
                     'field' => 'price',
@@ -82,7 +79,6 @@ $itemEdit = [
                 ],
             ],
             'vat_id' => [
-                'class' => $this->Form,
                 'method' => 'control',
                 'parameters' => [
                     'field' => 'vat_id',
@@ -98,14 +94,12 @@ $itemEdit = [
                 ],
             ],
             'submit' => [
-                'class' => $this->Form,
                 'method' => 'submit',
                 'parameters' => [
                     'label' => __d('documents', 'Save'),
                 ],
             ],
             'form_end' => [
-                'class' => $this->Form,
                 'method' => 'end',
                 'parameters' => [],
             ],

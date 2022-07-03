@@ -31,13 +31,15 @@ class DocumentsClientsTable extends Table
         $this->setDisplayField('title');
         $this->setPrimaryKey('id');
         $this->addBehavior('Timestamp');
+
         $this->belongsTo('Documents', [
             'foreignKey' => 'document_id',
             'className' => 'Documents.Documents',
         ]);
+
         $this->belongsTo('Contacts', [
             'foreignKey' => 'contact_id',
-            'className' => 'Documents.Contacts',
+            'className' => 'Crm.Contacts',
         ]);
     }
 

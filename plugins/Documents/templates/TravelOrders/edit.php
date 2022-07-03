@@ -108,7 +108,7 @@ $documentEdit = [
             ],
 
             ////////////////////////////////////////////////////////////////////////////////////
-           /* 'fs_basic_start' => '<fieldset>',
+            'fs_basic_start' => '<fieldset>',
             'fs_basic_legend' => sprintf('<legend>%s</legend>', __d('documents', 'Basics')),
             'no' => [
                 'method' => 'control',
@@ -144,7 +144,7 @@ $documentEdit = [
                     ],
                 ],
             ],
-            'fs_basic_end' => '</fieldset>', // basics*/
+            'fs_basic_end' => '</fieldset>', // basics
 
             ////////////////////////////////////////////////////////////////////////////////////
             'tror_travel_start' => '<fieldset>',

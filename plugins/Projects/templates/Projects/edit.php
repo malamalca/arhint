@@ -1,4 +1,8 @@
 <?php
+
+use Cake\Core\Configure;
+use Cake\Routing\Router;
+
 /**
  * This is admin_edit template file.
  */
@@ -102,6 +106,8 @@ $editForm = [
                     ],
                 ],
             ],
+            'picker' => '<button data-target="modal1" class="btn modal-trigger">' .
+                __d('projects', 'Pick on Map') . '</button>',
 
             'ico' => [
                 'method' => 'control',
@@ -145,3 +151,48 @@ $editForm = [
 ];
 $this->Lil->jsReady('$("#project-no").focus();');
 echo $this->Lil->form($editForm, 'Projects.Projects.edit');
+?>
+<div id="modal1" class="modal">
+<div class="modal-content">
+<div id="map" style="min-height: 300px;"></div>
+</div>
+</div>
+<script>
+    var map;
+    var marker = null;
+
+    function initMap() {
+        map = new google.maps.Map(document.getElementById('map'), {
+            center: {lat: 46.056946, lng: 14.505751},
+            zoom: 9
+        });
+
+        let latValue = $("#project-lat").val();
+        let lonValue = $("#project-lon").val();
+
+        if (latValue && lonValue) {
+            let myLatlng = new google.maps.LatLng(latValue, lonValue);
+        
+            marker = new google.maps.Marker({
+                position: myLatlng,
+                title: "<?= __d('projects', 'Project Position') ?>",
+                map: map
+            });
+        }
+
+        google.maps.event.addListener(map, "click", function(event) {
+            if (marker) {
+                marker.setPosition(event.latLng);
+            } else {
+                marker = new google.maps.Marker({
+                    position: event.latLng,
+                    title: "Project Position",
+                    map: map
+                });
+            }
+            $("#project-lat").val(parseFloat(event.latLng.lat()).toFixed(4));
+            $("#project-lon").val(parseFloat(event.latLng.lng()).toFixed(4));
+        });
+    }
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key=<?= Configure::read('Projects.mapsApiKey') ?>&callback=initMap" async defer></script>

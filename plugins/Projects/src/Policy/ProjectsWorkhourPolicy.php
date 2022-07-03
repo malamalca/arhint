@@ -3,13 +3,13 @@ declare(strict_types=1);
 
 namespace Projects\Policy;
 
-use Cake\ORM\TableRegistry;
-
 /**
  * ProjectsWorkhour Policy Resolver
  */
 class ProjectsWorkhourPolicy
 {
+    use ProjectAccessTrait;
+
     /**
      * Authorize edit action
      *
@@ -23,10 +23,8 @@ class ProjectsWorkhourPolicy
             return false;
         }
 
-        /** @var \Projects\Model\Table\ProjectsTable $ProjectsTable */
-        $ProjectsTable = TableRegistry::getTableLocator()->get('Projects.Projects');
-
-        return $ProjectsTable->isOwnedBy($entity->project_id, $user->company_id);
+        return $this->canAccess($entity->project_id, $user) &&
+            ($entity->user_id == $user->id || $user->hasRole('admin'));
     }
 
     /**
@@ -42,9 +40,7 @@ class ProjectsWorkhourPolicy
             return false;
         }
 
-        /** @var \Projects\Model\Table\ProjectsTable $ProjectsTable */
-        $ProjectsTable = TableRegistry::getTableLocator()->get('Projects.Projects');
-
-        return $ProjectsTable->isOwnedBy($entity->project_id, $user->company_id);
+        return $this->canAccess($entity->project_id, $user) &&
+            ($entity->user_id == $user->id || $user->hasRole('admin'));
     }
 }

@@ -55,7 +55,7 @@ use Cake\Routing\Router;
                                 'action' => 'avatar',
                                 $this->getCurrentUser() ? $this->getCurrentUser()->get('id') : null,
                                 '_ext' => 'png',
-                            ]),
+                            ], fn($var) => $var !== null),
                             true
                         ),
                         ['class' => 'circle']

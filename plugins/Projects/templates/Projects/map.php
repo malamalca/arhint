@@ -14,7 +14,7 @@
             ],
         ],
         'panels' => [
-            'map' => '<div id="map" style="height: 90%;"></div>',
+            'map' => '<div id="map" style="min-height: 300px;"></div>',
         ],
     ];
 
@@ -24,6 +24,14 @@
     <script>
         var map;
         var infowindow;
+
+        function placeMarker(position, map) {
+        var marker = new google.maps.Marker({
+          position: position,
+          map: map
+        });
+        map.panTo(position);
+      }
 
         function initMap() {
             map = new google.maps.Map(document.getElementById('map'), {
@@ -35,6 +43,8 @@
 
             google.maps.event.addListener(map, "click", function(event) {
                 infowindow.close();
+                //console.log(event.latLng.lat());
+                //placeMarker(event.latLng, map);
             });
 
             var icons = {
@@ -82,7 +92,6 @@
     </script>
     <script src="https://maps.googleapis.com/maps/api/js?key=<?= Configure::read('Projects.mapsApiKey') ?>&callback=initMap" async defer></script>
 
-
     <script type="text/javascript">
         $(document).on ("click", "#submit-logs-btn", function () {
             if ($("textarea#descript").val().length > 0) {
@@ -96,5 +105,24 @@
                 });
             }
             return false;
+        });
+
+        $(document).ready(function() {
+            function resizeMap()
+            {
+                let iFrameHeight = $(window).height() - $(".navbar-fixed").height() - 140;
+                //let iFrameWidth = $("#map").parent(".container").width();
+
+                $("#map")
+                    .height(iFrameHeight);
+                    //.width(iFrameWidth);
+
+            }
+            
+            resizeMap();
+
+            $(window).on("resize", function() {
+                resizeMap();
+            });
         });
     </script>

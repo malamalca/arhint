@@ -50,7 +50,12 @@ class ProjectsLogsController extends AppController
                     return $this->redirect(base64_decode($redirect));
                 }
 
-                return $this->redirect(['controller' => 'Projects', 'action' => 'view', $projectsLog->project_id]);
+                return $this->redirect([
+                    'controller' => 'Projects',
+                    'action' => 'view',
+                    $projectsLog->project_id,
+                    '?' => ['tab' => 'logs'],
+                ]);
             }
             $this->Flash->error(__d('projects', 'The projects log could not be saved. Please, try again.'));
         }

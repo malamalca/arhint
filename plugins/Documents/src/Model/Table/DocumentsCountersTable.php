@@ -102,9 +102,10 @@ class DocumentsCountersTable extends Table
      *
      * @param string $userId Users id
      * @param object $scopedQuery Query with applied scope
+     * @param string|null $filterKind Filter by counter kind
      * @return mixed $counters
      */
-    public function rememberForUser($userId, $scopedQuery)
+    public function rememberForUser($userId, $scopedQuery, $filterKind = null)
     {
         $counters = Cache::remember(
             'Documents.sidebarCounters.' . $userId,
@@ -115,6 +116,10 @@ class DocumentsCountersTable extends Table
                     ->all();
             }
         );
+
+        if (!empty($filterKind)) {
+            $counters = $counters->filter(fn($value, $key) => $value->kind == $filterKind);
+        }
 
         return $counters;
     }

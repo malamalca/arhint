@@ -110,6 +110,8 @@ class DocumentsSidebar
                         in_array($request->getParam('action'), ['index', 'edit'])) ||
             ($request->getParam('controller') == 'DocumentsTemplates' &&
                         in_array($request->getParam('action'), ['index', 'edit'])) ||
+            ($request->getParam('controller') == 'Vehicles' &&
+                        in_array($request->getParam('action'), ['index', 'edit'])) ||
             ($request->getParam('controller') == 'Items' &&
                         in_array($request->getParam('action'), ['index', 'edit']));
 
@@ -155,6 +157,17 @@ class DocumentsSidebar
                         'action' => 'index',
                     ],
                     'active' => $request->getParam('controller') == 'DocumentsTemplates' &&
+                        in_array($request->getParam('action'), ['index', 'edit']),
+                ],
+                'vehicles' => [
+                    'visible' => true,
+                    'title' => __d('documents', 'Vehicles'),
+                    'url' => [
+                        'plugin' => 'Documents',
+                        'controller' => 'Vehicles',
+                        'action' => 'index',
+                    ],
+                    'active' => $request->getParam('controller') == 'Vehicles' &&
                         in_array($request->getParam('action'), ['index', 'edit']),
                 ],
             ];

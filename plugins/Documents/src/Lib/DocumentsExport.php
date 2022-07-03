@@ -89,73 +89,72 @@ class DocumentsExport
     {
         $result = null;
 
+        $pdf = null;
+
+        if ($ext == 'pdf') {
+            $pdfEngine = Configure::read('Documents.pdfEngine');
+            $pdfOptions = Configure::read('Documents.' . $pdfEngine);
+            $pdf = LilPdfFactory::create($pdfEngine, (array)$pdfOptions);
+        }
+
+        $responseHtml = '';
+
+        foreach ($data as $document) {
+            $this->view->set('documents', [0 => $document]);
+            $this->view->setTemplate('generic');
+
+            $outputHtml = $this->view->render();
+
+            if (in_array($ext, ['html', 'xml'])) {
+                $responseHtml .= $outputHtml;
+            }
+
+            if ($ext == 'pdf') {
+                // PDF
+                $pageOptions = [];
+                if (!empty($document->tpl_header)) {
+                    $templateBody = $document->tpl_header->body;
+                    if (substr($templateBody, 0, 5) == 'data:') {
+                        $templateBody = json_encode([
+                            'image' => substr($templateBody, strpos($templateBody, ',') + 1),
+                        ]);
+                    } else {
+                        $templateBody = $this->_autop($templateBody);
+                    }
+                    $pdf->setHeaderHtml($templateBody);
+                }
+                if (!empty($document->tpl_footer)) {
+                    $templateBody = $document->tpl_footer->body;
+                    if (substr($templateBody, 0, 5) == 'data:') {
+                        $templateBody = json_encode([
+                            'image' => substr($templateBody, strpos($templateBody, ',') + 1),
+                        ]);
+                    } else {
+                        $templateBody = $this->_autop($templateBody);
+                    }
+
+                    $pdf->setFooterHtml($templateBody);
+                }
+                $pdf->newPage($this->toHtml($document, $outputHtml), $pageOptions);
+            }
+        }
+
         switch ($ext) {
-            case 'pdf':
-            case 'xml':
             case 'html':
-                $pdf = null;
-
-                if ($ext == 'pdf') {
-                    $pdfEngine = Configure::read('Documents.pdfEngine');
-                    $pdfOptions = Configure::read('Documents.' . $pdfEngine);
-                    $pdf = LilPdfFactory::create($pdfEngine, (array)$pdfOptions);
-                }
-
-                $responseHtml = '';
-
-                foreach ($data as $document) {
-                    $this->view->set('documents', [0 => $document]);
-                    $this->view->setTemplate('generic');
-
-                    $outputHtml = $this->view->render();
-
-                    if (in_array($ext, ['html', 'xml'])) {
-                        $responseHtml .= $outputHtml;
-                    }
-
-                    if ($ext == 'pdf') {
-                        // PDF
-                        $pageOptions = [];
-                        if (!empty($document->tpl_header)) {
-                            $templateBody = $document->tpl_header->body;
-                            if (substr($templateBody, 0, 5) == 'data:') {
-                                $templateBody = json_encode([
-                                    'image' => substr($templateBody, strpos($templateBody, ',') + 1),
-                                ]);
-                            } else {
-                                $templateBody = $this->_autop($templateBody);
-                            }
-                            $pdf->setHeaderHtml($templateBody);
-                        }
-                        if (!empty($document->tpl_footer)) {
-                            $templateBody = $document->tpl_footer->body;
-                            if (substr($templateBody, 0, 5) == 'data:') {
-                                $templateBody = json_encode([
-                                    'image' => substr($templateBody, strpos($templateBody, ',') + 1),
-                                ]);
-                            } else {
-                                $templateBody = $this->_autop($templateBody);
-                            }
-
-                            $pdf->setFooterHtml($templateBody);
-                        }
-                        $pdf->newPage($this->toHtml($document, $outputHtml), $pageOptions);
-                    }
-                }
-
-                if ($ext == 'html') {
-                    $result = $this->toHtml($data[0], $responseHtml);
-                } else {
-                    $tmpFilename = constant('TMP') . uniqid('xml2pdf') . '.pdf';
-                    if (!$pdf->saveAs($tmpFilename)) {
-                        $this->lastError = $pdf->getError();
-
-                        return false;
-                    }
-                    $result = file_get_contents($tmpFilename);
-                    unlink($tmpFilename);
-                }
+                $result = $this->toHtml($data[0], $responseHtml);
                 break;
+            case 'xml':
+                $result = $responseHtml;
+                break;
+            default:
+                $tmpFilename = constant('TMP') . uniqid('xml2pdf') . '.pdf';
+                if (!$pdf->saveAs($tmpFilename)) {
+                    $this->lastError = $pdf->getError();
+
+                    return false;
+                }
+                $result = file_get_contents($tmpFilename);
+                unlink($tmpFilename);
         }
 
         return $result;

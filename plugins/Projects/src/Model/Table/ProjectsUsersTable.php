@@ -83,4 +83,11 @@ class ProjectsUsersTable extends Table
 
         return $rules;
     }
+
+    public function hasAccess($projectId, $userId)
+    {
+        return $this->find()
+            ->where(['project_id' => $projectId, 'user_id' => $userId])
+            ->count() > 0;
+    }
 }

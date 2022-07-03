@@ -5,6 +5,7 @@ namespace Calendar\Test\TestCase\Controller;
 
 use Cake\TestSuite\IntegrationTestTrait;
 use Cake\TestSuite\TestCase;
+use Cake\ORM\TableRegistry;
 use Calendar\Controller\EventsController;
 
 /**
@@ -22,8 +23,22 @@ class EventsControllerTest extends TestCase
      * @var array
      */
     protected $fixtures = [
+        'app.Users',
         'plugin.Calendar.Events',
+        'plugin.Documents.DocumentsCounters',
     ];
+
+    /**
+     * Login method
+     * 
+     * @var string $userId User id
+     * @return void
+     */
+    private function login($userId)
+    {
+        $user = TableRegistry::getTableLocator()->get('Users')->get($userId);
+        $this->session(['Auth' => $user]);
+    }
 
     /**
      * Test index method
@@ -33,7 +48,11 @@ class EventsControllerTest extends TestCase
      */
     public function testIndex(): void
     {
-        $this->markTestIncomplete('Not implemented yet.');
+        // Set session data
+        $this->login(USER_ADMIN);
+
+        $this->get('calendar/events/index');
+        $this->assertResponseOk();
     }
 
     /**
@@ -44,18 +63,11 @@ class EventsControllerTest extends TestCase
      */
     public function testView(): void
     {
-        $this->markTestIncomplete('Not implemented yet.');
-    }
+        // Set session data
+        $this->login(USER_ADMIN);
 
-    /**
-     * Test add method
-     *
-     * @return void
-     * @uses \Calendar\Controller\EventsController::add()
-     */
-    public function testAdd(): void
-    {
-        $this->markTestIncomplete('Not implemented yet.');
+        $this->get('calendar/events/view/185383a4-38c8-4194-9516-52c9069bc3bf');
+        $this->assertResponseOk();
     }
 
     /**
@@ -66,7 +78,36 @@ class EventsControllerTest extends TestCase
      */
     public function testEdit(): void
     {
-        $this->markTestIncomplete('Not implemented yet.');
+        // Set session data
+        $this->login(USER_ADMIN);
+
+        $this->get('calendar/events/edit/185383a4-38c8-4194-9516-52c9069bc3bf');
+        $this->assertResponseOk();
+
+        $this->get('calendar/events/edit');
+        $this->assertResponseOk();
+
+        // Set session data
+        $this->login(USER_ADMIN);
+
+        $data = [
+            'id' => '185383a4-38c8-4194-9516-52c9069bc3bf',
+            'owner_id' => COMPANY_FIRST,
+            'calendar_id' => USER_ADMIN,
+            'title' => 'Edited Title',
+            'location' => 'Ljubljana',
+            'body' => 'This is an event description.',
+            'all_day' => 0,
+            'dat_start' => '2022-01-27 12:49:26',
+            'dat_end' => '2022-01-27 13:49:26',
+            'reminder' => 0,
+        ];
+
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+
+        $this->post('calendar/events/edit/185383a4-38c8-4194-9516-52c9069bc3bf', $data);
+        $this->assertRedirect(['action' => 'index']);
     }
 
     /**
@@ -77,6 +118,10 @@ class EventsControllerTest extends TestCase
      */
     public function testDelete(): void
     {
-        $this->markTestIncomplete('Not implemented yet.');
+        // Set session data
+        $this->login(USER_ADMIN);
+
+        $this->get('calendar/events/delete/185383a4-38c8-4194-9516-52c9069bc3bf');
+        $this->assertRedirect();
     }
 }

@@ -16,10 +16,10 @@ class ProjectsWorkhoursFixture extends TestFixture
     public $records = [
         [
             'id' => 'a1895b24-5809-40cb-9670-302a37aa35bf',
-            'project_id' => '268e00ed-431f-47a2-b567-c75fe349d09a',
-            'user_id' => '7e1fd2bf-01e5-4b79-84da-75a744746be1',
+            'project_id' => '4dd53305-9715-4be4-b169-20defe113d2a',
+            'user_id' => USER_ADMIN,
             'started' => '2018-02-27 06:33:56',
-            'duration' => 1,
+            'duration' => 4*60*60,
             'created' => '2018-02-27 06:33:56',
             'modified' => '2018-02-27 06:33:56',
         ],
