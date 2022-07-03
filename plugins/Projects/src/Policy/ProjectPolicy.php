@@ -3,8 +3,6 @@ declare(strict_types=1);
 
 namespace Projects\Policy;
 
-use Cake\ORM\TableRegistry;
-
 /**
  * Project Policy Resolver
  */

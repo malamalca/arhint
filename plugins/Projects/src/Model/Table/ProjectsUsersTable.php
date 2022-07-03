@@ -84,6 +84,13 @@ class ProjectsUsersTable extends Table
         return $rules;
     }
 
+    /**
+     * Check if user has access on specified project
+     *
+     * @param string $projectId Project id.
+     * @param string $userId User id.
+     * @return bool
+     */
     public function hasAccess($projectId, $userId)
     {
         return $this->find()
