@@ -4,6 +4,8 @@ declare(strict_types=1);
 namespace Crm\Model\Table;
 
 use ArrayObject;
+use Cake\Database\Expression\FunctionExpression;
+use Cake\Database\Expression\QueryExpression;
 use Cake\Event\Event;
 use Cake\ORM\Entity;
 use Cake\ORM\Rule\IsUnique;
@@ -194,9 +196,29 @@ class ContactsTable extends Table
         $ret['conditions']['Contacts.kind'] = $filter['kind'];
 
         if (!empty($filter['search'])) {
+            $q = $this->find();
+            $subquery = $this->ContactsPhones->find()
+                ->select(['id', 'no'])
+                ->where([
+                    function (QueryExpression $exp) {
+                        return $exp->equalFields('Contacts.id', 'ContactsPhones.contact_id');
+                    },
+                    function (QueryExpression $exp) use ($filter) {
+                        return $exp->like(
+                            //$q->func()->replace(['ContactsPhones.no' => 'identifier', ' ', '']),
+                            new FunctionExpression('replace', ['ContactsPhones.no' => 'identifier', ' ', '']),
+                            '%' . preg_replace('/\s+/', '', $filter['search']) . '%'
+                        );
+                    },
+                ]);
+
+            $q = $this->find();
+
             $ret['conditions']['OR'] = [
                 'Contacts.title LIKE' => '%' . $filter['search'] . '%',
-                'PrimaryPhones.no LIKE' => '%' . $filter['search'] . '%',
+                function (QueryExpression $exp) use ($subquery) {
+                    return $exp->exists($subquery);
+                },
             ];
         }
 

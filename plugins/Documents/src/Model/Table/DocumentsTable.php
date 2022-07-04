@@ -217,7 +217,7 @@ class DocumentsTable extends Table
                 $ret['conditions'][] = ['OR' => [
                     'Documents.no LIKE' => '%' . $filter['search'] . '%',
                     'Documents.location LIKE' => '%' . $filter['search'] . '%',
-                    //'Client.title LIKE' => '%' . $filter['search'] . '%',
+                    'Documents.title LIKE' => '%' . $filter['search'] . '%',
                 ]];
             }
         }

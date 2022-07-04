@@ -42,7 +42,7 @@ class ContactsController extends AppController
 
         $params = array_merge_recursive(
             [
-                'contain' => ['ContactsEmails', 'ContactsPhones', 'PrimaryAddresses', 'PrimaryPhones', 'Companies'],
+                'contain' => ['ContactsEmails', 'ContactsPhones', 'PrimaryAddresses', 'Companies'],
                 'conditions' => [],
                 'order' => 'Contacts.title',
             ],
@@ -50,6 +50,7 @@ class ContactsController extends AppController
         );
 
         $query = $this->Authorization->applyScope($this->Contacts->find())
+            ->select(['id', 'kind', 'title', 'job', 'descript', 'syncable'])
             ->where($params['conditions'])
             ->contain($params['contain'])
             ->order($params['order']);

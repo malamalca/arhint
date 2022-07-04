@@ -85,7 +85,7 @@ $documents_index = [
         'head' => ['rows' => [
             1 => ['columns' => [
                 'no' => [
-                    'parameters' => ['class' => 'left-align hide-on-small-only'],
+                    'parameters' => ['class' => 'left-align'],
                     'html' => $this->Paginator->sort('no', __d('documents', 'No')),
                 ],
                 'date' => [

@@ -85,6 +85,7 @@ $contactsIndex = [
 $countries = Configure::read('Crm.countries');
 foreach ($contacts as $contact) {
     $job = '';
+
     if (!empty($contact->company)) {
         $job .= '<div class="contact-employer">';
         if (!empty($contact->job)) {
