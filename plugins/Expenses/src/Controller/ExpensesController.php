@@ -143,9 +143,9 @@ class ExpensesController extends AppController
                     return $this->response->withType('application/json')->withStringBody(json_encode($expense));
                 }
 
-                $this->Flash->success(__d('expenses', 'The expense has been saved.'));
+                //$this->Flash->success(__d('expenses', 'The expense has been saved.'));
 
-                return $this->redirect(['action' => 'index']);
+                //return $this->redirect(['action' => 'index']);
             } else {
                 $this->Flash->error(__d('expenses', 'The expense could not be saved. Please, try again.'));
             }
