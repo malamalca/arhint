@@ -115,18 +115,19 @@ class EmailForm extends Form
                     ->where(function (QueryExpression $exp, Query $query) use ($documents) {
                         foreach ($documents as $doc) {
                             switch (get_class($doc)) {
-                                case \Documents\Model\Table\InvoicesTable::class:
+                                case \Documents\Model\Entity\Invoice::class:
                                     $modelName = 'Invoice';
                                     break;
-                                case \Documents\Model\Table\TravelOrdersTable::class:
+                                case \Documents\Model\Entity\TravelOrder::class:
                                     $modelName = 'TravelOrder';
                                     break;
                                 default:
                                     $modelName = 'Document';
                             }
-                    
+
                             $atchs[] = $query->newExpr()->and(['model' => $modelName, 'document_id' => $doc->id]);
                         }
+
                         return $exp->or($atchs);
                     })
                     ->all();
