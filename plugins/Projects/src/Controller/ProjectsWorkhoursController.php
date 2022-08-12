@@ -155,6 +155,10 @@ class ProjectsWorkhoursController extends AppController
             $this->Flash->error(__d('projects', 'The projects workhour could not be saved. Please, try again.'));
         }
 
+        /** @var \App\Model\Table\UsersTable $UsersTable */
+        $UsersTable = TableRegistry::getTableLocator()->get('App.Users');
+        $users = $UsersTable->fetchForCompany($this->getCurrentUser()->get('company_id'));
+
         $projects = $this->Authorization->applyScope($this->ProjectsWorkhours->Projects->find(), 'index')
             ->where(['active' => true])
             ->order(['no DESC', 'title'])
@@ -164,7 +168,7 @@ class ProjectsWorkhoursController extends AppController
             })
             ->toArray();
 
-        $this->set(compact('projectsWorkhour', 'projects'));
+        $this->set(compact('projectsWorkhour', 'projects', 'users'));
 
         return null;
     }

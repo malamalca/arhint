@@ -117,6 +117,9 @@ class DocumentsAttachmentsTable extends Table
             case 'Document':
                 $InvoicesTable = TableRegistry::getTableLocator()->get('Documents.Documents');
                 break;
+            case 'TravelOrder':
+                $InvoicesTable = TableRegistry::getTableLocator()->get('Documents.TravelOrder');
+                break;
         }
 
         if (!empty($InvoicesTable)) {

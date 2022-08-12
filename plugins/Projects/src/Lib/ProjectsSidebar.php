@@ -47,6 +47,16 @@ class ProjectsSidebar
                 ],
                 'active' => $request->getParam('controller') == 'Projects',
             ],
+            'workhours' => [
+                'title' => __d('projects', 'Workhours'),
+                'visible' => true,
+                'url' => [
+                    'plugin' => 'Projects',
+                    'controller' => 'ProjectsWorkhours',
+                    'action' => 'index',
+                ],
+                'active' => $request->getParam('controller') == 'ProjectsWorkhours',
+            ],
             'reports' => [
                 'visible' => $currentUser->hasRole('admin'),
                 'title' => __d('projects', 'Reports'),

@@ -100,11 +100,15 @@ $tableIndex = [
                 'params' => ['class' => 'center-align'],
                 'html' => __d('projects', 'Duration'),
             ],
+            'confirmed' => [
+                'params' => ['class' => 'center-align'],
+                'html' => __d('projects', ''),
+            ],
             'actions' => [],
         ]]]],
         'foot' => ['rows' => [['columns' => [
             'sum' => [
-                'params' => ['colspan' => '3', 'class' => 'right-align'],
+                'params' => ['colspan' => '4', 'class' => 'right-align'],
                 'html' => __d('projects', 'Total duration') . ':',
             ],
             'total' => [
@@ -143,6 +147,10 @@ foreach ($projectsWorkhours as $workhour) {
         'duration' => [
             'params' => ['class' => 'center-align'],
             'html' => $this->Arhint->duration($workhour->duration),
+        ],
+        'confirmed' => [
+            'params' => ['class' => 'center-align'],
+            'html' => empty($workhour->dat_confirmed) ? '&nbsp;' : '<i class="material-icons small red-text text-lighten-2">beenhere</i>',
         ],
         'actions' => [
             'parameters' => ['class' => 'right-align'],

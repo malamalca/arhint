@@ -18,13 +18,28 @@ $editForm = [
                 'method' => 'hidden',
                 'parameters' => ['field' => 'id'],
             ],
-            'user_id' => [
-                'method' => 'hidden',
-                'parameters' => ['field' => 'user_id'],
-            ],
             'referer' => [
                 'method' => 'hidden',
                 'parameters' => ['referer', ['id' => 'referer', 'default' => Router::url($this->getRequest()->referer(), true)]],
+            ],
+            'user_id' => $this->getCurrentUser()->hasRole('admin') ? null :[
+                'method' => 'hidden',
+                'parameters' => ['field' => 'user_id'],
+            ],
+            'user' => !$this->getCurrentUser()->hasRole('admin') ? null : [
+                'method' => 'control',
+                'parameters' => [
+                    'field' => 'user_id',
+                    'options' => [
+                        'type' => 'select',
+                        'options' => $users,
+                        'label' => [
+                            'text' => __d('projects', 'User') . ':',
+                            'class' => 'active',
+                        ],
+                        'class' => 'browser-default',
+                    ],
+                ],
             ],
             'project_id' => !$this->getRequest()->getQuery('project') ? null : [
                 'method' => 'hidden',
@@ -80,6 +95,19 @@ $editForm = [
                         'type' => 'textarea',
                         'label' => [
                             'text' => __d('projects', 'Description') . ':',
+                            'class' => 'active',
+                        ],
+                    ],
+                ],
+            ],
+            'confirmed' => !$this->getCurrentUser()->hasRole('admin') ? null : [
+                'method' => 'control',
+                'parameters' => [
+                    'field' => 'dat_confirmed',
+                    'options' => [
+                        'type' => 'date',
+                        'label' => [
+                            'text' => __d('projects', 'Confirmed') . ':',
                             'class' => 'active',
                         ],
                     ],

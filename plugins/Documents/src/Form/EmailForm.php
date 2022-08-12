@@ -3,9 +3,13 @@ declare(strict_types=1);
 
 namespace Documents\Form;
 
+use Cake\Core\Configure;
+use Cake\Database\Expression\QueryExpression;
 use Cake\Form\Form;
 use Cake\Form\Schema;
 use Cake\Mailer\Mailer;
+use Cake\ORM\Query;
+use Cake\ORM\TableRegistry;
 use Cake\Validation\Validator;
 use Documents\Lib\DocumentsExport;
 
@@ -96,12 +100,44 @@ class EmailForm extends Form
                     $attachmentName = (string)mb_ereg_replace("([\.]{2,})", '', $attachmentName);
                 }
 
-                $email->setAttachments([
+                // base attachments (document export)
+                $attachments = [
                     $attachmentName => [
                         'data' => $data,
                         'mimetype' => 'application/pdf',
                     ],
-                ]);
+                ];
+
+                // documents file attachments
+                $DocumentsAttachmentsTable = TableRegistry::getTableLocator()->get('Documents.DocumentsAttachments');
+                $docAttachments = $DocumentsAttachmentsTable->find()
+                    ->select(['id', 'original', 'filename'])
+                    ->where(function (QueryExpression $exp, Query $query) use ($documents) {
+                        foreach ($documents as $doc) {
+                            switch (get_class($doc)) {
+                                case \Documents\Model\Table\InvoicesTable::class:
+                                    $modelName = 'Invoice';
+                                    break;
+                                case \Documents\Model\Table\TravelOrdersTable::class:
+                                    $modelName = 'TravelOrder';
+                                    break;
+                                default:
+                                    $modelName = 'Document';
+                            }
+                    
+                            $atchs[] = $query->newExpr()->and(['model' => $modelName, 'document_id' => $doc->id]);
+                        }
+                        return $exp->or($atchs);
+                    })
+                    ->all();
+
+                foreach ($docAttachments as $attachment) {
+                    $attachments[$attachment->original] = [
+                        'file' => Configure::read('Documents.uploadFolder') . DS . $attachment->filename,
+                    ];
+                }
+
+                $email->setAttachments($attachments);
 
                 $result = $email->deliver((string)$this->request->getData('body'));
 

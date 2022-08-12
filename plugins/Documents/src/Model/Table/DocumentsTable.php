@@ -218,6 +218,7 @@ class DocumentsTable extends Table
                     'Documents.no LIKE' => '%' . $filter['search'] . '%',
                     'Documents.location LIKE' => '%' . $filter['search'] . '%',
                     'Documents.title LIKE' => '%' . $filter['search'] . '%',
+                    'Client.title LIKE' => '%' . $filter['search'] . '%',
                 ]];
             }
         }
