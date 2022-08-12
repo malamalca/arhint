@@ -17,7 +17,7 @@ use Cake\Validation\Validator;
  * @method \Projects\Model\Entity\ProjectsWorkhour newEmptyEntity(array $options = [])
  * @method \Projects\Model\Entity\ProjectsWorkhour[] newEntities(array $data, array $options = [])
  * @method \Projects\Model\Entity\ProjectsWorkhour|false save(\Cake\Datasource\EntityInterface $entity, $options = [])
- * @method \Projects\Model\Entity\ProjectsWorkhour patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
+ * @method \Projects\Model\Entity\ProjectsWorkhour patchEntity(iterable $entities, array $data, array $options = [])
  * @method \Projects\Model\Entity\ProjectsWorkhour[] patchEntities(\Traversable|array<array-key, \Cake\Datasource\EntityInterface> $entity, array $data, array $options = [])
  * @method \Projects\Model\Entity\ProjectsWorkhour findOrCreate($search, callable $callback = null, $options = [])
  * @mixin \Cake\ORM\Behavior\TimestampBehavior
