@@ -6,11 +6,15 @@
 /tmp/*
 /vendor/*
 /uploads/*
-/uploads/Documents/*
 /webroot/.well-known/*
 schema-dump-default.lock
 
-!.gitkeep
+/uploads/Documents/*
+/uploads/Invoices/*
+/uploads/TravelOrders/*
+!/uploads/Documents/.gitkeep
+!/uploads/Invoices/.gitkeep
+!/uploads/TravelOrders/.gitkeep
 
 # OS generated files #
 ######################
