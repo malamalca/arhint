@@ -67,18 +67,18 @@ jobs:
       run: composer run-script post-install-cmd --no-interaction
 
     - name: Setup problem matchers for PHPUnit
-      if: matrix.php-version == '7.4'
+      if: matrix.php-version == '8.0'
       run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
 
     - name: Run PHPUnit
       run: |
-        if [[ ${{ matrix.php-version }} == '7.4' ]]; then
+        if [[ ${{ matrix.php-version }} == '8.0' ]]; then
           export CODECOVERAGE=1 && php -dpcov.enabled=1 -dpcov.directory=. vendor/bin/phpunit --verbose --coverage-clover=coverage.xml
         else
           vendor/bin/phpunit
         fi
     - name: Submit code coverage
-      if: matrix.php-version == '7.4'
+      if: matrix.php-version == '8.0'
       uses: codecov/codecov-action@v3
 
 
