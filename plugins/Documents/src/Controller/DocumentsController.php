@@ -65,7 +65,7 @@ class DocumentsController extends BaseDocumentsController
         $params = $this->Documents->filter($filter);
 
         $query = $this->Authorization->applyScope($this->Documents->find())
-            ->select(['id', 'no', 'dat_issue', 'title', 'descript', 'project_id', 'attachments_count', 'client.title'])
+            ->select(['id', 'no', 'dat_issue', 'title', 'descript', 'project_id', 'attachments_count', 'Client.title'])
             ->join([
                 'table' => 'documents_clients',
                 'alias' => 'Client',
