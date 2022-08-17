@@ -60,7 +60,6 @@ class DocumentsLinksControllerTest extends IntegrationTestCase
         );
 
         $this->assertFlashElement('flash/success');
-        //$this->assertRedirect(Router::url(['controller' => 'Documents', 'action' => 'view', 'd0d59a31-6de7-4eb4-8230-ca09113a7fe5']));
         $this->assertRedirect(Router::url(['controller' => 'DocumentsLinks', 'action' => 'index']));
     }
 

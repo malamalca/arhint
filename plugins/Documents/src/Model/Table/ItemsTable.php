@@ -36,7 +36,7 @@ class ItemsTable extends Table
         $this->belongsToMany('Documents', [
             'foreignKey' => 'item_id',
             'targetForeignKey' => 'document_id',
-            'joinTable' => 'documents_items',
+            'joinTable' => 'invoices_items',
             'className' => 'Documents.Documents',
         ]);
     }

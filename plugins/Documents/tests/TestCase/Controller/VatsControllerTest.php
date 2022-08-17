@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Documents\Test\TestCase\Controller;
 
+use Cake\ORM\TableRegistry;
 use Cake\TestSuite\IntegrationTestCase;
 
 /**
@@ -16,8 +17,16 @@ class VatsControllerTest extends IntegrationTestCase
      * @var array
      */
     public $fixtures = [
+        'Users' => 'app.Users',
         'Vats' => 'plugin.Documents.Vats',
+        'Items' => 'plugin.Documents.Items',
     ];
+
+    private function login($userId)
+    {
+        $user = TableRegistry::getTableLocator()->get('Users')->get($userId);
+        $this->session(['Auth' => $user]);
+    }
 
     /**
      * Test index method
@@ -26,17 +35,11 @@ class VatsControllerTest extends IntegrationTestCase
      */
     public function testIndex()
     {
-        $this->markTestIncomplete('Not implemented yet.');
-    }
+        // Set session data
+        $this->login(USER_ADMIN);
 
-    /**
-     * Test view method
-     *
-     * @return void
-     */
-    public function testView()
-    {
-        $this->markTestIncomplete('Not implemented yet.');
+        $this->get('documents/vats/index');
+        $this->assertResponseOk();
     }
 
     /**
@@ -46,7 +49,21 @@ class VatsControllerTest extends IntegrationTestCase
      */
     public function testAdd()
     {
-        $this->markTestIncomplete('Not implemented yet.');
+        // Set session data
+        $this->login(USER_ADMIN);
+
+        $data = [
+            'id' => '',
+            'owner_id' => '8155426d-2302-4fa5-97de-e33cefb9d704',
+            'descript' => '99 %',
+            'percent' => 99,
+        ];
+
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+
+        $this->post('documents/vats/edit', $data);
+        $this->assertRedirect();
     }
 
     /**
@@ -56,7 +73,21 @@ class VatsControllerTest extends IntegrationTestCase
      */
     public function testEdit()
     {
-        $this->markTestIncomplete('Not implemented yet.');
+        // Set session data
+        $this->login(USER_ADMIN);
+
+        $data = [
+            'id' => '3e55df84-9fba-4ea7-ba9e-3e6a3f83da0c',
+            'owner_id' => '8155426d-2302-4fa5-97de-e33cefb9d704',
+            'descript' => '99 %',
+            'percent' => 99,
+        ];
+
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+
+        $this->post('documents/vats/edit/3e55df84-9fba-4ea7-ba9e-3e6a3f83da0c', $data);
+        $this->assertRedirect();
     }
 
     /**
@@ -66,6 +97,10 @@ class VatsControllerTest extends IntegrationTestCase
      */
     public function testDelete()
     {
-        $this->markTestIncomplete('Not implemented yet.');
+        // Set session data
+        $this->login(USER_ADMIN);
+
+        $this->get('documents/vats/delete/3e55df84-9fba-4ea7-ba9e-3e6a3f83da0c');
+        $this->assertRedirect();
     }
 }
