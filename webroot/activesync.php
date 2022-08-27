@@ -42,12 +42,21 @@ if (!$Hasher->check($_SERVER['PHP_AUTH_PW'], $user->passwd)) {
 
 Syncroton_Registry::set('user', $user);
 
+function timezone_offset_string( $offset )
+{
+	return sprintf( "%s%02d:%02d", ( $offset >= 0 ) ? '+' : '-', abs( $offset / 3600 ), abs( $offset % 3600 ) );
+}
+$offset = timezone_offset_get(new DateTimeZone(Configure::read('App.defaultTimezone')), new DateTime());
+
 $conf = ConnectionManager::get('default')->config();
 $db = Zend_Db::factory('PDO_MYSQL', [
     'host' => $conf['host'],
     'username' => $conf['username'],
     'password' => $conf['password'],
     'dbname' => $conf['database'],
+    'driver_options' => [
+        PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES UTF8;SET time_zone = "' . timezone_offset_string($offset) . '";',
+    ],
 ]);
 Syncroton_Registry::setDatabase($db);
 

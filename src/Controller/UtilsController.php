@@ -66,15 +66,16 @@ class UtilsController extends AppController
             $command = sprintf($command, implode(' ', $sourcePDF), escapeshellarg(TMP . $outputPDF));
 
             $ret = exec($command);
-            if ($ret) {
+
+            //if ($ret) {
                 $response = $this->getResponse()
                     ->withType('application/json')
                     ->withStringBody(json_encode(['filename' => $outputPDF]));
 
                     return $response;
-            } else {
+            //} else {
                 throw new BadRequestException('Error processing pdf files.');
-            }
+           // }
         }
 
         return null;
@@ -256,7 +257,7 @@ class UtilsController extends AppController
                 $res = $pdfObj->set_signature_certificate($cert['tmp_name'], $this->getRequest()->getData('pass'));
 
                 if ($res) {
-                    $pdfSignedContents = $pdfObj->to_pdf_file_s(true);
+                    $pdfSignedContents = $pdfObj->to_pdf_file_s(false);
 
                     if ($pdfSignedContents === false) {
                         throw new BadRequestException('Error signing pdf files.');

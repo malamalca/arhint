@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace Calendar\Lib;
 
+use Cake\Core\Configure;
+use Cake\I18n\FrozenTime;
 use Cake\Log\Log;
 use Cake\ORM\TableRegistry;
 use DateTime;
@@ -112,8 +114,8 @@ class ActiveSyncCalendar implements Syncroton_Data_IData
         $entry->location = $event->location;
         $entry->allDayEvent = $event->all_day ? 1 : 0;
 
-        $entry->startTime = $event->dat_start ? new \DateTime($event->dat_start->toDateTimeString()) : '';
-        $entry->endTime = $event->dat_end ? new \DateTime($event->dat_end->toDateTimeString()) : '';
+        $entry->startTime = $event->dat_start ? new \DateTime($event->dat_start->setTimezone('UTC')->toDateTimeString()) : '';
+        $entry->endTime = $event->dat_end ? new \DateTime($event->dat_end->setTimezone('UTC')->toDateTimeString()) : '';
         $entry->reminder = $event->reminder;
         //recurrence
 
@@ -150,8 +152,8 @@ class ActiveSyncCalendar implements Syncroton_Data_IData
 
         $event->all_day = (bool)$_entry->allDayEvent;
 
-        $event->dat_start = $_entry->startTime;
-        $event->dat_end = $_entry->endTime;
+        $event->dat_start = (new FrozenTime($_entry->startTime, 'UTC'))->setTimezone(Configure::read('App.defaultTimezone'));
+        $event->dat_end = (new FrozenTime($_entry->endTime, 'UTC'))->setTimezone(Configure::read('App.defaultTimezone'));
         $event->reminder = $_entry->reminder;
 
         if (!$EventsTable->save($event)) {
@@ -189,8 +191,8 @@ class ActiveSyncCalendar implements Syncroton_Data_IData
 
         $event->all_day = (bool)$_entry->allDayEvent;
 
-        $event->dat_start = $_entry->startTime;
-        $event->dat_end = $_entry->endTime;
+        $event->dat_start = (new FrozenTime($_entry->startTime, 'UTC'))->setTimezone(Configure::read('App.defaultTimezone'));
+        $event->dat_end = (new FrozenTime($_entry->endTime, 'UTC'))->setTimezone(Configure::read('App.defaultTimezone'));
         $event->reminder = $_entry->reminder;
 
         Log::write('debug', print_r($_entry, true));
