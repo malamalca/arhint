@@ -67,7 +67,7 @@ class InvoicesController extends BaseDocumentsController
 
         $query = $this->Authorization->applyScope($this->Invoices->find())
             ->select(['id', 'no', 'counter', 'counter_id', 'dat_issue', 'title', 'net_total', 'total', 'project_id',
-                'attachments_count', 'client.title'])
+                'attachments_count', 'Client.title'])
             ->join([
                 'table' => 'documents_clients',
                 'alias' => 'Client',

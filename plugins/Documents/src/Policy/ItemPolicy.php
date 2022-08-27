@@ -41,6 +41,6 @@ class ItemPolicy
      */
     public function canDelete($user, $entity)
     {
-        return $entity->owner_id == $user->company_id && $$user->hasRole('editor');
+        return $entity->owner_id == $user->company_id && $user->hasRole('editor');
     }
 }

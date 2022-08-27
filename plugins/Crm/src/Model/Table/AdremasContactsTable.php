@@ -27,10 +27,6 @@ class AdremasContactsTable extends Table
         $this->setDisplayField('title');
         $this->setPrimaryKey('id');
         $this->addBehavior('Timestamp');
-        /*$this->belongsTo('Users', [
-            'foreignKey' => 'owner_id',
-            'className' => 'Crm.Users'
-        ]);*/
         $this->belongsTo('Adremas', [
             'foreignKey' => 'adrema_id',
             'className' => 'Crm.Adremas',
@@ -76,7 +72,6 @@ class AdremasContactsTable extends Table
      */
     public function buildRules(RulesChecker $rules): RulesChecker
     {
-        //$rules->add($rules->existsIn(['owner_id'], 'Users'));
         $rules->add($rules->existsIn(['adrema_id'], 'Adremas'));
         //$rules->add($rules->existsIn(['contacts_address_id'], 'ContactsAddresses'));
         return $rules;

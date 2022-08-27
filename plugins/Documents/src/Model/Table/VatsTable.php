@@ -27,10 +27,6 @@ class VatsTable extends Table
         $this->setDisplayField('id');
         $this->setPrimaryKey('id');
         $this->addBehavior('Timestamp');
-        $this->hasMany('DocumentsItems', [
-            'foreignKey' => 'vat_id',
-            'className' => 'Documents\Model\Table\DocumentsItemsTable',
-        ]);
         $this->hasMany('InvoicesTaxes', [
             'foreignKey' => 'vat_id',
             'className' => 'Documents\Model\Table\InvoicesTaxesTable',

@@ -19,7 +19,7 @@ class Adrema extends Entity
     /**
      * Fields that can be mass assigned using newEntity() or patchEntity().
      *
-     * @var array<bool>
+     * @var array<string, bool>
      */
     protected $_accessible = [
         '*' => true,

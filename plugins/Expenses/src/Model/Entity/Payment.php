@@ -28,7 +28,7 @@ class Payment extends Entity
      * mass assigned. For security purposes, it is advised to set '*' to false
      * (or remove), and explicitly make individual fields accessible as needed.
      *
-     * @var array<bool>
+     * @var array<string, bool>
      */
     protected $_accessible = [
         'owner_id' => true,
