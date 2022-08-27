@@ -42,7 +42,7 @@ $editForm = [
                     ],
                 ],
             ],
-
+            'spacer' => '<div>&nbsp;</div>',
             'submit' => [
                 'method' => 'button',
                 'parameters' => [
