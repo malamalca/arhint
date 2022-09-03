@@ -74,8 +74,8 @@ class UtilsController extends AppController
 
                     return $response;
             //} else {
-                throw new BadRequestException('Error processing pdf files.');
-           // }
+            //    throw new BadRequestException('Error processing pdf files.');
+            //}
         }
 
         return null;
