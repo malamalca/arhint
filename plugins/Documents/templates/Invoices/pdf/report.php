@@ -36,8 +36,6 @@ $documentsTable = [
     ],
 ];
 
-$dateFormat = $this->Lil->dateFormat();
-
 $total = 0;
 $netTotal = 0;
 $counterId = null;
@@ -70,7 +68,7 @@ foreach ($data as $document) {
         ],
         'date' => [
             'parameters' => ['align' => 'center'],
-            'html' => $this->Time->format($document->dat_issue, $dateFormat),
+            'html' => (string)($document->dat_issue),
         ],
         'title' => [
             'html' => h($document->title),

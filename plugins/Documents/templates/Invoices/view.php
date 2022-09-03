@@ -124,7 +124,7 @@ $invoiceView = [
                         '?' => ['download' => 1],
                     ],
                 ],
-                'sepaxml' => !$document->isInvoice() ? null : [
+                'sepaxml' => [
                     'title' => __d('documents', 'Sepa XML'),
                     'visible' => true,
                     'url' => [
@@ -134,7 +134,7 @@ $invoiceView = [
                         '?' => ['download' => 1],
                     ],
                 ],
-                'eslog' => !$document->isInvoice() ? null : [
+                'eslog' => [
                     'title' => __d('documents', 'eSlog'),
                     'visible' => true,
                     'url' => [
@@ -144,7 +144,7 @@ $invoiceView = [
                         '?' => ['download' => 1],
                     ],
                 ],
-                'eslog20' => !$document->isInvoice() ? null : [
+                'eslog20' => [
                     'title' => __d('documents', 'eSlog 2.0'),
                     'visible' => true,
                     'url' => [
@@ -269,11 +269,11 @@ $invoiceView = [
                     'label' => __d('documents', 'Date of issue') . ':',
                     'text' => (string)$document->dat_issue,
                 ],
-                1 => !$document->isInvoice() ? null : [
+                1 => [
                     'label' => __d('documents', 'Service date') . ':',
                     'text' => (string)$document->dat_service,
                 ],
-                2 => !$document->isInvoice() ? null : [
+                2 => [
                     'label' => __d('documents', 'Expiration date') . ':',
                     'text' => (string)$document->dat_expire,
                 ],
@@ -300,7 +300,7 @@ $invoiceView = [
                 ],
             ],
         ],
-        'total' => !$document->isInvoice() ? null : [
+        'total' => [
             'id' => 'invoice-total',
             'lines' => [[
                 'label' => __d('documents', 'Total') . ':',
@@ -323,184 +323,182 @@ foreach ($counters as $cntr) {
     ];
 }
 
-if ($document->isInvoice()) {
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    // ITEMS
-    $itemsBody = [];
-    $itemsTotal = 0;
-    $grandTotal = 0;
-    foreach ($document->invoices_items as $itm) {
-        $itemsPrice = round($itm->price * $itm->qty, 4);
-        $discount = round($itemsPrice * $itm->discount / 100, 4);
-        $itemTotal = $itemsPrice - $discount;
+////////////////////////////////////////////////////////////////////////////////////////////////
+// ITEMS
+$itemsBody = [];
+$itemsTotal = 0;
+$grandTotal = 0;
+foreach ($document->invoices_items as $itm) {
+    $itemsPrice = round($itm->price * $itm->qty, 4);
+    $discount = round($itemsPrice * $itm->discount / 100, 4);
+    $itemTotal = $itemsPrice - $discount;
 
-        $lineTotal = round($itemTotal, 2) + round($itemTotal * $itm->vat_percent / 100, 2);
-        $grandTotal += $lineTotal;
+    $lineTotal = round($itemTotal, 2) + round($itemTotal * $itm->vat_percent / 100, 2);
+    $grandTotal += $lineTotal;
 
-        $itemsBody['rows'][] = ['columns' => [
-            'descript' => h($itm['descript']),
-            'qty' => [
-                'parameters' => ['class' => 'right-align'],
-                'html' => $this->Number->precision((float)$itm->qty, 2),
-            ],
-            'unit' => [
-                'html' => h($itm['unit']),
-            ],
-            'price' => [
-                'parameters' => ['class' => 'right-align'],
-                'html' => $this->Number->currency($itm->price),
-            ],
-            'discount' => [
-                'parameters' => ['class' => 'right-align'],
-                'html' => $this->Number->precision((float)$itm->discount, 1),
-            ],
-            'item_total' => [
-                'parameters' => ['class' => 'right-align'],
-                'html' => $this->Number->currency($itemTotal),
-            ],
-            'tax' => [
-                'parameters' => ['class' => 'right-align'],
-                'html' => $this->Number->precision((float)$itm->vat_percent, 1),
-            ],
-            'line_total' => [
-                'parameters' => ['class' => 'right-align'],
-                'html' => $this->Number->currency($lineTotal),
-            ],
-        ]];
-        $itemsTotal += $itemTotal;
-    }
+    $itemsBody['rows'][] = ['columns' => [
+        'descript' => h($itm['descript']),
+        'qty' => [
+            'parameters' => ['class' => 'right-align'],
+            'html' => $this->Number->precision((float)$itm->qty, 2),
+        ],
+        'unit' => [
+            'html' => h($itm['unit']),
+        ],
+        'price' => [
+            'parameters' => ['class' => 'right-align'],
+            'html' => $this->Number->currency($itm->price),
+        ],
+        'discount' => [
+            'parameters' => ['class' => 'right-align'],
+            'html' => $this->Number->precision((float)$itm->discount, 1),
+        ],
+        'item_total' => [
+            'parameters' => ['class' => 'right-align'],
+            'html' => $this->Number->currency($itemTotal),
+        ],
+        'tax' => [
+            'parameters' => ['class' => 'right-align'],
+            'html' => $this->Number->precision((float)$itm->vat_percent, 1),
+        ],
+        'line_total' => [
+            'parameters' => ['class' => 'right-align'],
+            'html' => $this->Number->currency($lineTotal),
+        ],
+    ]];
+    $itemsTotal += $itemTotal;
+}
 
-    $items = [
-        'parameters' => ['cellspacing' => '0', 'cellpadding' => '0', 'id' => 'invoice-analytics-table'],
-        'head' => [
-            'rows' => [
-                0 => [
-                    'columns' => [
-                        __d('documents', 'Description'),
-                        ['parameters' => ['class' => 'right-align'], 'html' => __d('documents', 'Quantity')],
-                        ['parameters' => ['class' => 'left-align'], 'html' => __d('documents', 'Unit')],
-                        ['parameters' => ['class' => 'right-align'], 'html' => __d('documents', 'Price per Unit')],
-                        ['parameters' => ['class' => 'right-align'], 'html' => __d('documents', 'Discount [%]')],
-                        ['parameters' => ['class' => 'right-align'], 'html' => __d('documents', 'Unit Total')],
-                        ['parameters' => ['class' => 'right-align'], 'html' => __d('documents', 'Tax [%]')],
-                        ['parameters' => ['class' => 'right-align'], 'html' => __d('documents', 'Total with Tax')],
+$items = [
+    'parameters' => ['cellspacing' => '0', 'cellpadding' => '0', 'id' => 'invoice-analytics-table'],
+    'head' => [
+        'rows' => [
+            0 => [
+                'columns' => [
+                    __d('documents', 'Description'),
+                    ['parameters' => ['class' => 'right-align'], 'html' => __d('documents', 'Quantity')],
+                    ['parameters' => ['class' => 'left-align'], 'html' => __d('documents', 'Unit')],
+                    ['parameters' => ['class' => 'right-align'], 'html' => __d('documents', 'Price per Unit')],
+                    ['parameters' => ['class' => 'right-align'], 'html' => __d('documents', 'Discount [%]')],
+                    ['parameters' => ['class' => 'right-align'], 'html' => __d('documents', 'Unit Total')],
+                    ['parameters' => ['class' => 'right-align'], 'html' => __d('documents', 'Tax [%]')],
+                    ['parameters' => ['class' => 'right-align'], 'html' => __d('documents', 'Total with Tax')],
+                ],
+            ],
+        ],
+    ],
+    'body' => $itemsBody,
+    'foot' => [
+        'rows' => [
+            0 => [
+                'columns' => [
+                    [
+                        'parameters' => ['class' => 'right-align', 'colspan' => 5],
+                        'html' => __d('documents', 'Grand Total') . ':',
+                    ],
+                    [
+                        'parameters' => ['class' => 'right-align'],
+                        'html' => $this->Number->currency($itemsTotal),
+                    ],
+                    [
+                        'html' => '&nbsp;',
+                    ],
+                    [
+                        'parameters' => ['class' => 'right-align', 'id' => 'invoice-analytics-grand-total'],
+                        'html' => $this->Number->currency($grandTotal),
                     ],
                 ],
             ],
         ],
-        'body' => $itemsBody,
-        'foot' => [
-            'rows' => [
-                0 => [
-                    'columns' => [
-                        [
-                            'parameters' => ['class' => 'right-align', 'colspan' => 5],
-                            'html' => __d('documents', 'Grand Total') . ':',
-                        ],
-                        [
-                            'parameters' => ['class' => 'right-align'],
-                            'html' => $this->Number->currency($itemsTotal),
-                        ],
-                        [
-                            'html' => '&nbsp;',
-                        ],
-                        [
-                            'parameters' => ['class' => 'right-align', 'id' => 'invoice-analytics-grand-total'],
-                            'html' => $this->Number->currency($grandTotal),
-                        ],
+    ],
+];
+
+if ($document->documents_counter->direction == 'issued') {
+    $invoiceView['panels']['items_title'] = sprintf('<h3>%s</h3>', __d('documents', 'Analytics'));
+    $invoiceView['panels']['items']['id'] = 'invoice-view-items-table';
+    $invoiceView['panels']['items']['table'] = $items;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+// TAXES
+$taxesBody = [];
+$baseTotal = 0;
+$taxTotal = 0;
+$grandTotal = 0;
+foreach ($document->invoices_taxes as $itm) {
+    $tax = round($itm->base * $itm->vat_percent / 100, 2);
+    $lineTotal = round($itm->base + $tax, 2);
+
+    $taxesBody['rows'][] = ['columns' => [
+        'descript' => h($itm->vat_title),
+        'percent' => [
+            'parameters' => ['class' => 'right-align'],
+            'html' => $this->Number->precision((float)$itm->vat_percent, 1),
+        ],
+        'base' => [
+            'parameters' => ['class' => 'right-align'],
+            'html' => $this->Number->currency($itm->base),
+        ],
+        'tax' => [
+            'parameters' => ['class' => 'right-align'],
+            'html' => $this->Number->currency($tax),
+        ],
+        'line_total' => [
+            'parameters' => ['class' => 'right-align'],
+            'html' => $this->Number->currency($lineTotal),
+        ],
+
+    ]];
+    $baseTotal += round($itm->base, 2);
+    $taxTotal += $tax;
+    $grandTotal += $lineTotal;
+}
+$taxes = [
+    'parameters' => ['cellspacing' => '0', 'cellpadding' => '0', 'id' => 'invoice-taxes-table', 'class' => 'index-static'],
+    'head' => [
+        'rows' => [
+            0 => [
+                'columns' => [
+                    __d('documents', 'Description'),
+                    ['parameters' => ['class' => 'right-align'], 'html' => __d('documents', 'VAT [%]')],
+                    ['parameters' => ['class' => 'right-align'], 'html' => __d('documents', 'Base')],
+                    ['parameters' => ['class' => 'right-align'], 'html' => __d('documents', 'Tax')],
+                    ['parameters' => ['class' => 'right-align'], 'html' => __d('documents', 'Total')],
+                ],
+            ],
+        ],
+    ],
+    'body' => $taxesBody,
+    'foot' => [
+        'rows' => [
+            0 => [
+                'columns' => [
+                    [
+                        'parameters' => ['class' => 'right-align', 'colspan' => 2],
+                        'html' => __d('documents', 'Grand Total') . ':',
+                    ],
+                    [
+                        'parameters' => ['class' => 'right-align'],
+                        'html' => $this->Number->currency($baseTotal),
+                    ],
+                    [
+                        'parameters' => ['class' => 'right-align'],
+                        'html' => $this->Number->currency($taxTotal),
+                    ],
+                    [
+                        'parameters' => ['class' => 'right-align', 'id' => 'invoice-analytics-grand-total'],
+                        'html' => $this->Number->currency($grandTotal),
                     ],
                 ],
             ],
         ],
-    ];
+    ],
+];
 
-    if ($document->documents_counter->direction == 'issued') {
-        $invoiceView['panels']['items_title'] = sprintf('<h3>%s</h3>', __d('documents', 'Analytics'));
-        $invoiceView['panels']['items']['id'] = 'invoice-view-items-table';
-        $invoiceView['panels']['items']['table'] = $items;
-    }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    // TAXES
-    $taxesBody = [];
-    $baseTotal = 0;
-    $taxTotal = 0;
-    $grandTotal = 0;
-    foreach ($document->invoices_taxes as $itm) {
-        $tax = round($itm->base * $itm->vat_percent / 100, 2);
-        $lineTotal = round($itm->base + $tax, 2);
-
-        $taxesBody['rows'][] = ['columns' => [
-            'descript' => h($itm->vat_title),
-            'percent' => [
-                'parameters' => ['class' => 'right-align'],
-                'html' => $this->Number->precision((float)$itm->vat_percent, 1),
-            ],
-            'base' => [
-                'parameters' => ['class' => 'right-align'],
-                'html' => $this->Number->currency($itm->base),
-            ],
-            'tax' => [
-                'parameters' => ['class' => 'right-align'],
-                'html' => $this->Number->currency($tax),
-            ],
-            'line_total' => [
-                'parameters' => ['class' => 'right-align'],
-                'html' => $this->Number->currency($lineTotal),
-            ],
-
-        ]];
-        $baseTotal += round($itm->base, 2);
-        $taxTotal += $tax;
-        $grandTotal += $lineTotal;
-    }
-    $taxes = [
-        'parameters' => ['cellspacing' => '0', 'cellpadding' => '0', 'id' => 'invoice-taxes-table', 'class' => 'index-static'],
-        'head' => [
-            'rows' => [
-                0 => [
-                    'columns' => [
-                        __d('documents', 'Description'),
-                        ['parameters' => ['class' => 'right-align'], 'html' => __d('documents', 'VAT [%]')],
-                        ['parameters' => ['class' => 'right-align'], 'html' => __d('documents', 'Base')],
-                        ['parameters' => ['class' => 'right-align'], 'html' => __d('documents', 'Tax')],
-                        ['parameters' => ['class' => 'right-align'], 'html' => __d('documents', 'Total')],
-                    ],
-                ],
-            ],
-        ],
-        'body' => $taxesBody,
-        'foot' => [
-            'rows' => [
-                0 => [
-                    'columns' => [
-                        [
-                            'parameters' => ['class' => 'right-align', 'colspan' => 2],
-                            'html' => __d('documents', 'Grand Total') . ':',
-                        ],
-                        [
-                            'parameters' => ['class' => 'right-align'],
-                            'html' => $this->Number->currency($baseTotal),
-                        ],
-                        [
-                            'parameters' => ['class' => 'right-align'],
-                            'html' => $this->Number->currency($taxTotal),
-                        ],
-                        [
-                            'parameters' => ['class' => 'right-align', 'id' => 'invoice-analytics-grand-total'],
-                            'html' => $this->Number->currency($grandTotal),
-                        ],
-                    ],
-                ],
-            ],
-        ],
-    ];
-
-    if ($document->documents_counter->direction == 'received') {
-        $invoiceView['panels']['vat_title'] = sprintf('<h3>%s</h3>', __d('documents', 'VAT Analytics'));
-        $invoiceView['panels']['vat']['id'] = 'invoice-view-tax-table';
-        $invoiceView['panels']['vat']['table'] = $taxes;
-    }
+if ($document->documents_counter->direction == 'received') {
+    $invoiceView['panels']['vat_title'] = sprintf('<h3>%s</h3>', __d('documents', 'VAT Analytics'));
+    $invoiceView['panels']['vat']['id'] = 'invoice-view-tax-table';
+    $invoiceView['panels']['vat']['table'] = $taxes;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////

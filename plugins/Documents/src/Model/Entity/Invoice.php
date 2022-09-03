@@ -89,14 +89,4 @@ class Invoice extends Entity
         // update counter
         $DocumentsCounters->updateAll(['counter' => $counter->counter + 1], ['id' => $counter->id]);
     }
-
-    /**
-     * Checks if current document is Document
-     *
-     * @return bool
-     */
-    public function isInvoice()
-    {
-        return in_array($this->doc_type, Configure::read('Documents.invoiceDocTypes'));
-    }
 }

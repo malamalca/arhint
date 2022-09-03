@@ -97,15 +97,11 @@ $invoicesIndex = [
                     'parameters' => ['class' => 'left-align hide-on-small-only'],
                     'html' => __d('documents', 'Client'),
                 ],
-                'project' => $counter->isInvoice() ? null : [
-                    'parameters' => ['class' => 'left-align'],
-                    'html' => __d('documents', 'Project'),
-                ],
-                'net_total' => !$counter->isInvoice() ? null : [
+                'net_total' => [
                     'parameters' => ['class' => 'right-align hide-on-small-only'],
                     'html' => $this->Paginator->sort('net_total', __d('documents', 'Net Total')),
                 ],
-                'total' => !$counter->isInvoice() ? null : [
+                'total' => [
                     'parameters' => ['class' => 'right-align'],
                     'html' => $this->Paginator->sort('total', __d('documents', 'Total')),
                 ],
@@ -129,17 +125,13 @@ $invoicesIndex = [
             ],
             'client' => [
                 'parameters' => ['class' => 'invoices-client right-align hide-on-small-only'],
-                'html' => ($counter->isInvoice() ? __d('documents', 'Total Sum') . ': ' : '&nbsp;'),
+                'html' => __d('documents', 'Total Sum') . ': ',
             ],
-            'project' => $counter->isInvoice() ? null : [
-                'parameters' => ['class' => 'invoices-project right-align nowrap'],
-                'html' => '&nbsp;',
-            ],
-            'net_total' => !$counter->isInvoice() ? null : [
+            'net_total' => [
                 'parameters' => ['class' => 'right-align nowrap hide-on-small-only'],
                 'html' => '&nbsp;',
             ],
-            'total' => !$counter->isInvoice() ? null : [
+            'total' => [
                 'parameters' => ['class' => 'right-align nowrap'],
                 'html' => '&nbsp;',
             ],
@@ -185,25 +177,11 @@ foreach ($data as $invoice) {
             'parameters' => ['class' => 'invoices-client left-align hide-on-small-only'],
             'html' => '<div class="truncate">' . h($invoice->client['title'] ?? '') . '</div>',
         ],
-        'project' => $counter->isInvoice() ? null : [
-            'parameters' => ['class' => 'invoices-project left-align'],
-            'html' => '<div style="height: 20px; overflow: hidden; scroll: none;">' .
-                ($project ? $this->Html->link(
-                    $project,
-                    [
-                        'plugin' => 'Projects',
-                        'controller' => 'projects',
-                        'action' => 'view',
-                        $project->id,
-                    ]
-                ) : '') .
-                '</div>',
-        ],
-        'net_total' => !$counter->isInvoice() ? null : [
+        'net_total' => [
             'parameters' => ['class' => 'invoices-net_total right-align nowrap hide-on-small-only'],
             'html' => $this->Number->currency($invoice->net_total),
         ],
-        'total' => !$counter->isInvoice() ? null : [
+        'total' => [
             'parameters' => ['class' => 'invoices-total right-align nowrap'],
             'html' => $this->Number->currency($invoice->total),
         ],
@@ -212,10 +190,8 @@ foreach ($data as $invoice) {
     $net_total += $invoice->net_total;
 }
 
-if ($counter->isInvoice()) {
-    $invoicesIndex['table']['foot']['rows'][0]['columns']['total']['html'] = $this->Number->currency($invoicesTotals['sumTotal']);
-    $invoicesIndex['table']['foot']['rows'][0]['columns']['net_total']['html'] = $this->Number->currency($invoicesTotals['sumNetTotal']);
-}
+$invoicesIndex['table']['foot']['rows'][0]['columns']['total']['html'] = $this->Number->currency($invoicesTotals['sumTotal']);
+$invoicesIndex['table']['foot']['rows'][0]['columns']['net_total']['html'] = $this->Number->currency($invoicesTotals['sumNetTotal']);
 
 echo $this->Lil->index($invoicesIndex, 'Documents.Invoices.index');
 ?>

@@ -110,7 +110,7 @@ class InvoicesExport
                     $this->view->set('invoices', [0 => $invoice]);
 
                     $this->view->setTemplate('generic');
-                    if ($invoice->isInvoice()) {
+                    if (get_class($invoice) == \Documents\Model\Entity\Invoice::class) {
                         $this->view->setTemplate('eslog');
                     }
 
@@ -249,7 +249,7 @@ class InvoicesExport
             $xsl->loadXml($document->tpl_body->body, LIBXML_NOCDATA);
         } else {
             $xsltTpl = Plugin::path('Documents') . DS . 'webroot' . DS . 'doc_default.xslt';
-            if ($document->isInvoice()) {
+            if (get_class($document) == \Documents\Model\Entity\Invoice::class) {
                 $xsltTpl = Plugin::path('Documents') . DS . 'webroot' . DS . 'doc_eslog.xslt';
             }
             $xsl->load($xsltTpl, LIBXML_NOCDATA);

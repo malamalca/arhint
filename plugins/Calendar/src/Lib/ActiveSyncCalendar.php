@@ -218,12 +218,12 @@ class ActiveSyncCalendar implements Syncroton_Data_IData
     public function deleteEntry($_folderId, $_serverId, $_collectionData)
     {
         $EventsTable = TableRegistry::getTableLocator()->get('Calendar.Events');
-        $event = $TableRegistry->get($_serverId);
+        $event = $EventsTable->get($_serverId);
         if (!$event->calendar_id == $this->_userId) {
             throw new Syncroton_Exception_NotFound("entry $serverId not found");
         }
 
-        $result = $TableRegistry->delete($event);
+        $result = $EventsTable->delete($event);
 
         return (bool)$result;
     }

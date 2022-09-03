@@ -111,10 +111,6 @@
                 'parameters' => ['class' => 'center-align'],
                 'html' => (string)$invoice->dat_issue,
             ],
-            /*'total' => [
-                'parameters' => ['class' => 'right-align'],
-                'html' => $invoice->isInvoice() ? $this->Number->currency($invoice->total) : '',
-            ],*/
         ];
         $total += $invoice->total;
     }

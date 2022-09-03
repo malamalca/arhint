@@ -48,7 +48,7 @@ class ProjectsUsersTable extends Table
         ]);
         $this->belongsTo('Users', [
             'foreignKey' => 'user_id',
-            'className' => 'Projects.Users',
+            'className' => 'App.Users',
         ]);
     }
 

@@ -226,12 +226,11 @@ echo $this->Lil->form($counter_edit, 'Documents.DocumentsCounters.edit');
 ?>
 
 <script type="text/javascript">
-    var invoiceDocTypes = <?= json_encode(Configure::read('Documents.invoiceDocTypes')) ?>;
     $(document).ready(function() {
-        invoiceDocTypes.includes($("#counter-doc-type").val()) ? $("#payment-templates").show() : $("#payment-templates").hide();
+        $("#counter-kind").val() == "Invoices" ? $("#payment-templates").show() : $("#payment-templates").hide();
 
-        $("#counter-doc-type").change(function(e) {
-            invoiceDocTypes.includes($(this).val()) ? $("#payment-templates").show() : $("#payment-templates").hide();
+        $("#counter-kind").change(function(e) {
+            $("#counter-kind").val() == "Invoices" ? $("#payment-templates").show() : $("#payment-templates").hide();
         });
     });
 </script>

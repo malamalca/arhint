@@ -96,7 +96,7 @@ $documents_index = [
                     'parameters' => ['class' => 'left-align hide-on-small-only'],
                     'html' => __d('documents', 'Employee'),
                 ],
-                'total' => !$counter->isInvoice() ? null : [
+                'total' => [
                     'parameters' => ['class' => 'right-align'],
                     'html' => $this->Paginator->sort('total', __d('documents', 'Total')),
                 ],
@@ -180,11 +180,11 @@ foreach ($data as $travelOrder) {
                 ) : '') .
                 '</div>',
         ],
-        'net_total' => !$counter->isInvoice() ? null : [
+        'net_total' => [
             'parameters' => ['class' => 'documents-net_total right-align nowrap hide-on-small-only'],
             'html' => $this->Number->currency($travelOrder->net_total),
         ],
-        'total' => !$counter->isInvoice() ? null : [
+        'total' => [
             'parameters' => ['class' => 'documents-total right-align nowrap'],
             'html' => $this->Number->currency($travelOrder->total),
         ],

@@ -143,7 +143,7 @@ $documentEdit = [
                 'method' => 'control',
                 'parameters' => [
                     'field' => 'no', [
-                        'label' => ($document->isInvoice() ? __d('documents', 'Document no') : __d('documents', 'Document no')) . ':',
+                        'label' => __d('documents', 'Document no') . ':',
                         'disabled' => !empty($counter->mask),
                     ],
                 ],
@@ -297,205 +297,203 @@ require dirname(dirname(__FILE__)) . DS . 'element' . DS . 'edit_client.php';
 $this->Lil->insertIntoArray($documentEdit['form']['lines'], clientFields('receiver', 'Invoice'), ['after' => 'client_error']);
 $this->Lil->insertIntoArray($documentEdit['form']['lines'], clientFields('issuer', 'Invoice'), ['after' => 'client_error']);
 
-if ($document->isInvoice()) {
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    // additional client "buyer" - INVOICES ONLY
-    $clientBuyer = clientFields('buyer', 'Invoice') +
-    [
-        'client_buyer_start' => $counter->direction == 'received' ? null : '<div id="buyer-wrapper">',
-        'client_buyer' => $counter->direction == 'received' ? null : [
-            'method' => 'control',
-            'parameters' => [
-                'field' => 'buyer.title',
-                ['label' => __d('documents', 'Buyer') . ':'],
+////////////////////////////////////////////////////////////////////////////////////////////////
+// additional client "buyer" - INVOICES ONLY
+$clientBuyer = clientFields('buyer', 'Invoice') +
+[
+    'client_buyer_start' => $counter->direction == 'received' ? null : '<div id="buyer-wrapper">',
+    'client_buyer' => $counter->direction == 'received' ? null : [
+        'method' => 'control',
+        'parameters' => [
+            'field' => 'buyer.title',
+            ['label' => __d('documents', 'Buyer') . ':'],
+        ],
+    ],
+    'client_buyer_end' => $counter->direction == 'received' ? null : '</div>',
+
+    'client_buyer_toggle' => $counter->direction == 'received' ? null : [
+        'method' => 'control',
+        'parameters' => [
+            'field' => 'client-buyer-toggle', [
+                'type' => 'checkbox',
+                'checked' => $document->buyer->contact_id != $document->receiver->contact_id,
+                'label' => ' ' . __d('documents', 'Use different client for buyer.'),
             ],
         ],
-        'client_buyer_end' => $counter->direction == 'received' ? null : '</div>',
+    ],
+];
+$this->Lil->insertIntoArray($documentEdit['form']['lines'], $clientBuyer, ['after' => 'client_error']);
 
-        'client_buyer_toggle' => $counter->direction == 'received' ? null : [
-            'method' => 'control',
-            'parameters' => [
-                'field' => 'client-buyer-toggle', [
-                    'type' => 'checkbox',
-                    'checked' => $document->buyer->contact_id != $document->receiver->contact_id,
-                    'label' => ' ' . __d('documents', 'Use different client for buyer.'),
-                ],
+////////////////////////////////////////////////////////////////////////////////////////////////
+// additional dates - INVOICES ONLY
+$documentDates = [
+    'fs_dates_col2_start' => '<td>',
+    'dat_service' => [
+        'method' => 'control',
+        'parameters' => [
+            'field' => 'dat_service',
+            'options' => [
+                'type' => 'date',
+                'label' => __d('documents', 'Service date') . ':',
+                'error' => ['empty' => __d('documents', 'Blank')],
+            ],
+        ],
+    ],
+    'fs_dates_col2_end' => '</td>',
+
+    'fs_dates_col3_start' => '<td>',
+    'dat_expire' => [
+        'method' => 'control',
+        'parameters' => [
+            'field' => 'dat_expire',
+            'options' => [
+                'type' => 'date',
+                'label' => __d('documents', 'Expiration date') . ':',
+                'error' => ['empty' => __d('documents', 'Blank')],
+            ],
+        ],
+    ],
+    'fs_dates_col3_end' => '</td>',
+];
+$this->Lil->insertIntoArray($documentEdit['form']['lines'], $documentDates, ['after' => 'fs_dates_col1_end']);
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+// analytics and taxes
+$analytics = [];
+if ($counter->direction == 'received') {
+    $analytics['fs_analytics_start'] = '<fieldset>';
+    $analytics['fs_analytics_legend'] = sprintf('<legend>%s</legend>', __d('documents', 'Analytics'));
+    $analytics['analytics'] = [
+        'method' => 'control',
+        'parameters' => [
+            'total', [
+                'type' => 'number',
+                'step' => 0.01,
+                'label' => __d('documents', 'Total') . ':',
             ],
         ],
     ];
-    $this->Lil->insertIntoArray($documentEdit['form']['lines'], $clientBuyer, ['after' => 'client_error']);
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    // additional dates - INVOICES ONLY
-    $documentDates = [
-        'fs_dates_col2_start' => '<td>',
-        'dat_service' => [
-            'method' => 'control',
-            'parameters' => [
-                'field' => 'dat_service',
-                'options' => [
-                    'type' => 'date',
-                    'label' => __d('documents', 'Service date') . ':',
-                    'error' => ['empty' => __d('documents', 'Blank')],
-                ],
-            ],
-        ],
-        'fs_dates_col2_end' => '</td>',
-
-        'fs_dates_col3_start' => '<td>',
-        'dat_expire' => [
-            'method' => 'control',
-            'parameters' => [
-                'field' => 'dat_expire',
-                'options' => [
-                    'type' => 'date',
-                    'label' => __d('documents', 'Expiration date') . ':',
-                    'error' => ['empty' => __d('documents', 'Blank')],
-                ],
-            ],
-        ],
-        'fs_dates_col3_end' => '</td>',
-    ];
-    $this->Lil->insertIntoArray($documentEdit['form']['lines'], $documentDates, ['after' => 'fs_dates_col1_end']);
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    // analytics and taxes
-    $analytics = [];
-    if ($document->isInvoice() && $counter->direction == 'received') {
-        $analytics['fs_analytics_start'] = '<fieldset>';
-        $analytics['fs_analytics_legend'] = sprintf('<legend>%s</legend>', __d('documents', 'Analytics'));
-        $analytics['analytics'] = [
-            'method' => 'control',
-            'parameters' => [
-                'total', [
-                    'type' => 'number',
-                    'step' => 0.01,
-                    'label' => __d('documents', 'Total') . ':',
-                ],
-            ],
-        ];
-        $analytics['fs_analytics_end'] = '</fieldset>';
-    } elseif ($counter->direction == 'issued') {
-        $analytics['fs_analytics_start'] = '<fieldset>';
-        $analytics['fs_analytics_legend'] = sprintf('<legend>%s</legend>', __d('documents', 'Analytics'));
-        require dirname(dirname(__FILE__)) . DS . 'element' . DS . 'edit_items.php';
-        $analytics['fs_analytics_end'] = '</fieldset>';
-    }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    if (in_array($counter->direction, ['received'])) {
-        $analytics['fs_tax_start'] = '<fieldset>';
-        $analytics['fs_tax_legend'] = sprintf('<legend>%s</legend>', __d('documents', 'Taxes Analytics'));
-        require dirname(dirname(__FILE__)) . DS . 'element' . DS . 'edit_tax.php';
-        $analytics['fs_tax_end'] = '</fieldset>';
-    }
-    $this->Lil->insertIntoArray($documentEdit['form']['lines'], $analytics, ['after' => 'fs_dates_end']);
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    // payment details
-    $paymentDetails = [
-        'fs_payment_start' => '<fieldset>',
-        'fs_payment_legend' => sprintf('<legend>%s</legend>', __d('documents', 'Payment')),
-        'pmt_kind' => [
-            'method' => 'control',
-            'parameters' => [
-                'field' => 'pmt_kind', [
-                    'type' => 'select',
-                    'options' => [
-                        0 => __d('documents', 'Document must be payed.'),
-                        1 => __d('documents', 'Auto transaction. No payment needed.'),
-                        2 => __d('documents', 'Document payed in full.'),
-                        3 => __d('documents', 'Other. No payment needed.'),
-                    ],
-                    'default' => 0,
-                    'class' => 'browser-default',
-                    'label' => [
-                        'class' => 'active',
-                        'text' => __d('documents', 'Payment Kind') . ':',
-                    ],
-                ],
-            ],
-        ],
-        'pmt_sepa_type' => [
-            'method' => 'control',
-            'parameters' => [
-                'pmt_sepa_type',
-                'options' => [
-                    'type' => 'select',
-                    'options' => Configure::read('Documents.sepaTypes'),
-                    'default' => 'OTHR',
-                    'class' => 'browser-default',
-                    'label' => [
-                        'class' => 'active',
-                        'text' => __d('documents', 'Sepa Type') . ':',
-                    ],
-                    'error' => [
-                        'format' => __d('documents', 'Invalid type'),
-                    ],
-                ],
-            ],
-        ],
-        'fs_payment_table_start' => '<table id="InvoicesPayment"><tr><td>',
-
-        'pmt_type' => [
-            'method' => 'control',
-            'parameters' => [
-                'field' => 'pmt_type',
-                'options' => [
-                    'type' => 'text',
-                    'size' => 2,
-                    'default' => 'SI',
-                    'label' => __d('documents', 'Type') . ':',
-                    'error' => [
-                        'format' => __d('documents', 'Invalid format'),
-                    ],
-                ],
-            ],
-        ],
-        'fs_payment_col1' => '</td><td>',
-        'pmt_module' => [
-            'method' => 'control',
-            'parameters' => [
-                'field' => 'pmt_module',
-                'options' => [
-                    'type' => 'text', 'size' => 2,
-                    'default' => '00',
-                    'label' => __d('documents', 'MOD') . ':',
-                    'error' => [
-                        'format' => __d('documents', 'Invalid format'),
-                    ],
-                ],
-            ],
-        ],
-        'fs_payment_col2' => '</td><td>',
-        'pmt_ref' => [
-            'method' => 'control',
-            'parameters' => [
-                'field' => 'pmt_ref',
-                'options' => [
-                    'type' => 'text',
-                    'default' => '0',
-                    'label' => __d('documents', 'Reference') . ':',
-                    'error' => [
-                        'empty' => __d('documents', 'Blank'),
-                    ],
-                ],
-            ],
-        ],
-        'fs_payment_table_end' => '</td></tr></table>',
-        'fs_payment_hint' => sprintf(
-            '<div class="helper-text">%s</div>',
-            __d('documents', 'Use \'OTHR\' for unknown payment type. Use prefix and two numers for module (eg SI00).')
-        ),
-        'fs_payment_end' => '</fieldset>',
-    ];
-
-    $this->Lil->insertIntoArray($documentEdit['form']['lines'], $paymentDetails, ['before' => 'fs_descript_start']);
+    $analytics['fs_analytics_end'] = '</fieldset>';
+} elseif ($counter->direction == 'issued') {
+    $analytics['fs_analytics_start'] = '<fieldset>';
+    $analytics['fs_analytics_legend'] = sprintf('<legend>%s</legend>', __d('documents', 'Analytics'));
+    require dirname(dirname(__FILE__)) . DS . 'element' . DS . 'edit_items.php';
+    $analytics['fs_analytics_end'] = '</fieldset>';
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////
+if (in_array($counter->direction, ['received'])) {
+    $analytics['fs_tax_start'] = '<fieldset>';
+    $analytics['fs_tax_legend'] = sprintf('<legend>%s</legend>', __d('documents', 'Taxes Analytics'));
+    require dirname(dirname(__FILE__)) . DS . 'element' . DS . 'edit_tax.php';
+    $analytics['fs_tax_end'] = '</fieldset>';
+}
+$this->Lil->insertIntoArray($documentEdit['form']['lines'], $analytics, ['after' => 'fs_dates_end']);
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+// payment details
+$paymentDetails = [
+    'fs_payment_start' => '<fieldset>',
+    'fs_payment_legend' => sprintf('<legend>%s</legend>', __d('documents', 'Payment')),
+    'pmt_kind' => [
+        'method' => 'control',
+        'parameters' => [
+            'field' => 'pmt_kind', [
+                'type' => 'select',
+                'options' => [
+                    0 => __d('documents', 'Document must be payed.'),
+                    1 => __d('documents', 'Auto transaction. No payment needed.'),
+                    2 => __d('documents', 'Document payed in full.'),
+                    3 => __d('documents', 'Other. No payment needed.'),
+                ],
+                'default' => 0,
+                'class' => 'browser-default',
+                'label' => [
+                    'class' => 'active',
+                    'text' => __d('documents', 'Payment Kind') . ':',
+                ],
+            ],
+        ],
+    ],
+    'pmt_sepa_type' => [
+        'method' => 'control',
+        'parameters' => [
+            'pmt_sepa_type',
+            'options' => [
+                'type' => 'select',
+                'options' => Configure::read('Documents.sepaTypes'),
+                'default' => 'OTHR',
+                'class' => 'browser-default',
+                'label' => [
+                    'class' => 'active',
+                    'text' => __d('documents', 'Sepa Type') . ':',
+                ],
+                'error' => [
+                    'format' => __d('documents', 'Invalid type'),
+                ],
+            ],
+        ],
+    ],
+    'fs_payment_table_start' => '<table id="InvoicesPayment"><tr><td>',
+
+    'pmt_type' => [
+        'method' => 'control',
+        'parameters' => [
+            'field' => 'pmt_type',
+            'options' => [
+                'type' => 'text',
+                'size' => 2,
+                'default' => 'SI',
+                'label' => __d('documents', 'Type') . ':',
+                'error' => [
+                    'format' => __d('documents', 'Invalid format'),
+                ],
+            ],
+        ],
+    ],
+    'fs_payment_col1' => '</td><td>',
+    'pmt_module' => [
+        'method' => 'control',
+        'parameters' => [
+            'field' => 'pmt_module',
+            'options' => [
+                'type' => 'text', 'size' => 2,
+                'default' => '00',
+                'label' => __d('documents', 'MOD') . ':',
+                'error' => [
+                    'format' => __d('documents', 'Invalid format'),
+                ],
+            ],
+        ],
+    ],
+    'fs_payment_col2' => '</td><td>',
+    'pmt_ref' => [
+        'method' => 'control',
+        'parameters' => [
+            'field' => 'pmt_ref',
+            'options' => [
+                'type' => 'text',
+                'default' => '0',
+                'label' => __d('documents', 'Reference') . ':',
+                'error' => [
+                    'empty' => __d('documents', 'Blank'),
+                ],
+            ],
+        ],
+    ],
+    'fs_payment_table_end' => '</td></tr></table>',
+    'fs_payment_hint' => sprintf(
+        '<div class="helper-text">%s</div>',
+        __d('documents', 'Use \'OTHR\' for unknown payment type. Use prefix and two numers for module (eg SI00).')
+    ),
+    'fs_payment_end' => '</fieldset>',
+];
+
+$this->Lil->insertIntoArray($documentEdit['form']['lines'], $paymentDetails, ['before' => 'fs_descript_start']);
 
 echo $this->Html->script('/Documents/js/invoiceEditTaxes');
 echo $this->Html->script('/Documents/js/invoiceEditItems');
@@ -593,6 +591,7 @@ echo $this->Lil->form($documentEdit, 'Documents.Invoices.edit');
             selector:'textarea#invoice-descript',
             menubar:false,
             statusbar: false,
+            convert_urls: false,
             toolbar: 'undo redo | styleselect | bold italic underline subscript superscript | bullist numlist | indent outdent | pagebreak | pasteword table image',
             plugins: "autoresize table paste pagebreak image",
             table_toolbar: "tablecellprops | tableprops tabledelete | tableinsertrowbefore tableinsertrowafter tabledeleterow | tableinsertcolbefore tableinsertcolafter tabledeletecol",

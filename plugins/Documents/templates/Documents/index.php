@@ -100,7 +100,7 @@ $documents_index = [
                     'parameters' => ['class' => 'left-align hide-on-small-only'],
                     'html' => __d('documents', 'Client'),
                 ],
-                'project' => $counter->isInvoice() ? null : [
+                'project' => [
                     'parameters' => ['class' => 'left-align'],
                     'html' => __d('documents', 'Project'),
                 ],
