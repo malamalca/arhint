@@ -157,7 +157,7 @@ class PaymentsTable extends Table
 
         if (!empty($filter['account'])) {
             $validAccounts = array_keys($this->PaymentsAccounts->listForOwner($ownerId));
-            if (empty($filter['account']) || !in_array($filter['account'], $validAccounts)) {
+            if (!in_array($filter['account'], $validAccounts)) {
                 $filter['account'] = null;
             } else {
                 $ret['conditions']['Payments.account_id'] = $filter['account'];
