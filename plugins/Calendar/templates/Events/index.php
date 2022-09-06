@@ -124,7 +124,12 @@ for ($weekNo = 1; $weekNo <= $weeksInMonth; $weekNo++) {
                     $eventClasses = array_merge($eventClasses, ['datespan', 'datespan-start', 'datespan-end', 'event.datespan-1']);
                 } else {
                     if ($endDate->diffInDays($event->dat_start) == 0) {
-                        $eventTitle = '<span class="bullet">&bull;</span> ' . $eventTitle;
+                        //$eventTitle = '<span class="bullet">&bull;</span> ' . $eventTitle;
+                        $eventTitle = sprintf(
+                            '<span class="bullet">%1$s</span> %2$s',
+                            $event->dat_start->i18nFormat('HH:mm'),
+                            $eventTitle
+                        );
                     }
                 }
 

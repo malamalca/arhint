@@ -144,7 +144,7 @@ foreach ($data as $document) {
                 sprintf(
                     '<div class="hide-on-med-and-up">%1$s<br />%2$s</div>',
                     (string)$document->dat_issue,
-                    h($document->client['title'] ?? '')
+                    h($document->Client['title'] ?? '')
                 ) . '</div>',
         ],
         'date' => [
@@ -160,7 +160,7 @@ foreach ($data as $document) {
         ],
         'client' => [
             'parameters' => ['class' => 'invoices-client left-align hide-on-small-only'],
-            'html' => '<div class="truncate">' . h($document->client['title'] ?? '') . '</div>',
+            'html' => '<div class="truncate">' . h($document->Client['title'] ?? '') . '</div>',
         ],
         'project' => empty($project) ? null : [
             'parameters' => ['class' => 'documents-project left-align'],
@@ -221,7 +221,7 @@ echo $this->Lil->index($documents_index, 'Documents.Documents.index');
         $.get(searchUrl.replace(rx_term, encodeURIComponent($(".search-panel input").val())), function(response) {
             let tBody = response
                 .substring(response.indexOf("<table class=\"index"), response.indexOf("</table>")+8);
-            $("#AdminDocumentsIndex").html(tBody);
+            $("#AdminInvoicesIndex").html(tBody);
         });
     }
 

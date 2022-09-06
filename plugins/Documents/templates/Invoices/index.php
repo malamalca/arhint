@@ -159,7 +159,7 @@ foreach ($data as $invoice) {
                 sprintf(
                     '<div class="hide-on-med-and-up">%1$s<br />%2$s</div>',
                     (string)$invoice->dat_issue,
-                    h($invoice->client['title'] ?? '')
+                    h($invoice->Client['title'] ?? '')
                 ) . '</div>',
         ],
         'date' => [
@@ -175,7 +175,7 @@ foreach ($data as $invoice) {
         ],
         'client' => [
             'parameters' => ['class' => 'invoices-client left-align hide-on-small-only'],
-            'html' => '<div class="truncate">' . h($invoice->client['title'] ?? '') . '</div>',
+            'html' => '<div class="truncate">' . h($invoice->Client['title'] ?? '') . '</div>',
         ],
         'net_total' => [
             'parameters' => ['class' => 'invoices-net_total right-align nowrap hide-on-small-only'],
