@@ -95,8 +95,8 @@ class ArhintReport
     {
         $result = null;
 
-        $pdfEngine = Configure::read('pdfEngine', 'TCPDF');
-        $pdfOptions = Configure::read($pdfEngine, []);
+        $pdfEngine = Configure::read('Lil.pdfEngine');
+        $pdfOptions = Configure::read('Lil.' . $pdfEngine);
 
         $pdf = LilPdfFactory::create($pdfEngine, Hash::merge((array)$pdfOptions, $this->pdfOptions));
 

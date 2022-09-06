@@ -74,3 +74,22 @@ h1 {
 .min_width {
     width: 1%;
 }
+
+.small {
+    font-size: 80%;
+}
+
+.light {
+    color: #404040;
+}
+
+td.head {
+    font-weight: bold;
+    border-bottom: solid 1px #000;
+}
+.top-line {
+    border-top: solid 1px #000;
+}
+.bottom-line {
+    border-bottom: solid 1px #000;
+}

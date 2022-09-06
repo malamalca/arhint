@@ -89,6 +89,9 @@ class LabelsController extends AppController
         $settings = Configure::read('Crm.label.' . $data['label']);
         unset($settings['form']);
 
+        // must be tcpdf because of the way the labels are constructed
+        Configure::write('Lil.pdfEngine', 'TCPDF');
+
         $this->viewBuilder()->setClassName('Lil.Pdf');
         $this->viewBuilder()->setOptions($settings);
         $this->viewBuilder()->setTemplate($data['label']);

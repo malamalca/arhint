@@ -24,7 +24,7 @@ $years = []; for (
 
 $time = new FrozenTime();
 $report = [
-    'title_for_layout' => __d('documents', 'REPORT: VATs'),
+    'title_for_layout' => __d('documents', 'REPORT: Invoices'),
     'form' => [
         'pre' => '<div class="form">',
         'post' => '</div>',
@@ -59,6 +59,7 @@ $report = [
                         'options' => $months,
                         'label' => false,
                         'default' => (int)$time->i18nFormat('MM'),
+                        'class' => 'browser-default',
                     ],
                 ],
             ],
@@ -73,6 +74,7 @@ $report = [
                         'options' => $years,
                         'label' => false,
                         'default' => $time->i18nFormat('yyyy'),
+                        'class' => 'browser-default',
                     ],
                 ],
             ],
@@ -96,7 +98,7 @@ $report = [
                 'parameters' => [
                     'field' => 'start',
                     'options' => [
-                        'type' => 'lil-date',
+                        'type' => 'date',
                         'label' => __d('documents', 'Start') . ':',
                     ],
                 ],
@@ -107,7 +109,7 @@ $report = [
                 'parameters' => [
                     'field' => 'end',
                     'options' => [
-                        'type' => 'lil-date',
+                        'type' => 'date',
                         'label' => __d('documents', 'End') . ':',
                     ],
                 ],

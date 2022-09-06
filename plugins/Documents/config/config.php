@@ -28,22 +28,4 @@ return ['Documents' => [
     'banks' => $banks,
     'sepaTypes' => $sepaTypes,
     'documentTypes' => $documentTypes,
-    'pdfEngine' => 'WKHTML2PDF',
-    'TCPDF' => [
-        'user-style-sheet' => dirname(dirname(__FILE__)) . DS . 'webroot' . DS . 'css' . DS . 'documents_pdf.css',
-    ],
-    'WKHTML2PDF' => [
-        'binary' => 'C:\bin\wkhtmltopdf\bin\wkhtmltopdf.exe',
-        'no-outline', // Make Chrome not complain
-        'print-media-type',
-        'dpi' => 96,
-        'margin-top' => 30,
-        'margin-right' => 0,
-        'margin-bottom' => 20,
-        'margin-left' => 0,
-
-        // Default page options
-        'disable-smart-shrinking',
-        'user-style-sheet' => dirname(dirname(__FILE__)) . DS . 'webroot' . DS . 'css' . DS . 'documents_pdf.css',
-    ],
 ]];

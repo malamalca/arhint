@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Documents\Controller;
 
+use App\Lib\ArhintReport;
 use Cake\Event\EventInterface;
 use Cake\Http\Exception\NotFoundException;
 use Cake\I18n\FrozenTime;
@@ -502,8 +503,8 @@ class BaseDocumentsController extends AppController
 
             if ($filter['kind'] == 'span') {
                 unset($filter['month']);
-                $filter['start'] = FrozenTime::parse($filter['start']);
-                $filter['end'] = FrozenTime::parse($filter['end']);
+                $filter['start'] = $filter['start'];
+                $filter['end'] = $filter['end'];
             } else {
                 unset($filter['start']);
                 unset($filter['end']);
@@ -524,10 +525,27 @@ class BaseDocumentsController extends AppController
                 ->order(['DocumentsCounters.title', 'Invoices.no'])
                 ->all();
 
-            $this->set(compact('data', 'filter'));
-            $this->viewBuilder()->setClassName('Lil.Pdf');
+            //$this->set(compact('data', 'filter'));
+            //$this->viewBuilder()->setClassName('Lil.Pdf');
 
-            $this->response = $this->response->withType('pdf');
+            //$this->response = $this->response->withType('pdf');
+
+            $report = new ArhintReport(
+                'Invoices.index',
+                $this->request,
+                ['title' => __d('documents', 'Documents')]
+            );
+            $report->set(compact('data', 'filter'));
+
+            $tmpName = $report->export();
+
+            $this->redirect([
+                'plugin' => false,
+                'controller' => 'Pages',
+                'action' => 'report',
+                'Invoices.index',
+                substr($tmpName, 0, -4),
+            ]);
         }
 
         return null;

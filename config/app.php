@@ -410,6 +410,25 @@ return [
     'Lil' => [
         'layout' => 'default',
         'appTitle' => 'ARHINT',
+        'pdfEngine' => 'WKHTML2PDF',
+        'TCPDF' => [
+            'user-style-sheet' => dirname(dirname(__FILE__)) . DS . 'webroot' . DS . 'css' . DS . 'pdf.css',
+        ],
+        'WKHTML2PDF' => [
+            'binary' => 'C:\bin\wkhtmltopdf\bin\wkhtmltopdf.exe',
+            'no-outline', // Make Chrome not complain
+            'print-media-type',
+            'dpi' => 96,
+            'margin-top' => 30,
+            'margin-right' => 20,
+            'margin-bottom' => 20,
+            'margin-left' => 20,
+            'encoding' => 'utf-8',
+    
+            // Default page options
+            'disable-smart-shrinking',
+            'user-style-sheet' => dirname(dirname(__FILE__)) . DS . 'webroot' . DS . 'css' . DS . 'pdf.css',
+        ],
     ],
 
     'DebugKit' => [

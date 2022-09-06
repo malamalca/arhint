@@ -99,8 +99,8 @@ class InvoicesExport
                 $pdf = null;
 
                 if ($ext == 'pdf') {
-                    $pdfEngine = Configure::read('Documents.pdfEngine');
-                    $pdfOptions = Configure::read('Documents.' . $pdfEngine);
+                    $pdfEngine = Configure::read('Lil.pdfEngine');
+                    $pdfOptions = Configure::read('Lil.' . $pdfEngine);
                     $pdf = LilPdfFactory::create($pdfEngine, (array)$pdfOptions);
                 }
 

@@ -129,39 +129,39 @@ if (empty($data)) {
             'total' => $this->Number->currency($expense->total),
         ];
 
-        if (!empty($expense->document)) {
-            if ($current_counter !== $expense->document->counter_id) {
+        if (!empty($expense->invoice)) {
+            if ($current_counter !== $expense->invoice->counter_id) {
                 // close table
                 if ($i > 0) {
                     initUnpaidDocumentsTableFoot($target, $counter_total, $this->Number);
                 }
 
-                $analytics['panels']['cntr_hr_' . $expense->document->counter_id] = sprintf(
+                $analytics['panels']['cntr_hr_' . $expense->invoice->counter_id] = sprintf(
                     '<h2>%s</h2>',
-                    h($counters[$expense->document->counter_id])
+                    h($counters[$expense->invoice->counter_id])
                 );
-                $analytics['panels']['cntr_' . $expense->document->counter_id]['table']['element'] = [];
-                $target =& $analytics['panels']['cntr_' . $expense->document->counter_id]['table'];
+                $analytics['panels']['cntr_' . $expense->invoice->counter_id]['table']['element'] = [];
+                $target =& $analytics['panels']['cntr_' . $expense->invoice->counter_id]['table'];
 
                 initUnpaidDocumentsTableHead($target);
 
-                $current_counter = $expense->document->counter_id;
+                $current_counter = $expense->invoice->counter_id;
                 $counter_total = 0;
             }
 
-            $tableFields['counter'] = $expense->document->counter;
-            $tableFields['no'] = $expense->document->no;
-            $tableFields['issued'] = (string)$expense->document->dat_issue .
+            $tableFields['counter'] = $expense->invoice->counter;
+            $tableFields['no'] = $expense->invoice->no;
+            $tableFields['issued'] = (string)$expense->invoice->dat_issue .
                 '<br />' .
-                (string)$expense->document->dat_expire;
-            $tableFields['title'] = $expense->document->title;
+                (string)$expense->invoice->dat_expire;
+            $tableFields['title'] = $expense->invoice->title;
 
-            $client = $counters[$expense->document->counter_id]->kind == 'issued' ?
-                $expense->document->receiver :
-                $expense->document->issuer;
+            $client = $counters[$expense->invoice->counter_id]->kind == 'issued' ?
+                $expense->invoice->receiver :
+                $expense->invoice->issuer;
             $tableFields['client'] = $client->title;
 
-            $tableFields['total'] = $this->Number->currency($expense->document->total);
+            $tableFields['total'] = $this->Number->currency($expense->invoice->total);
         } elseif (empty($current_counter)) {
             $analytics['panels']['cntr_default']['table']['element'] = [];
             $target =& $analytics['panels']['cntr_default']['table'];

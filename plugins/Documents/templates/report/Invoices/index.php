@@ -11,10 +11,10 @@ $documentsTable = [
                         'head' => [
                             'rows' => [
                                 0 => ['columns' => [
-                                    'no' => ['html' => __d('documents', 'No')],
+                                    'no' => ['parameters' => ['align' => 'left'], 'html' => __d('documents', 'No')],
                                     'date' => ['parameters' => ['align' => 'center'], 'html' => __d('documents', 'Issued')],
                                     'title' => ['parameters' => ['align' => 'left'], 'html' => __d('documents', 'Title')],
-                                    'client' => ['html' => __d('documents', 'Client')],
+                                    'client' => ['parameters' => ['align' => 'left'], 'html' => __d('documents', 'Client')],
                                     'net_total' => ['parameters' => ['align' => 'right'], 'html' => __d('documents', 'Net Total')],
                                     'total' => ['parameters' => ['align' => 'right'], 'html' => __d('documents', 'Total')],
                                 ]],
@@ -64,10 +64,11 @@ foreach ($data as $document) {
 
     $target['table']['body']['rows'][] = ['columns' => [
         'no' => [
+            'parameters' => ['class' => 'nowrap'],
             'html' => $document->no,
         ],
         'date' => [
-            'parameters' => ['align' => 'center'],
+            'parameters' => ['align' => 'center', 'class' => 'nowrap'],
             'html' => (string)($document->dat_issue),
         ],
         'title' => [
