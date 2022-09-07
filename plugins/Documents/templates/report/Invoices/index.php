@@ -1,13 +1,22 @@
 <?php
+use Cake\I18n\FrozenDate;
+
+if ($filter['kind'] == 'span') {
+    $title = __d('documents', 'Documents List from {0} to {1}', $filter['start'], $filter['end']);
+} else {
+    $dateTitle = FrozenDate::parseDate($filter['month'] . '-01', 'yyyy-MM-dd');
+    $title = __d('documents', 'Documents List for {0}', $dateTitle->i18nFormat('MMMM yyyy'));
+}
 
 $documentsTable = [
     'data' => $data,
     'panels' => [
         'list' => [
             'lines' => [
-                'title' => ['html' => sprintf('<h1>%s</h1>', __d('documents', 'Documents List'))],
+                'title' => ['html' => sprintf('<h1>%s</h1>', $title)],
                 'default' => [
                     'table' => [
+                        'params' => ['width' => '100%'],
                         'head' => [
                             'rows' => [
                                 0 => ['columns' => [

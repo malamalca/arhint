@@ -50,7 +50,7 @@ class ArhintReport
         $this->view = new $viewClass($request, null, EventManager::instance(), []);
         $this->view->setSubDir('');
         $this->view->setTemplatePath('report');
-        $this->view->enableAutoLayout(false);
+        //$this->view->enableAutoLayout(false);
 
         $templateName = strtr($template, '.', DS);
         $plugin = $request->getParam('plugin');
@@ -58,6 +58,7 @@ class ArhintReport
             $templateName = $plugin . '.' . $templateName;
         }
         $this->view->setTemplate($templateName);
+        $this->view->setLayout('pdf');
 
         $this->view->loadHelper('Lil.Lil');
     }

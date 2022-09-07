@@ -37,12 +37,14 @@ html, body {
 }
 
 h1 {
-	font-size: 1.5em;
+	font-size: 2em !important;
 }
 h2 {
-	font-size: 1.1em;
+	font-size: 1.2em !important;
 }
-
+h3 {
+	font-size: 1.1em !important;
+}
 .center-align, .center {
 	text-align: center;
 }
@@ -81,11 +83,12 @@ td.head {
 }
 th {
 	font-weight: bold;
+    padding: 3px !important;
     background-color: #c0c0c0;
-    border: solid 1px #000;
+    /*border: solid 1px #000;*/
 }
 td {
-    padding: 2px !important;
+    padding: 3px !important;
     vertical-align: top;
 }
 
