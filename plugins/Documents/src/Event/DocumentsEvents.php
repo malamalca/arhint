@@ -100,13 +100,13 @@ class DocumentsEvents implements EventListenerInterface
             ->where([
                 'Documents.owner_id' => $user->company_id,
             ])
-            ->order(['Documents.created'])
-            ->limit(3)
+            ->order(['Documents.created DESC'])
+            ->limit(6)
             ->all();
 
         if (!$newDocuments->isEmpty()) {
             $panels['panels']['documents'] = ['lines' => [
-                '<h3>' . __d('documents', 'Last 5 documents') . '</h3>',
+                '<h3>' . __d('documents', 'Last 6 documents') . '</h3>',
             ]];
 
             foreach ($newDocuments as $document) {
