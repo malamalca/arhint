@@ -101,7 +101,7 @@ class ProjectsWorkhoursController extends AppController
         }
 
         $filter = [];
-        $filter['project'] = $sourceRequest['pass'][0] ?? null;
+        $filter['project'] = $sourceRequest[0] ?? null;
 
         $params = $this->ProjectsWorkhours->filter($filter);
 

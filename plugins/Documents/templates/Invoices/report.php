@@ -35,14 +35,32 @@ $report = [
                 'parameters' => [null, ['type' => 'GET']],
             ],
 
+            'counters' => [
+                'class' => $this->Form,
+                'method' => 'control',
+                'parameters' => [
+                    'counter',
+                    'options' => [
+                        'type' => 'select',
+                        'options' => $counters,
+                        'label' => [
+                            'text' => __d('documents', 'Counter') . ':',
+                            'class' => 'active',
+                        ],
+                        'empty' => '-- ' . __d('documents', 'All Counters') . ' --',
+                        'class' => 'browser-default',
+                    ],
+                ],
+            ],
+
             'fs_kind_basic_start' => '<fieldset>',
             'lg_kind_basic' => sprintf(
                 '<legend>%s</legend>',
                 $this->Form->control('kind', [
                     'type' => 'radio',
-                    'options'      => ['month' => ' ' . __d('documents', 'Specify Month')],
+                    'options' => ['month' => ' ' . __d('documents', 'Specify Month')],
                     'hiddenField' => false,
-                    'default'      => 'month',
+                    'default' => 'month',
                     'templates' => ['inputContainer' => '{{content}}'],
                     'label' => false,
                 ])
@@ -133,3 +151,16 @@ $report = [
 ];
 
 echo $this->Lil->form($report, 'Documents.Invoices.report');
+?>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("#start, #end").change(function () {
+            $("#kind-span").prop("checked", true);
+        });
+
+        $("#month, #year").change(function () {
+            $("#kind-month").prop("checked", true);
+        });
+    });
+</script>

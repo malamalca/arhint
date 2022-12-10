@@ -157,11 +157,22 @@ if ($contact->kind != 'T') {
                 'options' => ['type' => 'hidden'],
             ],
         ],
+        'company_id_unlock' => [
+            'method' => 'unlockField',
+            'parameters' => ['company_id'],
+        ],
         'company.title' => [
             'method' => 'control',
             'parameters' => [
                 'field' => 'company.title',
-                'options' => ['label' => __d('crm', 'Company Name') . ':', 'required' => false],
+                'options' => [
+                    'label' => [
+                        'text' => __d('crm', 'Company Name') . ':',
+                        'class' => 'active',
+                    ],
+                    'required' => false,
+                    'autocomplete' => 'off',
+                ],
             ],
         ],
         'company_hint' => sprintf(
@@ -441,54 +452,54 @@ echo $this->Lil->form($editForm, 'Crm.Contacts.edit');
     $(document).ready(function() {
 
         <?php
-        if ($contact->kind == 'T') {
-            ?>
+        if ($contact->kind == "T") {
+        ?>
         $("#AddCompanyLink").modalPopup({
             title: "<?= __d('crm', 'Add a Company') ?>",
             processSubmit: true,
             onJson: function(company) {
-                $("#company_id").val(company.id);
+                $("#contact-company-id").val(company.id);
                 $("#contact-company-title").val(company.title);
                 $("#ImageContactCheck").show();
             }
         });
-            <?php
+        <?php
         }
         ?>
 
-        $('#contact-address-zip').autocomplete({
+        $("#contact-address-zip").autocomplete({
             autoFocus: true,
-            source: '<?php echo Router::url([
+            source: "<?php echo Router::url([
                 'plugin' => 'Crm',
                 'controller' => 'ContactsAddresses',
                 'action' => 'autocomplete-zip-city',
                 'zip',
-            ], true); ?>',
+            ], true); ?>",
             select: function(event, ui) {
                 if (ui.item) {
-                    $('#contact-address-zip').val(ui.item.value);
-                    $('#contact-address-city').val(ui.item.label);
+                    $("#contact-address-zip").val(ui.item.value);
+                    $("#contact-address-city").val(ui.item.label);
                 }
             }
         });
 
-        $('#contact-address-city').autocomplete({
+        $("#contact-address-city").autocomplete({
             autoFocus: true,
-            source: '<?php echo Router::url([
+            source: "<?php echo Router::url([
                 'plugin' => 'Crm',
                 'controller' => 'ContactsAddresses',
                 'action' => 'autocomplete-zip-city',
                 'city',
-            ], true); ?>',
+            ], true); ?>",
             select: function(event, ui) {
                 if (ui.item) {
-                    $('#contact-address-zip').val(ui.item.id);
-                    $('#contact-address-city').val(ui.item.label);
+                    $("#contact-address-zip").val(ui.item.id);
+                    $("#contact-address-city").val(ui.item.label);
                 }
             }
         });
 
-        $('#magic-tax-lookup').click(function() {
+        $("#magic-tax-lookup").click(function() {
             let inetisUrl = "<?php echo Router::url([
                 'plugin' => 'Crm',
                 'controller' => 'Contacts',
@@ -500,7 +511,7 @@ echo $this->Lil->form($editForm, 'Crm.Contacts.edit');
             let taxNo = $("#contact-tax-no").val();
 
             if (taxNo.trim() == "") {
-                alert('No tax number entered!');
+                alert("No tax number entered!");
 
                 return false;
             }
@@ -512,16 +523,16 @@ echo $this->Lil->form($editForm, 'Crm.Contacts.edit');
                 $("#contact-tax-status", parentForm).attr("checked", data.tax_no.substr(0,2) == "SI");
 
                 if (data.primary_address) {
-                    $('#contact-address-street', parentForm).val(data.primary_address.street);
-                    $('#contact-address-zip', parentForm).val(data.primary_address.zip);
-                    $('#contact-address-city', parentForm).val(data.primary_address.city);
-                    $('#contact-address-country-code', parentForm).val(data.primary_address.country_code);
+                    $("#contact-address-street", parentForm).val(data.primary_address.street);
+                    $("#contact-address-zip", parentForm).val(data.primary_address.zip);
+                    $("#contact-address-city", parentForm).val(data.primary_address.city);
+                    $("#contact-address-country-code", parentForm).val(data.primary_address.country_code);
                 }
 
                 if (data.primary_account) {
-                    $('#contact-account-iban', parentForm).val(data.primary_account.iban);
-                    $('#contact-account-bic', parentForm).val(data.primary_account.bic);
-                    $('#contact-account-bank', parentForm).val(data.primary_account.bank);
+                    $("#contact-account-iban", parentForm).val(data.primary_account.iban);
+                    $("#contact-account-bic", parentForm).val(data.primary_account.bic);
+                    $("#contact-account-bank", parentForm).val(data.primary_account.bank);
                 }
 
                 M.updateTextFields()
@@ -530,27 +541,28 @@ echo $this->Lil->form($editForm, 'Crm.Contacts.edit');
         });
 
         // CREATE IMAGE
-        var contactCheck = $('<img />', {
-            id: 'ImageContactCheck',
-            src: '<?= Router::url('/crm/img/ico_contact_check.gif'); ?>',
-            style: 'display: none'
+        var contactCheck = $("<img />", {
+            id: "ImageContactCheck",
+            src: "<?= Router::url('/crm/img/ico_contact_check.gif'); ?>",
+            style: "display: none",
+            title: "<?= __d('lil_crm', 'Company') ?>"
         });
-        $('#contact-company-title').after(contactCheck);
+        $("#contact-company-title").after(contactCheck);
 
         // SHOW CHECKMARK FOR CLIENT IF IT'S ID EXISTS
-        if ($('#contact-company-id').val() !== "") {
-            $('#ImageContactCheck').show();
+        if ($("#contact-company-id").val() !== "") {
+            $("#ImageContactCheck").show();
         }
 
-        $('#contact-account-iban').blur(function() {
-            var iban = $('#contact-account-iban').val().split(' ').join('');
-            var bic = $('#contact-account-bic').val().trim();
-            var bank = $('#contact-account-bank').val().trim();
-            if ((iban.substr(0, 4) == 'SI56') && (bic == '') && typeof banks['bd'+iban.substr(4, 2)] != 'undefined') {
-                bic = banks['bd'+iban.substr(4, 2)];
-                $('#contact-account-bic').val(bic);
-                if (bank == '' && typeof banks[bic] != 'undefined') {
-                    $('#contact-account-bank').val(banks[bic]);
+        $("#contact-account-iban").blur(function() {
+            var iban = $("#contact-account-iban").val().split(" ").join("");
+            var bic = $("#contact-account-bic").val().trim();
+            var bank = $("#contact-account-bank").val().trim();
+            if ((iban.substr(0, 4) == "SI56") && (bic == "") && typeof banks["bd" + iban.substr(4, 2)] != "undefined") {
+                bic = banks["bd" + iban.substr(4, 2)];
+                $("#contact-account-bic").val(bic);
+                if (bank == "" && typeof banks[bic] != "undefined") {
+                    $("#contact-account-bank").val(banks[bic]);
                 }
             }
         });

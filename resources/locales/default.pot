@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2022-05-08 06:34+0000\n"
+"POT-Creation-Date: 2022-09-07 10:56+0000\n"
 "PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
 "Last-Translator: NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
@@ -38,27 +38,27 @@ msgstr ""
 msgid "Please verify that the information is correct."
 msgstr ""
 
-#: ./src/Controller/UsersController.php:231
+#: ./src/Controller/UsersController.php:232
 msgid "The user has been saved."
 msgstr ""
 
-#: ./src/Controller/UsersController.php:235
+#: ./src/Controller/UsersController.php:236
 msgid "The user could not be saved. Please, try again."
 msgstr ""
 
-#: ./src/Controller/UsersController.php:276
+#: ./src/Controller/UsersController.php:277
 msgid "Properties have been saved."
 msgstr ""
 
-#: ./src/Controller/UsersController.php:280
+#: ./src/Controller/UsersController.php:281
 msgid "Properties could not be saved. Please, try again."
 msgstr ""
 
-#: ./src/Controller/UsersController.php:302
+#: ./src/Controller/UsersController.php:303
 msgid "The user has been deleted."
 msgstr ""
 
-#: ./src/Controller/UsersController.php:304
+#: ./src/Controller/UsersController.php:305
 msgid "The user could not be deleted. Please, try again."
 msgstr ""
 
@@ -315,7 +315,7 @@ msgid "Encode to PDF/A"
 msgstr ""
 
 #: ./templates/Utils/pdf_merge.php:72
-#: ./templates/Utils/pdf_sign.php:95
+#: ./templates/Utils/pdf_sign.php:105
 msgid "Submit"
 msgstr ""
 
@@ -352,14 +352,18 @@ msgid "Certificate"
 msgstr ""
 
 #: ./templates/Utils/pdf_sign.php:67
+msgid "Signature"
+msgstr ""
+
+#: ./templates/Utils/pdf_sign.php:77
 msgid "Page"
 msgstr ""
 
-#: ./templates/Utils/pdf_sign.php:78
+#: ./templates/Utils/pdf_sign.php:88
 msgid "X"
 msgstr ""
 
-#: ./templates/Utils/pdf_sign.php:88
+#: ./templates/Utils/pdf_sign.php:98
 msgid "Y"
 msgstr ""
 

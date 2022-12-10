@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2022-05-08 06:34+0000\n"
+"POT-Creation-Date: 2022-09-07 10:56+0000\n"
 "PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
 "Last-Translator: NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
@@ -67,31 +67,31 @@ msgstr ""
 msgid "Invalid address"
 msgstr ""
 
-#: ./plugins/Crm/src/Controller/ContactsController.php:172
+#: ./plugins/Crm/src/Controller/ContactsController.php:162
 msgid "Contact has been saved."
 msgstr ""
 
-#: ./plugins/Crm/src/Controller/ContactsController.php:177
+#: ./plugins/Crm/src/Controller/ContactsController.php:167
 msgid "Unable to save your contact."
 msgstr ""
 
-#: ./plugins/Crm/src/Controller/ContactsController.php:200
+#: ./plugins/Crm/src/Controller/ContactsController.php:190
 msgid "The contact been deleted."
 msgstr ""
 
-#: ./plugins/Crm/src/Controller/ContactsController.php:204
+#: ./plugins/Crm/src/Controller/ContactsController.php:194
 msgid "The contact could not be deleted. Please, try again."
 msgstr ""
 
-#: ./plugins/Crm/src/Controller/ContactsController.php:267
+#: ./plugins/Crm/src/Controller/ContactsController.php:257
 msgid "Invalid Request"
 msgstr ""
 
-#: ./plugins/Crm/src/Controller/ContactsController.php:293
+#: ./plugins/Crm/src/Controller/ContactsController.php:283
 msgid "Invalid ajax call or contact does not exist."
 msgstr ""
 
-#: ./plugins/Crm/src/Controller/ContactsController.php:379
+#: ./plugins/Crm/src/Controller/ContactsController.php:369
 msgid "Soap call failed"
 msgstr ""
 
@@ -135,19 +135,19 @@ msgstr ""
 msgid "Invalid label"
 msgstr ""
 
-#: ./plugins/Crm/src/Controller/LabelsController.php:144
+#: ./plugins/Crm/src/Controller/LabelsController.php:147
 msgid "The address has been saved."
 msgstr ""
 
-#: ./plugins/Crm/src/Controller/LabelsController.php:148
+#: ./plugins/Crm/src/Controller/LabelsController.php:151
 msgid "The address could not be saved. Please, try again."
 msgstr ""
 
-#: ./plugins/Crm/src/Controller/LabelsController.php:170
+#: ./plugins/Crm/src/Controller/LabelsController.php:173
 msgid "The label has been deleted."
 msgstr ""
 
-#: ./plugins/Crm/src/Controller/LabelsController.php:172
+#: ./plugins/Crm/src/Controller/LabelsController.php:175
 msgid "The label could not be deleted. Please, try again."
 msgstr ""
 
@@ -178,7 +178,7 @@ msgstr ""
 
 #: ./plugins/Crm/templates/Adremas/edit.php:41
 #: ./plugins/Crm/templates/Contacts/edit.php:61
-#: ./plugins/Crm/templates/Contacts/index.php:61
+#: ./plugins/Crm/templates/Contacts/index.php:46
 #: ./plugins/Crm/templates/Labels/adrema.php:74
 #: ./plugins/Crm/templates/Labels/edit_address.php:55
 msgid "Title"
@@ -282,7 +282,7 @@ msgstr ""
 
 #: ./plugins/Crm/templates/ContactsEmails/edit.php:61
 #: ./plugins/Crm/templates/Contacts/edit.php:360
-#: ./plugins/Crm/templates/Contacts/index.php:65
+#: ./plugins/Crm/templates/Contacts/index.php:50
 #: ./plugins/Crm/templates/Contacts/view.php:178
 #: ./plugins/Crm/templates/Contacts/view.php:272
 msgid "Email"
@@ -357,7 +357,7 @@ msgid "Personal Data"
 msgstr ""
 
 #: ./plugins/Crm/templates/Contacts/edit.php:116
-#: ./plugins/Crm/templates/Contacts/index.php:61
+#: ./plugins/Crm/templates/Contacts/index.php:46
 #: ./plugins/Crm/templates/Contacts/view.php:271
 msgid "Name"
 msgstr ""
@@ -423,26 +423,22 @@ msgstr ""
 msgid "Add"
 msgstr ""
 
-#: ./plugins/Crm/templates/Contacts/index.php:47
-msgid "Search"
-msgstr ""
-
-#: ./plugins/Crm/templates/Contacts/index.php:69
+#: ./plugins/Crm/templates/Contacts/index.php:54
 #: ./plugins/Crm/templates/Contacts/view.php:206
 #: ./plugins/Crm/templates/Contacts/view.php:273
 msgid "Phone"
 msgstr ""
 
-#: ./plugins/Crm/templates/Contacts/index.php:73
+#: ./plugins/Crm/templates/Contacts/index.php:58
 msgid "Syncable"
 msgstr ""
 
-#: ./plugins/Crm/templates/Contacts/index.php:108
+#: ./plugins/Crm/templates/Contacts/index.php:94
 #: ./plugins/Crm/templates/Contacts/view.php:11
 msgid "employed"
 msgstr ""
 
-#: ./plugins/Crm/templates/Contacts/index.php:110
+#: ./plugins/Crm/templates/Contacts/index.php:96
 #: ./plugins/Crm/templates/Contacts/view.php:16
 msgid "at"
 msgstr ""

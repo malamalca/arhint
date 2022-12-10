@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App;
 
+use App\Command\HeartBeatCommand;
 use Authentication\AuthenticationService;
 use Authentication\AuthenticationServiceInterface;
 use Authentication\AuthenticationServiceProviderInterface;
@@ -13,6 +14,7 @@ use Authorization\AuthorizationServiceProviderInterface;
 use Authorization\Exception\MissingIdentityException;
 use Authorization\Middleware\AuthorizationMiddleware;
 use Authorization\Policy\OrmResolver;
+use Cake\Console\CommandCollection;
 use Cake\Core\Configure;
 use Cake\Core\Exception\MissingPluginException;
 use Cake\Datasource\FactoryLocator;
@@ -27,7 +29,6 @@ use Cake\Routing\Middleware\AssetMiddleware;
 use Cake\Routing\Middleware\RoutingMiddleware;
 use Cake\Routing\Route\DashedRoute;
 use Cake\Routing\RouteBuilder;
-use Cake\Routing\Router;
 use Crm\Plugin as CrmPlugin;
 use Documents\Plugin as DocumentsPlugin;
 use Expenses\Plugin as ExpensesPlugin;
@@ -116,20 +117,10 @@ class Application extends BaseApplication implements
     {
         $csrf = new SessionCsrfProtectionMiddleware([]);
         $csrf->skipCheckCallback(function ($request) {
-            if (
-                in_array($request->getParam('controller'), ['Invoices', 'Documents']) &&
-                $request->getParam('action') == 'edit' &&
-                $request->hasHeader('Lil-Scan')
-            ) {
-                return true;
-            }
-
-            if (
-                $request->getParam('controller') == 'ProjectsWorkhours' &&
-                $request->getParam('action') == 'import'
-            ) {
-                return true;
-            }
+            return $this->checkParams($request->getAttribute('params'), [
+                ['controller' => 'ProjectsWorkhours', 'action' => 'import'],
+                ['controller' => ['Invoices', 'Documents'], 'action' => 'edit', $request->hasHeader('Lil-Scan')],
+            ]);
         });
 
         $middlewareQueue
@@ -156,8 +147,8 @@ class Application extends BaseApplication implements
         ->add(new AuthorizationMiddleware($this, [
             'unauthorizedHandler' => [
                 'className' => 'Authorization.Redirect',
-                'url' => '/users/login',
-                'queryParam' => 'redirectUrl',
+                'url' => $this->getLoginPath(),
+                'queryParam' => 'redirect',
                 'exceptions' => [
                     MissingIdentityException::class,
                 ],
@@ -191,28 +182,29 @@ class Application extends BaseApplication implements
     public function getAuthenticationService(ServerRequestInterface $request): AuthenticationServiceInterface
     {
         $service = new AuthenticationService([
-            'unauthenticatedRedirect' => Configure::read('loginPath', 'users/login'),
+            'unauthenticatedRedirect' => $this->getLoginPath(),
+            'loginUrl' => $this->getLoginPath(),
             'queryParam' => 'redirect',
         ]);
 
         $fields = [
             'username' => 'username',
             'password' => 'passwd',
-            ];
+        ];
 
         // Load identifiers
         $service->loadIdentifier('Authentication.Password', [
-        'fields' => $fields,
-        'passwordHasher' => [
-            'className' => 'Authentication.Fallback',
-            'hashers' => [
-                'Authentication.Default',
-                [
-                    'className' => 'Authentication.Legacy',
-                    'hashType' => 'sha1',
+            'fields' => $fields,
+            'passwordHasher' => [
+                'className' => 'Authentication.Fallback',
+                'hashers' => [
+                    'Authentication.Default',
+                    [
+                        'className' => 'Authentication.Legacy',
+                        'hashType' => 'sha1',
+                    ],
                 ],
             ],
-        ],
         ]);
 
         // Load the authenticators, you want session first
@@ -220,7 +212,6 @@ class Application extends BaseApplication implements
 
         $service->loadAuthenticator('Authentication.Form', [
             'fields' => $fields,
-            'loginUrl' => Router::url('/users/login'),
         ]);
 
         $service->loadAuthenticator('Authentication.Cookie', [
@@ -229,30 +220,16 @@ class Application extends BaseApplication implements
                 'name' => self::REMEMBERME_COOKIE_NAME,
                 'expires' => (new FrozenTime())->addDays(30),
             ],
-            'loginUrl' => Router::url('/users/login'),
         ]);
 
-        $params = $request->getAttribute('params');
         if (
-            $params['controller'] == 'Projects' &&
-            $params['action'] == 'index' &&
-            $params['_ext'] == 'txt'
+            $this->checkParams($request->getAttribute('params'), [
+            ['controller' => 'Projects', 'action' => 'index', '_ext' => 'txt'],
+            ['controller' => 'ProjectsWorkhours', 'action' => 'import'],
+            ['controller' => ['Invoices', 'Documents'], 'action' => 'edit'],
+            ])
         ) {
-            $service->loadAuthenticator('Authentication.HttpBasic');
-        }
-
-        if (
-            $params['controller'] == 'ProjectsWorkhours' &&
-            $params['action'] == 'import'
-        ) {
-            $service->loadAuthenticator('Authentication.HttpBasic');
-        }
-
-        if (
-            in_array($params['controller'], ['Invoices', 'Documents']) &&
-            $params['action'] == 'edit'
-        ) {
-            $service->loadAuthenticator('Authentication.HttpBasic');
+            $service->loadAuthenticator('Authentication.HttpBasic', ['realm' => 'intranet']);
         }
 
         return $service;
@@ -269,5 +246,61 @@ class Application extends BaseApplication implements
         $ormResolver = new OrmResolver();
 
         return new AuthorizationService($ormResolver);
+    }
+
+    /**
+     * Setup console actions
+     *
+     * @param \Cake\Console\CommandCollection $commands Commands
+     * @return \Cake\Console\CommandCollection
+     */
+    public function console(CommandCollection $commands): CommandCollection
+    {
+        $commands->add('hourly', HeartBeatCommand::class);
+
+        return $commands;
+    }
+
+    /**
+     * Validate groups of param values
+     *
+     * @param array $params Array of passed params (request); there is an OR condition
+     * @param array $checkList Checklist array
+     * @return bool
+     */
+    private function checkParams($params, $checkList)
+    {
+        $result = true;
+        foreach ($checkList as $conditions) {
+            foreach ($conditions as $paramName => $paramValue) {
+                if (is_numeric($paramName) && !$paramValue) {
+                    $result = false;
+                }
+                if (isset($params[$paramName])) {
+                    if (is_array($paramValue) && !in_array($params[$paramName], $paramValue)) {
+                        $result = false;
+                    }
+                    if (is_string($paramValue) && $params[$paramName] !== $paramValue) {
+                        $result = false;
+                    }
+                }
+            }
+            if ($result === true) {
+                return true;
+            }
+            $result = true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Returns login path
+     *
+     * @return string
+     */
+    private function getLoginPath()
+    {
+        return Configure::read('App.fullBaseUrl') . Configure::read('App.base') . '/users/login';
     }
 }

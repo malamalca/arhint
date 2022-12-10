@@ -35,7 +35,7 @@ class DocumentsController extends BaseDocumentsController
             if (in_array($this->getRequest()->getParam('action'), ['edit', 'editPreview'])) {
                 $this->Security->setConfig(
                     'unlockedFields',
-                    ['receiver', 'issuer']
+                    ['company']
                 );
             }
         }

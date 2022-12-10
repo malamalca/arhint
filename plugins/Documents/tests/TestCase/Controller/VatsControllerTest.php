@@ -38,7 +38,7 @@ class VatsControllerTest extends IntegrationTestCase
         // Set session data
         $this->login(USER_ADMIN);
 
-        $this->get('documents/vats/index');
+        $this->get('/documents/vats/index');
         $this->assertResponseOk();
     }
 
@@ -62,7 +62,7 @@ class VatsControllerTest extends IntegrationTestCase
         $this->enableSecurityToken();
         $this->enableCsrfToken();
 
-        $this->post('documents/vats/edit', $data);
+        $this->post('/documents/vats/edit', $data);
         $this->assertRedirect();
     }
 
@@ -86,7 +86,7 @@ class VatsControllerTest extends IntegrationTestCase
         $this->enableSecurityToken();
         $this->enableCsrfToken();
 
-        $this->post('documents/vats/edit/3e55df84-9fba-4ea7-ba9e-3e6a3f83da0c', $data);
+        $this->post('/documents/vats/edit/3e55df84-9fba-4ea7-ba9e-3e6a3f83da0c', $data);
         $this->assertRedirect();
     }
 
@@ -100,7 +100,7 @@ class VatsControllerTest extends IntegrationTestCase
         // Set session data
         $this->login(USER_ADMIN);
 
-        $this->get('documents/vats/delete/3e55df84-9fba-4ea7-ba9e-3e6a3f83da0c');
+        $this->get('/documents/vats/delete/3e55df84-9fba-4ea7-ba9e-3e6a3f83da0c');
         $this->assertRedirect();
     }
 }

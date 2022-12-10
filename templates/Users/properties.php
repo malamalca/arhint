@@ -62,6 +62,18 @@ $userForm = [
             ],
             'fs_basics_end' => '</fieldset>',
 
+            'fs_emails_start' => '<fieldset>',
+            'lg_emails' => sprintf('<legend>%s</legend>', __('Email Notifications')),
+            'email_hourly' => [
+                'method' => 'control',
+                'parameters' => ['email_hourly', [
+                    'type' => 'checkbox',
+                    'label' => __('Receive Notifications Email'),
+                    'class' => 'browser-default',
+                ]],
+            ],
+            'fs_emails_end' => '</fieldset>',
+
             'fs_login_start' => '<fieldset>',
             'lg_login' => sprintf('<legend>%s</legend>', __('Change Password')),
             'old-passwd' => [

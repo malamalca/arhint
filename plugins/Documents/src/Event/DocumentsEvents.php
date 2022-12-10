@@ -4,6 +4,8 @@ declare(strict_types=1);
 namespace Documents\Event;
 
 use Cake\Event\EventListenerInterface;
+use Cake\I18n\FrozenTime;
+use Cake\ORM\TableRegistry;
 use Cake\Routing\Router;
 use Documents\Lib\DocumentsSidebar;
 
@@ -18,11 +20,114 @@ class DocumentsEvents implements EventListenerInterface
     {
         return [
             //'Controller.initialize' => 'enableClientEditing',
+            'App.HeartBeat.hourlyEmail' => 'hourlyEmail',
+            'App.dashboard' => 'dashboardPanels',
             'View.beforeRender' => 'addScripts',
             'Lil.Sidebar.beforeRender' => 'modifySidebar',
             'Lil.Panels.Crm.Contacts.view' => 'showDocumentsTable',
             'Lil.Panels.Projects.Projects.view' => 'showDocumentsTable',
         ];
+    }
+
+    /**
+     * Hourly
+     *
+     * @param \Cake\Event\Event $event Event object.
+     * @return void
+     */
+    public function hourlyEmail($event)
+    {
+        $panels = $event->getData('panels');
+
+        /** @var \App\Model\Entity\User $user */
+        $user = $event->getData('user');
+
+        $DocumentsTable = TableRegistry::getTableLocator()->get('Documents.Documents');
+        $newDocuments = $DocumentsTable->find()
+            ->select()
+            ->contain(['Projects'])
+            ->where([
+                'Documents.owner_id' => $user->company_id,
+                'Documents.created >' => (new FrozenTime())->addHours(-1),
+            ])
+            ->order(['Documents.created'])
+            ->all();
+
+        if (!$newDocuments->isEmpty()) {
+            $panels['panels']['documents'] = ['lines' => [
+                '<h2>' . __d('documents', 'New Documents In Last Hour') . '</h2>',
+            ]];
+
+            foreach ($newDocuments as $document) {
+                $panels['panels']['documents']['lines'][] = sprintf(
+                    '<div><a href="%4$s">%2$s :: <span class="title big">%1$s</span></a>%3$s</div>',
+                    h($document->title),
+                    h($document->no),
+                    $document->project ?
+                        sprintf(' <span class="project small light">[%s]</span>', h($document->project->title)) :
+                        '',
+                    Router::url([
+                        'plugin' => 'Documents',
+                        'controller' => 'Documents',
+                        'action' => 'view',
+                        $document->id,
+                    ], true)
+                );
+            }
+        }
+
+        $event->setResult(['panels' => $panels] + $event->getData());
+    }
+
+    /**
+     * Dashboard panels
+     *
+     * @param \Cake\Event\Event $event Event object.
+     * @return void
+     */
+    public function dashboardPanels($event)
+    {
+        $panels = $event->getData('panels');
+        $view = $event->getSubject();
+
+        /** @var \App\Model\Entity\User $user */
+        $user = $view->getCurrentUser();
+
+        $DocumentsTable = TableRegistry::getTableLocator()->get('Documents.Documents');
+        $newDocuments = $DocumentsTable->find()
+            ->select(['Documents.id', 'Documents.title', 'Documents.no', 'Documents.project_id', 'Projects.title'])
+            ->contain(['Projects'])
+            ->where([
+                'Documents.owner_id' => $user->company_id,
+            ])
+            ->order(['Documents.created'])
+            ->limit(3)
+            ->all();
+
+        if (!$newDocuments->isEmpty()) {
+            $panels['panels']['documents'] = ['lines' => [
+                '<h3>' . __d('documents', 'Last 5 documents') . '</h3>',
+            ]];
+
+            foreach ($newDocuments as $document) {
+                $panels['panels']['documents']['lines'][] = sprintf(
+                    '<div><a href="%4$s">%2$s :: <span class="title big">%1$s</span></a>%3$s</div>',
+                    h($document->title),
+                    h($document->no),
+                    $document->project ?
+                        sprintf(' <span class="project small light">[%s]</span>', h($document->project->title)) :
+                        '',
+                    Router::url([
+                        'plugin' => 'Documents',
+                        'controller' => 'Documents',
+                        'action' => 'view',
+                        $document->id,
+                    ], true)
+                );
+            }
+        }
+
+        $event->setResult(['panels' => $panels] + $event->getData());
     }
 
     /**

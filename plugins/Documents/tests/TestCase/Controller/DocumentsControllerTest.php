@@ -59,7 +59,7 @@ class DocumentsControllerTest extends IntegrationTestCase
         // Set session data
         $this->login(USER_ADMIN);
 
-        $this->get('documents/documents/index?counter=1d53bc5b-de2d-4e85-b13b-81b39a97fc90');
+        $this->get('/documents/documents/index?counter=1d53bc5b-de2d-4e85-b13b-81b39a97fc90');
         $this->assertResponseOk();
     }
 
@@ -73,7 +73,7 @@ class DocumentsControllerTest extends IntegrationTestCase
         // Set session data
         $this->login(USER_ADMIN);
 
-        $this->get('documents/documents/index?counter=1d53bc5b-de2d-4e85-b13b-81b39a97fc90&search=test');
+        $this->get('/documents/documents/index?counter=1d53bc5b-de2d-4e85-b13b-81b39a97fc90&search=test');
         $this->assertResponseOk();
     }
 
@@ -86,7 +86,7 @@ class DocumentsControllerTest extends IntegrationTestCase
     {
         // Set session data
         $this->login(USER_ADMIN);
-        $this->get('documents/documents/view/d0d59a31-6de7-4eb4-8230-ca09113a7fe6');
+        $this->get('/documents/documents/view/d0d59a31-6de7-4eb4-8230-ca09113a7fe6');
         $this->assertResponseOk();
     }
 
@@ -127,7 +127,7 @@ class DocumentsControllerTest extends IntegrationTestCase
         $this->enableCsrfToken();
         $this->setUnlockedFields(['issuer', 'receiver']);
 
-        $this->post('documents/documents/edit?counter=1d53bc5b-de2d-4e85-b13b-81b39a97fc90', $data);
+        $this->post('/documents/documents/edit?counter=1d53bc5b-de2d-4e85-b13b-81b39a97fc90', $data);
 
         $Documents = TableRegistry::getTableLocator()->get('Documents.Documents');
         $document = $Documents
@@ -204,7 +204,7 @@ class DocumentsControllerTest extends IntegrationTestCase
         $this->enableSecurityToken();
         $this->enableCsrfToken();
 
-        $this->post('documents/documents/edit', $data);
+        $this->post('/documents/documents/edit', $data);
 
         $this->assertResponseSuccess();
         $this->assertContentType('application/json');
@@ -259,7 +259,7 @@ class DocumentsControllerTest extends IntegrationTestCase
         $this->enableSecurityToken();
         $this->enableCsrfToken();
 
-        $this->post('documents/documents/edit/d0d59a31-6de7-4eb4-8230-ca09113a7fe6?counter=1d53bc5b-de2d-4e85-b13b-81b39a97fc90', $data);
+        $this->post('/documents/documents/edit/d0d59a31-6de7-4eb4-8230-ca09113a7fe6?counter=1d53bc5b-de2d-4e85-b13b-81b39a97fc90', $data);
         $this->assertRedirect(['action' => 'view', 'd0d59a31-6de7-4eb4-8230-ca09113a7fe6']);
 
         $Documents = TableRegistry::getTableLocator()->get('Documents.Documents');
@@ -278,7 +278,7 @@ class DocumentsControllerTest extends IntegrationTestCase
         // Set session data
         $this->login(USER_ADMIN);
 
-        $this->get('documents/documents/delete/d0d59a31-6de7-4eb4-8230-ca09113a7fe6');
+        $this->get('/documents/documents/delete/d0d59a31-6de7-4eb4-8230-ca09113a7fe6');
         $this->assertRedirect(['action' => 'index', '?' => ['counter' => '1d53bc5b-de2d-4e85-b13b-81b39a97fc90']]);
     }
 }

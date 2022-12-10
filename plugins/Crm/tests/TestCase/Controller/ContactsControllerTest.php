@@ -54,10 +54,10 @@ class ContactsControllerTest extends IntegrationTestCase
         // Set session data
         $this->login(USER_ADMIN);
 
-        $this->get('crm/Contacts/index');
+        $this->get('/crm/Contacts/index');
         $this->assertResponseOk();
 
-        $this->get('crm/Contacts/index?search=arhim');
+        $this->get('/crm/Contacts/index?search=arhim');
         $this->assertResponseOk();
     }
 
@@ -71,7 +71,7 @@ class ContactsControllerTest extends IntegrationTestCase
         // Set session data
         $this->login(USER_ADMIN);
 
-        $this->get('crm/Contacts/view/' . COMPANY_FIRST);
+        $this->get('/crm/Contacts/view/' . COMPANY_FIRST);
         $this->assertResponseOk();
     }
 
@@ -163,7 +163,7 @@ class ContactsControllerTest extends IntegrationTestCase
         // Set session data
         $this->login(USER_ADMIN);
 
-        $this->get('crm/Contacts/delete/49a90cfe-fda4-49ca-b7ec-ca50783b5a45');
+        $this->get('/crm/Contacts/delete/49a90cfe-fda4-49ca-b7ec-ca50783b5a45');
         $this->assertRedirectContains('/crm/contacts');
     }
 }

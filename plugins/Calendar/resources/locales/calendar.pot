@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2022-05-08 06:35+0000\n"
+"POT-Creation-Date: 2022-09-07 10:56+0000\n"
 "PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
 "Last-Translator: NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
@@ -14,21 +14,21 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: ./plugins/Calendar/src/Controller/EventsController.php:79
-#: ./plugins/Calendar/src/Controller/EventsController.php:115
+#: ./plugins/Calendar/src/Controller/EventsController.php:81
+#: ./plugins/Calendar/src/Controller/EventsController.php:119
 msgid "The event has been deleted."
 msgstr ""
 
-#: ./plugins/Calendar/src/Controller/EventsController.php:81
-#: ./plugins/Calendar/src/Controller/EventsController.php:117
+#: ./plugins/Calendar/src/Controller/EventsController.php:83
+#: ./plugins/Calendar/src/Controller/EventsController.php:121
 msgid "The event could not be deleted. Please, try again."
 msgstr ""
 
-#: ./plugins/Calendar/src/Controller/EventsController.php:91
+#: ./plugins/Calendar/src/Controller/EventsController.php:93
 msgid "The event has been saved."
 msgstr ""
 
-#: ./plugins/Calendar/src/Controller/EventsController.php:97
+#: ./plugins/Calendar/src/Controller/EventsController.php:99
 msgid "The event could not be saved. Please, try again."
 msgstr ""
 
@@ -38,14 +38,14 @@ msgid "Calendar"
 msgstr ""
 
 #: ./plugins/Calendar/templates/Events/edit.php:19
-#: ./plugins/Calendar/templates/Events/index.php:210
+#: ./plugins/Calendar/templates/Events/index.php:215
 msgid "Edit Event"
 msgstr ""
 
 #: ./plugins/Calendar/templates/Events/edit.php:19
 #: ./plugins/Calendar/templates/Events/index.php:30
-#: ./plugins/Calendar/templates/Events/index.php:205
-#: ./plugins/Calendar/templates/Events/index.php:219
+#: ./plugins/Calendar/templates/Events/index.php:210
+#: ./plugins/Calendar/templates/Events/index.php:224
 msgid "Add Event"
 msgstr ""
 
@@ -138,7 +138,7 @@ msgstr ""
 msgid "Today"
 msgstr ""
 
-#: ./plugins/Calendar/templates/Events/index.php:175
+#: ./plugins/Calendar/templates/Events/index.php:180
 msgid "+{0} More Events"
 msgstr ""
 

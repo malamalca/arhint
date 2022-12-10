@@ -47,7 +47,7 @@ class DocumentsSigner
         }
 
         $signedInfo = $this->doc->getElementsByTagName('ds:SignedInfo')->item(0);
-        if ($signedInfo instanceof \DomElement) {
+        if ($signedInfo instanceof \DOMElement) {
             $data = $signedInfo->C14N(false, false);
             $digest = hash('sha256', $data);
 
@@ -66,7 +66,7 @@ class DocumentsSigner
     public function setSignatureDatetime($time)
     {
         $signingTime = $this->doc->getElementsByTagName('xds:SigningTime')->item(0);
-        if ($signingTime instanceof \DomElement) {
+        if ($signingTime instanceof \DOMElement) {
             $signingTime->nodeValue = $time->toIso8601String();
 
             return true;
@@ -88,7 +88,7 @@ class DocumentsSigner
         }
 
         $signatureValue = $this->doc->getElementsByTagName('ds:SignatureValue')->item(0);
-        if ($signatureValue instanceof \DomElement) {
+        if ($signatureValue instanceof \DOMElement) {
             $signatureValue->nodeValue = $signature;
 
             return true;
@@ -128,13 +128,13 @@ class DocumentsSigner
 
             // add certificate
             $X509Certificate = $this->doc->getElementsByTagName('ds:X509Certificate')->item(0);
-            if ($X509Certificate instanceof \DomElement) {
+            if ($X509Certificate instanceof \DOMElement) {
                 $X509Certificate->nodeValue = implode('', $arr);
             }
 
             // add nodes
             $signingCertificate = $this->doc->getElementsByTagName('xds:SigningCertificate')->item(0);
-            if ($signingCertificate instanceof \DomElement) {
+            if ($signingCertificate instanceof \DOMElement) {
                 $certNode = $this->doc->createElement('xds:Cert');
 
                 $certDigest = $this->doc->createElement('xds:CertDigest');
@@ -194,14 +194,14 @@ class DocumentsSigner
      */
     private function addReferenceSha1($uri, $type)
     {
-        $xpath = new \DomXpath($this->doc);
+        $xpath = new \DOMXPath($this->doc);
         $node = $xpath->query(sprintf('//*[@Id="%s"]', substr($uri, 1)))->item(0);
-        if ($node instanceof \DomElement) {
+        if ($node instanceof \DOMElement) {
             $data = $node->C14N();
             $digest = base64_encode(hash('sha1', $data, true));
 
             $signedInfo = $this->doc->getElementsByTagName('ds:SignedInfo')->item(0);
-            if ($signedInfo instanceof \DomElement) {
+            if ($signedInfo instanceof \DOMElement) {
                 $referenceNode = $this->doc->createElement('ds:Reference');
                 $referenceURI = $this->doc->createAttribute('URI');
                 $referenceURI->value = $uri;

@@ -72,6 +72,15 @@ img#magic-tax-lookup {
     line-height: 30px !important;
     padding: 6px !important;
 }
+
+#contact-company-title {
+    width: calc(100% - 25px);;
+}
+#ImageContactCheck {
+    display: block;
+    float: right;
+    padding-top: 10px;
+}
 /*div#edit-contact-name, div#edit-contact-surname {
     display: block;
     float: left;

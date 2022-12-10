@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Documents 3.0\n"
-"POT-Creation-Date: 2022-05-08 06:34+0000\n"
-"PO-Revision-Date: 2022-05-08 08:45+0200\n"
+"POT-Creation-Date: 2022-09-07 10:56+0000\n"
+"PO-Revision-Date: 2022-09-07 12:59+0200\n"
 "Last-Translator: ARHIM d.o.o. <info@arhim.si>\n"
 "Language-Team: \n"
 "Language: sl_SI\n"
@@ -16,50 +16,60 @@ msgstr ""
 "%100==4 ? 2 : 3);\n"
 "X-Generator: Poedit 3.0.1\n"
 
-#: plugins/Documents/src/Controller/BaseDocumentsController.php:83
+#: plugins/Documents/src/Controller/BaseDocumentsController.php:85
 msgid "No counters found. Please activate or add a new one."
 msgstr ""
 "Ni še vpisanega števca dokumentov. Vpišite nov števec ali reaktivirajte "
 "obstoječega."
 
-#: plugins/Documents/src/Controller/BaseDocumentsController.php:193
-#: plugins/Documents/src/Controller/BaseDocumentsController.php:354
+#: plugins/Documents/src/Controller/BaseDocumentsController.php:211
+#: plugins/Documents/src/Controller/BaseDocumentsController.php:372
 msgid "The document has been saved."
 msgstr "Dokument je shranjen."
 
-#: plugins/Documents/src/Controller/BaseDocumentsController.php:213
+#: plugins/Documents/src/Controller/BaseDocumentsController.php:231
 msgid "The document could not be saved. Please, try again."
 msgstr "Napaka v vpisanih podatkih. Preverite polja in poizkusite ponovno."
 
-#: plugins/Documents/src/Controller/BaseDocumentsController.php:241
+#: plugins/Documents/src/Controller/BaseDocumentsController.php:259
 msgid "The invoice has been deleted."
 msgstr "Račun je izbrisan."
 
-#: plugins/Documents/src/Controller/BaseDocumentsController.php:243
+#: plugins/Documents/src/Controller/BaseDocumentsController.php:261
 msgid "The invoice could not be deleted. Please, try again."
 msgstr "Napaka pri brisanju. Preverite povezavo in poizkusite ponovno."
 
-#: plugins/Documents/src/Controller/BaseDocumentsController.php:289
+#: plugins/Documents/src/Controller/BaseDocumentsController.php:307
 msgid "The document has been signed."
 msgstr "Dokument je podpisan."
 
-#: plugins/Documents/src/Controller/BaseDocumentsController.php:298
+#: plugins/Documents/src/Controller/BaseDocumentsController.php:316
 msgid "Signing document failed. Please, try again."
 msgstr "Podpisovanje je spodletelo. Preverite polja in poizkusite ponovno."
 
-#: plugins/Documents/src/Controller/BaseDocumentsController.php:379
+#: plugins/Documents/src/Controller/BaseDocumentsController.php:397
 msgid "The document(s) has been sent."
 msgstr "Dokument je bil poslan."
 
-#: plugins/Documents/src/Controller/BaseDocumentsController.php:383
+#: plugins/Documents/src/Controller/BaseDocumentsController.php:401
 msgid "Please correct all marked fields below."
 msgstr "Vpisani so napačni podatki. Popravite označena polja."
 
-#: plugins/Documents/src/Controller/BaseDocumentsController.php:462
+#: plugins/Documents/src/Controller/BaseDocumentsController.php:480
 msgid "Error exporting to specified format."
 msgstr "Napaka pri izvozu v izbrani format."
 
-#: plugins/Documents/src/Controller/BaseDocumentsController.php:558
+#: plugins/Documents/src/Controller/BaseDocumentsController.php:536
+#: plugins/Documents/src/Event/DocumentsEvents.php:42
+#: plugins/Documents/src/Event/DocumentsEvents.php:79
+#: plugins/Documents/src/Lib/DocumentsSidebar.php:34
+#: plugins/Documents/src/Lib/DocumentsSidebar.php:75
+#: plugins/Documents/templates/DocumentsCounters/edit.php:47
+#: plugins/Documents/templates/Documents/aht/list.php:15
+msgid "Documents"
+msgstr "Dokumenti"
+
+#: plugins/Documents/src/Controller/BaseDocumentsController.php:603
 msgid "Invalid request."
 msgstr "Napaka pri zahtevi."
 
@@ -175,16 +185,23 @@ msgstr "Davčna stopnja je izbrisana."
 msgid "The vat could not be deleted. Please, try again."
 msgstr "Napaka pri brisanju. Preverite povezavo in poizkusite ponovno."
 
-#: plugins/Documents/src/Event/DocumentsEvents.php:43
-#: plugins/Documents/src/Event/DocumentsEvents.php:80
-#: plugins/Documents/src/Lib/DocumentsSidebar.php:34
-#: plugins/Documents/src/Lib/DocumentsSidebar.php:75
-#: plugins/Documents/templates/DocumentsCounters/edit.php:47
-#: plugins/Documents/templates/Documents/aht/list.php:15
-msgid "Documents"
-msgstr "Dokumenti"
+#: plugins/Documents/src/Controller/VehiclesController.php:49
+msgid "The vehicles has been saved."
+msgstr "Vozilo je stranjene."
 
-#: plugins/Documents/src/Event/DocumentsEvents.php:73
+#: plugins/Documents/src/Controller/VehiclesController.php:53
+msgid "The vehicles could not be saved. Please, try again."
+msgstr "Napaka v vpisanih podatkih. Preverite polja in poizkusite ponovno."
+
+#: plugins/Documents/src/Controller/VehiclesController.php:73
+msgid "The vehicle has been deleted."
+msgstr "Vozilo je izbrisano."
+
+#: plugins/Documents/src/Controller/VehiclesController.php:75
+msgid "The vehicle could not be deleted. Please, try again."
+msgstr "Napaka pri brisanju. Preverite povezavo in poizkusite ponovno."
+
+#: plugins/Documents/src/Event/DocumentsEvents.php:72
 #: plugins/Documents/src/Lib/DocumentsSidebar.php:81
 #: plugins/Documents/templates/DocumentsCounters/edit.php:48
 #: plugins/Documents/templates/Invoices/aht/list.php:15
@@ -205,24 +222,24 @@ msgstr "Seznam"
 msgid "Travel Orders"
 msgstr "Potni nalogi"
 
-#: plugins/Documents/src/Lib/DocumentsSidebar.php:111
+#: plugins/Documents/src/Lib/DocumentsSidebar.php:99
 msgid "Lookups"
 msgstr "Šifranti"
 
-#: plugins/Documents/src/Lib/DocumentsSidebar.php:132
+#: plugins/Documents/src/Lib/DocumentsSidebar.php:122
 #: plugins/Documents/templates/Items/index.php:4
 msgid "Items"
 msgstr "Artikli"
 
-#: plugins/Documents/src/Lib/DocumentsSidebar.php:142
+#: plugins/Documents/src/Lib/DocumentsSidebar.php:132
 msgid "Counters"
 msgstr "Števci"
 
-#: plugins/Documents/src/Lib/DocumentsSidebar.php:152
+#: plugins/Documents/src/Lib/DocumentsSidebar.php:142
 msgid "VAT levels"
 msgstr "Davčne stopnje"
 
-#: plugins/Documents/src/Lib/DocumentsSidebar.php:163
+#: plugins/Documents/src/Lib/DocumentsSidebar.php:153
 #: plugins/Documents/templates/DocumentsCounters/edit.php:121
 #: plugins/Documents/templates/DocumentsTemplates/index.php:4
 #: plugins/Documents/templates/Documents/view.php:142
@@ -230,6 +247,11 @@ msgstr "Davčne stopnje"
 #: plugins/Documents/templates/TravelOrders/view.php:115
 msgid "Templates"
 msgstr "Predloge dokumenta"
+
+#: plugins/Documents/src/Lib/DocumentsSidebar.php:164
+#: plugins/Documents/templates/Vehicles/index.php:4
+msgid "Vehicles"
+msgstr "Vozila"
 
 #: plugins/Documents/templates/DocumentsAttachments/add.php:6
 msgid "Add Attachment"
@@ -244,12 +266,14 @@ msgstr "Datoteka mora biti izbrana."
 #: plugins/Documents/templates/DocumentsCounters/edit.php:214
 #: plugins/Documents/templates/DocumentsLinks/link.php:60
 #: plugins/Documents/templates/DocumentsTemplates/edit.php:102
-#: plugins/Documents/templates/Documents/edit.php:249
-#: plugins/Documents/templates/Invoices/edit.php:259
+#: plugins/Documents/templates/Documents/edit.php:260
+#: plugins/Documents/templates/Documents/templates.php:83
+#: plugins/Documents/templates/Invoices/edit.php:269
 #: plugins/Documents/templates/Invoices/templates.php:83
-#: plugins/Documents/templates/Items/edit.php:104
+#: plugins/Documents/templates/Items/edit.php:99
 #: plugins/Documents/templates/TravelOrders/edit.php:325
 #: plugins/Documents/templates/Vats/edit.php:51
+#: plugins/Documents/templates/Vehicles/edit.php:59
 msgid "Save"
 msgstr "Shrani"
 
@@ -258,14 +282,14 @@ msgid "Scan an Attachment"
 msgstr "Skeniranje priponke"
 
 #: plugins/Documents/templates/DocumentsAttachments/scan.php:40
-#: plugins/Documents/templates/Documents/edit.php:231
-#: plugins/Documents/templates/Invoices/edit.php:241
+#: plugins/Documents/templates/Documents/edit.php:242
+#: plugins/Documents/templates/Invoices/edit.php:251
 msgid "Scan a Document"
 msgstr "Skeniranje dokumenta"
 
 #: plugins/Documents/templates/DocumentsAttachments/view.php:9
 #: plugins/Documents/templates/Documents/view.php:337
-#: plugins/Documents/templates/Invoices/view.php:618
+#: plugins/Documents/templates/Invoices/view.php:616
 #: plugins/Documents/templates/TravelOrders/view.php:304
 msgid "Attachment Preview"
 msgstr "Predogled priponke"
@@ -287,19 +311,22 @@ msgstr "Urejanje klienta"
 #: plugins/Documents/templates/DocumentsCounters/index.php:59
 #: plugins/Documents/templates/DocumentsTemplates/edit.php:35
 #: plugins/Documents/templates/DocumentsTemplates/index.php:21
-#: plugins/Documents/templates/Documents/edit.php:112
-#: plugins/Documents/templates/Documents/index.php:93
+#: plugins/Documents/templates/Documents/edit.php:113
+#: plugins/Documents/templates/Documents/index.php:97
 #: plugins/Documents/templates/Documents/view.php:184
 #: plugins/Documents/templates/Invoices/edit.php:117
-#: plugins/Documents/templates/Invoices/index.php:93
-#: plugins/Documents/templates/Invoices/pdf/report.php:16
+#: plugins/Documents/templates/Invoices/index.php:94
 #: plugins/Documents/templates/Invoices/view.php:218
 #: plugins/Documents/templates/TravelOrders/view.php:145
+#: plugins/Documents/templates/Vehicles/edit.php:31
+#: plugins/Documents/templates/Vehicles/index.php:20
+#: plugins/Documents/templates/report/Invoices/index.php:25
 msgid "Title"
 msgstr "Naziv"
 
 #: plugins/Documents/templates/DocumentsClients/edit.php:33
 #: plugins/Documents/templates/DocumentsTemplates/edit.php:36
+#: plugins/Documents/templates/Vehicles/edit.php:32
 msgid "Title is required."
 msgstr "Naziv je zahtevano polje."
 
@@ -384,8 +411,9 @@ msgid "Add Counter"
 msgstr "Vpis števca"
 
 #: plugins/Documents/templates/DocumentsCounters/edit.php:34
-#: plugins/Documents/templates/Documents/edit.php:106
+#: plugins/Documents/templates/Documents/edit.php:107
 #: plugins/Documents/templates/Invoices/edit.php:111
+#: plugins/Documents/templates/TravelOrders/edit.php:112
 msgid "Basics"
 msgstr "Osnovni podatki"
 
@@ -398,8 +426,8 @@ msgid "Direction"
 msgstr "Navodila"
 
 #: plugins/Documents/templates/DocumentsCounters/edit.php:66
-#: plugins/Documents/templates/Invoices/index.php:89
-#: plugins/Documents/templates/Invoices/pdf/report.php:15
+#: plugins/Documents/templates/Invoices/index.php:90
+#: plugins/Documents/templates/report/Invoices/index.php:24
 msgid "Issued"
 msgstr "Izdano"
 
@@ -409,7 +437,7 @@ msgstr "Prejeto"
 
 #: plugins/Documents/templates/DocumentsCounters/edit.php:80
 #: plugins/Documents/templates/DocumentsCounters/index.php:60
-#: plugins/Documents/templates/Invoices/edit.php:442
+#: plugins/Documents/templates/Invoices/edit.php:451
 msgid "Type"
 msgstr "Tip"
 
@@ -456,6 +484,8 @@ msgstr "Glava"
 
 #: plugins/Documents/templates/DocumentsCounters/edit.php:172
 #: plugins/Documents/templates/DocumentsCounters/edit.php:204
+#: plugins/Documents/templates/Documents/templates.php:46
+#: plugins/Documents/templates/Documents/templates.php:73
 #: plugins/Documents/templates/Invoices/templates.php:46
 #: plugins/Documents/templates/Invoices/templates.php:73
 msgid "none"
@@ -470,6 +500,7 @@ msgid "Body"
 msgstr "Besedilo"
 
 #: plugins/Documents/templates/DocumentsCounters/edit.php:188
+#: plugins/Documents/templates/Documents/templates.php:60
 #: plugins/Documents/templates/Invoices/templates.php:60
 msgid "default"
 msgstr "privzeto"
@@ -500,11 +531,12 @@ msgstr "{0} števci tipa: {1}"
 
 #: plugins/Documents/templates/DocumentsCounters/index.php:43
 #: plugins/Documents/templates/DocumentsTemplates/index.php:7
-#: plugins/Documents/templates/Documents/index.php:56
-#: plugins/Documents/templates/Invoices/index.php:56
+#: plugins/Documents/templates/Documents/index.php:59
+#: plugins/Documents/templates/Invoices/index.php:57
 #: plugins/Documents/templates/Items/index.php:7
 #: plugins/Documents/templates/TravelOrders/index.php:56
 #: plugins/Documents/templates/Vats/index.php:7
+#: plugins/Documents/templates/Vehicles/index.php:7
 msgid "Add"
 msgstr "Dodaj"
 
@@ -545,8 +577,9 @@ msgid "This is default template"
 msgstr "Privzeta predloga"
 
 #: plugins/Documents/templates/Documents/aht/list.php:21
-#: plugins/Documents/templates/Documents/index.php:89
+#: plugins/Documents/templates/Documents/index.php:93
 #: plugins/Documents/templates/Invoices/aht/list.php:21
+#: plugins/Documents/templates/TravelOrders/edit.php:139
 #: plugins/Documents/templates/TravelOrders/index.php:89
 #: plugins/Documents/templates/element/invoices_list.php:24
 #: plugins/Documents/templates/element/invoices_projects_list.php:36
@@ -557,77 +590,78 @@ msgstr "Datum"
 msgid "No documents for this Entity found."
 msgstr "Dokumenti ne obstajajo."
 
-#: plugins/Documents/templates/Documents/edit.php:9
+#: plugins/Documents/templates/Documents/edit.php:10
 #: plugins/Documents/templates/Invoices/edit.php:10
 msgid "Add an Document #{0} <span class=\"light\">({1})</span>"
 msgstr "Vpis dokumenta #{0} <span class=\"light\">({1})</span>"
 
-#: plugins/Documents/templates/Documents/edit.php:16
+#: plugins/Documents/templates/Documents/edit.php:17
 #: plugins/Documents/templates/Invoices/edit.php:17
 msgid "Edit an Document #{0} <span class=\"light\">({1})</span>"
 msgstr "Urejanje dokumenta #{0} <span class=\"light\">({1})</span>"
 
-#: plugins/Documents/templates/Documents/edit.php:28
+#: plugins/Documents/templates/Documents/edit.php:29
 #: plugins/Documents/templates/Invoices/edit.php:29
 #: plugins/Documents/templates/TravelOrders/edit.php:26
 msgid "Preview"
 msgstr "Predogled"
 
-#: plugins/Documents/templates/Documents/edit.php:114
+#: plugins/Documents/templates/Documents/edit.php:115
 #: plugins/Documents/templates/Invoices/edit.php:119
 msgid "Please enter document's title."
 msgstr "Vpišite naziv dokumenta."
 
-#: plugins/Documents/templates/Documents/edit.php:124
+#: plugins/Documents/templates/Documents/edit.php:125
 #: plugins/Documents/templates/Invoices/edit.php:129
 #: plugins/Documents/templates/Invoices/view.php:226
 msgid "Receiver"
 msgstr "Prejemnik"
 
-#: plugins/Documents/templates/Documents/edit.php:124
+#: plugins/Documents/templates/Documents/edit.php:125
 #: plugins/Documents/templates/Invoices/edit.php:129
 #: plugins/Documents/templates/Invoices/view.php:226
 msgid "Issuer"
 msgstr "Izdajatelj"
 
-#: plugins/Documents/templates/Documents/edit.php:131
-#: plugins/Documents/templates/Documents/edit.php:135
+#: plugins/Documents/templates/Documents/edit.php:132
+#: plugins/Documents/templates/Documents/edit.php:136
 #: plugins/Documents/templates/Invoices/edit.php:136
 #: plugins/Documents/templates/Invoices/edit.php:140
 msgid "Please choose a client"
 msgstr "Izberite klienta."
 
-#: plugins/Documents/templates/Documents/edit.php:141
+#: plugins/Documents/templates/Documents/edit.php:142
 #: plugins/Documents/templates/Invoices/edit.php:146
+#: plugins/Documents/templates/TravelOrders/edit.php:117
 msgid "Document no"
 msgstr "Dokument št."
 
-#: plugins/Documents/templates/Documents/edit.php:150
+#: plugins/Documents/templates/Documents/edit.php:151
 #: plugins/Documents/templates/Invoices/edit.php:155
+#: plugins/Documents/templates/TravelOrders/edit.php:127
 msgid "Location"
 msgstr "Kraj izdaje"
 
-#: plugins/Documents/templates/Documents/edit.php:161
-#: plugins/Documents/templates/Documents/index.php:101
+#: plugins/Documents/templates/Documents/edit.php:162
+#: plugins/Documents/templates/Documents/index.php:105
 #: plugins/Documents/templates/Documents/view.php:200
 #: plugins/Documents/templates/Invoices/edit.php:166
-#: plugins/Documents/templates/Invoices/index.php:101
 #: plugins/Documents/templates/Invoices/view.php:293
 #: plugins/Documents/templates/TravelOrders/view.php:161
 msgid "Project"
 msgstr "Projekt"
 
-#: plugins/Documents/templates/Documents/edit.php:165
+#: plugins/Documents/templates/Documents/edit.php:166
 #: plugins/Documents/templates/Invoices/edit.php:170
 msgid "no project"
 msgstr "brez projekta"
 
-#: plugins/Documents/templates/Documents/edit.php:175
+#: plugins/Documents/templates/Documents/edit.php:176
 #: plugins/Documents/templates/Invoices/edit.php:180
 msgid "Dates"
 msgstr "Datumi"
 
-#: plugins/Documents/templates/Documents/edit.php:182
+#: plugins/Documents/templates/Documents/edit.php:183
 #: plugins/Documents/templates/Documents/view.php:192
 #: plugins/Documents/templates/Invoices/edit.php:188
 #: plugins/Documents/templates/Invoices/view.php:269
@@ -635,11 +669,11 @@ msgstr "Datumi"
 msgid "Date of issue"
 msgstr "Datum dokumenta"
 
-#: plugins/Documents/templates/Documents/edit.php:184
+#: plugins/Documents/templates/Documents/edit.php:185
 #: plugins/Documents/templates/Invoices/edit.php:190
-#: plugins/Documents/templates/Invoices/edit.php:329
-#: plugins/Documents/templates/Invoices/edit.php:343
-#: plugins/Documents/templates/Invoices/edit.php:474
+#: plugins/Documents/templates/Invoices/edit.php:338
+#: plugins/Documents/templates/Invoices/edit.php:352
+#: plugins/Documents/templates/Invoices/edit.php:483
 #: plugins/Documents/templates/element/edit_items.php:72
 #: plugins/Documents/templates/element/edit_items.php:88
 #: plugins/Documents/templates/element/edit_items.php:104
@@ -649,13 +683,13 @@ msgstr "Datum dokumenta"
 msgid "Blank"
 msgstr "Vpišite podatek"
 
-#: plugins/Documents/templates/Documents/edit.php:192
+#: plugins/Documents/templates/Documents/edit.php:193
 #: plugins/Documents/templates/Documents/view.php:311
 #: plugins/Documents/templates/Invoices/edit.php:202
-#: plugins/Documents/templates/Invoices/view.php:379
-#: plugins/Documents/templates/Invoices/view.php:463
-#: plugins/Documents/templates/Invoices/view.php:591
-#: plugins/Documents/templates/Items/edit.php:30
+#: plugins/Documents/templates/Invoices/view.php:378
+#: plugins/Documents/templates/Invoices/view.php:462
+#: plugins/Documents/templates/Invoices/view.php:589
+#: plugins/Documents/templates/Items/edit.php:31
 #: plugins/Documents/templates/Items/index.php:20
 #: plugins/Documents/templates/TravelOrders/view.php:279
 #: plugins/Documents/templates/Vats/edit.php:30
@@ -664,30 +698,30 @@ msgstr "Vpišite podatek"
 msgid "Description"
 msgstr "Opis"
 
-#: plugins/Documents/templates/Documents/edit.php:208
+#: plugins/Documents/templates/Documents/edit.php:209
 #: plugins/Documents/templates/Invoices/edit.php:218
 msgid "Archive"
 msgstr "Arhiv"
 
-#: plugins/Documents/templates/Documents/edit.php:262
-#: plugins/Documents/templates/Invoices/edit.php:272
+#: plugins/Documents/templates/Documents/edit.php:273
+#: plugins/Documents/templates/Invoices/edit.php:282
 msgid "Add another document after saving this one"
 msgstr "Po shranjevanju nadaljuj z vpisom novega dokumenta"
 
-#: plugins/Documents/templates/Documents/edit.php:310
-#: plugins/Documents/templates/Invoices/edit.php:532
+#: plugins/Documents/templates/Documents/edit.php:321
+#: plugins/Documents/templates/Invoices/edit.php:540
 msgid "Add a Company"
 msgstr "Vpis podjetja"
 
-#: plugins/Documents/templates/Documents/edit.php:311
-#: plugins/Documents/templates/Invoices/edit.php:533
+#: plugins/Documents/templates/Documents/edit.php:322
+#: plugins/Documents/templates/Invoices/edit.php:541
 msgid "Add a Person"
 msgstr "Vpis osebe"
 
 #: plugins/Documents/templates/Documents/email.php:6
 #: plugins/Documents/templates/Documents/view.php:321
 #: plugins/Documents/templates/Invoices/email.php:6
-#: plugins/Documents/templates/Invoices/view.php:601
+#: plugins/Documents/templates/Invoices/view.php:599
 #: plugins/Documents/templates/TravelOrders/view.php:289
 msgid "Email Document"
 msgstr "Pošlji dokument"
@@ -723,42 +757,42 @@ msgstr "Pošlji"
 #: plugins/Documents/templates/Documents/email.php:91
 #: plugins/Documents/templates/Documents/view.php:230
 #: plugins/Documents/templates/Invoices/email.php:91
-#: plugins/Documents/templates/Invoices/view.php:510
+#: plugins/Documents/templates/Invoices/view.php:508
 #: plugins/Documents/templates/TravelOrders/view.php:198
 msgid "Attachments"
 msgstr "Priponke"
 
-#: plugins/Documents/templates/Documents/index.php:35
-#: plugins/Documents/templates/Invoices/index.php:35
+#: plugins/Documents/templates/Documents/index.php:38
+#: plugins/Documents/templates/Invoices/index.php:36
 #: plugins/Documents/templates/TravelOrders/index.php:35
 msgid "\"{2}\" from {0} to {1}"
 msgstr "\"{2}\" od {0} do {1}"
 
-#: plugins/Documents/templates/Documents/index.php:66
+#: plugins/Documents/templates/Documents/index.php:69
 #: plugins/Documents/templates/Documents/view.php:92
-#: plugins/Documents/templates/Invoices/index.php:66
-#: plugins/Documents/templates/Invoices/report.php:121
+#: plugins/Documents/templates/Invoices/index.php:67
+#: plugins/Documents/templates/Invoices/report.php:141
 #: plugins/Documents/templates/Invoices/view.php:94
 #: plugins/Documents/templates/TravelOrders/index.php:66
 #: plugins/Documents/templates/TravelOrders/view.php:91
 msgid "Print"
 msgstr "Tiskaj"
 
-#: plugins/Documents/templates/Documents/index.php:85
-#: plugins/Documents/templates/Invoices/index.php:85
-#: plugins/Documents/templates/Invoices/pdf/report.php:14
+#: plugins/Documents/templates/Documents/index.php:89
+#: plugins/Documents/templates/Invoices/index.php:86
 #: plugins/Documents/templates/TravelOrders/index.php:85
+#: plugins/Documents/templates/report/Invoices/index.php:23
 msgid "No"
 msgstr "Št."
 
-#: plugins/Documents/templates/Documents/index.php:97
-#: plugins/Documents/templates/Invoices/index.php:97
-#: plugins/Documents/templates/Invoices/pdf/report.php:17
+#: plugins/Documents/templates/Documents/index.php:101
+#: plugins/Documents/templates/Invoices/index.php:98
+#: plugins/Documents/templates/report/Invoices/index.php:26
 msgid "Client"
 msgstr "Klient"
 
-#: plugins/Documents/templates/Documents/index.php:136
-#: plugins/Documents/templates/Invoices/index.php:162
+#: plugins/Documents/templates/Documents/index.php:140
+#: plugins/Documents/templates/Invoices/index.php:155
 #: plugins/Documents/templates/TravelOrders/index.php:143
 msgid "n/a"
 msgstr "n/a"
@@ -770,6 +804,26 @@ msgstr "Predogled"
 #: plugins/Documents/templates/Documents/preview.php:15
 msgid "Document #%1$s"
 msgstr "Dokument #%1$s"
+
+#: plugins/Documents/templates/Documents/templates.php:4
+#: plugins/Documents/templates/Invoices/templates.php:4
+msgid "Edit Templates for Document #{0}"
+msgstr "Urejanje predlog za dokument #{0}"
+
+#: plugins/Documents/templates/Documents/templates.php:44
+#: plugins/Documents/templates/Invoices/templates.php:44
+msgid "Page Header"
+msgstr "Glava dokumenta"
+
+#: plugins/Documents/templates/Documents/templates.php:58
+#: plugins/Documents/templates/Invoices/templates.php:58
+msgid "Page Body"
+msgstr "Telo dokumenta"
+
+#: plugins/Documents/templates/Documents/templates.php:71
+#: plugins/Documents/templates/Invoices/templates.php:71
+msgid "Page Footer"
+msgstr "Noga dokumenta"
 
 #: plugins/Documents/templates/Documents/view.php:6
 #: plugins/Documents/templates/Invoices/view.php:8
@@ -848,70 +902,70 @@ msgstr "Nastavitve"
 #: plugins/Documents/templates/Documents/view.php:153
 #: plugins/Documents/templates/Documents/view.php:332
 #: plugins/Documents/templates/Invoices/view.php:175
-#: plugins/Documents/templates/Invoices/view.php:612
+#: plugins/Documents/templates/Invoices/view.php:610
 msgid "Edit Issuer"
 msgstr "Urejanje izdajatelja"
 
 #: plugins/Documents/templates/Documents/view.php:165
 #: plugins/Documents/templates/Documents/view.php:333
 #: plugins/Documents/templates/Invoices/view.php:187
-#: plugins/Documents/templates/Invoices/view.php:613
+#: plugins/Documents/templates/Invoices/view.php:611
 msgid "Edit Receiver"
 msgstr "Urejanje prejemnika"
 
 #: plugins/Documents/templates/Documents/view.php:270
-#: plugins/Documents/templates/Invoices/view.php:550
+#: plugins/Documents/templates/Invoices/view.php:548
 #: plugins/Documents/templates/TravelOrders/view.php:238
 msgid "Are you sure you want to delete this attachment"
 msgstr "Ste prepričani, da želite izbrisati priponko?"
 
 #: plugins/Documents/templates/Documents/view.php:281
-#: plugins/Documents/templates/Invoices/view.php:561
+#: plugins/Documents/templates/Invoices/view.php:559
 #: plugins/Documents/templates/TravelOrders/view.php:249
 msgid "Linked Documents"
 msgstr "Povezani dokumenti"
 
 #: plugins/Documents/templates/Documents/view.php:303
-#: plugins/Documents/templates/Invoices/view.php:583
+#: plugins/Documents/templates/Invoices/view.php:581
 #: plugins/Documents/templates/TravelOrders/view.php:271
 msgid "Are you sure you want to delete this link?"
 msgstr "Ste prepričani, da želite izbrisati povezan dokument?"
 
 #: plugins/Documents/templates/Documents/view.php:320
-#: plugins/Documents/templates/Invoices/view.php:600
+#: plugins/Documents/templates/Invoices/view.php:598
 #: plugins/Documents/templates/TravelOrders/view.php:288
 msgid "Edit Templates"
 msgstr "Uredi predloge"
 
 #: plugins/Documents/templates/Documents/view.php:323
-#: plugins/Documents/templates/Invoices/view.php:603
+#: plugins/Documents/templates/Invoices/view.php:601
 #: plugins/Documents/templates/TravelOrders/view.php:291
 msgid "Attach File"
 msgstr "Pripenjanje"
 
 #: plugins/Documents/templates/Documents/view.php:324
-#: plugins/Documents/templates/Invoices/view.php:604
+#: plugins/Documents/templates/Invoices/view.php:602
 #: plugins/Documents/templates/TravelOrders/view.php:292
 msgid "Link Document"
 msgstr "Povezava dokumentov"
 
 #: plugins/Documents/templates/Documents/view.php:325
-#: plugins/Documents/templates/Invoices/view.php:605
+#: plugins/Documents/templates/Invoices/view.php:603
 #: plugins/Documents/templates/TravelOrders/view.php:293
 msgid "Scan Document"
 msgstr "Sken dokumenta"
 
 #: plugins/Documents/templates/Invoices/aht/list.php:28
 #: plugins/Documents/templates/Invoices/aht/list.php:45
-#: plugins/Documents/templates/Invoices/edit.php:363
-#: plugins/Documents/templates/Invoices/index.php:109
-#: plugins/Documents/templates/Invoices/pdf/report.php:19
+#: plugins/Documents/templates/Invoices/edit.php:372
+#: plugins/Documents/templates/Invoices/index.php:106
 #: plugins/Documents/templates/Invoices/view.php:306
-#: plugins/Documents/templates/Invoices/view.php:467
+#: plugins/Documents/templates/Invoices/view.php:466
 #: plugins/Documents/templates/TravelOrders/index.php:101
 #: plugins/Documents/templates/TravelOrders/view.php:174
 #: plugins/Documents/templates/element/invoices_list.php:32
 #: plugins/Documents/templates/element/invoices_list.php:51
+#: plugins/Documents/templates/report/Invoices/index.php:28
 msgid "Total"
 msgstr "Skupaj"
 
@@ -920,80 +974,80 @@ msgstr "Skupaj"
 msgid "No invoices for this Contact found."
 msgstr "Dokumenti ne obstajajo."
 
-#: plugins/Documents/templates/Invoices/edit.php:300
+#: plugins/Documents/templates/Invoices/edit.php:309
 msgid "Buyer"
 msgstr "Naročnik - plačnik"
 
-#: plugins/Documents/templates/Invoices/edit.php:311
+#: plugins/Documents/templates/Invoices/edit.php:320
 msgid "Use different client for buyer."
 msgstr "Izberi drugega plačnika"
 
-#: plugins/Documents/templates/Invoices/edit.php:328
+#: plugins/Documents/templates/Invoices/edit.php:337
 #: plugins/Documents/templates/Invoices/view.php:273
 msgid "Service date"
 msgstr "Datum storitve"
 
-#: plugins/Documents/templates/Invoices/edit.php:342
+#: plugins/Documents/templates/Invoices/edit.php:351
 #: plugins/Documents/templates/Invoices/view.php:277
 msgid "Expiration date"
 msgstr "Datum zapadlosti"
 
-#: plugins/Documents/templates/Invoices/edit.php:356
-#: plugins/Documents/templates/Invoices/edit.php:370
-#: plugins/Documents/templates/Invoices/view.php:418
+#: plugins/Documents/templates/Invoices/edit.php:365
+#: plugins/Documents/templates/Invoices/edit.php:379
+#: plugins/Documents/templates/Invoices/view.php:417
 msgid "Analytics"
 msgstr "Analitika"
 
-#: plugins/Documents/templates/Invoices/edit.php:382
+#: plugins/Documents/templates/Invoices/edit.php:391
 msgid "Taxes Analytics"
 msgstr "DDV Analitika"
 
-#: plugins/Documents/templates/Invoices/edit.php:392
+#: plugins/Documents/templates/Invoices/edit.php:401
 msgid "Payment"
 msgstr "Plačilo"
 
-#: plugins/Documents/templates/Invoices/edit.php:399
+#: plugins/Documents/templates/Invoices/edit.php:408
 msgid "Document must be payed."
 msgstr "Račun je potrebno plačati."
 
-#: plugins/Documents/templates/Invoices/edit.php:400
+#: plugins/Documents/templates/Invoices/edit.php:409
 msgid "Auto transaction. No payment needed."
 msgstr "Račun bo plačan preko direktne bremenitve in ga ni potrebno plačati."
 
-#: plugins/Documents/templates/Invoices/edit.php:401
+#: plugins/Documents/templates/Invoices/edit.php:410
 msgid "Document payed in full."
 msgstr "Račun je bil že plačan."
 
-#: plugins/Documents/templates/Invoices/edit.php:402
+#: plugins/Documents/templates/Invoices/edit.php:411
 msgid "Other. No payment needed."
 msgstr "Drugo - ni možnosti plačila."
 
-#: plugins/Documents/templates/Invoices/edit.php:408
+#: plugins/Documents/templates/Invoices/edit.php:417
 msgid "Payment Kind"
 msgstr "Način plačila"
 
-#: plugins/Documents/templates/Invoices/edit.php:424
+#: plugins/Documents/templates/Invoices/edit.php:433
 msgid "Sepa Type"
 msgstr "Koda namena"
 
-#: plugins/Documents/templates/Invoices/edit.php:427
+#: plugins/Documents/templates/Invoices/edit.php:436
 msgid "Invalid type"
 msgstr "Nepoznani tip."
 
-#: plugins/Documents/templates/Invoices/edit.php:444
-#: plugins/Documents/templates/Invoices/edit.php:459
+#: plugins/Documents/templates/Invoices/edit.php:453
+#: plugins/Documents/templates/Invoices/edit.php:468
 msgid "Invalid format"
 msgstr "Nepoznani format"
 
-#: plugins/Documents/templates/Invoices/edit.php:457
+#: plugins/Documents/templates/Invoices/edit.php:466
 msgid "MOD"
 msgstr "MOD"
 
-#: plugins/Documents/templates/Invoices/edit.php:472
+#: plugins/Documents/templates/Invoices/edit.php:481
 msgid "Reference"
 msgstr "Referenca"
 
-#: plugins/Documents/templates/Invoices/edit.php:482
+#: plugins/Documents/templates/Invoices/edit.php:491
 msgid ""
 "Use 'OTHR' for unknown payment type. Use prefix and two numers for module "
 "(eg SI00)."
@@ -1001,23 +1055,15 @@ msgstr ""
 "Uporabite 'OTHR' za nepoznane tipe plačila. Za uporabo modula uporabite še "
 "lokalno predpono kot npr. SI00"
 
-#: plugins/Documents/templates/Invoices/index.php:105
-#: plugins/Documents/templates/Invoices/pdf/report.php:18
+#: plugins/Documents/templates/Invoices/index.php:102
+#: plugins/Documents/templates/report/Invoices/index.php:27
 msgid "Net Total"
 msgstr "Skupaj brez DDV"
 
-#: plugins/Documents/templates/Invoices/index.php:131
+#: plugins/Documents/templates/Invoices/index.php:128
 #: plugins/Documents/templates/TravelOrders/index.php:123
 msgid "Total Sum"
 msgstr "Skupni znesek"
-
-#: plugins/Documents/templates/Invoices/pdf/report.php:8
-msgid "Documents List"
-msgstr "Seznam dokumentov"
-
-#: plugins/Documents/templates/Invoices/pdf/report.php:26
-msgid "TOTAL"
-msgstr "SKUPAJ"
 
 #: plugins/Documents/templates/Invoices/preview.php:8
 msgid "Invoice Preview"
@@ -1028,22 +1074,30 @@ msgid "Invoice #%1$s"
 msgstr "Račun #%1$s"
 
 #: plugins/Documents/templates/Invoices/report.php:27
-msgid "REPORT: VATs"
-msgstr "IZPIS: DDV"
+msgid "REPORT: Invoices"
+msgstr "IZPIS: Računi"
 
-#: plugins/Documents/templates/Invoices/report.php:43
+#: plugins/Documents/templates/Invoices/report.php:47
+msgid "Counter"
+msgstr "Števec"
+
+#: plugins/Documents/templates/Invoices/report.php:50
+msgid "All Counters"
+msgstr "vsi števci"
+
+#: plugins/Documents/templates/Invoices/report.php:61
 msgid "Specify Month"
 msgstr "Izbira meseca"
 
-#: plugins/Documents/templates/Invoices/report.php:87
+#: plugins/Documents/templates/Invoices/report.php:107
 msgid "From - to Date"
 msgstr "Od-do datuma"
 
-#: plugins/Documents/templates/Invoices/report.php:100
+#: plugins/Documents/templates/Invoices/report.php:120
 msgid "Start"
 msgstr "od"
 
-#: plugins/Documents/templates/Invoices/report.php:111
+#: plugins/Documents/templates/Invoices/report.php:131
 msgid "End"
 msgstr "do"
 
@@ -1058,22 +1112,6 @@ msgstr "Podpis dokumenta #{0}"
 #: plugins/Documents/templates/Invoices/sign.php:73
 msgid "Datetime"
 msgstr "Datum in čas"
-
-#: plugins/Documents/templates/Invoices/templates.php:4
-msgid "Edit Templates for Document #{0}"
-msgstr "Urejanje predlog za dokument #{0}"
-
-#: plugins/Documents/templates/Invoices/templates.php:44
-msgid "Page Header"
-msgstr "Glava dokumenta"
-
-#: plugins/Documents/templates/Invoices/templates.php:58
-msgid "Page Body"
-msgstr "Telo dokumenta"
-
-#: plugins/Documents/templates/Invoices/templates.php:71
-msgid "Page Footer"
-msgstr "Noga dokumenta"
 
 #: plugins/Documents/templates/Invoices/validate.php:6
 msgid "Invoice validation"
@@ -1096,7 +1134,7 @@ msgid "eSlog 2.0"
 msgstr "eSlog 2.0"
 
 #: plugins/Documents/templates/Invoices/view.php:199
-#: plugins/Documents/templates/Invoices/view.php:614
+#: plugins/Documents/templates/Invoices/view.php:612
 msgid "Edit Buyer"
 msgstr "Urejanje naročnika-plačnika"
 
@@ -1116,67 +1154,67 @@ msgstr "Datum potrditve"
 msgid "Sign date"
 msgstr "Datum podpisa"
 
-#: plugins/Documents/templates/Invoices/view.php:380
+#: plugins/Documents/templates/Invoices/view.php:379
 #: plugins/Documents/templates/element/edit_items.php:9
 msgid "Quantity"
 msgstr "Količina"
 
-#: plugins/Documents/templates/Invoices/view.php:381
-#: plugins/Documents/templates/Items/edit.php:54
+#: plugins/Documents/templates/Invoices/view.php:380
+#: plugins/Documents/templates/Items/edit.php:53
 #: plugins/Documents/templates/Items/index.php:26
 #: plugins/Documents/templates/element/edit_items.php:10
 msgid "Unit"
 msgstr "E.M."
 
-#: plugins/Documents/templates/Invoices/view.php:382
+#: plugins/Documents/templates/Invoices/view.php:381
 #: plugins/Documents/templates/element/edit_items.php:11
 msgid "Price per Unit"
 msgstr "Cena"
 
-#: plugins/Documents/templates/Invoices/view.php:383
+#: plugins/Documents/templates/Invoices/view.php:382
 #: plugins/Documents/templates/element/edit_items.php:12
 msgid "Discount [%]"
 msgstr "Popust [%]"
 
-#: plugins/Documents/templates/Invoices/view.php:384
+#: plugins/Documents/templates/Invoices/view.php:383
 #: plugins/Documents/templates/element/edit_items.php:13
 msgid "Unit Total"
 msgstr "Skupaj"
 
-#: plugins/Documents/templates/Invoices/view.php:385
+#: plugins/Documents/templates/Invoices/view.php:384
 #: plugins/Documents/templates/element/edit_items.php:14
 msgid "Tax [%]"
 msgstr "DDV [%]"
 
-#: plugins/Documents/templates/Invoices/view.php:386
+#: plugins/Documents/templates/Invoices/view.php:385
 #: plugins/Documents/templates/element/edit_items.php:15
 #: plugins/Documents/templates/element/edit_tax.php:12
 msgid "Total with Tax"
 msgstr "Skupaj z DDV"
 
-#: plugins/Documents/templates/Invoices/view.php:398
-#: plugins/Documents/templates/Invoices/view.php:479
+#: plugins/Documents/templates/Invoices/view.php:397
+#: plugins/Documents/templates/Invoices/view.php:478
 #: plugins/Documents/templates/element/edit_items.php:234
 #: plugins/Documents/templates/element/edit_tax.php:147
 msgid "Grand Total"
 msgstr "Skupni znesek"
 
-#: plugins/Documents/templates/Invoices/view.php:464
+#: plugins/Documents/templates/Invoices/view.php:463
 #: plugins/Documents/templates/element/edit_tax.php:9
 msgid "VAT [%]"
 msgstr "DDV [%]"
 
-#: plugins/Documents/templates/Invoices/view.php:465
+#: plugins/Documents/templates/Invoices/view.php:464
 #: plugins/Documents/templates/element/edit_tax.php:10
 msgid "Base"
 msgstr "Osnova"
 
-#: plugins/Documents/templates/Invoices/view.php:466
+#: plugins/Documents/templates/Invoices/view.php:465
 #: plugins/Documents/templates/element/edit_tax.php:11
 msgid "Tax"
 msgstr "DDV"
 
-#: plugins/Documents/templates/Invoices/view.php:500
+#: plugins/Documents/templates/Invoices/view.php:499
 msgid "VAT Analytics"
 msgstr "DDV Analitika"
 
@@ -1188,7 +1226,7 @@ msgstr "Urejanje artikla"
 msgid "Add Item"
 msgstr "Nov artikel"
 
-#: plugins/Documents/templates/Items/edit.php:31
+#: plugins/Documents/templates/Items/edit.php:32
 #: plugins/Documents/templates/Vats/edit.php:31
 msgid "Description is required."
 msgstr "Opis je zahtevano polje."
@@ -1198,21 +1236,21 @@ msgstr "Opis je zahtevano polje."
 msgid "Qty"
 msgstr "Kol."
 
-#: plugins/Documents/templates/Items/edit.php:55
+#: plugins/Documents/templates/Items/edit.php:54
 msgid "pcs"
 msgstr "kom"
 
-#: plugins/Documents/templates/Items/edit.php:67
+#: plugins/Documents/templates/Items/edit.php:65
 #: plugins/Documents/templates/Items/index.php:30
 msgid "Discount"
 msgstr "Popust"
 
-#: plugins/Documents/templates/Items/edit.php:80
+#: plugins/Documents/templates/Items/edit.php:77
 #: plugins/Documents/templates/Items/index.php:34
 msgid "Price"
 msgstr "Cena"
 
-#: plugins/Documents/templates/Items/edit.php:94
+#: plugins/Documents/templates/Items/edit.php:90
 msgid "Vat"
 msgstr "DDV"
 
@@ -1223,6 +1261,14 @@ msgstr "Vpis potnega naloga #{0} <span class=\"light\">({1})</span>"
 #: plugins/Documents/templates/TravelOrders/edit.php:14
 msgid "Edit a Travel Order #{0} <span class=\"light\">({1})</span>"
 msgstr "Urejanje potnega naloga #{0} <span class=\"light\">({1})</span>"
+
+#: plugins/Documents/templates/TravelOrders/edit.php:129
+msgid "Please enter location."
+msgstr "Vpišite lokacijo."
+
+#: plugins/Documents/templates/TravelOrders/edit.php:142
+msgid "Please date of order."
+msgstr "Vpišite datum naloga."
 
 #: plugins/Documents/templates/TravelOrders/edit.php:151
 msgid "Travel Details"
@@ -1321,6 +1367,32 @@ msgstr "DDV stopnje"
 msgid "Level"
 msgstr "Stopnja"
 
+#: plugins/Documents/templates/Vehicles/edit.php:4
+msgid "Edit Vehicle"
+msgstr "Urejanje vozila"
+
+#: plugins/Documents/templates/Vehicles/edit.php:4
+msgid "Add Vehicle"
+msgstr "Vpis vozila"
+
+#: plugins/Documents/templates/Vehicles/edit.php:41
+#: plugins/Documents/templates/Vehicles/index.php:22
+msgid "Registration"
+msgstr "Registracija"
+
+#: plugins/Documents/templates/Vehicles/edit.php:42
+msgid "Registration is required."
+msgstr "Registracija je zahtevano polje."
+
+#: plugins/Documents/templates/Vehicles/edit.php:51
+#: plugins/Documents/templates/Vehicles/index.php:25
+msgid "Owner"
+msgstr "Lastnik"
+
+#: plugins/Documents/templates/Vehicles/edit.php:52
+msgid "Owner is required."
+msgstr "Lastnik je zahtevano polje."
+
 #: plugins/Documents/templates/element/edit_items.php:207
 #: plugins/Documents/templates/element/edit_tax.php:123
 msgid "Remove Item"
@@ -1346,6 +1418,21 @@ msgstr "Račun"
 msgid "Download Attachment(s)"
 msgstr "Prenos priponk"
 
+#: plugins/Documents/templates/report/Invoices/index.php:5
+msgid "Documents List from {0} to {1}"
+msgstr "Seznam računov od {0} do {1}"
+
+#: plugins/Documents/templates/report/Invoices/index.php:8
+msgid "Documents List for {0}"
+msgstr "Seznam računov za {0}"
+
+#: plugins/Documents/templates/report/Invoices/index.php:35
+msgid "TOTAL"
+msgstr "SKUPAJ"
+
+#~ msgid "REPORT: VATs"
+#~ msgstr "IZPIS: DDV"
+
 #~ msgid "Add Invoice"
 #~ msgstr "Nov račun"
 
@@ -1360,12 +1447,6 @@ msgstr "Prenos priponk"
 
 #~ msgid "Select Source"
 #~ msgstr "Izbira vira"
-
-#~ msgid "Please enter location."
-#~ msgstr "Vpišite lokacijo."
-
-#~ msgid "Please date of order."
-#~ msgstr "Vpišite datum naloga."
 
 #~ msgid "Travel's Payer"
 #~ msgstr "Plačnik"

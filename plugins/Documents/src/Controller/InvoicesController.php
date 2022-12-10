@@ -271,12 +271,12 @@ class InvoicesController extends BaseDocumentsController
     /**
      * Upnqr method
      *
-     * @param string $kind XML kind as of eslog20, eslog, sepa,..
      * @param string|null $id Document id.
+     * @param string $kind XML kind as of eslog20, eslog, sepa,..
      * @return \Cake\Http\Response|null
      * @throws \Cake\Http\Exception\NotFoundException When record not found.
      */
-    public function validate($kind, $id)
+    public function validate($id, $kind = 'sepa')
     {
         if (!in_array($kind, ['sepa', 'eslog', 'eslog20'])) {
             die('Invalid extension!');
@@ -285,11 +285,10 @@ class InvoicesController extends BaseDocumentsController
 
         $Exporter = new InvoicesExport();
 
-        $documents = $Exporter->find($filter);
-        $this->Authorization->applyScope($documents, 'index');
+        $invoice = $Exporter->find($filter)->first();
+        $this->Authorization->authorize($invoice, 'view');
 
-        $documents = $documents->toArray();
-        $data = $Exporter->export($kind, $documents);
+        $data = $Exporter->export($kind, [$invoice]);
 
         $xml = new \DOMDocument();
         $xml->loadXml($data);
@@ -301,9 +300,7 @@ class InvoicesController extends BaseDocumentsController
             case 'eslog':
                 $xsd = Plugin::path('Documents') . 'webroot' . DS . 'schema' . DS . 'eSLOG_1-6_EnostavniRacun.xsd';
                 break;
-            case 'eslog20':
-                $xsd = Plugin::path('Documents') . 'webroot' . DS . 'schema' . DS . 'eSLOG20_INVOIC_v200.xsd';
-                break;
+            //case 'eslog20':
             default:
                 $xsd = Plugin::path('Documents') . 'webroot' . DS . 'schema' . DS . 'eSLOG20_INVOIC_v200.xsd';
         }

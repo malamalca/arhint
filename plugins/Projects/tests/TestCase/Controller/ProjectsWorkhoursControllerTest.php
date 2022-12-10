@@ -46,7 +46,7 @@ class ProjectsWorkhoursControllerTest extends TestCase
     {
         $this->login(USER_ADMIN);
 
-        $this->get('projects/projects-workhours/index');
+        $this->get('/projects/projects-workhours/index');
         $this->assertResponseOk();
     }
 
@@ -59,7 +59,7 @@ class ProjectsWorkhoursControllerTest extends TestCase
     {
         $this->login(USER_ADMIN);
 
-        $this->get('projects/projects-workhours/list');
+        $this->get('/projects/projects-workhours/list');
         $this->assertResponseOk();
     }
 
@@ -72,10 +72,10 @@ class ProjectsWorkhoursControllerTest extends TestCase
     {
         $this->login(USER_ADMIN);
 
-        $this->get('projects/projects-workhours/edit/a1895b24-5809-40cb-9670-302a37aa35bf');
+        $this->get('/projects/projects-workhours/edit/a1895b24-5809-40cb-9670-302a37aa35bf');
         $this->assertResponseOk();
 
-        $this->get('projects/projects-workhours/edit?project=4dd53305-9715-4be4-b169-20defe113d2a');
+        $this->get('/projects/projects-workhours/edit?project=4dd53305-9715-4be4-b169-20defe113d2a');
         $this->assertResponseOk();
 
         $data = [
@@ -89,7 +89,7 @@ class ProjectsWorkhoursControllerTest extends TestCase
         $this->enableSecurityToken();
         $this->enableCsrfToken();
 
-        $this->post('projects/projects-workhours/edit/a1895b24-5809-40cb-9670-302a37aa35bf', $data);
+        $this->post('/projects/projects-workhours/edit/a1895b24-5809-40cb-9670-302a37aa35bf', $data);
         $this->assertRedirect(['controller' => 'ProjectsWorkhours', 'action' => 'index', '?' => ['project' => '4dd53305-9715-4be4-b169-20defe113d2a']]);
     }
 
@@ -102,7 +102,7 @@ class ProjectsWorkhoursControllerTest extends TestCase
     {
         $this->login(USER_ADMIN);
 
-        $this->get('projects/projects-workhours/delete/a1895b24-5809-40cb-9670-302a37aa35bf');
+        $this->get('/projects/projects-workhours/delete/a1895b24-5809-40cb-9670-302a37aa35bf');
         $this->assertRedirect();
     }
 
@@ -133,7 +133,7 @@ class ProjectsWorkhoursControllerTest extends TestCase
             ],
         ]];
 
-        $this->post('projects/projects-workhours/import', $data);
+        $this->post('/projects/projects-workhours/import', $data);
         $this->assertResponseOk();
 
         $workhours = TableRegistry::getTableLocator()

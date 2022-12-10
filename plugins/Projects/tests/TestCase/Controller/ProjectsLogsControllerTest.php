@@ -47,10 +47,10 @@ class ProjectsLogsControllerTest extends TestCase
     {
         $this->login(USER_ADMIN);
 
-        $this->get('projects/projects-logs/edit/0cc5e896-da92-4408-af50-9eaf1d4cc50b');
+        $this->get('/projects/projects-logs/edit/0cc5e896-da92-4408-af50-9eaf1d4cc50b');
         $this->assertResponseOk();
 
-        $this->get('projects/projects-logs/edit?project=4dd53305-9715-4be4-b169-20defe113d2a');
+        $this->get('/projects/projects-logs/edit?project=4dd53305-9715-4be4-b169-20defe113d2a');
         $this->assertResponseOk();
 
         $data = [
@@ -63,7 +63,7 @@ class ProjectsLogsControllerTest extends TestCase
         $this->enableSecurityToken();
         $this->enableCsrfToken();
 
-        $this->post('projects/projects-logs/edit/0cc5e896-da92-4408-af50-9eaf1d4cc50b', $data);
+        $this->post('/projects/projects-logs/edit/0cc5e896-da92-4408-af50-9eaf1d4cc50b', $data);
         $this->assertRedirect(['controller' => 'Projects', 'action' => 'view', '4dd53305-9715-4be4-b169-20defe113d2a', '?' => ['tab' => 'logs']]);
     }
 
@@ -77,13 +77,13 @@ class ProjectsLogsControllerTest extends TestCase
         // Set session data
         $this->login(USER_COMMON);
 
-        $this->get('projects/projects-logs/edit/4dd53305-9715-4be4-b169-20defe113d2a');
+        $this->get('/projects/projects-logs/edit/4dd53305-9715-4be4-b169-20defe113d2a');
         $this->assertResponseError();
 
-        $this->get('projects/projects-logs/edit?project=4dd53305-9715-4be4-b169-20defe113d2a');
+        $this->get('/projects/projects-logs/edit?project=4dd53305-9715-4be4-b169-20defe113d2a');
         $this->assertResponseError();
 
-        $this->get('projects/projects-logs/edit?project=4dd53305-9715-4be4-b169-20defe113d2b');
+        $this->get('/projects/projects-logs/edit?project=4dd53305-9715-4be4-b169-20defe113d2b');
         $this->assertResponseOk();
 
         $data = [
@@ -93,7 +93,7 @@ class ProjectsLogsControllerTest extends TestCase
         $this->enableSecurityToken();
         $this->enableCsrfToken();
 
-        $this->post('projects/projects-logs/edit?project=4dd53305-9715-4be4-b169-20defe113d2b', $data);
+        $this->post('/projects/projects-logs/edit?project=4dd53305-9715-4be4-b169-20defe113d2b', $data);
         $this->assertRedirect(['controller' => 'Projects', 'action' => 'view', '4dd53305-9715-4be4-b169-20defe113d2b', '?' => ['tab' => 'logs']]);
     }
 
@@ -107,7 +107,7 @@ class ProjectsLogsControllerTest extends TestCase
         // Set session data
         $this->login(USER_ADMIN);
 
-        $this->get('projects/projects-logs/delete/0cc5e896-da92-4408-af50-9eaf1d4cc50b');
+        $this->get('/projects/projects-logs/delete/0cc5e896-da92-4408-af50-9eaf1d4cc50b');
         $this->assertRedirect();
     }
 }

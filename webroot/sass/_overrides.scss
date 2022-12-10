@@ -203,6 +203,10 @@ fieldset {
         padding-left: 10px;
         padding-right: 10px;
 
+        p {
+            margin: 0 !important;
+        }
+
         div.select-wrapper {
             input {
                 font-size: 26px !important;

@@ -45,11 +45,11 @@ class DocumentsCountersControllerTest extends IntegrationTestCase
      */
     public function testIndex()
     {
-        $this->get('documents/documents-counters');
+        $this->get('/documents/documents-counters');
         $this->assertRedirect();
 
         $this->login(USER_ADMIN);
-        $this->get('documents/documents-counters');
+        $this->get('/documents/documents-counters');
         $this->assertResponseOk();
     }
 
@@ -77,7 +77,7 @@ class DocumentsCountersControllerTest extends IntegrationTestCase
             'active' => 1,
         ];
 
-        $this->get('documents/documents-counters/edit', $data);
+        $this->get('/documents/documents-counters/edit', $data);
         $this->assertRedirect();
 
         $this->login(USER_ADMIN);
@@ -85,7 +85,7 @@ class DocumentsCountersControllerTest extends IntegrationTestCase
         $this->enableSecurityToken();
         $this->enableCsrfToken();
 
-        $this->post('documents/documents-counters/edit', $data);
+        $this->post('/documents/documents-counters/edit', $data);
         $this->assertRedirect(['controller' => 'DocumentsCounters', 'action' => 'index']);
 
         $DocumentsCounters = TableRegistry::getTableLocator()->get('Documents.DocumentsCounters');
@@ -115,7 +115,7 @@ class DocumentsCountersControllerTest extends IntegrationTestCase
             'active' => 1,
         ];
 
-        $this->get('documents/documents-counters/edit/1d53bc5b-de2d-4e85-b13b-81b39a97fc88', $data);
+        $this->get('/documents/documents-counters/edit/1d53bc5b-de2d-4e85-b13b-81b39a97fc88', $data);
         $this->assertRedirect();
 
         $this->login(USER_ADMIN);
@@ -123,7 +123,7 @@ class DocumentsCountersControllerTest extends IntegrationTestCase
         $this->enableSecurityToken();
         $this->enableCsrfToken();
 
-        $this->post('documents/documents-counters/edit/1d53bc5b-de2d-4e85-b13b-81b39a97fc88', $data);
+        $this->post('/documents/documents-counters/edit/1d53bc5b-de2d-4e85-b13b-81b39a97fc88', $data);
         $this->assertRedirect(['controller' => 'DocumentsCounters', 'action' => 'index']);
 
         $DocumentsCounters = TableRegistry::getTableLocator()->get('Documents.DocumentsCounters');
@@ -145,7 +145,7 @@ class DocumentsCountersControllerTest extends IntegrationTestCase
             ->where(['owner_id' => COMPANY_FIRST])
             ->count();
 
-        $this->get('documents/documents-counters/delete/1d53bc5b-de2d-4e85-b13b-81b39a97fc88');
+        $this->get('/documents/documents-counters/delete/1d53bc5b-de2d-4e85-b13b-81b39a97fc88');
         $this->assertRedirect(['controller' => 'DocumentsCounters', 'action' => 'index']);
 
         $countAfter = $DocumentsCounters->find()

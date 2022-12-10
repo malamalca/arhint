@@ -1,0 +1,62 @@
+    h1 {
+        font-size: 2em !important;
+    }
+    h2 {
+        font-size: 1.2em !important;
+    }
+    h3 {
+        font-size: 1.1em !important;
+    }
+
+    .center-align, .center {
+        text-align: center;
+    }
+
+    .right-align, .right {
+        text-align: right;
+    }
+
+    .label {
+        font-weight: bold;
+        color: #404040;
+    }
+
+    .small {
+        font-size: 80%;
+    }
+    .big {
+        font-size: 110%;
+    }
+    .light {
+        color: #404040;
+    }
+    .nowrap {
+        white-space: nowrap;
+    }
+    .top-line {
+        border-top: solid 1px #000;
+    }
+    .bottom-line {
+        border-bottom: solid 1px #000;
+    }
+    table {
+        border-spacing: 0;
+    }
+    td.head {
+        font-weight: bold;
+        border-bottom: solid 1px #000;
+    }
+    th {
+        font-weight: bold;
+        padding: 3px !important;
+        background-color: #c0c0c0;
+        /*border: solid 1px #000;*/
+    }
+    td {
+        padding: 3px !important;
+        vertical-align: top;
+    }
+
+    .min_width {
+        width: 1%;
+    }

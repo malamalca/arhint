@@ -39,7 +39,7 @@ class ItemsControllerTest extends IntegrationTestCase
         // Set session data
         $this->login(USER_ADMIN);
 
-        $this->get('documents/items/index');
+        $this->get('/documents/items/index');
         $this->assertResponseOk();
     }
 
@@ -67,7 +67,7 @@ class ItemsControllerTest extends IntegrationTestCase
         $this->enableSecurityToken();
         $this->enableCsrfToken();
 
-        $this->post('documents/items/edit', $data);
+        $this->post('/documents/items/edit', $data);
         $this->assertRedirect();
     }
 
@@ -95,7 +95,7 @@ class ItemsControllerTest extends IntegrationTestCase
         $this->enableSecurityToken();
         $this->enableCsrfToken();
 
-        $this->post('documents/items/edit/1', $data);
+        $this->post('/documents/items/edit/1', $data);
         $this->assertRedirect();
     }
 
@@ -109,7 +109,7 @@ class ItemsControllerTest extends IntegrationTestCase
         // Set session data
         $this->login(USER_ADMIN);
 
-        $this->get('documents/items/delete/1');
+        $this->get('/documents/items/delete/1');
         $this->assertRedirect();
     }
 
@@ -127,7 +127,7 @@ class ItemsControllerTest extends IntegrationTestCase
             'headers' => ['X-Requested-With' => 'XMLHttpRequest'],
         ]);
 
-        $this->get('documents/items/autocomplete?term=test');
+        $this->get('/documents/items/autocomplete?term=test');
         $this->assertResponseOk();
     }
 }

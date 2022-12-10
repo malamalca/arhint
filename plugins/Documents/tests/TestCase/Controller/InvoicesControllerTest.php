@@ -63,7 +63,7 @@ class InvoicesControllerTest extends IntegrationTestCase
         // Set session data
         $this->login(USER_ADMIN);
 
-        $this->get('documents/invoices/index');
+        $this->get('/documents/invoices/index');
         $this->assertResponseOk();
     }
 
@@ -77,7 +77,7 @@ class InvoicesControllerTest extends IntegrationTestCase
         // Set session data
         $this->login(USER_ADMIN);
 
-        $this->get('documents/invoices/index?counter=1d53bc5b-de2d-4e85-b13b-81b39a97fc88&search=test');
+        $this->get('/documents/invoices/index?counter=1d53bc5b-de2d-4e85-b13b-81b39a97fc88&search=test');
         $this->assertResponseOk();
     }
 
@@ -90,7 +90,7 @@ class InvoicesControllerTest extends IntegrationTestCase
     {
         // Set session data
         $this->login(USER_ADMIN);
-        $this->get('documents/invoices/view/d0d59a31-6de7-4eb4-8230-ca09113a7fe5');
+        $this->get('/documents/invoices/view/d0d59a31-6de7-4eb4-8230-ca09113a7fe5');
         $this->assertResponseOk();
     }
 
@@ -164,7 +164,7 @@ class InvoicesControllerTest extends IntegrationTestCase
         $this->enableCsrfToken();
         $this->setUnlockedFields(['invoices_items', 'buyer', 'receiver']);
 
-        $this->post('documents/invoices/edit?counter=1d53bc5b-de2d-4e85-b13b-81b39a97fc89', $data);
+        $this->post('/documents/invoices/edit?counter=1d53bc5b-de2d-4e85-b13b-81b39a97fc89', $data);
 
         $Invoices = TableRegistry::getTableLocator()->get('Documents.Invoices');
         $invoice = $Invoices
@@ -245,7 +245,7 @@ class InvoicesControllerTest extends IntegrationTestCase
         $this->enableSecurityToken();
         $this->enableCsrfToken();
 
-        $this->post('documents/invoices/edit', $data);
+        $this->post('/documents/invoices/edit', $data);
 
         $this->assertResponseSuccess();
         $this->assertContentType('application/json');
@@ -312,7 +312,7 @@ class InvoicesControllerTest extends IntegrationTestCase
         $this->enableCsrfToken();
         $this->setUnlockedFields(['invoices_taxes']);
 
-        $this->post('documents/invoices/edit/d0d59a31-6de7-4eb4-8230-ca09113a7fe5?counter=1d53bc5b-de2d-4e85-b13b-81b39a97fc88', $data);
+        $this->post('/documents/invoices/edit/d0d59a31-6de7-4eb4-8230-ca09113a7fe5?counter=1d53bc5b-de2d-4e85-b13b-81b39a97fc88', $data);
         $this->assertRedirect(['action' => 'view', 'd0d59a31-6de7-4eb4-8230-ca09113a7fe5']);
 
         $Invoices = TableRegistry::getTableLocator()->get('Documents.Invoices');
@@ -385,7 +385,7 @@ class InvoicesControllerTest extends IntegrationTestCase
         $this->enableCsrfToken();
         $this->setUnlockedFields(['invoices_taxes']);
 
-        $this->post('documents/invoices/edit/d0d59a31-6de7-4eb4-8230-ca09113a7fe5?counter=1d53bc5b-de2d-4e85-b13b-81b39a97fc88', $data);
+        $this->post('/documents/invoices/edit/d0d59a31-6de7-4eb4-8230-ca09113a7fe5?counter=1d53bc5b-de2d-4e85-b13b-81b39a97fc88', $data);
 
         //var_dump($this->_response);
         $this->assertRedirect(['action' => 'view', 'd0d59a31-6de7-4eb4-8230-ca09113a7fe5']);
@@ -466,7 +466,7 @@ class InvoicesControllerTest extends IntegrationTestCase
         $this->enableSecurityToken();
         $this->setUnlockedFields(['invoices_items']);
 
-        $this->post('documents/invoices/edit/d0d59a31-6de7-4eb4-8230-ca09113a7fe6?filter%5Bcounter%5D=1d53bc5b-de2d-4e85-b13b-81b39a97fc89', $data);
+        $this->post('/documents/invoices/edit/d0d59a31-6de7-4eb4-8230-ca09113a7fe6?filter%5Bcounter%5D=1d53bc5b-de2d-4e85-b13b-81b39a97fc89', $data);
         $this->assertRedirect(['action' => 'view', 'd0d59a31-6de7-4eb4-8230-ca09113a7fe6']);
 
         $Invoices = TableRegistry::getTableLocator()->get('Documents.Invoices');
@@ -539,7 +539,7 @@ class InvoicesControllerTest extends IntegrationTestCase
         $this->enableCsrfToken();
         $this->setUnlockedFields(['invoices_items']);
 
-        $this->post('documents/invoices/edit/d0d59a31-6de7-4eb4-8230-ca09113a7fe6?filter%5Bcounter%5D=1d53bc5b-de2d-4e85-b13b-81b39a97fc89', $data);
+        $this->post('/documents/invoices/edit/d0d59a31-6de7-4eb4-8230-ca09113a7fe6?filter%5Bcounter%5D=1d53bc5b-de2d-4e85-b13b-81b39a97fc89', $data);
         $this->assertRedirect(['action' => 'view', 'd0d59a31-6de7-4eb4-8230-ca09113a7fe6']);
 
         $Invoices = TableRegistry::getTableLocator()->get('Documents.Invoices');
@@ -583,7 +583,7 @@ class InvoicesControllerTest extends IntegrationTestCase
         $this->enableSecurityToken();
         $this->enableCsrfToken();
 
-        $this->post('documents/invoices/edit/d0d59a31-6de7-4eb4-8230-ca09113a7fe6', $data);
+        $this->post('/documents/invoices/edit/d0d59a31-6de7-4eb4-8230-ca09113a7fe6', $data);
         $this->assertRedirect(['action' => 'view', 'd0d59a31-6de7-4eb4-8230-ca09113a7fe6']);
 
         $Invoices = TableRegistry::getTableLocator()->get('Documents.Invoices');
@@ -604,7 +604,7 @@ class InvoicesControllerTest extends IntegrationTestCase
         $this->enableSecurityToken();
         $this->enableCsrfToken();
 
-        $this->post('documents/invoices/edit/d0d59a31-6de7-4eb4-8230-ca09113a7fe5', $data);
+        $this->post('/documents/invoices/edit/d0d59a31-6de7-4eb4-8230-ca09113a7fe5', $data);
         $this->assertRedirect(['action' => 'view', 'd0d59a31-6de7-4eb4-8230-ca09113a7fe5']);
 
         $Invoices = TableRegistry::getTableLocator()->get('Documents.Invoices');
@@ -624,7 +624,7 @@ class InvoicesControllerTest extends IntegrationTestCase
         // Set session data
         $this->login(USER_ADMIN);
 
-        $this->get('documents/invoices/delete/d0d59a31-6de7-4eb4-8230-ca09113a7fe5');
+        $this->get('/documents/invoices/delete/d0d59a31-6de7-4eb4-8230-ca09113a7fe5');
         $this->assertRedirect(['action' => 'index', '?' => ['counter' => '1d53bc5b-de2d-4e85-b13b-81b39a97fc88']]);
     }
 }

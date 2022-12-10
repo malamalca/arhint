@@ -17,6 +17,8 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use Cake\Core\Configure;
+use Cake\Event\Event;
+use Cake\Event\EventManager;
 use Cake\Http\Exception\ForbiddenException;
 use Cake\Http\Exception\NotFoundException;
 use Cake\Http\Response;
@@ -118,5 +120,31 @@ class PagesController extends AppController
         }
 
         return $result;
+    }
+
+    /**
+     * Displays a dashboard
+     *
+     * @return \Cake\Http\Response|void
+     * @throws \Cake\Http\Exception\NotFoundException When the view file could not be found.
+     */
+    public function dashboard()
+    {
+        $this->Authorization->skipAuthorization();
+
+        $dashboardPanels = [
+            'title' => '&nbsp;',
+            'menu' => [],
+            'panels' => [],
+        ];
+
+        $event = new Event('App.dashboard', $this, ['panels' => $dashboardPanels]);
+        EventManager::instance()->dispatch($event);
+
+        if (!empty($event->getResult()['panels'])) {
+            $dashboardPanels = $event->getResult()['panels'];
+        }
+
+        $this->set(['panels' => $dashboardPanels]);
     }
 }

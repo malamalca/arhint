@@ -47,7 +47,7 @@ class ProjectsControllerTest extends TestCase
         // Set session data
         $this->login(USER_ADMIN);
 
-        $this->get('projects/projects/index');
+        $this->get('/projects/projects/index');
         $this->assertResponseOk();
     }
 
@@ -61,7 +61,7 @@ class ProjectsControllerTest extends TestCase
         // Set session data
         $this->login(USER_ADMIN);
 
-        $this->get('projects/projects/view/4dd53305-9715-4be4-b169-20defe113d2a');
+        $this->get('/projects/projects/view/4dd53305-9715-4be4-b169-20defe113d2a');
         $this->assertResponseOk();
     }
 
@@ -75,7 +75,7 @@ class ProjectsControllerTest extends TestCase
         // Set session data
         $this->login(USER_COMMON);
 
-        $this->get('projects/projects/view/4dd53305-9715-4be4-b169-20defe113d2a');
+        $this->get('/projects/projects/view/4dd53305-9715-4be4-b169-20defe113d2a');
         $this->assertResponseError();
     }
 
@@ -89,10 +89,10 @@ class ProjectsControllerTest extends TestCase
         // Set session data
         $this->login(USER_ADMIN);
 
-        $this->get('projects/projects/edit/4dd53305-9715-4be4-b169-20defe113d2a');
+        $this->get('/projects/projects/edit/4dd53305-9715-4be4-b169-20defe113d2a');
         $this->assertResponseOk();
 
-        $this->get('projects/projects/edit');
+        $this->get('/projects/projects/edit');
         $this->assertResponseOk();
 
         // Set session data
@@ -114,7 +114,7 @@ class ProjectsControllerTest extends TestCase
         $this->enableSecurityToken();
         $this->enableCsrfToken();
 
-        $this->post('projects/projects/edit/4dd53305-9715-4be4-b169-20defe113d2a', $data);
+        $this->post('/projects/projects/edit/4dd53305-9715-4be4-b169-20defe113d2a', $data);
         $this->assertRedirect(['action' => 'view', '4dd53305-9715-4be4-b169-20defe113d2a']);
     }
 
@@ -128,7 +128,7 @@ class ProjectsControllerTest extends TestCase
         // Set session data
         $this->login(USER_COMMON);
 
-        $this->get('projects/projects/edit/4dd53305-9715-4be4-b169-20defe113d2a');
+        $this->get('/projects/projects/edit/4dd53305-9715-4be4-b169-20defe113d2a');
         $this->assertResponseError();
     }
 
@@ -142,10 +142,10 @@ class ProjectsControllerTest extends TestCase
         // Set session data
         $this->login(USER_ADMIN);
 
-        $this->get('projects/projects/user/invalidUuid');
+        $this->get('/projects/projects/user/invalidUuid');
         $this->assertResponseError();
 
-        $this->get('projects/projects/user/4dd53305-9715-4be4-b169-20defe113d2a');
+        $this->get('/projects/projects/user/4dd53305-9715-4be4-b169-20defe113d2a');
         $this->assertResponseOk();
 
         // Set session data
@@ -160,7 +160,7 @@ class ProjectsControllerTest extends TestCase
         $this->enableSecurityToken();
         $this->enableCsrfToken();
 
-        $this->post('projects/projects/user/4dd53305-9715-4be4-b169-20defe113d2a', $data);
+        $this->post('/projects/projects/user/4dd53305-9715-4be4-b169-20defe113d2a', $data);
         $this->assertRedirect(['action' => 'view', '4dd53305-9715-4be4-b169-20defe113d2a', '?' => ['tab' => 'users']]);
     }
 
@@ -179,7 +179,7 @@ class ProjectsControllerTest extends TestCase
 
         $this->login(USER_ADMIN);
 
-        $this->get('projects/projects/deleteUser/4dd53305-9715-4be4-b169-20defe113d2a/' . USER_COMMON);
+        $this->get('/projects/projects/deleteUser/4dd53305-9715-4be4-b169-20defe113d2a/' . USER_COMMON);
         $this->assertRedirect(['action' => 'view', '4dd53305-9715-4be4-b169-20defe113d2a', '?' => ['tab' => 'users']]);
     }
 
@@ -193,7 +193,7 @@ class ProjectsControllerTest extends TestCase
         // Set session data
         $this->login(USER_ADMIN);
 
-        $this->get('projects/projects/delete/4dd53305-9715-4be4-b169-20defe113d2a');
+        $this->get('/projects/projects/delete/4dd53305-9715-4be4-b169-20defe113d2a');
         $this->assertRedirect();
     }
 
@@ -207,7 +207,7 @@ class ProjectsControllerTest extends TestCase
         // Set session data
         $this->login(USER_COMMON);
 
-        $this->get('projects/projects/delete/4dd53305-9715-4be4-b169-20defe113d2a');
+        $this->get('/projects/projects/delete/4dd53305-9715-4be4-b169-20defe113d2a');
         $this->assertResponseError();
     }
 }

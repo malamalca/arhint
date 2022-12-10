@@ -37,7 +37,7 @@ class DocumentsTemplatesControllerTest extends IntegrationTestCase
         // Set session data
         $this->login(USER_ADMIN);
 
-        $this->get('documents/DocumentsTemplates/index');
+        $this->get('/documents/DocumentsTemplates/index');
         $this->assertResponseOk();
     }
 
@@ -62,7 +62,7 @@ class DocumentsTemplatesControllerTest extends IntegrationTestCase
         $this->enableSecurityToken();
         $this->enableCsrfToken();
 
-        $this->post('documents/DocumentsTemplates/edit', $data);
+        $this->post('/documents/DocumentsTemplates/edit', $data);
         $this->assertRedirect();
     }
 
@@ -87,7 +87,7 @@ class DocumentsTemplatesControllerTest extends IntegrationTestCase
         $this->enableSecurityToken();
         $this->enableCsrfToken();
 
-        $this->post('documents/DocumentsTemplates/edit/a08d3c00-7443-40e0-ac62-0caca1747e24', $data);
+        $this->post('/documents/DocumentsTemplates/edit/a08d3c00-7443-40e0-ac62-0caca1747e24', $data);
         $this->assertRedirect();
     }
 
@@ -101,7 +101,7 @@ class DocumentsTemplatesControllerTest extends IntegrationTestCase
         // Set session data
         $this->login(USER_ADMIN);
 
-        $this->get('documents/DocumentsTemplates/delete/a08d3c00-7443-40e0-ac62-0caca1747e24');
+        $this->get('/documents/DocumentsTemplates/delete/a08d3c00-7443-40e0-ac62-0caca1747e24');
         $this->assertRedirect();
     }
 }

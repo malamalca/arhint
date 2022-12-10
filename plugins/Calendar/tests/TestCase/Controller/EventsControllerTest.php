@@ -51,7 +51,7 @@ class EventsControllerTest extends TestCase
         // Set session data
         $this->login(USER_ADMIN);
 
-        $this->get('calendar/events/index');
+        $this->get('/calendar/events/index');
         $this->assertResponseOk();
     }
 
@@ -66,7 +66,7 @@ class EventsControllerTest extends TestCase
         // Set session data
         $this->login(USER_ADMIN);
 
-        $this->get('calendar/events/view/185383a4-38c8-4194-9516-52c9069bc3bf');
+        $this->get('/calendar/events/view/185383a4-38c8-4194-9516-52c9069bc3bf');
         $this->assertResponseOk();
     }
 
@@ -81,10 +81,10 @@ class EventsControllerTest extends TestCase
         // Set session data
         $this->login(USER_ADMIN);
 
-        $this->get('calendar/events/edit/185383a4-38c8-4194-9516-52c9069bc3bf');
+        $this->get('/calendar/events/edit/185383a4-38c8-4194-9516-52c9069bc3bf');
         $this->assertResponseOk();
 
-        $this->get('calendar/events/edit');
+        $this->get('/calendar/events/edit');
         $this->assertResponseOk();
 
         // Set session data
@@ -106,7 +106,7 @@ class EventsControllerTest extends TestCase
         $this->enableSecurityToken();
         $this->enableCsrfToken();
 
-        $this->post('calendar/events/edit/185383a4-38c8-4194-9516-52c9069bc3bf', $data);
+        $this->post('/calendar/events/edit/185383a4-38c8-4194-9516-52c9069bc3bf', $data);
         $this->assertRedirect(['action' => 'index']);
     }
 
@@ -121,7 +121,7 @@ class EventsControllerTest extends TestCase
         // Set session data
         $this->login(USER_ADMIN);
 
-        $this->get('calendar/events/delete/185383a4-38c8-4194-9516-52c9069bc3bf');
+        $this->get('/calendar/events/delete/185383a4-38c8-4194-9516-52c9069bc3bf');
         $this->assertRedirect();
     }
 }

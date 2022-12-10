@@ -548,6 +548,16 @@ class BaseDocumentsController extends AppController
             ]);
         }
 
+        /** @var \Documents\Model\Table\DocumentsCountersTable $DocumentsCounters */
+        $DocumentsCounters = TableRegistry::getTableLocator()->get('Documents.DocumentsCounters');
+        $counters = $DocumentsCounters->rememberForUser(
+            $this->getCurrentUser()->id,
+            $this->Authorization->applyScope($DocumentsCounters->find(), 'index'),
+            $this->documentsScope
+        );
+
+        $this->set(compact('counters'));
+
         return null;
     }
 
