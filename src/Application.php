@@ -101,7 +101,7 @@ class Application extends BaseApplication implements
         $routes->setRouteClass(DashedRoute::class);
 
         $routes->scope('/', function (RouteBuilder $builder) {
-            $builder->connect('/', ['plugin' => 'Projects', 'controller' => 'Projects', 'action' => 'index']);
+            $builder->connect('/', ['controller' => 'Pages', 'action' => 'dashboard']);
 
             $builder->fallbacks();
         });

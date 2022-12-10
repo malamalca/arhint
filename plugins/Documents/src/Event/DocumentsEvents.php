@@ -95,7 +95,7 @@ class DocumentsEvents implements EventListenerInterface
 
         $DocumentsTable = TableRegistry::getTableLocator()->get('Documents.Documents');
         $newDocuments = $DocumentsTable->find()
-            ->select(['Documents.id', 'Documents.title', 'Documents.no', 'Documents.project_id', 'Projects.title'])
+            ->select()
             ->contain(['Projects'])
             ->where([
                 'Documents.owner_id' => $user->company_id,
@@ -111,7 +111,8 @@ class DocumentsEvents implements EventListenerInterface
 
             foreach ($newDocuments as $document) {
                 $panels['panels']['documents']['lines'][] = sprintf(
-                    '<div><a href="%4$s">%2$s :: <span class="title big">%1$s</span></a>%3$s</div>',
+                    '<div><span style="display: block; width: 80px; float: left">%5$s</span> ' .
+                        '<a href="%4$s"><span class="title big">%1$s</span></a> %2$s %3$s</div>',
                     h($document->title),
                     h($document->no),
                     $document->project ?
@@ -122,7 +123,8 @@ class DocumentsEvents implements EventListenerInterface
                         'controller' => 'Documents',
                         'action' => 'view',
                         $document->id,
-                    ], true)
+                    ], true),
+                    (string)$document->dat_issue
                 );
             }
         }
