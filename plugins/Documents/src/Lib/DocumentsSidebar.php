@@ -31,6 +31,17 @@ class DocumentsSidebar
             return;
         }
 
+        ////////////////////////////////////////////////////////////////////////////////////////
+        // Fetch counters
+
+        /** @var \Documents\Model\Table\DocumentsCountersTable $DocumentsCounters */
+        $DocumentsCounters = TableRegistry::getTableLocator()->get('Documents.DocumentsCounters');
+
+        $counters = $DocumentsCounters->rememberForUser(
+            $currentUser->id,
+            $controller->Authorization->applyScope($DocumentsCounters->find(), 'index')
+        );
+
         $documents['title'] = __d('documents', 'Documents');
         $documents['visible'] = true;
         $documents['active'] = $request->getParam('plugin') == 'Documents';
@@ -40,6 +51,13 @@ class DocumentsSidebar
             'action' => 'index',
         ];
         $documents['items'] = [];
+
+        if (!$counters->isEmpty()) {
+            if (get_class($counters->first()) == \Documents\Model\Entity\DocumentsCounter::class) {
+                $documents['url']['controller'] = 'Documents';
+                $documents['url']['?']['counter'] = $counters->first()->id;
+            }
+        }
 
         $sidebar['documents'] = $documents;
 
@@ -174,17 +192,6 @@ class DocumentsSidebar
 
         // build counters submenu only when needed
         if (($request->getParam('plugin') == 'Documents')) {
-            ////////////////////////////////////////////////////////////////////////////////////////
-            // Fetch counters
-
-            /** @var \Documents\Model\Table\DocumentsCountersTable $DocumentsCounters */
-            $DocumentsCounters = TableRegistry::getTableLocator()->get('Documents.DocumentsCounters');
-
-            $counters = $DocumentsCounters->rememberForUser(
-                $currentUser->id,
-                $controller->Authorization->applyScope($DocumentsCounters->find(), 'index')
-            );
-
             // determine current counter
             $isActionIndex = $request->getParam('controller') == 'Documents' && $request->getParam('action') == 'index';
             $currentCounter = $request->getQuery('counter');
