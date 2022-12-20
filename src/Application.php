@@ -81,7 +81,7 @@ class Application extends BaseApplication implements
         }
 
         // Load more plugins here
-        $this->addPlugin(LilPlugin::class, ['bootstrap' => true, 'routes' => true]);
+        $this->addPlugin(LilPlugin::class, ['bootstrap' => true, 'routes' => false]);
         $this->addPlugin(CrmPlugin::class, ['bootstrap' => true, 'routes' => true]);
         $this->addPlugin(ExpensesPlugin::class, ['bootstrap' => true, 'routes' => true]);
         $this->addPlugin(DocumentsPlugin::class, ['bootstrap' => true, 'routes' => true]);

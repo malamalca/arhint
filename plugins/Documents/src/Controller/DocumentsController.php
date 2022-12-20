@@ -92,6 +92,7 @@ class DocumentsController extends BaseDocumentsController
             $projects = [];
             if (!empty($projectsIds)) {
                 $projects = $ProjectsTable->find()
+                    ->select(['id', 'no', 'title'])
                     ->where(['id IN' => $projectsIds])
                     ->all()
                     ->combine('id', function ($entity) {
