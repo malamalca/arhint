@@ -5,6 +5,7 @@ namespace Crm\Event;
 
 use Cake\Core\Configure;
 use Cake\Event\EventListenerInterface;
+use Cake\Routing\Router;
 use Crm\Lib\CrmSidebar;
 
 class CrmEvents implements EventListenerInterface
@@ -19,7 +20,28 @@ class CrmEvents implements EventListenerInterface
         return [
             'View.beforeRender' => 'addScripts',
             'Lil.Sidebar.beforeRender' => 'modifySidebar',
+            'Lil.Form.Documents.Documents.email' => 'addAutocompleteToEmail',
         ];
+    }
+
+    /**
+     * Add autocomplete func to email field
+     *
+     * @param \Cake\Event\Event $event Event.
+     * @param \ArrayObject $form Form
+     * @return void
+     */
+    public function addAutocompleteToEmail($event, $form)
+    {
+        $view = $event->getSubject();
+
+        $link = Router::url([
+            'plugin' => 'Crm',
+            'controller' => 'Contacts',
+            'action' => 'autocomplete-email',
+        ], true);
+
+        $view->Lil->jsReady(sprintf('$("#to").autocompleteajax({source: "%s"});', $link));
     }
 
     /**

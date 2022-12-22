@@ -25,6 +25,7 @@ $send_document = [
                         'type' => 'text',
                         'label' => __d('documents', 'To') . ':',
                         'default' => $this->getRequest()->getQuery('to'),
+                        'autocomplete' => 'off',
                     ],
                 ],
             ],

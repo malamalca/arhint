@@ -198,6 +198,61 @@ class ContactsController extends AppController
     }
 
     /**
+     * Autocomplete emails method
+     *
+     * @return object
+     * @throws \Cake\Http\Exception\NotFoundException When no ajax call.
+     */
+    public function autocompleteEmail()
+    {
+        if ($this->getRequest()->is('ajax') || Configure::read('debug')) {
+            $searchTerm = (string)$this->getRequest()->getQuery('term');
+
+            $data = [];
+
+            if ($searchTerm !== null) {
+                $conditions = [
+                    'Contacts.title LIKE' => '%' . $searchTerm . '%',
+                ];
+
+                $kind = $this->getRequest()->getQuery('kind');
+                if (!empty($kind)) {
+                    $conditions['Contacts.kind'] = $kind;
+                }
+
+                $query = $this->Authorization->applyScope($this->Contacts->find(), 'index')
+                    ->select($this->Contacts)
+                    ->select(['Contacts__email' => 'c.email'])
+                    ->where($conditions)
+                    ->order('title')
+                    ->join([
+                        'table' => 'contacts_emails',
+                        'alias' => 'c',
+                        'type' => 'INNER',
+                        'conditions' => [
+                            'c.contact_id = Contacts.id',
+                            'c.email LIKE' => '%' . $searchTerm . '%',
+                        ],
+                    ])
+                    ->limit(50);
+                $contacts = $query->all();
+
+                foreach ($contacts as $c) {
+                    $data[] = ['label' => $c->email, 'value' => $c->email, 'client' => $c];
+                }
+            }
+
+            $response = $this->response
+                ->withType('application/json')
+                ->withStringBody((string)json_encode($data));
+
+            return $response;
+        } else {
+            throw new NotFoundException(__d('crm', 'Invalid Request'));
+        }
+    }
+
+    /**
      * admin_autocomplete method
      *
      * @return object
@@ -205,7 +260,7 @@ class ContactsController extends AppController
      */
     public function autocomplete()
     {
-        if ($this->getRequest()->is('ajax')) {
+        if ($this->getRequest()->is('ajax') || Configure::read('debug')) {
             $searchTerm = (string)$this->getRequest()->getQuery('term');
 
             $data = [];
@@ -221,13 +276,13 @@ class ContactsController extends AppController
                 }
 
                 if ($this->getRequest()->getQuery('detailed')) {
-                    $contacts = $this->Authorization->applyScope($this->Contacts->find(), 'index')
+                    $query = $this->Authorization->applyScope($this->Contacts->find(), 'index')
                         ->select()
                         ->where($conditions)
                         ->order('title')
                         ->contain(['PrimaryAddresses', 'PrimaryAccounts', 'PrimaryEmails', 'PrimaryPhones'])
-                        ->limit(50)
-                        ->all();
+                        ->limit(50);
+                    $contacts = $query->all();
 
                     foreach ($contacts as $c) {
                         $data[] = ['label' => $c->title, 'value' => $c->title, 'client' => $c];
