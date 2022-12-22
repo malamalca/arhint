@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace Tasks\Lib;
 
-use Cake\ORM\TableRegistry;
 use Cake\I18n\FrozenTime;
+use Cake\ORM\TableRegistry;
 
 class TasksUtils
 {

@@ -28,11 +28,11 @@ class TasksEvents implements EventListenerInterface
      * Dashboard panels
      *
      * @param \Cake\Event\Event $event Event object.
+     * @param \ArrayObject $panels Panels data.
      * @return void
      */
-    public function dashboardPanels($event)
+    public function dashboardPanels($event, $panels)
     {
-        $panels = $event->getData('panels');
         $controller = $event->getSubject();
         $view = $controller->createView();
 
@@ -66,7 +66,7 @@ class TasksEvents implements EventListenerInterface
             }
         }
 
-        $event->setResult(['panels' => $panels] + $event->getData());
+        $event->setResult(['panels' => $panels]);
     }
 
     /**

@@ -132,7 +132,7 @@ class PagesController extends AppController
     {
         $this->Authorization->skipAuthorization();
 
-        $dashboardPanels = [
+        $dashboardPanels = new \ArrayObject([
             'title' => '&nbsp;',
             'menu' => [
                 'sign' => [
@@ -155,7 +155,7 @@ class PagesController extends AppController
                 ],
             ],
             'panels' => [],
-        ];
+        ]);
 
         $event = new Event('App.dashboard', $this, ['panels' => $dashboardPanels]);
         EventManager::instance()->dispatch($event);

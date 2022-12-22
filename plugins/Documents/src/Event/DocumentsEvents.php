@@ -83,11 +83,11 @@ class DocumentsEvents implements EventListenerInterface
      * Dashboard panels
      *
      * @param \Cake\Event\Event $event Event object.
+     * @param \ArrayObject $panels Panels data.
      * @return void
      */
-    public function dashboardPanels($event)
+    public function dashboardPanels($event, $panels)
     {
-        $panels = $event->getData('panels');
         $view = $event->getSubject();
 
         /** @var \App\Model\Entity\User $user */
@@ -106,7 +106,7 @@ class DocumentsEvents implements EventListenerInterface
 
         if (!$newDocuments->isEmpty()) {
             $panels['panels']['documents'] = ['lines' => [
-                '<h3>' . __d('documents', 'Last 6 documents') . '</h3>',
+                '<h5>' . __d('documents', 'Last 6 documents') . '</h5>',
             ]];
 
             foreach ($newDocuments as $document) {
@@ -129,7 +129,7 @@ class DocumentsEvents implements EventListenerInterface
             }
         }
 
-        $event->setResult(['panels' => $panels] + $event->getData());
+        $event->setResult(['panels' => $panels]);
     }
 
     /**
