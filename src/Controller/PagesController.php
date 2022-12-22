@@ -160,10 +160,6 @@ class PagesController extends AppController
         $event = new Event('App.dashboard', $this, ['panels' => $dashboardPanels]);
         EventManager::instance()->dispatch($event);
 
-        if (!empty($event->getResult()['panels'])) {
-            $dashboardPanels = $event->getResult()['panels'];
-        }
-
-        $this->set(['panels' => $dashboardPanels]);
+        $this->set(['panels' => $event->getResult()['panels']]);
     }
 }
