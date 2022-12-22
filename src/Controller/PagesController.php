@@ -134,7 +134,26 @@ class PagesController extends AppController
 
         $dashboardPanels = [
             'title' => '&nbsp;',
-            'menu' => [],
+            'menu' => [
+                'sign' => [
+                    'title' => __('PDF Sign'),
+                    'visible' => true,
+                    'url' => [
+                        'plugin' => false,
+                        'controller' => 'Utils',
+                        'action' => 'pdfSign',
+                    ],
+                ],
+                'merge' => [
+                    'title' => __('PDF Merge'),
+                    'visible' => true,
+                    'url' => [
+                        'plugin' => false,
+                        'controller' => 'Utils',
+                        'action' => 'pdfMerge',
+                    ],
+                ],
+            ],
             'panels' => [],
         ];
 

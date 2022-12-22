@@ -4,7 +4,9 @@ declare(strict_types=1);
 namespace Tasks\Event;
 
 use Cake\Event\EventListenerInterface;
+use Cake\ORM\TableRegistry;
 use Tasks\Lib\TasksSidebar;
+use Tasks\Lib\TasksUtils;
 
 class TasksEvents implements EventListenerInterface
 {
@@ -16,9 +18,55 @@ class TasksEvents implements EventListenerInterface
     public function implementedEvents(): array
     {
         return [
+            'App.dashboard' => 'dashboardPanels',
             'View.beforeRender' => 'addScripts',
             'Lil.Sidebar.beforeRender' => 'modifySidebar',
         ];
+    }
+
+    /**
+     * Dashboard panels
+     *
+     * @param \Cake\Event\Event $event Event object.
+     * @return void
+     */
+    public function dashboardPanels($event)
+    {
+        $panels = $event->getData('panels');
+        $controller = $event->getSubject();
+        $view = $controller->createView();
+
+        /** @var \App\Model\Entity\User $user */
+        $user = $controller->getCurrentUser();
+
+        /** @var \Tasks\Model\Table\TasksTable $TasksTable */
+        $TasksTable = TableRegistry::getTableLocator()->get('Tasks.Tasks');
+
+        $filter = [];
+        $params = array_merge_recursive([
+            'contain' => ['TasksFolders'],
+            'conditions' => [],
+            'order' => ['TasksFolders.title ASC', 'Tasks.completed'],
+        ], $TasksTable->filter($filter));
+
+        $tasks = $TasksTable->find()
+            ->select()
+            ->where($params['conditions'])
+            ->contain($params['contain'])
+            ->order($params['order'])
+            ->all();
+
+        if (!$tasks->isEmpty()) {
+            $panels['panels']['tasks'] = ['lines' => [
+                '<h5>' . __d('documents', 'Open Tasks') . '</h5>',
+            ]];
+
+            foreach ($tasks as $task) {
+                $panels['panels']['tasks-' . $task->id] = TasksUtils::taskPanel($task, $view);
+            }
+        }
+
+        $event->setResult(['panels' => $panels] + $event->getData());
     }
 
     /**

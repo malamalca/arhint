@@ -21,6 +21,7 @@ use Cake\ORM\Entity;
  * @property \Cake\I18n\FrozenTime|null $started
  * @property \Cake\I18n\FrozenTime|null $deadline
  * @property \Cake\I18n\FrozenTime|null $completed
+ * @property int $priority
  * @property \Cake\I18n\FrozenTime $created
  * @property \Cake\I18n\FrozenTime $modified
  */
