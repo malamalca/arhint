@@ -42,7 +42,7 @@ class TasksEvents implements EventListenerInterface
         /** @var \Tasks\Model\Table\TasksTable $TasksTable */
         $TasksTable = TableRegistry::getTableLocator()->get('Tasks.Tasks');
 
-        $filter = [];
+        $filter = ['user' => $user->id];
         $params = array_merge_recursive([
             'contain' => ['TasksFolders'],
             'conditions' => [],
