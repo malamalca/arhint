@@ -41,9 +41,11 @@ class CrmEvents implements EventListenerInterface
             'action' => 'autocomplete-email',
         ], true);
 
-        $form->form['post'] .= '<script type="text/javascript">' . PHP_EOL .
-            sprintf('$("#to").autocompleteajax({source: "%s"});', $link) . PHP_EOL .
-            '</script>' . PHP_EOL;
+        if (isset($form['form']['post'])) {
+            $form['form']['post'] .= '<script type="text/javascript">' . PHP_EOL .
+                sprintf('$("#to").autocompleteajax({source: "%s"});', $link) . PHP_EOL .
+                '</script>' . PHP_EOL;
+        }
     }
 
     /**
