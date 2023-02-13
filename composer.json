@@ -20,9 +20,9 @@
         "malamalca/lil": "^4.5",
         "mikehaertl/phpwkhtmltopdf": "2.0.*@dev",
         "phpoffice/phpword": "^0.18.2",
-        "syncroton/syncroton": "dev-master",
         "tecnickcom/tcpdf": "dev-main",
-        "zendframework/zendframework1": "1.12.*"
+        "syncroton/syncroton": "dev-master",
+        "zendframework/zendframework1": "1.12.20pl61 as 1.12.20"
     },
     "require-dev": {
         "cakephp/bake": "^2.6",
@@ -49,6 +49,10 @@
         {
             "type": "vcs",
             "url": "git@github.com:malamalca/Qr-Code.git"
+        },
+        {
+            "type": "git",
+            "url": "https://github.com/tine20/zendframework1.git"
         }
     ],
     "suggest": {
