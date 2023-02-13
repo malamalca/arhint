@@ -64,6 +64,9 @@
             "Syncroton": [
                 "./vendor/syncroton/syncroton/lib/",
                 "./vendor/syncroton/syncroton/tests/"
+            ],
+            "Zend_": [
+                "vendor/zendframework/zendframework1/library/"
             ]
         },
         "psr-4": {

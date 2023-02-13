@@ -16,6 +16,9 @@ if (!isset($_SERVER['PHP_AUTH_USER'])) {
     exit;
 }
 
+set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__DIR__) . '/vendor/zendframework/zendframework1/library');
+
+
 // Use composer to load the autoloader.
 require dirname(__DIR__) . '/vendor/autoload.php';
 require dirname(__DIR__) . '/config/bootstrap.php';
