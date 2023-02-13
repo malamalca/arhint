@@ -28,7 +28,7 @@ class CrmEvents implements EventListenerInterface
      * Add autocomplete func to email field
      *
      * @param \Cake\Event\Event $event Event.
-     * @param \ArrayObject $form Form
+     * @param \Lil\Lib\LilForm $form Form array
      * @return void
      */
     public function addAutocompleteToEmail($event, $form)
@@ -41,11 +41,9 @@ class CrmEvents implements EventListenerInterface
             'action' => 'autocomplete-email',
         ], true);
 
-        if (isset($form['form']['post'])) {
-            $form['form']['post'] .= '<script type="text/javascript">' . PHP_EOL .
-                sprintf('$("#to").autocompleteajax({source: "%s"});', $link) . PHP_EOL .
-                '</script>' . PHP_EOL;
-        }
+        $form->form['post'] .= '<script type="text/javascript">' . PHP_EOL .
+            sprintf('$("#to").autocompleteajax({source: "%s"});', $link) . PHP_EOL .
+            '</script>' . PHP_EOL;
     }
 
     /**
