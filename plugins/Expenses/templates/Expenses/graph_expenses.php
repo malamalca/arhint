@@ -21,7 +21,7 @@ $yearLink = $this->Html->link(
 $popupYears = $this->Lil->popup('year', $popupYears, true);
 
 // page title
-$title = __d('expenses', 'GRAPH: {0}', $yearLink);
+$title = __d('expenses', 'GRAPH: Income and Expenses for {0}', $yearLink);
 
 $graphPanels = [
     'title_for_layout' => $title,

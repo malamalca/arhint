@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2022-05-08 06:35+0000\n"
+"POT-Creation-Date: 2023-04-18 09:25+0000\n"
 "PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
 "Last-Translator: NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
@@ -19,12 +19,8 @@ msgstr ""
 msgid "Invalid ajax call."
 msgstr ""
 
-#: ./plugins/Expenses/src/Controller/ExpensesController.php:146
-msgid "The expense has been saved."
-msgstr ""
-
 #: ./plugins/Expenses/src/Controller/ExpensesController.php:150
-#: ./plugins/Expenses/src/Controller/ExpensesController.php:357
+#: ./plugins/Expenses/src/Controller/ExpensesController.php:388
 msgid "The expense could not be saved. Please, try again."
 msgstr ""
 
@@ -40,7 +36,7 @@ msgstr ""
 msgid "Unpaid Expenses"
 msgstr ""
 
-#: ./plugins/Expenses/src/Controller/ExpensesController.php:353
+#: ./plugins/Expenses/src/Controller/ExpensesController.php:384
 #: ./plugins/Expenses/src/Controller/PaymentsController.php:106
 msgid "The payment has been saved."
 msgstr ""
@@ -90,6 +86,7 @@ msgid "Income/Expense"
 msgstr ""
 
 #: ./plugins/Expenses/src/Event/ExpensesEvents.php:88
+#: ./plugins/Expenses/templates/Expenses/graph_expenses.php:63
 #: ./plugins/Expenses/templates/Expenses/graph_yearly.php:6
 #: ./plugins/Expenses/templates/Expenses/graph_yearly.php:15
 #: ./plugins/Expenses/templates/Expenses/index.php:7
@@ -105,17 +102,18 @@ msgstr ""
 msgid "Neither expense nor income"
 msgstr ""
 
-#: ./plugins/Expenses/src/Event/ExpensesEvents.php:132
+#: ./plugins/Expenses/src/Event/ExpensesEvents.php:131
 #: ./plugins/Expenses/src/Lib/ExpensesSidebar.php:38
 #: ./plugins/Expenses/templates/Expenses/view.php:54
 msgid "Payments"
 msgstr ""
 
-#: ./plugins/Expenses/src/Event/ExpensesEvents.php:142
+#: ./plugins/Expenses/src/Event/ExpensesEvents.php:141
 msgid "WARNING: There are multiple expenses for this document!"
 msgstr ""
 
 #: ./plugins/Expenses/src/Lib/ExpensesSidebar.php:48
+#: ./plugins/Expenses/templates/Expenses/graph_expenses.php:56
 #: ./plugins/Expenses/templates/Expenses/graph_yearly.php:6
 #: ./plugins/Expenses/templates/Expenses/graph_yearly.php:20
 #: ./plugins/Expenses/templates/Expenses/index.php:7
@@ -132,23 +130,27 @@ msgid "Unpaid Invoices"
 msgstr ""
 
 #: ./plugins/Expenses/src/Lib/ExpensesSidebar.php:83
+msgid "Expenses Graph"
+msgstr ""
+
+#: ./plugins/Expenses/src/Lib/ExpensesSidebar.php:95
 msgid "Yearly Graph"
 msgstr ""
 
-#: ./plugins/Expenses/src/Lib/ExpensesSidebar.php:97
+#: ./plugins/Expenses/src/Lib/ExpensesSidebar.php:109
 #: ./plugins/Expenses/templates/Expenses/import_sepa_step1.php:27
 msgid "Import"
 msgstr ""
 
-#: ./plugins/Expenses/src/Lib/ExpensesSidebar.php:108
+#: ./plugins/Expenses/src/Lib/ExpensesSidebar.php:120
 msgid "Sepa XML"
 msgstr ""
 
-#: ./plugins/Expenses/src/Lib/ExpensesSidebar.php:122
+#: ./plugins/Expenses/src/Lib/ExpensesSidebar.php:134
 msgid "Lookups"
 msgstr ""
 
-#: ./plugins/Expenses/src/Lib/ExpensesSidebar.php:130
+#: ./plugins/Expenses/src/Lib/ExpensesSidebar.php:142
 msgid "Accounts"
 msgstr ""
 
@@ -237,6 +239,10 @@ msgstr ""
 #: ./plugins/Expenses/templates/PaymentsAccounts/edit.php:58
 #: ./plugins/Expenses/templates/Payments/edit.php:118
 msgid "Save"
+msgstr ""
+
+#: ./plugins/Expenses/templates/Expenses/graph_expenses.php:24
+msgid "GRAPH: Income and Expenses for {0}"
 msgstr ""
 
 #: ./plugins/Expenses/templates/Expenses/graph_yearly.php:46

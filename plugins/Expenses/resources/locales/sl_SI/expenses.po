@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Expenses\n"
-"POT-Creation-Date: 2022-05-08 06:35+0000\n"
-"PO-Revision-Date: 2022-05-08 08:45+0200\n"
+"POT-Creation-Date: 2023-04-18 09:25+0000\n"
+"PO-Revision-Date: 2023-04-18 11:27+0200\n"
 "Last-Translator: Malamalca <info@malamalca.com>\n"
 "Language-Team: \n"
 "Language: sl\n"
@@ -22,12 +22,8 @@ msgstr ""
 msgid "Invalid ajax call."
 msgstr "Napaka pri povezavi ajax."
 
-#: plugins/Expenses/src/Controller/ExpensesController.php:146
-msgid "The expense has been saved."
-msgstr "Prihodek/odhodek je shranjen."
-
 #: plugins/Expenses/src/Controller/ExpensesController.php:150
-#: plugins/Expenses/src/Controller/ExpensesController.php:357
+#: plugins/Expenses/src/Controller/ExpensesController.php:388
 msgid "The expense could not be saved. Please, try again."
 msgstr ""
 "Prihodka/odhodka ni bilo mogoče shraniti. Preverite polja in poizkusite "
@@ -45,7 +41,7 @@ msgstr "Prihodka/odhodka ni bilo mogoče izbrisati."
 msgid "Unpaid Expenses"
 msgstr "Neplačani prihodki/odhodki"
 
-#: plugins/Expenses/src/Controller/ExpensesController.php:353
+#: plugins/Expenses/src/Controller/ExpensesController.php:384
 #: plugins/Expenses/src/Controller/PaymentsController.php:106
 msgid "The payment has been saved."
 msgstr "Plačilo je shranjeno."
@@ -95,6 +91,7 @@ msgid "Income/Expense"
 msgstr "Prihodki/Odhodki"
 
 #: plugins/Expenses/src/Event/ExpensesEvents.php:88
+#: plugins/Expenses/templates/Expenses/graph_expenses.php:63
 #: plugins/Expenses/templates/Expenses/graph_yearly.php:6
 #: plugins/Expenses/templates/Expenses/graph_yearly.php:15
 #: plugins/Expenses/templates/Expenses/index.php:7
@@ -110,17 +107,18 @@ msgstr "Odhodek"
 msgid "Neither expense nor income"
 msgstr "Ni ne prihodek, ne odhodek"
 
-#: plugins/Expenses/src/Event/ExpensesEvents.php:132
+#: plugins/Expenses/src/Event/ExpensesEvents.php:131
 #: plugins/Expenses/src/Lib/ExpensesSidebar.php:38
 #: plugins/Expenses/templates/Expenses/view.php:54
 msgid "Payments"
 msgstr "Plačila"
 
-#: plugins/Expenses/src/Event/ExpensesEvents.php:142
+#: plugins/Expenses/src/Event/ExpensesEvents.php:141
 msgid "WARNING: There are multiple expenses for this document!"
 msgstr "POZOR! Za dokument obstaja več kot en prihodek/odhodek!"
 
 #: plugins/Expenses/src/Lib/ExpensesSidebar.php:48
+#: plugins/Expenses/templates/Expenses/graph_expenses.php:56
 #: plugins/Expenses/templates/Expenses/graph_yearly.php:6
 #: plugins/Expenses/templates/Expenses/graph_yearly.php:20
 #: plugins/Expenses/templates/Expenses/index.php:7
@@ -137,23 +135,27 @@ msgid "Unpaid Invoices"
 msgstr "Odprte postavke"
 
 #: plugins/Expenses/src/Lib/ExpensesSidebar.php:83
+msgid "Expenses Graph"
+msgstr "Graf - prihodki/odhodki"
+
+#: plugins/Expenses/src/Lib/ExpensesSidebar.php:95
 msgid "Yearly Graph"
 msgstr "Graf - letni promet"
 
-#: plugins/Expenses/src/Lib/ExpensesSidebar.php:97
+#: plugins/Expenses/src/Lib/ExpensesSidebar.php:109
 #: plugins/Expenses/templates/Expenses/import_sepa_step1.php:27
 msgid "Import"
 msgstr "Uvoz"
 
-#: plugins/Expenses/src/Lib/ExpensesSidebar.php:108
+#: plugins/Expenses/src/Lib/ExpensesSidebar.php:120
 msgid "Sepa XML"
 msgstr "Sepa XML"
 
-#: plugins/Expenses/src/Lib/ExpensesSidebar.php:122
+#: plugins/Expenses/src/Lib/ExpensesSidebar.php:134
 msgid "Lookups"
 msgstr "Šifranti"
 
-#: plugins/Expenses/src/Lib/ExpensesSidebar.php:130
+#: plugins/Expenses/src/Lib/ExpensesSidebar.php:142
 msgid "Accounts"
 msgstr "Računi"
 
@@ -243,6 +245,10 @@ msgstr "ni še plačano"
 #: plugins/Expenses/templates/Payments/edit.php:118
 msgid "Save"
 msgstr "Shrani"
+
+#: plugins/Expenses/templates/Expenses/graph_expenses.php:24
+msgid "GRAPH: Income and Expenses for {0}"
+msgstr "GRAF: Prihodki in odhodki za {0}"
 
 #: plugins/Expenses/templates/Expenses/graph_yearly.php:46
 msgid "GRAPH: {0} for {1}"
@@ -556,6 +562,9 @@ msgstr "Razlika"
 #: plugins/Expenses/templates/report/Expenses/unpaid.php:120
 msgid "No documents found"
 msgstr "Ni vpisanih dokumentov."
+
+#~ msgid "The expense has been saved."
+#~ msgstr "Prihodek/odhodek je shranjen."
 
 #~ msgid "GRAPH: Yearly Income/Expenses"
 #~ msgstr "Graf: Letni Prihodki/Odhodki"
