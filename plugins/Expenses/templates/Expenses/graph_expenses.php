@@ -2,28 +2,6 @@
 
 use Cake\Routing\Router;
 
-// popup for expenses/income
-$expenseKinds = ['income' => __d('expenses', 'Income'), 'expenses' => __d('expenses', 'Expenses')];
-
-$kindLink = $this->Html->link(
-    !empty($kind) ? $expenseKinds[$kind] : __d('expenses', 'Income and Expenses'),
-    ['action' => 'filter'],
-    ['class' => 'dropdown-trigger', 'id' => 'filter-kind', 'data-target' => 'dropdown-kind']
-);
-$popupKind = ['items' => [
-    [
-        'title' => __d('expenses', 'Income'),
-        'url' => ['?' => array_merge($this->getRequest()->getQuery(), ['kind' => 'income'])],
-        'active' => $this->getRequest()->getQuery('kind') == 'income',
-    ],
-    [
-        'title' => __d('expenses', 'Expenses'),
-        'url' => ['?' => array_merge($this->getRequest()->getQuery(), ['kind' => 'expenses'])],
-        'active' => $this->getRequest()->getQuery('kind') == 'expenses',
-    ],
-]];
-$popupKind = $this->Lil->popup('kind', $popupKind, true);
-
 // popup for years
 $popupYears = ['items' => []];
 $destYear = (int)date('Y');
@@ -43,11 +21,11 @@ $yearLink = $this->Html->link(
 $popupYears = $this->Lil->popup('year', $popupYears, true);
 
 // page title
-$title = __d('expenses', 'GRAPH: {0} for {1}', $kindLink, $yearLink);
+$title = __d('expenses', 'GRAPH: {0}', $yearLink);
 
 $graphPanels = [
     'title_for_layout' => $title,
-    'actions' => ['lines' => [$popupKind, $popupYears]],
+    'actions' => ['lines' => [$popupYears]],
     'panels' => [
         'graph' => [
             'lines' => [
@@ -58,7 +36,7 @@ $graphPanels = [
 ];
 
 echo $this->Html->script('https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js');
-echo $this->Lil->panels($graphPanels, 'Expenses.Expenses.graph_yearly');
+echo $this->Lil->panels($graphPanels, 'Expenses.Expenses.graph_expenses');
 ?>
 
 <script type="text/javascript">
@@ -66,7 +44,7 @@ $(document).ready(function() {
     var year = <?= $year ?>;
     var expensesUrl = "<?= Router::url([
         'action' => 'index',
-        '?' => ['type' => $kind, 'year' => '__year__', 'month' => '__month__'],
+        '?' => ['year' => '__year__', 'month' => '__month__'],
     ], true) ?>";
     var ctx = document.getElementById('expensesChart').getContext('2d');
     var myChart = new Chart(ctx, {
@@ -77,19 +55,16 @@ $(document).ready(function() {
                 {
                     label: "<?= $year ?>",
                     data: [<?= implode(', ', $data1) ?>],
-                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
                     borderColor: 'rgba(255, 99, 132, 1)',
-                    borderWidth: 1
+                    borderWidth: 1,
+                    fill: false,
                 },
                 {
                     label: "<?= $year - 1 ?>",
                     data: [<?= implode(', ', $data2) ?>],
-                    borderWidth: 1
-                },
-                {
-                    label: "<?= $year - 2 ?>",
-                    data: [<?= implode(', ', $data3) ?>],
-                    borderWidth: 1
+                    borderColor: 'rgba(99, 255, 132, 1)',
+                    borderWidth: 1,
+                    fill: false,
                 }
             ]
         },

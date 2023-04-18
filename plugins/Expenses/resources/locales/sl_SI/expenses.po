@@ -246,7 +246,7 @@ msgstr "Shrani"
 
 #: plugins/Expenses/templates/Expenses/graph_yearly.php:46
 msgid "GRAPH: {0} for {1}"
-msgstr "GRAF: {0} za {1} {2}"
+msgstr "GRAF: {0} za {1}"
 
 #: plugins/Expenses/templates/Expenses/import_sepa_link.php:5
 msgid "Link with Sepa Payment"

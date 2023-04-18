@@ -78,6 +78,18 @@ class ExpensesSidebar
                         'active' => $request->getParam('controller') == 'Expenses' &&
                         $request->getParam('action') == 'reportUnpaid',
                     ],
+                    'graph_expenses' => [
+                        'visible' => true,
+                        'title' => __d('expenses', 'Expenses Graph'),
+
+                        'url' => [
+                            'plugin' => 'Expenses',
+                            'controller' => 'Expenses',
+                            'action' => 'graphExpenses',
+                        ],
+                        'active' => $request->getParam('controller') == 'Expenses' &&
+                        $request->getParam('action') == 'graphExpenses',
+                    ],
                     'graph_yearly' => [
                         'visible' => true,
                         'title' => __d('expenses', 'Yearly Graph'),
