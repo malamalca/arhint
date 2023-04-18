@@ -53,14 +53,14 @@ $(document).ready(function() {
             labels: [<?= '"' . implode('", "', $this->Arhint->getMonthNames()) . '"' ?>],
             datasets: [
                 {
-                    label: "<?= $year ?>",
+                    label: "<?= __d('expenses', 'Expenses') ?>",
                     data: [<?= implode(', ', $data1) ?>],
                     borderColor: 'rgba(255, 99, 132, 1)',
                     borderWidth: 1,
                     fill: false,
                 },
                 {
-                    label: "<?= $year - 1 ?>",
+                    label: "<?= __d('expenses', 'Income') ?>",
                     data: [<?= implode(', ', $data2) ?>],
                     borderColor: 'rgba(99, 255, 132, 1)',
                     borderWidth: 1,
