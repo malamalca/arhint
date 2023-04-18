@@ -257,7 +257,7 @@ class Application extends BaseApplication implements
     public function console(CommandCollection $commands): CommandCollection
     {
         parent::console($commands);
-        
+
         $commands->add('hourly', HeartBeatCommand::class);
 
         return $commands;

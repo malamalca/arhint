@@ -309,13 +309,13 @@ class ExpensesController extends AppController
 
             $query = $this->Authorization->applyScope($this->Expenses->find(), 'index');
             $data1 = $this->Expenses->monthlyTotals(
-                $query, 
+                $query,
                 array_merge($options, ['kind' => 'expenses', 'year' => $year])
             );
 
             $query = $this->Authorization->applyScope($this->Expenses->find(), 'index');
             $data2 = $this->Expenses->monthlyTotals(
-                $query, 
+                $query,
                 array_merge($options, ['kind' => 'income', 'year' => $year])
             );
 
