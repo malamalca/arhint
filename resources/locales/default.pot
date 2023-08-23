@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2023-04-18 09:25+0000\n"
+"POT-Creation-Date: 2023-08-23 13:00+0000\n"
 "PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
 "Last-Translator: NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
@@ -25,13 +25,22 @@ msgstr ""
 #: ./src/Controller/PagesController.php:139
 #: ./templates/Utils/pdf_merge.php:20
 #: ./templates/Utils/pdf_sign.php:8
+#: ./templates/Utils/pdf_splice.php:8
 msgid "PDF Sign"
 msgstr ""
 
 #: ./src/Controller/PagesController.php:148
 #: ./templates/Utils/pdf_merge.php:28
 #: ./templates/Utils/pdf_sign.php:16
+#: ./templates/Utils/pdf_splice.php:16
 msgid "PDF Merge"
+msgstr ""
+
+#: ./src/Controller/PagesController.php:157
+#: ./templates/Utils/pdf_merge.php:36
+#: ./templates/Utils/pdf_sign.php:24
+#: ./templates/Utils/pdf_splice.php:24
+msgid "PDF Splice"
 msgstr ""
 
 #: ./src/Controller/UsersController.php:107
@@ -217,7 +226,7 @@ msgstr ""
 #: ./templates/Users/edit.php:87
 #: ./templates/Users/login.php:29
 #: ./templates/Users/properties.php:95
-#: ./templates/Utils/pdf_sign.php:57
+#: ./templates/Utils/pdf_sign.php:65
 msgid "Password"
 msgstr ""
 
@@ -319,70 +328,80 @@ msgstr ""
 msgid "Are you sure you want to delete this user?"
 msgstr ""
 
-#: ./templates/Utils/pdf_merge.php:47
-#: ./templates/Utils/pdf_merge.php:85
+#: ./templates/Utils/pdf_merge.php:55
+#: ./templates/Utils/pdf_merge.php:93
 msgid "Drag and Drop file here<br/>Or<br/>Click to select file"
 msgstr ""
 
-#: ./templates/Utils/pdf_merge.php:52
+#: ./templates/Utils/pdf_merge.php:60
 msgid "Filename"
 msgstr ""
 
-#: ./templates/Utils/pdf_merge.php:61
+#: ./templates/Utils/pdf_merge.php:69
 msgid "Encode to PDF/A"
 msgstr ""
 
-#: ./templates/Utils/pdf_merge.php:72
-#: ./templates/Utils/pdf_sign.php:105
+#: ./templates/Utils/pdf_merge.php:80
+#: ./templates/Utils/pdf_sign.php:113
+#: ./templates/Utils/pdf_splice.php:74
 msgid "Submit"
 msgstr ""
 
-#: ./templates/Utils/pdf_merge.php:83
+#: ./templates/Utils/pdf_merge.php:91
 msgid "Drag Here"
 msgstr ""
 
-#: ./templates/Utils/pdf_merge.php:84
+#: ./templates/Utils/pdf_merge.php:92
 msgid "Drop"
 msgstr ""
 
-#: ./templates/Utils/pdf_merge.php:155
+#: ./templates/Utils/pdf_merge.php:163
 msgid "Upload a file first!"
 msgstr ""
 
-#: ./templates/Utils/pdf_merge.php:160
+#: ./templates/Utils/pdf_merge.php:168
 msgid "Please enter target file name!"
 msgstr ""
 
-#: ./templates/Utils/pdf_merge.php:165
+#: ./templates/Utils/pdf_merge.php:173
 msgid "Target filename should be PDF!"
 msgstr ""
 
-#: ./templates/Utils/pdf_merge.php:235
+#: ./templates/Utils/pdf_merge.php:243
 msgid "Only pdf files are allowed"
 msgstr ""
 
-#: ./templates/Utils/pdf_sign.php:37
+#: ./templates/Utils/pdf_sign.php:45
+#: ./templates/Utils/pdf_splice.php:45
 msgid "PDF"
 msgstr ""
 
-#: ./templates/Utils/pdf_sign.php:47
+#: ./templates/Utils/pdf_sign.php:55
 msgid "Certificate"
 msgstr ""
 
-#: ./templates/Utils/pdf_sign.php:67
+#: ./templates/Utils/pdf_sign.php:75
 msgid "Signature"
 msgstr ""
 
-#: ./templates/Utils/pdf_sign.php:77
+#: ./templates/Utils/pdf_sign.php:85
 msgid "Page"
 msgstr ""
 
-#: ./templates/Utils/pdf_sign.php:88
+#: ./templates/Utils/pdf_sign.php:96
 msgid "X"
 msgstr ""
 
-#: ./templates/Utils/pdf_sign.php:98
+#: ./templates/Utils/pdf_sign.php:106
 msgid "Y"
+msgstr ""
+
+#: ./templates/Utils/pdf_splice.php:55
+msgid "First Page"
+msgstr ""
+
+#: ./templates/Utils/pdf_splice.php:66
+msgid "Last Page"
 msgstr ""
 
 #: ./templates/email/text/reset.php:15

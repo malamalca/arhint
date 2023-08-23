@@ -31,7 +31,7 @@ class UtilsController extends AppController
     }
 
     /**
-     * index method
+     * pdfMerge method
      *
      * @return \Cake\Http\Response|null
      */
@@ -76,6 +76,42 @@ class UtilsController extends AppController
             //} else {
             //    throw new BadRequestException('Error processing pdf files.');
             //}
+        }
+
+        return null;
+    }
+
+    /**
+     * pdfSplice method
+     *
+     * @return \Cake\Http\Response|null
+     */
+    public function pdfSplice()
+    {
+        $this->Authorization->skipAuthorization();
+
+        if ($this->getRequest()->is(['patch', 'post', 'put'])) {
+            $gsProgram = Configure::read('Ghostscript.executable');
+            $gsParams = '-dBATCH -dNOPAUSE -sDEVICE=pdfwrite -dFirstPage=%3$s -dLastPage=%4$s -sOutputFile=%2$s %1$s';
+
+            $file = $this->getRequest()->getData('file');
+            $outputPDF = $file['name'];
+
+            $command = escapeshellarg($gsProgram) . ' ' . $gsParams;
+            $command = sprintf(
+                $command,
+                escapeshellarg($file['tmp_name']),
+                escapeshellarg(TMP . $outputPDF),
+                $this->getRequest()->getData('firstPage'),
+                $this->getRequest()->getData('lastPage')
+            );
+
+            $ret = exec($command);
+
+            $response = $this->getResponse()
+                ->withFile(TMP . $outputPDF, ['download' => true, 'name' => $outputPDF]);
+
+            return $response;
         }
 
         return null;

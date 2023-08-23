@@ -2,7 +2,7 @@
 use Cake\Routing\Router;
 
 $uploadForm = [
-    'title' => 'PDF Sign',
+    'title' => 'PDF Splice',
     'menu' => [
         'sign' => [
             'title' => __('PDF Sign'),
@@ -47,64 +47,25 @@ $uploadForm = [
                     ],
                 ]],
             ],
-            'cert' => [
+            'firstPage' => [
                 'method' => 'control',
-                'parameters' => ['cert', [
-                    'type' => 'file',
+                'parameters' => ['firstPage', [
+                    'type' => 'number',
                     'label' => [
-                        'text' => __('Certificate') . ':',
-                        'class' => 'active',
-                    ],
-                ]],
-            ],
-            'pass' => [
-                'method' => 'control',
-                'parameters' => ['pass', [
-                    'type' => 'text',
-                    'label' => [
-                        'text' => __('Password') . ':',
-                        'class' => 'active',
-                    ],
-                ]],
-            ],
-            'signature' => [
-                'method' => 'control',
-                'parameters' => ['signature', [
-                    'type' => 'file',
-                    'label' => [
-                        'text' => __('Signature') . ':',
-                        'class' => 'active',
-                    ],
-                ]],
-            ],
-            'page' => [
-                'method' => 'control',
-                'parameters' => ['page', [
-                    'type' => 'text',
-                    'label' => [
-                        'text' => __('Page') . ':',
+                        'text' => __('First Page') . ':',
                         'class' => 'active',
                         'default' => 0,
                     ],
                 ]],
             ],
-            'x' => [
+            'lastPage' => [
                 'method' => 'control',
-                'parameters' => ['x', [
-                    'type' => 'text',
+                'parameters' => ['lastPage', [
+                    'type' => 'number',
                     'label' => [
-                        'text' => __('X') . ' [%]:',
+                        'text' => __('Last Page') . ':',
                         'class' => 'active',
-                    ],
-                ]],
-            ],
-            'y' => [
-                'method' => 'control',
-                'parameters' => ['y', [
-                    'type' => 'text',
-                    'label' => [
-                        'text' => __('Y') . ' [%]:',
-                        'class' => 'active',
+                        'default' => 0,
                     ],
                 ]],
             ],

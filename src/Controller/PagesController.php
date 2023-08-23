@@ -153,6 +153,15 @@ class PagesController extends AppController
                         'action' => 'pdfMerge',
                     ],
                 ],
+                'splice' => [
+                    'title' => __('PDF Splice'),
+                    'visible' => true,
+                    'url' => [
+                        'plugin' => false,
+                        'controller' => 'Utils',
+                        'action' => 'pdfSplice',
+                    ],
+                ],
             ],
             'panels' => [],
         ]);

@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2022-05-08 06:34+0000\n"
-"PO-Revision-Date: 2022-05-08 08:41+0200\n"
+"POT-Creation-Date: 2023-08-23 13:00+0000\n"
+"PO-Revision-Date: 2023-08-23 15:03+0200\n"
 "Last-Translator: \n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
 "Language: sl_SI\n"
@@ -15,6 +15,29 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100>=3 && n"
 "%100<=4 ? 2 : 3);\n"
 "X-Generator: Poedit 3.0.1\n"
+
+#: src/Command/HeartBeatCommand.php:31
+msgid "Intranet Notification"
+msgstr "Intranet obvestila"
+
+#: src/Command/HeartBeatCommand.php:47
+msgid "Intranet Report"
+msgstr "Intranet poročilo"
+
+#: src/Controller/PagesController.php:139 templates/Utils/pdf_merge.php:20
+#: templates/Utils/pdf_sign.php:8 templates/Utils/pdf_splice.php:8
+msgid "PDF Sign"
+msgstr "PDF Podpis"
+
+#: src/Controller/PagesController.php:148 templates/Utils/pdf_merge.php:28
+#: templates/Utils/pdf_sign.php:16 templates/Utils/pdf_splice.php:16
+msgid "PDF Merge"
+msgstr "PDF Združevanje"
+
+#: src/Controller/PagesController.php:157 templates/Utils/pdf_merge.php:36
+#: templates/Utils/pdf_sign.php:24 templates/Utils/pdf_splice.php:24
+msgid "PDF Splice"
+msgstr "PDF Razrez"
 
 #: src/Controller/UsersController.php:107
 msgid "An email with password reset instructions has been sent."
@@ -40,29 +63,29 @@ msgstr "Geslo je spremenjeno."
 msgid "Please verify that the information is correct."
 msgstr "Prosimo preverite vpisane podatke."
 
-#: src/Controller/UsersController.php:231
+#: src/Controller/UsersController.php:232
 msgid "The user has been saved."
 msgstr "Uporabnik je shranjen."
 
-#: src/Controller/UsersController.php:235
+#: src/Controller/UsersController.php:236
 msgid "The user could not be saved. Please, try again."
 msgstr ""
 "Uporabnika ni mogoče shraniti. Preverite vpisane podatke in poizkusite "
 "ponovno."
 
-#: src/Controller/UsersController.php:276
+#: src/Controller/UsersController.php:277
 msgid "Properties have been saved."
 msgstr "Nastavitve so shranjene."
 
-#: src/Controller/UsersController.php:280
+#: src/Controller/UsersController.php:281
 msgid "Properties could not be saved. Please, try again."
 msgstr "Ni mogoče shraniti nastavitev. Preverite vpisane podatke."
 
-#: src/Controller/UsersController.php:302
+#: src/Controller/UsersController.php:303
 msgid "The user has been deleted."
 msgstr "Uporabnik je izbrisan."
 
-#: src/Controller/UsersController.php:304
+#: src/Controller/UsersController.php:305
 msgid "The user could not be deleted. Please, try again."
 msgstr "Uporabnika ni mogoče izbrisati, ker je povezan z veljavnimi podatki."
 
@@ -121,12 +144,12 @@ msgid "Password is required, format must be valid."
 msgstr "Geslo je obvezno, preverja se format."
 
 #: templates/Users/change_password.php:11 templates/Users/edit.php:95
-#: templates/Users/properties.php:91
+#: templates/Users/properties.php:103
 msgid "Repeat Password"
 msgstr "Ponovitev gesla"
 
-#: templates/Users/change_password.php:11 templates/Users/properties.php:75
-#: templates/Users/properties.php:95
+#: templates/Users/change_password.php:11 templates/Users/properties.php:87
+#: templates/Users/properties.php:107
 msgid "Passwords do not match."
 msgstr "Gesli se ne ujemata."
 
@@ -190,11 +213,11 @@ msgid "Username"
 msgstr "Uporabniško ime"
 
 #: templates/Users/edit.php:87 templates/Users/login.php:29
-#: templates/Users/properties.php:83 templates/Utils/pdf_sign.php:57
+#: templates/Users/properties.php:95 templates/Utils/pdf_sign.php:65
 msgid "Password"
 msgstr "Geslo"
 
-#: templates/Users/edit.php:104 templates/Users/properties.php:104
+#: templates/Users/edit.php:104 templates/Users/properties.php:116
 msgid "Save"
 msgstr "Shrani"
 
@@ -243,14 +266,22 @@ msgid "Avatar"
 msgstr "Avatar"
 
 #: templates/Users/properties.php:66
+msgid "Email Notifications"
+msgstr "Email obvestila"
+
+#: templates/Users/properties.php:71
+msgid "Receive Notifications Email"
+msgstr "Prejmi obvestila na email"
+
+#: templates/Users/properties.php:78
 msgid "Change Password"
 msgstr "Sprememba gesla"
 
-#: templates/Users/properties.php:71
+#: templates/Users/properties.php:83
 msgid "Current Password"
 msgstr "Trenutno geslo"
 
-#: templates/Users/properties.php:74 templates/Users/properties.php:94
+#: templates/Users/properties.php:86 templates/Users/properties.php:106
 msgid "Must not be empty."
 msgstr "Polje ne sme ostati prazno."
 
@@ -278,75 +309,80 @@ msgstr "Briši"
 msgid "Are you sure you want to delete this user?"
 msgstr "Ste prepričani, da želite izbrisati uporabnika?"
 
-#: templates/Utils/pdf_merge.php:20 templates/Utils/pdf_sign.php:8
-msgid "PDF Sign"
-msgstr "PDF Podpis"
-
-#: templates/Utils/pdf_merge.php:28 templates/Utils/pdf_sign.php:16
-msgid "PDF Merge"
-msgstr "PDF Združevanje"
-
-#: templates/Utils/pdf_merge.php:47 templates/Utils/pdf_merge.php:85
+#: templates/Utils/pdf_merge.php:55 templates/Utils/pdf_merge.php:93
 msgid "Drag and Drop file here<br/>Or<br/>Click to select file"
 msgstr ""
 "Povlecite in spustite datoteko tukaj<br />ali<br />Kliknite za izbiro "
 "datoteke"
 
-#: templates/Utils/pdf_merge.php:52
+#: templates/Utils/pdf_merge.php:60
 msgid "Filename"
 msgstr "Datoteka"
 
-#: templates/Utils/pdf_merge.php:61
+#: templates/Utils/pdf_merge.php:69
 msgid "Encode to PDF/A"
 msgstr "Kodiraj v PDF/A"
 
-#: templates/Utils/pdf_merge.php:72 templates/Utils/pdf_sign.php:95
+#: templates/Utils/pdf_merge.php:80 templates/Utils/pdf_sign.php:113
+#: templates/Utils/pdf_splice.php:74
 msgid "Submit"
 msgstr "Pošlji"
 
-#: templates/Utils/pdf_merge.php:83
+#: templates/Utils/pdf_merge.php:91
 msgid "Drag Here"
 msgstr "Povlecite sem"
 
-#: templates/Utils/pdf_merge.php:84
+#: templates/Utils/pdf_merge.php:92
 msgid "Drop"
 msgstr "Spustite"
 
-#: templates/Utils/pdf_merge.php:155
+#: templates/Utils/pdf_merge.php:163
 msgid "Upload a file first!"
 msgstr "Najprej prenesite datoteko!"
 
-#: templates/Utils/pdf_merge.php:160
+#: templates/Utils/pdf_merge.php:168
 msgid "Please enter target file name!"
 msgstr "Vpišite naziv ciljne datoteke!"
 
-#: templates/Utils/pdf_merge.php:165
+#: templates/Utils/pdf_merge.php:173
 msgid "Target filename should be PDF!"
 msgstr "Ime ciljne datoteke mora imeti končnico PDF!"
 
-#: templates/Utils/pdf_merge.php:235
+#: templates/Utils/pdf_merge.php:243
 msgid "Only pdf files are allowed"
 msgstr "Dovoljene so samo PDF datoteke."
 
-#: templates/Utils/pdf_sign.php:37
+#: templates/Utils/pdf_sign.php:45 templates/Utils/pdf_splice.php:45
 msgid "PDF"
 msgstr "PDF"
 
-#: templates/Utils/pdf_sign.php:47
+#: templates/Utils/pdf_sign.php:55
 msgid "Certificate"
 msgstr "Certifikat"
 
-#: templates/Utils/pdf_sign.php:67
+#: templates/Utils/pdf_sign.php:75
+msgid "Signature"
+msgstr "Podpis"
+
+#: templates/Utils/pdf_sign.php:85
 msgid "Page"
 msgstr "Stran"
 
-#: templates/Utils/pdf_sign.php:78
+#: templates/Utils/pdf_sign.php:96
 msgid "X"
 msgstr "X"
 
-#: templates/Utils/pdf_sign.php:88
+#: templates/Utils/pdf_sign.php:106
 msgid "Y"
 msgstr "Y"
+
+#: templates/Utils/pdf_splice.php:55
+msgid "First Page"
+msgstr "Prva stran"
+
+#: templates/Utils/pdf_splice.php:66
+msgid "Last Page"
+msgstr "Zadnja stran"
 
 #: templates/email/text/reset.php:15
 msgid "You've received this mail from password reset request on Famiree"

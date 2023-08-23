@@ -32,6 +32,14 @@
                     'action' => 'pdfMerge',
                 ],
             ],
+            'splice' => [
+                'title' => __('PDF Splice'),
+                'active' => $this->getRequest()->getParam('action') == 'pdfSplice',
+                'visible' => true,
+                'url' => [
+                    'action' => 'pdfSplice',
+                ],
+            ],
         ],
         'form' => [
             'defaultHelper' => $this->Form,
