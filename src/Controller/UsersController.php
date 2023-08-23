@@ -94,13 +94,13 @@ class UsersController extends AppController
         $this->Authorization->skipAuthorization();
 
         if ($this->getRequest()->is('post')) {
-            /** @var \App\Model\Entity\User $user */
+            /** @var \App\Model\Entity\User|null $user */
             $user = $this->Users->find()
                 ->select()
                 ->where(['email' => $this->getRequest()->getData('email')])
                 ->first();
 
-            if ($user != false) {
+            if ($user) {
                 $user->reset_key = uniqid();
                 if ($this->Users->save($user)) {
                     $this->Users->sendResetEmail($user);

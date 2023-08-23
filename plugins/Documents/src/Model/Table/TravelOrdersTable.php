@@ -290,12 +290,12 @@ class TravelOrdersTable extends Table
         if (empty($ret['start'])) {
             $ret['start'] = new FrozenDate();
         } else {
-            $ret['start'] = FrozenDate::parse($ret['start']);
+            $ret['start'] = FrozenDate::parseDate($ret['start'], 'yyyy-MM-dd');
         }
         if (empty($ret['end'])) {
             $ret['end'] = new FrozenDate();
         } else {
-            $ret['end'] = FrozenDate::parse($ret['end']);
+            $ret['end'] = FrozenDate::parseDate($ret['end'], 'yyyy-MM-dd');
         }
 
         return $ret;

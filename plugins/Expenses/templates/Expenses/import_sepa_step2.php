@@ -114,7 +114,7 @@ foreach ($importedPayments as $p) {
             'columns' => [
                 'date' => [
                     'parameters' => ['class' => 'center-align'],
-                    'html' => (string)FrozenDate::parse($p['date']),
+                    'html' => (string)FrozenDate::parseDate($p['date'], 'yyyy-MM-dd'),
                 ],
                 'amount' => [
                     'parameters' => ['class' => 'right-align' . ($p['kind'] == 'DBIT' ? ' negative' : '')],
