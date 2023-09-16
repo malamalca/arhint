@@ -5,8 +5,8 @@ if (!empty($filter['start']) && !empty($filter['end'])) {
     $date_caption = __d(
         'expenses',
         'from {0} to {1}',
-        (string)FrozenDate::parse($filter['start']),
-        (string)FrozenDate::parse($filter['end'])
+        (string)FrozenDate::parseDate($filter['start'], 'yyyy-MM-dd'),
+        (string)FrozenDate::parseDate($filter['end'], 'yyyy-MM-dd')
     );
 } elseif (!empty($filter['end'])) {
     $date_caption = __d('expenses', 'to {0}', $this->LilDate->format($filter['end']));
