@@ -43,7 +43,7 @@ class Plugin extends BasePlugin
         $routes->plugin(
             'Tasks',
             ['path' => '/tasks'],
-            function (RouteBuilder $builder) {
+            function (RouteBuilder $builder): void {
                 // Add custom routes here
                 $builder->fallbacks();
             }

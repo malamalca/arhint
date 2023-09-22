@@ -15,6 +15,8 @@ declare(strict_types=1);
 namespace App\View\Widget;
 
 use Cake\View\Form\ContextInterface;
+use Cake\View\StringTemplate;
+use Cake\View\View;
 use Cake\View\Widget\WidgetInterface;
 
 /**
@@ -33,14 +35,14 @@ class DurationWidget implements WidgetInterface
      *
      * @var \Cake\View\StringTemplate
      */
-    protected $templates;
+    protected StringTemplate $templates;
 
     /**
      * View instance.
      *
      * @var \Cake\View\View
      */
-    protected $view;
+    protected View $view;
 
     /**
      * Constructor.
@@ -48,7 +50,7 @@ class DurationWidget implements WidgetInterface
      * @param \Cake\View\StringTemplate $templates Templates list.
      * @param \Cake\View\View $view Reference to view.
      */
-    public function __construct($templates, $view)
+    public function __construct(StringTemplate $templates, View $view)
     {
         $this->templates = $templates;
         $this->view = $view;
@@ -59,7 +61,7 @@ class DurationWidget implements WidgetInterface
      *
      * Any other keys provided in $data will be converted into HTML attributes.
      *
-     * @param array            $data    The data to build a control with.
+     * @param array<string, mixed> $data The data to build a control with.
      * @param \Cake\View\Form\ContextInterface $context The form context.
      * @return string
      */
@@ -156,11 +158,12 @@ class DurationWidget implements WidgetInterface
     /**
      * {@inheritDoc}
      *
-     * @param array $data Fields data.
+     * @param array<string, mixed> $data Fields data.
      * @return array<array-key, string>
      */
     public function secureFields(array $data): array
     {
+        // fdsfd
         return [$data['name'] . '.hours', $data['name'] . '.minutes', $data['name'] . '.duration'];
     }
 }

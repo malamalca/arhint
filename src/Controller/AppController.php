@@ -3,8 +3,10 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Model\Entity\User;
 use Cake\Controller\Controller;
 use Cake\Event\EventInterface;
+use Exception;
 
 /**
  * Application Controller
@@ -21,7 +23,7 @@ class AppController extends Controller
     /**
      * @var \App\Model\Entity\User|null $currentUser
      */
-    protected $currentUser = null;
+    protected ?User $currentUser = null;
 
     /**
      * Initialization hook method.
@@ -36,35 +38,41 @@ class AppController extends Controller
     {
         parent::initialize();
 
-        $this->loadComponent('RequestHandler', [
-            'viewClassMap' => [
-                'aht' => 'App.AhtView',
-            ],
-        ]);
         $this->loadComponent('Flash');
-
-        /*
-         * Enable the following component for recommended CakePHP security settings.
-         * see https://book.cakephp.org/4/en/controllers/components/security.html
-         */
-        $this->loadComponent('Security');
 
         $this->loadComponent('Authentication.Authentication');
         $this->loadComponent('Authorization.Authorization');
 
-        //Type::build('float')->useLocaleParser();
-        //Type::build('decimal')->useLocaleParser();
+        /*
+         * Enable the following component for recommended CakePHP form protection settings.
+         * see https://book.cakephp.org/4/en/controllers/components/form-protection.html
+         */
+        $this->loadComponent('FormProtection');
 
         $this->response->setTypeMap('aht', ['text/html']);
     }
 
     /**
+     * Returns is user is logged on.
+     *
+     * @return bool
+     */
+    public function hasCurrentUser(): bool
+    {
+        return !empty($this->currentUser);
+    }
+
+    /**
      * Returns current user.
      *
-     * @return \App\Model\Entity\User|null
+     * @return \App\Model\Entity\User
      */
-    public function getCurrentUser()
+    public function getCurrentUser(): User
     {
+        if (!$this->currentUser) {
+            throw new Exception('User does not exist.');
+        }
+
         return $this->currentUser;
     }
 
@@ -72,14 +80,14 @@ class AppController extends Controller
      * beforeFilterCallback
      *
      * @param \Cake\Event\EventInterface $event Event object
-     * @return \Cake\Http\Response|null
+     * @return void
      */
     public function beforeFilter(EventInterface $event)
     {
         /** @var \App\Model\Entity\User $user */
         $user = $this->Authentication->getIdentity();
-        $this->currentUser = $user;
-
-        return null;
+        if ($user) {
+            $this->currentUser = $user->getOriginalData();
+        }
     }
 }

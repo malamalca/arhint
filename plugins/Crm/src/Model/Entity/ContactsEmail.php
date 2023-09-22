@@ -14,8 +14,8 @@ use Cake\ORM\Entity;
  * @property string|null $kind
  * @property string|null $email
  * @property bool $primary
- * @property \Cake\I18n\FrozenTime|null $created
- * @property \Cake\I18n\FrozenTime|null $modified
+ * @property \Cake\I18n\DateTime|null $created
+ * @property \Cake\I18n\DateTime|null $modified
  */
 class ContactsEmail extends Entity implements EntityInterface
 {
@@ -24,7 +24,7 @@ class ContactsEmail extends Entity implements EntityInterface
      *
      * @var array<string, bool>
      */
-    protected $_accessible = [
+    protected array $_accessible = [
         '*' => true,
         'id' => false,
     ];

@@ -7,12 +7,13 @@ use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
 use Cake\Validation\Validator;
+use Documents\Model\Entity\DocumentsClient;
 
 /**
  * DocumentsClients Model
  *
  * @property \Cake\ORM\Association\BelongsTo $Contacts
- * @method \Documents\Model\Entity\DocumentsClient get($primaryKey, array $options = [])
+ * @method \Documents\Model\Entity\DocumentsClient get(mixed $primaryKey, array|string $finder = 'all', \Psr\SimpleCache\CacheInterface|string|null $cache = null, \Closure|string|null $cacheKey = null, mixed ...$args)
  * @method \Documents\Model\Entity\DocumentsClient newEntity(array $data = [], array $options = [])
  * @method \Documents\Model\Entity\DocumentsClient newEmptyEntity()
  * @method \Documents\Model\Entity\DocumentsClient patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
@@ -22,7 +23,7 @@ class DocumentsClientsTable extends Table
     /**
      * Initialize method
      *
-     * @param array $config The configuration for the Table.
+     * @param array<string, mixed> $config List of options for this table.
      * @return void
      */
     public function initialize(array $config): void
@@ -95,11 +96,15 @@ class DocumentsClientsTable extends Table
      * Checks if entity belongs to user.
      *
      * @param \Documents\Model\Entity\DocumentsClient $entity Entity Id.
-     * @param string $ownerId User Id.
+     * @param string|null $ownerId User Id.
      * @return bool
      */
-    public function isOwnedBy($entity, $ownerId)
+    public function isOwnedBy(DocumentsClient $entity, ?string $ownerId): bool
     {
+        if (empty($ownerId)) {
+            return false;
+        }
+
         switch ($entity->model) {
             case 'Document':
                 /** @var \Documents\Model\Table\DocumentsTable $ModelTable */

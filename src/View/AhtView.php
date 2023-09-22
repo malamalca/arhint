@@ -15,14 +15,14 @@ class AhtView extends AppView
      *
      * @var string
      */
-    public $layout = 'ajax';
+    public string $layout = 'ajax';
 
     /**
      * AHT views are located in the 'xml' sub directory for controllers' views.
      *
      * @var string
      */
-    protected $subDir = 'aht';
+    protected string $subDir = 'aht';
 
     /**
      * Initialization hook method.

@@ -3,13 +3,14 @@ declare(strict_types=1);
 
 namespace Projects\Controller;
 
+use Cake\Http\Response;
 use Cake\ORM\TableRegistry;
 
 /**
  * ProjectsLogs Controller
  *
  * @property \Projects\Model\Table\ProjectsLogsTable $ProjectsLogs
- * @method \Cake\Datasource\ResultSetInterface|\Cake\ORM\ResultSet paginate($object = null, array $settings = [])
+ * @method \Cake\Datasource\Paging\PaginatedInterface paginate($object = null, array $settings = [])
  */
 class ProjectsLogsController extends AppController
 {
@@ -17,10 +18,10 @@ class ProjectsLogsController extends AppController
      * Edit method
      *
      * @param string|null $id Projects Log id.
-     * @return \Cake\Http\Response|null Redirects on successful edit, renders view otherwise.
+     * @return \Cake\Http\Response|null
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function edit($id = null)
+    public function edit(?string $id = null): ?Response
     {
         if ($id) {
             $projectsLog = $this->ProjectsLogs->get($id);
@@ -70,10 +71,10 @@ class ProjectsLogsController extends AppController
      * Delete method
      *
      * @param string|null $id Projects Log id.
-     * @return \Cake\Http\Response|null Redirects to index.
+     * @return \Cake\Http\Response|null
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function delete($id = null)
+    public function delete(?string $id = null): ?Response
     {
         $this->request->allowMethod(['post', 'delete', 'get']);
         $projectsLog = $this->ProjectsLogs->get($id);

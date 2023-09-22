@@ -16,21 +16,21 @@ use Authorization\Middleware\AuthorizationMiddleware;
 use Authorization\Policy\OrmResolver;
 use Cake\Console\CommandCollection;
 use Cake\Core\Configure;
-use Cake\Core\Exception\MissingPluginException;
 use Cake\Datasource\FactoryLocator;
 use Cake\Error\Middleware\ErrorHandlerMiddleware;
 use Cake\Http\BaseApplication;
 use Cake\Http\Middleware\EncryptedCookieMiddleware;
 use Cake\Http\Middleware\SessionCsrfProtectionMiddleware;
 use Cake\Http\MiddlewareQueue;
-use Cake\I18n\FrozenTime;
+use Cake\I18n\DateTime;
 use Cake\ORM\Locator\TableLocator;
 use Cake\Routing\Middleware\AssetMiddleware;
 use Cake\Routing\Middleware\RoutingMiddleware;
 use Cake\Routing\Route\DashedRoute;
 use Cake\Routing\RouteBuilder;
+use Cake\Routing\Router;
 use Crm\Plugin as CrmPlugin;
-use Documents\Plugin as DocumentsPlugin;
+use Documents\DocumentsPlugin;
 use Expenses\Plugin as ExpensesPlugin;
 use Lil\Plugin as LilPlugin;
 use Projects\Plugin as ProjectsPlugin;
@@ -42,6 +42,8 @@ use Tasks\Plugin as TasksPlugin;
  *
  * This defines the bootstrapping logic and middleware layers you
  * want to use in your application.
+ *
+ * @extends \Cake\Http\BaseApplication<\App\Application>
  */
 class Application extends BaseApplication implements
     AuthenticationServiceProviderInterface,
@@ -72,12 +74,8 @@ class Application extends BaseApplication implements
          * Only try to load DebugKit in development mode
          * Debug Kit should not be installed on a production system
          */
-        if (Configure::read('debug') && (PHP_SAPI != 'cli')) {
-            try {
-                $this->addPlugin('DebugKit');
-            } catch (MissingPluginException $e) {
-                // Do not halt if the plugin is missing
-            }
+        if (Configure::read('debug')) {
+            $this->addPlugin('DebugKit');
         }
 
         // Load more plugins here
@@ -100,7 +98,7 @@ class Application extends BaseApplication implements
     {
         $routes->setRouteClass(DashedRoute::class);
 
-        $routes->scope('/', function (RouteBuilder $builder) {
+        $routes->scope('/', function (RouteBuilder $builder): void {
             $builder->connect('/', ['controller' => 'Pages', 'action' => 'dashboard']);
 
             $builder->fallbacks();
@@ -153,6 +151,9 @@ class Application extends BaseApplication implements
                     MissingIdentityException::class,
                 ],
             ],
+            'identityDecorator' => function ($auth, $user) {
+                return $user->setAuthorization($auth);
+            },
         ]));
 
         return $middlewareQueue;
@@ -167,7 +168,6 @@ class Application extends BaseApplication implements
      */
     protected function bootstrapCli(): void
     {
-        $this->addOptionalPlugin('Cake/Repl');
         $this->addOptionalPlugin('Bake');
 
         $this->addPlugin('Migrations');
@@ -218,7 +218,7 @@ class Application extends BaseApplication implements
             'fields' => $fields,
             'cookie' => [
                 'name' => self::REMEMBERME_COOKIE_NAME,
-                'expires' => (new FrozenTime())->addDays(30),
+                'expires' => (string)(new DateTime())->addDays(30),
             ],
         ]);
 
@@ -266,11 +266,11 @@ class Application extends BaseApplication implements
     /**
      * Validate groups of param values
      *
-     * @param array $params Array of passed params (request); there is an OR condition
-     * @param array $checkList Checklist array
+     * @param array<array-key, mixed> $params Array of passed params (request); there is an OR condition
+     * @param array<array-key, mixed> $checkList Checklist array
      * @return bool
      */
-    private function checkParams($params, $checkList)
+    private function checkParams(array $params, array $checkList): bool
     {
         $result = true;
         foreach ($checkList as $conditions) {
@@ -301,8 +301,8 @@ class Application extends BaseApplication implements
      *
      * @return string
      */
-    private function getLoginPath()
+    private function getLoginPath(): string
     {
-        return Configure::read('App.fullBaseUrl') . Configure::read('App.base') . '/users/login';
+        return /*Configure::read('App.fullBaseUrl') . Configure::read('App.base') . */Router::url('/users/login');
     }
 }

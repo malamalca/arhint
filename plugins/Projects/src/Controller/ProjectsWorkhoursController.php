@@ -4,7 +4,9 @@ declare(strict_types=1);
 namespace Projects\Controller;
 
 use Cake\Event\EventInterface;
-use Cake\I18n\FrozenTime;
+use Cake\Http\Response;
+use Cake\Http\ServerRequest;
+use Cake\I18n\DateTime;
 use Cake\ORM\TableRegistry;
 use Cake\Routing\Router;
 
@@ -12,7 +14,7 @@ use Cake\Routing\Router;
  * ProjectsWorkhours Controller
  *
  * @property \Projects\Model\Table\ProjectsWorkhoursTable $ProjectsWorkhours
- * @method \Cake\Datasource\ResultSetInterface|\Cake\ORM\ResultSet paginate($object = null, array $settings = [])
+ * @method \Cake\Datasource\Paging\PaginatedInterface paginate($object = null, array $settings = [])
  */
 class ProjectsWorkhoursController extends AppController
 {
@@ -20,25 +22,21 @@ class ProjectsWorkhoursController extends AppController
      * BeforeFilter event handler
      *
      * @param \Cake\Event\EventInterface $event Event interface
-     * @return \Cake\Http\Response|null
+     * @return void
      */
     public function beforeFilter(EventInterface $event)
     {
         parent::beforeFilter($event);
 
-        if (!empty($this->Security)) {
-            if (in_array($this->getRequest()->getParam('action'), ['import'])) {
-                $this->Security->setConfig('validatePost', false);
-            }
+        if ($this->getRequest()->getParam('action') == 'import') {
+            $this->FormProtection->setConfig('validate', false);
         }
-
-        return null;
     }
 
     /**
      * Index method
      *
-     * @return \Cake\Http\Response|void
+     * @return void
      */
     public function index()
     {
@@ -85,14 +83,14 @@ class ProjectsWorkhoursController extends AppController
     /**
      * List method
      *
-     * @return \Cake\Http\Response|null
+     * @return void
      */
     public function list()
     {
         $sourceUrl = $this->getRequest()->getQuery('source');
         $sourceRequest = [];
         if (!empty($sourceUrl)) {
-            $request = new \Cake\Http\ServerRequest(['url' => $this->getRequest()->getQuery('source')]);
+            $request = new ServerRequest(['url' => $this->getRequest()->getQuery('source')]);
             $sourceRequest = Router::parseRequest($request);
 
             $sourceRequest = array_merge($sourceRequest, $sourceRequest['pass']);
@@ -116,18 +114,16 @@ class ProjectsWorkhoursController extends AppController
         $users = $UsersTable->fetchForCompany($this->getCurrentUser()->get('company_id'), ['inactive' => true]);
 
         $this->set(compact('data', 'sourceRequest', 'users'));
-
-        return null;
     }
 
     /**
      * Edit method
      *
      * @param string|null $id Projects Workhour id.
-     * @return \Cake\Http\Response|null Redirects on successful edit, renders view otherwise.
+     * @return \Cake\Http\Response|null
      * @throws \Cake\Http\Exception\NotFoundException When record not found.
      */
-    public function edit($id = null)
+    public function edit(?string $id = null): ?Response
     {
         if ($id) {
             $projectsWorkhour = $this->ProjectsWorkhours->get($id);
@@ -177,29 +173,32 @@ class ProjectsWorkhoursController extends AppController
      * Delete method
      *
      * @param string|null $id Projects Workhour id.
-     * @return \Cake\Http\Response|null Redirects to index.
+     * @return \Cake\Http\Response|null
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function delete($id = null)
+    public function delete(?string $id = null): ?Response
     {
         $this->getRequest()->allowMethod(['post', 'delete', 'get']);
         $projectsWorkhour = $this->ProjectsWorkhours->get($id);
         $this->Authorization->authorize($projectsWorkhour);
+
         if ($this->ProjectsWorkhours->delete($projectsWorkhour)) {
             $this->Flash->success(__d('projects', 'The projects workhour has been deleted.'));
         } else {
             $this->Flash->error(__d('projects', 'The projects workhour could not be deleted. Please, try again.'));
         }
 
-        return $this->redirect($this->getRequest()->referer());
+        return $this->redirect(
+            $this->getRequest()->referer() ?? ['action' => 'index', '?' => ['project' => $projectsWorkhour->project_id]]
+        );
     }
 
     /**
      * Import from timetracking software
      *
-     * @return \Cake\Http\Response|null
+     * @return \Cake\Http\Response
      */
-    public function import()
+    public function import(): Response
     {
         $this->getRequest()->allowMethod(['post']);
 
@@ -216,9 +215,9 @@ class ProjectsWorkhoursController extends AppController
                     !empty($registration['project_id']) &&
                     isset($projects[$registration['project_id']]) &&
                     !empty($registration['datetime']) &&
-                    FrozenTime::parseDateTime($registration['datetime'], 'yyyy-MM-dd HH:mm:ss')
+                    DateTime::parseDateTime($registration['datetime'], 'yyyy-MM-dd HH:mm:ss')
                 ) {
-                    $registrationTime = FrozenTime::parseDateTime($registration['datetime'], 'yyyy-MM-dd HH:mm:ss');
+                    $registrationTime = DateTime::parseDateTime($registration['datetime'], 'yyyy-MM-dd HH:mm:ss');
 
                     switch ($registration['mode']) {
                         case 'start':

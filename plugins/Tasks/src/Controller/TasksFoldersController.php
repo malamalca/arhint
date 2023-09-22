@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Tasks\Controller;
 
 use Cake\Cache\Cache;
+use Cake\Http\Response;
 
 /**
  * TasksFolders Controller
@@ -16,15 +17,15 @@ class TasksFoldersController extends AppController
      * Edit method
      *
      * @param string|null $id Task id.
-     * @return \Cake\Http\Response|void
+     * @return \Cake\Http\Response|null
      */
-    public function edit($id = null)
+    public function edit(?string $id = null): ?Response
     {
         if ($id) {
             $folder = $this->TasksFolders->get($id);
         } else {
             $folder = $this->TasksFolders->newEmptyEntity();
-            $folder->owner_id = $this->getCurrentUser()->get('company_id');
+            $folder->owner_id = $this->getCurrentUser()->company_id ?? '';
         }
 
         $this->Authorization->authorize($folder);
@@ -43,15 +44,17 @@ class TasksFoldersController extends AppController
         }
 
         $this->set(compact('folder'));
+
+        return null;
     }
 
     /**
      * Delete method
      *
      * @param string|null $id Task id.
-     * @return \Cake\Http\Response|void
+     * @return \Cake\Http\Response|null
      */
-    public function delete($id = null)
+    public function delete(?string $id = null): ?Response
     {
         $tasksFolder = $this->TasksFolders->get($id);
 

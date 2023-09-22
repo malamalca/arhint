@@ -17,8 +17,8 @@ use Cake\ORM\Entity;
  * @property string $ico
  * @property string $colorize
  * @property bool $active
- * @property \Cake\I18n\FrozenTime $created
- * @property \Cake\I18n\FrozenTime $modified
+ * @property \Cake\I18n\DateTime $created
+ * @property \Cake\I18n\DateTime $modified
  *
  * @property \Projects\Model\Entity\Owner $owner
  */
@@ -33,7 +33,7 @@ class Project extends Entity
      *
      * @var array<string, bool>
      */
-    protected $_accessible = [
+    protected array $_accessible = [
         'owner_id' => true,
         'status_id' => true,
         'no' => true,
@@ -53,7 +53,7 @@ class Project extends Entity
      *
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->no . ' - ' . $this->title;
     }

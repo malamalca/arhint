@@ -3,11 +3,12 @@ declare(strict_types=1);
 
 namespace App\Model\Table;
 
-use Cake\Auth\PasswordHasherFactory;
+use App\Model\Entity\User;
+use Authentication\PasswordHasher\PasswordHasherFactory;
 use Cake\Core\Configure;
+use Cake\Datasource\QueryInterface;
 use Cake\Http\ServerRequest;
 use Cake\Mailer\Mailer;
-use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
@@ -17,7 +18,7 @@ use Cake\Validation\Validator;
  * Users Model
  *
  * @property \App\Model\Table\CompaniesTable|\Cake\ORM\Association\BelongsTo $Companies
- * @method \App\Model\Entity\User get($primaryKey, $options = [])
+ * @method \App\Model\Entity\User get(mixed $primaryKey, array|string $finder = 'all', \Psr\SimpleCache\CacheInterface|string|null $cache = null, \Closure|string|null $cacheKey = null, mixed ...$args)
  * @method \App\Model\Entity\User newEntity($data = null, array $options = [])
  * @method \App\Model\Entity\User[] newEntities(array $data, array $options = [])
  * @method \App\Model\Entity\User|false save(\Cake\Datasource\EntityInterface $entity, $options = [])
@@ -32,7 +33,7 @@ class UsersTable extends Table
     /**
      * Initialize method
      *
-     * @param array $config The configuration for the Table.
+     * @param array<string, mixed> $config List of options for this table.
      * @return void
      */
     public function initialize(array $config): void
@@ -126,7 +127,7 @@ class UsersTable extends Table
      * @param \Cake\Validation\Validator $validator Validator instance.
      * @return \Cake\Validation\Validator
      */
-    public function validationResetPassword($validator)
+    public function validationResetPassword(Validator $validator): Validator
     {
         $validator = new Validator();
         $validator
@@ -153,7 +154,7 @@ class UsersTable extends Table
      * @param \Cake\Validation\Validator $validator Validator instance.
      * @return \Cake\Validation\Validator
      */
-    public function validationProperties($validator)
+    public function validationProperties(Validator $validator): Validator
     {
         $validator = new Validator();
         $validator
@@ -178,9 +179,10 @@ class UsersTable extends Table
                     $UsersTable = TableRegistry::getTableLocator()->get('Users');
                     $user = $UsersTable->get($context['data']['id']);
 
-                    $passwordHasher = PasswordHasherFactory::build('Default');
+                    $passwordHasher =
+                        PasswordHasherFactory::build('Authentication\PasswordHasher\DefaultPasswordHasher');
 
-                    return $passwordHasher->check($value, $user->passwd);
+                    return $passwordHasher->check($value, $user->passwd ?? '');
                 },
             ]);
 
@@ -205,11 +207,11 @@ class UsersTable extends Table
     /**
      * Filter by params
      *
-     * @param \Cake\ORM\Query $query Query object
+     * @param \Cake\Datasource\QueryInterface $query Query object
      * @param \Cake\Http\ServerRequest $request Server request
-     * @return array
+     * @return array<string, mixed>
      */
-    public function filter(Query $query, ServerRequest $request)
+    public function filter(QueryInterface $query, ServerRequest $request): array
     {
         $ret = [];
 
@@ -226,7 +228,7 @@ class UsersTable extends Table
      * @param \App\Model\Entity\User $user User entity.
      * @return bool
      */
-    public function sendResetEmail($user)
+    public function sendResetEmail(User $user): bool
     {
         $email = new Mailer('default');
         $email->setFrom([Configure::read('App.fromEmail.from') => Configure::read('App.fromEmail.name')]);
@@ -247,29 +249,17 @@ class UsersTable extends Table
      * Fetch users for specified company
      *
      * @param string $companyId Company id
-     * @param array $options Array of options
-     * @return array
+     * @param array<string, mixed> $options Array of options
+     * @return array<\App\Model\Entity\User>
      */
-    public function fetchForCompany($companyId, $options = [])
+    public function fetchForCompany(string $companyId, array $options = []): array
     {
-        // $groupByDepartment = false, $includeInactive = false
         $defaultOptions = [
-            'group' => true,
             'inactive' => false,
-            'hidden' => false,
-            'department' => null,
         ];
         $options = array_merge($defaultOptions, $options);
 
-        $listOptions = [
-            'keyField' => 'id',
-            'valueField' => function ($e) {
-                return $e;
-            },
-        ];
-
-        $query = $this->find('list', $listOptions);
-
+        $query = $this->find('list', keyField: 'id', valueField: fn ($e) => $e);
         $query->where(['Users.company_id' => $companyId]);
 
         if (!$options['inactive']) {

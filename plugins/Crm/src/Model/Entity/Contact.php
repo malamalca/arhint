@@ -20,8 +20,8 @@ use Cake\ORM\Entity;
  * @property string|null $company_id
  * @property string|null $job
  * @property bool $syncable
- * @property \Cake\I18n\FrozenTime|null $created
- * @property \Cake\I18n\FrozenTime|null $modified
+ * @property \Cake\I18n\DateTime|null $created
+ * @property \Cake\I18n\DateTime|null $modified
  *
  * @property \Crm\Model\Entity\Contact $company
  * @property \Crm\Model\Entity\ContactsAccount|null $primary_account
@@ -41,7 +41,7 @@ class Contact extends Entity
      *
      * @var array<string, bool>
      */
-    protected $_accessible = [
+    protected array $_accessible = [
         '*' => true,
         'id' => false,
     ];

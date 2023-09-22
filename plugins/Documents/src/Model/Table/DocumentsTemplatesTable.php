@@ -13,7 +13,7 @@ use Cake\Validation\Validator;
 /**
  * DocumentsTemplates Model
  *
- * @method \Documents\Model\Entity\DocumentsTemplate get($primaryKey, array $options = [])
+ * @method \Documents\Model\Entity\DocumentsTemplate get(mixed $primaryKey, array|string $finder = 'all', \Psr\SimpleCache\CacheInterface|string|null $cache = null, \Closure|string|null $cacheKey = null, mixed ...$args)
  * @method \Documents\Model\Entity\DocumentsTemplate newEmptyEntity()
  * @method \Documents\Model\Entity\DocumentsTemplate patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
  */
@@ -22,7 +22,7 @@ class DocumentsTemplatesTable extends Table
     /**
      * Initialize method
      *
-     * @param array $config The configuration for the Table.
+     * @param array<string, mixed> $config List of options for this table.
      * @return void
      */
     public function initialize(array $config): void
@@ -74,7 +74,7 @@ class DocumentsTemplatesTable extends Table
      * @param \ArrayObject $options Options array.
      * @return bool
      */
-    public function beforeSave(Event $event, Entity $entity, ArrayObject $options)
+    public function beforeSave(Event $event, Entity $entity, ArrayObject $options): bool
     {
         if (
             !$this->exists([
@@ -97,7 +97,7 @@ class DocumentsTemplatesTable extends Table
      * @param \ArrayObject $options Options array.
      * @return void
      */
-    public function afterSave(Event $event, Entity $entity, ArrayObject $options)
+    public function afterSave(Event $event, Entity $entity, ArrayObject $options): void
     {
         if ($entity->main) {
             $this->updateAll(['main' => false], [
@@ -117,7 +117,7 @@ class DocumentsTemplatesTable extends Table
      * @param string $ownerId User Id.
      * @return bool
      */
-    public function isOwnedBy($entityId, $ownerId)
+    public function isOwnedBy(string $entityId, string $ownerId): bool
     {
         return $this->exists(['id' => $entityId, 'owner_id' => $ownerId]);
     }
@@ -126,9 +126,9 @@ class DocumentsTemplatesTable extends Table
      * List templates by kind for specified owner.
      *
      * @param string $ownerId User Id.
-     * @return array
+     * @return array<\Documents\Model\Entity\DocumentsTemplate>
      */
-    public function findForOwner($ownerId)
+    public function findForOwner(string $ownerId): array
     {
         // In a controller or table method.
         $query = $this->find('list', [

@@ -3,8 +3,10 @@ declare(strict_types=1);
 
 namespace Documents\Event;
 
+use ArrayObject;
+use Cake\Event\Event;
 use Cake\Event\EventListenerInterface;
-use Cake\I18n\FrozenTime;
+use Cake\I18n\DateTime;
 use Cake\ORM\TableRegistry;
 use Cake\Routing\Router;
 use Documents\Lib\DocumentsSidebar;
@@ -35,7 +37,7 @@ class DocumentsEvents implements EventListenerInterface
      * @param \Cake\Event\Event $event Event object.
      * @return void
      */
-    public function hourlyEmail($event)
+    public function hourlyEmail(Event $event): void
     {
         $panels = $event->getData('panels');
 
@@ -48,7 +50,7 @@ class DocumentsEvents implements EventListenerInterface
             ->contain(['Projects'])
             ->where([
                 'Documents.owner_id' => $user->company_id,
-                'Documents.created >' => (new FrozenTime())->addHours(-1),
+                'Documents.created >' => (new DateTime())->addHours(-1),
             ])
             ->order(['Documents.created'])
             ->all();
@@ -86,8 +88,9 @@ class DocumentsEvents implements EventListenerInterface
      * @param \ArrayObject $panels Panels data.
      * @return void
      */
-    public function dashboardPanels($event, $panels)
+    public function dashboardPanels(Event $event, ArrayObject $panels): void
     {
+        /** @var \App\View\AppView $view */
         $view = $event->getSubject();
 
         /** @var \App\Model\Entity\User $user */
@@ -138,8 +141,9 @@ class DocumentsEvents implements EventListenerInterface
      * @param \Cake\Event\Event $event Event object.
      * @return void
      */
-    public function addScripts($event)
+    public function addScripts(Event $event): void
     {
+        /** @var \App\View\AppView $view */
         $view = $event->getSubject();
         $view->append('script');
         echo $view->Html->css('Documents.documents');
@@ -157,7 +161,7 @@ class DocumentsEvents implements EventListenerInterface
      * @param \ArrayObject $sidebar Sidebar object.
      * @return void
      */
-    public function modifySidebar($event, $sidebar)
+    public function modifySidebar(Event $event, ArrayObject $sidebar): void
     {
         DocumentsSidebar::setAdminSidebar($event, $sidebar);
     }
@@ -166,11 +170,12 @@ class DocumentsEvents implements EventListenerInterface
      * Add documents list to Contact and Project view page.
      *
      * @param \Cake\Event\Event $event Event object.
-     * @param \Lil\Lib\LilPanels $panels Panels object.
-     * @return \Lil\Lib\LilPanels
+     * @param mixed $panels Panels object.
+     * @return mixed
      */
-    public function showDocumentsTable($event, $panels)
+    public function showDocumentsTable(Event $event, mixed $panels): mixed
     {
+        /** @var \App\View\AppView $view */
         $view = $event->getSubject();
 
         $invoicesTab = sprintf(

@@ -8,12 +8,12 @@ use Cake\TestSuite\Fixture\TestFixture;
  */
 class ContactsPhonesFixture extends TestFixture
 {
-   /**
+    /**
      * Records
      *
      * @var array
      */
-    public $records = [
+    public array $records = [
         [
             'id' => '1',
             'contact_id' => COMPANY_FIRST,

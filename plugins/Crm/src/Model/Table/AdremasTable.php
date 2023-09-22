@@ -12,7 +12,7 @@ use Cake\Validation\Validator;
  *
  * @method \Crm\Model\Entity\Adrema newEmptyEntity()
  * @method \Crm\Model\Entity\Adrema newEntity(array $data, array $options = [])
- * @method \Crm\Model\Entity\Adrema get($primaryKey, array $options = [])
+ * @method \Crm\Model\Entity\Adrema get(mixed $primaryKey, array|string $finder = 'all', \Psr\SimpleCache\CacheInterface|string|null $cache = null, \Closure|string|null $cacheKey = null, mixed ...$args)
  * @method \Crm\Model\Entity\Adrema patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
  */
 class AdremasTable extends Table
@@ -20,7 +20,7 @@ class AdremasTable extends Table
     /**
      * Initialize method
      *
-     * @param array $config The configuration for the Table.
+     * @param array<string, mixed> $config List of options for this table.
      * @return void
      */
     public function initialize(array $config): void
@@ -57,13 +57,13 @@ class AdremasTable extends Table
     /**
      * Checks if entity belongs to user.
      *
-     * @param string $entityId Entity Id.
-     * @param string $ownerId User Id.
+     * @param string|null $entityId Entity Id.
+     * @param string|null $ownerId User Id.
      * @return bool
      */
-    public function isOwnedBy($entityId, $ownerId)
+    public function isOwnedBy(?string $entityId, ?string $ownerId): bool
     {
-        return $this->exists(['id' => $entityId, 'owner_id' => $ownerId]);
+        return !empty($entityId) && !empty($ownerId) && $this->exists(['id' => $entityId, 'owner_id' => $ownerId]);
     }
 
     /**
@@ -73,7 +73,7 @@ class AdremasTable extends Table
      * @param string $destId Destination's adrema id.
      * @return void
      */
-    public function copyAddresses($sourceId, $destId)
+    public function copyAddresses(string $sourceId, string $destId): void
     {
         $AdremasContacts = TableRegistry::getTableLocator()->get('Crm.AdremasContacts');
 

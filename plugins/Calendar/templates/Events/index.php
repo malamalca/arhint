@@ -1,12 +1,12 @@
 <?php
-use Cake\I18n\FrozenDate;
+use Cake\I18n\Date;
 use Cake\Routing\Router;
 
 if (empty($filter['month'])) {
-    $filter['month'] = (new FrozenDate())->format('Y-m');
+    $filter['month'] = (new Date())->format('Y-m');
 }
 
-$firstDayOfMonth = (new FrozenDate())->parse($filter['month'] . '-01');
+$firstDayOfMonth = (new Date())->parse($filter['month'] . '-01');
 
 $title = $firstDayOfMonth->i18nFormat('MMMM YYYY');
 
@@ -16,10 +16,10 @@ $buttons = sprintf(
     '<a href="%2$s" id="go-next" class="btn waves-effect waves-light">></a> ' .
     '<a href="%4$s" id="go-today" class="btn waves-effect waves-light">%3$s</a>' .
     '</div>',
-    Router::url(['?' => array_merge($filter, ['month' => $firstDayOfMonth->addMonth(-1)->format('Y-m')])]),
-    Router::url(['?' => array_merge($filter, ['month' => $firstDayOfMonth->addMonth(+1)->format('Y-m')])]),
+    Router::url(['?' => array_merge($filter, ['month' => $firstDayOfMonth->addMonths(-1)->format('Y-m')])]),
+    Router::url(['?' => array_merge($filter, ['month' => $firstDayOfMonth->addMonths(+1)->format('Y-m')])]),
     __d('calendar', 'Today'),
-    Router::url(['?' => array_merge($filter, ['month' => (new FrozenDate())->format('Y-m')])])
+    Router::url(['?' => array_merge($filter, ['month' => (new Date())->format('Y-m')])])
 );
 
 
@@ -75,11 +75,11 @@ foreach ($events as $event) {
     $endDate = $event->dat_end ?? $event->dat_start;
 
     // when event spans across multiple weeks
-    $currentFirstDayOfWeek = $event->dat_start->startOfWeek()->addWeek(1);
-    while($currentFirstDayOfWeek->lte($endDate)) {
+    $currentFirstDayOfWeek = $event->dat_start->startOfWeek()->addWeeks(1);
+    while($currentFirstDayOfWeek->lessThanOrEquals($endDate)) {
         $eventsByDay[$currentFirstDayOfWeek->format('Y-m-d')][] = $event;
 
-        $currentFirstDayOfWeek = $currentFirstDayOfWeek->addWeek(1);
+        $currentFirstDayOfWeek = $currentFirstDayOfWeek->addWeeks(1);
     }
 }
 
@@ -92,10 +92,10 @@ for ($weekNo = 1; $weekNo <= $weeksInMonth; $weekNo++) {
     for ($dow = 0; $dow < 7; $dow++) {
         $dayClasses = ['calendar-box', 'calendar-day'];
 
-        if ($currentDay->lt($firstDayOfMonth)) {
+        if ($currentDay->lessThan($firstDayOfMonth)) {
             $dayClasses[] = 'prev-month';
         }
-        if ($currentDay->gt($firstDayOfMonth->endOfMonth())) {
+        if ($currentDay->greaterThan($firstDayOfMonth->endOfMonth())) {
             $dayClasses[] = 'next-month';
         }
         if ($currentDay->isSunday()) {
@@ -137,7 +137,7 @@ for ($weekNo = 1; $weekNo <= $weeksInMonth; $weekNo++) {
                 // event duration multiple days
                 if ($endDate->diffInDays($event->dat_start) > 0) {
                     $eventClasses[] = 'datespan';
-                    if ($endDate->lte($currentDay->endOfWeek())) {
+                    if ($endDate->lessThanOrEquals($currentDay->endOfWeek())) {
                         $eventClasses[] = 'datespan-' . ($endDate->diffInDays($currentDay)+1);
                     } else {
                         $eventClasses[] = 'datespan-' . ($currentDay->endOfWeek()->diffInDays($currentDay)+1);

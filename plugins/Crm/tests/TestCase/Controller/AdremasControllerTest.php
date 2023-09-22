@@ -19,7 +19,7 @@ class AdremasControllerTest extends TestCase
      *
      * @var array
      */
-    public $fixtures = [
+    public array $fixtures = [
         'Adremas' => 'plugin.Crm.Adremas',
         'AdremasContacts' => 'plugin.Crm.AdremasContacts',
         'Users' => 'app.Users',

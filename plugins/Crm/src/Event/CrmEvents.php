@@ -3,10 +3,13 @@ declare(strict_types=1);
 
 namespace Crm\Event;
 
+use ArrayObject;
 use Cake\Core\Configure;
+use Cake\Event\Event;
 use Cake\Event\EventListenerInterface;
 use Cake\Routing\Router;
 use Crm\Lib\CrmSidebar;
+use Lil\Lib\LilForm;
 
 class CrmEvents implements EventListenerInterface
 {
@@ -31,10 +34,8 @@ class CrmEvents implements EventListenerInterface
      * @param \Lil\Lib\LilForm $form Form array
      * @return void
      */
-    public function addAutocompleteToEmail($event, $form)
+    public function addAutocompleteToEmail(Event $event, LilForm $form): void
     {
-        $view = $event->getSubject();
-
         $link = Router::url([
             'plugin' => 'Crm',
             'controller' => 'Contacts',
@@ -52,8 +53,9 @@ class CrmEvents implements EventListenerInterface
      * @param \Cake\Event\Event $event Event.
      * @return void
      */
-    public function addScripts($event)
+    public function addScripts(Event $event): void
     {
+        /** @var \App\View\AppView $view */
         $view = $event->getSubject();
         $view->append('script');
         echo $view->Html->css('Crm.crm');
@@ -71,9 +73,8 @@ class CrmEvents implements EventListenerInterface
      * @param \ArrayObject $sidebar Sidebar.
      * @return void
      */
-    public function modifySidebar($event, $sidebar)
+    public function modifySidebar(Event $event, ArrayObject $sidebar): void
     {
-        $ret = $sidebar;
         if (Configure::read('Crm.showSidebar')) {
             CrmSidebar::setAdminSidebar($event, $sidebar);
         }

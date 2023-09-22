@@ -3,7 +3,9 @@ declare(strict_types=1);
 
 namespace Documents\Policy;
 
+use App\Model\Entity\User;
 use Cake\ORM\TableRegistry;
+use Documents\Model\Entity\DocumentsClient;
 
 /**
  * DocumentsClient Policy Resolver
@@ -17,12 +19,12 @@ class DocumentsClientPolicy
      * @param \Documents\Model\Entity\DocumentsClient $entity Entity
      * @return bool
      */
-    public function canView($user, $entity)
+    public function canView(User $user, DocumentsClient $entity): bool
     {
-        /** @var \Documents\Model\Table\DocumentsClientsTable $DocumentsClientsTable */
-        $DocumentsClientsTable = TableRegistry::getTableLocator()->get('Documents.DocumentsClients');
+        /** @var \Documents\Model\Table\DocumentsClientsTable $DocumentsClients */
+        $DocumentsClients = TableRegistry::getTableLocator()->get('Documents.DocumentsClients');
 
-        return $DocumentsClientsTable->isOwnedBy($entity, $user->company_id);
+        return $DocumentsClients->isOwnedBy($entity, $user->company_id);
     }
 
     /**
@@ -32,10 +34,10 @@ class DocumentsClientPolicy
      * @param \Documents\Model\Entity\DocumentsClient $entity Entity
      * @return bool
      */
-    public function canEdit($user, $entity)
+    public function canEdit(User $user, DocumentsClient $entity): bool
     {
-        /** @var \Documents\Model\Table\DocumentsClientsTable $DocumentsClientsTable */
-        $DocumentsClientsTable = TableRegistry::getTableLocator()->get('Documents.DocumentsClients');
+        //@var \Documents\Model\Table\DocumentsClientsTable $DocumentsClientsTable */
+        //$DocumentsClientsTable = TableRegistry::getTableLocator()->get('Documents.DocumentsClients');
 
         return /*$DocumentsClientsTable->isOwnedBy($entity, $user->company_id) && */$user->hasRole('editor');
     }

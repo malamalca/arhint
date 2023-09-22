@@ -1,6 +1,6 @@
 <?php
 
-use Cake\I18n\FrozenDate;
+use Cake\I18n\Date;
 use Cake\Routing\Router;
 
 $linkUnfinished = $this->Html->link(
@@ -114,7 +114,7 @@ foreach ($importedPayments as $p) {
             'columns' => [
                 'date' => [
                     'parameters' => ['class' => 'center-align'],
-                    'html' => (string)FrozenDate::parseDate($p['date'], 'yyyy-MM-dd'),
+                    'html' => (string)Date::parseDate($p['date'], 'yyyy-MM-dd'),
                 ],
                 'amount' => [
                     'parameters' => ['class' => 'right-align' . ($p['kind'] == 'DBIT' ? ' negative' : '')],

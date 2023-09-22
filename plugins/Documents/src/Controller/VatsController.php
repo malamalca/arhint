@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace Documents\Controller;
 
+use Cake\Http\Response;
+
 /**
  * Vats Controller
  *
@@ -13,7 +15,7 @@ class VatsController extends AppController
     /**
      * Index method
      *
-     * @return \Cake\Http\Response|null
+     * @return \Cake\Http\Response|void
      */
     public function index()
     {
@@ -21,8 +23,6 @@ class VatsController extends AppController
             ->order('descript')
             ->all();
         $this->set(compact('vats'));
-
-        return null;
     }
 
     /**
@@ -32,7 +32,7 @@ class VatsController extends AppController
      * @return \Cake\Http\Response|null
      * @throws \Cake\Http\Exception\NotFoundException When record not found.
      */
-    public function edit($id = null)
+    public function edit(?string $id = null): ?Response
     {
         if (empty($id)) {
             $vat = $this->Vats->newEmptyEntity();
@@ -67,7 +67,7 @@ class VatsController extends AppController
      * @return \Cake\Http\Response|null
      * @throws \Cake\Http\Exception\NotFoundException When record not found.
      */
-    public function delete($id = null)
+    public function delete(?string $id = null): ?Response
     {
         $vat = $this->Vats->get($id);
         $this->Authorization->authorize($vat);

@@ -5,7 +5,9 @@ namespace Projects\Model\Table;
 
 use ArrayObject;
 use Cake\Cache\Cache;
+use Cake\Database\Expression\QueryExpression;
 use Cake\Event\Event;
+use Cake\ORM\Query\SelectQuery;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
@@ -17,7 +19,7 @@ use Projects\Model\Entity\Project;
  *
  * @property \Projects\Model\Table\ProjectsLogsTable|\Cake\ORM\Association\HasMany $ProjectsLogs
  * @property \Projects\Model\Table\ProjectsStatusesTable|\Cake\ORM\Association\HasMany $ProjectsStatuses
- * @method \Projects\Model\Entity\Project get($primaryKey, $options = [])
+ * @method \Projects\Model\Entity\Project get(mixed $primaryKey, array|string $finder = 'all', \Psr\SimpleCache\CacheInterface|string|null $cache = null, \Closure|string|null $cacheKey = null, mixed ...$args)
  * @method \Projects\Model\Entity\Project newEntity($data = null, array $options = [])
  * @method \Projects\Model\Entity\Project newEmptyEntity(array $options = [])
  * @method \Projects\Model\Entity\Project[] newEntities(array $data, array $options = [])
@@ -32,7 +34,7 @@ class ProjectsTable extends Table
     /**
      * Initialize method
      *
-     * @param array $config The configuration for the Table.
+     * @param array<string, mixed> $config List of options for this table.
      * @return void
      */
     public function initialize(array $config): void
@@ -67,11 +69,9 @@ class ProjectsTable extends Table
         $this->hasOne('LastLog', [
             'foreignKey' => false,
             'className' => 'Projects.ProjectsLogs',
-            'conditions' => function (\Cake\Database\Expression\QueryExpression $exp, \Cake\ORM\Query $query) {
-                $subquery = $query
-                    ->getConnection()
-                    ->newQuery()
-                    ->select(['SubLastLog.id'])
+            'conditions' => function (QueryExpression $exp, SelectQuery $query) {
+                $subquery = clone $query;
+                $subquery->select(['SubLastLog.id'])
                     ->from(['SubLastLog' => 'projects_logs'])
                     ->where(['Projects.id = SubLastLog.project_id'])
                     ->order(['SubLastLog.created' => 'DESC'])
@@ -136,22 +136,22 @@ class ProjectsTable extends Table
     /**
      * Checks if entity belongs to user.
      *
-     * @param string $entityId Entity Id.
-     * @param string $ownerId User Id.
+     * @param string|null $entityId Entity Id.
+     * @param string|null $ownerId User Id.
      * @return bool
      */
-    public function isOwnedBy($entityId, $ownerId)
+    public function isOwnedBy(?string $entityId, ?string $ownerId): bool
     {
-        return $this->exists(['id' => $entityId, 'owner_id' => $ownerId]);
+        return !empty($entityId) && !empty($ownerId) && $this->exists(['id' => $entityId, 'owner_id' => $ownerId]);
     }
 
     /**
      * filter method
      *
-     * @param array $filter Filter data.
-     * @return array
+     * @param array<string, mixed> $filter Filter data.
+     * @return array<string, mixed>
      */
-    public function filter(&$filter)
+    public function filter(array &$filter): array
     {
         $ret = ['conditions' => [], 'contain' => []];
 
@@ -188,7 +188,7 @@ class ProjectsTable extends Table
      * @param \ArrayObject $options Array object.
      * @return void
      */
-    public function afterSave(Event $event, Project $project, ArrayObject $options)
+    public function afterSave(Event $event, Project $project, ArrayObject $options): void
     {
         Cache::delete('Projects.projectsList.' . $project->owner_id);
     }
@@ -201,7 +201,7 @@ class ProjectsTable extends Table
      * @param \ArrayObject $options Array object.
      * @return void
      */
-    public function afterDelete(Event $event, Project $project, ArrayObject $options)
+    public function afterDelete(Event $event, Project $project, ArrayObject $options): void
     {
         Cache::delete('Projects.projectsList.' . $project->owner_id);
     }
@@ -209,14 +209,18 @@ class ProjectsTable extends Table
     /**
      * List projects by kind for specified owner.
      *
-     * @param string $ownerId Users Company Id.
-     * @param \Cake\ORM\Query $query Query object.
-     * @return array
+     * @param string|null $ownerId Users Company Id.
+     * @param \Cake\ORM\Query\SelectQuery $query Query object.
+     * @return array<\Projects\Model\Entity\Project>
      */
-    public function findForOwner($ownerId, $query = null)
+    public function findForOwner(?string $ownerId, ?SelectQuery $query = null): array
     {
         if (empty($query)) {
             $query = $this->find();
+        }
+
+        if (empty($ownerId)) {
+            return [];
         }
 
         $data = Cache::remember(

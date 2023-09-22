@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace Calendar\Controller;
 
+use Cake\Http\Response;
+
 /**
  * Events Controller
  *
@@ -14,7 +16,7 @@ class EventsController extends AppController
     /**
      * Index method
      *
-     * @return \Cake\Http\Response|null|void Renders view
+     * @return \Cake\Http\Response|void Renders view
      */
     public function index()
     {
@@ -45,10 +47,10 @@ class EventsController extends AppController
      * View method
      *
      * @param string|null $id Event id.
-     * @return \Cake\Http\Response|null|void Renders view
+     * @return \Cake\Http\Response|void Renders view
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function view($id = null)
+    public function view(?string $id = null)
     {
         $event = $this->Events->get($id);
 
@@ -61,10 +63,10 @@ class EventsController extends AppController
      * Edit method
      *
      * @param string|null $id Event id.
-     * @return \Cake\Http\Response|null|void Redirects on successful edit, renders view otherwise.
+     * @return \Cake\Http\Response|null
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function edit($id = null)
+    public function edit(?string $id = null): ?Response
     {
         if ($id) {
             $event = $this->Events->get($id);
@@ -100,16 +102,18 @@ class EventsController extends AppController
         }
 
         $this->set(compact('event'));
+
+        return null;
     }
 
     /**
      * Delete method
      *
      * @param string|null $id Event id.
-     * @return \Cake\Http\Response|null|void Redirects to index.
+     * @return \Cake\Http\Response|null
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function delete($id = null)
+    public function delete(?string $id = null): ?Response
     {
         $this->request->allowMethod(['post', 'delete', 'get']);
         $event = $this->Events->get($id);

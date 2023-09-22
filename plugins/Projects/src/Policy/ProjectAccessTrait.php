@@ -3,21 +3,27 @@ declare(strict_types=1);
 
 namespace Projects\Policy;
 
+use App\Model\Entity\User;
 use Cake\ORM\TableRegistry;
+use Projects\Model\Entity\Project;
 
 trait ProjectAccessTrait
 {
     /**
      * Check if user has access to specified project.
      *
-     * @param \Projects\Model\Entity\Project|string $project Project entity or project id
+     * @param \Projects\Model\Entity\Project|string|null $project Project entity or project id
      * @param \App\Model\Entity\User $user User
      * @return bool
      */
-    public function canAccess($project, $user)
+    public function canAccess(Project|string|null $project, User $user): bool
     {
+        if (empty($project)) {
+            return false;
+        }
+
         $projectId = $project;
-        if ($project instanceof \Projects\Model\Entity\Project) {
+        if ($project instanceof Project) {
             $projectId = $project->id;
 
             if (!$project->owner_id == $user->company_id) {

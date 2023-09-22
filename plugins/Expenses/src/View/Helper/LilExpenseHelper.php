@@ -5,6 +5,7 @@ namespace Expenses\View\Helper;
 
 use Cake\Core\Plugin;
 use Cake\View\Helper;
+use Expenses\Model\Entity\Expense;
 
 /**
  * LilExpenseHelper class
@@ -14,7 +15,10 @@ use Cake\View\Helper;
  */
 class LilExpenseHelper extends Helper
 {
-    public $helpers = ['Html', 'Number'];
+    /**
+     * @var array<string> $helpers
+     */
+    protected array $helpers = ['Html', 'Number'];
 
     /**
      * Build Expense icon
@@ -22,7 +26,7 @@ class LilExpenseHelper extends Helper
      * @param \Expenses\Model\Entity\Expense $expense Expense entity.
      * @return string
      */
-    public function icon($expense)
+    public function icon(Expense $expense): string
     {
         $icon = '';
         // linked models
@@ -48,7 +52,7 @@ class LilExpenseHelper extends Helper
      * @param bool $forceExpenseView Force expense view
      * @return string
      */
-    public function link($expense, $forceExpenseView = false)
+    public function link(Expense $expense, bool $forceExpenseView = false): string
     {
         $title = $expense->title;
         if (empty($title)) {
@@ -78,7 +82,7 @@ class LilExpenseHelper extends Helper
                         $link = sprintf(
                             $i_caption,
                             $link = $this->Html->link(
-                                !empty($expense->invoice->no) ? $expense->invoice->no : __d('expenses', 'N/A'),
+                                strlen($expense->invoice->no) == 0 ? __d('expenses', 'N/A') : $expense->invoice->no,
                                 [
                                     'plugin' => 'Documents',
                                     'controller' => 'Invoices',
@@ -102,7 +106,7 @@ class LilExpenseHelper extends Helper
      * @param \Expenses\Model\Entity\Expense $expense Expense with linked models
      * @return string
      */
-    public function title($expense)
+    public function title(Expense $expense): string
     {
         // this is default expense link
         $title = $expense->title;
@@ -134,7 +138,7 @@ class LilExpenseHelper extends Helper
      * @param \Expenses\Model\Entity\Expense $expense Expense with linked models
      * @return string
      */
-    public function label($expense)
+    public function label(Expense $expense): string
     {
         // this is default expense link
         $template =

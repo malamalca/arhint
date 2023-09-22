@@ -5,6 +5,7 @@ namespace Expenses\Lib;
 
 use Cake\Cache\Cache;
 use Cake\ORM\TableRegistry;
+use Cake\Utility\Exception\XmlException;
 use Cake\Utility\Xml;
 use DirectoryIterator;
 use ZipArchive;
@@ -14,7 +15,7 @@ class ExpensesImport
     /**
      * @var string $ownerId Owner id.
      */
-    private $ownerId;
+    private string $ownerId;
 
     /**
      * Default contructor
@@ -22,7 +23,7 @@ class ExpensesImport
      * @param string $ownerId Owner id.
      * @return void
      */
-    public function __construct($ownerId)
+    public function __construct(string $ownerId)
     {
         $this->ownerId = $ownerId;
     }
@@ -30,9 +31,9 @@ class ExpensesImport
     /**
      * Read payments from cache
      *
-     * @return array
+     * @return array<string, mixed>
      */
-    public function getPayments()
+    public function getPayments(): array
     {
         $cachedPayments = Cache::remember(
             'Expenses.sepaImportedPayments' . $this->ownerId,
@@ -63,7 +64,7 @@ class ExpensesImport
      *
      * @return void
      */
-    public function clear()
+    public function clear(): void
     {
         Cache::delete('Expenses.sepaImportedPayments' . $this->ownerId);
     }
@@ -75,13 +76,13 @@ class ExpensesImport
      * @param string $ext File extension
      * @return void
      */
-    public function addFromFile($filename, $ext)
+    public function addFromFile(string $filename, string $ext): void
     {
         switch ($ext) {
             case 'zip':
                 $zip = new ZipArchive();
                 if ($zip->open($filename) === true) {
-                    $tempDir = tempnam(sys_get_temp_dir(), '');
+                    $tempDir = (string)tempnam(sys_get_temp_dir(), '');
                     if (file_exists($tempDir)) {
                         unlink($tempDir);
                     }
@@ -115,12 +116,12 @@ class ExpensesImport
      * @param string $filename XML filename.
      * @return bool
      */
-    public function addFromXml($filename)
+    public function addFromXml(string $filename): bool
     {
         if (file_exists($filename)) {
             try {
-                $xmlObject = Xml::build(file_get_contents($filename));
-            } catch (\Cake\Utility\Exception\XmlException $e) {
+                $xmlObject = Xml::build((string)file_get_contents($filename));
+            } catch (XmlException $e) {
                 return false;
             }
             $importedPayments = Xml::toArray($xmlObject);

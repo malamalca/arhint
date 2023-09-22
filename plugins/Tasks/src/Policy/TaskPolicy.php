@@ -3,6 +3,9 @@ declare(strict_types=1);
 
 namespace Tasks\Policy;
 
+use App\Model\Entity\User;
+use Tasks\Model\Entity\Task;
+
 /**
  * Task Policy Resolver
  */
@@ -15,7 +18,7 @@ class TaskPolicy
      * @param \Tasks\Model\Entity\Task $entity Entity
      * @return bool
      */
-    public function canView($user, $entity)
+    public function canView(User $user, Task $entity): bool
     {
         return $entity->owner_id == $user->company_id;
     }
@@ -27,7 +30,7 @@ class TaskPolicy
      * @param \Tasks\Model\Entity\Task $entity Entity
      * @return bool
      */
-    public function canEdit($user, $entity)
+    public function canEdit(User $user, Task $entity): bool
     {
         return $entity->owner_id == $user->company_id;
     }
@@ -39,7 +42,7 @@ class TaskPolicy
      * @param \Tasks\Model\Entity\Task $entity Entity
      * @return bool
      */
-    public function canDelete($user, $entity)
+    public function canDelete(User $user, Task $entity): bool
     {
         return $entity->owner_id == $user->company_id;
     }

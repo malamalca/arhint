@@ -3,14 +3,15 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use Cake\Event\EventInterface;
 use Cake\Http\Exception\NotFoundException;
+use Cake\Http\Response;
 
 /**
  * Users Controller
  *
  * @property \App\Model\Table\UsersTable $Users
- * @property \Cake\Controller\Component\SecurityComponent $Security
- * @method \Cake\Datasource\ResultSetInterface|\Cake\ORM\ResultSet paginate($object = null, array $settings = [])
+ * @method \Cake\Datasource\Paging\PaginatedInterface paginate($object = null, array $settings = [])
  */
 class UsersController extends AppController
 {
@@ -18,41 +19,34 @@ class UsersController extends AppController
      * BeforeFilter method.
      *
      * @param \Cake\Event\EventInterface $event Cake Event object.
-     * @return \Cake\Http\Response|void|null
+     * @return void
      */
-    public function beforeFilter($event)
+    public function beforeFilter(EventInterface $event)
     {
         parent::beforeFilter($event);
 
         $this->Authentication->allowUnauthenticated(['login', 'reset', 'changePassword', 'avatar']);
 
         if ($this->getRequest()->getParam('action') == 'login') {
-            $this->Security->setConfig('validatePost', false);
+            $this->FormProtection->setConfig('validate', false);
         }
     }
 
     /**
      * This method will display login form
      *
-     * @return \Cake\Http\Response|void|null
+     * @return \Cake\Http\Response|null
      */
-    public function login()
+    public function login(): ?Response
     {
         $this->Authorization->skipAuthorization();
 
         $result = $this->Authentication->getResult();
 
         // regardless of POST or GET, redirect if user is logged in
-        if ($result->isValid()) {
+        if ($result && $result->isValid()) {
             /** @var \App\Model\Entity\User $user */
             $user = $this->Authentication->getIdentity();
-
-            /*$this->loadModel('AuditLogins');
-            $auditLogin = $this->AuditLogins->newEntity([]);
-            $auditLogin->user_id = $user->id;
-            $auditLogin->date = new FrozenTime();
-            $auditLogin->ip = $this->getRequest()->clientIp();
-            $this->AuditLogins->save($auditLogin);*/
 
             $redirect = $user->login_redirect ?? $this->Authentication->getLoginRedirect();
             if (empty($redirect)) {
@@ -63,7 +57,7 @@ class UsersController extends AppController
         }
 
         // display error if user submitted and authentication failed
-        if ($this->getRequest()->is(['post']) && $result->isValid() !== true) {
+        if ($this->getRequest()->is(['post']) && (!$result || $result->isValid() !== true)) {
             $this->Flash->error('Invalid username or password');
         }
 
@@ -73,12 +67,11 @@ class UsersController extends AppController
     /**
      * Logout method
      *
-     * @return \Cake\Http\Response|void|null
+     * @return \Cake\Http\Response|null
      */
-    public function logout()
+    public function logout(): ?Response
     {
         $this->Authorization->skipAuthorization();
-
         $this->Authentication->logout();
 
         return $this->redirect('/');
@@ -87,9 +80,9 @@ class UsersController extends AppController
     /**
      * Reset method
      *
-     * @return \Cake\Http\Response|void|null
+     * @return \Cake\Http\Response|null
      */
-    public function reset()
+    public function reset(): ?Response
     {
         $this->Authorization->skipAuthorization();
 
@@ -118,9 +111,9 @@ class UsersController extends AppController
      * Change users password
      *
      * @param string $resetKey Auto generated reset key.
-     * @return \Cake\Http\Response|void|null
+     * @return \Cake\Http\Response|null
      */
-    public function changePassword($resetKey = null)
+    public function changePassword(?string $resetKey = null): ?Response
     {
         $this->Authorization->skipAuthorization();
 
@@ -158,14 +151,14 @@ class UsersController extends AppController
     /**
      * Index method
      *
-     * @return \Cake\Http\Response|void|null
+     * @return \Cake\Http\Response|null
      */
-    public function index()
+    public function index(): ?Response
     {
         $q = $this->Authorization->applyScope($this->Users->find())
             ->order('name');
 
-        $filter = $this->Users->filter($q, $this->getRequest());
+        $this->Users->filter($q, $this->getRequest());
         $users = $q->all();
 
         $this->set(compact('users'));
@@ -177,10 +170,10 @@ class UsersController extends AppController
      * View method
      *
      * @param string|null $id User id.
-     * @return \Cake\Http\Response|void|null
+     * @return \Cake\Http\Response|null
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function view($id = null)
+    public function view(?string $id = null): ?Response
     {
         $user = $this->Users->get($id);
 
@@ -198,10 +191,10 @@ class UsersController extends AppController
      * @return \Cake\Http\Response|null
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function loginAs($id)
+    public function loginAs(string $id): ?Response
     {
         $user = $this->Users->get($id);
-        $ret = $this->Authentication->setIdentity($user);
+        $this->Authentication->setIdentity($user);
 
         return $this->redirect('/');
     }
@@ -210,10 +203,10 @@ class UsersController extends AppController
      * Edit method
      *
      * @param string|null $id User id.
-     * @return \Cake\Http\Response|void|null
+     * @return \Cake\Http\Response|null
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function edit($id = null)
+    public function edit(?string $id = null): ?Response
     {
         if ($id) {
             $user = $this->Users->get($id);
@@ -244,10 +237,10 @@ class UsersController extends AppController
     /**
      * Properties method is for users editing their own data.
      *
-     * @return \Cake\Http\Response|void|null
+     * @return \Cake\Http\Response|null
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function properties()
+    public function properties(): ?Response
     {
         $user = $this->Users->get($this->getCurrentUser()->get('id'));
 
@@ -257,15 +250,14 @@ class UsersController extends AppController
             $user = $this->Users->patchEntity($user, $this->getRequest()->getData(), ['validate' => 'properties']);
 
             $avatarFile = $this->getRequest()->getData('avatar_file');
-            if (is_array($avatarFile)) {
-                if (isset($avatarFile['error'])) {
-                    if ($avatarFile['error'] == UPLOAD_ERR_OK) {
-                        $user->avatar = base64_encode(file_get_contents($avatarFile['tmp_name']));
-                    }
-                    if ($avatarFile['error'] == UPLOAD_ERR_NO_FILE) {
-                        unset($user->avatar);
-                        $user->setDirty('avatar', false);
-                    }
+            if ($avatarFile) {
+                if ($avatarFile->getError() == UPLOAD_ERR_OK) {
+                    $avatarData = (string)file_get_contents($avatarFile->getStream()->getMetadata('uri'));
+                    $user->avatar = base64_encode($avatarData);
+                }
+                if ($avatarFile->getError() == UPLOAD_ERR_NO_FILE) {
+                    unset($user->avatar);
+                    $user->setDirty('avatar', false);
                 }
             }
 
@@ -290,10 +282,10 @@ class UsersController extends AppController
      * Delete method
      *
      * @param string|null $id User id.
-     * @return \Cake\Http\Response|null Redirects to index.
+     * @return \Cake\Http\Response|null
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function delete($id = null)
+    public function delete(?string $id = null): ?Response
     {
         $this->getRequest()->allowMethod(['get']);
         $user = $this->Users->get($id);
@@ -312,10 +304,10 @@ class UsersController extends AppController
      * Avatar method
      *
      * @param string|null $id User id.
-     * @return \Cake\Http\Response|void
+     * @return \Cake\Http\Response
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function avatar($id = null)
+    public function avatar(?string $id = null): Response
     {
         if (!empty($id)) {
             $user = $this->Users->get($id);
@@ -331,7 +323,7 @@ class UsersController extends AppController
         }
 
         $response = $this->response
-            ->withStringBody($imageData)
+            ->withStringBody((string)$imageData)
             ->withType('png')
             ->withCache('-1 day', '+30 days');
 

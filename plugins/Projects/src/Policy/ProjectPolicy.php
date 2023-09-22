@@ -3,6 +3,9 @@ declare(strict_types=1);
 
 namespace Projects\Policy;
 
+use App\Model\Entity\User;
+use Projects\Model\Entity\Project;
+
 /**
  * Project Policy Resolver
  */
@@ -17,7 +20,7 @@ class ProjectPolicy
      * @param \Projects\Model\Entity\Project $project Entity
      * @return bool
      */
-    public function canView($user, $project)
+    public function canView(User $user, Project $project): bool
     {
         return $this->canAccess($project, $user);
     }
@@ -29,7 +32,7 @@ class ProjectPolicy
      * @param \Projects\Model\Entity\Project $project Entity
      * @return bool
      */
-    public function canEdit($user, $project)
+    public function canEdit(User $user, Project $project): bool
     {
         return $user->hasRole('admin') && $this->canAccess($project, $user);
     }
@@ -41,7 +44,7 @@ class ProjectPolicy
      * @param \Projects\Model\Entity\Project $project Entity
      * @return bool
      */
-    public function canUser($user, $project)
+    public function canUser(User $user, Project $project): bool
     {
         return $user->hasRole('admin') && $this->canAccess($project, $user);
     }
@@ -53,7 +56,7 @@ class ProjectPolicy
      * @param \Projects\Model\Entity\Project $entity Entity
      * @return bool
      */
-    public function canDelete($user, $entity)
+    public function canDelete(User $user, Project $entity): bool
     {
         return $entity->owner_id == $user->company_id && $user->hasRole('admin');
     }

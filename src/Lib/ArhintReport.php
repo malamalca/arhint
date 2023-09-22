@@ -8,6 +8,7 @@ use Cake\Event\EventManager;
 use Cake\Http\Exception\InternalErrorException;
 use Cake\Http\Response;
 use Cake\Utility\Hash;
+use Cake\View\View;
 use DirectoryIterator;
 use Lil\Lib\LilPdfFactory;
 
@@ -16,41 +17,37 @@ class ArhintReport
     /**
      * @var string $ext
      */
-    private $ext = null;
+    private ?string $ext = null;
     /**
      * @var \Cake\View\View $view
      */
-    private $view = null;
+    private View $view;
     /**
-     * @var array $pdfOptions
+     * @var array<string, mixed> $pdfOptions
      */
-    private $pdfOptions = null;
+    private ?array $pdfOptions = null;
     /**
      * @var string $lastError
      */
-    private $lastError = null;
+    private ?string $lastError = null;
 
     /**
      * Constructor
      *
      * @param string $template Template file with dot notation.
      * @param mixed $request Request object.
-     * @param array $pdfOptions Options that are passed to pdf engine.
+     * @param array<string, mixed> $pdfOptions Options that are passed to pdf engine.
      * @return void
      */
-    public function __construct($template, $request, $pdfOptions = [])
+    public function __construct(string $template, mixed $request, array $pdfOptions = [])
     {
         $this->pdfOptions = $pdfOptions;
 
         $viewClass = 'App\View\AppView';
-        $viewOptions = [];
-
-        //dd($request->getParam('plugin'));
 
         $this->view = new $viewClass($request, null, EventManager::instance(), []);
         $this->view->setSubDir('');
         $this->view->setTemplatePath('report');
-        //$this->view->enableAutoLayout(false);
 
         $templateName = strtr($template, '.', DS);
         $plugin = $request->getParam('plugin');
@@ -70,7 +67,7 @@ class ArhintReport
      * @param mixed $arguments Set arguments
      * @return void
      */
-    public function set($name, $arguments = null)
+    public function set(mixed $name, mixed $arguments = null): void
     {
         $this->view->set($name, $arguments);
     }
@@ -80,7 +77,7 @@ class ArhintReport
      *
      * @return string
      */
-    public function render()
+    public function render(): string
     {
         $outputHtml = $this->view->render();
 
@@ -92,10 +89,8 @@ class ArhintReport
      *
      * @return string
      */
-    public function export()
+    public function export(): string
     {
-        $result = null;
-
         $pdfEngine = Configure::read('Lil.pdfEngine');
         $pdfOptions = Configure::read('Lil.' . $pdfEngine);
 
@@ -130,7 +125,7 @@ class ArhintReport
      *
      * @return void
      */
-    private function clearReportCache()
+    private function clearReportCache(): void
     {
         foreach (new DirectoryIterator(constant('TMP')) as $fileInfo) {
             if ($fileInfo->isDot()) {
@@ -149,10 +144,10 @@ class ArhintReport
      * Returns Cake response object
      *
      * @param string $data Result of Export funtion.
-     * @param array $options Export options
+     * @param array<string, mixed> $options Export options
      * @return \Cake\Http\Response|string
      */
-    public function response($data, $options = [])
+    public function response(string $data, array $options = []): Response|string
     {
         $defaults = ['download' => false, 'filename' => 'documents'];
         $options = array_merge($defaults, $options);
@@ -185,48 +180,52 @@ class ArhintReport
      * @param int|bool $br Optional. If set, this will convert all remaining line-breaks after paragraphing. Default true.
      * @return string Text which has been converted into correct paragraph tags.
      */
-    private function _autop($pee, $br = 1)
+    private function _autop(string $pee, int|bool $br = 1): string
     {
         if (trim($pee) === '') {
             return '';
         }
         $pee = $pee . "\n"; // just to make things a little easier, pad the end
-        $pee = preg_replace('|<br />\s*<br />|', "\n\n", $pee);
+        $pee = (string)preg_replace('|<br />\s*<br />|', "\n\n", $pee);
         // Space things out a little
         $allblocks = '(?:table|thead|tfoot|caption|col|colgroup|tbody|tr|td|th|div|dl|dd|dt|ul|ol|li|pre|select|' .
             'form|map|area|blockquote|address|math|style|input|p|h[1-6]|hr)';
-        $pee = preg_replace('!(<' . $allblocks . '[^>]*>)!', "\n$1", $pee);
-        $pee = preg_replace('!(</' . $allblocks . '>)!', "$1\n\n", $pee);
+        $pee = (string)preg_replace('!(<' . $allblocks . '[^>]*>)!', "\n$1", $pee);
+        $pee = (string)preg_replace('!(</' . $allblocks . '>)!', "$1\n\n", $pee);
         $pee = str_replace(["\r\n", "\r"], "\n", $pee); // cross-platform newlines
         if (strpos($pee, '<object') !== false) {
-            $pee = preg_replace('|\s*<param([^>]*)>\s*|', '<param$1>', $pee); // no pee inside object/embed
-            $pee = preg_replace('|\s*</embed>\s*|', '</embed>', $pee);
+            $pee = (string)preg_replace('|\s*<param([^>]*)>\s*|', '<param$1>', $pee); // no pee inside object/embed
+            $pee = (string)preg_replace('|\s*</embed>\s*|', '</embed>', $pee);
         }
-        $pee = preg_replace("/\n\n+/", "\n\n", $pee); // take care of duplicates
+        $pee = (string)preg_replace("/\n\n+/", "\n\n", $pee); // take care of duplicates
         // make paragraphs, including one at the end
-        $pees = (array)preg_split('/\n\s*\n/', $pee, -1, PREG_SPLIT_NO_EMPTY);
+        $pees = preg_split('/\n\s*\n/', $pee, -1, PREG_SPLIT_NO_EMPTY);
         $pee = '';
-        foreach ($pees as $tinkle) {
-            $pee .= '<p>' . trim((string)$tinkle, "\n") . "</p>\n";
+        if (is_array($pees)) {
+            foreach ($pees as $tinkle) {
+                $pee .= '<p>' . trim((string)$tinkle, "\n") . "</p>\n";
+            }
         }
-        $pee = preg_replace('|<p>\s*</p>|', '', $pee); // under certain strange conditions it could create a P of entirely whitespace
-        $pee = preg_replace('!<p>([^<]+)</(div|address|form)>!', '<p>$1</p></$2>', $pee);
-        $pee = preg_replace('!<p>\s*(</?' . $allblocks . '[^>]*>)\s*</p>!', '$1', $pee); // don't pee all over a tag
-        $pee = preg_replace('|<p>(<li.+?)</p>|', '$1', $pee); // problem with nested lists
-        $pee = preg_replace('|<p><blockquote([^>]*)>|i', '<blockquote$1><p>', $pee);
+        $pee = (string)preg_replace('|<p>\s*</p>|', '', $pee); // under certain strange conditions it could create a P of entirely whitespace
+        $pee = (string)preg_replace('!<p>([^<]+)</(div|address|form)>!', '<p>$1</p></$2>', $pee);
+        $pee = (string)preg_replace('!<p>\s*(</?' . $allblocks . '[^>]*>)\s*</p>!', '$1', $pee); // don't pee all over a tag
+        $pee = (string)preg_replace('|<p>(<li.+?)</p>|', '$1', $pee); // problem with nested lists
+        $pee = (string)preg_replace('|<p><blockquote([^>]*)>|i', '<blockquote$1><p>', $pee);
         $pee = str_replace('</blockquote></p>', '</p></blockquote>', $pee);
-        $pee = preg_replace('!<p>\s*(</?' . $allblocks . '[^>]*>)!', '$1', $pee);
-        $pee = preg_replace('!(</?' . $allblocks . '[^>]*>)\s*</p>!', '$1', $pee);
+        $pee = (string)preg_replace('!<p>\s*(</?' . $allblocks . '[^>]*>)!', '$1', $pee);
+        $pee = (string)preg_replace('!(</?' . $allblocks . '[^>]*>)\s*</p>!', '$1', $pee);
         if ($br) {
-            $pee = preg_replace_callback('/<(script|style).*?<\/\\1>/s', function ($matches) {
-                return str_replace("\n", '<PreserveNewline />', $matches[0]);
-            }, $pee);
-            $pee = preg_replace('|(?<!<br />)\s*\n|', "<br />\n", $pee); // optionally make line breaks
+            $pee = (string)preg_replace_callback(
+                '/<(script|style).*?<\/\\1>/s',
+                fn ($matches) => str_replace("\n", '<PreserveNewline />', $matches[0]),
+                $pee
+            );
+            $pee = (string)preg_replace('|(?<!<br />)\s*\n|', "<br />\n", $pee); // optionally make line breaks
             $pee = str_replace('<PreserveNewline />', "\n", $pee);
         }
-        $pee = preg_replace('!(</?' . $allblocks . '[^>]*>)\s*<br />!', '$1', $pee);
-        $pee = preg_replace('!<br />(\s*</?(?:p|li|div|dl|dd|dt|th|pre|td|ul|ol)[^>]*>)!', '$1', $pee);
-        $pee = preg_replace("|\n</p>$|", '</p>', $pee);
+        $pee = (string)preg_replace('!(</?' . $allblocks . '[^>]*>)\s*<br />!', '$1', $pee);
+        $pee = (string)preg_replace('!<br />(\s*</?(?:p|li|div|dl|dd|dt|th|pre|td|ul|ol)[^>]*>)!', '$1', $pee);
+        $pee = (string)preg_replace("|\n</p>$|", '</p>', $pee);
 
         return $pee;
     }

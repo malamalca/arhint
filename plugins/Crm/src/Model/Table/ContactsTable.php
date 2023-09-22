@@ -27,7 +27,7 @@ class ContactsTable extends Table
     /**
      * Initialize method
      *
-     * @param array $config The configuration for the Table.
+     * @param array<string, mixed> $config List of options for this table.
      * @return void
      */
     public function initialize(array $config): void
@@ -159,7 +159,7 @@ class ContactsTable extends Table
      * @param \ArrayObject $options Options array.
      * @return bool
      */
-    public function beforeSave(Event $event, Entity $entity, ArrayObject $options)
+    public function beforeSave(Event $event, Entity $entity, ArrayObject $options): bool
     {
         if ($entity->kind == 'T') {
             $entity->title = implode(' ', array_filter([$entity->surname, $entity->name]));
@@ -171,22 +171,22 @@ class ContactsTable extends Table
     /**
      * Checks if entity belongs to user.
      *
-     * @param string $entityId Entity Id.
-     * @param string $ownerId User Id.
+     * @param string|null $entityId Entity Id.
+     * @param string|null $ownerId User Id.
      * @return bool
      */
-    public function isOwnedBy($entityId, $ownerId)
+    public function isOwnedBy(?string $entityId, ?string $ownerId): bool
     {
-        return $this->exists(['id' => $entityId, 'owner_id' => $ownerId]);
+        return !empty($entityId) && !empty($ownerId) && $this->exists(['id' => $entityId, 'owner_id' => $ownerId]);
     }
 
     /**
      * filter method
      *
-     * @param array $filter Filter data.
-     * @return array
+     * @param array<string, mixed> $filter Filter data.
+     * @return array<string, mixed>
      */
-    public function filter(&$filter)
+    public function filter(array &$filter): array
     {
         $ret = ['conditions' => [], 'order' => []];
         if (empty($filter['kind'])) {
@@ -196,7 +196,6 @@ class ContactsTable extends Table
         $ret['conditions']['Contacts.kind'] = $filter['kind'];
 
         if (!empty($filter['search'])) {
-            $q = $this->find();
             $subquery = $this->ContactsPhones->find()
                 ->select(['id', 'no'])
                 ->where([
@@ -211,8 +210,6 @@ class ContactsTable extends Table
                         );
                     },
                 ]);
-
-            $q = $this->find();
 
             $ret['conditions']['OR'] = [
                 'Contacts.title LIKE' => '%' . $filter['search'] . '%',

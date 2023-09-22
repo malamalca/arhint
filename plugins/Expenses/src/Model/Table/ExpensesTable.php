@@ -5,9 +5,9 @@ namespace Expenses\Model\Table;
 
 use ArrayObject;
 use Cake\Event\Event;
-use Cake\I18n\FrozenTime;
+use Cake\I18n\DateTime;
 use Cake\ORM\Entity;
-use Cake\ORM\Query;
+use Cake\ORM\Query\SelectQuery;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
@@ -17,7 +17,7 @@ use Cake\Validation\Validator;
  *
  * @property \Expenses\Model\Table\PaymentsTable $Payments
  * @property \Documents\Model\Table\InvoicesTable $Invoices
- * @method \Expenses\Model\Entity\Expense get($primaryKey, array $options = [])
+ * @method \Expenses\Model\Entity\Expense get(mixed $primaryKey, array|string $finder = 'all', \Psr\SimpleCache\CacheInterface|string|null $cache = null, \Closure|string|null $cacheKey = null, mixed ...$args)
  * @method \Expenses\Model\Entity\Expense newEmptyEntity()
  * @method \Expenses\Model\Entity\Expense patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
  */
@@ -26,7 +26,7 @@ class ExpensesTable extends Table
     /**
      * Initialize method
      *
-     * @param array $config The configuration for the Table.
+     * @param array<string, mixed> $config List of options for this table.
      * @return void
      */
     public function initialize(array $config): void
@@ -105,7 +105,7 @@ class ExpensesTable extends Table
      * @param \ArrayObject $options Array object.
      * @return bool
      */
-    public function beforeSave(Event $event, Entity $entity, ArrayObject $options)
+    public function beforeSave(Event $event, Entity $entity, ArrayObject $options): bool
     {
         if ($entity->isNew() && !empty($entity->dat_happened) && empty($entity->month)) {
             $entity->month = (string)$entity->dat_happened->i18nFormat('yyyy-MM');
@@ -117,11 +117,11 @@ class ExpensesTable extends Table
     /**
      * Filters accounts by query string
      *
-     * @param array $filter Filter array.
+     * @param array<string, mixed> $filter Filter array.
      * @param string $ownerId Owner Company Id.
-     * @return array
+     * @return array<string, mixed>
      */
-    public function filter(&$filter, $ownerId)
+    public function filter(array &$filter, string $ownerId): array
     {
         $ret = ['conditions' => [], 'order' => []];
 
@@ -141,7 +141,7 @@ class ExpensesTable extends Table
                 $end = implode('-', [
                     $filter['year'],
                     $endMonth,
-                    date('t', strtotime(implode('-', [$filter['year'], $endMonth, '01']))),
+                    date('t', (int)strtotime(implode('-', [$filter['year'], $endMonth, '01']))),
                 ]);
 
                 $ret['conditions'][] = function ($exp) use ($start, $end) {
@@ -149,15 +149,15 @@ class ExpensesTable extends Table
                 };
             }
             if ($filter['span'] == 'fromto') {
-                $start = FrozenTime::parseDateTime($filter['start'], 'yyyy-MM-dd');
+                $start = DateTime::parseDateTime($filter['start'], 'yyyy-MM-dd');
                 if (!isset($filter['start']) || empty($start)) {
-                    $start = FrozenTime::parseDateTime(date('Y') . '-01-01', 'yyyy-MM-dd');
+                    $start = DateTime::parseDateTime(date('Y') . '-01-01', 'yyyy-MM-dd');
                 }
-                $filter['start'] = $ret['conditions']['Expenses.dat_happened >='] = $start->i18nFormat('yyyy-MM-dd');
+                $filter['start'] = $ret['conditions']['Expenses.dat_happened >='] = $start?->i18nFormat('yyyy-MM-dd');
 
-                $end = FrozenTime::parseDateTime($filter['end'], 'yyyy-MM-dd');
+                $end = DateTime::parseDateTime($filter['end'], 'yyyy-MM-dd');
                 if (!isset($filter['end']) || empty($end)) {
-                    $end = FrozenTime::now();
+                    $end = DateTime::now();
                 }
                 $filter['end'] = $ret['conditions']['Expenses.dat_happened <='] = $end->i18nFormat('yyyy-MM-dd');
             }
@@ -182,7 +182,7 @@ class ExpensesTable extends Table
      * @param string $ownerId User Id.
      * @return bool
      */
-    public function isOwnedBy($entityId, $ownerId)
+    public function isOwnedBy(string $entityId, string $ownerId): bool
     {
         return $this->exists(['id' => $entityId, 'owner_id' => $ownerId]);
     }
@@ -194,7 +194,7 @@ class ExpensesTable extends Table
      * @param string $ownerId Company Id.
      * @return string
      */
-    public function minYear($ownerId)
+    public function minYear(string $ownerId): string
     {
         $q = $this->find();
 
@@ -214,13 +214,14 @@ class ExpensesTable extends Table
     /**
      * Returns monthly totals
      *
-     * @param \Cake\ORM\Query $query Query object
-     * @param array $options Options array
-     * @return array
+     * @param \Cake\ORM\Query\SelectQuery $query Query object
+     * @param array<string, mixed> $options Options array
+     * @return array<\Expenses\Model\Entity\Expense>
      */
-    public function monthlyTotals(Query $query, array $options)
+    public function monthlyTotals(SelectQuery $query, array $options): array
     {
         $year = $options['year'] ?? '2020';
+
         $query = $query
             ->select(['Expenses.month', 'monthly_amount' => $query->func()->sum('Expenses.total')])
             ->where(['Expenses.month LIKE' => $year . '-%'])->group('Expenses.month');

@@ -8,19 +8,24 @@ use Cake\Core\Plugin;
 use Cake\Event\Event;
 use Cake\Event\EventManager;
 use Cake\Http\Response;
+use Cake\ORM\Query\SelectQuery;
 use Cake\ORM\TableRegistry;
+use Cake\View\View;
+use Cake\View\XmlView;
+use DOMDocument;
 use Lil\Lib\LilPdfFactory;
+use XSLTProcessor;
 
 class DocumentsExport
 {
     /**
      * @var string $lastError
      */
-    public $lastError = null;
+    public ?string $lastError = null;
     /**
      * @var \Cake\View\View $view
      */
-    private $view = null;
+    private View $view;
 
     /**
      * Constructor
@@ -29,8 +34,7 @@ class DocumentsExport
      */
     public function __construct()
     {
-        $viewClass = \Cake\View\XmlView::class;
-        $viewOptions = [];
+        $viewClass = XmlView::class;
 
         $this->view = new $viewClass(null, null, EventManager::instance(), []);
         $this->view->setTemplatePath('Documents');
@@ -41,10 +45,10 @@ class DocumentsExport
     /**
      * Find documents for expodrt
      *
-     * @param array $filter Array of options
-     * @return \Cake\ORM\Query
+     * @param array<string, mixed> $filter Array of options
+     * @return \Cake\ORM\Query\SelectQuery
      */
-    public function find($filter)
+    public function find(array $filter): SelectQuery
     {
         $conditions = [];
         if (!empty($filter['id'])) {
@@ -82,10 +86,10 @@ class DocumentsExport
      * export method
      *
      * @param string $ext Export extension.
-     * @param array $data Array of documents
+     * @param array<\Documents\Model\Entity\Document> $data Array of documents
      * @return mixed
      */
-    public function export($ext, $data)
+    public function export(string $ext, array $data): mixed
     {
         $result = null;
 
@@ -113,7 +117,7 @@ class DocumentsExport
                 // PDF
                 $pageOptions = [];
                 if (!empty($document->tpl_header)) {
-                    $templateBody = $document->tpl_header->body;
+                    $templateBody = $document->tpl_header->body ?? '';
                     if (substr($templateBody, 0, 5) == 'data:') {
                         $templateBody = json_encode([
                             'image' => substr($templateBody, strpos($templateBody, ',') + 1),
@@ -124,7 +128,7 @@ class DocumentsExport
                     $pdf->setHeaderHtml($templateBody);
                 }
                 if (!empty($document->tpl_footer)) {
-                    $templateBody = $document->tpl_footer->body;
+                    $templateBody = $document->tpl_footer->body ?? '';
                     if (substr($templateBody, 0, 5) == 'data:') {
                         $templateBody = json_encode([
                             'image' => substr($templateBody, strpos($templateBody, ',') + 1),
@@ -165,10 +169,10 @@ class DocumentsExport
      *
      * @param string $ext Export extension.
      * @param string $data Result of Export funtion.
-     * @param array $options Export options
+     * @param array<string, mixed> $options Export options
      * @return \Cake\Http\Response
      */
-    public function response($ext, $data, $options = [])
+    public function response(string $ext, string $data, array $options = []): Response
     {
         $defaults = ['download' => false, 'filename' => 'documents'];
         $options = array_merge($defaults, $options);
@@ -203,10 +207,10 @@ class DocumentsExport
      * @param string $eslogXml Document XML in eSlog format.
      * @return mixed
      */
-    private function toHtml($document, $eslogXml)
+    private function toHtml(object $document, string $eslogXml): mixed
     {
         // load stylesheet for specified document
-        $xsl = new \DOMDocument();
+        $xsl = new DOMDocument();
         if (!empty($document->tpl_body)) {
             $xsl->loadXml($document->tpl_body->body, LIBXML_NOCDATA);
         } else {
@@ -214,10 +218,10 @@ class DocumentsExport
             $xsl->load($xsltTpl, LIBXML_NOCDATA);
         }
 
-        $xslt = new \XSLTProcessor();
+        $xslt = new XSLTProcessor();
         $xslt->importStylesheet($xsl);
 
-        $xml = new \DOMDocument();
+        $xml = new DOMDocument();
 
         $xml->loadXML($eslogXml);
 
@@ -250,48 +254,52 @@ class DocumentsExport
      * @param int|bool $br Optional. If set, this will convert all remaining line-breaks after paragraphing. Default true.
      * @return string Text which has been converted into correct paragraph tags.
      */
-    private function _autop($pee, $br = 1)
+    private function _autop(string $pee, int|bool $br = 1): string
     {
         if (trim($pee) === '') {
             return '';
         }
         $pee = $pee . "\n"; // just to make things a little easier, pad the end
-        $pee = preg_replace('|<br />\s*<br />|', "\n\n", $pee);
+        $pee = (string)preg_replace('|<br />\s*<br />|', "\n\n", $pee);
         // Space things out a little
         $allblocks = '(?:table|thead|tfoot|caption|col|colgroup|tbody|tr|td|th|div|dl|dd|dt|ul|ol|li|pre|select|form' .
             '|map|area|blockquote|address|math|style|input|p|h[1-6]|hr)';
-        $pee = preg_replace('!(<' . $allblocks . '[^>]*>)!', "\n$1", $pee);
-        $pee = preg_replace('!(</' . $allblocks . '>)!', "$1\n\n", $pee);
-        $pee = str_replace(["\r\n", "\r"], "\n", $pee); // cross-platform newlines
+        $pee = (string)preg_replace('!(<' . $allblocks . '[^>]*>)!', "\n$1", $pee);
+        $pee = (string)preg_replace('!(</' . $allblocks . '>)!', "$1\n\n", $pee);
+        $pee = (string)str_replace(["\r\n", "\r"], "\n", $pee); // cross-platform newlines
         if (strpos($pee, '<object') !== false) {
-            $pee = preg_replace('|\s*<param([^>]*)>\s*|', '<param$1>', $pee); // no pee inside object/embed
-            $pee = preg_replace('|\s*</embed>\s*|', '</embed>', $pee);
+            $pee = (string)preg_replace('|\s*<param([^>]*)>\s*|', '<param$1>', $pee); // no pee inside object/embed
+            $pee = (string)preg_replace('|\s*</embed>\s*|', '</embed>', $pee);
         }
-        $pee = preg_replace("/\n\n+/", "\n\n", $pee); // take care of duplicates
+        $pee = (string)preg_replace("/\n\n+/", "\n\n", $pee); // take care of duplicates
         // make paragraphs, including one at the end
         $pees = preg_split('/\n\s*\n/', $pee, -1, PREG_SPLIT_NO_EMPTY);
         $pee = '';
-        foreach ($pees as $tinkle) {
-            $pee .= '<p>' . trim($tinkle, "\n") . "</p>\n";
+        if (is_array($pees)) {
+            foreach ($pees as $tinkle) {
+                $pee .= '<p>' . trim($tinkle, "\n") . "</p>\n";
+            }
         }
-        $pee = preg_replace('|<p>\s*</p>|', '', $pee); // under certain strange conditions it could create a P of entirely whitespace
-        $pee = preg_replace('!<p>([^<]+)</(div|address|form)>!', '<p>$1</p></$2>', $pee);
-        $pee = preg_replace('!<p>\s*(</?' . $allblocks . '[^>]*>)\s*</p>!', '$1', $pee); // don't pee all over a tag
-        $pee = preg_replace('|<p>(<li.+?)</p>|', '$1', $pee); // problem with nested lists
-        $pee = preg_replace('|<p><blockquote([^>]*)>|i', '<blockquote$1><p>', $pee);
+        $pee = (string)preg_replace('|<p>\s*</p>|', '', $pee); // under certain strange conditions it could create a P of entirely whitespace
+        $pee = (string)preg_replace('!<p>([^<]+)</(div|address|form)>!', '<p>$1</p></$2>', $pee);
+        $pee = (string)preg_replace('!<p>\s*(</?' . $allblocks . '[^>]*>)\s*</p>!', '$1', $pee); // don't pee all over a tag
+        $pee = (string)preg_replace('|<p>(<li.+?)</p>|', '$1', $pee); // problem with nested lists
+        $pee = (string)preg_replace('|<p><blockquote([^>]*)>|i', '<blockquote$1><p>', $pee);
         $pee = str_replace('</blockquote></p>', '</p></blockquote>', $pee);
-        $pee = preg_replace('!<p>\s*(</?' . $allblocks . '[^>]*>)!', '$1', $pee);
-        $pee = preg_replace('!(</?' . $allblocks . '[^>]*>)\s*</p>!', '$1', $pee);
+        $pee = (string)preg_replace('!<p>\s*(</?' . $allblocks . '[^>]*>)!', '$1', $pee);
+        $pee = (string)preg_replace('!(</?' . $allblocks . '[^>]*>)\s*</p>!', '$1', $pee);
         if ($br) {
-            $pee = preg_replace_callback('/<(script|style).*?<\/\\1>/s', function ($matches) {
-                return str_replace("\n", '<PreserveNewline />', $matches[0]);
-            }, $pee);
-            $pee = preg_replace('|(?<!<br />)\s*\n|', "<br />\n", $pee); // optionally make line breaks
+            $pee = (string)preg_replace_callback(
+                '/<(script|style).*?<\/\\1>/s',
+                fn ($matches) => str_replace("\n", '<PreserveNewline />', $matches[0]),
+                $pee
+            );
+            $pee = (string)preg_replace('|(?<!<br />)\s*\n|', "<br />\n", $pee); // optionally make line breaks
             $pee = str_replace('<PreserveNewline />', "\n", $pee);
         }
-        $pee = preg_replace('!(</?' . $allblocks . '[^>]*>)\s*<br />!', '$1', $pee);
-        $pee = preg_replace('!<br />(\s*</?(?:p|li|div|dl|dd|dt|th|pre|td|ul|ol)[^>]*>)!', '$1', $pee);
-        $pee = preg_replace("|\n</p>$|", '</p>', $pee);
+        $pee = (string)preg_replace('!(</?' . $allblocks . '[^>]*>)\s*<br />!', '$1', $pee);
+        $pee = (string)preg_replace('!<br />(\s*</?(?:p|li|div|dl|dd|dt|th|pre|td|ul|ol)[^>]*>)!', '$1', $pee);
+        $pee = (string)preg_replace("|\n</p>$|", '</p>', $pee);
 
         return $pee;
     }

@@ -182,11 +182,11 @@ foreach ($data as $travelOrder) {
         ],
         'net_total' => [
             'parameters' => ['class' => 'documents-net_total right-align nowrap hide-on-small-only'],
-            'html' => $this->Number->currency($travelOrder->net_total),
+            'html' => $this->Number->currency($travelOrder->net_total ?? 0),
         ],
         'total' => [
             'parameters' => ['class' => 'documents-total right-align nowrap'],
-            'html' => $this->Number->currency($travelOrder->total),
+            'html' => $this->Number->currency($travelOrder->total ?? 0),
         ],
     ];
     $total += $travelOrder->total;

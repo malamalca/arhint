@@ -19,16 +19,16 @@ class ProjectsLogsControllerTest extends TestCase
      *
      * @var array
      */
-    public $fixtures = [
+    public array $fixtures = [
         'app.Users',
         'plugin.Projects.Projects',
-        'plugin.Projects.ProjectsLogs', 
-        'plugin.Projects.ProjectsUsers', 
+        'plugin.Projects.ProjectsLogs',
+        'plugin.Projects.ProjectsUsers',
     ];
 
     /**
      * Login method
-     * 
+     *
      * @var string $userId User id
      * @return void
      */

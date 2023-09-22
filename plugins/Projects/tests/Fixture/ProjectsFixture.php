@@ -13,7 +13,7 @@ class ProjectsFixture extends TestFixture
      *
      * @var array
      */
-    public $records = [
+    public array $records = [
         [
             'id' => '4dd53305-9715-4be4-b169-20defe113d2a',
             'owner_id' => COMPANY_FIRST,

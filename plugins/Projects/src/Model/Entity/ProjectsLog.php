@@ -12,8 +12,8 @@ use Cake\ORM\Entity;
  * @property string|null $project_id
  * @property string|null $user_id
  * @property string|null $descript
- * @property \Cake\I18n\FrozenTime|null $created
- * @property \Cake\I18n\FrozenTime|null $modified
+ * @property \Cake\I18n\DateTime|null $created
+ * @property \Cake\I18n\DateTime|null $modified
  *
  * @property \Projects\Model\Entity\Project $project
  * @property \Projects\Model\Entity\User $user
@@ -29,7 +29,7 @@ class ProjectsLog extends Entity
      *
      * @var array<string, bool>
      */
-    protected $_accessible = [
+    protected array $_accessible = [
         'project_id' => true,
         'user_id' => true,
         'descript' => true,

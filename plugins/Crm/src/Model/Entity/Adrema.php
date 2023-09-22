@@ -11,8 +11,8 @@ use Cake\ORM\Entity;
  * @property string $id
  * @property string|null $owner_id
  * @property string|null $title
- * @property \Cake\I18n\FrozenTime|null $created
- * @property \Cake\I18n\FrozenTime|null $modified
+ * @property \Cake\I18n\DateTime|null $created
+ * @property \Cake\I18n\DateTime|null $modified
  */
 class Adrema extends Entity
 {
@@ -21,7 +21,7 @@ class Adrema extends Entity
      *
      * @var array<string, bool>
      */
-    protected $_accessible = [
+    protected array $_accessible = [
         '*' => true,
         'id' => false,
     ];

@@ -13,7 +13,7 @@ class DocumentsCountersFixture extends TestFixture
      *
      * @var array
      */
-    public $records = [
+    public array $records = [
         [
             'id' => '1d53bc5b-de2d-4e85-b13b-81b39a97fc88',
             'owner_id' => '8155426d-2302-4fa5-97de-e33cefb9d704',

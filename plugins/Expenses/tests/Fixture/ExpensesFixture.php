@@ -13,7 +13,7 @@ class ExpensesFixture extends TestFixture
      *
      * @var array
      */
-    public $records = [
+    public array $records = [
         [
             'id' => 'c60fe467-cd81-4a2c-b25d-4c3e0fe8c63e',
             'model' => 'Lorem ipsum dolor sit amet',

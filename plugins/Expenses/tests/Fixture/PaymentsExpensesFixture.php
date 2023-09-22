@@ -13,7 +13,7 @@ class PaymentsExpensesFixture extends TestFixture
      *
      * @var array
      */
-    public $records = [
+    public array $records = [
         [
             'id' => 1,
             'payment_id' => 'd5218643-a30c-4e96-8b9a-274cdc150828',

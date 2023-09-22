@@ -3,6 +3,9 @@ declare(strict_types=1);
 
 namespace Documents\Policy;
 
+use App\Model\Entity\User;
+use Documents\Model\Entity\DocumentsCounter;
+
 /**
  * DocumentsCounter Policy Resolver
  */
@@ -15,7 +18,7 @@ class DocumentsCounterPolicy
      * @param \Documents\Model\Entity\DocumentsCounter $entity Entity
      * @return bool
      */
-    public function canView($user, $entity)
+    public function canView(User $user, DocumentsCounter $entity): bool
     {
         return $entity->owner_id == $user->company_id;
     }
@@ -27,7 +30,7 @@ class DocumentsCounterPolicy
      * @param \Documents\Model\Entity\DocumentsCounter $entity Entity
      * @return bool
      */
-    public function canEdit($user, $entity)
+    public function canEdit(User $user, DocumentsCounter $entity): bool
     {
         return $entity->owner_id == $user->company_id && $user->hasRole('editor');
     }
@@ -39,7 +42,7 @@ class DocumentsCounterPolicy
      * @param \Documents\Model\Entity\DocumentsCounter $entity Entity
      * @return bool
      */
-    public function canDelete($user, $entity)
+    public function canDelete(User $user, DocumentsCounter $entity): bool
     {
         return $entity->owner_id == $user->company_id && $user->hasRole('editor');
     }

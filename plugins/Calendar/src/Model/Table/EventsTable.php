@@ -3,8 +3,9 @@ declare(strict_types=1);
 
 namespace Calendar\Model\Table;
 
+use ArrayObject;
 use Cake\Event\Event;
-use Cake\I18n\FrozenDate;
+use Cake\I18n\Date;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
@@ -33,7 +34,7 @@ class EventsTable extends Table
     /**
      * Initialize method
      *
-     * @param array $config The configuration for the Table.
+     * @param array<string, mixed> $config List of options for this table.
      * @return void
      */
     public function initialize(array $config): void
@@ -119,7 +120,7 @@ class EventsTable extends Table
      * @param \ArrayObject $options Array object.
      * @return void
      */
-    public function beforeMarshal(Event $event, \ArrayObject $data, \ArrayObject $options)
+    public function beforeMarshal(Event $event, ArrayObject $data, ArrayObject $options): void
     {
         if ($data['all_day'] == '1') {
             $data['dat_start'] .= ' 00:00:00';
@@ -134,7 +135,7 @@ class EventsTable extends Table
      * @param string $ownerId User Id.
      * @return bool
      */
-    public function isOwnedBy($entityId, $ownerId)
+    public function isOwnedBy(string $entityId, string $ownerId): bool
     {
         return $this->exists(['id' => $entityId, 'owner_id' => $ownerId]);
     }
@@ -142,10 +143,10 @@ class EventsTable extends Table
     /**
      * Filters accounts by query string
      *
-     * @param array $filter Filter array.
-     * @return array
+     * @param array<string, mixed> $filter Filter array.
+     * @return array<string, mixed>
      */
-    public function filter(&$filter)
+    public function filter(array &$filter): array
     {
         $ret = [];
 
@@ -154,15 +155,15 @@ class EventsTable extends Table
         }
 
         if (!empty($filter['month'])) {
-            $startDate = FrozenDate::parseDate($filter['month'] . '-01', 'yyyy-MM-dd');
+            $startDate = Date::parseDate($filter['month'] . '-01', 'yyyy-MM-dd');
             if (!$startDate) {
-                $startDate = (new FrozenDate())->startOfMonth();
+                $startDate = (new Date())->startOfMonth();
             }
         } else {
-            $startDate = (new FrozenDate())->startOfMonth();
+            $startDate = (new Date())->startOfMonth();
         }
 
-        $endDate = $startDate->endOfMonth()->addDay();
+        $endDate = $startDate->endOfMonth()->addDays(1);
 
         $ret['conditions']['AND'] = [
             'Events.dat_start <=' => $endDate,

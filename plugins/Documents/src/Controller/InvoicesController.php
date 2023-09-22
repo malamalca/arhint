@@ -5,10 +5,13 @@ namespace Documents\Controller;
 
 use Cake\Core\Plugin;
 use Cake\Event\EventInterface;
+use Cake\Http\Response;
+use Cake\Http\ServerRequest;
 use Cake\ORM\TableRegistry;
 use Cake\Routing\Router;
 use Documents\Lib\DocumentsUpnQr;
 use Documents\Lib\InvoicesExport;
+use DOMDocument;
 
 /**
  * Invoices Controller
@@ -21,28 +24,24 @@ class InvoicesController extends BaseDocumentsController
     /**
      * @var string $documentsScope
      */
-    public $documentsScope = 'Invoices';
+    public string $documentsScope = 'Invoices';
 
     /**
      * BeforeFilter event handler
      *
      * @param \Cake\Event\EventInterface $event Event interface
-     * @return \Cake\Http\Response|null
+     * @return void
      */
     public function beforeFilter(EventInterface $event)
     {
         parent::beforeFilter($event);
 
-        if (!empty($this->Security)) {
-            if (in_array($this->getRequest()->getParam('action'), ['edit', 'editPreview'])) {
-                $this->Security->setConfig(
-                    'unlockedFields',
-                    ['invoices_taxes', 'invoices_items', 'receiver', 'buyer', 'issuer']
-                );
-            }
+        if (in_array($this->getRequest()->getParam('action'), ['edit', 'editPreview'])) {
+            $this->FormProtection->setConfig(
+                'unlockedFields',
+                ['invoices_taxes', 'invoices_items', 'receiver', 'buyer', 'issuer']
+            );
         }
-
-        return null;
     }
 
     /**
@@ -55,7 +54,7 @@ class InvoicesController extends BaseDocumentsController
         /** @var \Documents\Model\Entity\DocumentsCounter|\Cake\Http\Response $counter */
         $counter = parent::index();
 
-        if ($counter instanceof \Cake\Http\Response) {
+        if ($counter instanceof Response) {
             return $counter;
         }
 
@@ -108,7 +107,7 @@ class InvoicesController extends BaseDocumentsController
             /** @var \Projects\Model\Table\ProjectsTable $ProjectsTable */
             $ProjectsTable = TableRegistry::getTableLocator()->get('Projects.Projects');
 
-            $projectsIds = array_filter(array_unique($data->extract('project_id')->toList()));
+            $projectsIds = array_filter(array_unique($query->all()->extract('project_id')->toList()));
 
             $projects = [];
             if (!empty($projectsIds)) {
@@ -134,7 +133,7 @@ class InvoicesController extends BaseDocumentsController
      */
     public function list()
     {
-        $request = new \Cake\Http\ServerRequest(['url' => $this->getRequest()->getQuery('source')]);
+        $request = new ServerRequest(['url' => $this->getRequest()->getQuery('source')]);
         $sourceRequest = Router::parseRequest($request);
 
         $filter = [];
@@ -181,10 +180,10 @@ class InvoicesController extends BaseDocumentsController
      * View method
      *
      * @param string|null $id Document id.
-     * @return \Cake\Http\Response|null
+     * @return \Cake\Http\Response|void
      * @throws \Cake\Http\Exception\NotFoundException When record not found.
      */
-    public function view($id = null)
+    public function view(?string $id = null)
     {
         $containTables = [
             'Issuers', 'Buyers', 'Receivers',
@@ -204,7 +203,7 @@ class InvoicesController extends BaseDocumentsController
      * @return \Cake\Http\Response|null
      * @throws \Cake\Http\Exception\NotFoundException When record not found.
      */
-    public function edit($id = null)
+    public function edit(?string $id = null): ?Response
     {
         $containTables = [
             'Issuers', 'Buyers', 'Receivers',
@@ -236,25 +235,26 @@ class InvoicesController extends BaseDocumentsController
     /**
      * editPreview method
      *
-     * @return \Cake\Http\Response|null
+     * @param array<mixed> $args Arguments
+     * @return \Cake\Http\Response|void
      * @throws \Cake\Http\Exception\NotFoundException When record not found.
      */
-    public function editPreview()
+    public function editPreview(array ...$args)
     {
         $invoice = $this->Invoices->parseRequest($this->getRequest(), $this->getRequest()->getData('id'));
         $assocModels = ['InvoicesTaxes', 'InvoicesItems', 'DocumentsAttachments', 'Issuers', 'Buyers', 'Receivers'];
 
-        return parent::editPreview($invoice, $assocModels);
+        return parent::editPreview([$invoice, $assocModels]);
     }
 
     /**
      * Upnqr method
      *
-     * @param string|null $id Document id.
+     * @param string $id Document id.
      * @return \Cake\Http\Response|null
      * @throws \Cake\Http\Exception\NotFoundException When record not found.
      */
-    public function upnqr($id = null)
+    public function upnqr(string $id)
     {
         $invoice = $this->Invoices->get($id);
         $this->Authorization->authorize($invoice, 'view');
@@ -276,7 +276,7 @@ class InvoicesController extends BaseDocumentsController
      * @return \Cake\Http\Response|null
      * @throws \Cake\Http\Exception\NotFoundException When record not found.
      */
-    public function validate($id, $kind = 'sepa')
+    public function validate(?string $id, string $kind = 'sepa')
     {
         if (!in_array($kind, ['sepa', 'eslog', 'eslog20'])) {
             die('Invalid extension!');
@@ -290,7 +290,7 @@ class InvoicesController extends BaseDocumentsController
 
         $data = $Exporter->export($kind, [$invoice]);
 
-        $xml = new \DOMDocument();
+        $xml = new DOMDocument();
         $xml->loadXml($data);
 
         switch ($kind) {

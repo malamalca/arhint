@@ -5,7 +5,8 @@ namespace Tasks\Controller;
 
 use Cake\Cache\Cache;
 use Cake\Http\Exception\NotFoundException;
-use Cake\I18n\FrozenTime;
+use Cake\Http\Response;
+use Cake\I18n\DateTime;
 use Cake\ORM\TableRegistry;
 
 /**
@@ -58,9 +59,9 @@ class TasksController extends AppController
      * Edit method
      *
      * @param string|null $id Task id.
-     * @return mixed
+     * @return \Cake\Http\Response|null
      */
-    public function edit($id = null)
+    public function edit(?string $id = null): ?Response
     {
         if ($id) {
             $task = $this->Tasks->get($id);
@@ -95,19 +96,21 @@ class TasksController extends AppController
         $users = $UsersTable->fetchForCompany($this->getCurrentUser()->get('company_id'));
 
         $this->set(compact('task', 'folders', 'users'));
+
+        return null;
     }
 
     /**
      * Toggle completed
      *
      * @param string|null $id Task id.
-     * @return \Cake\Http\Response|null Redirects to index.
+     * @return \Cake\Http\Response|null
      */
-    public function toggle($id = null)
+    public function toggle(?string $id = null): ?Response
     {
         $task = $this->Tasks->get($id);
         if (empty($task->completed)) {
-            $task->completed = new FrozenTime();
+            $task->completed = new DateTime();
         } else {
             $task->completed = null;
         }
@@ -120,16 +123,16 @@ class TasksController extends AppController
 
         Cache::delete('Tasks.' . $this->getCurrentUser()->id . '.OpenTasks');
 
-        return $this->redirect($this->getRequest()->referer());
+        return $this->redirect($this->getRequest()->referer() ?? ['action' => 'index']);
     }
 
     /**
      * Delete method
      *
      * @param string|null $id Task id.
-     * @return \Cake\Http\Response|null Redirects to index.
+     * @return \Cake\Http\Response|null
      */
-    public function delete($id = null)
+    public function delete(?string $id = null): ?Response
     {
         $task = $this->Tasks->get($id);
 

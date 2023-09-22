@@ -18,8 +18,8 @@ use Cake\ORM\Entity;
  * @property string|null $country_code
  * @property string|null $country
  * @property bool $primary
- * @property \Cake\I18n\FrozenTime|null $created
- * @property \Cake\I18n\FrozenTime|null $modified
+ * @property \Cake\I18n\DateTime|null $created
+ * @property \Cake\I18n\DateTime|null $modified
  */
 class ContactsAddress extends Entity implements EntityInterface
 {
@@ -28,7 +28,7 @@ class ContactsAddress extends Entity implements EntityInterface
      *
      * @var array<string, bool>
      */
-    protected $_accessible = [
+    protected array $_accessible = [
         '*' => true,
         'id' => false,
     ];

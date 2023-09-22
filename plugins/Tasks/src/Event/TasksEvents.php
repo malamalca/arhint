@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace Tasks\Event;
 
+use ArrayObject;
+use Cake\Event\Event;
 use Cake\Event\EventListenerInterface;
 use Cake\ORM\TableRegistry;
 use Tasks\Lib\TasksSidebar;
@@ -31,9 +33,12 @@ class TasksEvents implements EventListenerInterface
      * @param \ArrayObject $panels Panels data.
      * @return void
      */
-    public function dashboardPanels($event, $panels)
+    public function dashboardPanels(Event $event, ArrayObject $panels): void
     {
+        /** @var \App\Controller\AppController $controller */
         $controller = $event->getSubject();
+
+        /** @var \App\View\AppView $view */
         $view = $controller->createView();
 
         /** @var \App\Model\Entity\User $user */
@@ -75,8 +80,9 @@ class TasksEvents implements EventListenerInterface
      * @param \Cake\Event\Event $event Event object.
      * @return void
      */
-    public function addScripts($event)
+    public function addScripts(Event $event): void
     {
+        /** @var \App\View\AppView $view */
         $view = $event->getSubject();
         $view->append('script');
         if ($view->getRequest()->is('mobile')) {
@@ -98,7 +104,7 @@ class TasksEvents implements EventListenerInterface
      * @param \ArrayObject $sidebar Sidebar array;
      * @return void
      */
-    public function modifySidebar($event, $sidebar)
+    public function modifySidebar(Event $event, ArrayObject $sidebar): void
     {
         TasksSidebar::setAdminSidebar($event, $sidebar);
     }

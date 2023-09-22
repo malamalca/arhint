@@ -3,6 +3,9 @@ declare(strict_types=1);
 
 namespace Projects\Policy;
 
+use App\Model\Entity\User;
+use Projects\Model\Entity\ProjectsStatus;
+
 /**
  * ProjectsStatus Policy Resolver
  */
@@ -15,7 +18,7 @@ class ProjectsStatusPolicy
      * @param \Projects\Model\Entity\ProjectsStatus $entity Entity
      * @return bool
      */
-    public function canEdit($user, $entity)
+    public function canEdit(User $user, ProjectsStatus $entity): bool
     {
         return $entity->owner_id == $user->company_id && $user->hasRole('admin');
     }
@@ -27,7 +30,7 @@ class ProjectsStatusPolicy
      * @param \Projects\Model\Entity\ProjectsStatus $entity Entity
      * @return bool
      */
-    public function canDelete($user, $entity)
+    public function canDelete(User $user, ProjectsStatus $entity): bool
     {
         return $entity->owner_id == $user->company_id && $user->hasRole('admin');
     }

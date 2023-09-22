@@ -6,12 +6,14 @@ namespace Documents\Model\Table;
 use ArrayObject;
 use Cake\Core\Plugin;
 use Cake\Event\Event;
-use Cake\I18n\FrozenDate;
+use Cake\Http\ServerRequest;
+use Cake\I18n\Date;
 use Cake\ORM\Entity;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
 use Cake\Validation\Validator;
+use Documents\Model\Entity\Invoice;
 
 /**
  * Invoices Model
@@ -20,7 +22,7 @@ use Cake\Validation\Validator;
  * @property \Documents\Model\Table\DocumentsClientsTable|\Cake\ORM\Association\hasOne $Buyers
  * @property \Documents\Model\Table\DocumentsClientsTable|\Cake\ORM\Association\hasOne $Issuers
  * @property \Documents\Model\Table\DocumentsClientsTable|\Cake\ORM\Association\hasOne $Receivers
- * @method \Documents\Model\Entity\Invoice get($primaryKey, array $options = [])
+ * @method \Documents\Model\Entity\Invoice get(mixed $primaryKey, array|string $finder = 'all', \Psr\SimpleCache\CacheInterface|string|null $cache = null, \Closure|string|null $cacheKey = null, mixed ...$args)
  * @method \Documents\Model\Entity\Invoice newEmptyEntity()
  * @method \Documents\Model\Entity\Invoice patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
  */
@@ -29,7 +31,7 @@ class InvoicesTable extends Table
     /**
      * Initialize method
      *
-     * @param array $config The configuration for the Table.
+     * @param array<string, mixed> $config List of options for this table.
      * @return void
      */
     public function initialize(array $config): void
@@ -172,7 +174,7 @@ class InvoicesTable extends Table
      * @param \ArrayObject $options Array object.
      * @return bool
      */
-    public function beforeSave(Event $event, Entity $invoice, ArrayObject $options)
+    public function beforeSave(Event $event, Entity $invoice, ArrayObject $options): bool
     {
         if ($invoice->isDirty('invoices_taxes')) {
             $invoice->net_total = 0;
@@ -199,7 +201,7 @@ class InvoicesTable extends Table
      * @param string $ownerId User Id.
      * @return bool
      */
-    public function isOwnedBy($entityId, $ownerId)
+    public function isOwnedBy(string $entityId, string $ownerId): bool
     {
         return $this->exists(['id' => $entityId, 'owner_id' => $ownerId]);
     }
@@ -207,10 +209,10 @@ class InvoicesTable extends Table
     /**
      * filter method
      *
-     * @param array $filter Filter data.
-     * @return array
+     * @param array<string, mixed> $filter Filter data.
+     * @return array<string, mixed>
      */
-    public function filter(&$filter)
+    public function filter(array &$filter): array
     {
         $ret = ['conditions' => [], 'contain' => []];
 
@@ -220,31 +222,31 @@ class InvoicesTable extends Table
 
         // from-to date
         if (isset($filter['start'])) {
-            $filter['start'] = FrozenDate::parseDate($filter['start'], 'yyyy-MM-dd');
+            $filter['start'] = Date::parseDate($filter['start'], 'yyyy-MM-dd');
             if (!empty($filter['start'])) {
                 $ret['conditions']['Invoices.dat_issue >='] = $filter['start'];
             }
         }
 
         if (isset($filter['end'])) {
-            $filter['end'] = FrozenDate::parseDate($filter['end'], 'yyyy-MM-dd');
+            $filter['end'] = Date::parseDate($filter['end'], 'yyyy-MM-dd');
             if (!empty($filter['end'])) {
                 $ret['conditions']['Invoices.dat_issue <='] = $filter['end'];
             }
         }
 
         if (isset($filter['month'])) {
-            $start = FrozenDate::parseDate($filter['month'] . '-01', 'yyyy-MM-dd');
+            $start = Date::parseDate($filter['month'] . '-01', 'yyyy-MM-dd');
             if (!empty($start)) {
                 $ret['conditions']['Invoices.dat_issue >='] = $start;
-                $ret['conditions']['Invoices.dat_issue <'] = $start->addMonth();
+                $ret['conditions']['Invoices.dat_issue <'] = $start->addMonths(1);
                 $filter['start'] = $start;
-                $filter['end'] = $start->addMonth()->subDays(1);
+                $filter['end'] = $start->addMonths(1)->subDays(1);
             }
         }
 
         if (!empty($filter['expired'])) {
-            $expired = FrozenDate::parseDate($filter['expired'] . '-01', 'yyyy-MM-dd');
+            $expired = Date::parseDate($filter['expired'] . '-01', 'yyyy-MM-dd');
             if (!empty($expired)) {
                 $ret['conditions']['Invoices.dat_expire <='] = $expired;
             }
@@ -306,9 +308,9 @@ class InvoicesTable extends Table
      * Method returns array
      *
      * @param string $counterId Counter id
-     * @return array
+     * @return array<string, \Cake\I18n\Date>
      */
-    public function maxSpan($counterId)
+    public function maxSpan(string $counterId): array
     {
         $ret = [];
 
@@ -322,14 +324,14 @@ class InvoicesTable extends Table
         $ret = $query->first()->toArray();
 
         if (empty($ret['start'])) {
-            $ret['start'] = new FrozenDate();
+            $ret['start'] = new Date();
         } else {
-            $ret['start'] = FrozenDate::parseDate($ret['start'], 'yyyy-MM-dd');
+            $ret['start'] = Date::parseDate($ret['start'], 'yyyy-MM-dd');
         }
         if (empty($ret['end'])) {
-            $ret['end'] = new FrozenDate();
+            $ret['end'] = new Date();
         } else {
-            $ret['end'] = FrozenDate::parseDate($ret['end'], 'yyyy-MM-dd');
+            $ret['end'] = Date::parseDate($ret['end'], 'yyyy-MM-dd');
         }
 
         return $ret;
@@ -342,11 +344,11 @@ class InvoicesTable extends Table
      * @param string|null $id Document id.
      * @return \Documents\Model\Entity\Invoice
      */
-    public function parseRequest($request, $id = null)
+    public function parseRequest(ServerRequest $request, ?string $id = null): Invoice
     {
         if (!empty($id)) {
-            $invoice = $this->get($id, ['contain' => ['Issuers', 'Buyers', 'Receivers',
-                'InvoicesTaxes', 'InvoicesItems', 'DocumentsCounters']]);
+            $invoice = $this->get($id, contain: ['Issuers', 'Buyers', 'Receivers',
+                'InvoicesTaxes', 'InvoicesItems', 'DocumentsCounters']);
         } else {
             /** @var \Documents\Model\Table\DocumentsClientsTable $DocumentsClients */
             $DocumentsClients = TableRegistry::getTableLocator()->get('Documents.DocumentsClients');
@@ -356,8 +358,8 @@ class InvoicesTable extends Table
             $sourceId = $request->getQuery('duplicate');
             if (!empty($sourceId)) {
                 // clone
-                $invoice = $this->get($sourceId, ['contain' => ['Issuers', 'Buyers', 'Receivers',
-                    'InvoicesTaxes', 'InvoicesItems', 'DocumentsCounters']]);
+                $invoice = $this->get($sourceId, contain: ['Issuers', 'Buyers', 'Receivers',
+                    'InvoicesTaxes', 'InvoicesItems', 'DocumentsCounters']);
 
                 $invoice->setNew(true);
                 unset($invoice->id);
@@ -414,16 +416,16 @@ class InvoicesTable extends Table
 
                 switch ($invoice->documents_counter->direction) {
                     case 'issued':
-                        $invoice->issuer->patchWithAuth($request->getAttribute('identity'));
+                        $invoice->issuer->patchWithAuth($request->getAttribute('identity')->getOriginalData());
                         break;
                     case 'received':
-                        $invoice->receiver->patchWithAuth($request->getAttribute('identity'));
-                        $invoice->buyer->patchWithAuth($request->getAttribute('identity'));
+                        $invoice->receiver->patchWithAuth($request->getAttribute('identity')->getOriginalData());
+                        $invoice->buyer->patchWithAuth($request->getAttribute('identity')->getOriginalData());
                         break;
                 }
             }
 
-            $invoice->no = $DocumentsCounters->generateNo($invoice->counter_id);
+            $invoice->no = (string)$DocumentsCounters->generateNo($invoice->counter_id);
         }
 
         return $invoice;

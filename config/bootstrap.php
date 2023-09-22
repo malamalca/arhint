@@ -18,7 +18,7 @@ declare(strict_types=1);
 /*
  * Configure paths required to find CakePHP + general filepath constants
  */
-require __DIR__ . '/paths.php';
+require __DIR__ . DIRECTORY_SEPARATOR . 'paths.php';
 
 /*
  * Bootstrap CakePHP.
@@ -45,6 +45,11 @@ use Cake\Mailer\Mailer;
 use Cake\Mailer\TransportFactory;
 use Cake\Routing\Router;
 use Cake\Utility\Security;
+
+/**
+ * Load global functions.
+ */
+require CAKE . 'functions.php';
 
 /*
  * See https://github.com/josegonzalez/php-dotenv for API details.
@@ -85,7 +90,7 @@ try {
 
 /*
  * Load an environment local configuration file to provide overrides to your configuration.
- * Notice: For security reasons app_local.php will not be included in your git repo.
+ * Notice: For security reasons app_local.php **should not** be included in your git repo.
  */
 if (file_exists(CONFIG . 'app_local.php')) {
     Configure::load('app_local', 'default');
@@ -104,7 +109,7 @@ if (Configure::read('debug')) {
 
 /*
  * Set the default server timezone. Using UTC makes time calculations / conversions easier.
- * Check http://php.net/manual/en/timezones.php for list of valid timezone strings.
+ * Check https://php.net/manual/en/timezones.php for list of valid timezone strings.
  */
 date_default_timezone_set(Configure::read('App.defaultTimezone'));
 
@@ -175,8 +180,10 @@ Security::setSalt(Configure::consume('Security.salt'));
 
 /*
  * Setup detectors for mobile and tablet.
+ * If you don't use these checks you can safely remove this code
+ * and the mobiledetect package from composer.json.
  */
-/*ServerRequest::addDetector('mobile', function ($request) {
+ServerRequest::addDetector('mobile', function ($request) {
     $detector = new \Detection\MobileDetect();
 
     return $detector->isMobile();
@@ -185,7 +192,8 @@ ServerRequest::addDetector('tablet', function ($request) {
     $detector = new \Detection\MobileDetect();
 
     return $detector->isTablet();
-});*/
+});
+
 ServerRequest::addDetector('lilScan', function ($request) {
     return $request->hasHeader('Lil-Scan');
 });

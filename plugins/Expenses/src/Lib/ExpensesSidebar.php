@@ -3,6 +3,10 @@ declare(strict_types=1);
 
 namespace Expenses\Lib;
 
+use App\Controller\AppController;
+use ArrayObject;
+use Cake\Event\Event;
+
 class ExpensesSidebar
 {
     /**
@@ -10,20 +14,21 @@ class ExpensesSidebar
      *
      * @param \Cake\Event\Event $event Event object.
      * @param \ArrayObject $sidebar Sidebar data.
-     * @return bool|null
+     * @return void
      */
-    public static function setAdminSidebar($event, $sidebar)
+    public static function setAdminSidebar(Event $event, ArrayObject $sidebar): void
     {
-        if (!$event->getSubject() instanceof \App\Controller\AppController) {
-            return false;
+        if (!$event->getSubject() instanceof AppController) {
+            return;
         }
 
-        $request = $event->getSubject()->getRequest();
-        $currentUser = $event->getSubject()->getCurrentUser();
-
-        if (empty($currentUser) || !$currentUser->hasRole('admin')) {
-            return false;
+        /** @var \App\Controller\AppController $controller */
+        $controller = $event->getSubject();
+        if (!$controller->hasCurrentUser()) {
+            return;
         }
+
+        $request = $controller->getRequest();
 
         $accounting['title'] = __d('expenses', 'Accounting');
         $accounting['visible'] = true;
@@ -155,7 +160,5 @@ class ExpensesSidebar
         $sidebar->append($accounting);
 
         $event->setResult(['sidebar' => $sidebar]);
-
-        return true;
     }
 }

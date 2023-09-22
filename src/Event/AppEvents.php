@@ -30,7 +30,7 @@ class AppEvents implements EventListenerInterface
      * @param \ArrayObject $options Additional options from controller.
      * @return void
      */
-    public function marshalDuration(Event $event, ArrayObject $data, ArrayObject $options)
+    public function marshalDuration(Event $event, ArrayObject $data, ArrayObject $options): void
     {
         foreach ($data as $fieldName => $fieldValue) {
             if (is_array($fieldValue) && !empty($fieldValue['duration'])) {
@@ -46,7 +46,7 @@ class AppEvents implements EventListenerInterface
      * @param \ArrayObject $sidebar Sidebar.
      * @return \ArrayObject
      */
-    public function modifySidebar($event, $sidebar)
+    public function modifySidebar(Event $event, ArrayObject $sidebar): ArrayObject
     {
         $ret = $sidebar;
         unset($sidebar['welcome']);

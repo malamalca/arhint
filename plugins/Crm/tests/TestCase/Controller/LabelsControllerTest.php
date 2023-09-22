@@ -5,19 +5,22 @@ namespace Crm\Test\TestCase\Controller;
 
 use Cake\Http\Exception\NotFoundException;
 use Cake\ORM\TableRegistry;
-use Cake\TestSuite\IntegrationTestCase;
+use Cake\TestSuite\IntegrationTestTrait;
+use Cake\TestSuite\TestCase;
 
 /**
  * Crm\Controller\LabelsController Test Case
  */
-class LabelsControllerTest extends IntegrationTestCase
+class LabelsControllerTest extends TestCase
 {
+    use IntegrationTestTrait;
+
     /**
      * Fixtures
      *
      * @var array
      */
-    public $fixtures = [
+    public array $fixtures = [
         'Adremas' => 'plugin.Crm.Adremas',
         'AdremasContacts' => 'plugin.Crm.AdremasContacts',
         'Contacts' => 'plugin.Crm.Contacts',

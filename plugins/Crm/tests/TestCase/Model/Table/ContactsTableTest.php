@@ -16,7 +16,7 @@ class ContactsTableTest extends TestCase
      *
      * @var array
      */
-    public $fixtures = [
+    public array $fixtures = [
         'Contacts' => 'plugin.Crm.Contacts',
         'Adremas' => 'plugin.Crm.Adremas',
     ];
@@ -29,8 +29,7 @@ class ContactsTableTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-        $config = TableRegistry::exists('Contacts') ? [] : ['className' => 'Crm\Model\Table\ContactsTable'];
-        $this->Contacts = TableRegistry::getTableLocator()->get('Crm.Contacts', $config);
+        $this->Contacts = TableRegistry::getTableLocator()->get('Crm.Contacts');
     }
 
     /**

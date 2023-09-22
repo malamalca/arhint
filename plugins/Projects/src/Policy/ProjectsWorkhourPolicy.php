@@ -3,6 +3,9 @@ declare(strict_types=1);
 
 namespace Projects\Policy;
 
+use App\Model\Entity\User;
+use Projects\Model\Entity\ProjectsWorkhour;
+
 /**
  * ProjectsWorkhour Policy Resolver
  */
@@ -17,7 +20,7 @@ class ProjectsWorkhourPolicy
      * @param \Projects\Model\Entity\ProjectsWorkhour $entity Entity
      * @return bool
      */
-    public function canEdit($user, $entity)
+    public function canEdit(User $user, ProjectsWorkhour $entity): bool
     {
         if (!$user->hasRole('admin') && !empty($entity->dat_confirmed)) {
             return false;
@@ -34,7 +37,7 @@ class ProjectsWorkhourPolicy
      * @param \Projects\Model\Entity\ProjectsWorkhour $entity Entity
      * @return bool
      */
-    public function canDelete($user, $entity)
+    public function canDelete(User $user, ProjectsWorkhour $entity): bool
     {
         if (!$user->hasRole('admin') && !empty($entity->dat_confirmed)) {
             return false;

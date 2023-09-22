@@ -5,19 +5,24 @@ namespace Documents\Test\TestCase\Controller;
 
 use Cake\Core\Configure;
 use Cake\ORM\TableRegistry;
-use Cake\TestSuite\IntegrationTestCase;
+use Cake\TestSuite\IntegrationTestTrait;
+use Cake\TestSuite\TestCase;
+use Laminas\Diactoros\UploadedFile;
+use const UPLOAD_ERR_OK;
 
 /**
  * Documents\Controller\DocumentsAttachmentsController Test Case
  */
-class DocumentsAttachmentsControllerTest extends IntegrationTestCase
+class DocumentsAttachmentsControllerTest extends TestCase
 {
+    use IntegrationTestTrait;
+
     /**
      * Fixtures
      *
      * @var array
      */
-    public $fixtures = [
+    public array $fixtures = [
         'Users' => 'app.Users',
         'Invoices' => 'plugin.Documents.Invoices',
         'DocumentsAttachments' => 'plugin.Documents.DocumentsAttachments',
@@ -60,19 +65,22 @@ class DocumentsAttachmentsControllerTest extends IntegrationTestCase
      *
      * @return void
      */
-    public function testAdd()
+    public function testAdd(): void
     {
         $this->login(USER_ADMIN);
+
+        $jpgAttachment = new UploadedFile(
+            dirname(__FILE__) . DS . 'data' . DS . 'sunset.jpg',
+            100963,
+            UPLOAD_ERR_OK,
+            'sunset_uploaded.jpg',
+            'image/jpg'
+        );
 
         $data = [
             'id' => null,
             'document_id' => 'd0d59a31-6de7-4eb4-8230-ca09113a7fe5',
-            'filename' => [
-                'name' => 'sunset_uploaded.jpg',
-                'type' => 'image/jpg',
-                'size' => 100963,
-                'tmp_name' => dirname(__FILE__) . DS . 'data' . DS . 'sunset.jpg',
-            ],
+            'filename' => $jpgAttachment,
         ];
 
         $this->enableSecurityToken();
@@ -108,6 +116,5 @@ class DocumentsAttachmentsControllerTest extends IntegrationTestCase
 
         $this->get('/documents/documents-attachments/delete/aef61652-7416-43b4-9bb4-198f5706ed74');
         $this->assertRedirect(['controller' => 'DocumentsAttachments', 'action' => 'index']);
-        //$this->assertRedirect(['controller' => 'Invoices', 'action' => 'view', 'd0d59a31-6de7-4eb4-8230-ca09113a7fe5']);
     }
 }

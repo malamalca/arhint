@@ -6,7 +6,8 @@ namespace Documents\Controller;
 use App\Lib\ArhintReport;
 use Cake\Event\EventInterface;
 use Cake\Http\Exception\NotFoundException;
-use Cake\I18n\FrozenTime;
+use Cake\Http\Response;
+use Cake\I18n\DateTime;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Inflector;
 use Cake\Utility\Text;
@@ -25,34 +26,30 @@ class BaseDocumentsController extends AppController
     /**
      * @var string $documentsScope
      */
-    public $documentsScope = null;
+    public string $documentsScope;
 
     /**
      * BeforeFilter event handler
      *
      * @param \Cake\Event\EventInterface $event Event interface
-     * @return \Cake\Http\Response|null
+     * @return void
      */
     public function beforeFilter(EventInterface $event)
     {
         parent::beforeFilter($event);
 
-        if (!empty($this->Security)) {
-            if (in_array($this->getRequest()->getParam('action'), ['editPreview'])) {
-                $this->Security->setConfig('validatePost', false);
-            }
-
-            if (in_array($this->getRequest()->getParam('action'), ['sign'])) {
-                $this->Security->setConfig('validatePost', false);
-            }
-
-            // post from external program like LilScan
-            if (in_array($this->getRequest()->getParam('action'), ['edit']) && $this->request->hasHeader('Lil-Scan')) {
-                $this->Security->setConfig('validatePost', false);
-            }
+        if (in_array($this->getRequest()->getParam('action'), ['editPreview'])) {
+            $this->FormProtection->setConfig('validate', false);
         }
 
-        return null;
+        if (in_array($this->getRequest()->getParam('action'), ['sign'])) {
+            $this->FormProtection->setConfig('validatePost', false);
+        }
+
+        // post from external program like LilScan
+        if (in_array($this->getRequest()->getParam('action'), ['edit']) && $this->request->hasHeader('Lil-Scan')) {
+            $this->FormProtection->setConfig('validatePost', false);
+        }
     }
 
     /**
@@ -64,19 +61,20 @@ class BaseDocumentsController extends AppController
     {
         $filter = (array)$this->getRequest()->getQuery();
 
-        $this->loadModel('Documents.DocumentsCounters');
-        $counters = $this->DocumentsCounters->rememberForUser(
+        /** @var \Documents\Model\Table\DocumentsCountersTable $DocumentsCountersTable */
+        $DocumentsCountersTable = $this->fetchTable('Documents.DocumentsCounters');
+        $counters = $DocumentsCountersTable->rememberForUser(
             $this->getCurrentUser()->id,
-            $this->Authorization->applyScope($this->DocumentsCounters->find(), 'index'),
+            $this->Authorization->applyScope($DocumentsCountersTable->find(), 'index'),
             $this->documentsScope
         );
 
         if (!empty($filter['counter'])) {
-            $counter = $this->DocumentsCounters->get($filter['counter']);
+            $counter = $DocumentsCountersTable->get($filter['counter']);
             $this->Authorization->authorize($counter, 'view');
         } else {
-            $counter = $this->DocumentsCounters->findDefaultCounter(
-                $this->Authorization->applyScope($this->DocumentsCounters->find(), 'index'),
+            $counter = $DocumentsCountersTable->findDefaultCounter(
+                $this->Authorization->applyScope($DocumentsCountersTable->find(), 'index'),
                 strtolower($this->documentsScope),
                 $this->getRequest()->getQuery('direction')
             );
@@ -96,7 +94,7 @@ class BaseDocumentsController extends AppController
     /**
      * View method
      *
-     * @return \Cake\Http\Response|null
+     * @return \Cake\Http\Response|void
      * @throws \Cake\Http\Exception\NotFoundException When record not found.
      */
     public function view()
@@ -105,7 +103,7 @@ class BaseDocumentsController extends AppController
         $id = $args[0];
         $containTables = $args[1];
 
-        $document = $this->{$this->documentsScope}->get($id, ['contain' => $containTables]);
+        $document = $this->{$this->documentsScope}->get($id, contain: $containTables);
 
         $this->Authorization->authorize($document);
 
@@ -124,8 +122,6 @@ class BaseDocumentsController extends AppController
         $currentCounter = $document->documents_counter->id;
 
         $this->set(compact('document', 'counters', 'links', 'currentCounter'));
-
-        return null;
     }
 
     /**
@@ -134,7 +130,7 @@ class BaseDocumentsController extends AppController
      * @return \Cake\Http\Response|null
      * @throws \Cake\Http\Exception\NotFoundException When record not found.
      */
-    public function edit()
+    public function edit(): ?Response
     {
         $args = func_get_args();
         $document = $args[0];
@@ -163,8 +159,9 @@ class BaseDocumentsController extends AppController
                 $tmpAttachments = $this->getRequest()->getData('documents_attachments');
                 if (!empty($tmpAttachments)) {
                     foreach ((array)$tmpAttachments as $tmpAttachment) {
-                        if (!empty($tmpAttachment['filename']['tmp_name'])) {
-                            $tmpNames[$tmpAttachment['filename']['name']] = $tmpAttachment['filename']['tmp_name'];
+                        if (!empty($tmpAttachment['filename']) && !$tmpAttachment['filename']->getError()) {
+                            $tmpNames[$tmpAttachment['filename']->getClientFilename()] =
+                                $tmpAttachment['filename']->getStream()->getMetadata('uri');
                         }
                     }
                 }
@@ -204,7 +201,7 @@ class BaseDocumentsController extends AppController
                     if ($this->getRequest()->is('ajax') || $this->getRequest()->is('lilScan')) {
                         $response = $this->getResponse()
                             ->withType('application/json')
-                            ->withStringBody(json_encode(['document' => $document]));
+                            ->withStringBody((string)json_encode(['document' => $document]));
 
                         return $response;
                     } else {
@@ -224,7 +221,9 @@ class BaseDocumentsController extends AppController
                 if ($this->getRequest()->is('ajax')) {
                     $response = $this->getResponse()
                         ->withType('application/json')
-                        ->withStringBody(json_encode(['document' => $document, 'errors' => $document->getErrors()]));
+                        ->withStringBody(
+                            (string)json_encode(['document' => $document, 'errors' => $document->getErrors()])
+                        );
 
                     return $response;
                 } else {
@@ -232,11 +231,6 @@ class BaseDocumentsController extends AppController
                 }
             }
         }
-
-        $counter = TableRegistry::getTableLocator()->get('Documents.DocumentsCounters')
-            ->find()
-            ->where(['DocumentsCounters.id' => $document->counter_id])
-            ->first();
 
         $this->set(compact('document'));
 
@@ -250,7 +244,7 @@ class BaseDocumentsController extends AppController
      * @return \Cake\Http\Response|null
      * @throws \Cake\Http\Exception\NotFoundException When record not found.
      */
-    public function delete($id = null)
+    public function delete(?string $id = null): ?Response
     {
         $invoice = $this->{$this->documentsScope}->get($id);
         $this->Authorization->authorize($invoice);
@@ -277,13 +271,13 @@ class BaseDocumentsController extends AppController
      * @param string $id Document id
      * @return \Cake\Http\Response|null
      */
-    public function sign($id)
+    public function sign(string $id): ?Response
     {
         $invoice = $this->{$this->documentsScope}->get($id);
         $this->Authorization->authorize($invoice);
 
         if ($this->getRequest()->is(['post', 'put'])) {
-            $signTimestamp = FrozenTime::parseDateTime($this->getRequest()->getData('dat_sign'), 'yyyy-MM-ddTHH:mm:ss');
+            $signTimestamp = DateTime::parseDateTime($this->getRequest()->getData('dat_sign'), 'yyyy-MM-ddTHH:mm:ss');
             $cert = $this->getRequest()->getData('sign_cert');
 
             if (empty($cert) || empty($signTimestamp)) {
@@ -328,12 +322,12 @@ class BaseDocumentsController extends AppController
     /**
      * editPreview method
      *
-     * @return \Cake\Http\Response|null
+     * @param array<mixed> $args Arguments
+     * @return \Cake\Http\Response|void
      * @throws \Cake\Http\Exception\NotFoundException When record not found.
      */
-    public function editPreview()
+    public function editPreview(array ...$args)
     {
-        $args = func_get_args();
         $document = $args[0];
         $containTables = (array)$args[1];
 
@@ -349,8 +343,6 @@ class BaseDocumentsController extends AppController
         if (!empty($data)) {
             return $Exporter->response('pdf', $data);
         }
-
-        return null;
     }
 
     /**
@@ -360,7 +352,7 @@ class BaseDocumentsController extends AppController
      * @return \Cake\Http\Response|null
      * @throws \Cake\Http\Exception\NotFoundException When record not found.
      */
-    public function templates($id = null)
+    public function templates(?string $id = null): ?Response
     {
         $invoice = $this->{$this->documentsScope}->get($id);
         $this->Authorization->authorize($invoice, 'edit');
@@ -388,7 +380,7 @@ class BaseDocumentsController extends AppController
      *
      * @return \Cake\Http\Response|null
      */
-    public function email()
+    public function email(): ?Response
     {
         $email = new EmailForm($this->getRequest());
 
@@ -421,9 +413,9 @@ class BaseDocumentsController extends AppController
      *
      * @param string|null $id Document id.
      * @param string|null $name Display name.
-     * @return \Cake\Http\Response|null
+     * @return \Cake\Http\Response|void
      */
-    public function preview($id = null, $name = null)
+    public function preview(?string $id = null, ?string $name = null)
     {
         $this->Authorization->skipAuthorization();
         if (empty($id)) {
@@ -431,8 +423,6 @@ class BaseDocumentsController extends AppController
         } else {
             $this->set(compact('id', 'name'));
         }
-
-        return null;
     }
 
     /**
@@ -440,10 +430,10 @@ class BaseDocumentsController extends AppController
      *
      * @param string|null $id Document id.
      * @param string|null $name Document slug.
-     * @return \Cake\Http\Response|null
+     * @return \Cake\Http\Response|void
      * @throws \Cake\Http\Exception\NotFoundException When record not found.
      */
-    public function export($id = null, $name = null)
+    public function export(?string $id = null, ?string $name = null)
     {
         $filter = (array)$this->getRequest()->getQuery();
         if (!empty($id) && ($id !== 'invoices')) {
@@ -451,8 +441,8 @@ class BaseDocumentsController extends AppController
         }
 
         $ExporterClass = '\\Documents\\Lib\\' . $this->documentsScope . 'Export';
-        //$Exporter = new InvoicesExport();
 
+        /** @var \Documents\Lib\InvoicesExport|\Documents\Lib\DocumentsExport $Exporter */
         $Exporter = new $ExporterClass();
         $documents = $Exporter->find($filter);
         $this->Authorization->applyScope($documents, 'index');
@@ -484,21 +474,19 @@ class BaseDocumentsController extends AppController
                 $this->redirect(['action' => 'view', $id]);
             }
         }
-
-        return null;
     }
 
     /**
      * report method
      *
-     * @return \Cake\Http\Response|null
+     * @return \Cake\Http\Response|void
      */
     public function report()
     {
         $this->Authorization->skipAuthorization();
 
         if (!empty($this->getRequest()->getQuery('kind'))) {
-            /** @var array $filter */
+            /** @var array<string, mixed> $filter */
             $filter = $this->getRequest()->getQuery();
 
             if ($filter['kind'] == 'span') {
@@ -557,16 +545,14 @@ class BaseDocumentsController extends AppController
         );
 
         $this->set(compact('counters'));
-
-        return null;
     }
 
     /**
      * autocomplete method
      *
-     * @return \Cake\Http\Response|null
+     * @return \Cake\Http\Response
      */
-    public function autocomplete()
+    public function autocomplete(): Response
     {
         if ($this->getRequest()->is('ajax')) {
             $term = $this->getRequest()->getQuery('term');
@@ -596,7 +582,7 @@ class BaseDocumentsController extends AppController
 
             $response = $this->getResponse()
                 ->withType('application/json')
-                ->withStringBody(json_encode($ret));
+                ->withStringBody((string)json_encode($ret));
 
             return $response;
         } else {

@@ -1,5 +1,5 @@
 <?php
-use Cake\I18n\FrozenTime;
+use Cake\I18n\DateTime;
 use Cake\Routing\Router;
 
 $this->set('head_for_layout', false);
@@ -73,7 +73,7 @@ $document_preview = [
                                     'text' => __d('documents', 'Datetime') . ':',
                                     'class' => 'active',
                                 ],
-                                'default' => (new FrozenTime())->toDatetimeString(),
+                                'default' => (new DateTime())->toDatetimeString(),
                                 'readonly' => !$this->getCurrentUser()->hasRole('root'),
                             ],
                         ],

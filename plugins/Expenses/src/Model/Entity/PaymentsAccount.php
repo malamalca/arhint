@@ -13,8 +13,8 @@ use Cake\ORM\Entity;
  * @property string|null $title
  * @property bool|null $primary
  * @property bool|null $active
- * @property \Cake\I18n\FrozenTime|null $created
- * @property \Cake\I18n\FrozenTime|null $modified
+ * @property \Cake\I18n\DateTime|null $created
+ * @property \Cake\I18n\DateTime|null $modified
  */
 class PaymentsAccount extends Entity
 {
@@ -26,7 +26,7 @@ class PaymentsAccount extends Entity
      *
      * @var array<string, bool>
      */
-    protected $_accessible = [
+    protected array $_accessible = [
         '*' => true,
         'id' => false,
     ];

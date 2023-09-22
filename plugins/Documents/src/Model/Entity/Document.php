@@ -21,21 +21,21 @@ use Cake\ORM\TableRegistry;
  * @property int $attachments_count
  * @property int $counter
  * @property string|null $no
- * @property \Cake\I18n\FrozenDate|null $dat_issue
+ * @property \Cake\I18n\Date|null $dat_issue
  * @property string|null $title
  * @property string|null $descript
  * @property string|null $location
- * @property \Cake\I18n\FrozenTime|null $created
- * @property \Cake\I18n\FrozenTime|null $modified
+ * @property \Cake\I18n\DateTime|null $created
+ * @property \Cake\I18n\DateTime|null $modified
  *
  * @property \Documents\Model\Entity\DocumentsClient $issuer
  * @property \Documents\Model\Entity\DocumentsClient $receiver
  * @property \Documents\Model\Entity\DocumentsCounter $documents_counter
  * @property \Documents\Model\Entity\Contact $contact
  * @property \Documents\Model\Entity\Project $project
- * @property \Documents\Model\Entity\TplHeader $tpl_header
- * @property \Documents\Model\Entity\TplBody $tpl_body
- * @property \Documents\Model\Entity\TplFooter $tpl_footer
+ * @property \Documents\Model\Entity\DocumentsTemplate $tpl_header
+ * @property \Documents\Model\Entity\DocumentsTemplate $tpl_body
+ * @property \Documents\Model\Entity\DocumentsTemplate $tpl_footer
  * @property \Documents\Model\Entity\DocumentsAttachment[] $documents_attachments
  * @property \Documents\Model\Entity\DocumentsClient[] $documents_clients
  * @property \Documents\Model\Entity\DocumentsLink[] $documents_links
@@ -51,7 +51,7 @@ class Document extends Entity
      *
      * @var array<string, bool>
      */
-    protected $_accessible = [
+    protected array $_accessible = [
         'owner_id' => true,
         'user_id' => true,
         'contact_id' => true,
@@ -86,7 +86,7 @@ class Document extends Entity
      *
      * @return void
      */
-    public function getNextCounterNo()
+    public function getNextCounterNo(): void
     {
         /** @var \Documents\Model\Table\DocumentsCountersTable $DocumentsCounters */
         $DocumentsCounters = TableRegistry::getTableLocator()->get('Documents.DocumentsCounters');
@@ -97,7 +97,7 @@ class Document extends Entity
 
         // generate documents' `no` according to counter's `mask`
         if (!empty($counter->mask)) {
-            $this->no = $DocumentsCounters->generateNo($counter->toArray());
+            $this->no = (string)$DocumentsCounters->generateNo($counter->toArray());
         }
 
         // update counter

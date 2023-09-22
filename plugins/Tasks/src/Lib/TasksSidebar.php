@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace Tasks\Lib;
 
+use App\Controller\AppController;
+use ArrayObject;
 use Cake\Cache\Cache;
 use Cake\ORM\TableRegistry;
 
@@ -12,9 +14,9 @@ class TasksSidebar
      * Returns number of open tasks for specified due string.
      *
      * @param string $userId User id
-     * @return array
+     * @return array<string, int>
      */
-    public static function countOpenTasks($userId)
+    public static function countOpenTasks(string $userId): array
     {
         $counters = Cache::remember(
             'Tasks.' . $userId . '.OpenTasks',
@@ -64,19 +66,20 @@ class TasksSidebar
      * @param \ArrayObject $sidebar Sidebar data.
      * @return void
      */
-    public static function setAdminSidebar($event, $sidebar)
+    public static function setAdminSidebar(mixed $event, ArrayObject $sidebar): void
     {
-        if (!$event->getSubject() instanceof \App\Controller\AppController) {
+        if (!$event->getSubject() instanceof AppController) {
             return;
         }
 
+        /** @var \App\Controller\AppController $controller */
         $controller = $event->getSubject();
+        if (!$controller->hasCurrentUser()) {
+            return;
+        }
+
         $request = $event->getSubject()->getRequest();
         $currentUser = $event->getSubject()->getCurrentUser();
-
-        if (empty($currentUser)) {
-            return;
-        }
 
         $tasks['title'] = __d('tasks', 'Tasks');
         $tasks['visible'] = true;
@@ -192,11 +195,10 @@ class TasksSidebar
                 ],*/
             ];
 
-            $owner_id = $currentUser->id;
+            /*$owner_id = $currentUser->id;
             $folders = Cache::remember(
                 'Tasks.' . $owner_id . '.Folders',
                 function () use ($owner_id, $openTasksCounters, $request) {
-                    /** @var \Tasks\Model\Table\TasksFoldersTable $TasksFolders */
                     $TasksFolders = TableRegistry::getTableLocator()->get('Tasks.TasksFolders');
 
                     $folders = $TasksFolders->findForOwner($owner_id);
@@ -220,7 +222,7 @@ class TasksSidebar
 
                     return $folders;
                 }
-            );
+            );*/
         }
 
         $sidebar->append($tasks);

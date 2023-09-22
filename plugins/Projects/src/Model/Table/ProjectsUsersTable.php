@@ -15,23 +15,19 @@ use Cake\Validation\Validator;
  * @method \Projects\Model\Entity\ProjectsUser newEmptyEntity()
  * @method \Projects\Model\Entity\ProjectsUser newEntity(array $data, array $options = [])
  * @method \Projects\Model\Entity\ProjectsUser[] newEntities(array $data, array $options = [])
- * @method \Projects\Model\Entity\ProjectsUser get($primaryKey, $options = [])
+ * @method \Projects\Model\Entity\ProjectsUser get(mixed $primaryKey, array|string $finder = 'all', \Psr\SimpleCache\CacheInterface|string|null $cache = null, \Closure|string|null $cacheKey = null, mixed ...$args)
  * @method \Projects\Model\Entity\ProjectsUser findOrCreate($search, ?callable $callback = null, $options = [])
  * @method \Projects\Model\Entity\ProjectsUser patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
  * @method \Projects\Model\Entity\ProjectsUser[] patchEntities(iterable $entities, array $data, array $options = [])
  * @method \Projects\Model\Entity\ProjectsUser|false save(\Cake\Datasource\EntityInterface $entity, $options = [])
  * @method \Projects\Model\Entity\ProjectsUser saveOrFail(\Cake\Datasource\EntityInterface $entity, $options = [])
- * @method \Projects\Model\Entity\ProjectsUser[]|\Cake\Datasource\ResultSetInterface|false saveMany(iterable $entities, $options = [])
- * @method \Projects\Model\Entity\ProjectsUser[]|\Cake\Datasource\ResultSetInterface saveManyOrFail(iterable $entities, $options = [])
- * @method \Projects\Model\Entity\ProjectsUser[]|\Cake\Datasource\ResultSetInterface|false deleteMany(iterable $entities, $options = [])
- * @method \Projects\Model\Entity\ProjectsUser[]|\Cake\Datasource\ResultSetInterface deleteManyOrFail(iterable $entities, $options = [])
  */
 class ProjectsUsersTable extends Table
 {
     /**
      * Initialize method
      *
-     * @param array $config The configuration for the Table.
+     * @param array<string, mixed> $config List of options for this table.
      * @return void
      */
     public function initialize(array $config): void
@@ -91,7 +87,7 @@ class ProjectsUsersTable extends Table
      * @param string $userId User id.
      * @return bool
      */
-    public function hasAccess($projectId, $userId)
+    public function hasAccess(string $projectId, string $userId): bool
     {
         return $this->find()
             ->where(['project_id' => $projectId, 'user_id' => $userId])

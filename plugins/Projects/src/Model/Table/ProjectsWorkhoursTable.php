@@ -12,7 +12,7 @@ use Cake\Validation\Validator;
  *
  * @property \Projects\Model\Table\ProjectsTable|\Cake\ORM\Association\BelongsTo $Projects
  * @property \Projects\Model\Table\UsersTable|\Cake\ORM\Association\BelongsTo $Users
- * @method \Projects\Model\Entity\ProjectsWorkhour get($primaryKey, array $options = [])
+ * @method \Projects\Model\Entity\ProjectsWorkhour get(mixed $primaryKey, array|string $finder = 'all', \Psr\SimpleCache\CacheInterface|string|null $cache = null, \Closure|string|null $cacheKey = null, mixed ...$args)
  * @method \Projects\Model\Entity\ProjectsWorkhour newEntity($data = null, array $options = [])
  * @method \Projects\Model\Entity\ProjectsWorkhour newEmptyEntity(array $options = [])
  * @method \Projects\Model\Entity\ProjectsWorkhour[] newEntities(array $data, array $options = [])
@@ -27,7 +27,7 @@ class ProjectsWorkhoursTable extends Table
     /**
      * Initialize method
      *
-     * @param array $config The configuration for the Table.
+     * @param array<string, mixed> $config List of options for this table.
      * @return void
      */
     public function initialize(array $config): void
@@ -96,7 +96,7 @@ class ProjectsWorkhoursTable extends Table
      * @param string $projectId Project id
      * @return int Duration in seconds
      */
-    public function getTotalDuration($projectId)
+    public function getTotalDuration(string $projectId): int
     {
         $query = $this->find();
         $data = $query->select(['totalDuration' => $query->func()->sum('duration')])
@@ -104,16 +104,16 @@ class ProjectsWorkhoursTable extends Table
             ->disableHydration()
             ->first();
 
-        return $data['totalDuration'];
+        return (int)$data['totalDuration'];
     }
 
     /**
      * filter method
      *
-     * @param array $filter Filter data.
-     * @return array
+     * @param array<string, mixed> $filter Filter data.
+     * @return array<string, mixed>
      */
-    public function filter(&$filter)
+    public function filter(array &$filter): array
     {
         $ret = ['conditions' => [], 'contain' => []];
 

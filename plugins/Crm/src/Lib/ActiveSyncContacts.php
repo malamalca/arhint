@@ -20,12 +20,12 @@ use Syncroton_Registry;
 
 class ActiveSyncContacts implements Syncroton_Data_IData
 {
-    protected $_supportedFolderTypes = [
+    protected array $_supportedFolderTypes = [
         Syncroton_Command_FolderSync::FOLDERTYPE_CONTACT,
         Syncroton_Command_FolderSync::FOLDERTYPE_CONTACT_USER_CREATED,
     ];
 
-    protected $_phoneTrans = [
+    protected array $_phoneTrans = [
         'H' => 'homePhoneNumber',
         'M' => 'mobilePhoneNumber',
         'W' => 'businessPhoneNumber',
@@ -33,7 +33,7 @@ class ActiveSyncContacts implements Syncroton_Data_IData
         'P' => 'home2PhoneNumber',
     ];
 
-    protected $_addressTrans = [
+    protected array $_addressTrans = [
         'H' => 'home',
         'W' => 'business',
         'O' => 'other',
@@ -42,7 +42,7 @@ class ActiveSyncContacts implements Syncroton_Data_IData
     /**
      * @var \DateTime
      */
-    protected $_timeStamp;
+    protected DateTime $_timeStamp;
 
     /**
      * the constructor
@@ -68,11 +68,11 @@ class ActiveSyncContacts implements Syncroton_Data_IData
     /**
      * return one folder identified by id
      *
-     * @param  string  $id Folder id.
+     * @param string  $id Folder id.
      * @throws \Crm\Lib\Syncroton_Exception_NotFound
      * @return \Syncroton_Model_Folder
      */
-    public function getFolder($id)
+    public function getFolder(string $id): Syncroton_Model_Folder
     {
         //if ($id == 'contacts') {
             return new Syncroton_Model_Folder([
@@ -97,7 +97,7 @@ class ActiveSyncContacts implements Syncroton_Data_IData
      * @param \Syncroton_Model_IFolder $folder Folder model
      * @return \Syncroton_Model_Folder
      */
-    public function createFolder(Syncroton_Model_IFolder $folder)
+    public function createFolder(Syncroton_Model_IFolder $folder): Syncroton_Model_Folder
     {
         if (!in_array($folder->type, $this->_supportedFolderTypes)) {
             throw new Syncroton_Exception_UnexpectedValue();
@@ -115,7 +115,7 @@ class ActiveSyncContacts implements Syncroton_Data_IData
      * @param \Syncroton_Model_IEntry $_entry Entry
      * @return string
      */
-    public function createEntry($_folderId, Syncroton_Model_IEntry $_entry)
+    public function createEntry(string $_folderId, Syncroton_Model_IEntry $_entry): string
     {
         $Contacts = TableRegistry::getTableLocator()->get('Crm.Contacts');
         $c = $Contacts->newEmptyEntity();
@@ -194,7 +194,7 @@ class ActiveSyncContacts implements Syncroton_Data_IData
      * @param mixed $_collectionData Collection data
      * @return bool
      */
-    public function deleteEntry($_folderId, $_serverId, $_collectionData)
+    public function deleteEntry(string $_folderId, string $_serverId, mixed $_collectionData): bool
     {
         $Contacts = TableRegistry::getTableLocator()->get('Crm.Contacts');
         $contact = $Contacts->get($_serverId);
@@ -209,7 +209,7 @@ class ActiveSyncContacts implements Syncroton_Data_IData
      * @param string $_folderId Folder id
      * @return bool
      */
-    public function deleteFolder($_folderId)
+    public function deleteFolder(string $_folderId): bool
     {
         return true;
     }
@@ -221,7 +221,7 @@ class ActiveSyncContacts implements Syncroton_Data_IData
      * @param array $options Options
      * @return bool
      */
-    public function emptyFolderContents($folderId, $options)
+    public function emptyFolderContents(string $folderId, array $options): bool
     {
         return true;
     }
@@ -231,7 +231,7 @@ class ActiveSyncContacts implements Syncroton_Data_IData
      *
      * @return array
      */
-    public function getAllFolders()
+    public function getAllFolders(): array
     {
         $result = [
             'contacts' => new Syncroton_Model_Folder([
@@ -261,12 +261,12 @@ class ActiveSyncContacts implements Syncroton_Data_IData
      * @return array
      */
     public function getChangedEntries(
-        $_folderId,
+        string $_folderId,
         DateTime $_startTimeStamp,
         ?DateTime $_endTimeStamp = null,
-        $filterType = null
-    ) {
-        $folderId = $_folderId instanceof Syncroton_Model_IFolder ? $_folderId->id : $_folderId;
+        ?string $filterType = null
+    ): array {
+        //$folderId = $_folderId instanceof Syncroton_Model_IFolder ? $_folderId->id : $_folderId;
 
         $Contacts = TableRegistry::getTableLocator()->get('Crm.Contacts');
         $query = $Contacts->find('list');
@@ -296,7 +296,7 @@ class ActiveSyncContacts implements Syncroton_Data_IData
      * @param \DateTime $endTimeStamp Ent date time.
      * @return array list of Syncroton_Model_Folder
      */
-    public function getChangedFolders(DateTime $startTimeStamp, DateTime $endTimeStamp)
+    public function getChangedFolders(DateTime $startTimeStamp, DateTime $endTimeStamp): array
     {
         $result = [
             'contacts' => new Syncroton_Model_Folder([
@@ -323,9 +323,9 @@ class ActiveSyncContacts implements Syncroton_Data_IData
      * @param string $_filter Filter string
      * @return array
      */
-    public function getServerEntries($_folderId, $_filter)
+    public function getServerEntries(Syncroton_Model_IFolder|string $_folderId, string $_filter): array
     {
-        $folderId = $_folderId instanceof Syncroton_Model_IFolder ? $_folderId->id : $_folderId;
+        //$folderId = $_folderId instanceof Syncroton_Model_IFolder ? $_folderId->id : $_folderId;
 
         $Contacts = TableRegistry::getTableLocator()->get('Crm.Contacts');
         $ids = array_keys($Contacts->find('list')
@@ -352,7 +352,7 @@ class ActiveSyncContacts implements Syncroton_Data_IData
         Syncroton_Backend_IContent $contentBackend,
         Syncroton_Model_IFolder $folder,
         Syncroton_Model_ISyncState $syncState
-    ) {
+    ): int {
         $allClientEntries = $contentBackend->getFolderState($this->_device, $folder);
         $allServerEntries = $this->getServerEntries($folder->serverId, $folder->lastfiltertype);
 
@@ -375,7 +375,7 @@ class ActiveSyncContacts implements Syncroton_Data_IData
      * @return void
      * @throw \Syncroton_Exception_NotFound
      */
-    public function getFileReference($fileReference)
+    public function getFileReference(string $fileReference): void
     {
         throw new Syncroton_Exception_NotFound('filereference not found');
     }
@@ -387,12 +387,12 @@ class ActiveSyncContacts implements Syncroton_Data_IData
      * @param string $serverId Server id
      * @return \Syncroton_Model_IEntry
      */
-    public function getEntry(Syncroton_Model_SyncCollection $collection, $serverId)
+    public function getEntry(Syncroton_Model_SyncCollection $collection, string $serverId): Syncroton_Model_IEntry
     {
         $Contacts = TableRegistry::getTableLocator()->get('Crm.Contacts');
         $c = $Contacts->get(
             $serverId,
-            ['contain' => ['Companies', 'ContactsPhones', 'ContactsAddresses', 'ContactsEmails']]
+            contain: ['Companies', 'ContactsPhones', 'ContactsAddresses', 'ContactsEmails']
         );
         if (!$c->owner_id == $this->_ownerId) {
             return false;
@@ -449,7 +449,7 @@ class ActiveSyncContacts implements Syncroton_Data_IData
         Syncroton_Backend_IContent $contentBackend,
         Syncroton_Model_IFolder $folder,
         Syncroton_Model_ISyncState $syncState
-    ) {
+    ): bool {
         return (bool)$this->getCountOfChanges($contentBackend, $folder, $syncState);
     }
 
@@ -461,7 +461,7 @@ class ActiveSyncContacts implements Syncroton_Data_IData
      * @param string $_dstFolderId Destination folder id
      * @return string
      */
-    public function moveItem($_srcFolderId, $_serverId, $_dstFolderId)
+    public function moveItem(string $_srcFolderId, string $_serverId, string $_dstFolderId): string
     {
         return $_serverId;
     }
@@ -472,12 +472,12 @@ class ActiveSyncContacts implements Syncroton_Data_IData
      * @param string $_folderId Folder id
      * @param string $_serverId Server id
      * @param \Syncroton_Model_IEntry $_entry Entry
-     * @return bool|string
+     * @return string|bool
      */
-    public function updateEntry($_folderId, $_serverId, Syncroton_Model_IEntry $_entry)
+    public function updateEntry(string $_folderId, string $_serverId, Syncroton_Model_IEntry $_entry): bool|string
     {
         $Contacts = TableRegistry::getTableLocator()->get('Crm.Contacts');
-        $c = $Contacts->get($_serverId, ['contain' => ['ContactsPhones', 'ContactsAddresses', 'ContactsEmails']]);
+        $c = $Contacts->get($_serverId, contain: ['ContactsPhones', 'ContactsAddresses', 'ContactsEmails']);
         if (empty($c)) {
             $c = $Contacts->newEmptyEntity();
             $c->id = $_serverId;
@@ -623,7 +623,7 @@ class ActiveSyncContacts implements Syncroton_Data_IData
      * @param \Syncroton_Model_IFolder $folder Folder
      * @return \Syncroton_Model_IFolder
      */
-    public function updateFolder(Syncroton_Model_IFolder $folder)
+    public function updateFolder(Syncroton_Model_IFolder $folder): Syncroton_Model_IFolder
     {
         return $this->getFolder($folder->serverId);
     }

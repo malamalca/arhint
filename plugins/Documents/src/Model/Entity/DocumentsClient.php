@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Documents\Model\Entity;
 
+use App\Model\Entity\User;
 use Cake\ORM\Entity;
 use Cake\ORM\TableRegistry;
 
@@ -29,8 +30,8 @@ use Cake\ORM\TableRegistry;
  * @property string|null $phone
  * @property string|null $fax
  * @property string|null $email
- * @property \Cake\I18n\FrozenTime|null $created
- * @property \Cake\I18n\FrozenTime|null $modified
+ * @property \Cake\I18n\DateTime|null $created
+ * @property \Cake\I18n\DateTime|null $modified
  */
 class DocumentsClient extends Entity
 {
@@ -39,7 +40,7 @@ class DocumentsClient extends Entity
      *
      * @var array<string, bool>
      */
-    protected $_accessible = [
+    protected array $_accessible = [
         '*' => true,
         'id' => false,
     ];
@@ -50,15 +51,16 @@ class DocumentsClient extends Entity
      * @param \App\Model\Entity\User $user Source data entity.
      * @return void
      */
-    public function patchWithAuth($user)
+    public function patchWithAuth(User $user): void
     {
         $this->contact_id = $user->company_id;
 
         if (empty($user->company)) {
             /** @var \Crm\Model\Entity\Contact $company */
-            $company = TableRegistry::getTableLocator()->get('Crm.Contacts')->get($user->company_id, [
-                'contain' => ['PrimaryAddresses', 'PrimaryAccounts'],
-            ]);
+            $company = TableRegistry::getTableLocator()->get('Crm.Contacts')->get(
+                $user->company_id,
+                contain: ['PrimaryAddresses', 'PrimaryAccounts']
+            );
         } else {
             /** @var \Crm\Model\Entity\Contact $company */
             $company = $user->company;

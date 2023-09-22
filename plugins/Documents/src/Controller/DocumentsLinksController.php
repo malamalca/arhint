@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Documents\Controller;
 
 use Cake\Event\EventInterface;
+use Cake\Http\Response;
 
 /**
  * DocumentsLinks Controller
@@ -16,19 +17,14 @@ class DocumentsLinksController extends AppController
      * BeforeFilter event handler
      *
      * @param \Cake\Event\EventInterface $event Event interface
-     * @return \Cake\Http\Response|void
+     * @return void
      */
     public function beforeFilter(EventInterface $event)
     {
         parent::beforeFilter($event);
 
-        if (!empty($this->Security)) {
-            if (in_array($this->getRequest()->getParam('action'), ['link'])) {
-                $this->Security->setConfig(
-                    'unlockedFields',
-                    ['document_id', 'model']
-                );
-            }
+        if (in_array($this->getRequest()->getParam('action'), ['link'])) {
+            $this->FormProtection->setConfig('unlockedFields', ['document_id', 'model']);
         }
     }
 
@@ -39,7 +35,7 @@ class DocumentsLinksController extends AppController
      * @param string $documentId Document id.
      * @return \Cake\Http\Response|null
      */
-    public function link($model, $documentId = null)
+    public function link(string $model, string $documentId): ?Response
     {
         $this->Authorization->skipAuthorization();
 
@@ -73,7 +69,7 @@ class DocumentsLinksController extends AppController
      * @return \Cake\Http\Response|null
      * @throws \Cake\Http\Exception\NotFoundException When record not found.
      */
-    public function delete($documentId, $id)
+    public function delete(string $documentId, string $id): ?Response
     {
         $documentsLink = $this->DocumentsLinks->get($id);
         $this->Authorization->skipAuthorization();

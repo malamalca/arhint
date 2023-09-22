@@ -5,24 +5,33 @@ namespace Documents\Test\TestCase\Controller;
 
 use Cake\ORM\TableRegistry;
 use Cake\Routing\Router;
-use Cake\TestSuite\IntegrationTestCase;
+use Cake\TestSuite\IntegrationTestTrait;
+use Cake\TestSuite\TestCase;
 
 /**
  * Documents\Controller\DocumentsLinksController Test Case
  */
-class DocumentsLinksControllerTest extends IntegrationTestCase
+class DocumentsLinksControllerTest extends TestCase
 {
+    use IntegrationTestTrait;
+
     /**
      * Fixtures
      *
      * @var array
      */
-    public $fixtures = [
+    public array $fixtures = [
         'Users' => 'app.Users',
         'DocumentsLinks' => 'plugin.Documents.DocumentsLinks',
         'Invoices' => 'plugin.Documents.Invoices',
     ];
 
+    /**
+     * User login method
+     *
+     * @param string $userId User id
+     * @return void
+     */
     private function login($userId)
     {
         $user = TableRegistry::getTableLocator()->get('Users')->get($userId);
@@ -71,7 +80,7 @@ class DocumentsLinksControllerTest extends IntegrationTestCase
     public function testDelete()
     {
         $DocumentsLinksTable = TableRegistry::getTableLocator()->get('Documents.DocumentsLinks');
-        $linkId = $DocumentsLinksTable->two('Invoice', 'd0d59a31-6de7-4eb4-8230-ca09113a7fe5','Invoice', 'd0d59a31-6de7-4eb4-8230-ca09113a7fe6');
+        $linkId = $DocumentsLinksTable->two('Invoice', 'd0d59a31-6de7-4eb4-8230-ca09113a7fe5', 'Invoice', 'd0d59a31-6de7-4eb4-8230-ca09113a7fe6');
         $this->assertNotFalse($linkId);
 
         $this->login(USER_ADMIN);

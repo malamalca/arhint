@@ -12,7 +12,7 @@ use Cake\Validation\Validator;
 /**
  * PaymentsAccounts Model
  *
- * @method \Expenses\Model\Entity\PaymentsAccount get($primaryKey, array $options = [])
+ * @method \Expenses\Model\Entity\PaymentsAccount get(mixed $primaryKey, array|string $finder = 'all', \Psr\SimpleCache\CacheInterface|string|null $cache = null, \Closure|string|null $cacheKey = null, mixed ...$args)
  * @method \Expenses\Model\Entity\PaymentsAccount newEmptyEntity()
  * @method \Expenses\Model\Entity\PaymentsAccount patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
  */
@@ -21,7 +21,7 @@ class PaymentsAccountsTable extends Table
     /**
      * Initialize method
      *
-     * @param array $config The configuration for the Table.
+     * @param array<string, mixed> $config List of options for this table.
      * @return void
      */
     public function initialize(array $config): void
@@ -71,7 +71,7 @@ class PaymentsAccountsTable extends Table
      * @param \ArrayObject $options Options array.
      * @return bool
      */
-    public function beforeSave(Event $event, Entity $entity, ArrayObject $options)
+    public function beforeSave(Event $event, Entity $entity, ArrayObject $options): bool
     {
         if (!$this->exists(['owner_id' => $entity->owner_id, 'primary' => true])) {
             $entity->primary = true;
@@ -88,7 +88,7 @@ class PaymentsAccountsTable extends Table
      * @param \ArrayObject $options Options array.
      * @return void
      */
-    public function afterSave(Event $event, Entity $entity, ArrayObject $options)
+    public function afterSave(Event $event, Entity $entity, ArrayObject $options): void
     {
         if ($entity->primary) {
             $this->updateAll(['primary' => false], [
@@ -105,7 +105,7 @@ class PaymentsAccountsTable extends Table
      * @param string $ownerId User Id.
      * @return bool
      */
-    public function isOwnedBy($entityId, $ownerId)
+    public function isOwnedBy(string $entityId, string $ownerId): bool
     {
         return $this->exists(['id' => $entityId, 'owner_id' => $ownerId]);
     }
@@ -113,10 +113,10 @@ class PaymentsAccountsTable extends Table
     /**
      * Filters accounts by query string
      *
-     * @param array $filter Filter array.
-     * @return array
+     * @param array<string, mixed> $filter Filter array.
+     * @return array<string, mixed>
      */
-    public function filter(&$filter)
+    public function filter(array &$filter): array
     {
         $ret = [];
 
@@ -128,9 +128,9 @@ class PaymentsAccountsTable extends Table
      *
      * @param string $ownerId Company Id.
      * @param bool $showActiveOnly Show only active accounts.
-     * @return array
+     * @return array<\Expenses\Model\Entity\PaymentsAccount>
      */
-    public function listForOwner($ownerId, $showActiveOnly = false)
+    public function listForOwner(string $ownerId, bool $showActiveOnly = false): array
     {
         $conditions = ['PaymentsAccounts.owner_id' => $ownerId];
         if ($showActiveOnly) {

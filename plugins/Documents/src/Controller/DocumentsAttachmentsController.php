@@ -4,8 +4,9 @@ declare(strict_types=1);
 namespace Documents\Controller;
 
 use Cake\Core\Configure;
-use Cake\Filesystem\File;
 use Cake\Http\Exception\NotFoundException;
+use Cake\Http\Response;
+use ZipArchive;
 
 /**
  * DocumentsAttachments Controller
@@ -17,11 +18,11 @@ class DocumentsAttachmentsController extends AppController
     /**
      * View method
      *
-     * @param  string $id   Documents Attachment id.
+     * @param string $id Documents Attachment id.
      * @return void
      * @throws \Cake\Http\Exception\NotFoundException When record not found.
      */
-    public function view($id)
+    public function view(string $id)
     {
         $a = $this->DocumentsAttachments->get($id);
 
@@ -35,27 +36,27 @@ class DocumentsAttachmentsController extends AppController
     /**
      * Download method
      *
-     * @param  string $id   Documents Attachment id.
-     * @param  bool|null $forceDownload Force download of an attachment.
-     * @param  string|null $name Documents Attachment name.
-     * @return \Cake\Http\Response|null
+     * @param string $id   Documents Attachment id.
+     * @param bool|null $forceDownload Force download of an attachment.
+     * @param string|null $name Documents Attachment name.
+     * @return \Cake\Http\Response
      * @throws \Cake\Http\Exception\NotFoundException When record not found.
      */
-    public function download($id, $forceDownload = true, $name = null)
+    public function download(string $id, ?bool $forceDownload = true, ?string $name = null): Response
     {
         $a = $this->DocumentsAttachments->get($id);
 
         $this->Authorization->authorize($a, 'view');
 
         $path = Configure::read('Documents.uploadFolder') . DS . $a->filename;
-
-        $file = new File($a->original);
-        $mimeType = $this->response->getMimeType(strtolower($file->ext()));
-
         $response = $this->response->withFile($path, ['name' => $a->original, 'download' => (bool)$forceDownload]);
 
-        if ($mimeType) {
-            $response = $response->withType($mimeType);
+        $finfoType = finfo_open(FILEINFO_MIME_TYPE);
+        if ($finfoType) {
+            $mimeType = finfo_file($finfoType, $path);
+            if ($mimeType) {
+                $response = $response->withType($mimeType);
+            }
         }
 
         return $response;
@@ -64,11 +65,11 @@ class DocumentsAttachmentsController extends AppController
     /**
      * Download all attachment for specified Document
      *
-     * @param  string $documentId   Document id.
-     * @return \Cake\Http\Response|null
+     * @param string $documentId   Document id.
+     * @return \Cake\Http\Response
      * @throws \Cake\Http\Exception\NotFoundException When record not found.
      */
-    public function downloadAll($documentId)
+    public function downloadAll(string $documentId): Response
     {
         $attachments = $this->Authorization->applyScope($this->DocumentsAttachments->find(), 'index')
             ->where(['document_id' => $documentId])
@@ -87,8 +88,8 @@ class DocumentsAttachmentsController extends AppController
         } else {
             $tmpFilename = uniqid('attachments') . '.zip';
 
-            $zip = new \ZipArchive();
-            $res = $zip->open(constant('TMP') . $tmpFilename, \ZipArchive::CREATE);
+            $zip = new ZipArchive();
+            $zip->open(constant('TMP') . $tmpFilename, ZipArchive::CREATE);
             foreach ($attachments as $attachment) {
                 $path = Configure::read('Documents.uploadFolder') . DS . $attachment->filename;
                 $zip->addFile($path, $attachment->original);
@@ -112,7 +113,7 @@ class DocumentsAttachmentsController extends AppController
      * @param string $mode Mode - 'upload' or 'scan'
      * @return \Cake\Http\Response|null
      */
-    public function add($model, $documentId, $mode = 'upload')
+    public function add(string $model, string $documentId, string $mode = 'upload'): ?Response
     {
         $uploadDir = Configure::read('Documents.uploadFolder');
         if (!is_writable($uploadDir)) {
@@ -144,6 +145,7 @@ class DocumentsAttachmentsController extends AppController
                     $tmpNames[$tmpName] = tempnam(constant('TMP'), 'LilScan') . '.pdf';
                     $tmpBinary = base64_decode($pdfData);
                     file_put_contents($tmpName, $tmpBinary);
+
                     $data['filename'] = [
                         'name' => $tmpName,
                         'type' => 'application/pdf',
@@ -152,8 +154,10 @@ class DocumentsAttachmentsController extends AppController
                     unset($data['scanned']);
                 }
             } else {
-                $tmpNames[$this->getRequest()->getData('filename.name')] =
-                    $this->getRequest()->getData('filename.tmp_name');
+                $uploadedFile = $this->getRequest()->getData('filename');
+                if (!empty($uploadedFile) && !$uploadedFile->getError()) {
+                    $tmpNames[$uploadedFile->getClientFilename()] = $uploadedFile->getStream()->getMetadata('uri');
+                }
             }
 
             $attachment = $this->DocumentsAttachments->patchEntity($attachment, $data);
@@ -176,11 +180,11 @@ class DocumentsAttachmentsController extends AppController
     /**
      * Delete method
      *
-     * @param  string|null $id Documents Attachment id.
-     * @return mixed Redirects to index.
+     * @param string|null $id Documents Attachment id.
+     * @return \Cake\Http\Response|null
      * @throws \Cake\Http\Exception\NotFoundException When record not found.
      */
-    public function delete($id = null)
+    public function delete(?string $id = null): ?Response
     {
         $attachment = $this->DocumentsAttachments->get($id);
 

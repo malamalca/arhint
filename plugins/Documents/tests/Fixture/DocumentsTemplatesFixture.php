@@ -13,7 +13,7 @@ class DocumentsTemplatesFixture extends TestFixture
      *
      * @var array
      */
-    public $records = [
+    public array $records = [
         [
             'id' => 'a08d3c00-7443-40e0-ac62-0caca1747e24',
             'owner_id' => COMPANY_FIRST,
@@ -21,6 +21,5 @@ class DocumentsTemplatesFixture extends TestFixture
             'body' => 'Test header',
             'main' => true,
         ],
-
     ];
 }

@@ -9,7 +9,7 @@ use Cake\Validation\Validator;
 /**
  * Vats Model
  *
- * @method \Documents\Model\Entity\Vat get($primaryKey, array $options = [])
+ * @method \Documents\Model\Entity\Vat get(mixed $primaryKey, array|string $finder = 'all', \Psr\SimpleCache\CacheInterface|string|null $cache = null, \Closure|string|null $cacheKey = null, mixed ...$args)
  * @method \Documents\Model\Entity\Vat newEmptyEntity()
  * @method \Documents\Model\Entity\Vat patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
  */
@@ -18,7 +18,7 @@ class VatsTable extends Table
     /**
      * Initialize method
      *
-     * @param array $config The configuration for the Table.
+     * @param array<string, mixed> $config List of options for this table.
      * @return void
      */
     public function initialize(array $config): void
@@ -63,7 +63,7 @@ class VatsTable extends Table
      * @param string $ownerId User Id.
      * @return bool
      */
-    public function isOwnedBy($entityId, $ownerId)
+    public function isOwnedBy(string $entityId, string $ownerId): bool
     {
         return $this->exists(['id' => $entityId, 'owner_id' => $ownerId]);
     }
@@ -72,20 +72,17 @@ class VatsTable extends Table
      * Fetch vat levels
      *
      * @param string $ownerId Company id.
-     * @return array
+     * @return array<string, \Documents\Model\Entity\Vat>
      */
-    public function levels($ownerId)
+    public function levels(string $ownerId): array
     {
         $vats = $this
             ->find()
             ->where(['owner_id' => $ownerId])
-            ->all();
+            ->all()
+            ->combine('id', fn ($entity) => $entity)
+            ->toArray();
 
-        $ret = [];
-        foreach ($vats as $vat) {
-            $ret[$vat->id] = $vat;
-        }
-
-        return $ret;
+        return $vats;
     }
 }

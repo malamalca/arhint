@@ -10,7 +10,7 @@ use Cake\Validation\Validator;
 /**
  * InvoicesItems Model
  *
- * @method \Documents\Model\Entity\InvoicesItem get($primaryKey, array $options = [])
+ * @method \Documents\Model\Entity\InvoicesItem get(mixed $primaryKey, array|string $finder = 'all', \Psr\SimpleCache\CacheInterface|string|null $cache = null, \Closure|string|null $cacheKey = null, mixed ...$args)
  * @method \Documents\Model\Entity\InvoicesItem newEmptyEntity()
  * @method \Documents\Model\Entity\InvoicesItem patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
  */
@@ -19,7 +19,7 @@ class InvoicesItemsTable extends Table
     /**
      * Initialize method
      *
-     * @param array $config The configuration for the Table.
+     * @param array<string, mixed> $config List of options for this table.
      * @return void
      */
     public function initialize(array $config): void

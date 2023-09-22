@@ -25,11 +25,11 @@ use Cake\ORM\TableRegistry;
  * @property string|null $title
  * @property string|null $descript
  * @property string|null $signed
- * @property \Cake\I18n\FrozenDate|null $dat_sign
- * @property \Cake\I18n\FrozenDate|null $dat_issue
- * @property \Cake\I18n\FrozenDate|null $dat_service
- * @property \Cake\I18n\FrozenDate|null $dat_expire
- * @property \Cake\I18n\FrozenDate|null $dat_approval
+ * @property \Cake\I18n\Date|null $dat_sign
+ * @property \Cake\I18n\Date|null $dat_issue
+ * @property \Cake\I18n\Date|null $dat_service
+ * @property \Cake\I18n\Date|null $dat_expire
+ * @property \Cake\I18n\Date|null $dat_approval
  * @property float|null $net_total
  * @property float|null $total
  * @property bool $inversed_tax
@@ -40,8 +40,8 @@ use Cake\ORM\TableRegistry;
  * @property string|null $pmt_ref
  * @property string|null $pmt_descript
  * @property string|null $location
- * @property \Cake\I18n\FrozenTime|null $created
- * @property \Cake\I18n\FrozenTime|null $modified
+ * @property \Cake\I18n\DateTime|null $created
+ * @property \Cake\I18n\DateTime|null $modified
  *
  * @property \Documents\Model\Entity\DocumentsCounter $documents_counter
  * @property \Documents\Model\Entity\DocumentsClient $issuer
@@ -61,7 +61,7 @@ class Invoice extends Entity
      *
      * @var array<string, bool>
      */
-    protected $_accessible = [
+    protected array $_accessible = [
         '*' => true,
         'id' => false,
     ];
@@ -71,7 +71,7 @@ class Invoice extends Entity
      *
      * @return void
      */
-    public function getNextCounterNo()
+    public function getNextCounterNo(): void
     {
         /** @var \Documents\Model\Table\DocumentsCountersTable $DocumentsCounters */
         $DocumentsCounters = TableRegistry::getTableLocator()->get('Documents.DocumentsCounters');
@@ -82,7 +82,7 @@ class Invoice extends Entity
 
         // generate documents' `no` according to counter's `mask`
         if (!empty($counter->mask)) {
-            $this->no = $DocumentsCounters->generateNo($counter->toArray());
+            $this->no = (string)$DocumentsCounters->generateNo($counter->toArray());
         }
 
         // update counter

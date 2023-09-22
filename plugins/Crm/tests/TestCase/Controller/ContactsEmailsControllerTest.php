@@ -4,19 +4,22 @@ declare(strict_types=1);
 namespace Crm\Test\TestCase\Controller;
 
 use Cake\ORM\TableRegistry;
-use Cake\TestSuite\IntegrationTestCase;
+use Cake\TestSuite\IntegrationTestTrait;
+use Cake\TestSuite\TestCase;
 
 /**
  * Crm\Controller\ContactsEmailsController Test Case
  */
-class ContactsEmailsControllerTest extends IntegrationTestCase
+class ContactsEmailsControllerTest extends TestCase
 {
+    use IntegrationTestTrait;
+
     /**
      * Fixtures
      *
      * @var array
      */
-    public $fixtures = [
+    public array $fixtures = [
         'Users' => 'app.Users',
         'Contacts' => 'plugin.Crm.Contacts',
         'ContactsEmails' => 'plugin.Crm.ContactsEmails',

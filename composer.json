@@ -5,16 +5,20 @@
     "type": "project",
     "license": "MIT",
     "require": {
-        "php": ">=7.4",
+        "php": ">=8.1",
         "ext-intl": "*",
         "ext-json": "*",
         "ext-mbstring": "*",
-        "cakephp/authentication": "^2.9",
-        "cakephp/authorization": "^2.2",
-        "cakephp/cakephp": "^4.4.4",
-        "cakephp/chronos": "^2.3",
-        "cakephp/migrations": "^3.4",
-        "cakephp/plugin-installer": "^1.3",
+        
+
+        "cakephp/authentication": "^3.0.0",
+        "cakephp/authorization": "^3.0.0",
+        "cakephp/cakephp": "^5.0.0",
+        "cakephp/chronos": "^3.0.0",
+        "cakephp/migrations": "^4.0.0",
+        "cakephp/plugin-installer": "^2.0",
+        "mobiledetect/mobiledetectlib": "^3.74",
+
         "ddn/sapp": "dev-main",
         "krivart/php-qr-code": "dev-master",
         "malamalca/lil": "^4.5",
@@ -25,13 +29,13 @@
         "zendframework/zendframework1": "1.12.20pl61 as 1.12.20"
     },
     "require-dev": {
-        "cakephp/bake": "^2.6",
-        "cakephp/cakephp-codesniffer": "^4.5",
-        "cakephp/debug_kit": "^4.5",
-        "josegonzalez/dotenv": "^3.2",
+        "cakephp/bake": "^3.0.0",
+        "cakephp/cakephp-codesniffer": "^5.0",
+        "cakephp/debug_kit": "^5.0.0",
+        "josegonzalez/dotenv": "^4.0",
         "phpstan/phpstan": "^1.0",
-        "phpunit/phpunit": "^9.3",
-        "vimeo/psalm": "^4.15"
+        "phpunit/phpunit": "^10.1.0",
+        "vimeo/psalm": "^5.15"
     },
     "repositories": [
         {
@@ -55,10 +59,6 @@
             "url": "https://github.com/tine20/zendframework1.git"
         }
     ],
-    "suggest": {
-        "markstory/asset_compress": "An asset compression plugin which provides file concatenation and a flexible filter system for preprocessing and minification.",
-        "dereuromark/cakephp-ide-helper": "After baking your code, this keeps your annotations in sync with the code evolving from there on for maximum IDE and PHPStan/Psalm compatibility."
-    },
     "autoload": {
         "psr-0": {
             "Syncroton": [
@@ -103,9 +103,9 @@
             "@stan",
             "@psalm"
         ],
-        "cs-check": "phpcs --colors -p --standard=vendor/cakephp/cakephp-codesniffer/CakePHP src/ tests/ plugins/Expenses/src/ plugins/Crm/src/ plugins/Documents/src/ plugins/Projects/src/ plugins/Tasks/src/ plugins/Calendar/src/",
-        "cs-fix": "phpcbf --colors --standard=vendor/cakephp/cakephp-codesniffer/CakePHP src/ tests/ plugins/Expenses/src/ plugins/Crm/src/ plugins/Documents/src/ plugins/Projects/src/ plugins/Tasks/src/ plugins/Calendar/src/",
-        "stan": "phpstan analyse -l 5 src/ plugins/Expenses/src/ plugins/Crm/src/ plugins/Documents/src/ plugins/Projects/src/ plugins/Tasks/src/ plugins/Calendar/src",
+        "cs-check": "phpcs --colors -p",
+        "cs-fix": "phpcbf --colors",
+        "stan": "phpstan analyse",
         "test": "phpunit --colors=always",
         "psalm": "psalm"
     },

@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Documents\Controller;
 
 use Cake\Cache\Cache;
+use Cake\Http\Response;
 use Cake\ORM\TableRegistry;
 
 /**
@@ -16,7 +17,7 @@ class DocumentsCountersController extends AppController
     /**
      * Index method
      *
-     * @return \Cake\Http\Response|null
+     * @return \Cake\Http\Response|void
      */
     public function index()
     {
@@ -35,8 +36,6 @@ class DocumentsCountersController extends AppController
 
         $counters = $this->paginate($query, ['limit' => 10]);
         $this->set(compact('counters', 'filter'));
-
-        return null;
     }
 
     /**
@@ -46,7 +45,7 @@ class DocumentsCountersController extends AppController
      * @return \Cake\Http\Response|null
      * @throws \Cake\Http\Exception\NotFoundException When record not found.
      */
-    public function edit($id = null)
+    public function edit(?string $id = null): ?Response
     {
         if (empty($id)) {
             $counter = $this->DocumentsCounters->newEmptyEntity();
@@ -87,7 +86,7 @@ class DocumentsCountersController extends AppController
      * @return \Cake\Http\Response|null
      * @throws \Cake\Http\Exception\NotFoundException When record not found.
      */
-    public function delete($id = null)
+    public function delete(?string $id = null): ?Response
     {
         $DocumentsCounter = $this->DocumentsCounters->get($id);
         $this->Authorization->authorize($DocumentsCounter);

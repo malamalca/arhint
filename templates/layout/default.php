@@ -53,7 +53,7 @@ use Cake\Routing\Router;
                                 'plugin' => false,
                                 'controller' => 'Users',
                                 'action' => 'avatar',
-                                $this->getCurrentUser() ? $this->getCurrentUser()->get('id') : null,
+                                $this->hasCurrentUser() ? $this->getCurrentUser()->get('id') : null,
                                 '_ext' => 'png',
                             ], fn($var) => $var !== null),
                             true
@@ -62,7 +62,7 @@ use Cake\Routing\Router;
                     ) ?>
                     </a>
                     <?php
-                        if ($this->getCurrentUser() && $this->getCurrentUser()->get('id')) {
+                        if ($this->hasCurrentUser() && $this->getCurrentUser()->get('id')) {
                             $isUserProperties = $this->getRequest()->getParam('controller') == 'Users' &&
                                 $this->getRequest()->getParam('action') == 'properties';
                             $isUtils = $this->getRequest()->getParam('controller') == 'Utils';

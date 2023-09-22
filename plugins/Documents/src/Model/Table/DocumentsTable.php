@@ -4,11 +4,13 @@ declare(strict_types=1);
 namespace Documents\Model\Table;
 
 use Cake\Core\Plugin;
-use Cake\I18n\FrozenDate;
+use Cake\Http\ServerRequest;
+use Cake\I18n\DateTime;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
 use Cake\Validation\Validator;
+use Documents\Model\Entity\Document;
 
 /**
  * Documents Model
@@ -20,16 +22,11 @@ use Cake\Validation\Validator;
  * @method \Documents\Model\Entity\Document newEmptyEntity()
  * @method \Documents\Model\Entity\Document newEntity(array $data, array $options = [])
  * @method \Documents\Model\Entity\Document[] newEntities(array $data, array $options = [])
- * @method \Documents\Model\Entity\Document get($primaryKey, $options = [])
+ * @method \Documents\Model\Entity\Document get(mixed $primaryKey, array|string $finder = 'all', \Psr\SimpleCache\CacheInterface|string|null $cache = null, \Closure|string|null $cacheKey = null, mixed ...$args)
  * @method \Documents\Model\Entity\Document findOrCreate($search, ?callable $callback = null, $options = [])
  * @method \Documents\Model\Entity\Document patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
  * @method \Documents\Model\Entity\Document[] patchEntities(iterable $entities, array $data, array $options = [])
  * @method \Documents\Model\Entity\Document|false save(\Cake\Datasource\EntityInterface $entity, $options = [])
- * @method \Documents\Model\Entity\Document saveOrFail(\Cake\Datasource\EntityInterface $entity, $options = [])
- * @method \Documents\Model\Entity\Document[]|\Cake\Datasource\ResultSetInterface|false saveMany(iterable $entities, $options = [])
- * @method \Documents\Model\Entity\Document[]|\Cake\Datasource\ResultSetInterface saveManyOrFail(iterable $entities, $options = [])
- * @method \Documents\Model\Entity\Document[]|\Cake\Datasource\ResultSetInterface|false deleteMany(iterable $entities, $options = [])
- * @method \Documents\Model\Entity\Document[]|\Cake\Datasource\ResultSetInterface deleteManyOrFail(iterable $entities, $options = [])
  * @mixin \Cake\ORM\Behavior\TimestampBehavior
  */
 class DocumentsTable extends Table
@@ -37,7 +34,7 @@ class DocumentsTable extends Table
     /**
      * Initialize method
      *
-     * @param array $config The configuration for the Table.
+     * @param array<string, mixed> $config List of options for this table.
      * @return void
      */
     public function initialize(array $config): void
@@ -156,22 +153,22 @@ class DocumentsTable extends Table
     /**
      * Checks if entity belongs to user.
      *
-     * @param string $entityId Entity Id.
-     * @param string $ownerId User Id.
+     * @param string|null $entityId Entity Id.
+     * @param string|null $ownerId User Id.
      * @return bool
      */
-    public function isOwnedBy($entityId, $ownerId)
+    public function isOwnedBy(?string $entityId, ?string $ownerId): bool
     {
-        return $this->exists(['id' => $entityId, 'owner_id' => $ownerId]);
+        return !empty($entityId) && !empty($ownerId) && $this->exists(['id' => $entityId, 'owner_id' => $ownerId]);
     }
 
     /**
      * filter method
      *
-     * @param array $filter Filter data.
-     * @return array
+     * @param array<string, mixed> $filter Filter data.
+     * @return array<string, mixed>
      */
-    public function filter(&$filter)
+    public function filter(array &$filter): array
     {
         $ret = ['conditions' => [], 'contain' => []];
 
@@ -181,26 +178,26 @@ class DocumentsTable extends Table
 
         // from-to date
         if (isset($filter['start'])) {
-            $filter['start'] = FrozenDate::parseDate($filter['start'], 'yyyy-MM-dd');
+            $filter['start'] = DateTime::parseDate($filter['start'], 'yyyy-MM-dd');
             if (!empty($filter['start'])) {
                 $ret['conditions']['Documents.dat_issue >='] = $filter['start'];
             }
         }
 
         if (isset($filter['end'])) {
-            $filter['end'] = FrozenDate::parseDate($filter['end'], 'yyyy-MM-dd');
+            $filter['end'] = DateTime::parseDate($filter['end'], 'yyyy-MM-dd');
             if (!empty($filter['end'])) {
                 $ret['conditions']['Documents.dat_issue <='] = $filter['end'];
             }
         }
 
         if (isset($filter['month'])) {
-            $start = FrozenDate::parseDate($filter['month'] . '-01', 'yyyy-MM-dd');
+            $start = DateTime::parseDate($filter['month'] . '-01', 'yyyy-MM-dd');
             if (!empty($start)) {
                 $ret['conditions']['Documents.dat_issue >='] = $start;
-                $ret['conditions']['Documents.dat_issue <'] = $start->addMonth();
+                $ret['conditions']['Documents.dat_issue <'] = $start->addMonths(1);
                 $filter['start'] = $start;
-                $filter['end'] = $start->addMonth()->subDays(1);
+                $filter['end'] = $start->addMonths(1)->subDays(1);
             }
         }
 
@@ -258,9 +255,9 @@ class DocumentsTable extends Table
      * Method returns array
      *
      * @param string $counterId Counter id
-     * @return array
+     * @return array<string, \Cake\I18n\DateTime>
      */
-    public function maxSpan($counterId)
+    public function maxSpan(string $counterId): array
     {
         $ret = [];
 
@@ -274,14 +271,14 @@ class DocumentsTable extends Table
         $ret = $query->first()->toArray();
 
         if (empty($ret['start'])) {
-            $ret['start'] = new FrozenDate();
+            $ret['start'] = new DateTime();
         } else {
-            $ret['start'] = FrozenDate::parseDate($ret['start'], 'yyyy-MM-dd');
+            $ret['start'] = DateTime::parseDate($ret['start'], 'yyyy-MM-dd');
         }
         if (empty($ret['end'])) {
-            $ret['end'] = new FrozenDate();
+            $ret['end'] = new DateTime();
         } else {
-            $ret['end'] = FrozenDate::parseDate($ret['end'], 'yyyy-MM-dd');
+            $ret['end'] = DateTime::parseDate($ret['end'], 'yyyy-MM-dd');
         }
 
         return $ret;
@@ -294,10 +291,10 @@ class DocumentsTable extends Table
      * @param string|null $id Document id.
      * @return \Documents\Model\Entity\Document
      */
-    public function parseRequest($request, $id = null)
+    public function parseRequest(ServerRequest $request, ?string $id = null): Document
     {
         if (!empty($id)) {
-            $document = $this->get($id, ['contain' => ['DocumentsCounters', 'Issuers', 'Receivers']]);
+            $document = $this->get($id, contain: ['DocumentsCounters', 'Issuers', 'Receivers']);
         } else {
             /** @var \Documents\Model\Table\DocumentsClientsTable $DocumentsClients */
             $DocumentsClients = TableRegistry::getTableLocator()->get('Documents.DocumentsClients');
@@ -307,7 +304,7 @@ class DocumentsTable extends Table
             $sourceId = $request->getQuery('duplicate');
             if (!empty($sourceId)) {
                 // clone
-                $document = $this->get($sourceId, ['contain' => ['DocumentsCounters', 'Issuers', 'Receivers']]);
+                $document = $this->get($sourceId, contain: ['DocumentsCounters', 'Issuers', 'Receivers']);
 
                 $document->setNew(true);
                 unset($document->id);
@@ -337,16 +334,16 @@ class DocumentsTable extends Table
 
                 switch ($document->documents_counter->direction) {
                     case 'issued':
-                        $document->issuer->patchWithAuth($request->getAttribute('identity'));
+                        $document->issuer->patchWithAuth($request->getAttribute('identity')->getOriginalData());
                         break;
                     case 'received':
-                        $document->receiver->patchWithAuth($request->getAttribute('identity'));
+                        $document->receiver->patchWithAuth($request->getAttribute('identity')->getOriginalData());
                         break;
                 }
             }
 
             $document->counter_id = $document->documents_counter->id;
-            $document->no = $DocumentsCounters->generateNo($document->counter_id);
+            $document->no = (string)$DocumentsCounters->generateNo($document->counter_id);
         }
 
         return $document;

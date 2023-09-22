@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Projects\Controller;
 
+use Cake\Http\Response;
 use Cake\ORM\TableRegistry;
 use Projects\Lib\ProjectsFuncs;
 
@@ -10,7 +11,7 @@ use Projects\Lib\ProjectsFuncs;
  * Projects Controller
  *
  * @property \Projects\Model\Table\ProjectsTable $Projects
- * @method \Cake\Datasource\ResultSetInterface|\Cake\ORM\ResultSet paginate($object = null, array $settings = [])
+ * @method \Cake\Datasource\Paging\PaginatedInterface paginate($object = null, array $settings = [])
  */
 class ProjectsController extends AppController
 {
@@ -74,10 +75,10 @@ class ProjectsController extends AppController
      *
      * @param string|null $id Project id.
      * @param string $size Image size.
-     * @return \Cake\Http\Response|void
+     * @return \Cake\Http\Response
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function picture($id = null, $size = 'normal')
+    public function picture(?string $id = null, string $size = 'normal'): Response
     {
         $project = $this->Projects->get($id);
 
@@ -112,9 +113,9 @@ class ProjectsController extends AppController
      * @return \Cake\Http\Response|void
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function view($id = null)
+    public function view(?string $id = null)
     {
-        $project = $this->Projects->get($id, ['contain' => 'Users']);
+        $project = $this->Projects->get($id, contain: 'Users');
 
         $this->Authorization->authorize($project);
 
@@ -164,7 +165,7 @@ class ProjectsController extends AppController
      * @return \Cake\Http\Response|null Redirects on successful edit, renders view otherwise.
      * @throws \Cake\Http\Exception\NotFoundException When record not found.
      */
-    public function edit($id = null)
+    public function edit(?string $id = null)
     {
         if ($id) {
             $project = $this->Projects->get($id);
@@ -179,15 +180,14 @@ class ProjectsController extends AppController
             $project = $this->Projects->patchEntity($project, $this->getRequest()->getData());
 
             $icoFile = $this->getRequest()->getData('ico');
-            if (is_array($icoFile)) {
-                if (isset($icoFile['error'])) {
-                    if ($icoFile['error'] == UPLOAD_ERR_OK) {
-                        $project->ico = base64_encode(file_get_contents($icoFile['tmp_name']));
-                    }
-                    if ($icoFile['error'] == UPLOAD_ERR_NO_FILE) {
-                        unset($project->ico);
-                        $project->setDirty('ico', false);
-                    }
+            if ($icoFile) {
+                if ($icoFile->getError() == UPLOAD_ERR_OK) {
+                    $icoContents = (string)$icoFile->getStream()->getMetadata('uri');
+                    $project->ico = base64_encode($icoContents);
+                }
+                if ($icoFile->getError() == UPLOAD_ERR_NO_FILE) {
+                    unset($project->ico);
+                    $project->setDirty('ico', false);
                 }
             }
 
@@ -220,7 +220,7 @@ class ProjectsController extends AppController
      * @return \Cake\Http\Response|null Redirects on successful edit, renders view otherwise.
      * @throws \Cake\Http\Exception\NotFoundException When record not found.
      */
-    public function user($projectId, $userId = null)
+    public function user(string $projectId, ?string $userId = null): ?Response
     {
         $project = $this->Projects->get($projectId);
         $this->Authorization->authorize($project);
@@ -280,10 +280,10 @@ class ProjectsController extends AppController
      *
      * @param string $projectId Project id.
      * @param string $userId User id.
-     * @return \Cake\Http\Response|null Redirects to index.
+     * @return \Cake\Http\Response|null
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function deleteUser($projectId, $userId)
+    public function deleteUser(string $projectId, string $userId): ?Response
     {
         $this->getRequest()->allowMethod(['post', 'delete', 'get']);
         $project = $this->Projects->get($projectId);
@@ -314,10 +314,10 @@ class ProjectsController extends AppController
      * Delete method
      *
      * @param string|null $id Project id.
-     * @return \Cake\Http\Response|null Redirects to index.
+     * @return \Cake\Http\Response|null
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function delete($id = null)
+    public function delete(?string $id = null): ?Response
     {
         $this->getRequest()->allowMethod(['post', 'delete', 'get']);
         $project = $this->Projects->get($id);

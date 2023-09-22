@@ -14,23 +14,18 @@ use Cake\Validation\Validator;
  * @method \Projects\Model\Entity\ProjectsStatus newEmptyEntity()
  * @method \Projects\Model\Entity\ProjectsStatus newEntity(array $data, array $options = [])
  * @method \Projects\Model\Entity\ProjectsStatus[] newEntities(array $data, array $options = [])
- * @method \Projects\Model\Entity\ProjectsStatus get($primaryKey, $options = [])
+ * @method \Projects\Model\Entity\ProjectsStatus get(mixed $primaryKey, array|string $finder = 'all', \Psr\SimpleCache\CacheInterface|string|null $cache = null, \Closure|string|null $cacheKey = null, mixed ...$args)
  * @method \Projects\Model\Entity\ProjectsStatus findOrCreate($search, ?callable $callback = null, $options = [])
  * @method \Projects\Model\Entity\ProjectsStatus patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
  * @method \Projects\Model\Entity\ProjectsStatus[] patchEntities(iterable $entities, array $data, array $options = [])
  * @method \Projects\Model\Entity\ProjectsStatus|false save(\Cake\Datasource\EntityInterface $entity, $options = [])
- * @method \Projects\Model\Entity\ProjectsStatus saveOrFail(\Cake\Datasource\EntityInterface $entity, $options = [])
- * @method \Projects\Model\Entity\ProjectsStatus[]|\Cake\Datasource\ResultSetInterface|false saveMany(iterable $entities, $options = [])
- * @method \Projects\Model\Entity\ProjectsStatus[]|\Cake\Datasource\ResultSetInterface saveManyOrFail(iterable $entities, $options = [])
- * @method \Projects\Model\Entity\ProjectsStatus[]|\Cake\Datasource\ResultSetInterface|false deleteMany(iterable $entities, $options = [])
- * @method \Projects\Model\Entity\ProjectsStatus[]|\Cake\Datasource\ResultSetInterface deleteManyOrFail(iterable $entities, $options = [])
  */
 class ProjectsStatusesTable extends Table
 {
     /**
      * Initialize method
      *
-     * @param array $config The configuration for the Table.
+     * @param array<string, mixed> $config List of options for this table.
      * @return void
      */
     public function initialize(array $config): void

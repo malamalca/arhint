@@ -13,7 +13,7 @@ class InvoicesFixture extends TestFixture
      *
      * @var array
      */
-    public $records = [
+    public array $records = [
         [
             // received document
             'id' => 'd0d59a31-6de7-4eb4-8230-ca09113a7fe5',

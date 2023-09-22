@@ -22,5 +22,6 @@
     </projectFiles>
     <stubs>
         <file name="config/paths.php" />
+		<file name="vendor/cakephp/cakephp/src/functions.php" />
     </stubs>
 </psalm>

@@ -1,12 +1,10 @@
 <?php
+declare(strict_types=1);
+
 namespace Tasks\Test\Fixture;
 
 use Cake\TestSuite\Fixture\TestFixture;
 
-/**
- * TasksFixture
- *
- */
 class TasksFixture extends TestFixture
 {
     /**
@@ -14,7 +12,7 @@ class TasksFixture extends TestFixture
      *
      * @var array
      */
-    public $records = [
+    public array $records = [
         [
             'id' => 'b3a635df-c8dc-4fc4-82a9-062002007571',
             'owner_id' => 'Lorem ipsum dolor sit amet',
@@ -26,7 +24,7 @@ class TasksFixture extends TestFixture
             'deadline' => '2015-12-07',
             'completed' => '2015-12-07 17:05:06',
             'created' => '2015-12-07 17:05:06',
-            'modified' => '2015-12-07 17:05:06'
+            'modified' => '2015-12-07 17:05:06',
         ],
     ];
 }

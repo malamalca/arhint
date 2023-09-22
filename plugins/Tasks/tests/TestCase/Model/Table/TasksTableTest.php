@@ -1,22 +1,22 @@
 <?php
+declare(strict_types=1);
+
 namespace Tasks\Test\TestCase\Model\Table;
 
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\TestCase;
-use Tasks\Model\Table\TasksTable;
 
 /**
  * Tasks\Model\Table\TasksTable Test Case
  */
 class TasksTableTest extends TestCase
 {
-
     /**
      * Fixtures
      *
      * @var array
      */
-    public $fixtures = [
+    public array $fixtures = [
         'plugin.Tasks.Tasks',
     ];
 
@@ -28,8 +28,7 @@ class TasksTableTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-        $config = TableRegistry::exists('Tasks') ? [] : ['className' => 'Tasks\Model\Table\TasksTable'];
-        $this->Tasks = TableRegistry::getTableLocator()->get('Tasks', $config);
+        $this->Tasks = TableRegistry::getTableLocator()->get('Tasks', ['className' => 'Tasks\Model\Table\TasksTable']);
     }
 
     /**

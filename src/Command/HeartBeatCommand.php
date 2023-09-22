@@ -50,7 +50,7 @@ class HeartBeatCommand extends Command
                         ->setTemplate('hourly')
                         ->addHelpers(['Lil.Lil']);
 
-                $result = $email->deliver();
+                $email->deliver();
             }
         }
 

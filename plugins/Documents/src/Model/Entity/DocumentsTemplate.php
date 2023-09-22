@@ -14,8 +14,8 @@ use Cake\ORM\Entity;
  * @property string|null $title
  * @property string|null $body
  * @property bool $main
- * @property \Cake\I18n\FrozenTime|null $created
- * @property \Cake\I18n\FrozenTime|null $modified
+ * @property \Cake\I18n\DateTime|null $created
+ * @property \Cake\I18n\DateTime|null $modified
  */
 class DocumentsTemplate extends Entity
 {
@@ -24,7 +24,7 @@ class DocumentsTemplate extends Entity
      *
      * @var array<string, bool>
      */
-    protected $_accessible = [
+    protected array $_accessible = [
         '*' => true,
         'id' => false,
     ];

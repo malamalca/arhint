@@ -16,11 +16,11 @@ class ContactsAddressesController extends AppController
     /**
      * Edit method
      *
-     * @param  string|null $id Contacts Address id.
+     * @param string|null $id Contacts Address id.
      * @return mixed Redirects on successful edit, renders view otherwise.
      * @throws \Cake\Http\Exception\NotFoundException When record not found.
      */
-    public function edit($id = null)
+    public function edit(?string $id = null)
     {
         if ($id) {
             /** @var \Crm\Model\Entity\ContactsAddress $address */
@@ -54,11 +54,11 @@ class ContactsAddressesController extends AppController
     /**
      * Delete method
      *
-     * @param  string|null $id Contacts Address id.
+     * @param string|null $id Contacts Address id.
      * @return mixed Redirects to index.
      * @throws \Cake\Http\Exception\NotFoundException When record not found.
      */
-    public function delete($id = null)
+    public function delete(?string $id = null)
     {
         /** @var \Crm\Model\Entity\ContactsAddress $address */
         $address = $this->ContactsAddresses->get($id);
@@ -119,10 +119,10 @@ class ContactsAddressesController extends AppController
     /**
      * autocomplete_zip method
      *
-     * @param  string $zipCity Search by zip or city.
+     * @param string $zipCity Search by zip or city.
      * @return object Renders json.
      */
-    public function autocompleteZipCity($zipCity = 'zip')
+    public function autocompleteZipCity(string $zipCity = 'zip')
     {
         $this->Authorization->skipAuthorization();
 

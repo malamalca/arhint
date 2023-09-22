@@ -11,7 +11,7 @@ use Cake\Validation\Validator;
  * Items Model
  *
  * @property \Documents\Model\Table\VatsTable $Vats
- * @method \Documents\Model\Entity\Item get($primaryKey, array $options = [])
+ * @method \Documents\Model\Entity\Item get(mixed $primaryKey, array|string $finder = 'all', \Psr\SimpleCache\CacheInterface|string|null $cache = null, \Closure|string|null $cacheKey = null, mixed ...$args)
  * @method \Documents\Model\Entity\Item newEmptyEntity()
  * @method \Documents\Model\Entity\Item patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
  */
@@ -20,7 +20,7 @@ class ItemsTable extends Table
     /**
      * Initialize method
      *
-     * @param array $config The configuration for the Table.
+     * @param array<string, mixed> $config List of options for this table.
      * @return void
      */
     public function initialize(array $config): void
@@ -89,7 +89,7 @@ class ItemsTable extends Table
      * @param string $ownerId User Id.
      * @return bool
      */
-    public function isOwnedBy($entityId, $ownerId)
+    public function isOwnedBy(string $entityId, string $ownerId): bool
     {
         return $this->exists(['id' => $entityId, 'owner_id' => $ownerId]);
     }

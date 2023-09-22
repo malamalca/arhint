@@ -13,7 +13,7 @@ class ContactsAccountsFixture extends TestFixture
      *
      * @var array
      */
-    public $records = [
+    public array $records = [
         [
             'id' => 1,
             'contact_id' => COMPANY_FIRST,

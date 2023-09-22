@@ -1,9 +1,10 @@
 parameters:
-    level: 5
-    checkMissingIterableValueType: false
+    level: 8
+    treatPhpDocTypesAsCertain: false
     checkGenericClassInNonGenericObjectType: false
     bootstrapFiles:
         - config/paths.php
+        - vendor/cakephp/cakephp/src/functions.php
     excludePaths:
         - src/Console/Installer.php
         - src/App/Controller/ErrorController.php
@@ -13,3 +14,11 @@ parameters:
         - plugins/Crm/src/Lib/ActiveSyncContacts.php
         - plugins/Tasks/src/Lib/ActiveSyncTasks.php
         - plugins/Calendar/src/Lib/ActiveSyncCalendar.php
+    paths:
+        - src/
+        - plugins/Calendar/src/
+        - plugins/Crm/src/
+        - plugins/Documents/src/
+        - plugins/Expenses/src/
+        - plugins/Projects/src/
+        - plugins/Tasks/src/

@@ -13,11 +13,11 @@ class ContactsAccountsController extends AppController
     /**
      * Edit method
      *
-     * @param  string|null $id Contacts Account id.
+     * @param string|null $id Contacts Account id.
      * @return mixed Redirects on successful edit, renders view otherwise.
      * @throws \Cake\Http\Exception\NotFoundException When record not found.
      */
-    public function edit($id = null)
+    public function edit(?string $id = null)
     {
         if ($id) {
             /** @var \Crm\Model\Entity\ContactsAccount $account */
@@ -51,11 +51,11 @@ class ContactsAccountsController extends AppController
     /**
      * Delete method
      *
-     * @param  string|null $id Contacts Account id.
+     * @param string|null $id Contacts Account id.
      * @return mixed Redirects to index.
      * @throws \Cake\Http\Exception\NotFoundException When record not found.
      */
-    public function delete($id = null)
+    public function delete(?string $id = null)
     {
         /** @var \Crm\Model\Entity\ContactsAccount $account */
         $account = $this->ContactsAccounts->get($id);

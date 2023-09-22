@@ -19,7 +19,7 @@ class ProjectsWorkhoursControllerTest extends TestCase
      *
      * @var array
      */
-    public $fixtures = [
+    public array $fixtures = [
         'app.Users',
         'Projects' => 'plugin.Projects.Projects',
         'plugin.Projects.ProjectsWorkhours',
@@ -27,7 +27,7 @@ class ProjectsWorkhoursControllerTest extends TestCase
 
     /**
      * Login method
-     * 
+     *
      * @var string $userId User id
      * @return void
      */
@@ -83,7 +83,7 @@ class ProjectsWorkhoursControllerTest extends TestCase
             'project_id' => '4dd53305-9715-4be4-b169-20defe113d2a',
             'user_id' => USER_ADMIN,
             'started' => '2018-02-27 06:33:56',
-            'duration' => 5*60*60,
+            'duration' => 5 * 60 * 60,
         ];
 
         $this->enableSecurityToken();
@@ -140,6 +140,6 @@ class ProjectsWorkhoursControllerTest extends TestCase
             ->get('Projects.ProjectsWorkhours')
             ->getTotalDuration('4dd53305-9715-4be4-b169-20defe113d2a');
 
-        $this->assertEquals(5*60*60, $workhours);
+        $this->assertEquals(5 * 60 * 60, $workhours);
     }
 }

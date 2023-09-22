@@ -23,7 +23,7 @@ class ContactsAccountsTable extends Table
     /**
      * Initialize method
      *
-     * @param array $config The configuration for the Table.
+     * @param array<string, mixed> $config List of options for this table.
      * @return void
      */
     public function initialize(array $config): void
@@ -97,7 +97,7 @@ class ContactsAccountsTable extends Table
      * @param \ArrayObject $options Array object.
      * @return bool
      */
-    public function beforeSave(Event $event, Entity $entity, ArrayObject $options)
+    public function beforeSave(Event $event, Entity $entity, ArrayObject $options): bool
     {
         if (!$this->exists(['contact_id' => $entity->contact_id, 'primary' => true])) {
             $entity->primary = true;
@@ -127,7 +127,7 @@ class ContactsAccountsTable extends Table
      * @param \ArrayObject $options Array object.
      * @return void
      */
-    public function afterSave(Event $event, Entity $entity, ArrayObject $options)
+    public function afterSave(Event $event, Entity $entity, ArrayObject $options): void
     {
         if ($entity->primary) {
             $this->updateAll(['primary' => false], [
@@ -144,7 +144,7 @@ class ContactsAccountsTable extends Table
      * @param string $ownerId User Id.
      * @return bool
      */
-    public function isOwnedBy($entityId, $ownerId)
+    public function isOwnedBy(string $entityId, string $ownerId): bool
     {
         /** @var \Crm\Model\Entity\ContactsAccount $entity */
         $entity = $this->get($entityId, ['fields' => 'contact_id']);
