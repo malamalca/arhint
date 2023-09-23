@@ -93,11 +93,12 @@
                         )
                     ) .
                     '</tr></tfoot></table>',
-                    'fs_adrema_end' => '</fieldset>',
-                    'submit' => [
-                    'method' => 'submit',
+                'fs_adrema_end' => '</fieldset>',
+                'submit' => [
+                    'method' => 'button',
                     'parameters' => [
-                        'label' => __d('crm', 'Next'),
+                        __d('crm', 'Next'),
+                        ['type' => 'submit'],
                     ],
                 ],
                 'form_end' => [

@@ -122,9 +122,10 @@ $editAddressForm = [
                 'parameters' => ['country'],
             ],
             'submit' => [
-                'method' => 'submit',
+                'method' => 'button',
                 'parameters' => [
-                    'label' => __d('crm', 'Save'),
+                    __d('crm', 'Add'),
+                    ['type' => 'submit'],
                 ],
             ],
             'form_end' => [

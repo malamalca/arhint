@@ -308,7 +308,7 @@ if (!empty($links)) {
 }
 
 if (!empty($document->descript)) {
-    $invoiceView['panels']['text_title'] = sprintf('<h3>%s</h3>', __d('documents', 'Description'));
+    //$invoiceView['panels']['text_title'] = sprintf('<h3>%s</h3>', __d('documents', 'Description'));
     $invoiceView['panels']['text_data'] = sprintf('<div id="invoice-descript-preview">%s</div>', $document->descript);
 }
 

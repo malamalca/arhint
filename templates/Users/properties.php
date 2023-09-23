@@ -53,12 +53,14 @@ $userForm = [
                     'avatar_file',
                     [
                         'type' => 'file',
+                        'accept' => '.png',
                         'label' => [
                             'text' => __('Avatar') . ':',
                             'class' => 'active'
-                        ]
-                    ]
-                ]
+                        ],
+                        'error' => __('Only png images smaller than 30kB allowed.')
+                    ],
+                ],
             ],
             'fs_basics_end' => '</fieldset>',
 
@@ -111,9 +113,10 @@ $userForm = [
             'fs_login_end' => '</fieldset>',
 
             'submit' => [
-                'method' => 'submit',
+                'method' => 'button',
                 'parameters' => [
-                    'label' => __('Save')
+                    __('Save'),
+                    ['type' => 'submit'],
                 ]
             ],
             'form_end' => [

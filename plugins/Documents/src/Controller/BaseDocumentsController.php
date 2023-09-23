@@ -513,11 +513,6 @@ class BaseDocumentsController extends AppController
                 ->order(['DocumentsCounters.title', 'Invoices.no'])
                 ->all();
 
-            //$this->set(compact('data', 'filter'));
-            //$this->viewBuilder()->setClassName('Lil.Pdf');
-
-            //$this->response = $this->response->withType('pdf');
-
             $report = new ArhintReport(
                 'Invoices.index',
                 $this->request,

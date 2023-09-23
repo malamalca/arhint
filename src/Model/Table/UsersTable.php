@@ -158,6 +158,10 @@ class UsersTable extends Table
     {
         $validator = new Validator();
         $validator
+            ->allowEmptyFile('avatar_file')
+            ->add('avatar_file', 'file', ['rule' => ['mimeType', ['image/png']]])
+            ->add('avatar_file', 'file', ['rule' => ['filesize', '<', '30KB']])
+
             ->allowEmptyString('passwd')
             ->add('passwd', 'minLength', ['rule' => ['minLength', 4]])
 

@@ -43,9 +43,10 @@ use Cake\Routing\Router;
                 ],
 
                 'submit' => [
-                    'method' => 'submit',
+                    'method' => 'button',
                     'parameters' => [
-                        'label' => __d('crm', 'Next'),
+                        __d('crm', 'Print'),
+                        ['type' => 'submit'],
                     ],
                 ],
                 'form_end' => [

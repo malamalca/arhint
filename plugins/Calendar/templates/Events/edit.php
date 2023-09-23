@@ -12,7 +12,7 @@ if (!$defultDateStart) {
 $defultDateEnd = $defultDateStart->addHours(1);
 
 $diffSeconds = $defultDateEnd->diffInSeconds($defultDateStart);
-if (!$event->isNew()) {
+if (!$event->isNew() && $event->date_end) {
     $diffSeconds = $event->date_end->diffInSeconds($event->date_start);
 }
 

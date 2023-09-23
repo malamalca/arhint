@@ -13,6 +13,7 @@ $endLink = $this->Html->link(
     (string)$end_span,
     ['action' => 'filter'],
     ['id' => 'lil-invoices-link-date-end', 'class' => 'nowrap'],
+    ['class' => 'dropdown-trigger no-autoinit nowrap', 'data-target' => 'lil-invoices-input-date-end']
 );
 
 $counterLink = $this->Html->link(

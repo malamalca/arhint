@@ -351,7 +351,7 @@ class Installer
             $dbUser = $io->ask('<info>Enter db user ?</info> ');
             $dbPassword = $io->ask('<info>Enter db password ?</info> ');
 
-            $dbConnectSuccess = static::checkDbConnection($dbHost, $dbName, $dbUser, $dbPassword, $io);
+            $dbConnectSuccess = static::checkDbConnection($dbHost, $dbName, (string)$dbUser, (string)$dbPassword, $io);
 
             if ($dbConnectSuccess) {
                 static::setDbConfigInFile($dbHost, $dbName, $dbUser, $dbPassword, $dir, 'app_local.php', $io);

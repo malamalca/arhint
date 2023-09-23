@@ -5,7 +5,7 @@ namespace Documents\Model\Table;
 
 use Cake\Core\Plugin;
 use Cake\Http\ServerRequest;
-use Cake\I18n\DateTime;
+use Cake\I18n\Date;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
@@ -178,21 +178,21 @@ class DocumentsTable extends Table
 
         // from-to date
         if (isset($filter['start'])) {
-            $filter['start'] = DateTime::parseDate($filter['start'], 'yyyy-MM-dd');
+            $filter['start'] = Date::parseDate($filter['start'], 'yyyy-MM-dd');
             if (!empty($filter['start'])) {
                 $ret['conditions']['Documents.dat_issue >='] = $filter['start'];
             }
         }
 
         if (isset($filter['end'])) {
-            $filter['end'] = DateTime::parseDate($filter['end'], 'yyyy-MM-dd');
+            $filter['end'] = Date::parseDate($filter['end'], 'yyyy-MM-dd');
             if (!empty($filter['end'])) {
                 $ret['conditions']['Documents.dat_issue <='] = $filter['end'];
             }
         }
 
         if (isset($filter['month'])) {
-            $start = DateTime::parseDate($filter['month'] . '-01', 'yyyy-MM-dd');
+            $start = Date::parseDate($filter['month'] . '-01', 'yyyy-MM-dd');
             if (!empty($start)) {
                 $ret['conditions']['Documents.dat_issue >='] = $start;
                 $ret['conditions']['Documents.dat_issue <'] = $start->addMonths(1);
@@ -255,7 +255,7 @@ class DocumentsTable extends Table
      * Method returns array
      *
      * @param string $counterId Counter id
-     * @return array<string, \Cake\I18n\DateTime>
+     * @return array<string, \Cake\I18n\Date>
      */
     public function maxSpan(string $counterId): array
     {
@@ -271,14 +271,14 @@ class DocumentsTable extends Table
         $ret = $query->first()->toArray();
 
         if (empty($ret['start'])) {
-            $ret['start'] = new DateTime();
+            $ret['start'] = new Date();
         } else {
-            $ret['start'] = DateTime::parseDate($ret['start'], 'yyyy-MM-dd');
+            $ret['start'] = Date::parseDate($ret['start'], 'yyyy-MM-dd');
         }
         if (empty($ret['end'])) {
-            $ret['end'] = new DateTime();
+            $ret['end'] = new Date();
         } else {
-            $ret['end'] = DateTime::parseDate($ret['end'], 'yyyy-MM-dd');
+            $ret['end'] = Date::parseDate($ret['end'], 'yyyy-MM-dd');
         }
 
         return $ret;

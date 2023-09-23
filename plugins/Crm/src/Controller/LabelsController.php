@@ -98,8 +98,9 @@ class LabelsController extends AppController
 
         $adremaId = $this->getRequest()->getQuery('adrema');
 
-        $this->fetchTable('Crm.Adremas');
-        $adrema = $this->Adremas->get($adremaId);
+        /** @var \Crm\Model\Table\AdremasTable $AdremasTable */
+        $AdremasTable = $this->fetchTable('Crm.Adremas');
+        $adrema = $AdremasTable->get($adremaId);
 
         $this->Authorization->authorize($adrema, 'view');
 
