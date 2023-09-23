@@ -9,7 +9,6 @@
         "ext-intl": "*",
         "ext-json": "*",
         "ext-mbstring": "*",
-        
 
         "cakephp/authentication": "^3.0.0",
         "cakephp/authorization": "^3.0.0",
@@ -21,7 +20,7 @@
 
         "ddn/sapp": "dev-main",
         "krivart/php-qr-code": "dev-master",
-        "malamalca/lil": "^4.5",
+        "malamalca/lil": "^4.6",
         "mikehaertl/phpwkhtmltopdf": "2.0.*@dev",
         "phpoffice/phpword": "^0.18.2",
         "tecnickcom/tcpdf": "dev-main",
