@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Tasks\Model\Table;
 
-use Cake\I18n\FrozenTime;
+use Cake\I18n\DateTime;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
@@ -13,7 +13,7 @@ use Cake\Validation\Validator;
  *
  * @property \Cake\ORM\Association\BelongsTo $Owners
  * @property \Cake\ORM\Association\BelongsTo $Foreigns
- * @method \Tasks\Model\Entity\Task get($primaryKey, array $options = [])
+ * @method \Tasks\Model\Entity\Task get(mixed $primaryKey, array|string $finder = 'all', \Psr\SimpleCache\CacheInterface|string|null $cache = null, \Closure|string|null $cacheKey = null, mixed ...$args)
  * @method \Tasks\Model\Entity\Task newEntity($data = null, array $options = [])
  * @method \Tasks\Model\Entity\Task newEmptyEntity(array $options = [])
  * @method \Tasks\Model\Entity\Task patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
@@ -23,7 +23,7 @@ class TasksTable extends Table
     /**
      * Initialize method
      *
-     * @param array $config The configuration for the Table.
+     * @param array<string, mixed> $config List of options for this table.
      * @return void
      */
     public function initialize(array $config): void
@@ -98,7 +98,7 @@ class TasksTable extends Table
      * @param string $ownerId User Id.
      * @return bool
      */
-    public function isOwnedBy($entityId, $ownerId)
+    public function isOwnedBy(string $entityId, string $ownerId): bool
     {
         return $this->exists(['id' => $entityId, 'owner_id' => $ownerId]);
     }
@@ -106,10 +106,10 @@ class TasksTable extends Table
     /**
      * Filters accounts by query string
      *
-     * @param array $filter Filter array.
-     * @return array
+     * @param array<string, mixed> $filter Filter array.
+     * @return array<string, mixed>
      */
-    public function filter(&$filter)
+    public function filter(array &$filter): array
     {
         $ret = [];
 
@@ -128,19 +128,19 @@ class TasksTable extends Table
         if (!empty($filter['due'])) {
             switch ($filter['due']) {
                 case 'today':
-                    $ret['conditions']['Tasks.deadline >='] = new FrozenTime('today');
-                    $ret['conditions']['Tasks.deadline <'] = (new FrozenTime('today'))->addDay();
+                    $ret['conditions']['Tasks.deadline >='] = new DateTime('today');
+                    $ret['conditions']['Tasks.deadline <'] = (new DateTime('today'))->addDays(1);
                     break;
                 case 'tomorrow':
-                    $ret['conditions']['Tasks.deadline >='] = new FrozenTime('tomorrow');
-                    $ret['conditions']['Tasks.deadline <'] = (new FrozenTime('tomorrow'))->addDay();
+                    $ret['conditions']['Tasks.deadline >='] = new DateTime('tomorrow');
+                    $ret['conditions']['Tasks.deadline <'] = (new DateTime('tomorrow'))->addDays(1);
                     break;
                 case 'week':
-                    $ret['conditions']['Tasks.deadline >='] = (new FrozenTime('today'))->startOfWeek();
-                    $ret['conditions']['Tasks.deadline <'] = (new FrozenTime('today'))->startOfWeek()->addWeek();
+                    $ret['conditions']['Tasks.deadline >='] = (new DateTime('today'))->startOfWeek();
+                    $ret['conditions']['Tasks.deadline <'] = (new DateTime('today'))->startOfWeek()->addWeeks(1);
                     break;
                 case 'morethan2days':
-                    $ret['conditions']['Tasks.deadline >='] = (new FrozenTime('tomorrow'))->addDay();
+                    $ret['conditions']['Tasks.deadline >='] = (new DateTime('tomorrow'))->addDays(1);
                     break;
                 case 'empty':
                     $ret['conditions']['Tasks.deadline IS'] = null;
@@ -160,7 +160,7 @@ class TasksTable extends Table
         } else {
             $ret['conditions'][]['OR'] = [
                 'Tasks.completed IS' => null,
-                'Tasks.completed >=' => (new FrozenTime('today'))->subDays(8),
+                'Tasks.completed >=' => (new DateTime('today'))->subDays(8),
             ];
         }
 

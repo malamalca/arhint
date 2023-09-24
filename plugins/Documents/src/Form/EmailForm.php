@@ -7,18 +7,21 @@ use Cake\Core\Configure;
 use Cake\Database\Expression\QueryExpression;
 use Cake\Form\Form;
 use Cake\Form\Schema;
+use Cake\Http\ServerRequest;
 use Cake\Mailer\Mailer;
-use Cake\ORM\Query;
+use Cake\ORM\Query\SelectQuery;
 use Cake\ORM\TableRegistry;
 use Cake\Validation\Validator;
 use Documents\Lib\DocumentsExport;
+use Documents\Model\Entity\Invoice;
+use Documents\Model\Entity\TravelOrder;
 
 class EmailForm extends Form
 {
     /**
      * @var \Cake\Http\ServerRequest $request
      */
-    private $request = null;
+    private ServerRequest $request;
 
     /**
      * Form constructor.
@@ -26,7 +29,7 @@ class EmailForm extends Form
      * @param \Cake\Http\ServerRequest $request Request object.
      * @return void
      */
-    public function __construct($request)
+    public function __construct(ServerRequest $request)
     {
         $this->request = $request;
     }
@@ -60,7 +63,7 @@ class EmailForm extends Form
     /**
      * Form execute action
      *
-     * @param array $data Post data.
+     * @param array<array-key, mixed> $data Post data.
      * @return bool
      */
     protected function _execute(array $data): bool
@@ -112,13 +115,13 @@ class EmailForm extends Form
                 $DocumentsAttachmentsTable = TableRegistry::getTableLocator()->get('Documents.DocumentsAttachments');
                 $docAttachments = $DocumentsAttachmentsTable->find()
                     ->select(['id', 'original', 'filename'])
-                    ->where(function (QueryExpression $exp, Query $query) use ($documents) {
+                    ->where(function (QueryExpression $exp, SelectQuery $query) use ($documents) {
                         foreach ($documents as $doc) {
                             switch (get_class($doc)) {
-                                case \Documents\Model\Entity\Invoice::class:
+                                case Invoice::class:
                                     $modelName = 'Invoice';
                                     break;
-                                case \Documents\Model\Entity\TravelOrder::class:
+                                case TravelOrder::class:
                                     $modelName = 'TravelOrder';
                                     break;
                                 default:

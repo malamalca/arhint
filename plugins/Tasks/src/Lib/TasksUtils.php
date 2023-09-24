@@ -3,8 +3,10 @@ declare(strict_types=1);
 
 namespace Tasks\Lib;
 
-use Cake\I18n\FrozenTime;
+use App\View\AppView;
+use Cake\I18n\DateTime;
 use Cake\ORM\TableRegistry;
+use Tasks\Model\Entity\Task;
 
 class TasksUtils
 {
@@ -13,9 +15,9 @@ class TasksUtils
      *
      * @param \Tasks\Model\Entity\Task $task Task entity
      * @param \App\View\AppView $view View Class
-     * @return array
+     * @return array<string, mixed>
      */
-    public static function taskPanel($task, $view)
+    public static function taskPanel(Task $task, AppView $view): array
     {
         /** @var \App\Model\Table\UsersTable $UsersTable */
         $UsersTable = TableRegistry::getTableLocator()->get('App.Users');
@@ -36,11 +38,11 @@ class TasksUtils
         $dueSpan = '';
         if (!empty($task->deadline)) {
             $dueSpanClass = 'lil-task-due';
-            $dueDate = $task->deadline->timeAgoInWords(['accuracy' => 'hour', 'end' => 30]);
+            $dueDate = $task->deadline->timeAgoInWords(['accuracy' => 'hour'/* TODO: , 'end' => 30*/]);
 
             if ($view->Time->isToday($task->deadline)) {
                 $dueSpanClass = 'lil-task-duetoday';
-                if ($task->deadline->ne(new FrozenTime('today')) && $view->Time->isPast($task->deadline)) {
+                if ($task->deadline->notEquals(new DateTime('today')) && $view->Time->isPast($task->deadline)) {
                     $dueSpanClass = 'lil-task-overdue';
                 } else {
                     // time equals 00:00:00

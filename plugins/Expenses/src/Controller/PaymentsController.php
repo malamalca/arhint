@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Expenses\Controller;
 
 use Cake\Http\Exception\NotFoundException;
+use Cake\Http\Response;
 
 /**
  * Payments Controller
@@ -15,13 +16,13 @@ class PaymentsController extends AppController
     /**
      * Index method
      *
-     * @return null
+     * @return void
      */
     public function index()
     {
         $ownerId = $this->getCurrentUser()->get('company_id');
 
-        /** @var array $filter */
+        /** @var array<string, mixed> $filter */
         $filter = $this->getRequest()->getQuery();
 
         if ($this->getRequest()->is('ajax')) {
@@ -43,28 +44,22 @@ class PaymentsController extends AppController
         $minYear = $this->Payments->minYear($ownerId);
         $accounts = $this->Payments->PaymentsAccounts->listForOwner($ownerId, true);
         $this->set(compact('payments', 'accounts', 'filter', 'minYear'));
-
-        return null;
     }
 
     /**
      * View method
      *
      * @param string|null $id Payment id.
-     * @return null
+     * @return void
      * @throws \Cake\Http\Exception\NotFoundException When record not found.
      */
-    public function view($id = null)
+    public function view(?string $id = null)
     {
-        $payment = $this->Payments->get($id, [
-            'contain' => ['Accounts', 'Expenses'],
-        ]);
+        $payment = $this->Payments->get($id, contain: ['Accounts', 'Expenses']);
 
         $this->Authorization->authorize($payment);
 
         $this->set('payment', $payment);
-
-        return null;
     }
 
     /**
@@ -74,10 +69,10 @@ class PaymentsController extends AppController
      * @return \Cake\Http\Response|null
      * @throws \Cake\Http\Exception\NotFoundException When record not found.
      */
-    public function edit($id = null)
+    public function edit(?string $id = null): ?Response
     {
         if ($id) {
-            $payment = $this->Payments->get($id, ['contain' => ['Expenses']]);
+            $payment = $this->Payments->get($id, contain: ['Expenses']);
         } else {
             $payment = $this->Payments->newEmptyEntity();
             $payment->owner_id = $this->getCurrentUser()->get('company_id');
@@ -100,7 +95,7 @@ class PaymentsController extends AppController
             ]);
             if ($this->Payments->save($payment)) {
                 if ($this->getRequest()->is('ajax')) {
-                    return $this->response->withType('application/json')->withStringBody(json_encode($payment));
+                    return $this->response->withType('application/json')->withStringBody((string)json_encode($payment));
                 }
 
                 $this->Flash->success(__d('expenses', 'The payment has been saved.'));
@@ -124,7 +119,7 @@ class PaymentsController extends AppController
      * @return \Cake\Http\Response|null
      * @throws \Cake\Http\Exception\NotFoundException When record not found.
      */
-    public function delete($id = null)
+    public function delete(?string $id = null): ?Response
     {
         $payment = $this->Payments->get($id);
 
@@ -136,13 +131,13 @@ class PaymentsController extends AppController
             $this->Flash->error(__d('expenses', 'The payment could not be deleted. Please, try again.'));
         }
 
-        return $this->redirect($this->getRequest()->referer());
+        return $this->redirect($this->getRequest()->referer() ?? ['action' => 'index']);
     }
 
     /**
      * autocomplete method
      *
-     * @return \Cake\Http\Response|null
+     * @return void
      */
     public function autocomplete()
     {
@@ -161,7 +156,5 @@ class PaymentsController extends AppController
         } else {
             throw new NotFoundException(__d('expenses', 'Invalid ajax call.'));
         }
-
-        return null;
     }
 }

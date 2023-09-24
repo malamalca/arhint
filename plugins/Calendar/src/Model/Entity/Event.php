@@ -14,11 +14,11 @@ use Cake\ORM\Entity;
  * @property string|null $location
  * @property string|null $body
  * @property bool $all_day
- * @property \Cake\I18n\FrozenTime|null $dat_start
- * @property \Cake\I18n\FrozenTime|null $dat_end
+ * @property \Cake\I18n\DateTime|null $dat_start
+ * @property \Cake\I18n\DateTime|null $dat_end
  * @property int|null $reminder
- * @property \Cake\I18n\FrozenTime|null $created
- * @property \Cake\I18n\FrozenTime|null $modified
+ * @property \Cake\I18n\DateTime|null $created
+ * @property \Cake\I18n\DateTime|null $modified
  *
  * @property \Contacts\Model\Entity\Contact $calendar
  */
@@ -33,7 +33,7 @@ class Event extends Entity
      *
      * @var array<string, bool>
      */
-    protected $_accessible = [
+    protected array $_accessible = [
         'calendar_id' => true,
         'title' => true,
         'location' => true,

@@ -16,6 +16,7 @@ declare(strict_types=1);
  */
 namespace App\Controller;
 
+use ArrayObject;
 use Cake\Core\Configure;
 use Cake\Event\Event;
 use Cake\Event\EventManager;
@@ -83,7 +84,7 @@ class PagesController extends AppController
      * @return \Cake\Http\Response|void
      * @throws \Cake\Http\Exception\NotFoundException When the file could not be found
      */
-    public function report($reportName, $fileName)
+    public function report(string $reportName, string $fileName)
     {
         $this->Authorization->skipAuthorization();
 
@@ -98,10 +99,10 @@ class PagesController extends AppController
      * Displays a report
      *
      * @param string $fileName Report name
-     * @return \Cake\Http\Response|null
+     * @return \Cake\Http\Response
      * @throws \Cake\Http\Exception\NotFoundException When the view file could not be found.
      */
-    public function pdf($fileName)
+    public function pdf(string $fileName): Response
     {
         $this->Authorization->skipAuthorization();
 
@@ -132,7 +133,7 @@ class PagesController extends AppController
     {
         $this->Authorization->skipAuthorization();
 
-        $dashboardPanels = new \ArrayObject([
+        $dashboardPanels = new ArrayObject([
             'title' => '&nbsp;',
             'menu' => [
                 'sign' => [

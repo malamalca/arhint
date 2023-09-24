@@ -3,6 +3,9 @@ declare(strict_types=1);
 
 namespace Documents\Policy;
 
+use App\Model\Entity\User;
+use Documents\Model\Entity\Document;
+
 /**
  * Document Policy Resolver
  */
@@ -15,7 +18,7 @@ class DocumentPolicy
      * @param \Documents\Model\Entity\Document $entity Entity
      * @return bool
      */
-    public function canView($user, $entity)
+    public function canView(User $user, Document $entity): bool
     {
         return $entity->owner_id == $user->company_id;
     }
@@ -27,7 +30,7 @@ class DocumentPolicy
      * @param \Documents\Model\Entity\Document $entity Entity
      * @return bool
      */
-    public function canEdit($user, $entity)
+    public function canEdit(User $user, Document $entity): bool
     {
         return $entity->owner_id == $user->company_id && $user->hasRole('editor');
     }
@@ -39,7 +42,7 @@ class DocumentPolicy
      * @param \Documents\Model\Entity\Document $entity Entity
      * @return bool
      */
-    public function canEmail($user, $entity)
+    public function canEmail(User $user, Document $entity): bool
     {
         return $entity->owner_id == $user->company_id;
     }
@@ -51,7 +54,7 @@ class DocumentPolicy
      * @param \Documents\Model\Entity\Document $entity Entity
      * @return bool
      */
-    public function canSign($user, $entity)
+    public function canSign(User $user, Document $entity): bool
     {
         return $entity->owner_id == $user->company_id && $user->hasRole('editor');
     }
@@ -63,7 +66,7 @@ class DocumentPolicy
      * @param \Documents\Model\Entity\Document $entity Entity
      * @return bool
      */
-    public function canDelete($user, $entity)
+    public function canDelete(User $user, Document $entity): bool
     {
         return $entity->owner_id == $user->company_id && $user->hasRole('editor');
     }

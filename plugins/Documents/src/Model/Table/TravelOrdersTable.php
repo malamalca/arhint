@@ -4,11 +4,14 @@ declare(strict_types=1);
 namespace Documents\Model\Table;
 
 use Cake\Core\Plugin;
-use Cake\I18n\FrozenDate;
+use Cake\Http\ServerRequest;
+use Cake\I18n\Date;
+use Cake\I18n\DateTime;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
 use Cake\Validation\Validator;
+use Documents\Model\Entity\TravelOrder;
 
 /**
  * TravelOrders Model
@@ -24,16 +27,11 @@ use Cake\Validation\Validator;
  * @method \Documents\Model\Entity\TravelOrder newEmptyEntity()
  * @method \Documents\Model\Entity\TravelOrder newEntity(array $data, array $options = [])
  * @method \Documents\Model\Entity\TravelOrder[] newEntities(array $data, array $options = [])
- * @method \Documents\Model\Entity\TravelOrder get($primaryKey, $options = [])
+ * @method \Documents\Model\Entity\TravelOrder get(mixed $primaryKey, array|string $finder = 'all', \Psr\SimpleCache\CacheInterface|string|null $cache = null, \Closure|string|null $cacheKey = null, mixed ...$args)
  * @method \Documents\Model\Entity\TravelOrder findOrCreate($search, ?callable $callback = null, $options = [])
  * @method \Documents\Model\Entity\TravelOrder patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
  * @method \Documents\Model\Entity\TravelOrder[] patchEntities(iterable $entities, array $data, array $options = [])
  * @method \Documents\Model\Entity\TravelOrder|false save(\Cake\Datasource\EntityInterface $entity, $options = [])
- * @method \Documents\Model\Entity\TravelOrder saveOrFail(\Cake\Datasource\EntityInterface $entity, $options = [])
- * @method \Documents\Model\Entity\TravelOrder[]|\Cake\Datasource\ResultSetInterface|false saveMany(iterable $entities, $options = [])
- * @method \Documents\Model\Entity\TravelOrder[]|\Cake\Datasource\ResultSetInterface saveManyOrFail(iterable $entities, $options = [])
- * @method \Documents\Model\Entity\TravelOrder[]|\Cake\Datasource\ResultSetInterface|false deleteMany(iterable $entities, $options = [])
- * @method \Documents\Model\Entity\TravelOrder[]|\Cake\Datasource\ResultSetInterface deleteManyOrFail(iterable $entities, $options = [])
  * @mixin \Cake\ORM\Behavior\TimestampBehavior
  */
 class TravelOrdersTable extends Table
@@ -41,7 +39,7 @@ class TravelOrdersTable extends Table
     /**
      * Initialize method
      *
-     * @param array $config The configuration for the Table.
+     * @param array<string, mixed> $config List of options for this table.
      * @return void
      */
     public function initialize(array $config): void
@@ -193,7 +191,7 @@ class TravelOrdersTable extends Table
      * @param string $ownerId User Id.
      * @return bool
      */
-    public function isOwnedBy($entityId, $ownerId)
+    public function isOwnedBy(string $entityId, string $ownerId): bool
     {
         return $this->exists(['id' => $entityId, 'owner_id' => $ownerId]);
     }
@@ -201,10 +199,10 @@ class TravelOrdersTable extends Table
     /**
      * filter method
      *
-     * @param array $filter Filter data.
-     * @return array
+     * @param array<string, mixed> $filter Filter data.
+     * @return array<string, mixed>
      */
-    public function filter(&$filter)
+    public function filter(array &$filter): array
     {
         $ret = ['conditions' => [], 'contain' => []];
 
@@ -214,26 +212,26 @@ class TravelOrdersTable extends Table
 
         // from-to date
         if (isset($filter['start'])) {
-            $filter['start'] = FrozenDate::parseDate($filter['start'], 'yyyy-MM-dd');
+            $filter['start'] = DateTime::parseDate($filter['start'], 'yyyy-MM-dd');
             if (!empty($filter['start'])) {
                 $ret['conditions']['TravelOrders.dat_task >='] = $filter['start'];
             }
         }
 
         if (isset($filter['end'])) {
-            $filter['end'] = FrozenDate::parseDate($filter['end'], 'yyyy-MM-dd');
+            $filter['end'] = DateTime::parseDate($filter['end'], 'yyyy-MM-dd');
             if (!empty($filter['end'])) {
                 $ret['conditions']['TravelOrders.dat_task <='] = $filter['end'];
             }
         }
 
         if (isset($filter['month'])) {
-            $start = FrozenDate::parseDate($filter['month'] . '-01', 'yyyy-MM-dd');
+            $start = DateTime::parseDate($filter['month'] . '-01', 'yyyy-MM-dd');
             if (!empty($start)) {
                 $ret['conditions']['TravelOrders.dat_task >='] = $start;
-                $ret['conditions']['TravelOrders.dat_task <'] = $start->addMonth();
+                $ret['conditions']['TravelOrders.dat_task <'] = $start->addMonths(1);
                 $filter['start'] = $start;
-                $filter['end'] = $start->addMonth()->subDays(1);
+                $filter['end'] = $start->addMonths(1)->subDays(1);
             }
         }
 
@@ -272,9 +270,9 @@ class TravelOrdersTable extends Table
      * Method returns array
      *
      * @param string $counterId Counter id
-     * @return array
+     * @return array<string, \Cake\I18n\Date>
      */
-    public function maxSpan($counterId)
+    public function maxSpan(string $counterId): array
     {
         $ret = [];
 
@@ -288,14 +286,14 @@ class TravelOrdersTable extends Table
         $ret = $query->first()->toArray();
 
         if (empty($ret['start'])) {
-            $ret['start'] = new FrozenDate();
+            $ret['start'] = new Date();
         } else {
-            $ret['start'] = FrozenDate::parseDate($ret['start'], 'yyyy-MM-dd');
+            $ret['start'] = Date::parseDate($ret['start'], 'yyyy-MM-dd');
         }
         if (empty($ret['end'])) {
-            $ret['end'] = new FrozenDate();
+            $ret['end'] = new Date();
         } else {
-            $ret['end'] = FrozenDate::parseDate($ret['end'], 'yyyy-MM-dd');
+            $ret['end'] = Date::parseDate($ret['end'], 'yyyy-MM-dd');
         }
 
         return $ret;
@@ -308,20 +306,18 @@ class TravelOrdersTable extends Table
      * @param string|null $id Document id.
      * @return \Documents\Model\Entity\TravelOrder
      */
-    public function parseRequest($request, $id = null)
+    public function parseRequest(ServerRequest $request, ?string $id = null): TravelOrder
     {
         if (!empty($id)) {
-            $document = $this->get($id, ['contain' => ['DocumentsCounters']]);
+            $document = $this->get($id, contain: ['DocumentsCounters']);
         } else {
-            /** @var \Documents\Model\Table\DocumentsClientsTable $DocumentsClients */
-            $DocumentsClients = TableRegistry::getTableLocator()->get('Documents.DocumentsClients');
             /** @var \Documents\Model\Table\DocumentsCountersTable $DocumentsCounters */
             $DocumentsCounters = TableRegistry::getTableLocator()->get('Documents.DocumentsCounters');
 
             $sourceId = $request->getQuery('duplicate');
             if (!empty($sourceId)) {
                 // clone
-                $document = $this->get($sourceId, ['contain' => ['DocumentsCounters']]);
+                $document = $this->get($sourceId, contain: ['DocumentsCounters']);
 
                 $document->setNew(true);
                 unset($document->id);
@@ -343,7 +339,7 @@ class TravelOrdersTable extends Table
 
             $document->documents_counter = $DocumentsCounters->get($counterId);
             $document->counter_id = $document->documents_counter->id;
-            $document->no = $DocumentsCounters->generateNo($document->counter_id);
+            $document->no = (string)$DocumentsCounters->generateNo($document->counter_id);
         }
 
         return $document;

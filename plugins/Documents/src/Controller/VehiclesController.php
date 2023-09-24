@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace Documents\Controller;
 
+use Cake\Http\Response;
+
 /**
  * Vehicles Controller
  *
@@ -13,7 +15,7 @@ class VehiclesController extends AppController
     /**
      * Index method
      *
-     * @return \Cake\Http\Response|null|void Renders view
+     * @return \Cake\Http\Response|void Renders view
      */
     public function index()
     {
@@ -27,10 +29,10 @@ class VehiclesController extends AppController
      * Edit method
      *
      * @param string|null $id Vehicle id.
-     * @return \Cake\Http\Response|void
+     * @return \Cake\Http\Response|null
      * @throws \Cake\Http\Exception\NotFoundException When record not found.
      */
-    public function edit($id = null)
+    public function edit(?string $id = null): ?Response
     {
         if (empty($id)) {
             $vehicle = $this->Vehicles->newEmptyEntity();
@@ -55,16 +57,18 @@ class VehiclesController extends AppController
         }
 
         $this->set(compact('vehicle'));
+
+        return null;
     }
 
     /**
      * Delete method
      *
      * @param string|null $id Vehicle id.
-     * @return \Cake\Http\Response|null|void Redirects to index.
+     * @return \Cake\Http\Response|null
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function delete($id = null)
+    public function delete(?string $id = null): ?Response
     {
         $this->request->allowMethod(['post', 'delete', 'get']);
         $vehicle = $this->Vehicles->get($id);

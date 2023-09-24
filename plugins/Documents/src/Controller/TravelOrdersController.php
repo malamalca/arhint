@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Documents\Controller;
 
 use Cake\Core\Plugin;
+use Cake\Http\Response;
 use Cake\ORM\TableRegistry;
 
 /**
@@ -17,19 +18,19 @@ class TravelOrdersController extends BaseDocumentsController
     /**
      * @var string $documentsScope
      */
-    public $documentsScope = 'TravelOrders';
+    public string $documentsScope = 'TravelOrders';
 
     /**
      * Index method
      *
-     * @return \Cake\Http\Response|null|void Renders view
+     * @return \Cake\Http\Response|void Renders view
      */
     public function index()
     {
         /** @var \Documents\Model\Entity\DocumentsCounter|\Cake\Http\Response $counter */
         $counter = parent::index();
 
-        if ($counter instanceof \Cake\Http\Response) {
+        if ($counter instanceof Response) {
             return $counter;
         }
 
@@ -49,18 +50,16 @@ class TravelOrdersController extends BaseDocumentsController
         $dateSpan = $this->TravelOrders->maxSpan($filter['counter']);
 
         $this->set(compact('data', 'dateSpan'));
-
-        return null;
     }
 
     /**
      * View method
      *
      * @param string|null $id Travel Order id.
-     * @return \Cake\Http\Response|null|void Renders view
+     * @return \Cake\Http\Response|void Renders view
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function view($id = null)
+    public function view(?string $id = null)
     {
         $containTables = ['DocumentsCounters'];
         if (Plugin::isLoaded('Projects')) {
@@ -74,10 +73,10 @@ class TravelOrdersController extends BaseDocumentsController
      * Edit method
      *
      * @param string|null $id Travel Order id.
-     * @return \Cake\Http\Response|null|void Redirects on successful edit, renders view otherwise.
+     * @return \Cake\Http\Response|null
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function edit($id = null)
+    public function edit(?string $id = null): ?Response
     {
         $containTables = [];
 

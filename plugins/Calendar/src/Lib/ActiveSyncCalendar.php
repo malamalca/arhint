@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Calendar\Lib;
 
 use Cake\Core\Configure;
-use Cake\I18n\FrozenTime;
+use Cake\I18n\DateTime as CakeDateTime;
 use Cake\Log\Log;
 use Cake\ORM\TableRegistry;
 use DateTime;
@@ -15,6 +15,7 @@ use Syncroton_Exception_NotFound;
 use Syncroton_Exception_UnexpectedValue;
 use Syncroton_Model_EmailBody;
 use Syncroton_Model_Event;
+use Syncroton_Model_FileReference;
 use Syncroton_Model_Folder;
 use Syncroton_Model_IDevice;
 use Syncroton_Model_IEntry;
@@ -22,10 +23,11 @@ use Syncroton_Model_IFolder;
 use Syncroton_Model_ISyncState;
 use Syncroton_Model_SyncCollection;
 use Syncroton_Registry;
+use Zend_Db_Adapter_Abstract;
 
 class ActiveSyncCalendar implements Syncroton_Data_IData
 {
-    protected $_supportedFolderTypes = [
+    protected array $_supportedFolderTypes = [
         Syncroton_Command_FolderSync::FOLDERTYPE_CALENDAR,
         Syncroton_Command_FolderSync::FOLDERTYPE_CALENDAR_USER_CREATED,
     ];
@@ -33,37 +35,37 @@ class ActiveSyncCalendar implements Syncroton_Data_IData
     /**
      * @var \Syncroton_Model_IDevice
      */
-    protected $_device;
+    protected Syncroton_Model_IDevice $_device;
 
     /**
      * @var \DateTime
      */
-    protected $_timeStamp;
+    protected DateTime $_timeStamp;
 
     /**
      * @var \Zend_Db_Adapter_Abstract
      */
-    protected $_db;
+    protected Zend_Db_Adapter_Abstract $_db;
 
     /**
      * @var string
      */
-    protected $_tablePrefix;
+    protected string $_tablePrefix;
 
     /**
      * @var string|null
      */
-    protected $_ownerId;
+    protected ?string $_ownerId = null;
 
     /**
      * @var string|null
      */
-    protected $_userId;
+    protected ?string $_userId = null;
 
     /**
      * @var string|null
      */
-    protected $_calendarName = 'Arhint Calendar';
+    protected ?string $_calendarName = 'Arhint Calendar';
 
     /**
      * The constructor
@@ -92,13 +94,13 @@ class ActiveSyncCalendar implements Syncroton_Data_IData
      *
      * @param \Syncroton_Model_SyncCollection $collection Events collection.
      * @param mixed $serverId Event Server id.
-     * @return bool|\Syncroton_Model_Event
+     * @return \Syncroton_Model_Event|bool
      */
-    public function getEntry(Syncroton_Model_SyncCollection $collection, $serverId)
+    public function getEntry(Syncroton_Model_SyncCollection $collection, mixed $serverId): bool|Syncroton_Model_Event
     {
         /** @var \Calendar\Model\Table\EventsTable $EventsTable */
         $EventsTable = TableRegistry::getTableLocator()->get('Calendar.Events');
-        $event = $EventsTable->get($serverId, ['contain' => []]);
+        $event = $EventsTable->get($serverId);
 
         if (!$event->calendar_id == $this->_ownerId) {
             return false;
@@ -115,9 +117,9 @@ class ActiveSyncCalendar implements Syncroton_Data_IData
         $entry->allDayEvent = $event->all_day ? 1 : 0;
 
         $entry->startTime = $event->dat_start
-            ? new \DateTime($event->dat_start->setTimezone('UTC')->toDateTimeString())
+            ? new DateTime($event->dat_start->setTimezone('UTC')->toDateTimeString())
             : '';
-        $entry->endTime = $event->dat_end ? new \DateTime($event->dat_end->setTimezone('UTC')->toDateTimeString()) : '';
+        $entry->endTime = $event->dat_end ? new DateTime($event->dat_end->setTimezone('UTC')->toDateTimeString()) : '';
         $entry->reminder = $event->reminder;
         //recurrence
 
@@ -139,9 +141,9 @@ class ActiveSyncCalendar implements Syncroton_Data_IData
      * @param \Syncroton_Model_IEntry $_entry Entry
      * @return string Calendar\Event.id entity id
      */
-    public function createEntry($_folderId, Syncroton_Model_IEntry $_entry)
+    public function createEntry(string $_folderId, Syncroton_Model_IEntry $_entry): string
     {
-        $folderId = $_folderId instanceof Syncroton_Model_IFolder ? $_folderId->serverId : $_folderId;
+        //$folderId = $_folderId instanceof Syncroton_Model_IFolder ? $_folderId->serverId : $_folderId;
 
         $EventsTable = TableRegistry::getTableLocator()->get('Calendar.Events');
         $event = $EventsTable->newEmptyEntity();
@@ -154,9 +156,9 @@ class ActiveSyncCalendar implements Syncroton_Data_IData
 
         $event->all_day = (bool)$_entry->allDayEvent;
 
-        $event->dat_start = (new FrozenTime($_entry->startTime, 'UTC'))
+        $event->dat_start = (new CakeDateTime($_entry->startTime, 'UTC'))
             ->setTimezone(Configure::read('App.defaultTimezone'));
-        $event->dat_end = (new FrozenTime($_entry->endTime, 'UTC'))
+        $event->dat_end = (new CakeDateTime($_entry->endTime, 'UTC'))
             ->setTimezone(Configure::read('App.defaultTimezone'));
         $event->reminder = $_entry->reminder;
 
@@ -175,14 +177,14 @@ class ActiveSyncCalendar implements Syncroton_Data_IData
      * @param string $_folderId Folder id
      * @param string $_serverId Server id
      * @param \Syncroton_Model_IEntry $_entry Entry
-     * @return bool|string
+     * @return string|bool
      */
-    public function updateEntry($_folderId, $_serverId, Syncroton_Model_IEntry $_entry)
+    public function updateEntry(string $_folderId, string $_serverId, Syncroton_Model_IEntry $_entry): bool|string
     {
-        $folderId = $_folderId instanceof Syncroton_Model_IFolder ? $_folderId->serverId : $_folderId;
+        //$folderId = $_folderId instanceof Syncroton_Model_IFolder ? $_folderId->serverId : $_folderId;
 
         $EventsTable = TableRegistry::getTableLocator()->get('Calendar.Events');
-        $event = $EventsTable->get($_serverId, ['contain' => []]);
+        $event = $EventsTable->get($_serverId);
         if (empty($event)) {
             $event = $EventsTable->newEmptyEntity();
             $event->id = $_serverId;
@@ -195,9 +197,9 @@ class ActiveSyncCalendar implements Syncroton_Data_IData
 
         $event->all_day = (bool)$_entry->allDayEvent;
 
-        $event->dat_start = (new FrozenTime($_entry->startTime, 'UTC'))
+        $event->dat_start = (new CakeDateTime($_entry->startTime, 'UTC'))
             ->setTimezone(Configure::read('App.defaultTimezone'));
-        $event->dat_end = (new FrozenTime($_entry->endTime, 'UTC'))
+        $event->dat_end = (new CakeDateTime($_entry->endTime, 'UTC'))
             ->setTimezone(Configure::read('App.defaultTimezone'));
         $event->reminder = $_entry->reminder;
 
@@ -221,7 +223,7 @@ class ActiveSyncCalendar implements Syncroton_Data_IData
      * @param mixed $_collectionData Collection data
      * @return bool
      */
-    public function deleteEntry($_folderId, $_serverId, $_collectionData)
+    public function deleteEntry(string $_folderId, string $_serverId, mixed $_collectionData): bool
     {
         $EventsTable = TableRegistry::getTableLocator()->get('Calendar.Events');
         $event = $EventsTable->get($_serverId);
@@ -237,11 +239,11 @@ class ActiveSyncCalendar implements Syncroton_Data_IData
     /**
      * Return one folder identified by id
      *
-     * @param  string  $id Folder id.
+     * @param string  $id Folder id.
      * @throws \Syncroton_Exception_NotFound
      * @return \Syncroton_Model_Folder
      */
-    public function getFolder($id)
+    public function getFolder(string $id): Syncroton_Model_Folder
     {
         return new Syncroton_Model_Folder([
             'serverId' => 'calendar',
@@ -258,7 +260,7 @@ class ActiveSyncCalendar implements Syncroton_Data_IData
      * @param \Syncroton_Model_IFolder $folder Folder
      * @return \Syncroton_Model_Folder
      */
-    public function createFolder(Syncroton_Model_IFolder $folder)
+    public function createFolder(Syncroton_Model_IFolder $folder): Syncroton_Model_Folder
     {
         if (!in_array($folder->type, $this->_supportedFolderTypes)) {
             throw new Syncroton_Exception_UnexpectedValue();
@@ -276,7 +278,7 @@ class ActiveSyncCalendar implements Syncroton_Data_IData
      * @param \Syncroton_Model_IFolder $_folder Folder
      * @return \Syncroton_Model_Folder
      */
-    public function updateFolder(Syncroton_Model_IFolder $_folder)
+    public function updateFolder(Syncroton_Model_IFolder $_folder): Syncroton_Model_Folder
     {
         return $this->getFolder($_folder->serverId);
     }
@@ -288,7 +290,7 @@ class ActiveSyncCalendar implements Syncroton_Data_IData
      * @param string $_folderId Folder id.
      * @return bool
      */
-    public function deleteFolder($_folderId)
+    public function deleteFolder(string $_folderId): bool
     {
         return true;
     }
@@ -301,7 +303,7 @@ class ActiveSyncCalendar implements Syncroton_Data_IData
      * @param array $options Options
      * @return bool
      */
-    public function emptyFolderContents($folderId, $options)
+    public function emptyFolderContents(string $folderId, array $options): bool
     {
         return true;
     }
@@ -312,7 +314,7 @@ class ActiveSyncCalendar implements Syncroton_Data_IData
      * @see \Syncroton_Data_IData::getAllFolders()
      * @return array
      */
-    public function getAllFolders()
+    public function getAllFolders(): array
     {
         $result = [
             'calendar' => new Syncroton_Model_Folder([
@@ -333,7 +335,7 @@ class ActiveSyncCalendar implements Syncroton_Data_IData
      * @param \DateTime $endTimeStamp Ent date time.
      * @return array list of Syncroton_Model_Folder
      */
-    public function getChangedFolders(DateTime $startTimeStamp, DateTime $endTimeStamp)
+    public function getChangedFolders(DateTime $startTimeStamp, DateTime $endTimeStamp): array
     {
         $result = [
             'contacts' => new Syncroton_Model_Folder([
@@ -350,13 +352,13 @@ class ActiveSyncCalendar implements Syncroton_Data_IData
     /**
      * getServerEntries
      *
-     * @param  \Syncroton_Model_IFolder|string  $_folderId Folder id.
-     * @param  string                           $_filter Filter string.
+     * @param \Syncroton_Model_IFolder|string  $_folderId Folder id.
+     * @param string                           $_filter Filter string.
      * @return array
      */
-    public function getServerEntries($_folderId, $_filter)
+    public function getServerEntries(Syncroton_Model_IFolder|string $_folderId, string $_filter): array
     {
-        $folderId = $_folderId instanceof Syncroton_Model_IFolder ? $_folderId->id : $_folderId;
+        //$folderId = $_folderId instanceof Syncroton_Model_IFolder ? $_folderId->id : $_folderId;
 
         $EventsTable = TableRegistry::getTableLocator()->get('Calendar.Events');
         $ids = array_keys(
@@ -385,12 +387,12 @@ class ActiveSyncCalendar implements Syncroton_Data_IData
      * @return array
      */
     public function getChangedEntries(
-        $_folderId,
+        string $_folderId,
         DateTime $_startTimeStamp,
         ?DateTime $_endTimeStamp = null,
-        $filterType = null
-    ) {
-        $folderId = $_folderId instanceof Syncroton_Model_IFolder ? $_folderId->id : $_folderId;
+        ?string $filterType = null
+    ): array {
+        //$folderId = $_folderId instanceof Syncroton_Model_IFolder ? $_folderId->id : $_folderId;
 
         $EventsTable = TableRegistry::getTableLocator()->get('Calendar.Events');
         $query = $EventsTable->find('list');
@@ -427,7 +429,7 @@ class ActiveSyncCalendar implements Syncroton_Data_IData
         Syncroton_Backend_IContent $contentBackend,
         Syncroton_Model_IFolder $folder,
         Syncroton_Model_ISyncState $syncState
-    ) {
+    ): int {
         $allClientEntries = $contentBackend->getFolderState($this->_device, $folder);
         $allServerEntries = $this->getServerEntries($folder->serverId, $folder->lastfiltertype);
 
@@ -451,7 +453,7 @@ class ActiveSyncCalendar implements Syncroton_Data_IData
      * @return \Syncroton_Model_FileReference
      * @throw \Syncroton_Exception_NotFound
      */
-    public function getFileReference($fileReference)
+    public function getFileReference(mixed $fileReference): Syncroton_Model_FileReference
     {
         throw new Syncroton_Exception_NotFound('filereference not found');
     }
@@ -469,7 +471,7 @@ class ActiveSyncCalendar implements Syncroton_Data_IData
         Syncroton_Backend_IContent $contentBackend,
         Syncroton_Model_IFolder $folder,
         Syncroton_Model_ISyncState $syncState
-    ) {
+    ): bool {
         return (bool)$this->getCountOfChanges($contentBackend, $folder, $syncState);
     }
 
@@ -481,7 +483,7 @@ class ActiveSyncCalendar implements Syncroton_Data_IData
      * @param string $_dstFolderId Destination folder id
      * @return string
      */
-    public function moveItem($_srcFolderId, $_serverId, $_dstFolderId)
+    public function moveItem(string $_srcFolderId, string $_serverId, string $_dstFolderId): string
     {
         // TODO
         return $_serverId;

@@ -1,5 +1,5 @@
 <?php
-use Cake\I18n\FrozenDate;
+use Cake\I18n\Date;
 
 $counter = $document->documents_counter;
 
@@ -137,7 +137,7 @@ $documentEdit = [
                     'dat_issue',
                     [
                         'label' => __d('documents', 'Date') . ':',
-                        'default' => new FrozenDate(),
+                        'default' => new Date(),
                         'error' => [
                             'empty' => __d('documents', 'Please date of order.'),
                         ],
@@ -188,7 +188,7 @@ $documentEdit = [
                     'dat_task',
                     [
                         'label' => __d('documents', 'Travel Task Date') . ':',
-                        'default' => new FrozenDate(),
+                        'default' => new Date(),
                     ],
                 ],
             ],

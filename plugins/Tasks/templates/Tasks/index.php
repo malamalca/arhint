@@ -1,6 +1,5 @@
 <?php
 use Tasks\Lib\TasksUtils;
-use Cake\I18n\FrozenTime;
 
 $folderTitle = null;
 $folderId = $this->getRequest()->getQuery('folder');

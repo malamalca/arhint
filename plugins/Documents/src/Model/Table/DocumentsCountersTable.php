@@ -4,14 +4,15 @@ declare(strict_types=1);
 namespace Documents\Model\Table;
 
 use Cake\Cache\Cache;
-use Cake\I18n\FrozenDate;
+use Cake\I18n\DateTime;
+use Cake\ORM\Query\SelectQuery;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 
 /**
  * DocumentsCounters Model
  *
- * @method \Documents\Model\Entity\DocumentsCounter get($primaryKey, array $options = [])
+ * @method \Documents\Model\Entity\DocumentsCounter get(mixed $primaryKey, array|string $finder = 'all', \Psr\SimpleCache\CacheInterface|string|null $cache = null, \Closure|string|null $cacheKey = null, mixed ...$args)
  * @method \Documents\Model\Entity\DocumentsCounter newEmptyEntity()
  * @method \Documents\Model\Entity\DocumentsCounter patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
  */
@@ -20,7 +21,7 @@ class DocumentsCountersTable extends Table
     /**
      * Initialize method
      *
-     * @param array $config The configuration for the Table.
+     * @param array<string, mixed> $config List of options for this table.
      * @return void
      */
     public function initialize(array $config): void
@@ -67,7 +68,7 @@ class DocumentsCountersTable extends Table
      * @param mixed $id Counter id or counter data from which a new no is generated.
      * @return string|bool Generated document number or false on failure.
      */
-    public function generateNo($id)
+    public function generateNo(mixed $id): string|bool
     {
         $ret = false;
 
@@ -85,8 +86,8 @@ class DocumentsCountersTable extends Table
             $ret = strtr(
                 $data['mask'],
                 [
-                    '[[year]]' => (new FrozenDate())->i18nFormat('yyyy'),
-                    '[[month]]' => (new FrozenDate())->i18nFormat('MM'),
+                    '[[year]]' => (new DateTime())->i18nFormat('yyyy'),
+                    '[[month]]' => (new DateTime())->i18nFormat('MM'),
                     '[[no]]' => (int)$data['counter'] + 1,
                     '[[no.2]]' => str_pad((string)((int)$data['counter'] + 1), 2, '0', STR_PAD_LEFT),
                     '[[no.3]]' => str_pad((string)((int)$data['counter'] + 1), 3, '0', STR_PAD_LEFT),
@@ -101,11 +102,11 @@ class DocumentsCountersTable extends Table
      * Fetch counters from cache
      *
      * @param string $userId Users id
-     * @param object $scopedQuery Query with applied scope
+     * @param \Cake\ORM\Query\SelectQuery $scopedQuery Query with applied scope
      * @param string|null $filterKind Filter by counter kind
      * @return mixed $counters
      */
-    public function rememberForUser($userId, $scopedQuery, $filterKind = null)
+    public function rememberForUser(string $userId, SelectQuery $scopedQuery, ?string $filterKind = null): mixed
     {
         $counters = Cache::remember(
             'Documents.sidebarCounters.' . $userId,
@@ -118,7 +119,7 @@ class DocumentsCountersTable extends Table
         );
 
         if (!empty($filterKind)) {
-            $counters = $counters->filter(fn($value, $key) => $value->kind == $filterKind);
+            $counters = $counters->filter(fn ($value, $key) => $value->kind == $filterKind);
         }
 
         return $counters;
@@ -127,12 +128,12 @@ class DocumentsCountersTable extends Table
     /**
      * findDefaultCounter method
      *
-     * @param object $query Query with applied scope
+     * @param \Cake\ORM\Query\SelectQuery $query Query with applied scope
      * @param string $kind Counter kind (document, invoice, travelorder)
      * @param string|null $counterType Counter type
      * @return mixed Counter data or false on failure.
      */
-    public function findDefaultCounter($query, $kind, $counterType = null)
+    public function findDefaultCounter(SelectQuery $query, string $kind, ?string $counterType = null): mixed
     {
         $params = ['order' => null, 'conditions' => []];
 
@@ -164,7 +165,7 @@ class DocumentsCountersTable extends Table
      * @param string $ownerId User Id.
      * @return bool
      */
-    public function isOwnedBy($entityId, $ownerId)
+    public function isOwnedBy(string $entityId, string $ownerId): bool
     {
         return $this->exists(['id' => $entityId, 'owner_id' => $ownerId]);
     }
@@ -172,10 +173,10 @@ class DocumentsCountersTable extends Table
     /**
      * filter method
      *
-     * @param array $filter Filter data.
-     * @return array
+     * @param array<string, mixed> $filter Filter data.
+     * @return array<string, mixed>
      */
-    public function filter(&$filter)
+    public function filter(array &$filter): array
     {
         $ret = ['conditions' => [], 'contain' => []];
 

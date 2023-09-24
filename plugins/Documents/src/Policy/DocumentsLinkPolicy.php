@@ -3,7 +3,9 @@ declare(strict_types=1);
 
 namespace Documents\Policy;
 
+use App\Model\Entity\User;
 use Cake\ORM\TableRegistry;
+use Documents\Model\Entity\DocumentsLink;
 
 /**
  * DocumentsLink Policy Resolver
@@ -17,7 +19,7 @@ class DocumentsLinkPolicy
      * @param \Documents\Model\Entity\DocumentsLink $entity Entity
      * @return bool
      */
-    public function canLink($user, $entity)
+    public function canLink(User $user, DocumentsLink $entity): bool
     {
         /** @var \Documents\Model\Table\DocumentsLinksTable $DocumentsLinksTable */
         $DocumentsLinksTable = TableRegistry::getTableLocator()->get('Documents.DocumentsLinks');
@@ -32,7 +34,7 @@ class DocumentsLinkPolicy
      * @param \Documents\Model\Entity\DocumentsLink $entity Entity
      * @return bool
      */
-    public function canDelete($user, $entity)
+    public function canDelete(User $user, DocumentsLink $entity): bool
     {
         /** @var \Documents\Model\Table\DocumentsLinksTable $DocumentsLinksTable */
         $DocumentsLinksTable = TableRegistry::getTableLocator()->get('Documents.DocumentsLinks');

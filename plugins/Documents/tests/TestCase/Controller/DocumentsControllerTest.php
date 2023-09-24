@@ -4,19 +4,24 @@ declare(strict_types=1);
 namespace Documents\Test\TestCase\Controller;
 
 use Cake\ORM\TableRegistry;
-use Cake\TestSuite\IntegrationTestCase;
+use Cake\TestSuite\IntegrationTestTrait;
+use Cake\TestSuite\TestCase;
+use Laminas\Diactoros\UploadedFile;
+use const UPLOAD_ERR_OK;
 
 /**
  * Documents\Controller\DocumentsController Test Case
  */
-class DocumentsControllerTest extends IntegrationTestCase
+class DocumentsControllerTest extends TestCase
 {
+    use IntegrationTestTrait;
+
     /**
      * Fixtures
      *
      * @var array
      */
-    public $fixtures = [
+    public array $fixtures = [
         'Users' => 'app.Users',
         'Contacts' => 'plugin.Crm.Contacts',
         'ContactsAddresses' => 'plugin.Crm.ContactsAddresses',
@@ -185,18 +190,21 @@ class DocumentsControllerTest extends IntegrationTestCase
         $counters = TableRegistry::getTableLocator()->get('Documents.DocumentsCounters');
         $counter = $counters->get('1d53bc5b-de2d-4e85-b13b-81b39a97fc90');
 
+        $jpgAttachment = new UploadedFile(
+            dirname(__FILE__) . DS . 'data' . DS . 'sunset.jpg',
+            100963,
+            UPLOAD_ERR_OK,
+            'sunset.jpg',
+            'image/jpg'
+        );
+
         $data = [
             'counter_id' => '1d53bc5b-de2d-4e85-b13b-81b39a97fc90',
             'title' => 'Uploaded Document',
             'dat_issue' => '2020-05-31',
             'documents_attachments' => [
                 0 => [
-                    'filename' => [
-                        'name' => 'sunset.jpg',
-                        'type' => 'image/jpg',
-                        'size' => 100963,
-                        'tmp_name' => dirname(__FILE__) . DS . 'data' . DS . 'sunset.jpg',
-                    ],
+                    'filename' => $jpgAttachment,
                 ],
             ],
         ];
@@ -228,7 +236,6 @@ class DocumentsControllerTest extends IntegrationTestCase
         // test if counter increases
         $newCounter = $counters->get('1d53bc5b-de2d-4e85-b13b-81b39a97fc90');
         $this->assertEquals($counter->counter + 1, $newCounter->counter);
-
     }
 
     /**

@@ -3,6 +3,9 @@ declare(strict_types=1);
 
 namespace Documents\Policy;
 
+use App\Model\Entity\User;
+use Documents\Model\Entity\Item;
+
 /**
  * Item Policy Resolver
  */
@@ -15,7 +18,7 @@ class ItemPolicy
      * @param \Documents\Model\Entity\Item $entity Entity
      * @return bool
      */
-    public function canView($user, $entity)
+    public function canView(User $user, Item $entity): bool
     {
         return $entity->owner_id == $user->company_id;
     }
@@ -27,7 +30,7 @@ class ItemPolicy
      * @param \Documents\Model\Entity\Item $entity Entity
      * @return bool
      */
-    public function canEdit($user, $entity)
+    public function canEdit(User $user, Item $entity): bool
     {
         return $entity->owner_id == $user->company_id && $user->hasRole('editor');
     }
@@ -39,7 +42,7 @@ class ItemPolicy
      * @param \Documents\Model\Entity\Item $entity Entity
      * @return bool
      */
-    public function canDelete($user, $entity)
+    public function canDelete(User $user, Item $entity): bool
     {
         return $entity->owner_id == $user->company_id && $user->hasRole('editor');
     }

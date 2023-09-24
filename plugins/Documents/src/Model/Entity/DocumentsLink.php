@@ -12,8 +12,8 @@ use Cake\ORM\Entity;
  * @property string|null $link_id
  * @property string|null $document_id
  * @property string|null $model
- * @property \Cake\I18n\FrozenTime|null $created
- * @property \Cake\I18n\FrozenTime|null $modified
+ * @property \Cake\I18n\DateTime|null $created
+ * @property \Cake\I18n\DateTime|null $modified
  */
 class DocumentsLink extends Entity
 {
@@ -22,7 +22,7 @@ class DocumentsLink extends Entity
      *
      * @var array<string, bool>
      */
-    protected $_accessible = [
+    protected array $_accessible = [
         '*' => true,
         'id' => false,
     ];

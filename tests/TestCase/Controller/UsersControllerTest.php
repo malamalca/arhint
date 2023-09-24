@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Test\TestCase\Controller;
 
-use Cake\Auth\DefaultPasswordHasher;
+use Authentication\PasswordHasher\DefaultPasswordHasher;
 use Cake\ORM\TableRegistry;
 use Cake\Routing\Router;
 use Cake\TestSuite\IntegrationTestTrait;
@@ -21,7 +21,7 @@ class UsersControllerTest extends TestCase
      *
      * @var array
      */
-    protected $fixtures = [
+    protected array $fixtures = [
         'app.Users',
     ];
 
@@ -151,7 +151,7 @@ class UsersControllerTest extends TestCase
         );
         $this->assertRedirect();
 
-        $user = TableRegistry::getTableLocator()->get('Users')->get(USER_ADMIN);
+        TableRegistry::getTableLocator()->get('Users')->get(USER_ADMIN);
         $this->assertTrue($this->checkPassword(USER_ADMIN, 'newpass'));
     }
 
@@ -254,7 +254,7 @@ class UsersControllerTest extends TestCase
         $this->post('/users/edit/' . USER_ADMIN, $data);
         $this->assertRedirect('/users/view/' . USER_ADMIN);
 
-        $user = TableRegistry::getTableLocator()->get('Users')->get(USER_ADMIN);
+        TableRegistry::getTableLocator()->get('Users')->get(USER_ADMIN);
         $this->assertTrue($this->checkPassword(USER_ADMIN, 'newpass'));
     }
 

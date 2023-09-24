@@ -21,13 +21,13 @@ class LabelsController extends AppController
      * STEP 1: Select adrema, add contact to adrema, save, rename, duplicate and delete
      * selected adrema.
      *
-     * @param  string $adremaId Adremas uuid.
+     * @param string $adremaId Adremas uuid.
      * @return void
      */
-    public function adrema($adremaId = null)
+    public function adrema(?string $adremaId = null)
     {
-        $this->loadModel('Crm.Adremas');
-        $adremas = $this->Authorization->applyScope($this->Adremas->find('list'), 'index')
+        $AdremasTable = $this->fetchTable('Crm.Adremas');
+        $adremas = $this->Authorization->applyScope($AdremasTable->find('list'), 'index')
             ->toArray();
 
         if (empty($adremaId)) {
@@ -64,8 +64,8 @@ class LabelsController extends AppController
         $label = $this->getRequest()->getQuery('label');
         $adremaId = $this->getRequest()->getQuery('adrema');
 
-        $this->loadModel('Crm.Adremas');
-        $adrema = $this->Adremas->get($adremaId);
+        $AdremasTable = $this->fetchTable('Crm.Adremas');
+        $adrema = $AdremasTable->get($adremaId);
 
         $this->Authorization->authorize($adrema, 'view');
 
@@ -98,8 +98,9 @@ class LabelsController extends AppController
 
         $adremaId = $this->getRequest()->getQuery('adrema');
 
-        $this->loadModel('Crm.Adremas');
-        $adrema = $this->Adremas->get($adremaId);
+        /** @var \Crm\Model\Table\AdremasTable $AdremasTable */
+        $AdremasTable = $this->fetchTable('Crm.Adremas');
+        $adrema = $AdremasTable->get($adremaId);
 
         $this->Authorization->authorize($adrema, 'view');
 
@@ -119,18 +120,18 @@ class LabelsController extends AppController
     /**
      * Edit method
      *
-     * @param  string|null $id Address id.
+     * @param string|null $id Address id.
      * @return mixed Redirects on successful edit, renders view otherwise.
      * @throws \Cake\Http\Exception\NotFoundException When record not found.
      */
-    public function editAddress($id = null)
+    public function editAddress(?string $id = null)
     {
         /** @var \Crm\Model\Table\AdremasContactsTable $AdremasContacts */
         $AdremasContacts = TableRegistry::getTableLocator()->get('Crm.AdremasContacts');
         if ($id) {
-            $address = $AdremasContacts->get($id, ['contain' => ['ContactsAddresses']]);
+            $address = $AdremasContacts->get($id, contain: ['ContactsAddresses']);
             if (!empty($address->contacts_address)) {
-                $AdremasContacts->patchEntity($address, (array)$address->contacts_address);
+                $AdremasContacts->patchEntity($address, $address->contacts_address);
             }
         } else {
             /** @var \Crm\Model\Entity\AdremasContact $address */
@@ -157,11 +158,11 @@ class LabelsController extends AppController
     /**
      * Delete method
      *
-     * @param  string|null $id Label id.
+     * @param string|null $id Label id.
      * @return mixed Redirects to index.
      * @throws \Cake\Http\Exception\NotFoundException When record not found.
      */
-    public function deleteAddress($id = null)
+    public function deleteAddress(?string $id = null)
     {
         $AdremasContacts = TableRegistry::getTableLocator()->get('Crm.AdremasContacts');
         /** @var \Crm\Model\Entity\AdremasContact $address */

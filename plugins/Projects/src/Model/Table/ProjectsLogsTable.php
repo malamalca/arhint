@@ -12,7 +12,7 @@ use Cake\Validation\Validator;
  *
  * @property \Projects\Model\Table\ProjectsTable|\Cake\ORM\Association\BelongsTo $Projects
  * @property \Projects\Model\Table\UsersTable|\Cake\ORM\Association\BelongsTo $Users
- * @method \Projects\Model\Entity\ProjectsLog get($primaryKey, $options = [])
+ * @method \Projects\Model\Entity\ProjectsLog get(mixed $primaryKey, array|string $finder = 'all', \Psr\SimpleCache\CacheInterface|string|null $cache = null, \Closure|string|null $cacheKey = null, mixed ...$args)
  * @method \Projects\Model\Entity\ProjectsLog newEntity($data = null, array $options = [])
  * @method \Projects\Model\Entity\ProjectsLog newEmptyEntity(array $options = [])
  * @method \Projects\Model\Entity\ProjectsLog[] newEntities(array $data, array $options = [])
@@ -28,7 +28,7 @@ class ProjectsLogsTable extends Table
     /**
      * Initialize method
      *
-     * @param array $config The configuration for the Table.
+     * @param array<string, mixed> $config List of options for this table.
      * @return void
      */
     public function initialize(array $config): void

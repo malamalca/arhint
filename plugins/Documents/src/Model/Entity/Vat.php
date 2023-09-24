@@ -12,8 +12,8 @@ use Cake\ORM\Entity;
  * @property string|null $owner_id
  * @property string|null $descript
  * @property float $percent
- * @property \Cake\I18n\FrozenTime|null $created
- * @property \Cake\I18n\FrozenTime|null $modified
+ * @property \Cake\I18n\DateTime|null $created
+ * @property \Cake\I18n\DateTime|null $modified
  */
 class Vat extends Entity
 {
@@ -22,7 +22,7 @@ class Vat extends Entity
      *
      * @var array<string, bool>
      */
-    protected $_accessible = [
+    protected array $_accessible = [
         '*' => true,
         'id' => false,
     ];

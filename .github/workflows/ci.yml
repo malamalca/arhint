@@ -14,10 +14,10 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php-version: ['7.4', '8.0', '8.1']
+        php-version: ['8.1']
         prefer-lowest: ['']
         include:
-          - php-version: '7.4'
+          - php-version: '8.1'
             prefer-lowest: 'prefer-lowest'
 
     steps:
@@ -67,18 +67,18 @@ jobs:
       run: composer run-script post-install-cmd --no-interaction
 
     - name: Setup problem matchers for PHPUnit
-      if: matrix.php-version == '8.0'
+      if: matrix.php-version == '8.1'
       run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
 
     - name: Run PHPUnit
       run: |
-        if [[ ${{ matrix.php-version }} == '8.0' ]]; then
-          export CODECOVERAGE=1 && php -dpcov.enabled=1 -dpcov.directory=. vendor/bin/phpunit --verbose --coverage-clover=coverage.xml
+        if [[ ${{ matrix.php-version }} == '8.1' ]]; then
+          export CODECOVERAGE=1 && php -dpcov.enabled=1 -dpcov.directory=. vendor/bin/phpunit --coverage-clover=coverage.xml
         else
           vendor/bin/phpunit
         fi
     - name: Submit code coverage
-      if: matrix.php-version == '8.0'
+      if: matrix.php-version == '8.1'
       uses: codecov/codecov-action@v3
 
 
@@ -92,7 +92,7 @@ jobs:
     - name: Setup PHP
       uses: shivammathur/setup-php@v2
       with:
-        php-version: '8.0'
+        php-version: '8.1'
         extensions: mbstring, intl
         tools: cs2pr
         coverage: none
@@ -122,7 +122,7 @@ jobs:
         fi
 
     - name: Run PHP CodeSniffer
-      run: vendor/bin/phpcs --report=checkstyle --standard=vendor/cakephp/cakephp-codesniffer/CakePHP src/ tests/ plugins/Expenses/src/ plugins/Crm/src/ plugins/Documents/src/ plugins/Projects/src/ plugins/Tasks/src/ | cs2pr
+      run: vendor/bin/phpcs --report=checkstyle | cs2pr
 
     - name: Run psalm
       if: success() || failure()
@@ -130,4 +130,4 @@ jobs:
 
     - name: Run phpstan
       if: success() || failure()
-      run: vendor/bin/phpstan.phar analyse -l 5 src/ plugins/Expenses/src/ plugins/Crm/src/ plugins/Documents/src/ plugins/Projects/src/ plugins/Tasks/src/ --error-format=github
+      run: vendor/bin/phpstan.phar analyse --error-format=github

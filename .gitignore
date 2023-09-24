@@ -23,7 +23,8 @@ schema-dump-default.lock
 ._*
 .Spotlight-V100
 .Trashes
-Icon?
+# Icon must end with two \r
+Icon
 ehthumbs.db
 Thumbs.db
 .directory
@@ -31,7 +32,10 @@ Thumbs.db
 # Tool specific files #
 #######################
 # PHPUnit
-.phpunit.result.cache
+*.lock
+*.cache
+.phpunit.cache
+tests.sqlite
 # vim
 *~
 *.swp
@@ -49,7 +53,12 @@ Thumbs.db
 nbproject/*
 # Visual Studio Code
 .vscode
+# nova
+.nova
 # Sass preprocessor
 .sass-cache/
-# Composer
-*.lock
+# node
+/node_modules/*
+# yarn
+yarn-debug.log
+yarn-error.log

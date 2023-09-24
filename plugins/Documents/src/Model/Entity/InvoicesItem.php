@@ -19,8 +19,8 @@ use Cake\ORM\Entity;
  * @property string|null $unit
  * @property float $price
  * @property float $discount
- * @property \Cake\I18n\FrozenTime|null $created
- * @property \Cake\I18n\FrozenTime|null $modified
+ * @property \Cake\I18n\DateTime|null $created
+ * @property \Cake\I18n\DateTime|null $modified
  *
  * @property float $items_total
  * @property float $discount_total
@@ -34,7 +34,7 @@ class InvoicesItem extends Entity
      *
      * @var array<string, bool>
      */
-    protected $_accessible = [
+    protected array $_accessible = [
         'id' => false,
         'invoice_id' => true,
         'item_id' => true,
@@ -55,7 +55,7 @@ class InvoicesItem extends Entity
      *
      * @return float
      */
-    protected function _getItemsTotal()
+    protected function _getItemsTotal(): float
     {
         return round($this->price * $this->qty, 4);
     }
@@ -65,7 +65,7 @@ class InvoicesItem extends Entity
      *
      * @return float
      */
-    protected function _getDiscountTotal()
+    protected function _getDiscountTotal(): float
     {
         return round($this->items_total * $this->discount / 100, 4);
     }
@@ -75,7 +75,7 @@ class InvoicesItem extends Entity
      *
      * @return float
      */
-    protected function _getTaxTotal()
+    protected function _getTaxTotal(): float
     {
         return round($this->net_total * $this->vat_percent / 100, 2);
     }
@@ -85,7 +85,7 @@ class InvoicesItem extends Entity
      *
      * @return float
      */
-    protected function _getNetTotal()
+    protected function _getNetTotal(): float
     {
         return round($this->items_total - $this->discount_total, 2);
     }
@@ -95,7 +95,7 @@ class InvoicesItem extends Entity
      *
      * @return float
      */
-    protected function _getTotal()
+    protected function _getTotal(): float
     {
         return round($this->net_total + $this->tax_total, 2);
     }

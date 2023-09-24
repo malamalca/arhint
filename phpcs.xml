@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<ruleset name="App">
+    <config name="installed_paths" value="../../cakephp/cakephp-codesniffer"/>
+
+    <rule ref="CakePHP"/>
+    <rule ref="SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingNativeTypeHint">
+        <exclude-pattern>*/src/Controller/*</exclude-pattern>
+    </rule>
+
+    <file>src/</file>
+    <file>tests/</file>
+
+	<file>plugins/Calendar/src/</file>
+	<file>plugins/Calendar/tests/</file>
+
+	<file>plugins/Crm/src/</file>
+	<file>plugins/Crm/tests/</file>
+
+	<file>plugins/Documents/src/</file>
+	<file>plugins/Documents/tests/</file>
+
+	<file>plugins/Expenses/src/</file>
+	<file>plugins/Expenses/tests/</file>
+
+	<file>plugins/Projects/src/</file>
+	<file>plugins/Projects/tests/</file>
+
+	<file>plugins/Tasks/src/</file>
+	<file>plugins/Tasks/tests/</file>
+</ruleset>

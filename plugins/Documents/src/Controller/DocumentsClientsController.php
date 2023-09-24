@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace Documents\Controller;
 
+use Cake\Http\Response;
+
 /**
  * DocumentsClients Controller
  *
@@ -14,10 +16,10 @@ class DocumentsClientsController extends AppController
      * Edit method
      *
      * @param string $id Item id.
-     * @return \Cake\Http\Response|void
+     * @return \Cake\Http\Response|null
      * @throws \Cake\Http\Exception\NotFoundException When record not found.
      */
-    public function edit($id)
+    public function edit(string $id): ?Response
     {
         $client = $this->DocumentsClients->get($id);
 
@@ -36,5 +38,7 @@ class DocumentsClientsController extends AppController
         }
 
         $this->set(compact('client'));
+
+        return null;
     }
 }

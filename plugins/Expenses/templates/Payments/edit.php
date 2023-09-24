@@ -1,5 +1,5 @@
 <?php
-use Cake\I18n\FrozenTime;
+use Cake\I18n\DateTime;
 use Cake\Routing\Router;
 
 $payment_edit = [
@@ -53,7 +53,7 @@ $payment_edit = [
                     'type' => 'date',
                     'label' => __d('expenses', 'Date') . ':',
                     'error' => __d('expenses', 'Date is required.'),
-                    'default' => $this->getRequest()->getQuery('date') ?: new FrozenTime(),
+                    'default' => $this->getRequest()->getQuery('date') ?: new DateTime(),
                 ]],
             ],
             'amount' => [

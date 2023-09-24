@@ -1,22 +1,22 @@
 <?php
+declare(strict_types=1);
+
 namespace Tasks\Test\TestCase\Model\Table;
 
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\TestCase;
-use Tasks\Model\Table\TasksFoldersTable;
 
 /**
  * Tasks\Model\Table\TasksFoldersTable Test Case
  */
 class TasksFoldersTableTest extends TestCase
 {
-
     /**
      * Fixtures
      *
      * @var array
      */
-    public $fixtures = [
+    public array $fixtures = [
         'plugin.Tasks.TasksFolders',
     ];
 
@@ -28,8 +28,7 @@ class TasksFoldersTableTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-        $config = TableRegistry::exists('TasksFolders') ? [] : ['className' => 'Tasks\Model\Table\TasksFoldersTable'];
-        $this->TasksFolders = TableRegistry::getTableLocator()->get('TasksFolders', $config);
+        $this->TasksFolders = TableRegistry::getTableLocator()->get('TasksFolders', ['className' => 'Tasks\Model\Table\TasksFoldersTable']);
     }
 
     /**

@@ -12,6 +12,7 @@ use Syncroton_Data_IData;
 use Syncroton_Exception_NotFound;
 use Syncroton_Exception_UnexpectedValue;
 use Syncroton_Model_EmailBody;
+use Syncroton_Model_FileReference;
 use Syncroton_Model_Folder;
 use Syncroton_Model_IDevice;
 use Syncroton_Model_IEntry;
@@ -20,10 +21,11 @@ use Syncroton_Model_ISyncState;
 use Syncroton_Model_SyncCollection;
 use Syncroton_Model_Task;
 use Syncroton_Registry;
+use Zend_Db_Adapter_Abstract;
 
 class ActiveSyncTasks implements Syncroton_Data_IData
 {
-    protected $_supportedFolderTypes = [
+    protected array $_supportedFolderTypes = [
         Syncroton_Command_FolderSync::FOLDERTYPE_TASK,
         Syncroton_Command_FolderSync::FOLDERTYPE_TASK_USER_CREATED,
     ];
@@ -31,32 +33,32 @@ class ActiveSyncTasks implements Syncroton_Data_IData
     /**
      * @var \Syncroton_Model_IDevice
      */
-    protected $_device;
+    protected Syncroton_Model_IDevice $_device;
 
     /**
      * @var \DateTime
      */
-    protected $_timeStamp;
+    protected DateTime $_timeStamp;
 
     /**
      * @var \Zend_Db_Adapter_Abstract
      */
-    protected $_db;
+    protected Zend_Db_Adapter_Abstract $_db;
 
     /**
      * @var string
      */
-    protected $_tablePrefix;
+    protected string $_tablePrefix;
 
     /**
      * @var string|null
      */
-    protected $_ownerId;
+    protected ?string $_ownerId = null;
 
     /**
      * @var string|null
      */
-    protected $_userId;
+    protected ?string $_userId = null;
 
     /**
      * The constructor
@@ -85,13 +87,13 @@ class ActiveSyncTasks implements Syncroton_Data_IData
      *
      * @param \Syncroton_Model_SyncCollection $collection Task entry.
      * @param mixed $serverId Task Server id.
-     * @return bool|\Syncroton_Model_Task
+     * @return \Syncroton_Model_Task|bool
      */
-    public function getEntry(Syncroton_Model_SyncCollection $collection, $serverId)
+    public function getEntry(Syncroton_Model_SyncCollection $collection, mixed $serverId): bool|Syncroton_Model_Task
     {
         /** @var \Tasks\Model\Table\TasksTable $Tasks */
         $Tasks = TableRegistry::getTableLocator()->get('Tasks.Tasks');
-        $task = $Tasks->get($serverId, ['contain' => []]);
+        $task = $Tasks->get($serverId);
         if (!$task->owner_id == $this->_ownerId) {
             return false;
         }
@@ -126,7 +128,7 @@ class ActiveSyncTasks implements Syncroton_Data_IData
      * @param \Syncroton_Model_IEntry $_entry Entry
      * @return string Tasks\Task entity id
      */
-    public function createEntry($_folderId, Syncroton_Model_IEntry $_entry)
+    public function createEntry(string $_folderId, Syncroton_Model_IEntry $_entry): string
     {
         $folderId = $_folderId instanceof Syncroton_Model_IFolder ? $_folderId->serverId : $_folderId;
 
@@ -163,14 +165,14 @@ class ActiveSyncTasks implements Syncroton_Data_IData
      * @param string $_folderId Folder id
      * @param string $_serverId Server id
      * @param \Syncroton_Model_IEntry $_entry Entry
-     * @return bool|string
+     * @return string|bool
      */
-    public function updateEntry($_folderId, $_serverId, Syncroton_Model_IEntry $_entry)
+    public function updateEntry(string $_folderId, string $_serverId, Syncroton_Model_IEntry $_entry): bool|string
     {
         $folderId = $_folderId instanceof Syncroton_Model_IFolder ? $_folderId->serverId : $_folderId;
 
         $Tasks = TableRegistry::getTableLocator()->get('Tasks.Tasks');
-        $task = $Tasks->get($_serverId, ['contain' => []]);
+        $task = $Tasks->get($_serverId);
         if (empty($task)) {
             $task = $Tasks->newEmptyEntity();
             $task->id = $_serverId;
@@ -212,7 +214,7 @@ class ActiveSyncTasks implements Syncroton_Data_IData
      * @param mixed $_collectionData Collection data
      * @return bool
      */
-    public function deleteEntry($_folderId, $_serverId, $_collectionData)
+    public function deleteEntry(string $_folderId, string $_serverId, mixed $_collectionData): bool
     {
         $Tasks = TableRegistry::getTableLocator()->get('Tasks.Tasks');
         $task = $Tasks->get($_serverId);
@@ -228,11 +230,11 @@ class ActiveSyncTasks implements Syncroton_Data_IData
     /**
      * Return one folder identified by id
      *
-     * @param  string  $id Folder id.
+     * @param string  $id Folder id.
      * @throws \Syncroton_Exception_NotFound
      * @return \Syncroton_Model_Folder
      */
-    public function getFolder($id)
+    public function getFolder(string $id): Syncroton_Model_Folder
     {
         $TasksFolder = TableRegistry::getTableLocator()->get('Tasks.TasksFolders');
         $folder = $TasksFolder->get($id);
@@ -256,7 +258,7 @@ class ActiveSyncTasks implements Syncroton_Data_IData
      * @param \Syncroton_Model_IFolder $folder Folder
      * @return \Syncroton_Model_Folder
      */
-    public function createFolder(Syncroton_Model_IFolder $folder)
+    public function createFolder(Syncroton_Model_IFolder $folder): Syncroton_Model_Folder
     {
         if (!in_array($folder->type, $this->_supportedFolderTypes)) {
             throw new Syncroton_Exception_UnexpectedValue();
@@ -279,7 +281,7 @@ class ActiveSyncTasks implements Syncroton_Data_IData
      * @param \Syncroton_Model_IFolder $_folder Folder
      * @return \Syncroton_Model_Folder
      */
-    public function updateFolder(Syncroton_Model_IFolder $_folder)
+    public function updateFolder(Syncroton_Model_IFolder $_folder): Syncroton_Model_Folder
     {
         //$folderId = $_folderId instanceof Syncroton_Model_IFolder ? $_folder->serverId : $_folder;
         $folderId = $_folder->serverId;
@@ -312,7 +314,7 @@ class ActiveSyncTasks implements Syncroton_Data_IData
      * @param string $_folderId Folder id.
      * @return bool
      */
-    public function deleteFolder($_folderId)
+    public function deleteFolder(string $_folderId): bool
     {
         $folderId = $_folderId instanceof Syncroton_Model_IFolder ? $_folderId->serverId : $_folderId;
 
@@ -335,7 +337,7 @@ class ActiveSyncTasks implements Syncroton_Data_IData
      * @param array $options Options
      * @return bool
      */
-    public function emptyFolderContents($folderId, $options)
+    public function emptyFolderContents(string $folderId, array $options): bool
     {
         // TODO
         return true;
@@ -347,7 +349,7 @@ class ActiveSyncTasks implements Syncroton_Data_IData
      * @see \Syncroton_Data_IData::getAllFolders()
      * @return array
      */
-    public function getAllFolders()
+    public function getAllFolders(): array
     {
         $result = [];
 
@@ -381,7 +383,7 @@ class ActiveSyncTasks implements Syncroton_Data_IData
      * @param \DateTime $endTimeStamp Ent date time.
      * @return array list of Syncroton_Model_Folder
      */
-    public function getChangedFolders(DateTime $startTimeStamp, DateTime $endTimeStamp)
+    public function getChangedFolders(DateTime $startTimeStamp, DateTime $endTimeStamp): array
     {
         $TasksFolders = TableRegistry::getTableLocator()->get('Tasks.TasksFolders');
         $query = $TasksFolders->find();
@@ -417,11 +419,11 @@ class ActiveSyncTasks implements Syncroton_Data_IData
     /**
      * getServerEntries
      *
-     * @param  \Syncroton_Model_IFolder|string  $_folderId Folder id.
-     * @param  string                          $_filter Filter string.
+     * @param \Syncroton_Model_IFolder|string  $_folderId Folder id.
+     * @param string                          $_filter Filter string.
      * @return array
      */
-    public function getServerEntries($_folderId, $_filter)
+    public function getServerEntries(Syncroton_Model_IFolder|string $_folderId, string $_filter): array
     {
         $folderId = $_folderId instanceof Syncroton_Model_IFolder ? $_folderId->id : $_folderId;
 
@@ -450,11 +452,11 @@ class ActiveSyncTasks implements Syncroton_Data_IData
      * @return array
      */
     public function getChangedEntries(
-        $_folderId,
+        string $_folderId,
         DateTime $_startTimeStamp,
         ?DateTime $_endTimeStamp = null,
-        $filterType = null
-    ) {
+        ?string $filterType = null
+    ): array {
         $folderId = $_folderId instanceof Syncroton_Model_IFolder ? $_folderId->id : $_folderId;
 
         $Tasks = TableRegistry::getTableLocator()->get('Tasks.Tasks');
@@ -492,7 +494,7 @@ class ActiveSyncTasks implements Syncroton_Data_IData
         Syncroton_Backend_IContent $contentBackend,
         Syncroton_Model_IFolder $folder,
         Syncroton_Model_ISyncState $syncState
-    ) {
+    ): int {
         $allClientEntries = $contentBackend->getFolderState($this->_device, $folder);
         $allServerEntries = $this->getServerEntries($folder->serverId, $folder->lastfiltertype);
 
@@ -516,7 +518,7 @@ class ActiveSyncTasks implements Syncroton_Data_IData
      * @return \Syncroton_Model_FileReference
      * @throw \Syncroton_Exception_NotFound
      */
-    public function getFileReference($fileReference)
+    public function getFileReference(mixed $fileReference): Syncroton_Model_FileReference
     {
         throw new Syncroton_Exception_NotFound('filereference not found');
     }
@@ -534,7 +536,7 @@ class ActiveSyncTasks implements Syncroton_Data_IData
         Syncroton_Backend_IContent $contentBackend,
         Syncroton_Model_IFolder $folder,
         Syncroton_Model_ISyncState $syncState
-    ) {
+    ): bool {
         return (bool)$this->getCountOfChanges($contentBackend, $folder, $syncState);
     }
 
@@ -546,7 +548,7 @@ class ActiveSyncTasks implements Syncroton_Data_IData
      * @param string $_dstFolderId Destination folder id
      * @return string
      */
-    public function moveItem($_srcFolderId, $_serverId, $_dstFolderId)
+    public function moveItem(string $_srcFolderId, string $_serverId, string $_dstFolderId): string
     {
         // TODO
         return $_serverId;

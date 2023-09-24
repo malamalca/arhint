@@ -11,14 +11,14 @@ use Cake\Validation\Validator;
  * AdremasContacts Model
  *
  * @property \Crm\Model\Table\AdremasTable $Adremas
- * @method \Crm\Model\Entity\AdremasContact get($primaryKey, array $options = [])
+ * @method \Crm\Model\Entity\AdremasContact get(mixed $primaryKey, array|string $finder = 'all', \Psr\SimpleCache\CacheInterface|string|null $cache = null, \Closure|string|null $cacheKey = null, mixed ...$args)
  */
 class AdremasContactsTable extends Table
 {
     /**
      * Initialize method
      *
-     * @param array $config The configuration for the Table.
+     * @param array<string, mixed> $config List of options for this table.
      * @return void
      */
     public function initialize(array $config): void
@@ -84,7 +84,7 @@ class AdremasContactsTable extends Table
      * @param string $ownerId User Id.
      * @return bool
      */
-    public function isOwnedBy($entityId, $ownerId)
+    public function isOwnedBy(string $entityId, string $ownerId): bool
     {
         /** @var \Crm\Model\Entity\AdremasContact $entity */
         $entity = $this->get($entityId, ['fields' => 'adrema_id']);

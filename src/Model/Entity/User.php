@@ -3,8 +3,11 @@ declare(strict_types=1);
 
 namespace App\Model\Entity;
 
-use Authentication\IdentityInterface;
-use Cake\Auth\DefaultPasswordHasher;
+use Authentication\IdentityInterface as AuthenticationIdentity;
+use Authentication\PasswordHasher\DefaultPasswordHasher;
+use Authorization\AuthorizationServiceInterface;
+use Authorization\IdentityInterface as AuthorizationIdentity;
+use Authorization\Policy\ResultInterface;
 use Cake\ORM\Entity;
 
 /**
@@ -21,12 +24,12 @@ use Cake\ORM\Entity;
  * @property bool $active
  * @property string|null $login_redirect
  * @property string|null $avatar
- * @property \Cake\I18n\FrozenTime|null $created
- * @property \Cake\I18n\FrozenTime|null $modified
+ * @property \Cake\I18n\DateTime|null $created
+ * @property \Cake\I18n\DateTime|null $modified
  *
  * @property \App\Model\Entity\Company $company
  */
-class User extends Entity implements IdentityInterface
+class User extends Entity implements AuthorizationIdentity, AuthenticationIdentity
 {
     /**
      * Fields that can be mass assigned using newEntity() or patchEntity().
@@ -37,7 +40,7 @@ class User extends Entity implements IdentityInterface
      *
      * @var array<string, bool>
      */
-    protected $_accessible = [
+    protected array $_accessible = [
         'company_id' => true,
         'name' => true,
         'username' => true,
@@ -58,9 +61,11 @@ class User extends Entity implements IdentityInterface
      *
      * @var array<string>
      */
-    protected $_hidden = [
+    protected array $_hidden = [
         'passwd',
     ];
+
+    protected AuthorizationServiceInterface $authorization;
 
     /**
      * Entity to string magic method
@@ -76,13 +81,13 @@ class User extends Entity implements IdentityInterface
      * Set password method.
      *
      * @param string $password Users password.
-     * @return null|string
+     * @return string
      */
     protected function _setPasswd(string $password): ?string
     {
         $ret = (new DefaultPasswordHasher())->hash($password);
 
-        return $ret === false ? null : $ret;
+        return $ret;
     }
 
     /**
@@ -90,19 +95,57 @@ class User extends Entity implements IdentityInterface
      *
      * @return string
      */
-    public function getIdentifier()
+    public function getIdentifier(): string
     {
         return $this->id;
     }
 
     /**
      * Authentication\IdentityInterface method
+     * ArrayAccess|array
      *
-     * @return \App\Model\Entity\User
+     * @return self
      */
-    public function getOriginalData()
+    public function getOriginalData(): User
     {
         return $this;
+    }
+
+    /**
+     * Setter to be used by the middleware.
+     *
+     * @param \Authorization\AuthorizationServiceInterface $service Service interface
+     * @return self
+     */
+    public function setAuthorization(AuthorizationServiceInterface $service): self
+    {
+        $this->authorization = $service;
+
+        return $this;
+    }
+
+    /**
+     * Authorization\IdentityInterface method
+     */
+    public function can(string $action, mixed $resource): bool
+    {
+        return $this->authorization->can($this, $action, $resource);
+    }
+
+    /**
+     * Authorization\IdentityInterface method
+     */
+    public function canResult(string $action, mixed $resource): ResultInterface
+    {
+        return $this->authorization->canResult($this, $action, $resource);
+    }
+
+    /**
+     * Authorization\IdentityInterface method
+     */
+    public function applyScope(string $action, mixed $resource, mixed ...$optionalArgs): mixed
+    {
+        return $this->authorization->applyScope($this, $action, $resource);
     }
 
     /**
@@ -111,7 +154,7 @@ class User extends Entity implements IdentityInterface
      * @param string $role User role.
      * @return bool
      */
-    public function hasRole($role)
+    public function hasRole(string $role): bool
     {
         if ($role == 'root') {
             return $this->privileges <= 2;
@@ -132,7 +175,7 @@ class User extends Entity implements IdentityInterface
      * @param string $pluginName Plugin name
      * @return bool
      */
-    public function canUsePlugin($pluginName)
+    public function canUsePlugin(string $pluginName): bool
     {
         return true;
     }
@@ -142,13 +185,16 @@ class User extends Entity implements IdentityInterface
      *
      * @return string|bool
      */
-    public function getAvatarImage()
+    public function getAvatarImage(): string|bool
     {
         $ret = false;
         $avatarSize = 90;
 
         if (!empty($this->avatar)) {
             $im = imagecreatefromstring(base64_decode($this->avatar));
+            if (!$im) {
+                return false;
+            }
             $width = imagesx($im);
             $height = imagesy($im);
 
@@ -165,9 +211,12 @@ class User extends Entity implements IdentityInterface
             }
 
             $newImage = imagecreatetruecolor($avatarSize, $avatarSize);
+            if (!$newImage) {
+                return false;
+            }
             imagealphablending($newImage, false);
             imagesavealpha($newImage, true);
-            $transparent = imagecolorallocatealpha($newImage, 255, 255, 255, 127);
+            $transparent = (int)imagecolorallocatealpha($newImage, 255, 255, 255, 127);
             imagefilledrectangle($newImage, 0, 0, $avatarSize, $avatarSize, $transparent);
             imagecopyresampled($newImage, $im, 0, 0, $cropX, $cropY, $newWidth, $newHeight, $width, $height);
             imagedestroy($im);

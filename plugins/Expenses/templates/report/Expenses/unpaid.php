@@ -1,12 +1,12 @@
 <?php
-use Cake\i18n\FrozenDate;
+use Cake\i18n\Date;
 
 if (!empty($filter['start']) && !empty($filter['end'])) {
     $date_caption = __d(
         'expenses',
         'from {0} to {1}',
-        (string)FrozenDate::parseDate($filter['start'], 'yyyy-MM-dd'),
-        (string)FrozenDate::parseDate($filter['end'], 'yyyy-MM-dd')
+        (string)Date::parseDate($filter['start'], 'yyyy-MM-dd'),
+        (string)Date::parseDate($filter['end'], 'yyyy-MM-dd')
     );
 } elseif (!empty($filter['end'])) {
     $date_caption = __d('expenses', 'to {0}', $this->LilDate->format($filter['end']));

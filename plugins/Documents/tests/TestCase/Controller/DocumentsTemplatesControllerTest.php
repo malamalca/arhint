@@ -4,23 +4,32 @@ declare(strict_types=1);
 namespace Documents\Test\TestCase\Controller;
 
 use Cake\ORM\TableRegistry;
-use Cake\TestSuite\IntegrationTestCase;
+use Cake\TestSuite\IntegrationTestTrait;
+use Cake\TestSuite\TestCase;
 
 /**
  * Documents\Controller\DocumentsTemplatesController Test Case
  */
-class DocumentsTemplatesControllerTest extends IntegrationTestCase
+class DocumentsTemplatesControllerTest extends TestCase
 {
+    use IntegrationTestTrait;
+
     /**
      * Fixtures
      *
      * @var array
      */
-    public $fixtures = [
+    public array $fixtures = [
         'Users' => 'app.Users',
         'DocumentsTemplates' => 'plugin.Documents.DocumentsTemplates',
     ];
-    
+
+    /**
+     * User login method
+     *
+     * @param string $userId User id
+     * @return void
+     */
     private function login($userId)
     {
         $user = TableRegistry::getTableLocator()->get('Users')->get($userId);
@@ -62,7 +71,7 @@ class DocumentsTemplatesControllerTest extends IntegrationTestCase
         $this->enableSecurityToken();
         $this->enableCsrfToken();
 
-        $this->post('/documents/DocumentsTemplates/edit', $data);
+        $this->post('/documents/documents-templates/edit', $data);
         $this->assertRedirect();
     }
 
@@ -87,7 +96,7 @@ class DocumentsTemplatesControllerTest extends IntegrationTestCase
         $this->enableSecurityToken();
         $this->enableCsrfToken();
 
-        $this->post('/documents/DocumentsTemplates/edit/a08d3c00-7443-40e0-ac62-0caca1747e24', $data);
+        $this->post('/documents/documents-templates/edit/a08d3c00-7443-40e0-ac62-0caca1747e24', $data);
         $this->assertRedirect();
     }
 
@@ -101,7 +110,7 @@ class DocumentsTemplatesControllerTest extends IntegrationTestCase
         // Set session data
         $this->login(USER_ADMIN);
 
-        $this->get('/documents/DocumentsTemplates/delete/a08d3c00-7443-40e0-ac62-0caca1747e24');
+        $this->get('/documents/documents-templates/delete/a08d3c00-7443-40e0-ac62-0caca1747e24');
         $this->assertRedirect();
     }
 }

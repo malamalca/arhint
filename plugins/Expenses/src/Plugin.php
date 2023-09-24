@@ -49,7 +49,7 @@ class Plugin extends BasePlugin
         $routes->plugin(
             'Expenses',
             ['path' => '/expenses'],
-            function (RouteBuilder $builder) {
+            function (RouteBuilder $builder): void {
                 // Add custom routes here
                 $builder->fallbacks();
             }

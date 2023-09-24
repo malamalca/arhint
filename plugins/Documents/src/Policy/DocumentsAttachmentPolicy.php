@@ -3,7 +3,9 @@ declare(strict_types=1);
 
 namespace Documents\Policy;
 
+use App\Model\Entity\User;
 use Cake\ORM\TableRegistry;
+use Documents\Model\Entity\DocumentsAttachment;
 
 /**
  * DocumentsAttachment Policy Resolver
@@ -17,7 +19,7 @@ class DocumentsAttachmentPolicy
      * @param \Documents\Model\Entity\DocumentsAttachment $entity Entity
      * @return bool
      */
-    public function canView($user, $entity)
+    public function canView(User $user, DocumentsAttachment $entity): bool
     {
         /** @var \Documents\Model\Table\DocumentsAttachmentsTable $DocumentsAttachmentsTable */
         $DocumentsAttachmentsTable = TableRegistry::getTableLocator()->get('Documents.DocumentsAttachments');
@@ -32,7 +34,7 @@ class DocumentsAttachmentPolicy
      * @param \Documents\Model\Entity\DocumentsAttachment $entity Entity
      * @return bool
      */
-    public function canEdit($user, $entity)
+    public function canEdit(User $user, DocumentsAttachment $entity): bool
     {
         /** @var \Documents\Model\Table\DocumentsAttachmentsTable $DocumentsAttachmentsTable */
         $DocumentsAttachmentsTable = TableRegistry::getTableLocator()->get('Documents.DocumentsAttachments');
@@ -47,7 +49,7 @@ class DocumentsAttachmentPolicy
      * @param \Documents\Model\Entity\DocumentsAttachment $entity Entity
      * @return bool
      */
-    public function canDelete($user, $entity)
+    public function canDelete(User $user, DocumentsAttachment $entity): bool
     {
         /** @var \Documents\Model\Table\DocumentsAttachmentsTable $DocumentsAttachmentsTable */
         $DocumentsAttachmentsTable = TableRegistry::getTableLocator()->get('Documents.DocumentsAttachments');

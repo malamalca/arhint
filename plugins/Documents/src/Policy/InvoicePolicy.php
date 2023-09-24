@@ -3,6 +3,9 @@ declare(strict_types=1);
 
 namespace Documents\Policy;
 
+use App\Model\Entity\User;
+use Documents\Model\Entity\Invoice;
+
 /**
  * Invoice Policy Resolver
  */
@@ -15,7 +18,7 @@ class InvoicePolicy
      * @param \Documents\Model\Entity\Invoice $entity Entity
      * @return bool
      */
-    public function canView($user, $entity)
+    public function canView(User $user, Invoice $entity): bool
     {
         return $entity->owner_id == $user->company_id;
     }
@@ -27,7 +30,7 @@ class InvoicePolicy
      * @param \Documents\Model\Entity\Invoice $entity Entity
      * @return bool
      */
-    public function canEdit($user, $entity)
+    public function canEdit(User $user, Invoice $entity): bool
     {
         return $entity->owner_id == $user->company_id && $user->hasRole('editor');
     }
@@ -39,7 +42,7 @@ class InvoicePolicy
      * @param \Documents\Model\Entity\Invoice $entity Entity
      * @return bool
      */
-    public function canEmail($user, $entity)
+    public function canEmail(User $user, Invoice $entity): bool
     {
         return $entity->owner_id == $user->company_id;
     }
@@ -51,7 +54,7 @@ class InvoicePolicy
      * @param \Documents\Model\Entity\Invoice $entity Entity
      * @return bool
      */
-    public function canSign($user, $entity)
+    public function canSign(User $user, Invoice $entity): bool
     {
         return $entity->owner_id == $user->company_id && $user->hasRole('editor');
     }
@@ -63,7 +66,7 @@ class InvoicePolicy
      * @param \Documents\Model\Entity\Invoice $entity Entity
      * @return bool
      */
-    public function canDelete($user, $entity)
+    public function canDelete(User $user, Invoice $entity): bool
     {
         return $entity->owner_id == $user->company_id && $user->hasRole('editor');
     }

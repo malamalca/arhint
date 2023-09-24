@@ -53,7 +53,7 @@ class Plugin extends BasePlugin
         $routes->plugin(
             'Projects',
             ['path' => '/projects'],
-            function (RouteBuilder $builder) {
+            function (RouteBuilder $builder): void {
                 // Add custom routes here
                 $builder->fallbacks();
             }

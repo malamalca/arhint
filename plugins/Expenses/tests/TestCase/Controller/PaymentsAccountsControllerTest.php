@@ -3,19 +3,22 @@ declare(strict_types=1);
 
 namespace Expenses\Test\TestCase\Controller;
 
-use Cake\TestSuite\IntegrationTestCase;
+use Cake\TestSuite\IntegrationTestTrait;
+use Cake\TestSuite\TestCase;
 
 /**
  * Expenses\Controller\PaymentsAccountsController Test Case
  */
-class PaymentsAccountsControllerTest extends IntegrationTestCase
+class PaymentsAccountsControllerTest extends TestCase
 {
+    use IntegrationTestTrait;
+
     /**
      * Fixtures
      *
      * @var array
      */
-    public $fixtures = [
+    public array $fixtures = [
         'plugin.Expenses.PaymentsAccounts',
     ];
 

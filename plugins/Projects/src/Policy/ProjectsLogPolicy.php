@@ -3,6 +3,9 @@ declare(strict_types=1);
 
 namespace Projects\Policy;
 
+use App\Model\Entity\User;
+use Projects\Model\Entity\ProjectsLog;
+
 /**
  * ProjectsLog Policy Resolver
  */
@@ -17,7 +20,7 @@ class ProjectsLogPolicy
      * @param \Projects\Model\Entity\ProjectsLog $entity Entity
      * @return bool
      */
-    public function canEdit($user, $entity)
+    public function canEdit(User $user, ProjectsLog $entity): bool
     {
         return $this->canAccess($entity->project_id, $user) &&
             ($entity->isNew() || $entity->user_id == $user->id || $user->hasRole('admin'));
@@ -30,7 +33,7 @@ class ProjectsLogPolicy
      * @param \Projects\Model\Entity\ProjectsLog $entity Entity
      * @return bool
      */
-    public function canDelete($user, $entity)
+    public function canDelete(User $user, ProjectsLog $entity): bool
     {
         return $this->canAccess($entity->project_id, $user) &&
             ($entity->user_id == $user->id || $user->hasRole('admin'));

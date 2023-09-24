@@ -3,7 +3,10 @@ declare(strict_types=1);
 
 namespace Documents\Lib;
 
+use App\Controller\AppController;
+use ArrayObject;
 use Cake\ORM\TableRegistry;
+use Documents\Model\Entity\DocumentsCounter;
 use Lil\Lib\Lil;
 
 class DocumentsSidebar
@@ -17,19 +20,20 @@ class DocumentsSidebar
      * @param \ArrayObject $sidebar Sidebar data.
      * @return void
      */
-    public static function setAdminSidebar($event, $sidebar)
+    public static function setAdminSidebar(mixed $event, ArrayObject $sidebar): void
     {
-        if (!$event->getSubject() instanceof \App\Controller\AppController) {
+        if (!$event->getSubject() instanceof AppController) {
             return;
         }
 
+        /** @var \App\Controller\AppController $controller */
         $controller = $event->getSubject();
-        $request = $event->getSubject()->getRequest();
-        $currentUser = $event->getSubject()->getCurrentUser();
-
-        if (empty($currentUser)) {
+        if (!$controller->hasCurrentUser()) {
             return;
         }
+
+        $request = $controller->getRequest();
+        $currentUser = $controller->getCurrentUser();
 
         ////////////////////////////////////////////////////////////////////////////////////////
         // Fetch counters
@@ -53,7 +57,7 @@ class DocumentsSidebar
         $documents['items'] = [];
 
         if (!$counters->isEmpty()) {
-            if (get_class($counters->first()) == \Documents\Model\Entity\DocumentsCounter::class) {
+            if (get_class($counters->first()) == DocumentsCounter::class) {
                 $documents['url']['controller'] = 'Documents';
                 $documents['url']['?']['counter'] = $counters->first()->id;
             }
@@ -206,7 +210,7 @@ class DocumentsSidebar
             }
 
             // build submenus
-            foreach ($counters as $i => $c) {
+            foreach ($counters as $c) {
                 if ($currentCounter == $c->id) {
                     $sidebar['documents']['items'][strtolower($c->kind)]['active'] = true;
                 }

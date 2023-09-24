@@ -3,7 +3,9 @@ declare(strict_types=1);
 
 namespace App\View\Helper;
 
-use Cake\I18n\FrozenDate;
+use App\Model\Entity\User;
+use Cake\I18n\Date;
+use Cake\I18n\DateTime;
 use Cake\View\Helper;
 
 /**
@@ -15,7 +17,10 @@ class ArhintHelper extends Helper
     public const DATE_NAME_SHORT = 1;
     public const DATE_NAME_ABBREV = 2;
 
-    protected $helpers = ['Html'];
+    /**
+     * @var array<string> $helpers
+     */
+    protected array $helpers = ['Html'];
 
     /**
      * Returns duration in form HH:MM
@@ -23,12 +28,12 @@ class ArhintHelper extends Helper
      * @param int $seconds Duration in seconds
      * @return string
      */
-    public function duration($seconds)
+    public function duration(int $seconds): string
     {
         $sign = $seconds < 0 ? '-' : '';
 
-        $hours = str_pad((string)floor(abs((int)$seconds) / 3600), 2, '0', STR_PAD_LEFT);
-        $minutes = str_pad((string)(floor(abs((int)$seconds) / 60) % 60), 2, '0', STR_PAD_LEFT);
+        $hours = str_pad((string)floor(abs($seconds) / 3600), 2, '0', STR_PAD_LEFT);
+        $minutes = str_pad((string)(floor(abs($seconds) / 60) % 60), 2, '0', STR_PAD_LEFT);
 
         return $sign . $hours . ':' . $minutes;
     }
@@ -38,11 +43,11 @@ class ArhintHelper extends Helper
      *
      * @param int $month Month number from 1..12
      * @param int $format Date name format option
-     * @return int|string
+     * @return string|int
      */
-    public function getMonthName($month, $format = self::DATE_NAME_FULL)
+    public function getMonthName(int $month, int $format = self::DATE_NAME_FULL): int|string
     {
-        $_time = new FrozenDate('2018-' . str_pad((string)$month, 2, '0', STR_PAD_LEFT) . '-01');
+        $_time = new Date('2018-' . str_pad((string)$month, 2, '0', STR_PAD_LEFT) . '-01');
         switch ($format) {
             case self::DATE_NAME_FULL:
                 $_format = 'MMMM';
@@ -64,9 +69,9 @@ class ArhintHelper extends Helper
      * Returns month names
      *
      * @param int $format Date name format option
-     * @return array
+     * @return array<int, string>
      */
-    public function getMonthNames($format = self::DATE_NAME_FULL)
+    public function getMonthNames(int $format = self::DATE_NAME_FULL): array
     {
         $ret = [];
 
@@ -86,8 +91,7 @@ class ArhintHelper extends Helper
 
         for ($month = 1; $month < 13; $month++) {
             $dateString = '2018-' . str_pad((string)$month, 2, '0', STR_PAD_LEFT) . '-01';
-            $ret[$month] = (new FrozenDate($dateString))
-                ->i18nFormat($_format);
+            $ret[$month] = (string)(new Date($dateString))->i18nFormat($_format);
         }
 
         return $ret;
@@ -97,9 +101,9 @@ class ArhintHelper extends Helper
      * Returns day names
      *
      * @param int $format Length of formatting chars
-     * @return array
+     * @return array<int, string>
      */
-    public function getDayNames($format = self::DATE_NAME_FULL)
+    public function getDayNames(int $format = self::DATE_NAME_FULL): array
     {
         switch ($format) {
             case self::DATE_NAME_FULL:
@@ -116,9 +120,9 @@ class ArhintHelper extends Helper
         }
 
         $ret = [];
-        $aDate = new FrozenDate('2017-01-01'); // that was a sunday
+        $aDate = new Date('2017-01-01'); // that was a sunday
         for ($i = 0; $i < 7; $i++) {
-            $ret[] = $aDate->i18nFormat($_format);
+            $ret[] = (string)$aDate->i18nFormat($_format);
             $aDate = $aDate->addDays(1);
         }
 
@@ -129,10 +133,10 @@ class ArhintHelper extends Helper
      * Returns hourly representation of seconds
      *
      * @param int $seconds Specified seconds
-     * @param array $options Options array
+     * @param array<string, mixed> $options Options array
      * @return string
      */
-    public function toHoursAndMinutes($seconds = 0, $options = [])
+    public function toHoursAndMinutes(int $seconds = 0, array $options = []): string
     {
         $defaultOptions = [
             'separator' => ', ',
@@ -228,11 +232,11 @@ class ArhintHelper extends Helper
     /**
      * Output date in format for css component
      *
-     * @param \Cake\I18n\FrozenDate $day Specified day.
+     * @param \Cake\I18n\DateTime|\Cake\I18n\Date $day Specified day.
      * @param bool $isHoliday Marks date as holiday. Defaults to false.
      * @return string
      */
-    public function calendarDay($day, bool $isHoliday = false)
+    public function calendarDay(DateTime|Date $day, bool $isHoliday = false): string
     {
         $ret = sprintf(
             '<span class="calendar-day">' .
@@ -251,10 +255,10 @@ class ArhintHelper extends Helper
     /**
      * Output hour
      *
-     * @param \Cake\I18n\FrozenTime|string $time Specified time.
+     * @param \Cake\I18n\DateTime|string $time Specified time.
      * @return string
      */
-    public function timePanel($time)
+    public function timePanel(DateTime|string $time): string
     {
         if (!is_string($time)) {
             $time = (string)$time->i18nFormat('HH:mm');
@@ -276,11 +280,11 @@ class ArhintHelper extends Helper
     /**
      * Output line with time and description
      *
-     * @param \Cake\I18n\FrozenTime $dateTime Datetime of registrations
+     * @param \Cake\I18n\DateTime $dateTime Datetime of registrations
      * @param string $descript Descriptions
      * @return string
      */
-    public function workdayRow($dateTime, $descript)
+    public function workdayRow(DateTime $dateTime, string $descript): string
     {
         $ret = sprintf(
             //'<div><span class="time">%1$s</span>%2$s</div>',
@@ -299,7 +303,7 @@ class ArhintHelper extends Helper
      * @param \App\Model\Entity\User $user User
      * @return string
      */
-    public function userIcon($user)
+    public function userIcon(User $user): string
     {
         $icon = 'user_reader.png';
         if ($user->privileges <= 10) {
@@ -326,7 +330,7 @@ class ArhintHelper extends Helper
      * @param string $defaultValue Default Value
      * @return string
      */
-    public function searchPanel($defaultValue)
+    public function searchPanel(string $defaultValue): string
     {
         return sprintf(
             '<div class="search-panel"><input type="text" placeholder ="%1$s" value="%2$s"></div>',

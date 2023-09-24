@@ -13,7 +13,7 @@ class VatsFixture extends TestFixture
      *
      * @var array
      */
-    public $records = [
+    public array $records = [
         [
             'id' => '512e8f57-ba55-4162-ae1c-c011a8847351',
             'owner_id' => '8155426d-2302-4fa5-97de-e33cefb9d704',

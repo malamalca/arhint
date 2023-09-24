@@ -25,7 +25,7 @@ class ProjectsStatus extends Entity
      *
      * @var array<string, bool>
      */
-    protected $_accessible = [
+    protected array $_accessible = [
         'owner_id' => true,
         'title' => true,
         'owner' => true,

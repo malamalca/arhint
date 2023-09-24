@@ -4,19 +4,22 @@ declare(strict_types=1);
 namespace Documents\Test\TestCase\Controller;
 
 use Cake\ORM\TableRegistry;
-use Cake\TestSuite\IntegrationTestCase;
+use Cake\TestSuite\IntegrationTestTrait;
+use Cake\TestSuite\TestCase;
 
 /**
  * Documents\Controller\DocumentsCountersController Test Case
  */
-class DocumentsCountersControllerTest extends IntegrationTestCase
+class DocumentsCountersControllerTest extends TestCase
 {
+    use IntegrationTestTrait;
+
     /**
      * Fixtures
      *
      * @var array
      */
-    public $fixtures = [
+    public array $fixtures = [
         'Users' => 'app.Users',
         'DocumentsCounters' => 'plugin.Documents.DocumentsCounters',
         'DocumentsTemplates' => 'plugin.Documents.DocumentsTemplates',

@@ -20,7 +20,7 @@ class ContactsController extends AppController
      *
      * @return void
      */
-    public function index()
+    public function index(): void
     {
         $filter = [];
 
@@ -68,14 +68,14 @@ class ContactsController extends AppController
     /**
      * View method
      *
-     * @param  string $id Contact id.
+     * @param string $id Contact id.
      * @return void
      * @throws \Cake\Http\Exception\NotFoundException When record not found.
      */
-    public function view($id)
+    public function view(string $id): void
     {
-        $contact = $this->Contacts->get($id, ['contain' => [
-            'ContactsEmails', 'ContactsPhones', 'ContactsAddresses', 'ContactsAccounts', 'Companies']]);
+        $contact = $this->Contacts->get($id, contain: [
+            'ContactsEmails', 'ContactsPhones', 'ContactsAddresses', 'ContactsAccounts', 'Companies']);
 
         $this->Authorization->authorize($contact, 'view');
 
@@ -90,16 +90,16 @@ class ContactsController extends AppController
     /**
      * Edit method.
      *
-     * @param  string|null $id Contact id.
+     * @param string|null $id Contact id.
      * @return \Cake\Http\Response|null Redirects on successful edit, renders view otherwise.
      * @throws \Cake\Http\Exception\NotFoundException When record not found.
      */
-    public function edit($id = null)
+    public function edit(?string $id = null)
     {
         if ($id) {
             /** @var \Crm\Model\Entity\Contact $contact */
-            $contact = $this->Contacts->get($id, ['contain' => ['Companies',
-                'PrimaryAddresses', 'PrimaryAccounts', 'PrimaryEmails', 'PrimaryPhones']]);
+            $contact = $this->Contacts->get($id, contain: ['Companies',
+                'PrimaryAddresses', 'PrimaryAccounts', 'PrimaryEmails', 'PrimaryPhones']);
         } else {
             /** @var \Crm\Model\Entity\Contact $contact */
             $contact = $this->Contacts->newEmptyEntity();
@@ -175,11 +175,11 @@ class ContactsController extends AppController
     /**
      * Delete method
      *
-     * @param  string|null $id Project Constructions id.
+     * @param string|null $id Project Constructions id.
      * @return mixed Redirects to index.
      * @throws \Cake\Http\Exception\NotFoundException When record not found.
      */
-    public function delete($id = null)
+    public function delete(?string $id = null): mixed
     {
         /** @var \Crm\Model\Entity\Contact $contact */
         $contact = $this->Contacts->get($id);
@@ -203,14 +203,14 @@ class ContactsController extends AppController
      * @return object
      * @throws \Cake\Http\Exception\NotFoundException When no ajax call.
      */
-    public function autocompleteEmail()
+    public function autocompleteEmail(): object
     {
         if ($this->getRequest()->is('ajax') || Configure::read('debug')) {
             $searchTerm = (string)$this->getRequest()->getQuery('term');
 
             $data = [];
 
-            if ($searchTerm !== null) {
+            if (strlen($searchTerm) > 0) {
                 $conditions = [
                     'Contacts.title LIKE' => '%' . $searchTerm . '%',
                 ];
@@ -258,14 +258,14 @@ class ContactsController extends AppController
      * @return object
      * @throws \Cake\Http\Exception\NotFoundException When no ajax call.
      */
-    public function autocomplete()
+    public function autocomplete(): object
     {
         if ($this->getRequest()->is('ajax') || Configure::read('debug')) {
             $searchTerm = (string)$this->getRequest()->getQuery('term');
 
             $data = [];
 
-            if ($searchTerm !== null) {
+            if ($searchTerm) {
                 $conditions = [
                     'Contacts.title LIKE' => '%' . $searchTerm . '%',
                 ];
@@ -316,11 +316,11 @@ class ContactsController extends AppController
     /**
      * setSyncable method
      *
-     * @param  string $id Contacts id.
-     * @param  bool $syncable Syncable flag.
+     * @param string $id Contacts id.
+     * @param bool $syncable Syncable flag.
      * @return object Response.
      */
-    public function setSyncable($id, $syncable)
+    public function setSyncable(string $id, bool $syncable): object
     {
         if ($this->getRequest()->is('ajax')) {
             if (!empty($id)) {
@@ -329,7 +329,7 @@ class ContactsController extends AppController
 
                 $this->Authorization->authorize($contact, 'edit');
 
-                $contact->syncable = (bool)$syncable;
+                $contact->syncable = $syncable;
                 $this->Contacts->save($contact);
 
                 return $this->response;
@@ -344,7 +344,7 @@ class ContactsController extends AppController
      * @param string $ddv VAT number.
      * @return mixed Response.
      */
-    public function inetis($ddv)
+    public function inetis(string $ddv): mixed
     {
         $this->Authorization->skipAuthorization();
 

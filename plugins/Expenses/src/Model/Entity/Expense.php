@@ -12,13 +12,13 @@ use Cake\ORM\Entity;
  * @property string|null $owner_id
  * @property string|null $model
  * @property string|null $foreign_id
- * @property \Cake\I18n\FrozenDate|null $dat_happened
+ * @property \Cake\I18n\Date|null $dat_happened
  * @property string|null $month
  * @property string|null $title
  * @property float|null $net_total
  * @property float|null $total
- * @property \Cake\I18n\FrozenTime|null $created
- * @property \Cake\I18n\FrozenTime|null $modified
+ * @property \Cake\I18n\DateTime|null $created
+ * @property \Cake\I18n\DateTime|null $modified
  *
  * @property \App\Model\Entity\Expense $expense
  * @property \Documents\Model\Entity\Invoice $invoice
@@ -33,7 +33,7 @@ class Expense extends Entity
      *
      * @var array<string, bool>
      */
-    protected $_accessible = [
+    protected array $_accessible = [
         '*' => true,
         'payments' => true,
     ];

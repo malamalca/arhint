@@ -22,9 +22,9 @@ class CrmCommand extends Command
      *
      * @param \Cake\Console\Arguments $args The command arguments.
      * @param \Cake\Console\ConsoleIo $io The console io
-     * @return int|void|null The exit code or null for success
+     * @return int|null The exit code or null for success
      */
-    public function execute(Arguments $args, ConsoleIo $io)
+    public function execute(Arguments $args, ConsoleIo $io): ?int
     {
         switch ($args->getArgumentAt(0)) {
             case 'deleteStaleRecords':
@@ -47,6 +47,8 @@ class CrmCommand extends Command
             default:
                 $io->out('Available subcommands: deleteStaleRecords, findDuplicates');
         }
+
+        return null;
     }
 
     /**
@@ -55,7 +57,7 @@ class CrmCommand extends Command
      * @param \Cake\Console\ConsoleIo $io The console io
      * @return void
      */
-    public function findDuplicates(ConsoleIo $io)
+    public function findDuplicates(ConsoleIo $io): void
     {
         $ContactsTable = TableRegistry::getTableLocator()->get('Crm.Contacts');
         $ContactsAccountsTable = TableRegistry::getTableLocator()->get('Crm.ContactsAccounts');
@@ -171,10 +173,10 @@ class CrmCommand extends Command
     /**
      * Delete records that do not have owner
      *
-     * @param object $class TableClass
+     * @param \Cake\ORM\Table $class TableClass
      * @return void
      */
-    private function deleteStaleRecords($class)
+    private function deleteStaleRecords(object $class): void
     {
         $Contacts = TableRegistry::getTableLocator()->get('Crm.Contacts');
 

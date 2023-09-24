@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace Expenses\Controller;
 
+use Cake\Http\Response;
+
 /**
  * PaymentsAccounts Controller
  *
@@ -40,7 +42,7 @@ class PaymentsAccountsController extends AppController
      * @return void
      * @throws \Cake\Http\Exception\NotFoundException When record not found.
      */
-    public function view($id = null)
+    public function view(?string $id = null)
     {
         $paymentsAccount = $this->PaymentsAccounts->get($id);
         $this->Authorization->authorize($paymentsAccount);
@@ -52,10 +54,10 @@ class PaymentsAccountsController extends AppController
      * Edit method
      *
      * @param string|null $id Payments Account id.
-     * @return null|\Cake\Http\Response
+     * @return \Cake\Http\Response|null
      * @throws \Cake\Http\Exception\NotFoundException When record not found.
      */
-    public function edit($id = null)
+    public function edit(?string $id = null): ?Response
     {
         if ($id) {
             $account = $this->PaymentsAccounts->get($id);
@@ -85,10 +87,10 @@ class PaymentsAccountsController extends AppController
      * Delete method
      *
      * @param string|null $id Payments Account id.
-     * @return null|\Cake\Http\Response
+     * @return \Cake\Http\Response|null
      * @throws \Cake\Http\Exception\NotFoundException When record not found.
      */
-    public function delete($id = null)
+    public function delete(?string $id = null): ?Response
     {
         $paymentsAccount = $this->PaymentsAccounts->get($id);
         $this->Authorization->authorize($paymentsAccount);

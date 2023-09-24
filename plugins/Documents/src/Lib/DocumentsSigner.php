@@ -3,16 +3,21 @@ declare(strict_types=1);
 
 namespace Documents\Lib;
 
+use Cake\I18n\DateTime;
+use DOMDocument;
+use DOMElement;
+use DOMXPath;
+
 class DocumentsSigner
 {
     /**
      * @var \DOMDocument $doc
      */
-    private $doc = null;
+    private DOMDocument $doc;
     /**
      * @var bool $xadesAdded
      */
-    private $xadesAdded = false;
+    private ?bool $xadesAdded = false;
 
     /**
      * Constructor
@@ -20,7 +25,7 @@ class DocumentsSigner
      * @param string $documentId Document id.
      * @return void
      */
-    public function __construct($documentId)
+    public function __construct(string $documentId)
     {
         $Exporter = new DocumentsExport();
         $documents = $Exporter->find(['id' => $documentId]);
@@ -28,7 +33,7 @@ class DocumentsSigner
 
         $xml = $Exporter->export('eslog', [$document]);
 
-        $this->doc = new \DOMDocument();
+        $this->doc = new DOMDocument();
         if ($this->doc->loadXML($xml)) {
             $this->addSignature();
             $this->addReferenceSha1('#data', 'http://www.gzs.si/shemas/eslog/racun/1.6#Racun');
@@ -40,14 +45,14 @@ class DocumentsSigner
      *
      * @return string|bool
      */
-    public function getSigningHash()
+    public function getSigningHash(): string|bool
     {
         if (!$this->xadesAdded) {
             $this->xadesAdded = $this->addXadesReference();
         }
 
         $signedInfo = $this->doc->getElementsByTagName('ds:SignedInfo')->item(0);
-        if ($signedInfo instanceof \DOMElement) {
+        if ($signedInfo instanceof DOMElement) {
             $data = $signedInfo->C14N(false, false);
             $digest = hash('sha256', $data);
 
@@ -60,13 +65,13 @@ class DocumentsSigner
     /**
      * Set signature datetime.
      *
-     * @param \Cake\I18n\FrozenTime $time Signature datetime.
+     * @param \Cake\I18n\DateTime $time Signature datetime.
      * @return bool
      */
-    public function setSignatureDatetime($time)
+    public function setSignatureDatetime(DateTime $time): bool
     {
         $signingTime = $this->doc->getElementsByTagName('xds:SigningTime')->item(0);
-        if ($signingTime instanceof \DOMElement) {
+        if ($signingTime instanceof DOMElement) {
             $signingTime->nodeValue = $time->toIso8601String();
 
             return true;
@@ -81,14 +86,14 @@ class DocumentsSigner
      * @param string $signature Signature string
      * @return bool
      */
-    public function setSignature($signature)
+    public function setSignature(string $signature): bool
     {
         if (!$this->xadesAdded) {
             $this->xadesAdded = $this->addXadesReference();
         }
 
         $signatureValue = $this->doc->getElementsByTagName('ds:SignatureValue')->item(0);
-        if ($signatureValue instanceof \DOMElement) {
+        if ($signatureValue instanceof DOMElement) {
             $signatureValue->nodeValue = $signature;
 
             return true;
@@ -103,7 +108,7 @@ class DocumentsSigner
      * @param string $X509Cert Certificate
      * @return bool
      */
-    public function setCertificate($X509Cert)
+    public function setCertificate(string $X509Cert): bool
     {
         //$certData = openssl_x509_parse("-----BEGIN CERTIFICATE-----\n" . chunk_split($X509Cert, 64, "\n") . "-----END CERTIFICATE-----\n");
         $certData = openssl_x509_parse($X509Cert);
@@ -128,13 +133,13 @@ class DocumentsSigner
 
             // add certificate
             $X509Certificate = $this->doc->getElementsByTagName('ds:X509Certificate')->item(0);
-            if ($X509Certificate instanceof \DOMElement) {
+            if ($X509Certificate instanceof DOMElement) {
                 $X509Certificate->nodeValue = implode('', $arr);
             }
 
             // add nodes
             $signingCertificate = $this->doc->getElementsByTagName('xds:SigningCertificate')->item(0);
-            if ($signingCertificate instanceof \DOMElement) {
+            if ($signingCertificate instanceof DOMElement) {
                 $certNode = $this->doc->createElement('xds:Cert');
 
                 $certDigest = $this->doc->createElement('xds:CertDigest');
@@ -180,7 +185,7 @@ class DocumentsSigner
      *
      * @return bool
      */
-    private function addXadesReference()
+    private function addXadesReference(): bool
     {
         return $this->addReferenceSha1('#SignedPropertiesId', 'http://uri.etsi.org/01903#SignedProperties');
     }
@@ -192,16 +197,20 @@ class DocumentsSigner
      * @param string $type Type of reference block
      * @return bool
      */
-    private function addReferenceSha1($uri, $type)
+    private function addReferenceSha1(string $uri, string $type): bool
     {
-        $xpath = new \DOMXPath($this->doc);
-        $node = $xpath->query(sprintf('//*[@Id="%s"]', substr($uri, 1)))->item(0);
-        if ($node instanceof \DOMElement) {
+        $xpath = new DOMXPath($this->doc);
+        $query = $xpath->query(sprintf('//*[@Id="%s"]', substr($uri, 1)));
+        if (!$query) {
+            return false;
+        }
+        $node = $query->item(0);
+        if ($node instanceof DOMElement) {
             $data = $node->C14N();
             $digest = base64_encode(hash('sha1', $data, true));
 
             $signedInfo = $this->doc->getElementsByTagName('ds:SignedInfo')->item(0);
-            if ($signedInfo instanceof \DOMElement) {
+            if ($signedInfo instanceof DOMElement) {
                 $referenceNode = $this->doc->createElement('ds:Reference');
                 $referenceURI = $this->doc->createAttribute('URI');
                 $referenceURI->value = $uri;
@@ -234,13 +243,13 @@ class DocumentsSigner
      *
      * @return void
      */
-    private function addSignature()
+    private function addSignature(): void
     {
         $signature = $this->doc->createElement('ds:Signature');
         $signatureId = $this->doc->createAttribute('Id');
         $signatureId->value = 'SignatureId';
         $signature->appendChild($signatureId);
-        $this->doc->documentElement->appendChild($signature);
+        $this->doc->documentElement?->appendChild($signature);
 
         $signedInfo = $this->doc->createElement('ds:SignedInfo');
         $signature->appendChild($signedInfo);
@@ -309,9 +318,9 @@ class DocumentsSigner
      *
      * @return string
      */
-    public function getXml()
+    public function getXml(): string
     {
-        return $this->doc->saveXml();
+        return (string)$this->doc->saveXml();
     }
 
     /**

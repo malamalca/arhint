@@ -1,18 +1,20 @@
 <?php
-use Cake\I18n\FrozenTime;
+use Cake\I18n\DateTime;
 use Cake\Routing\Router;
 
-$defultDateStart = (new FrozenTime())->minute(0)->second(0)->microsecond(0);
-$defultDateEnd = (new FrozenTime())->minute(0)->second(0)->microsecond(0)->addHour();
+$suggestedDate = $this->getRequest()->getQuery('date', (new DateTime())->toDateString());
+$suggestedTime = (new DateTime())->toTimeString();
 
-$suggestedDate = $this->getRequest()->getQuery('date', (new FrozenTime())->toDateString());
-$suggestedTime = (new FrozenTime())->toTimeString();
-
-$defultDateStart = FrozenTime::parseDateTime($suggestedDate . ' ' . $suggestedTime, 'yyyy-MM-dd H:mm');
+$defultDateStart = DateTime::parseDateTime($suggestedDate . ' ' . $suggestedTime, 'yyyy-MM-dd H:mm');
 if (!$defultDateStart) {
-    $defultDateStart = (new FrozenTime())->minute(0)->second(0)->microsecond(0);
+    $defultDateStart = (new DateTime())->minute(0)->second(0)->microsecond(0);
 }
-$defultDateEnd = $defultDateStart->addHour();
+$defultDateEnd = $defultDateStart->addHours(1);
+
+$diffSeconds = $defultDateEnd->diffInSeconds($defultDateStart);
+if (!$event->isNew() && $event->date_end) {
+    $diffSeconds = $event->date_end->diffInSeconds($event->date_start);
+}
 
 $eventEdit = [
     'title_for_layout' =>
@@ -165,6 +167,7 @@ echo $this->Lil->form($eventEdit, 'Calendar.Events.edit');
 ?>
 <script type="text/javascript">
     var hoursToggleTransfer = '00:00';
+    var diffSeconds = <?= $diffSeconds ?>;
 
     function convertDateTimeToDate(field) {
         let tmpDateVal = new Date($(field).val());
@@ -217,7 +220,31 @@ echo $this->Lil->form($eventEdit, 'Calendar.Events.edit');
             convertDateToDateTime("#event-dat-end");
         }
     }
+
+    function changeStartDate() {
+        if (!$("#event-all-day").prop("checked")) {
+            let tmpDateVal = new Date($(this).val());
+            const tzOffset = tmpDateVal.getTimezoneOffset();
+
+            tmpDateVal.setSeconds(tmpDateVal.getSeconds() + diffSeconds);
+            tmpDateVal = new Date(tmpDateVal.getTime() - (tzOffset * 60 * 1000));
+
+            $("#event-dat-end").val(tmpDateVal.toISOString().substr(0, 16));
+        }
+    }
+
+    function changeEndDate() {
+        if (!$("#event-all-day").prop("checked")) {
+            let tmpEndDateVal = new Date($(this).val());
+            let tmpStartDateVal = new Date($("#event-dat-start").val());
+
+            diffSeconds = (tmpEndDateVal - tmpStartDateVal) / 1000;
+        }
+    }
+
     $(document).ready(function() {
         $("#event-all-day").on("change", toggleAllDay);
+        $("#event-dat-start").on("change", changeStartDate);
+        $("#event-dat-end").on("change", changeEndDate);
     });
 </script>

@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Documents\Model\Table;
 
 use ArrayObject;
+use Cake\Datasource\ResultSetInterface;
 use Cake\Event\Event;
 use Cake\ORM\Entity;
 use Cake\ORM\RulesChecker;
@@ -11,11 +12,12 @@ use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Text;
 use Cake\Validation\Validator;
+use Documents\Model\Entity\DocumentsLink;
 
 /**
  * DocumentsLinks Model
  *
- * @method \Documents\Model\Entity\DocumentsLink get($primaryKey, array $options = [])
+ * @method \Documents\Model\Entity\DocumentsLink get(mixed $primaryKey, array|string $finder = 'all', \Psr\SimpleCache\CacheInterface|string|null $cache = null, \Closure|string|null $cacheKey = null, mixed ...$args)
  * @method \Documents\Model\Entity\DocumentsLink newEmptyEntity()
  * @method \Documents\Model\Entity\DocumentsLink patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
  */
@@ -24,7 +26,7 @@ class DocumentsLinksTable extends Table
     /**
      * Initialize method
      *
-     * @param array $config The configuration for the Table.
+     * @param array<string, mixed> $config List of options for this table.
      * @return void
      */
     public function initialize(array $config): void
@@ -101,7 +103,7 @@ class DocumentsLinksTable extends Table
      * @param \ArrayObject $options Array object.
      * @return void
      */
-    public function afterDelete(Event $event, Entity $entity, ArrayObject $options)
+    public function afterDelete(Event $event, Entity $entity, ArrayObject $options): void
     {
         $cnt = $this
             ->find()
@@ -123,7 +125,7 @@ class DocumentsLinksTable extends Table
      * @param string $id2 Second document's id
      * @return string|false
      */
-    public function two($model, $id1, $model2, $id2)
+    public function two(string $model, string $id1, string $model2, string $id2): string|false
     {
         $link_id = Text::uuid();
         $link1 = $this->newEntity([
@@ -155,9 +157,9 @@ class DocumentsLinksTable extends Table
      *
      * @param string $id Document id
      * @param string $documentScope Scope
-     * @return \Cake\Datasource\ResultSetInterface|array
+     * @return \Cake\Datasource\ResultSetInterface|array<string, string>
      */
-    public function forDocument($id, $documentScope)
+    public function forDocument(string $id, string $documentScope): ResultSetInterface|array
     {
         $ret = [];
         $links = $this->find()
@@ -183,7 +185,7 @@ class DocumentsLinksTable extends Table
      * @param string $ownerId User Id.
      * @return bool
      */
-    public function isOwnedBy($entity, $ownerId)
+    public function isOwnedBy(DocumentsLink $entity, string $ownerId): bool
     {
         switch ($entity->model) {
             case 'Document':

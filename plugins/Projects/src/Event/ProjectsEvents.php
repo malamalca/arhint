@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace Projects\Event;
 
+use ArrayObject;
+use Cake\Event\Event;
 use Cake\Event\EventListenerInterface;
 use Projects\Lib\ProjectsSidebar;
 
@@ -27,8 +29,9 @@ class ProjectsEvents implements EventListenerInterface
      * @param \Cake\Event\Event $event Event object.
      * @return void
      */
-    public function addScripts($event)
+    public function addScripts(Event $event): void
     {
+        /** @var \App\View\AppView $view */
         $view = $event->getSubject();
         $view->append('script');
         echo $view->Html->css('Projects.projects');
@@ -46,7 +49,7 @@ class ProjectsEvents implements EventListenerInterface
      * @param \ArrayObject $sidebar Sidebar array.
      * @return void
      */
-    public function modifySidebar($event, $sidebar)
+    public function modifySidebar(Event $event, ArrayObject $sidebar): void
     {
         ProjectsSidebar::setAdminSidebar($event, $sidebar);
     }

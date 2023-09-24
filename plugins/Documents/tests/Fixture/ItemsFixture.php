@@ -13,7 +13,7 @@ class ItemsFixture extends TestFixture
      *
      * @var array
      */
-    public $records = [
+    public array $records = [
         [
             'id' => 1,
             'owner_id' => '8155426d-2302-4fa5-97de-e33cefb9d704',

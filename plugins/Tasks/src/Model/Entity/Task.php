@@ -18,12 +18,12 @@ use Cake\ORM\Entity;
  * @property \Tasks\Model\Entity\Foreign $foreign
  * @property string $title
  * @property string $descript
- * @property \Cake\I18n\FrozenTime|null $started
- * @property \Cake\I18n\FrozenTime|null $deadline
- * @property \Cake\I18n\FrozenTime|null $completed
+ * @property \Cake\I18n\DateTime|null $started
+ * @property \Cake\I18n\DateTime|null $deadline
+ * @property \Cake\I18n\DateTime|null $completed
  * @property int $priority
- * @property \Cake\I18n\FrozenTime $created
- * @property \Cake\I18n\FrozenTime $modified
+ * @property \Cake\I18n\DateTime $created
+ * @property \Cake\I18n\DateTime $modified
  */
 class Task extends Entity
 {
@@ -36,7 +36,7 @@ class Task extends Entity
      *
      * @var array<string, bool>
      */
-    protected $_accessible = [
+    protected array $_accessible = [
         '*' => true,
         'id' => false,
     ];

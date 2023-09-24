@@ -16,7 +16,6 @@ declare(strict_types=1);
  */
 
 use Cake\Core\Configure;
-//use Cake\Datasource\ConnectionManager;
 use Migrations\TestSuite\Migrator;
 
 /**
@@ -31,7 +30,9 @@ require dirname(__DIR__) . '/config/bootstrap.php';
 
 $_SERVER['PHP_SELF'] = '/';
 
-Configure::write('App.fullBaseUrl', 'http://localhost');
+if (empty($_SERVER['HTTP_HOST']) && !Configure::read('App.fullBaseUrl')) {
+    Configure::write('App.fullBaseUrl', 'http://localhost');
+}
 
 // DebugKit skips settings these connection config if PHP SAPI is CLI / PHPDBG.
 // But since PagesControllerTest is run with debug enabled and DebugKit is loaded

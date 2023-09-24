@@ -3,10 +3,9 @@ declare(strict_types=1);
 
 namespace Calendar\Test\TestCase\Controller;
 
+use Cake\ORM\TableRegistry;
 use Cake\TestSuite\IntegrationTestTrait;
 use Cake\TestSuite\TestCase;
-use Cake\ORM\TableRegistry;
-use Calendar\Controller\EventsController;
 
 /**
  * Calendar\Controller\EventsController Test Case
@@ -22,7 +21,7 @@ class EventsControllerTest extends TestCase
      *
      * @var array
      */
-    protected $fixtures = [
+    protected array $fixtures = [
         'app.Users',
         'plugin.Calendar.Events',
         'plugin.Documents.DocumentsCounters',
@@ -30,13 +29,15 @@ class EventsControllerTest extends TestCase
 
     /**
      * Login method
-     * 
+     *
      * @var string $userId User id
      * @return void
      */
     private function login($userId)
     {
-        $user = TableRegistry::getTableLocator()->get('Users')->get($userId);
+        $usersTable = TableRegistry::getTableLocator()->get('Users', ['className' => 'App\Model\Table\UsersTable']);
+        $user = $usersTable->get($userId);
+
         $this->session(['Auth' => $user]);
     }
 

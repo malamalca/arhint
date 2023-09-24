@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Expenses\Model\Table;
 
-use Cake\I18n\FrozenTime;
+use Cake\I18n\DateTime;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
@@ -11,10 +11,10 @@ use Cake\Validation\Validator;
 /**
  * Payments Model
  *
- * @property \Expenses\Model\Table\AccountsTable|\Cake\ORM\Association\BelongsTo $Accounts
- * @property \Expenses\Model\Table\ExpensesTable|\Cake\ORM\Association\BelongsToMany $Expenses
- * @property \Expenses\Model\Table\PaymentsAccountsTable|\Cake\ORM\Association\BelongsTo $PaymentsAccounts
- * @method \Expenses\Model\Entity\Payment get($primaryKey, array $options = [])
+ * @property \Expenses\Model\Table\AccountsTable $Accounts
+ * @property \Expenses\Model\Table\ExpensesTable $Expenses
+ * @property \Expenses\Model\Table\PaymentsAccountsTable $PaymentsAccounts
+ * @method \Expenses\Model\Entity\Payment get(mixed $primaryKey, array|string $finder = 'all', \Psr\SimpleCache\CacheInterface|string|null $cache = null, \Closure|string|null $cacheKey = null, mixed ...$args)
  * @method \Expenses\Model\Entity\Payment newEmptyEntity()
  * @method \Expenses\Model\Entity\Payment newEntity(array $data, array $options = [])
  */
@@ -23,7 +23,7 @@ class PaymentsTable extends Table
     /**
      * Initialize method
      *
-     * @param array $config The configuration for the Table.
+     * @param array<string, mixed> $config List of options for this table.
      * @return void
      */
     public function initialize(array $config): void
@@ -95,11 +95,11 @@ class PaymentsTable extends Table
     /**
      * Filters accounts by query string
      *
-     * @param array $filter Filter array.
+     * @param array<string, mixed> $filter Filter array.
      * @param string $ownerId Owner Company Id.
-     * @return array
+     * @return array<string, mixed>
      */
-    public function filter(&$filter, $ownerId)
+    public function filter(array &$filter, string $ownerId): array
     {
         $ret = ['conditions' => [], 'order' => []];
 
@@ -119,7 +119,7 @@ class PaymentsTable extends Table
                 $end = implode('-', [
                     $filter['year'],
                     $endMonth,
-                    date('t', strtotime(implode('-', [$filter['year'], $endMonth, '01']))),
+                    date('t', (int)strtotime(implode('-', [$filter['year'], $endMonth, '01']))),
                 ]);
 
                 $ret['conditions'][] = function ($exp) use ($start, $end) {
@@ -127,15 +127,15 @@ class PaymentsTable extends Table
                 };
             }
             if ($filter['span'] == 'fromto') {
-                $start = FrozenTime::parseDateTime($filter['start'], 'yyyy-MM-dd');
+                $start = DateTime::parseDateTime($filter['start'], 'yyyy-MM-dd');
                 if (!isset($filter['start']) || empty($start)) {
-                    $start = FrozenTime::parseDateTime(date('Y') . '-01-01', 'yyyy-MM-dd');
+                    $start = DateTime::parseDateTime(date('Y') . '-01-01', 'yyyy-MM-dd');
                 }
-                $filter['start'] = $ret['conditions']['Payments.dat_happened >='] = $start->i18nFormat('yyyy-MM-dd');
+                $filter['start'] = $ret['conditions']['Payments.dat_happened >='] = $start?->i18nFormat('yyyy-MM-dd');
 
-                $end = FrozenTime::parseDateTime($filter['end'], 'yyyy-MM-dd');
+                $end = DateTime::parseDateTime($filter['end'], 'yyyy-MM-dd');
                 if (!isset($filter['end']) || empty($end)) {
-                    $end = FrozenTime::now();
+                    $end = DateTime::now();
                 }
                 $filter['end'] = $ret['conditions']['Payments.dat_happened <='] = $end->i18nFormat('yyyy-MM-dd');
             }
@@ -174,7 +174,7 @@ class PaymentsTable extends Table
      * @param string $ownerId User Id.
      * @return bool
      */
-    public function isOwnedBy($entityId, $ownerId)
+    public function isOwnedBy(string $entityId, string $ownerId): bool
     {
         return $this->exists(['id' => $entityId, 'owner_id' => $ownerId]);
     }
@@ -186,7 +186,7 @@ class PaymentsTable extends Table
      * @param string $ownerId Company Id.
      * @return string
      */
-    public function minYear($ownerId)
+    public function minYear(string $ownerId): string
     {
         $q = $this->find();
 

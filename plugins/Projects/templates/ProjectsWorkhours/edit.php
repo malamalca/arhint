@@ -1,5 +1,5 @@
 <?php
-use Cake\I18n\FrozenTime;
+use Cake\I18n\DateTime;
 use Cake\Routing\Router;
 
 $editForm = [
@@ -70,7 +70,7 @@ $editForm = [
                             'text' => __d('projects', 'Started') . ':',
                             'class' => 'active',
                         ],
-                        'default' => new FrozenTime(),
+                        'default' => new DateTime(),
                     ],
                 ],
             ],

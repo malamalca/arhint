@@ -34,5 +34,3 @@ $migrator->run();
 
 // Run migrations for multiple plugins
 $migrator->run(['plugin' => 'Crm']);
-
-

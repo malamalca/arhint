@@ -5,6 +5,8 @@ namespace Documents\Controller;
 
 use Cake\Core\Plugin;
 use Cake\Event\EventInterface;
+use Cake\Http\Response;
+use Cake\Http\ServerRequest;
 use Cake\ORM\TableRegistry;
 use Cake\Routing\Router;
 
@@ -19,41 +21,34 @@ class DocumentsController extends BaseDocumentsController
     /**
      * @var string $documentsScope
      */
-    public $documentsScope = 'Documents';
+    public string $documentsScope = 'Documents';
 
     /**
      * BeforeFilter event handler
      *
      * @param \Cake\Event\EventInterface $event Event interface
-     * @return \Cake\Http\Response|null
+     * @return void
      */
     public function beforeFilter(EventInterface $event)
     {
         parent::beforeFilter($event);
 
-        if (!empty($this->Security)) {
-            if (in_array($this->getRequest()->getParam('action'), ['edit', 'editPreview'])) {
-                $this->Security->setConfig(
-                    'unlockedFields',
-                    ['company', 'receiver', 'issuer']
-                );
-            }
+        if (in_array($this->getRequest()->getParam('action'), ['edit', 'editPreview'])) {
+            $this->FormProtection->setConfig('unlockedFields', ['company', 'receiver', 'issuer']);
         }
-
-        return null;
     }
 
     /**
      * Index method
      *
-     * @return \Cake\Http\Response|null|void Renders view
+     * @return \Cake\Http\Response|void Renders view
      */
     public function index()
     {
         /** @var \Documents\Model\Entity\DocumentsCounter|\Cake\Http\Response $counter */
         $counter = parent::index();
 
-        if ($counter instanceof \Cake\Http\Response) {
+        if ($counter instanceof Response) {
             return $counter;
         }
 
@@ -87,7 +82,7 @@ class DocumentsController extends BaseDocumentsController
             /** @var \Projects\Model\Table\ProjectsTable $ProjectsTable */
             $ProjectsTable = TableRegistry::getTableLocator()->get('Projects.Projects');
 
-            $projectsIds = array_filter(array_unique($data->extract('project_id')->toList()));
+            $projectsIds = array_filter(array_unique($query->all()->extract('project_id')->toList()));
 
             $projects = [];
             if (!empty($projectsIds)) {
@@ -95,16 +90,12 @@ class DocumentsController extends BaseDocumentsController
                     ->select(['id', 'no', 'title'])
                     ->where(['id IN' => $projectsIds])
                     ->all()
-                    ->combine('id', function ($entity) {
-                        return $entity;
-                    })
+                    ->combine('id', fn ($entity) => $entity)
                     ->toArray();
             }
         }
 
         $this->set(compact('data', 'dateSpan', 'filter', 'projects'));
-
-        return null;
     }
 
     /**
@@ -114,7 +105,7 @@ class DocumentsController extends BaseDocumentsController
      */
     public function list()
     {
-        $request = new \Cake\Http\ServerRequest(['url' => $this->getRequest()->getQuery('source')]);
+        $request = new ServerRequest(['url' => $this->getRequest()->getQuery('source')]);
 
         $sourceRequest = Router::parseRequest($request);
 
@@ -152,10 +143,10 @@ class DocumentsController extends BaseDocumentsController
      * View method
      *
      * @param string|null $id Document id.
-     * @return \Cake\Http\Response|null|void Renders view
+     * @return \Cake\Http\Response|void Renders view
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function view($id = null)
+    public function view(?string $id = null)
     {
         $containTables = ['DocumentsCounters', 'DocumentsAttachments', 'DocumentsLinks', 'Issuers', 'Receivers'];
         if (Plugin::isLoaded('Projects')) {
@@ -166,13 +157,32 @@ class DocumentsController extends BaseDocumentsController
     }
 
     /**
+     * editPreview method
+     *
+     * @param array<mixed> $args Arguments
+     * @return \Cake\Http\Response|void Renders view
+     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
+     */
+    public function editPreview(array ...$args)
+    {
+        $id = $args[0] ?? [];
+
+        $containTables = ['DocumentsCounters', 'DocumentsAttachments', 'DocumentsLinks', 'Issuers', 'Receivers'];
+        if (Plugin::isLoaded('Projects')) {
+            $containTables[] = 'Projects';
+        }
+
+        parent::editPreview($id, $containTables);
+    }
+
+    /**
      * Edit method
      *
      * @param string|null $id Document id.
-     * @return \Cake\Http\Response|null|void Redirects on successful edit, renders view otherwise.
+     * @return \Cake\Http\Response|null
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function edit($id = null)
+    public function edit(?string $id = null): ?Response
     {
         $containTables = ['Issuers', 'Receivers', 'DocumentsAttachments'];
 

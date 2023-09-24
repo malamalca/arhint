@@ -12,7 +12,7 @@ use Cake\Routing\RouteBuilder;
 use Cake\Utility\Hash;
 use Documents\Event\DocumentsEvents;
 
-class Plugin extends BasePlugin
+class DocumentsPlugin extends BasePlugin
 {
     /**
      * Load all the plugin configuration and bootstrap logic.
@@ -52,7 +52,7 @@ class Plugin extends BasePlugin
         $routes->plugin(
             'Documents',
             ['path' => '/documents'],
-            function (RouteBuilder $builder) {
+            function (RouteBuilder $builder): void {
                 // Add custom routes here
                 $builder->fallbacks();
             }

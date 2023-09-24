@@ -26,7 +26,7 @@ class ProjectsUser extends Entity
      *
      * @var array<string, bool>
      */
-    protected $_accessible = [
+    protected array $_accessible = [
         'project_id' => true,
         'user_id' => true,
         'project' => true,

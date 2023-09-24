@@ -4,19 +4,20 @@ declare(strict_types=1);
 namespace Projects\Controller;
 
 use Cake\Cache\Cache;
+use Cake\Http\Response;
 
 /**
  * ProjectsStatuses Controller
  *
  * @property \Projects\Model\Table\ProjectsStatusesTable $ProjectsStatuses
- * @method \Cake\Datasource\ResultSetInterface|\Cake\ORM\ResultSet paginate($object = null, array $settings = [])
+ * @method \Cake\Datasource\Paging\PaginatedInterface paginate($object = null, array $settings = [])
  */
 class ProjectsStatusesController extends AppController
 {
     /**
      * Index method
      *
-     * @return \Cake\Http\Response|null
+     * @return void
      */
     public function index()
     {
@@ -26,18 +27,16 @@ class ProjectsStatusesController extends AppController
             ->all();
 
         $this->set(compact('projectsStatuses'));
-
-        return null;
     }
 
     /**
      * Edit method
      *
      * @param string|null $id Projects Status id.
-     * @return \Cake\Http\Response|null Redirects on successful edit, renders view otherwise.
+     * @return \Cake\Http\Response|null
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function edit($id = null)
+    public function edit(?string $id = null): ?Response
     {
         if (!empty($id)) {
             $projectsStatus = $this->ProjectsStatuses->get($id);
@@ -68,10 +67,10 @@ class ProjectsStatusesController extends AppController
      * Delete method
      *
      * @param string|null $id Projects Status id.
-     * @return \Cake\Http\Response|null Redirects to index.
+     * @return \Cake\Http\Response|null
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function delete($id = null)
+    public function delete(?string $id = null): ?Response
     {
         $this->request->allowMethod(['post', 'delete', 'get']);
         $projectsStatus = $this->ProjectsStatuses->get($id);

@@ -6,6 +6,7 @@ namespace Expenses\Controller;
 use App\Lib\ArhintReport;
 use Cake\Core\Plugin;
 use Cake\Http\Exception\NotFoundException;
+use Cake\Http\Response;
 use Cake\ORM\TableRegistry;
 use Expenses\Lib\ExpensesImport;
 
@@ -21,13 +22,13 @@ class ExpensesController extends AppController
     /**
      * Index method
      *
-     * @return \Cake\Http\Response|null
+     * @return void
      */
     public function index()
     {
         $ownerId = $this->getCurrentUser()->get('company_id');
 
-        /** @var array $filter */
+        /** @var array<string, mixed> $filter */
         $filter = $this->getRequest()->getQuery();
         if ($this->getRequest()->is('ajax')) {
             $filter['ajax'] = $this->getRequest()->getData();
@@ -50,14 +51,12 @@ class ExpensesController extends AppController
 
         $minYear = $this->Expenses->minYear($ownerId);
         $this->set(compact('expenses', 'filter', 'minYear'));
-
-        return null;
     }
 
     /**
      * autocomplete method
      *
-     * @return \Cake\Http\Response|null
+     * @return void
      */
     public function autocomplete()
     {
@@ -77,20 +76,18 @@ class ExpensesController extends AppController
         } else {
             throw new NotFoundException(__d('expenses', 'Invalid ajax call.'));
         }
-
-        return null;
     }
 
     /**
      * View method
      *
      * @param string|null $id Expense id.
-     * @return \Cake\Http\Response|null
+     * @return void
      * @throws \Cake\Http\Exception\NotFoundException When record not found.
      */
-    public function view($id = null)
+    public function view(?string $id = null)
     {
-        $expense = $this->Expenses->get($id, ['contain' => ['Payments']]);
+        $expense = $this->Expenses->get($id, contain: ['Payments']);
         $this->Authorization->authorize($expense);
 
         /** @var \Expenses\Model\Table\PaymentsAccountsTable $PaymentsAccounts */
@@ -98,23 +95,19 @@ class ExpensesController extends AppController
         $accounts = $PaymentsAccounts->listForOwner($this->getCurrentUser()->get('company_id'));
 
         $this->set(compact('expense', 'accounts'));
-
-        return null;
     }
 
     /**
      * Edit method
      *
      * @param string|null $id Expense id.
-     * @return \Cake\Http\Response|null
+     * @return \Cake\Http\Response|void
      * @throws \Cake\Http\Exception\NotFoundException When record not found.
      */
-    public function edit($id = null)
+    public function edit(?string $id = null)
     {
         if ($id) {
-            $expense = $this->Expenses->get($id, [
-                'contain' => ['Payments'],
-            ]);
+            $expense = $this->Expenses->get($id, contain: ['Payments']);
         } else {
             $expense = $this->Expenses->newEmptyEntity();
             $expense->owner_id = $this->getCurrentUser()->get('company_id');
@@ -140,7 +133,7 @@ class ExpensesController extends AppController
                 }
 
                 if ($this->getRequest()->is('ajax')) {
-                    return $this->response->withType('application/json')->withStringBody(json_encode($expense));
+                    return $this->response->withType('application/json')->withStringBody((string)json_encode($expense));
                 }
 
                 //$this->Flash->success(__d('expenses', 'The expense has been saved.'));
@@ -155,8 +148,6 @@ class ExpensesController extends AppController
         $PaymentsAccounts = TableRegistry::getTableLocator()->get('Expenses.PaymentsAccounts');
         $accounts = $PaymentsAccounts->listForOwner($this->getCurrentUser()->get('company_id'), true);
         $this->set(compact('expense', 'accounts'));
-
-        return null;
     }
 
     /**
@@ -166,7 +157,7 @@ class ExpensesController extends AppController
      * @return \Cake\Http\Response|null
      * @throws \Cake\Http\Exception\NotFoundException When record not found.
      */
-    public function delete($id = null)
+    public function delete(?string $id = null): ?Response
     {
         $expense = $this->Expenses->get($id);
         $this->Authorization->authorize($expense);
@@ -183,10 +174,10 @@ class ExpensesController extends AppController
     /**
      * ReportUnpaid method
      *
-     * @return void Redirects to index.
+     * @return void
      * @throws \Cake\Http\Exception\NotFoundException When record not found.
      */
-    public function reportUnpaid()
+    public function reportUnpaid(): void
     {
         $this->Authorization->skipAuthorization();
 
@@ -207,7 +198,7 @@ class ExpensesController extends AppController
         if ($this->getRequest()->is(['post'])) {
             $filter = $this->getRequest()->getData();
 
-            $this->loadModel('Expenses.PaymentsExpenses');
+            $PaymentsExpensesTable = $this->fetchTable('Expenses.PaymentsExpenses');
 
             if (!empty($filter['counter'])) {
                 $filter['counter'] = array_intersect_key((array)$filter['counter'], array_keys($counters));
@@ -215,7 +206,7 @@ class ExpensesController extends AppController
                 $filter['counter'] = array_keys($counters);
             }
 
-            $paymentsQuery = $this->PaymentsExpenses->find();
+            $paymentsQuery = $PaymentsExpensesTable->find();
             $paymentsQuery
                 ->select([
                     'payments_amount' => $paymentsQuery->func()->sum('Payments.amount'),
@@ -264,7 +255,7 @@ class ExpensesController extends AppController
     /**
      * Show yearly report
      *
-     * @return \Cake\Http\Response|null
+     * @return void
      */
     public function graphYearly()
     {
@@ -290,14 +281,12 @@ class ExpensesController extends AppController
 
             $this->set(compact('data1', 'data2', 'data3', 'year', 'kind'));
         }
-
-        return null;
     }
 
     /**
      * Show expenses for specified year
      *
-     * @return \Cake\Http\Response|null
+     * @return void
      */
     public function graphExpenses()
     {
@@ -321,8 +310,6 @@ class ExpensesController extends AppController
 
             $this->set(compact('data1', 'data2', 'year'));
         }
-
-        return null;
     }
 
     /**
@@ -330,7 +317,7 @@ class ExpensesController extends AppController
      *
      * @return \Cake\Http\Response|null
      */
-    public function importSepa()
+    public function importSepa(): ?Response
     {
         $this->Authorization->skipAuthorization();
 
@@ -340,9 +327,9 @@ class ExpensesController extends AppController
 
         if ($this->getRequest()->is('post')) {
             $sepafile = $this->getRequest()->getData('sepafile');
-            if (!empty($sepafile)) {
-                $tmpFile = $sepafile['tmp_name'];
-                $realFilename = $sepafile['name'];
+            if (!empty($sepafile) && !$sepafile->getError()) {
+                $tmpFile = $sepafile->getStream()->getMetadata('uri');
+                $realFilename = $sepafile->getClientFilename();
                 $Importer->addFromFile($tmpFile, pathinfo($realFilename, PATHINFO_EXTENSION));
 
                 return $this->redirect(['action' => 'importSepa']);
@@ -355,6 +342,7 @@ class ExpensesController extends AppController
             $filter = $this->getRequest()->getQuery('filter');
             $this->set(compact('filter'));
             $this->set('importedPayments', $payments);
+
             $this->viewBuilder()->setTemplate('import_sepa_step2');
         }
 
@@ -366,7 +354,7 @@ class ExpensesController extends AppController
      *
      * @return \Cake\Http\Response|null
      */
-    public function importSepaLink()
+    public function importSepaLink(): ?Response
     {
         if ($this->getRequest()->is(['patch', 'post', 'put'])) {
             $payment = $this->Expenses->Payments->get($this->getRequest()->getData('payment_id'));
@@ -378,7 +366,7 @@ class ExpensesController extends AppController
                 if ($this->getRequest()->is('ajax')) {
                     return $this->getResponse()
                         ->withType('application/json')
-                        ->withStringBody(json_encode($payment));
+                        ->withStringBody((string)json_encode($payment));
                 }
 
                 $this->Flash->success(__d('expenses', 'The payment has been saved.'));

@@ -13,7 +13,7 @@ class DocumentsAttachmentsFixture extends TestFixture
      *
      * @var array
      */
-    public $records = [
+    public array $records = [
         [
             'id' => 'aef61652-7416-43b4-9bb4-198f5706ed74',
             'document_id' => 'd0d59a31-6de7-4eb4-8230-ca09113a7fe5',

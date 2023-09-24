@@ -13,11 +13,11 @@ class ContactsPhonesController extends AppController
     /**
      * Edit method
      *
-     * @param  string|null $id Contacts Phone id.
+     * @param string|null $id Contacts Phone id.
      * @return mixed Redirects on successful edit, renders view otherwise.
      * @throws \Cake\Http\Exception\NotFoundException When record not found.
      */
-    public function edit($id = null)
+    public function edit(?string $id = null)
     {
         if (!empty($id)) {
             /** @var \Crm\Model\Entity\ContactsPhone $phone */
@@ -50,11 +50,11 @@ class ContactsPhonesController extends AppController
     /**
      * Delete method
      *
-     * @param  string|null $id Contacts Phone id.
+     * @param string|null $id Contacts Phone id.
      * @return mixed Redirects to index.
      * @throws \Cake\Http\Exception\NotFoundException When record not found.
      */
-    public function delete($id = null)
+    public function delete(?string $id = null)
     {
         /** @var \Crm\Model\Entity\ContactsPhone $phone */
         $phone = $this->ContactsPhones->get($id);

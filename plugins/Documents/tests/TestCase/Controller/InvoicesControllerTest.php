@@ -4,19 +4,24 @@ declare(strict_types=1);
 namespace Documents\Test\TestCase\Controller;
 
 use Cake\ORM\TableRegistry;
-use Cake\TestSuite\IntegrationTestCase;
+use Cake\TestSuite\IntegrationTestTrait;
+use Cake\TestSuite\TestCase;
+use Laminas\Diactoros\UploadedFile;
+use const UPLOAD_ERR_OK;
 
 /**
  * Documents\Controller\InvoicesController Test Case
  */
-class InvoicesControllerTest extends IntegrationTestCase
+class InvoicesControllerTest extends TestCase
 {
+    use IntegrationTestTrait;
+
     /**
      * Fixtures
      *
      * @var array
      */
-    public $fixtures = [
+    public array $fixtures = [
         'Users' => 'app.Users',
         'Contacts' => 'plugin.Crm.Contacts',
         'ContactsAddresses' => 'plugin.Crm.ContactsAddresses',
@@ -226,18 +231,21 @@ class InvoicesControllerTest extends IntegrationTestCase
         $counters = TableRegistry::getTableLocator()->get('Documents.DocumentsCounters');
         $counter = $counters->get('1d53bc5b-de2d-4e85-b13b-81b39a97fc89');
 
+        $jpgAttachment = new UploadedFile(
+            dirname(__FILE__) . DS . 'data' . DS . 'sunset.jpg',
+            100963,
+            UPLOAD_ERR_OK,
+            'sunset.jpg',
+            'image/jpg'
+        );
+
         $data = [
             'counter_id' => '1d53bc5b-de2d-4e85-b13b-81b39a97fc89',
             'title' => 'Uploaded Document',
             'dat_issue' => '2020-05-31',
             'documents_attachments' => [
                 0 => [
-                    'filename' => [
-                        'name' => 'sunset.jpg',
-                        'type' => 'image/jpg',
-                        'size' => 100963,
-                        'tmp_name' => dirname(__FILE__) . DS . 'data' . DS . 'sunset.jpg',
-                    ],
+                    'filename' => $jpgAttachment,
                 ],
             ],
         ];
@@ -391,7 +399,7 @@ class InvoicesControllerTest extends IntegrationTestCase
         $this->assertRedirect(['action' => 'view', 'd0d59a31-6de7-4eb4-8230-ca09113a7fe5']);
 
         $Invoices = TableRegistry::getTableLocator()->get('Documents.Invoices');
-        $invoice = $Invoices->get('d0d59a31-6de7-4eb4-8230-ca09113a7fe5', ['contain' => ['InvoicesTaxes']]);
+        $invoice = $Invoices->get('d0d59a31-6de7-4eb4-8230-ca09113a7fe5', contain: ['InvoicesTaxes']);
 
         $this->assertEquals(2, count($invoice->invoices_taxes));
         $this->assertEquals(110, $invoice->net_total);
@@ -470,7 +478,7 @@ class InvoicesControllerTest extends IntegrationTestCase
         $this->assertRedirect(['action' => 'view', 'd0d59a31-6de7-4eb4-8230-ca09113a7fe6']);
 
         $Invoices = TableRegistry::getTableLocator()->get('Documents.Invoices');
-        $invoice = $Invoices->get('d0d59a31-6de7-4eb4-8230-ca09113a7fe6', ['contain' => ['InvoicesItems']]);
+        $invoice = $Invoices->get('d0d59a31-6de7-4eb4-8230-ca09113a7fe6', contain: ['InvoicesItems']);
 
         $this->assertEquals(2, count($invoice->invoices_items));
         $this->assertEquals(300 + 100 * 0.9 * 2, $invoice->net_total);
@@ -543,7 +551,7 @@ class InvoicesControllerTest extends IntegrationTestCase
         $this->assertRedirect(['action' => 'view', 'd0d59a31-6de7-4eb4-8230-ca09113a7fe6']);
 
         $Invoices = TableRegistry::getTableLocator()->get('Documents.Invoices');
-        $invoice = $Invoices->get('d0d59a31-6de7-4eb4-8230-ca09113a7fe6', ['contain' => ['InvoicesItems']]);
+        $invoice = $Invoices->get('d0d59a31-6de7-4eb4-8230-ca09113a7fe6', contain: ['InvoicesItems']);
 
         $this->assertEquals(1, count($invoice->invoices_items));
         $this->assertEquals(100 * 0.9 * 2, $invoice->net_total);
@@ -567,7 +575,7 @@ class InvoicesControllerTest extends IntegrationTestCase
         $this->login(USER_ADMIN);
 
         $Invoices = TableRegistry::getTableLocator()->get('Documents.Invoices');
-        $invoice = $Invoices->get('d0d59a31-6de7-4eb4-8230-ca09113a7fe6', ['contain' => ['InvoicesItems']]);
+        $invoice = $Invoices->get('d0d59a31-6de7-4eb4-8230-ca09113a7fe6', contain: ['InvoicesItems']);
 
         $this->assertEquals(1, count($invoice->invoices_items));
         $this->assertEquals(290, $invoice->net_total);
@@ -587,7 +595,7 @@ class InvoicesControllerTest extends IntegrationTestCase
         $this->assertRedirect(['action' => 'view', 'd0d59a31-6de7-4eb4-8230-ca09113a7fe6']);
 
         $Invoices = TableRegistry::getTableLocator()->get('Documents.Invoices');
-        $invoice = $Invoices->get('d0d59a31-6de7-4eb4-8230-ca09113a7fe6', ['contain' => ['InvoicesItems']]);
+        $invoice = $Invoices->get('d0d59a31-6de7-4eb4-8230-ca09113a7fe6', contain: ['InvoicesItems']);
 
         $this->assertEquals(1, count($invoice->invoices_items));
         $this->assertEquals(290, $invoice->net_total);
@@ -608,7 +616,7 @@ class InvoicesControllerTest extends IntegrationTestCase
         $this->assertRedirect(['action' => 'view', 'd0d59a31-6de7-4eb4-8230-ca09113a7fe5']);
 
         $Invoices = TableRegistry::getTableLocator()->get('Documents.Invoices');
-        $invoice = $Invoices->get('d0d59a31-6de7-4eb4-8230-ca09113a7fe5', ['contain' => ['InvoicesTaxes']]);
+        $invoice = $Invoices->get('d0d59a31-6de7-4eb4-8230-ca09113a7fe5', contain: ['InvoicesTaxes']);
 
         $this->assertEquals(1, count($invoice->invoices_taxes));
         $this->assertEquals(1, $invoice->invoices_taxes[0]->id);

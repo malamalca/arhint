@@ -11,12 +11,12 @@ use Cake\ORM\Entity;
  * @property string $id
  * @property string $project_id
  * @property string $user_id
- * @property \Cake\I18n\FrozenTime $started
+ * @property \Cake\I18n\DateTime $started
  * @property int $duration
- * @property \Cake\I18n\FrozenDate $dat_confirmed
+ * @property \Cake\I18n\Date $dat_confirmed
  * @property string $descript
- * @property \Cake\I18n\FrozenTime $created
- * @property \Cake\I18n\FrozenTime $modified
+ * @property \Cake\I18n\DateTime $created
+ * @property \Cake\I18n\DateTime $modified
  *
  * @property \Projects\Model\Entity\Project $project
  * @property \Projects\Model\Entity\User $user
@@ -32,7 +32,7 @@ class ProjectsWorkhour extends Entity
      *
      * @var array<string, bool>
      */
-    protected $_accessible = [
+    protected array $_accessible = [
         'project_id' => true,
         'user_id' => true,
         'started' => true,

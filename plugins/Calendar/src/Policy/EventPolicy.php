@@ -3,6 +3,9 @@ declare(strict_types=1);
 
 namespace Calendar\Policy;
 
+use App\Model\Entity\User;
+use Calendar\Model\Entity\Event;
+
 /**
  * Event Policy Resolver
  */
@@ -15,7 +18,7 @@ class EventPolicy
      * @param \Calendar\Model\Entity\Event $entity Entity
      * @return bool
      */
-    public function canView($user, $entity)
+    public function canView(User $user, Event $entity): bool
     {
         return $entity->calendar_id == $user->id;
     }
@@ -27,7 +30,7 @@ class EventPolicy
      * @param \Calendar\Model\Entity\Event $entity Entity
      * @return bool
      */
-    public function canEdit($user, $entity)
+    public function canEdit(User $user, Event $entity): bool
     {
         return $entity->calendar_id == $user->id;
     }
@@ -39,7 +42,7 @@ class EventPolicy
      * @param \Calendar\Model\Entity\Event $entity Entity
      * @return bool
      */
-    public function canDelete($user, $entity)
+    public function canDelete(User $user, Event $entity): bool
     {
         return $entity->calendar_id == $user->id;
     }

@@ -13,13 +13,13 @@ use Cake\TestSuite\TestCase;
 class ProjectsControllerTest extends TestCase
 {
     use IntegrationTestTrait;
-    
+
     /**
      * Fixtures
      *
      * @var array
      */
-    public $fixtures = [
+    public array $fixtures = [
         'app.Users',
         'Projects' => 'plugin.Projects.Projects',
         'ProjectsUsers' => 'plugin.Projects.ProjectsUsers',
@@ -27,7 +27,7 @@ class ProjectsControllerTest extends TestCase
 
     /**
      * Login method
-     * 
+     *
      * @var string $userId User id
      * @return void
      */

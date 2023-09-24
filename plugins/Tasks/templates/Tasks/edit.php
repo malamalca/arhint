@@ -1,14 +1,14 @@
 <?php
 
-use Cake\I18n\FrozenTime;
+use Cake\I18n\DateTime;
 
 $deadline = null;
 switch ($this->getRequest()->getQuery('due')) {
     case 'today':
-        $deadline = FrozenTime::today();
+        $deadline = DateTime::today();
         break;
     case 'tomorrow':
-        $deadline = FrozenTime::tomorrow();
+        $deadline = DateTime::tomorrow();
         break;
 }
 

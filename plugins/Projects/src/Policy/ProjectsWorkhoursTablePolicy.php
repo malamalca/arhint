@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace Projects\Policy;
 
+use App\Model\Entity\User;
+use Cake\ORM\Query\SelectQuery;
 use Cake\ORM\TableRegistry;
 
 /**
@@ -14,10 +16,10 @@ class ProjectsWorkhoursTablePolicy
      * Index scope
      *
      * @param \App\Model\Entity\User $user User
-     * @param \Cake\ORM\Query $query Query object
-     * @return \Cake\ORM\Query
+     * @param \Cake\ORM\Query\SelectQuery $query Query object
+     * @return \Cake\ORM\Query\SelectQuery
      */
-    public function scopeIndex($user, $query)
+    public function scopeIndex(User $user, SelectQuery $query): SelectQuery
     {
         if (!$user->hasRole('admin')) {
             /** @var \Projects\Model\Table\ProjectsUsersTable $ProjectsUsersTable */

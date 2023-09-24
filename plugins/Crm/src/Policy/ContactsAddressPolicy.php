@@ -3,7 +3,9 @@ declare(strict_types=1);
 
 namespace Crm\Policy;
 
+use App\Model\Entity\User;
 use Cake\ORM\TableRegistry;
+use Crm\Model\Entity\ContactsAddress;
 
 /**
  * ContactsAddress Policy Resolver
@@ -17,7 +19,7 @@ class ContactsAddressPolicy
      * @param \Crm\Model\Entity\ContactsAddress $entity Entity
      * @return bool
      */
-    public function canEdit($user, $entity)
+    public function canEdit(User $user, ContactsAddress $entity): bool
     {
         /** @var \Crm\Model\Table\ContactsTable $contactsTable */
         $contactsTable = TableRegistry::getTableLocator()->get('Crm.Contacts');
@@ -32,7 +34,7 @@ class ContactsAddressPolicy
      * @param \Crm\Model\Entity\ContactsAddress $entity Entity
      * @return bool
      */
-    public function canDelete($user, $entity)
+    public function canDelete(User $user, ContactsAddress $entity): bool
     {
         /** @var \Crm\Model\Table\ContactsTable $contactsTable */
         $contactsTable = TableRegistry::getTableLocator()->get('Crm.Contacts');

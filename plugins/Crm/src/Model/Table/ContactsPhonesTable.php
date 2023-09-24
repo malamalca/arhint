@@ -22,7 +22,7 @@ class ContactsPhonesTable extends Table
     /**
      * Initialize method
      *
-     * @param array $config The configuration for the Table.
+     * @param array<string, mixed> $config List of options for this table.
      * @return void
      */
     public function initialize(array $config): void
@@ -93,7 +93,7 @@ class ContactsPhonesTable extends Table
      * @param \ArrayObject $options Options array.
      * @return void
      */
-    public function afterSave(Event $event, Entity $entity, ArrayObject $options)
+    public function afterSave(Event $event, Entity $entity, ArrayObject $options): void
     {
         if ($entity->primary) {
             $this->updateAll(['primary' => false], [
@@ -110,7 +110,7 @@ class ContactsPhonesTable extends Table
      * @param string $ownerId User Id.
      * @return bool
      */
-    public function isOwnedBy($entityId, $ownerId)
+    public function isOwnedBy(string $entityId, string $ownerId): bool
     {
         /** @var \Crm\Model\Entity\ContactsPhone $entity */
         $entity = $this->get($entityId, ['fields' => 'contact_id']);

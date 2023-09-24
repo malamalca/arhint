@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace Documents\Controller;
 
+use Cake\Http\Response;
+
 /**
  * DocumentsTemplates Controller
  *
@@ -30,7 +32,7 @@ class DocumentsTemplatesController extends AppController
      * @return \Cake\Http\Response|null
      * @throws \Cake\Http\Exception\NotFoundException When record not found.
      */
-    public function edit($id = null)
+    public function edit(?string $id = null): ?Response
     {
         if (empty($id)) {
             $template = $this->DocumentsTemplates->newEmptyEntity();
@@ -45,10 +47,10 @@ class DocumentsTemplatesController extends AppController
             $template = $this->DocumentsTemplates->patchEntity($template, $this->getRequest()->getData());
 
             $attachment = $this->getRequest()->getData('body_file');
-            if (!empty($attachment['tmp_name']) && file_exists($attachment['tmp_name'])) {
-                $ext = strtolower(pathinfo($attachment['name'], PATHINFO_EXTENSION));
+            if (!empty($attachment) && !$attachment->getError()) {
+                $ext = strtolower(pathinfo($attachment->getClientFilename(), PATHINFO_EXTENSION));
                 $template->body = 'data:image/' . $ext . ';base64,' .
-                    base64_encode(file_get_contents($attachment['tmp_name']));
+                    base64_encode((string)file_get_contents($attachment->getStream()->getMetadata('uri')));
             }
 
             if ($this->DocumentsTemplates->save($template)) {
@@ -72,7 +74,7 @@ class DocumentsTemplatesController extends AppController
      * @return \Cake\Http\Response|null
      * @throws \Cake\Http\Exception\NotFoundException When record not found.
      */
-    public function delete($id = null)
+    public function delete(?string $id = null): ?Response
     {
         $this->getRequest()->allowMethod(['get', 'delete']);
 

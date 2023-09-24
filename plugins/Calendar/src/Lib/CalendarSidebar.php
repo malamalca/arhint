@@ -3,6 +3,9 @@ declare(strict_types=1);
 
 namespace Calendar\Lib;
 
+use App\Controller\AppController;
+use ArrayObject;
+
 class CalendarSidebar
 {
     /**
@@ -14,19 +17,19 @@ class CalendarSidebar
      * @param \ArrayObject $sidebar Sidebar data.
      * @return void
      */
-    public static function setAdminSidebar($event, $sidebar)
+    public static function setAdminSidebar(mixed $event, ArrayObject $sidebar): void
     {
-        if (!$event->getSubject() instanceof \App\Controller\AppController) {
+        if (!$event->getSubject() instanceof AppController) {
             return;
         }
 
+        /** @var \App\Controller\AppController $controller */
         $controller = $event->getSubject();
-        $request = $event->getSubject()->getRequest();
-        $currentUser = $event->getSubject()->getCurrentUser();
-
-        if (empty($currentUser)) {
+        if (!$controller->hasCurrentUser()) {
             return;
         }
+
+        $request = $controller->getRequest();
 
         $calendar = [];
         $calendar['title'] = __d('calendar', 'Calendar');

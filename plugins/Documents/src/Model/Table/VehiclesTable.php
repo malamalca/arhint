@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Documents\Model\Table;
 
+use Cake\ORM\Query\SelectQuery;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 
@@ -12,16 +13,11 @@ use Cake\Validation\Validator;
  * @method \Documents\Model\Entity\Vehicle newEmptyEntity()
  * @method \Documents\Model\Entity\Vehicle newEntity(array $data, array $options = [])
  * @method \Documents\Model\Entity\Vehicle[] newEntities(array $data, array $options = [])
- * @method \Documents\Model\Entity\Vehicle get($primaryKey, $options = [])
+ * @method \Documents\Model\Entity\Vehicle get(mixed $primaryKey, array|string $finder = 'all', \Psr\SimpleCache\CacheInterface|string|null $cache = null, \Closure|string|null $cacheKey = null, mixed ...$args)
  * @method \Documents\Model\Entity\Vehicle findOrCreate($search, ?callable $callback = null, $options = [])
  * @method \Documents\Model\Entity\Vehicle patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
  * @method \Documents\Model\Entity\Vehicle[] patchEntities(iterable $entities, array $data, array $options = [])
  * @method \Documents\Model\Entity\Vehicle|false save(\Cake\Datasource\EntityInterface $entity, $options = [])
- * @method \Documents\Model\Entity\Vehicle saveOrFail(\Cake\Datasource\EntityInterface $entity, $options = [])
- * @method \Documents\Model\Entity\Vehicle[]|\Cake\Datasource\ResultSetInterface|false saveMany(iterable $entities, $options = [])
- * @method \Documents\Model\Entity\Vehicle[]|\Cake\Datasource\ResultSetInterface saveManyOrFail(iterable $entities, $options = [])
- * @method \Documents\Model\Entity\Vehicle[]|\Cake\Datasource\ResultSetInterface|false deleteMany(iterable $entities, $options = [])
- * @method \Documents\Model\Entity\Vehicle[]|\Cake\Datasource\ResultSetInterface deleteManyOrFail(iterable $entities, $options = [])
  * @mixin \Cake\ORM\Behavior\TimestampBehavior
  */
 class VehiclesTable extends Table
@@ -29,7 +25,7 @@ class VehiclesTable extends Table
     /**
      * Initialize method
      *
-     * @param array $config The configuration for the Table.
+     * @param array<string, mixed> $config List of options for this table.
      * @return void
      */
     public function initialize(array $config): void
@@ -80,7 +76,7 @@ class VehiclesTable extends Table
      * @param string $ownerId User Id.
      * @return bool
      */
-    public function isOwnedBy($entityId, $ownerId)
+    public function isOwnedBy(string $entityId, string $ownerId): bool
     {
         return $this->exists(['id' => $entityId, 'owner_id' => $ownerId]);
     }
@@ -89,10 +85,10 @@ class VehiclesTable extends Table
      * List vehicles for specified owner.
      *
      * @param string $ownerId Users Company Id.
-     * @param \Cake\ORM\Query|null $query Query object.
-     * @return array
+     * @param \Cake\ORM\Query\SelectQuery|null $query Query object.
+     * @return array<\Documents\Model\Entity\Vehicle>
      */
-    public function findForOwner($ownerId, $query = null)
+    public function findForOwner(string $ownerId, ?SelectQuery $query = null): array
     {
         if (empty($query)) {
             $query = $this->find();

@@ -6,8 +6,9 @@ namespace App\Controller;
 use Cake\Core\Configure;
 use Cake\Event\EventInterface;
 use Cake\Http\Exception\BadRequestException;
-use Cake\I18n\FrozenDate;
-use Cake\I18n\FrozenTime;
+use Cake\Http\Response;
+use Cake\I18n\Date;
+use Cake\I18n\DateTime;
 use ddn\sapp\PDFDoc;
 
 /**
@@ -19,15 +20,13 @@ class UtilsController extends AppController
      * BeforeFilter event handler
      *
      * @param \Cake\Event\EventInterface $event Event interface
-     * @return \Cake\Http\Response|null
+     * @return void
      */
     public function beforeFilter(EventInterface $event)
     {
         parent::beforeFilter($event);
 
-        $this->Security->setConfig('validatePost', false);
-
-        return null;
+        $this->FormProtection->setConfig('validate', false);
     }
 
     /**
@@ -35,7 +34,7 @@ class UtilsController extends AppController
      *
      * @return \Cake\Http\Response|null
      */
-    public function pdfMerge()
+    public function pdfMerge(): ?Response
     {
         $this->Authorization->skipAuthorization();
 
@@ -54,9 +53,8 @@ class UtilsController extends AppController
 
             $sourcePDF = [];
             foreach ($files as $file) {
-                if (is_file($file['tmp_name'])) {
-                    //$sourcePDF .= '"' . $file['tmp_name'] . '" ';
-                    $sourcePDF[] = escapeshellarg($file['tmp_name']);
+                if (!empty($file) && empty($file->getError())) {
+                    $sourcePDF[] = escapeshellarg($file->getStream()->getMetadata('uri'));
                 }
             }
 
@@ -65,12 +63,17 @@ class UtilsController extends AppController
             $command = escapeshellarg($gsProgram) . ' ' . $gsParams;
             $command = sprintf($command, implode(' ', $sourcePDF), escapeshellarg(TMP . $outputPDF));
 
-            $ret = exec($command);
+            exec($command);
+
+            $encodedPdf = json_encode(['filename' => $outputPDF]);
+            if (!$encodedPdf) {
+                throw new BadRequestException('Error processing pdf files.');
+            }
 
             //if ($ret) {
                 $response = $this->getResponse()
                     ->withType('application/json')
-                    ->withStringBody(json_encode(['filename' => $outputPDF]));
+                    ->withStringBody($encodedPdf);
 
                     return $response;
             //} else {
@@ -86,7 +89,7 @@ class UtilsController extends AppController
      *
      * @return \Cake\Http\Response|null
      */
-    public function pdfSplice()
+    public function pdfSplice(): ?Response
     {
         $this->Authorization->skipAuthorization();
 
@@ -95,23 +98,27 @@ class UtilsController extends AppController
             $gsParams = '-dBATCH -dNOPAUSE -sDEVICE=pdfwrite -dFirstPage=%3$s -dLastPage=%4$s -sOutputFile=%2$s %1$s';
 
             $file = $this->getRequest()->getData('file');
-            $outputPDF = $file['name'];
+            if (!empty($file) && !$file->getError()) {
+                $outputPDF = $file->getClientFilename();
 
-            $command = escapeshellarg($gsProgram) . ' ' . $gsParams;
-            $command = sprintf(
-                $command,
-                escapeshellarg($file['tmp_name']),
-                escapeshellarg(TMP . $outputPDF),
-                $this->getRequest()->getData('firstPage'),
-                $this->getRequest()->getData('lastPage')
-            );
+                $command = escapeshellarg($gsProgram) . ' ' . $gsParams;
+                $command = sprintf(
+                    $command,
+                    escapeshellarg($file->getStream()->getMetadata('uri')),
+                    escapeshellarg(TMP . $outputPDF),
+                    $this->getRequest()->getData('firstPage'),
+                    $this->getRequest()->getData('lastPage')
+                );
 
-            $ret = exec($command);
+                exec($command);
 
-            $response = $this->getResponse()
-                ->withFile(TMP . $outputPDF, ['download' => true, 'name' => $outputPDF]);
+                $response = $this->getResponse()
+                    ->withFile(TMP . $outputPDF, ['download' => true, 'name' => $outputPDF]);
 
-            return $response;
+                return $response;
+            } else {
+                throw new BadRequestException('Error processing pdf files.');
+            }
         }
 
         return null;
@@ -120,39 +127,43 @@ class UtilsController extends AppController
     /**
      * Create signature image
      *
-     * @param array $data Certificate data
-     * @return string
+     * @param array<string, mixed> $data Certificate data
+     * @return string|null
      */
-    public function signature($data = null)
+    public function signature(array $data): ?string
     {
         $certData = $data;
-        if (empty($data)) {
-            openssl_pkcs12_read(file_get_contents(TMP . 'arhim.pfx'), $certData, 'arhim3869');
-            $certData = openssl_x509_parse($certData['cert'], true);
-        }
+        //if (empty($data)) {
+        //    openssl_pkcs12_read(file_get_contents(TMP . 'arhim.pfx'), $certData, 'password');
+        //    $certData = openssl_x509_parse($certData['cert'], true);
+        //}
 
         $thumbSizeX = 250;
         $thumbSizeY = 105;
         $leftWidth = 70;
 
         $newImage = imagecreatetruecolor($thumbSizeX, $thumbSizeY);
+        if (!$newImage) {
+            return null;
+        }
         //imageantialias($newImage, true);
         //imagealphablending($newImage, false);
         //imagesavealpha($newImage, true);
-        $transparent = imagecolorallocate($newImage, 240, 240, 240);
-        $gray = imagecolorallocatealpha($newImage, 200, 200, 200, 0);
+        $textColor = '#000000';
+        $textColor = (int)imagecolorallocatealpha(
+            $newImage,
+            (int)hexdec(substr($textColor, 1, 2)),
+            (int)hexdec(substr($textColor, 3, 2)),
+            (int)hexdec(substr($textColor, 5, 2)),
+            0
+        );
+        $transparent = (int)imagecolorallocate($newImage, 240, 240, 240);
+        $gray = (int)imagecolorallocatealpha($newImage, 200, 200, 200, 0);
+
         imagefilledrectangle($newImage, $leftWidth, 0, $thumbSizeX, $thumbSizeY, $transparent);
         imagefilledrectangle($newImage, 0, 0, $leftWidth - 1, $thumbSizeY, $gray);
         imagefilledrectangle($newImage, 0, 0, $thumbSizeX - 1, 20, $gray);
 
-        $textColor = '#000000';
-        $textColor = imagecolorallocatealpha(
-            $newImage,
-            hexdec(substr($textColor, 1, 2)),
-            hexdec(substr($textColor, 3, 2)),
-            hexdec(substr($textColor, 5, 2)),
-            0
-        );
         $fontFile = constant('WWW_ROOT') . 'font' . constant('DS') . 'arialn.ttf';
 
         imagettftext($newImage, 10, 0, 5, 15, $textColor, $fontFile, 'DOKUMENT JE ELEKTRONSKO PODPISAN');
@@ -167,12 +178,12 @@ class UtilsController extends AppController
         imagettftext($newImage, 10, 0, 5, 65, $textColor, $fontFile, 'Št. certifikata: ');
         imagettftext($newImage, 10, 0, $leftWidth + 5, 65, $textColor, $fontFile, $certData['serialNumberHex']);
 
-        $certValidity = (string)(new FrozenDate($certData['validTo_time_t']));
+        $certValidity = (string)(new Date(DateTime::createFromTimestamp($certData['validTo_time_t'])));
         imagettftext($newImage, 10, 0, 5, 80, $textColor, $fontFile, 'Veljavnost:');
         imagettftext($newImage, 10, 0, $leftWidth + 5, 80, $textColor, $fontFile, $certValidity);
 
         imagettftext($newImage, 10, 0, 5, 95, $textColor, $fontFile, 'Čas podpisa:');
-        imagettftext($newImage, 10, 0, $leftWidth + 5, 95, $textColor, $fontFile, (string)(new FrozenTime()));
+        imagettftext($newImage, 10, 0, $leftWidth + 5, 95, $textColor, $fontFile, (string)(new DateTime()));
 
         ob_start();
         imagepng($newImage);
@@ -186,7 +197,7 @@ class UtilsController extends AppController
             echo $imageData;
             die;
         } else {
-            return $imageData;
+            return (string)$imageData;
         }
     }
 
@@ -195,7 +206,7 @@ class UtilsController extends AppController
      *
      * @return \Cake\Http\Response|null
      */
-    public function pdfSign()
+    public function pdfSign(): ?Response
     {
         $this->Authorization->skipAuthorization();
 
@@ -205,18 +216,26 @@ class UtilsController extends AppController
             $file = $this->getRequest()->getData('file');
             $cert = $this->getRequest()->getData('cert');
 
-            $pdfContents = file_get_contents($file['tmp_name']);
+            if (empty($file) || $file->getError() || empty($cert) || $cert->getError()) {
+                throw new BadRequestException('Error in uploaded files.');
+            }
+
+            $pdfContents = file_get_contents($file->getStream()->getMetadata('uri'));
             $pdfObj = PDFDoc::from_string($pdfContents);
 
             if ($pdfObj === false) {
                 $gsProgram = Configure::read('Ghostscript.executable');
                 $gsParams = '-dBATCH -dNOPAUSE -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -sOutputFile=%2$s %1$s';
 
-                $outputPDF = $this->getRequest()->getData('filename');
+                //$outputPDF = $this->getRequest()->getData('filename');
                 $tmpPDF = tempnam(constant('TMP'), 'Sign') . '.pdf';
 
                 $command = escapeshellarg($gsProgram) . ' ' . $gsParams;
-                $command = sprintf($command, escapeshellarg($file['tmp_name']), escapeshellarg($tmpPDF));
+                $command = sprintf(
+                    $command,
+                    escapeshellarg($file->getStream()->getMetadata('uri')),
+                    escapeshellarg($tmpPDF)
+                );
 
                 $ret = exec($command);
                 if ($ret) {
@@ -232,19 +251,20 @@ class UtilsController extends AppController
             } else {
                 $pdfSignedContents = false;
 
-                $certBinary = file_get_contents($cert['tmp_name']);
-                $ret = openssl_pkcs12_read($certBinary, $certdata, $this->getRequest()->getData('pass'));
+                $certBinary = (string)file_get_contents($cert->getStream()->getMetadata('uri'));
+                $ret = openssl_pkcs12_read($certBinary, $certdata, (string)$this->getRequest()->getData('pass', ''));
                 if ($ret) {
                     $certdata = openssl_x509_parse($certdata['cert'], true);
+                    if (!$certdata) {
+                        throw new BadRequestException('Certificate Error.');
+                    }
                 } else {
                     throw new BadRequestException('Certificate Error.');
                 }
 
-                $position = [ ];
-
                 $signatureFile = $this->getRequest()->getData('signature');
-                if (!empty($signatureFile['tmp_name']) && is_file($signatureFile['tmp_name'])) {
-                    $image = $signatureFile['tmp_name'];
+                if (!empty($signatureFile) && !$signatureFile->getError()) {
+                    $image = $signatureFile->getStream()->getMetadata('uri');
                 } else {
                     $imageData = $this->signature($certdata);
                     $image = TMP . uniqid() . '.png';
@@ -271,9 +291,8 @@ class UtilsController extends AppController
                 $i_w = $imagesize[0];
                 $i_h = $imagesize[1];
 
-                $ratio_x = $p_w / $i_w;
-                $ratio_y = $p_h / $i_h;
-                $ratio = min($ratio_x, $ratio_y);
+                //$ratio_x = $p_w / $i_w;
+                //$ratio_y = $p_h / $i_h;
 
                 $i_w = $imagesize[0] / 2;
                 $i_h = $imagesize[1] / 2;
@@ -284,13 +303,16 @@ class UtilsController extends AppController
                 //$p_y = $p_h / 3;
 
                 // Set the image appearance and the certificate file
-                $ret = $pdfObj->set_signature_appearance(
+                $pdfObj->set_signature_appearance(
                     (int)$this->getRequest()->getData('page'),
                     [ $p_x, $p_y, $p_x + $i_w, $p_y + $i_h ],
                     $image
                 );
 
-                $res = $pdfObj->set_signature_certificate($cert['tmp_name'], $this->getRequest()->getData('pass'));
+                $res = $pdfObj->set_signature_certificate(
+                    $cert->getStream()->getMetadata('uri'),
+                    $this->getRequest()->getData('pass')
+                );
 
                 if ($res) {
                     $pdfSignedContents = $pdfObj->to_pdf_file_s(false);
@@ -298,7 +320,7 @@ class UtilsController extends AppController
                     if ($pdfSignedContents === false) {
                         throw new BadRequestException('Error signing pdf files.');
                     } else {
-                        $signedFilename = substr($file['name'], 0, -4) . '_signed.pdf';
+                        $signedFilename = substr($file->getClientFilename(), 0, -4) . '_signed.pdf';
                         file_put_contents(TMP . $signedFilename, $pdfSignedContents);
 
                         return $this->redirect(['controller' => 'Pages', 'action' => 'pdf', $signedFilename]);

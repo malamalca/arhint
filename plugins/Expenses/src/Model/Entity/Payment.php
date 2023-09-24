@@ -11,12 +11,12 @@ use Cake\ORM\Entity;
  * @property string $id
  * @property string|null $owner_id
  * @property string|null $account_id
- * @property \Cake\I18n\FrozenDate|null $dat_happened
+ * @property \Cake\I18n\Date|null $dat_happened
  * @property string|null $descript
  * @property float|null $amount
  * @property string|null $sepa_id
- * @property \Cake\I18n\FrozenTime|null $created
- * @property \Cake\I18n\FrozenTime|null $modified
+ * @property \Cake\I18n\DateTime|null $created
+ * @property \Cake\I18n\DateTime|null $modified
  *
  * @property array $expenses
  */
@@ -30,7 +30,7 @@ class Payment extends Entity
      *
      * @var array<string, bool>
      */
-    protected $_accessible = [
+    protected array $_accessible = [
         'owner_id' => true,
         'account_id' => true,
         'dat_happened' => true,

@@ -13,7 +13,7 @@ class AdremasFixture extends TestFixture
      *
      * @var array
      */
-    public $records = [
+    public array $records = [
         [
             'id' => '49a90cfe-fda4-49ca-b7ec-ca5534465431',
             'owner_id' => COMPANY_FIRST,

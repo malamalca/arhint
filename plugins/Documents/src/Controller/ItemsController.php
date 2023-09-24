@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Documents\Controller;
 
 use Cake\Http\Exception\NotFoundException;
+use Cake\Http\Response;
 
 /**
  * Items Controller
@@ -29,10 +30,10 @@ class ItemsController extends AppController
      * Edit method
      *
      * @param string|null $id Item id.
-     * @return \Cake\Http\Response|void
+     * @return \Cake\Http\Response|null
      * @throws \Cake\Http\Exception\NotFoundException When record not found.
      */
-    public function edit($id = null)
+    public function edit(?string $id = null): ?Response
     {
         if (empty($id)) {
             $item = $this->Items->newEmptyEntity();
@@ -65,16 +66,18 @@ class ItemsController extends AppController
             ->toArray();
 
         $this->set(compact('item', 'vats'));
+
+        return null;
     }
 
     /**
      * Delete method
      *
      * @param string|null $id Item id.
-     * @return \Cake\Http\Response|void
+     * @return \Cake\Http\Response|null
      * @throws \Cake\Http\Exception\NotFoundException When record not found.
      */
-    public function delete($id = null)
+    public function delete(?string $id = null): ?Response
     {
         $item = $this->Items->get($id);
         $this->Authorization->authorize($item);
@@ -91,9 +94,9 @@ class ItemsController extends AppController
     /**
      * autocomplete method
      *
-     * @return \Cake\Http\Response|null
+     * @return \Cake\Http\Response
      */
-    public function autocomplete()
+    public function autocomplete(): Response
     {
         if ($this->getRequest()->is('ajax')) {
             $items = [];
@@ -111,7 +114,7 @@ class ItemsController extends AppController
 
             $response = $this->getResponse()
                 ->withType('application/json')
-                ->withStringBody(json_encode($items));
+                ->withStringBody((string)json_encode($items));
 
             return $response;
         } else {

@@ -20,12 +20,13 @@ if (!defined('STDIN')) {
     define('STDIN', fopen('php://stdin', 'r'));
 }
 
-use Cake\Auth\DefaultPasswordHasher;
+use Authentication\PasswordHasher\DefaultPasswordHasher;
 use Cake\Core\Configure;
 use Cake\Core\Configure\Engine\PhpConfig;
 use Cake\Datasource\ConnectionManager;
 use Cake\Utility\Security;
 use Cake\Utility\Text;
+use Composer\IO\IOInterface;
 use Composer\Script\Event;
 use Exception;
 use Migrations\Migrations;
@@ -71,13 +72,13 @@ class Installer
      * @throws \Exception Exception raised by validator.
      * @return void
      */
-    public static function createUser(Event $event)
+    public static function createUser(Event $event): void
     {
         $io = $event->getIO();
         $rootDir = dirname(dirname(__DIR__));
 
         if (file_exists($rootDir . '/config/app_local.php')) {
-            $loader = require $rootDir . '/vendor/autoload.php';
+            require $rootDir . '/vendor/autoload.php';
             require $rootDir . '/config/paths.php';
 
             Configure::config('default', new PhpConfig());
@@ -97,7 +98,7 @@ class Installer
      * @throws \Exception Exception raised by validator.
      * @return void
      */
-    public static function postInstall(Event $event)
+    public static function postInstall(Event $event): void
     {
         $io = $event->getIO();
 
@@ -131,13 +132,13 @@ class Installer
      * @throws \Exception Exception raised by validator.
      * @return void
      */
-    public static function postUpdate(Event $event)
+    public static function postUpdate(Event $event): void
     {
         $io = $event->getIO();
         $rootDir = dirname(dirname(__DIR__));
 
         if (file_exists($rootDir . '/config/app_local.php')) {
-            $loader = require $rootDir . '/vendor/autoload.php';
+            require $rootDir . '/vendor/autoload.php';
             require $rootDir . '/config/paths.php';
 
             Configure::config('default', new PhpConfig());
@@ -162,7 +163,7 @@ class Installer
      * @param \Composer\IO\IOInterface $io IO interface to write to console.
      * @return void
      */
-    public static function createAppLocalConfig($dir, $io)
+    public static function createAppLocalConfig(string $dir, IOInterface $io): void
     {
         $appLocalConfig = $dir . '/config/app_local.php';
         $appLocalConfigTemplate = $dir . '/config/app_local.example.php';
@@ -179,7 +180,7 @@ class Installer
      * @param \Composer\IO\IOInterface $io IO interface to write to console.
      * @return void
      */
-    public static function createWritableDirectories($dir, $io)
+    public static function createWritableDirectories(string $dir, IOInterface $io): void
     {
         foreach (static::WRITABLE_DIRS as $path) {
             $path = $dir . '/' . $path;
@@ -199,7 +200,7 @@ class Installer
      * @param \Composer\IO\IOInterface $io IO interface to write to console.
      * @return void
      */
-    public static function setFolderPermissions($dir, $io)
+    public static function setFolderPermissions(string $dir, IOInterface $io): void
     {
         // ask if the permissions should be changed
         if ($io->isInteractive()) {
@@ -222,7 +223,7 @@ class Installer
         }
 
         // Change the permissions on a path and output the results.
-        $changePerms = function ($path) use ($io) {
+        $changePerms = function ($path) use ($io): void {
             $currentPerms = fileperms($path) & 0777;
             $worldWritable = $currentPerms | 0007;
             if ($worldWritable == $currentPerms) {
@@ -237,7 +238,7 @@ class Installer
             }
         };
 
-        $walker = function ($dir) use (&$walker, $changePerms) {
+        $walker = function ($dir) use (&$walker, $changePerms): void {
             $files = array_diff(scandir($dir), ['.', '..']);
             foreach ($files as $file) {
                 $path = $dir . '/' . $file;
@@ -263,7 +264,7 @@ class Installer
      * @param \Composer\IO\IOInterface $io IO interface to write to console.
      * @return void
      */
-    public static function setSecuritySalt($dir, $io)
+    public static function setSecuritySalt(string $dir, IOInterface $io): void
     {
         $newKey = hash('sha256', Security::randomBytes(64));
         static::setSecuritySaltInFile($dir, $io, $newKey, 'app_local.php');
@@ -278,7 +279,7 @@ class Installer
      * @param string $file A path to a file relative to the application's root
      * @return void
      */
-    public static function setSecuritySaltInFile($dir, $io, $newKey, $file)
+    public static function setSecuritySaltInFile(string $dir, IOInterface $io, string $newKey, string $file): void
     {
         $config = $dir . '/config/' . $file;
         $content = file_get_contents($config);
@@ -309,7 +310,7 @@ class Installer
      * @param string $file A path to a file relative to the application's root
      * @return void
      */
-    public static function setAppNameInFile($dir, $io, $appName, $file)
+    public static function setAppNameInFile(string $dir, IOInterface $io, string $appName, string $file): void
     {
         $config = $dir . '/config/' . $file;
         $content = file_get_contents($config);
@@ -337,7 +338,7 @@ class Installer
      * @param \Composer\IO\IOInterface $io IO interface to write to console.
      * @return bool
      */
-    public static function setDatabase($dir, $io)
+    public static function setDatabase(string $dir, IOInterface $io): bool
     {
         $io->write('ENTER DATABASE CONNECTION');
 
@@ -350,7 +351,7 @@ class Installer
             $dbUser = $io->ask('<info>Enter db user ?</info> ');
             $dbPassword = $io->ask('<info>Enter db password ?</info> ');
 
-            $dbConnectSuccess = static::checkDbConnection($dbHost, $dbName, $dbUser, $dbPassword, $io);
+            $dbConnectSuccess = static::checkDbConnection($dbHost, $dbName, (string)$dbUser, (string)$dbPassword, $io);
 
             if ($dbConnectSuccess) {
                 static::setDbConfigInFile($dbHost, $dbName, $dbUser, $dbPassword, $dir, 'app_local.php', $io);
@@ -372,7 +373,7 @@ class Installer
      * @param string $connection Connection name
      * @return void
      */
-    public static function executeMigrations($dir, $io, $connection = 'install')
+    public static function executeMigrations(string $dir, IOInterface $io, string $connection = 'install'): void
     {
         if (!defined('ROOT')) {
             define('ROOT', $dir);
@@ -383,12 +384,12 @@ class Installer
         }
 
         $migrations = new Migrations(['connection' => $connection]);
-        /*$migrations->migrate();
+        $migrations->migrate();
 
         foreach (static::PLUGINS as $pluginName) {
             $migrations = new Migrations(['connection' => $connection, 'plugin' => $pluginName]);
             $migrations->migrate();
-        }*/
+        }
     }
 
     /**
@@ -398,12 +399,12 @@ class Installer
      * @param string $connection Connection name
      * @return void
      */
-    public static function createAdminUser($io, $connection = 'install')
+    public static function createAdminUser(IOInterface $io, string $connection = 'install'): void
     {
         /** @var \Cake\Database\Connection $conn */
         $conn = ConnectionManager::get($connection);
 
-        if ($conn && $conn->connect()) {
+        if ($conn && $conn->getDriver()->connect()) {
             $io->write('CREATE ADMIN USER');
 
             $adminName = $io->ask(
@@ -478,8 +479,13 @@ class Installer
      * @param \Composer\IO\IOInterface $io IO interface to write to console.
      * @return bool
      */
-    public static function checkDbConnection($dbHost, $db, $dbUser, $dbPassword, $io)
-    {
+    public static function checkDbConnection(
+        string $dbHost,
+        string $db,
+        string $dbUser,
+        string $dbPassword,
+        IOInterface $io
+    ): bool {
         try {
             ConnectionManager::drop('install');
 
@@ -500,9 +506,9 @@ class Installer
             ]);
             /** @var \Cake\Database\Connection $connection */
             $connection = ConnectionManager::get('install');
-            $result = $connection->connect();
+            $connection->getDriver()->connect();
 
-            return $result;
+            return $connection->getDriver()->isConnected();
         } catch (Exception $connectionError) {
             $errorMsg = $connectionError->getMessage();
             $io->writeError($errorMsg);
@@ -523,8 +529,15 @@ class Installer
      * @param \Composer\IO\IOInterface $io IO interface to write to console.
      * @return void
      */
-    public static function setDbConfigInFile($dbHost, $dbName, $dbUser, $dbPassword, $dir, $file, $io)
-    {
+    public static function setDbConfigInFile(
+        string $dbHost,
+        string $dbName,
+        string $dbUser,
+        string $dbPassword,
+        string $dir,
+        string $file,
+        IOInterface $io
+    ): void {
         $config = $dir . '/config/' . $file;
         $content = file_get_contents($config);
 
@@ -550,7 +563,7 @@ class Installer
      * @param string $file A path to a file relative to the application's root
      * @return void
      */
-    public static function setCookieKeyInFile($dir, $io, $file = 'app_local.php')
+    public static function setCookieKeyInFile(string $dir, IOInterface $io, string $file = 'app_local.php'): void
     {
         $config = $dir . '/config/' . $file;
         $content = file_get_contents($config);

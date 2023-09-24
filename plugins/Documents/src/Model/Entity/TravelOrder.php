@@ -22,22 +22,22 @@ use Cake\ORM\TableRegistry;
  * @property int $attachment_count
  * @property int|null $counter
  * @property string|null $no
- * @property \Cake\I18n\FrozenDate|null $dat_issue
+ * @property \Cake\I18n\Date|null $dat_issue
  * @property string|null $location
  * @property string|null $descript
  * @property string|null $title
  * @property string|null $taskee
- * @property \Cake\I18n\FrozenDate|null $dat_task
- * @property \Cake\I18n\FrozenTime|null $departure
- * @property \Cake\I18n\FrozenTime|null $arrival
+ * @property \Cake\I18n\Date|null $dat_task
+ * @property \Cake\I18n\DateTime|null $departure
+ * @property \Cake\I18n\DateTime|null $arrival
  * @property string|null $vehicle_registration
  * @property string|null $vehicle_owner
  * @property string|null $advance
- * @property \Cake\I18n\FrozenDate|null $dat_advance
+ * @property \Cake\I18n\Date|null $dat_advance
  * @property float|null $net_total
  * @property float|null $total
- * @property \Cake\I18n\FrozenTime|null $created
- * @property \Cake\I18n\FrozenTime|null $modified
+ * @property \Cake\I18n\DateTime|null $created
+ * @property \Cake\I18n\DateTime|null $modified
  *
  * @property \Documents\Model\Entity\DocumentsCounter $documents_counter
  * @property \Documents\Model\Entity\DocumentsClient $payer
@@ -53,7 +53,7 @@ class TravelOrder extends Entity
      *
      * @var array<string, bool>
      */
-    protected $_accessible = [
+    protected array $_accessible = [
         'owner_id' => true,
         'payer_id' => true,
         'employee_id' => true,
@@ -96,7 +96,7 @@ class TravelOrder extends Entity
      *
      * @return void
      */
-    public function getNextCounterNo()
+    public function getNextCounterNo(): void
     {
         /** @var \Documents\Model\Table\DocumentsCountersTable $DocumentsCounters */
         $DocumentsCounters = TableRegistry::getTableLocator()->get('Documents.DocumentsCounters');
@@ -107,7 +107,7 @@ class TravelOrder extends Entity
 
         // generate documents' `no` according to counter's `mask`
         if (!empty($counter->mask)) {
-            $this->no = $DocumentsCounters->generateNo($counter->toArray());
+            $this->no = (string)$DocumentsCounters->generateNo($counter->toArray());
         }
 
         // update counter

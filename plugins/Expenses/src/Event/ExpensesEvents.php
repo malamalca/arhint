@@ -4,10 +4,14 @@ declare(strict_types=1);
 namespace Expenses\Event;
 
 use ArrayObject;
+use Cake\Datasource\EntityInterface;
 use Cake\Event\Event;
 use Cake\Event\EventListenerInterface;
 use Cake\ORM\TableRegistry;
+use Documents\Model\Table\InvoicesTable;
+use Documents\Model\Table\TravelOrdersTable;
 use Expenses\Lib\ExpensesSidebar;
+use Lil\Lib\LilForm;
 
 class ExpensesEvents implements EventListenerInterface
 {
@@ -35,8 +39,9 @@ class ExpensesEvents implements EventListenerInterface
      * @param string $fileName Filename
      * @return void
      */
-    public function addScripts($event, $fileName)
+    public function addScripts(Event $event, string $fileName): void
     {
+        /** @var \App\View\AppView $view */
         $view = $event->getSubject();
         $view->append('script');
         echo $view->Html->css('Expenses.expenses');
@@ -54,9 +59,12 @@ class ExpensesEvents implements EventListenerInterface
      * @param \ArrayObject $sidebar Sidebar object
      * @return void
      */
-    public function modifySidebar($event, $sidebar)
+    public function modifySidebar(Event $event, ArrayObject $sidebar): void
     {
-        $user = $event->getSubject()->getRequest()->getAttribute('identity');
+        /** @var \App\View\AppView $view */
+        $view = $event->getSubject();
+
+        $user = $view->getRequest()->getAttribute('identity');
 
         if ($user && $user->canUsePlugin('Expenses')) {
             ExpensesSidebar::setAdminSidebar($event, $sidebar);
@@ -70,8 +78,9 @@ class ExpensesEvents implements EventListenerInterface
      * @param \Lil\Lib\LilForm $form Form array
      * @return \Lil\Lib\LilForm
      */
-    public function modifyCountersForm(Event $event, $form)
+    public function modifyCountersForm(Event $event, LilForm $form): LilForm
     {
+        /** @var \App\View\AppView $view */
         $view = $event->getSubject();
         $expenseFieldset = [
             'fs_expense_start' => '<fieldset>',
@@ -104,11 +113,12 @@ class ExpensesEvents implements EventListenerInterface
      * Add payments table to Documents View action
      *
      * @param \Cake\Event\Event $event Event object
-     * @param \Lil\Lib\LilPanels $panels Panels array
-     * @return \Lil\Lib\LilPanels
+     * @param mixed $panels Panels array
+     * @return mixed
      */
-    public function modifyDocumentsView(Event $event, $panels)
+    public function modifyDocumentsView(Event $event, mixed $panels): mixed
     {
+        /** @var \App\View\AppView $view */
         $view = $event->getSubject();
 
         $invoice = $panels->entity;
@@ -152,24 +162,25 @@ class ExpensesEvents implements EventListenerInterface
      * Create Expense on DocumentsCounter "expense" field set to "expense" or "income"
      *
      * @param \Cake\Event\Event $event Event object
-     * @param \Documents\Model\Entity\Invoice|\Documents\Model\Entity\TravelOrder $entity Entity object
+     * @param \Cake\Datasource\EntityInterface $entity Entity object
      * @param \ArrayObject $options Options array
      * @return void
      */
-    public function createExpenseOnSave(Event $event, $entity, ArrayObject $options)
+    public function createExpenseOnSave(Event $event, EntityInterface $entity, ArrayObject $options): void
     {
         switch (get_class($event->getSubject())) {
-            case \Documents\Model\Table\InvoicesTable::class:
+            case InvoicesTable::class:
                 $modelName = 'Invoice';
                 break;
-            case \Documents\Model\Table\TravelOrdersTable::class:
+            case TravelOrdersTable::class:
                 $modelName = 'TravelOrder';
                 break;
             default:
                 return;
         }
 
-        if (get_class($event->getSubject()) == \Documents\Model\Table\InvoicesTable::class) {
+        if (get_class($event->getSubject()) == InvoicesTable::class) {
+            /** @var \Documents\Model\Entity\Invoice $entity */
             $counter = $event->getSubject()->DocumentsCounters->get($entity->counter_id);
 
             if (($counter->expense === 0) || ($counter->expense === 1)) {
