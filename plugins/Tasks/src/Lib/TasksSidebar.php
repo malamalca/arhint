@@ -41,7 +41,7 @@ class TasksSidebar
 
                 $q = $TasksTable->find();
                 $countByFolder = $q
-                    ->select(['id', 'folder_id', 'count' => $q->func()->count('*')])
+                    ->select(['folder_id', 'count' => $q->func()->count('*')])
                     ->andWhere($params['conditions'])
                     ->group('Tasks.folder_id')
                     ->all()
