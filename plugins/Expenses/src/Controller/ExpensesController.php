@@ -121,7 +121,9 @@ class ExpensesController extends AppController
             if ($this->Expenses->save($expense)) {
                 if (!empty($this->getRequest()->getData('auto_payment'))) {
                     // auto create payment
-                    $this->Expenses->Payments->save($this->Expenses->Payments->newEntity([
+                    $PaymentsTable = TableRegistry::getTableLocator()->get('Expenses.Payments');
+
+                    $payment = $PaymentsTable->newEntity([
                         'owner_id' => $this->getCurrentUser()->get('company_id'),
                         'account_id' => $this->getRequest()->getData('auto_payment'),
                         'dat_happened' => $expense->dat_happened,
@@ -129,7 +131,9 @@ class ExpensesController extends AppController
                         'amount' => $expense->total,
                         'sepa_id' => $this->getRequest()->getData('sepa_id'),
                         'expenses' => ['_ids' => [$expense->id]],
-                    ]));
+                    ]);
+
+                    $PaymentsTable->save($payment);
                 }
 
                 if ($this->getRequest()->is('ajax')) {
@@ -137,7 +141,6 @@ class ExpensesController extends AppController
                 }
 
                 //$this->Flash->success(__d('expenses', 'The expense has been saved.'));
-
                 //return $this->redirect(['action' => 'index']);
             } else {
                 $this->Flash->error(__d('expenses', 'The expense could not be saved. Please, try again.'));
