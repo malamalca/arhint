@@ -47,22 +47,6 @@ class PaymentsController extends AppController
     }
 
     /**
-     * View method
-     *
-     * @param string|null $id Payment id.
-     * @return void
-     * @throws \Cake\Http\Exception\NotFoundException When record not found.
-     */
-    public function view(?string $id = null)
-    {
-        $payment = $this->Payments->get($id, contain: ['Accounts', 'Expenses']);
-
-        $this->Authorization->authorize($payment);
-
-        $this->set('payment', $payment);
-    }
-
-    /**
      * Edit method
      *
      * @param string|null $id Payment id.

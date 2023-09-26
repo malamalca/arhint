@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace Expenses\Test\TestCase\Controller;
 
+use Cake\Datasource\Exception\RecordNotFoundException;
+use Cake\ORM\TableRegistry;
 use Cake\TestSuite\IntegrationTestTrait;
 use Cake\TestSuite\TestCase;
 
@@ -19,8 +21,21 @@ class PaymentsAccountsControllerTest extends TestCase
      * @var array
      */
     public array $fixtures = [
+        'app.Users',
         'plugin.Expenses.PaymentsAccounts',
     ];
+
+    /**
+     * Login method
+     *
+     * @var string $userId User id
+     * @return void
+     */
+    private function login($userId)
+    {
+        $user = TableRegistry::getTableLocator()->get('Users')->get($userId);
+        $this->session(['Auth' => $user]);
+    }
 
     /**
      * Test index method
@@ -29,27 +44,11 @@ class PaymentsAccountsControllerTest extends TestCase
      */
     public function testIndex()
     {
-        $this->markTestIncomplete('Not implemented yet.');
-    }
+        // Set session data
+        $this->login(USER_ADMIN);
 
-    /**
-     * Test view method
-     *
-     * @return void
-     */
-    public function testView()
-    {
-        $this->markTestIncomplete('Not implemented yet.');
-    }
-
-    /**
-     * Test add method
-     *
-     * @return void
-     */
-    public function testAdd()
-    {
-        $this->markTestIncomplete('Not implemented yet.');
+        $this->get('/expenses/paymentsAccounts/index');
+        $this->assertResponseOk();
     }
 
     /**
@@ -59,7 +58,28 @@ class PaymentsAccountsControllerTest extends TestCase
      */
     public function testEdit()
     {
-        $this->markTestIncomplete('Not implemented yet.');
+        // Set session data
+        $this->login(USER_ADMIN);
+
+        $this->get('/expenses/paymentsAccounts/edit/c7f20dee-74f1-40e5-a129-d46d6fb43153');
+        $this->assertResponseOk();
+
+        $this->get('/expenses/paymentsAccounts/edit');
+        $this->assertResponseOk();
+
+        $data = [
+            'id' => 'c7f20dee-74f1-40e5-a129-d46d6fb43153',
+            'owner_id' => COMPANY_FIRST,
+            'title' => 'New Bank Account',
+            'primary' => true,
+            'active' => true,
+        ];
+
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+
+        $this->post('/expenses/paymentsAccounts/edit/c7f20dee-74f1-40e5-a129-d46d6fb43153', $data);
+        $this->assertRedirect(['action' => 'index']);
     }
 
     /**
@@ -69,6 +89,14 @@ class PaymentsAccountsControllerTest extends TestCase
      */
     public function testDelete()
     {
-        $this->markTestIncomplete('Not implemented yet.');
+        // Set session data
+        $this->login(USER_ADMIN);
+
+        $this->get('/expenses/paymentsAccounts/delete/c7f20dee-74f1-40e5-a129-d46d6fb43153');
+        $this->assertRedirect(['action' => 'index']);
+
+        $this->disableErrorHandlerMiddleware();
+        $this->expectException(RecordNotFoundException::class);
+        TableRegistry::getTableLocator()->get('Expenses.PaymentsAccounts')->get('c7f20dee-74f1-40e5-a129-d46d6fb43153');
     }
 }

@@ -7,6 +7,7 @@ use App\Command\HeartBeatCommand;
 use Authentication\AuthenticationService;
 use Authentication\AuthenticationServiceInterface;
 use Authentication\AuthenticationServiceProviderInterface;
+use Authentication\Identifier\AbstractIdentifier;
 use Authentication\Middleware\AuthenticationMiddleware;
 use Authorization\AuthorizationService;
 use Authorization\AuthorizationServiceInterface;
@@ -49,7 +50,7 @@ class Application extends BaseApplication implements
     AuthenticationServiceProviderInterface,
     AuthorizationServiceProviderInterface
 {
-    public const REMEMBERME_COOKIE_NAME = 'Arhint';
+    public const REMEMBERME_COOKIE_NAME = 'ARHINT';
 
     /**
      * Load all the application configuration and bootstrap logic.
@@ -188,8 +189,8 @@ class Application extends BaseApplication implements
         ]);
 
         $fields = [
-            'username' => 'username',
-            'password' => 'passwd',
+            AbstractIdentifier::CREDENTIAL_USERNAME => 'username',
+            AbstractIdentifier::CREDENTIAL_PASSWORD => 'passwd',
         ];
 
         // Load identifiers

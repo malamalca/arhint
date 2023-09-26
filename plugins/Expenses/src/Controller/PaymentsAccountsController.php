@@ -36,21 +36,6 @@ class PaymentsAccountsController extends AppController
     }
 
     /**
-     * View method
-     *
-     * @param string|null $id Payments Account id.
-     * @return void
-     * @throws \Cake\Http\Exception\NotFoundException When record not found.
-     */
-    public function view(?string $id = null)
-    {
-        $paymentsAccount = $this->PaymentsAccounts->get($id);
-        $this->Authorization->authorize($paymentsAccount);
-
-        $this->set('account', $paymentsAccount);
-    }
-
-    /**
      * Edit method
      *
      * @param string|null $id Payments Account id.
