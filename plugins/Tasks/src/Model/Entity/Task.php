@@ -10,12 +10,11 @@ use Cake\ORM\Entity;
  *
  * @property string $id
  * @property string $owner_id
+ * @property string $folder_id
  * @property string $user_id
  * @property string $tasker_id
- * @property \Tasks\Model\Entity\Owner $owner
  * @property string $model
  * @property string $foreign_id
- * @property \Tasks\Model\Entity\Foreign $foreign
  * @property string $title
  * @property string $descript
  * @property \Cake\I18n\DateTime|null $started

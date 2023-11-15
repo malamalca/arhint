@@ -3,15 +3,17 @@ declare(strict_types=1);
 
 namespace Tasks\Model\Table;
 
+use ArrayObject;
+use Cake\Event\Event;
 use Cake\I18n\DateTime;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
+use Tasks\Model\Entity\Task;
 
 /**
  * Tasks Model
  *
- * @property \Cake\ORM\Association\BelongsTo $Owners
- * @property \Cake\ORM\Association\BelongsTo $Foreigns
+ * @property \Tasks\Model\Table\TasksFoldersTable|\Cake\ORM\Association\BelongsTo $TasksFolders
  * @method \Tasks\Model\Entity\Task get(mixed $primaryKey, array|string $finder = 'all', \Psr\SimpleCache\CacheInterface|string|null $cache = null, \Closure|string|null $cacheKey = null, mixed ...$args)
  * @method \Tasks\Model\Entity\Task newEntity($data = null, array $options = [])
  * @method \Tasks\Model\Entity\Task newEmptyEntity(array $options = [])
@@ -76,6 +78,21 @@ class TasksTable extends Table
             ->allowEmptyString('completed');
 
         return $validator;
+    }
+
+    /**
+     * afterSave method
+     *
+     * @param \Cake\Event\Event $event Event object.
+     * @param \Tasks\Model\Entity\Task $task Entity object.
+     * @param \ArrayObject $options Array object.
+     * @return void
+     */
+    public function afterSave(Event $event, Task $task, ArrayObject $options): void
+    {
+        $folder = $this->TasksFolders->get($task->folder_id);
+        $folder->setDirty('title');
+        $this->TasksFolders->save($folder);
     }
 
     /**
