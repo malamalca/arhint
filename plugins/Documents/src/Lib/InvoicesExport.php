@@ -137,6 +137,7 @@ class InvoicesExport
                             } else {
                                 $templateBody = $this->_autop($templateBody);
                             }
+
                             $pdf->setHeaderHtml($templateBody);
                         }
                         if (!empty($invoice->tpl_footer)) {
