@@ -23,7 +23,7 @@ set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__DIR__) . '/vend
 require dirname(__DIR__) . '/vendor/autoload.php';
 require dirname(__DIR__) . '/config/bootstrap.php';
 
-$Hasher = PasswordHasherFactory::build(['className' => 'Default', 'hashType' => PASSWORD_BCRYPT, 'hashOptions' => ['salt' => Security::getSalt()]]);
+$Hasher = PasswordHasherFactory::build(['className' => 'Authentication\PasswordHasher\DefaultPasswordHasher', 'hashType' => PASSWORD_BCRYPT, 'hashOptions' => ['salt' => Security::getSalt()]]);
 
 $Users = TableRegistry::getTableLocator()->get('Users');
 $user = $Users->find()
