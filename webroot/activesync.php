@@ -3,7 +3,7 @@
  * Activesync server file
  */
 
-use Cake\Auth\PasswordHasherFactory;
+use Authentication\PasswordHasher\PasswordHasherFactory;
 use Cake\Core\Configure;
 use Cake\Datasource\ConnectionManager;
 use Cake\ORM\TableRegistry;
