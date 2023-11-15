@@ -15,8 +15,8 @@ html, body {
 }
 
 *, #print-area *, #header, #footer {
-    font-family:  "Garamond", Helvetica, sans-serif;
-    font-size: 11pt;
+    font-family:  "EB Garamond", Helvetica, sans-serif;
+    font-size: 12pt;
     letter-spacing: normal;
 }
 
