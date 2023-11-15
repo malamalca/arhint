@@ -86,10 +86,10 @@ class ActiveSyncTasks implements Syncroton_Data_IData
      * Returns Syncroton_Model_Task from Tasks\Task entity.
      *
      * @param \Syncroton_Model_SyncCollection $collection Task entry.
-     * @param mixed $serverId Task Server id.
+     * @param string $serverId Task Server id.
      * @return \Syncroton_Model_Task|bool
      */
-    public function getEntry(Syncroton_Model_SyncCollection $collection, mixed $serverId): bool|Syncroton_Model_Task
+    public function getEntry(Syncroton_Model_SyncCollection $collection, $serverId): bool|Syncroton_Model_Task
     {
         /** @var \Tasks\Model\Table\TasksTable $Tasks */
         $Tasks = TableRegistry::getTableLocator()->get('Tasks.Tasks');
@@ -112,7 +112,7 @@ class ActiveSyncTasks implements Syncroton_Data_IData
 
         if (!empty($task->completed)) {
             $entry->complete = 1;
-            $entry->dateCompleted = new DateTime($task->completed->toDateTimeString()) ?? '';
+            $entry->dateCompleted = new DateTime($task->completed->setTimezone('UTC')->toDateTimeString()) ?? '';
         } else {
             $entry->complete = 0;
         }
@@ -124,7 +124,7 @@ class ActiveSyncTasks implements Syncroton_Data_IData
      * Creates Tasks\Task entity from Syncroton_Model_Task
      *
      * @see \Syncroton_Data_IData::createEntry()
-     * @param string $_folderId Folder id.
+     * @param mixed $_folderId Folder id.
      * @param \Syncroton_Model_IEntry $_entry Entry
      * @return string Tasks\Task entity id
      */
@@ -162,8 +162,8 @@ class ActiveSyncTasks implements Syncroton_Data_IData
      * Update Tasks\Task entity from Syncroton_Model_Task
      *
      * @see \Syncroton_Data_IData::updateEntry()
-     * @param string $_folderId Folder id
-     * @param string $_serverId Server id
+     * @param mixed $_folderId Folder id
+     * @param mixed $_serverId Server id
      * @param \Syncroton_Model_IEntry $_entry Entry
      * @return string|bool
      */
@@ -211,10 +211,10 @@ class ActiveSyncTasks implements Syncroton_Data_IData
      * @see \Syncroton_Data_IData::deleteEntry()
      * @param string $_folderId Folder id
      * @param string $_serverId Server id
-     * @param mixed $_collectionData Collection data
+     * @param unknown_type $_collectionData Collection data
      * @return bool
      */
-    public function deleteEntry($_folderId, $_serverId, mixed $_collectionData): bool
+    public function deleteEntry($_folderId, $_serverId, $_collectionData): bool
     {
         $Tasks = TableRegistry::getTableLocator()->get('Tasks.Tasks');
         $task = $Tasks->get($_serverId);
@@ -419,8 +419,8 @@ class ActiveSyncTasks implements Syncroton_Data_IData
     /**
      * getServerEntries
      *
-     * @param \Syncroton_Model_IFolder|string  $_folderId Folder id.
-     * @param string                          $_filter Filter string.
+     * @param mixed $_folderId Folder id.
+     * @param mixed $_filter Filter string.
      * @return array
      */
     public function getServerEntries($_folderId, $_filter): array
@@ -445,10 +445,10 @@ class ActiveSyncTasks implements Syncroton_Data_IData
      * getChangedEntries
      *
      * @see \Syncroton_Data_IData::getChangedEntries()
-     * @param string $_folderId Folder id
+     * @param mixed $_folderId Folder id
      * @param \DateTime $_startTimeStamp Start datetime
      * @param \DateTime|null $_endTimeStamp End datetime
-     * @param string|null $filterType Filter type
+     * @param mixed $filterType Filter type
      * @return array
      */
     public function getChangedEntries(
@@ -514,11 +514,11 @@ class ActiveSyncTasks implements Syncroton_Data_IData
      * getFileReference
      *
      * @see \Syncroton_Data_IData::getFileReference()
-     * @param mixed $fileReference File reference
+     * @param unknown_type $fileReference File reference
      * @return \Syncroton_Model_FileReference
      * @throw \Syncroton_Exception_NotFound
      */
-    public function getFileReference(mixed $fileReference): Syncroton_Model_FileReference
+    public function getFileReference($fileReference): Syncroton_Model_FileReference
     {
         throw new Syncroton_Exception_NotFound('filereference not found');
     }
