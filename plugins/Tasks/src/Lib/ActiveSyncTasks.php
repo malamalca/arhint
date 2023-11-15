@@ -128,7 +128,7 @@ class ActiveSyncTasks implements Syncroton_Data_IData
      * @param \Syncroton_Model_IEntry $_entry Entry
      * @return string Tasks\Task entity id
      */
-    public function createEntry(string $_folderId, Syncroton_Model_IEntry $_entry): string
+    public function createEntry($_folderId, Syncroton_Model_IEntry $_entry): string
     {
         $folderId = $_folderId instanceof Syncroton_Model_IFolder ? $_folderId->serverId : $_folderId;
 
@@ -167,7 +167,7 @@ class ActiveSyncTasks implements Syncroton_Data_IData
      * @param \Syncroton_Model_IEntry $_entry Entry
      * @return string|bool
      */
-    public function updateEntry(string $_folderId, string $_serverId, Syncroton_Model_IEntry $_entry): bool|string
+    public function updateEntry($_folderId, $_serverId, Syncroton_Model_IEntry $_entry): bool|string
     {
         $folderId = $_folderId instanceof Syncroton_Model_IFolder ? $_folderId->serverId : $_folderId;
 
@@ -214,7 +214,7 @@ class ActiveSyncTasks implements Syncroton_Data_IData
      * @param mixed $_collectionData Collection data
      * @return bool
      */
-    public function deleteEntry(string $_folderId, string $_serverId, mixed $_collectionData): bool
+    public function deleteEntry($_folderId, $_serverId, mixed $_collectionData): bool
     {
         $Tasks = TableRegistry::getTableLocator()->get('Tasks.Tasks');
         $task = $Tasks->get($_serverId);
@@ -314,7 +314,7 @@ class ActiveSyncTasks implements Syncroton_Data_IData
      * @param string $_folderId Folder id.
      * @return bool
      */
-    public function deleteFolder(string $_folderId): bool
+    public function deleteFolder($_folderId): bool
     {
         $folderId = $_folderId instanceof Syncroton_Model_IFolder ? $_folderId->serverId : $_folderId;
 
@@ -337,7 +337,7 @@ class ActiveSyncTasks implements Syncroton_Data_IData
      * @param array $options Options
      * @return bool
      */
-    public function emptyFolderContents(string $folderId, array $options): bool
+    public function emptyFolderContents($folderId, $options): bool
     {
         // TODO
         return true;
@@ -423,7 +423,7 @@ class ActiveSyncTasks implements Syncroton_Data_IData
      * @param string                          $_filter Filter string.
      * @return array
      */
-    public function getServerEntries(Syncroton_Model_IFolder|string $_folderId, string $_filter): array
+    public function getServerEntries($_folderId, $_filter): array
     {
         $folderId = $_folderId instanceof Syncroton_Model_IFolder ? $_folderId->id : $_folderId;
 
@@ -452,10 +452,10 @@ class ActiveSyncTasks implements Syncroton_Data_IData
      * @return array
      */
     public function getChangedEntries(
-        string $_folderId,
+        $_folderId,
         DateTime $_startTimeStamp,
         ?DateTime $_endTimeStamp = null,
-        ?string $filterType = null
+        $filterType = null
     ): array {
         $folderId = $_folderId instanceof Syncroton_Model_IFolder ? $_folderId->id : $_folderId;
 
@@ -548,7 +548,7 @@ class ActiveSyncTasks implements Syncroton_Data_IData
      * @param string $_dstFolderId Destination folder id
      * @return string
      */
-    public function moveItem(string $_srcFolderId, string $_serverId, string $_dstFolderId): string
+    public function moveItem($_srcFolderId, $_serverId, $_dstFolderId): string
     {
         // TODO
         return $_serverId;
