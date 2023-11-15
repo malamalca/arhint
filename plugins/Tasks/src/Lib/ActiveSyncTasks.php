@@ -112,7 +112,7 @@ class ActiveSyncTasks implements Syncroton_Data_IData
 
         if (!empty($task->completed)) {
             $entry->complete = 1;
-            $entry->dateCompleted = $task->completed ?? '';
+            $entry->dateCompleted = $task->completed->toDateTimeString() ?? '';
         } else {
             $entry->complete = 0;
         }
