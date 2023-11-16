@@ -112,7 +112,7 @@ $editForm = [
             'ico' => [
                 'method' => 'control',
                 'parameters' => [
-                    'ico',
+                    'ico_file',
                     [
                         'type' => 'file',
                         //'label' => __d('projects', 'Icon') . ':',

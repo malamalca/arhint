@@ -179,11 +179,11 @@ class ProjectsController extends AppController
         if ($this->getRequest()->is(['patch', 'post', 'put'])) {
             $project = $this->Projects->patchEntity($project, $this->getRequest()->getData());
 
-            $icoFile = $this->getRequest()->getData('ico');
+            $icoFile = $this->getRequest()->getData('ico_file');
             if ($icoFile) {
                 if ($icoFile->getError() == UPLOAD_ERR_OK) {
                     $icoContents = (string)$icoFile->getStream()->getMetadata('uri');
-                    $project->ico = base64_encode($icoContents);
+                    $project->ico = base64_encode(file_get_contents($icoContents));
                 }
                 if ($icoFile->getError() == UPLOAD_ERR_NO_FILE) {
                     unset($project->ico);
