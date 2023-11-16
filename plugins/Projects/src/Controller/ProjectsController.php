@@ -183,7 +183,7 @@ class ProjectsController extends AppController
             if ($icoFile) {
                 if ($icoFile->getError() == UPLOAD_ERR_OK) {
                     $icoContents = (string)$icoFile->getStream()->getMetadata('uri');
-                    $project->ico = base64_encode(file_get_contents($icoContents));
+                    $project->ico = base64_encode((string)file_get_contents($icoContents));
                 }
                 if ($icoFile->getError() == UPLOAD_ERR_NO_FILE) {
                     unset($project->ico);
