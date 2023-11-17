@@ -77,7 +77,7 @@ class TasksUtils
             if ($task->user_id != $view->getCurrentUser()->id) {
                 $usersDescript = __d('tasks', '"{0}" to Me', h($users[$task->user_id]->name ?? ''));
             } else {
-                $usersDescript = __d('tasks', 'For myself', h($users[$task->user_id]->name ?? ''));
+                $usersDescript = __d('tasks', 'For myself');
             }
 
             if ($task->tasker_id != $view->getCurrentUser()->id) {

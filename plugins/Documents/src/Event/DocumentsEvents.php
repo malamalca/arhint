@@ -118,7 +118,7 @@ class DocumentsEvents implements EventListenerInterface
 
             foreach ($newDocuments as $document) {
                 $panels['panels']['documents']['lines'][] = sprintf(
-                    '<div style="clear: both; height: 50px;">' .
+                    '<div style="clear: both; height: 46px; margin-bottom: 10px; overflow: hidden;">' .
                         '<span style="display: block; width: 80px; float: left;">%5$s</span> ' .
                         '<div class="project small light">%3$s</div>' .
                         '<a href="%4$s"><span class="title big">%1$s</span></a> %2$s</div>',
