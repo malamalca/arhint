@@ -221,7 +221,7 @@ div.helper-text {
     margin-top: -20px;
 }
 
-.autocomplete-content {
+.autocomplete-content, .dropdown-content {
     width: auto !important;
 }
 
@@ -258,9 +258,8 @@ input {
 
 #dropdown-users {
     width: 250px !important;
-    min-height: 300px;
+    min-height: 150px;
     max-height: 600px;
-    padding-top: 50px;
 
     #searchbox {
         display: block;

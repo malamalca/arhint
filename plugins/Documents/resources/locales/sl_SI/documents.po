@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Documents 3.0\n"
-"POT-Creation-Date: 2022-09-07 10:56+0000\n"
-"PO-Revision-Date: 2022-09-07 12:59+0200\n"
+"POT-Creation-Date: 2023-11-17 10:57+0000\n"
+"PO-Revision-Date: 2023-11-17 11:59+0100\n"
 "Last-Translator: ARHIM d.o.o. <info@arhim.si>\n"
 "Language-Team: \n"
 "Language: sl_SI\n"
@@ -16,156 +16,156 @@ msgstr ""
 "%100==4 ? 2 : 3);\n"
 "X-Generator: Poedit 3.0.1\n"
 
-#: plugins/Documents/src/Controller/BaseDocumentsController.php:85
+#: plugins/Documents/src/Controller/BaseDocumentsController.php:83
 msgid "No counters found. Please activate or add a new one."
 msgstr ""
 "Ni še vpisanega števca dokumentov. Vpišite nov števec ali reaktivirajte "
 "obstoječega."
 
-#: plugins/Documents/src/Controller/BaseDocumentsController.php:211
-#: plugins/Documents/src/Controller/BaseDocumentsController.php:372
+#: plugins/Documents/src/Controller/BaseDocumentsController.php:208
+#: plugins/Documents/src/Controller/BaseDocumentsController.php:364
 msgid "The document has been saved."
 msgstr "Dokument je shranjen."
 
-#: plugins/Documents/src/Controller/BaseDocumentsController.php:231
+#: plugins/Documents/src/Controller/BaseDocumentsController.php:230
 msgid "The document could not be saved. Please, try again."
 msgstr "Napaka v vpisanih podatkih. Preverite polja in poizkusite ponovno."
 
-#: plugins/Documents/src/Controller/BaseDocumentsController.php:259
+#: plugins/Documents/src/Controller/BaseDocumentsController.php:253
 msgid "The invoice has been deleted."
 msgstr "Račun je izbrisan."
 
-#: plugins/Documents/src/Controller/BaseDocumentsController.php:261
+#: plugins/Documents/src/Controller/BaseDocumentsController.php:255
 msgid "The invoice could not be deleted. Please, try again."
 msgstr "Napaka pri brisanju. Preverite povezavo in poizkusite ponovno."
 
-#: plugins/Documents/src/Controller/BaseDocumentsController.php:307
+#: plugins/Documents/src/Controller/BaseDocumentsController.php:301
 msgid "The document has been signed."
 msgstr "Dokument je podpisan."
 
-#: plugins/Documents/src/Controller/BaseDocumentsController.php:316
+#: plugins/Documents/src/Controller/BaseDocumentsController.php:310
 msgid "Signing document failed. Please, try again."
 msgstr "Podpisovanje je spodletelo. Preverite polja in poizkusite ponovno."
 
-#: plugins/Documents/src/Controller/BaseDocumentsController.php:397
+#: plugins/Documents/src/Controller/BaseDocumentsController.php:389
 msgid "The document(s) has been sent."
 msgstr "Dokument je bil poslan."
 
-#: plugins/Documents/src/Controller/BaseDocumentsController.php:401
+#: plugins/Documents/src/Controller/BaseDocumentsController.php:393
 msgid "Please correct all marked fields below."
 msgstr "Vpisani so napačni podatki. Popravite označena polja."
 
-#: plugins/Documents/src/Controller/BaseDocumentsController.php:480
+#: plugins/Documents/src/Controller/BaseDocumentsController.php:470
 msgid "Error exporting to specified format."
 msgstr "Napaka pri izvozu v izbrani format."
 
-#: plugins/Documents/src/Controller/BaseDocumentsController.php:536
-#: plugins/Documents/src/Event/DocumentsEvents.php:42
-#: plugins/Documents/src/Event/DocumentsEvents.php:79
-#: plugins/Documents/src/Lib/DocumentsSidebar.php:34
-#: plugins/Documents/src/Lib/DocumentsSidebar.php:75
+#: plugins/Documents/src/Controller/BaseDocumentsController.php:519
+#: plugins/Documents/src/Event/DocumentsEvents.php:153
+#: plugins/Documents/src/Event/DocumentsEvents.php:191
+#: plugins/Documents/src/Lib/DocumentsSidebar.php:49
+#: plugins/Documents/src/Lib/DocumentsSidebar.php:97
 #: plugins/Documents/templates/DocumentsCounters/edit.php:47
 #: plugins/Documents/templates/Documents/aht/list.php:15
 msgid "Documents"
 msgstr "Dokumenti"
 
-#: plugins/Documents/src/Controller/BaseDocumentsController.php:603
+#: plugins/Documents/src/Controller/BaseDocumentsController.php:584
 msgid "Invalid request."
 msgstr "Napaka pri zahtevi."
 
-#: plugins/Documents/src/Controller/DocumentsAttachmentsController.php:78
+#: plugins/Documents/src/Controller/DocumentsAttachmentsController.php:79
 msgid "No Attachments Found."
 msgstr "Ni priponk."
 
-#: plugins/Documents/src/Controller/DocumentsAttachmentsController.php:163
+#: plugins/Documents/src/Controller/DocumentsAttachmentsController.php:167
 msgid "The documents attachment has been saved."
 msgstr "Priponka je shranjena."
 
-#: plugins/Documents/src/Controller/DocumentsAttachmentsController.php:167
+#: plugins/Documents/src/Controller/DocumentsAttachmentsController.php:171
 msgid "The attachment could not be saved. Please, try again."
 msgstr "Napaka v vpisanih podatkih. Preverite polja in poizkusite ponovno."
 
-#: plugins/Documents/src/Controller/DocumentsAttachmentsController.php:190
+#: plugins/Documents/src/Controller/DocumentsAttachmentsController.php:194
 msgid "The documents attachment has been deleted."
 msgstr "Priponka je izbrisana."
 
-#: plugins/Documents/src/Controller/DocumentsAttachmentsController.php:192
+#: plugins/Documents/src/Controller/DocumentsAttachmentsController.php:196
 msgid "The attachment could not be deleted. Please, try again."
 msgstr "Napaka pri brisanju. Preverite povezavo in poizkusite ponovno."
 
-#: plugins/Documents/src/Controller/DocumentsClientsController.php:30
+#: plugins/Documents/src/Controller/DocumentsClientsController.php:32
 msgid "The client has been saved."
 msgstr "Klient je stranjen."
 
-#: plugins/Documents/src/Controller/DocumentsClientsController.php:34
+#: plugins/Documents/src/Controller/DocumentsClientsController.php:36
 msgid "The client could not be saved. Please, try again."
 msgstr "Napaka v vpisanih podatkih. Preverite polja in poizkusite ponovno."
 
-#: plugins/Documents/src/Controller/DocumentsCountersController.php:65
+#: plugins/Documents/src/Controller/DocumentsCountersController.php:64
 msgid "The documents counter has been saved."
 msgstr "Števec dokumentov je shranjen."
 
-#: plugins/Documents/src/Controller/DocumentsCountersController.php:72
+#: plugins/Documents/src/Controller/DocumentsCountersController.php:71
 msgid "The documents counter could not be saved. Please, try again."
 msgstr "Napaka v vpisanih podatkih. Preverite polja in poizkusite ponovno."
 
-#: plugins/Documents/src/Controller/DocumentsCountersController.php:96
+#: plugins/Documents/src/Controller/DocumentsCountersController.php:95
 msgid "The documents counter has been deleted."
 msgstr "Števec dokumentov je izbrisan."
 
-#: plugins/Documents/src/Controller/DocumentsCountersController.php:100
+#: plugins/Documents/src/Controller/DocumentsCountersController.php:99
 msgid "The documents counter could not be deleted. Please, try again."
 msgstr "Napaka pri brisanju. Preverite povezavo in poizkusite ponovno."
 
-#: plugins/Documents/src/Controller/DocumentsLinksController.php:55
+#: plugins/Documents/src/Controller/DocumentsLinksController.php:51
 msgid "Documents have been successfully linked."
 msgstr "Povezava dokumentov je shranjena."
 
-#: plugins/Documents/src/Controller/DocumentsLinksController.php:61
+#: plugins/Documents/src/Controller/DocumentsLinksController.php:57
 msgid "The link could not be established. Please, try again."
 msgstr "Povezave ne mogoče vzpostaviti. Preverite polja in poizkusite ponovno."
 
-#: plugins/Documents/src/Controller/DocumentsLinksController.php:82
+#: plugins/Documents/src/Controller/DocumentsLinksController.php:78
 msgid "The documents link has been deleted."
 msgstr "Povezava je bila izbrisana."
 
-#: plugins/Documents/src/Controller/DocumentsLinksController.php:84
+#: plugins/Documents/src/Controller/DocumentsLinksController.php:80
 msgid "The documents link could not be deleted. Please, try again."
 msgstr "Napaka pri brisanju. Preverite povezavo in poizkusite ponovno."
 
-#: plugins/Documents/src/Controller/DocumentsTemplatesController.php:55
+#: plugins/Documents/src/Controller/DocumentsTemplatesController.php:57
 msgid "The documents template has been saved."
 msgstr "Podloga dokumenta je shranjena."
 
-#: plugins/Documents/src/Controller/DocumentsTemplatesController.php:59
+#: plugins/Documents/src/Controller/DocumentsTemplatesController.php:61
 msgid "The template could not be saved. Please, try again."
 msgstr "Predloga ni shranjena. Preverite polja in poizkusite ponovno."
 
-#: plugins/Documents/src/Controller/DocumentsTemplatesController.php:83
+#: plugins/Documents/src/Controller/DocumentsTemplatesController.php:85
 msgid "The documents template has been deleted."
 msgstr "Podloga je bila izbrisana."
 
-#: plugins/Documents/src/Controller/DocumentsTemplatesController.php:85
+#: plugins/Documents/src/Controller/DocumentsTemplatesController.php:87
 msgid "The documents template could not be deleted. Please, try again."
 msgstr "Napaka pri brisanju. Preverite povezavo in poizkusite ponovno."
 
-#: plugins/Documents/src/Controller/ItemsController.php:51
+#: plugins/Documents/src/Controller/ItemsController.php:52
 msgid "The item has been saved."
 msgstr "Artikel je stranjen."
 
-#: plugins/Documents/src/Controller/ItemsController.php:55
+#: plugins/Documents/src/Controller/ItemsController.php:56
 msgid "The item could not be saved. Please, try again."
 msgstr "Napaka v vpisanih podatkih. Preverite polja in poizkusite ponovno."
 
-#: plugins/Documents/src/Controller/ItemsController.php:83
+#: plugins/Documents/src/Controller/ItemsController.php:86
 msgid "The item has been deleted."
 msgstr "Artikel je izbrisan."
 
-#: plugins/Documents/src/Controller/ItemsController.php:85
+#: plugins/Documents/src/Controller/ItemsController.php:88
 msgid "The item could not be deleted. Please, try again."
 msgstr "Napaka pri brisanju. Preverite povezavo in poizkusite ponovno."
 
-#: plugins/Documents/src/Controller/ItemsController.php:118
+#: plugins/Documents/src/Controller/ItemsController.php:121
 msgid "Invalid ajax call."
 msgstr "Napaka v ajax klicu."
 
@@ -185,61 +185,69 @@ msgstr "Davčna stopnja je izbrisana."
 msgid "The vat could not be deleted. Please, try again."
 msgstr "Napaka pri brisanju. Preverite povezavo in poizkusite ponovno."
 
-#: plugins/Documents/src/Controller/VehiclesController.php:49
+#: plugins/Documents/src/Controller/VehiclesController.php:51
 msgid "The vehicles has been saved."
 msgstr "Vozilo je stranjene."
 
-#: plugins/Documents/src/Controller/VehiclesController.php:53
+#: plugins/Documents/src/Controller/VehiclesController.php:55
 msgid "The vehicles could not be saved. Please, try again."
 msgstr "Napaka v vpisanih podatkih. Preverite polja in poizkusite ponovno."
 
-#: plugins/Documents/src/Controller/VehiclesController.php:73
+#: plugins/Documents/src/Controller/VehiclesController.php:77
 msgid "The vehicle has been deleted."
 msgstr "Vozilo je izbrisano."
 
-#: plugins/Documents/src/Controller/VehiclesController.php:75
+#: plugins/Documents/src/Controller/VehiclesController.php:79
 msgid "The vehicle could not be deleted. Please, try again."
 msgstr "Napaka pri brisanju. Preverite povezavo in poizkusite ponovno."
 
-#: plugins/Documents/src/Event/DocumentsEvents.php:72
-#: plugins/Documents/src/Lib/DocumentsSidebar.php:81
+#: plugins/Documents/src/Event/DocumentsEvents.php:60
+msgid "New Documents In Last Hour"
+msgstr "Novi dokumenti v zadnji uri"
+
+#: plugins/Documents/src/Event/DocumentsEvents.php:112
+msgid "Last 6 documents"
+msgstr "Zadnjih 6 dokumentov"
+
+#: plugins/Documents/src/Event/DocumentsEvents.php:184
+#: plugins/Documents/src/Lib/DocumentsSidebar.php:103
 #: plugins/Documents/templates/DocumentsCounters/edit.php:48
 #: plugins/Documents/templates/Invoices/aht/list.php:15
 #: plugins/Documents/templates/element/invoices_list.php:18
 msgid "Invoices"
 msgstr "Računi"
 
-#: plugins/Documents/src/Lib/DocumentsSidebar.php:50
+#: plugins/Documents/src/Lib/DocumentsSidebar.php:72
 msgid "Reports"
 msgstr "Izpisi"
 
-#: plugins/Documents/src/Lib/DocumentsSidebar.php:60
+#: plugins/Documents/src/Lib/DocumentsSidebar.php:82
 msgid "List"
 msgstr "Seznam"
 
-#: plugins/Documents/src/Lib/DocumentsSidebar.php:87
+#: plugins/Documents/src/Lib/DocumentsSidebar.php:109
 #: plugins/Documents/templates/DocumentsCounters/edit.php:49
 msgid "Travel Orders"
 msgstr "Potni nalogi"
 
-#: plugins/Documents/src/Lib/DocumentsSidebar.php:99
+#: plugins/Documents/src/Lib/DocumentsSidebar.php:121
 msgid "Lookups"
 msgstr "Šifranti"
 
-#: plugins/Documents/src/Lib/DocumentsSidebar.php:122
+#: plugins/Documents/src/Lib/DocumentsSidebar.php:144
 #: plugins/Documents/templates/Items/index.php:4
 msgid "Items"
 msgstr "Artikli"
 
-#: plugins/Documents/src/Lib/DocumentsSidebar.php:132
+#: plugins/Documents/src/Lib/DocumentsSidebar.php:154
 msgid "Counters"
 msgstr "Števci"
 
-#: plugins/Documents/src/Lib/DocumentsSidebar.php:142
+#: plugins/Documents/src/Lib/DocumentsSidebar.php:164
 msgid "VAT levels"
 msgstr "Davčne stopnje"
 
-#: plugins/Documents/src/Lib/DocumentsSidebar.php:153
+#: plugins/Documents/src/Lib/DocumentsSidebar.php:175
 #: plugins/Documents/templates/DocumentsCounters/edit.php:121
 #: plugins/Documents/templates/DocumentsTemplates/index.php:4
 #: plugins/Documents/templates/Documents/view.php:142
@@ -248,7 +256,7 @@ msgstr "Davčne stopnje"
 msgid "Templates"
 msgstr "Predloge dokumenta"
 
-#: plugins/Documents/src/Lib/DocumentsSidebar.php:164
+#: plugins/Documents/src/Lib/DocumentsSidebar.php:186
 #: plugins/Documents/templates/Vehicles/index.php:4
 msgid "Vehicles"
 msgstr "Vozila"
@@ -315,7 +323,7 @@ msgstr "Urejanje klienta"
 #: plugins/Documents/templates/Documents/index.php:97
 #: plugins/Documents/templates/Documents/view.php:184
 #: plugins/Documents/templates/Invoices/edit.php:117
-#: plugins/Documents/templates/Invoices/index.php:94
+#: plugins/Documents/templates/Invoices/index.php:95
 #: plugins/Documents/templates/Invoices/view.php:218
 #: plugins/Documents/templates/TravelOrders/view.php:145
 #: plugins/Documents/templates/Vehicles/edit.php:31
@@ -426,7 +434,7 @@ msgid "Direction"
 msgstr "Navodila"
 
 #: plugins/Documents/templates/DocumentsCounters/edit.php:66
-#: plugins/Documents/templates/Invoices/index.php:90
+#: plugins/Documents/templates/Invoices/index.php:91
 #: plugins/Documents/templates/report/Invoices/index.php:24
 msgid "Issued"
 msgstr "Izdano"
@@ -494,7 +502,7 @@ msgstr "brez"
 #: plugins/Documents/templates/DocumentsCounters/edit.php:184
 #: plugins/Documents/templates/DocumentsTemplates/edit.php:48
 #: plugins/Documents/templates/DocumentsTemplates/edit.php:59
-#: plugins/Documents/templates/Documents/email.php:69
+#: plugins/Documents/templates/Documents/email.php:70
 #: plugins/Documents/templates/Invoices/email.php:69
 msgid "Body"
 msgstr "Besedilo"
@@ -532,7 +540,7 @@ msgstr "{0} števci tipa: {1}"
 #: plugins/Documents/templates/DocumentsCounters/index.php:43
 #: plugins/Documents/templates/DocumentsTemplates/index.php:7
 #: plugins/Documents/templates/Documents/index.php:59
-#: plugins/Documents/templates/Invoices/index.php:57
+#: plugins/Documents/templates/Invoices/index.php:58
 #: plugins/Documents/templates/Items/index.php:7
 #: plugins/Documents/templates/TravelOrders/index.php:56
 #: plugins/Documents/templates/Vats/index.php:7
@@ -684,7 +692,6 @@ msgid "Blank"
 msgstr "Vpišite podatek"
 
 #: plugins/Documents/templates/Documents/edit.php:193
-#: plugins/Documents/templates/Documents/view.php:311
 #: plugins/Documents/templates/Invoices/edit.php:202
 #: plugins/Documents/templates/Invoices/view.php:378
 #: plugins/Documents/templates/Invoices/view.php:462
@@ -731,22 +738,22 @@ msgstr "Pošlji dokument"
 msgid "To"
 msgstr "Za"
 
-#: plugins/Documents/templates/Documents/email.php:37
+#: plugins/Documents/templates/Documents/email.php:38
 #: plugins/Documents/templates/Invoices/email.php:37
 msgid "CC"
 msgstr "Kp"
 
-#: plugins/Documents/templates/Documents/email.php:48
+#: plugins/Documents/templates/Documents/email.php:49
 #: plugins/Documents/templates/Invoices/email.php:48
 msgid "Send CC to me ({0})"
 msgstr "Pošlji mi kopijo ({0})"
 
-#: plugins/Documents/templates/Documents/email.php:58
+#: plugins/Documents/templates/Documents/email.php:59
 #: plugins/Documents/templates/Invoices/email.php:58
 msgid "Subject"
 msgstr "Zadeva"
 
-#: plugins/Documents/templates/Documents/email.php:77
+#: plugins/Documents/templates/Documents/email.php:78
 #: plugins/Documents/templates/Documents/view.php:101
 #: plugins/Documents/templates/Invoices/email.php:77
 #: plugins/Documents/templates/Invoices/view.php:103
@@ -754,7 +761,7 @@ msgstr "Zadeva"
 msgid "Send"
 msgstr "Pošlji"
 
-#: plugins/Documents/templates/Documents/email.php:91
+#: plugins/Documents/templates/Documents/email.php:92
 #: plugins/Documents/templates/Documents/view.php:230
 #: plugins/Documents/templates/Invoices/email.php:91
 #: plugins/Documents/templates/Invoices/view.php:508
@@ -763,14 +770,14 @@ msgid "Attachments"
 msgstr "Priponke"
 
 #: plugins/Documents/templates/Documents/index.php:38
-#: plugins/Documents/templates/Invoices/index.php:36
+#: plugins/Documents/templates/Invoices/index.php:37
 #: plugins/Documents/templates/TravelOrders/index.php:35
 msgid "\"{2}\" from {0} to {1}"
 msgstr "\"{2}\" od {0} do {1}"
 
 #: plugins/Documents/templates/Documents/index.php:69
 #: plugins/Documents/templates/Documents/view.php:92
-#: plugins/Documents/templates/Invoices/index.php:67
+#: plugins/Documents/templates/Invoices/index.php:68
 #: plugins/Documents/templates/Invoices/report.php:141
 #: plugins/Documents/templates/Invoices/view.php:94
 #: plugins/Documents/templates/TravelOrders/index.php:66
@@ -779,20 +786,20 @@ msgid "Print"
 msgstr "Tiskaj"
 
 #: plugins/Documents/templates/Documents/index.php:89
-#: plugins/Documents/templates/Invoices/index.php:86
+#: plugins/Documents/templates/Invoices/index.php:87
 #: plugins/Documents/templates/TravelOrders/index.php:85
 #: plugins/Documents/templates/report/Invoices/index.php:23
 msgid "No"
 msgstr "Št."
 
 #: plugins/Documents/templates/Documents/index.php:101
-#: plugins/Documents/templates/Invoices/index.php:98
+#: plugins/Documents/templates/Invoices/index.php:99
 #: plugins/Documents/templates/report/Invoices/index.php:26
 msgid "Client"
 msgstr "Klient"
 
 #: plugins/Documents/templates/Documents/index.php:140
-#: plugins/Documents/templates/Invoices/index.php:155
+#: plugins/Documents/templates/Invoices/index.php:156
 #: plugins/Documents/templates/TravelOrders/index.php:143
 msgid "n/a"
 msgstr "n/a"
@@ -958,7 +965,7 @@ msgstr "Sken dokumenta"
 #: plugins/Documents/templates/Invoices/aht/list.php:28
 #: plugins/Documents/templates/Invoices/aht/list.php:45
 #: plugins/Documents/templates/Invoices/edit.php:372
-#: plugins/Documents/templates/Invoices/index.php:106
+#: plugins/Documents/templates/Invoices/index.php:107
 #: plugins/Documents/templates/Invoices/view.php:306
 #: plugins/Documents/templates/Invoices/view.php:466
 #: plugins/Documents/templates/TravelOrders/index.php:101
@@ -1055,12 +1062,12 @@ msgstr ""
 "Uporabite 'OTHR' za nepoznane tipe plačila. Za uporabo modula uporabite še "
 "lokalno predpono kot npr. SI00"
 
-#: plugins/Documents/templates/Invoices/index.php:102
+#: plugins/Documents/templates/Invoices/index.php:103
 #: plugins/Documents/templates/report/Invoices/index.php:27
 msgid "Net Total"
 msgstr "Skupaj brez DDV"
 
-#: plugins/Documents/templates/Invoices/index.php:128
+#: plugins/Documents/templates/Invoices/index.php:129
 #: plugins/Documents/templates/TravelOrders/index.php:123
 msgid "Total Sum"
 msgstr "Skupni znesek"
@@ -2015,9 +2022,6 @@ msgstr "SKUPAJ"
 
 #~ msgid "document"
 #~ msgstr "dokument"
-
-#~ msgid "documents"
-#~ msgstr "dokumenti"
 
 #~ msgid "Cannot fetch your employer!"
 #~ msgstr "Zaposlovalec ne obstaja!"

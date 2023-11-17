@@ -113,7 +113,7 @@ $tableIndex = [
             ],
             'total' => [
                 'params' => ['class' => 'center-align'],
-                'html' => $this->Arhint->duration($totalDuration),
+                'html' => $this->Arhint->duration($totalDuration ?? 0),
             ],
             'actions' => [],
         ]]]],

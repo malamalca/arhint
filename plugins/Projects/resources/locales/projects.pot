@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2022-05-16 14:27+0000\n"
+"POT-Creation-Date: 2023-11-17 10:57+0000\n"
 "PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
 "Last-Translator: NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
@@ -22,77 +22,110 @@ msgstr ""
 msgid "The project could not be saved. Please, try again."
 msgstr ""
 
-#: ./plugins/Projects/src/Controller/ProjectsController.php:228
+#: ./plugins/Projects/src/Controller/ProjectsController.php:248
+msgid "The project user has been saved."
+msgstr ""
+
+#: ./plugins/Projects/src/Controller/ProjectsController.php:256
+msgid "The project user could not be saved. Please, try again."
+msgstr ""
+
+#: ./plugins/Projects/src/Controller/ProjectsController.php:268
+#: ./plugins/Projects/templates/Projects/view.php:185
+msgid "No users found."
+msgstr ""
+
+#: ./plugins/Projects/src/Controller/ProjectsController.php:299
+msgid "No link found."
+msgstr ""
+
+#: ./plugins/Projects/src/Controller/ProjectsController.php:305
+msgid "The project user has been deleted."
+msgstr ""
+
+#: ./plugins/Projects/src/Controller/ProjectsController.php:307
+msgid "The project user could not be deleted. Please, try again."
+msgstr ""
+
+#: ./plugins/Projects/src/Controller/ProjectsController.php:326
 msgid "The project has been deleted."
 msgstr ""
 
-#: ./plugins/Projects/src/Controller/ProjectsController.php:230
+#: ./plugins/Projects/src/Controller/ProjectsController.php:328
 msgid "The project could not be deleted. Please, try again."
 msgstr ""
 
-#: ./plugins/Projects/src/Controller/ProjectsLogsController.php:46
+#: ./plugins/Projects/src/Controller/ProjectsLogsController.php:47
 msgid "The projects log has been saved."
 msgstr ""
 
-#: ./plugins/Projects/src/Controller/ProjectsLogsController.php:55
+#: ./plugins/Projects/src/Controller/ProjectsLogsController.php:61
 msgid "The projects log could not be saved. Please, try again."
 msgstr ""
 
-#: ./plugins/Projects/src/Controller/ProjectsLogsController.php:78
+#: ./plugins/Projects/src/Controller/ProjectsLogsController.php:84
 msgid "The projects log has been deleted."
 msgstr ""
 
-#: ./plugins/Projects/src/Controller/ProjectsLogsController.php:80
+#: ./plugins/Projects/src/Controller/ProjectsLogsController.php:86
 msgid "The projects log could not be deleted. Please, try again."
 msgstr ""
 
-#: ./plugins/Projects/src/Controller/ProjectsStatusesController.php:56
+#: ./plugins/Projects/src/Controller/ProjectsStatusesController.php:55
 msgid "The projects status has been saved."
 msgstr ""
 
-#: ./plugins/Projects/src/Controller/ProjectsStatusesController.php:60
+#: ./plugins/Projects/src/Controller/ProjectsStatusesController.php:59
 msgid "The projects status could not be saved. Please, try again."
 msgstr ""
 
-#: ./plugins/Projects/src/Controller/ProjectsStatusesController.php:81
+#: ./plugins/Projects/src/Controller/ProjectsStatusesController.php:80
 msgid "The projects status has been deleted."
 msgstr ""
 
-#: ./plugins/Projects/src/Controller/ProjectsStatusesController.php:83
+#: ./plugins/Projects/src/Controller/ProjectsStatusesController.php:82
 msgid "The projects status could not be deleted. Please, try again."
 msgstr ""
 
-#: ./plugins/Projects/src/Controller/ProjectsWorkhoursController.php:114
+#: ./plugins/Projects/src/Controller/ProjectsWorkhoursController.php:143
 msgid "The projects workhour has been saved."
 msgstr ""
 
-#: ./plugins/Projects/src/Controller/ProjectsWorkhoursController.php:122
+#: ./plugins/Projects/src/Controller/ProjectsWorkhoursController.php:151
 msgid "The projects workhour could not be saved. Please, try again."
 msgstr ""
 
-#: ./plugins/Projects/src/Controller/ProjectsWorkhoursController.php:152
+#: ./plugins/Projects/src/Controller/ProjectsWorkhoursController.php:186
 msgid "The projects workhour has been deleted."
 msgstr ""
 
-#: ./plugins/Projects/src/Controller/ProjectsWorkhoursController.php:154
+#: ./plugins/Projects/src/Controller/ProjectsWorkhoursController.php:188
 msgid "The projects workhour could not be deleted. Please, try again."
 msgstr ""
 
-#: ./plugins/Projects/src/Event/ProjectsEvents.php:38
-#: ./plugins/Projects/src/Lib/ProjectsSidebar.php:30
-#: ./plugins/Projects/src/Lib/ProjectsSidebar.php:41
+#: ./plugins/Projects/src/Event/ProjectsEvents.php:41
+#: ./plugins/Projects/src/Lib/ProjectsSidebar.php:35
+#: ./plugins/Projects/src/Lib/ProjectsSidebar.php:46
 msgid "Projects"
 msgstr ""
 
-#: ./plugins/Projects/src/Lib/ProjectsFuncs.php:192
-msgid "Total Thickness"
+#: ./plugins/Projects/src/Lib/ProjectsSidebar.php:56
+#: ./plugins/Projects/src/Lib/ProjectsSidebar.php:75
+#: ./plugins/Projects/templates/ProjectsWorkhours/index.php:3
+#: ./plugins/Projects/templates/ProjectsWorkhours/index.php:13
+#: ./plugins/Projects/templates/Projects/view.php:93
+msgid "Workhours"
 msgstr ""
 
-#: ./plugins/Projects/src/Lib/ProjectsSidebar.php:52
+#: ./plugins/Projects/src/Lib/ProjectsSidebar.php:67
+msgid "Reports"
+msgstr ""
+
+#: ./plugins/Projects/src/Lib/ProjectsSidebar.php:88
 msgid "Lookups"
 msgstr ""
 
-#: ./plugins/Projects/src/Lib/ProjectsSidebar.php:58
+#: ./plugins/Projects/src/Lib/ProjectsSidebar.php:94
 #: ./plugins/Projects/templates/ProjectsStatuses/index.php:4
 msgid "Statuses"
 msgstr ""
@@ -105,15 +138,16 @@ msgstr ""
 #: ./plugins/Projects/templates/Projects/index.php:146
 #: ./plugins/Projects/templates/Projects/index.php:158
 #: ./plugins/Projects/templates/Projects/view.php:34
-#: ./plugins/Projects/templates/Projects/view.php:163
+#: ./plugins/Projects/templates/Projects/view.php:215
 msgid "Add Log"
 msgstr ""
 
-#: ./plugins/Projects/templates/ProjectsLogs/edit.php:50
+#: ./plugins/Projects/templates/ProjectsLogs/edit.php:49
 #: ./plugins/Projects/templates/ProjectsStatuses/edit.php:35
-#: ./plugins/Projects/templates/ProjectsWorkhours/edit.php:78
-#: ./plugins/Projects/templates/Projects/edit.php:133
+#: ./plugins/Projects/templates/ProjectsWorkhours/edit.php:119
+#: ./plugins/Projects/templates/Projects/edit.php:140
 #: ./plugins/Projects/templates/Projects/map_popup.php:30
+#: ./plugins/Projects/templates/Projects/user.php:44
 msgid "Save"
 msgstr ""
 
@@ -127,7 +161,7 @@ msgstr ""
 
 #: ./plugins/Projects/templates/ProjectsStatuses/edit.php:27
 #: ./plugins/Projects/templates/ProjectsStatuses/index.php:21
-#: ./plugins/Projects/templates/Projects/edit.php:51
+#: ./plugins/Projects/templates/Projects/edit.php:55
 #: ./plugins/Projects/templates/Projects/index.php:62
 msgid "Title"
 msgstr ""
@@ -137,30 +171,32 @@ msgid "Title is required."
 msgstr ""
 
 #: ./plugins/Projects/templates/ProjectsStatuses/index.php:7
-#: ./plugins/Projects/templates/ProjectsWorkhours/index.php:21
+#: ./plugins/Projects/templates/ProjectsWorkhours/index.php:75
 #: ./plugins/Projects/templates/Projects/index.php:45
 #: ./plugins/Projects/templates/Projects/map.php:9
 msgid "Add"
 msgstr ""
 
 #: ./plugins/Projects/templates/ProjectsWorkhours/aht/list.php:14
-#: ./plugins/Projects/templates/ProjectsWorkhours/index.php:36
+#: ./plugins/Projects/templates/ProjectsWorkhours/edit.php:37
+#: ./plugins/Projects/templates/Projects/user.php:35
 msgid "User"
 msgstr ""
 
 #: ./plugins/Projects/templates/ProjectsWorkhours/aht/list.php:20
-#: ./plugins/Projects/templates/ProjectsWorkhours/edit.php:55
-#: ./plugins/Projects/templates/ProjectsWorkhours/index.php:37
+#: ./plugins/Projects/templates/ProjectsWorkhours/edit.php:70
+#: ./plugins/Projects/templates/ProjectsWorkhours/index.php:93
+#: ./plugins/Projects/templates/ProjectsWorkhours/index.php:97
 msgid "Started"
 msgstr ""
 
 #: ./plugins/Projects/templates/ProjectsWorkhours/aht/list.php:27
-#: ./plugins/Projects/templates/ProjectsWorkhours/edit.php:69
-#: ./plugins/Projects/templates/ProjectsWorkhours/index.php:38
+#: ./plugins/Projects/templates/ProjectsWorkhours/edit.php:84
+#: ./plugins/Projects/templates/ProjectsWorkhours/index.php:101
 msgid "Duration"
 msgstr ""
 
-#: ./plugins/Projects/templates/ProjectsWorkhours/aht/list.php:86
+#: ./plugins/Projects/templates/ProjectsWorkhours/aht/list.php:89
 msgid "No workhours for this project found."
 msgstr ""
 
@@ -172,58 +208,98 @@ msgstr ""
 msgid "Add Project Workhour"
 msgstr ""
 
-#: ./plugins/Projects/templates/ProjectsWorkhours/edit.php:41
+#: ./plugins/Projects/templates/ProjectsWorkhours/edit.php:56
 msgid "Project"
 msgstr ""
 
-#: ./plugins/Projects/templates/ProjectsWorkhours/index.php:3
-#: ./plugins/Projects/templates/ProjectsWorkhours/index.php:13
-#: ./plugins/Projects/templates/Projects/view.php:87
-msgid "Workhours"
+#: ./plugins/Projects/templates/ProjectsWorkhours/edit.php:97
+msgid "Description"
 msgstr ""
 
-#: ./plugins/Projects/templates/Projects/edit.php:8
+#: ./plugins/Projects/templates/ProjectsWorkhours/edit.php:110
+msgid "Confirmed"
+msgstr ""
+
+#: ./plugins/Projects/templates/ProjectsWorkhours/index.php:20
+#: ./plugins/Projects/templates/ProjectsWorkhours/index.php:25
+msgid "All Projects"
+msgstr ""
+
+#: ./plugins/Projects/templates/ProjectsWorkhours/index.php:43
+#: ./plugins/Projects/templates/ProjectsWorkhours/index.php:48
+msgid "All Users"
+msgstr ""
+
+#: ./plugins/Projects/templates/ProjectsWorkhours/index.php:63
+msgid "Me"
+msgstr ""
+
+#: ./plugins/Projects/templates/ProjectsWorkhours/index.php:68
+msgid "Workhours for {0} by {1}"
+msgstr ""
+
+#: ./plugins/Projects/templates/ProjectsWorkhours/index.php:90
+msgid "Descript"
+msgstr ""
+
+#: ./plugins/Projects/templates/ProjectsWorkhours/index.php:105
+msgid ""
+msgstr ""
+
+#: ./plugins/Projects/templates/ProjectsWorkhours/index.php:112
+msgid "Total duration"
+msgstr ""
+
+#: ./plugins/Projects/templates/Projects/edit.php:12
 msgid "Edit Project"
 msgstr ""
 
-#: ./plugins/Projects/templates/Projects/edit.php:8
+#: ./plugins/Projects/templates/Projects/edit.php:12
 msgid "Add Project"
 msgstr ""
 
-#: ./plugins/Projects/templates/Projects/edit.php:37
+#: ./plugins/Projects/templates/Projects/edit.php:41
 msgid "No."
 msgstr ""
 
-#: ./plugins/Projects/templates/Projects/edit.php:40
+#: ./plugins/Projects/templates/Projects/edit.php:44
 msgid "No already exists"
 msgstr ""
 
-#: ./plugins/Projects/templates/Projects/edit.php:63
+#: ./plugins/Projects/templates/Projects/edit.php:67
 #: ./plugins/Projects/templates/Projects/index.php:63
-#: ./plugins/Projects/templates/Projects/view.php:63
+#: ./plugins/Projects/templates/Projects/view.php:69
 msgid "Status"
 msgstr ""
 
-#: ./plugins/Projects/templates/Projects/edit.php:66
+#: ./plugins/Projects/templates/Projects/edit.php:70
 msgid "status"
 msgstr ""
 
-#: ./plugins/Projects/templates/Projects/edit.php:77
+#: ./plugins/Projects/templates/Projects/edit.php:81
 #: ./plugins/Projects/templates/Projects/index.php:7
 #: ./plugins/Projects/templates/Projects/index.php:12
 msgid "Active"
 msgstr ""
 
-#: ./plugins/Projects/templates/Projects/edit.php:89
+#: ./plugins/Projects/templates/Projects/edit.php:94
 msgid "Latitude"
 msgstr ""
 
-#: ./plugins/Projects/templates/Projects/edit.php:100
+#: ./plugins/Projects/templates/Projects/edit.php:105
 msgid "Longitude"
 msgstr ""
 
-#: ./plugins/Projects/templates/Projects/edit.php:123
+#: ./plugins/Projects/templates/Projects/edit.php:110
+msgid "Pick on Map"
+msgstr ""
+
+#: ./plugins/Projects/templates/Projects/edit.php:130
 msgid "Colorize"
+msgstr ""
+
+#: ./plugins/Projects/templates/Projects/edit.php:178
+msgid "Project Position"
 msgstr ""
 
 #: ./plugins/Projects/templates/Projects/index.php:7
@@ -248,6 +324,14 @@ msgstr ""
 msgid "Projects Map"
 msgstr ""
 
+#: ./plugins/Projects/templates/Projects/user.php:4
+msgid "Edit Project User"
+msgstr ""
+
+#: ./plugins/Projects/templates/Projects/user.php:4
+msgid "Add Project User"
+msgstr ""
+
 #: ./plugins/Projects/templates/Projects/view.php:15
 msgid "Edit"
 msgstr ""
@@ -261,19 +345,31 @@ msgid "Are you sure you want to delete this project?"
 msgstr ""
 
 #: ./plugins/Projects/templates/Projects/view.php:44
-#: ./plugins/Projects/templates/Projects/view.php:170
+#: ./plugins/Projects/templates/Projects/view.php:222
 msgid "Add Workhour"
 msgstr ""
 
-#: ./plugins/Projects/templates/Projects/view.php:67
+#: ./plugins/Projects/templates/Projects/view.php:54
+msgid "Add User"
+msgstr ""
+
+#: ./plugins/Projects/templates/Projects/view.php:73
 msgid "Work Duration"
 msgstr ""
 
-#: ./plugins/Projects/templates/Projects/view.php:81
+#: ./plugins/Projects/templates/Projects/view.php:87
 msgid "Logs"
 msgstr ""
 
-#: ./plugins/Projects/templates/Projects/view.php:119
+#: ./plugins/Projects/templates/Projects/view.php:99
+msgid "Users"
+msgstr ""
+
+#: ./plugins/Projects/templates/Projects/view.php:117
+msgid "No logs found."
+msgstr ""
+
+#: ./plugins/Projects/templates/Projects/view.php:139
 msgid "delete"
 msgstr ""
 
