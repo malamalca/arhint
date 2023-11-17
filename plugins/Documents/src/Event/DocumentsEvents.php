@@ -10,6 +10,7 @@ use Cake\Event\EventListenerInterface;
 use Cake\I18n\DateTime;
 use Cake\ORM\TableRegistry;
 use Cake\Routing\Router;
+use Cake\View\View;
 use Documents\Lib\DocumentsSidebar;
 
 class DocumentsEvents implements EventListenerInterface
@@ -91,7 +92,7 @@ class DocumentsEvents implements EventListenerInterface
      */
     public function dashboardPanels(Event $event, ArrayObject $panels): void
     {
-        /** @var \App\View\AppController $controller */
+        /** @var \App\Controller\AppController $controller */
         $controller = $event->getSubject();
 
         /** @var \App\Model\Entity\User $user */
@@ -113,7 +114,7 @@ class DocumentsEvents implements EventListenerInterface
                 '<h5>' . __d('documents', 'Last 6 documents') . '</h5>',
             ]];
 
-            $ArhintHelper = new ArhintHelper(new \Cake\View\View);
+            $ArhintHelper = new ArhintHelper(new View());
 
             foreach ($newDocuments as $document) {
                 $panels['panels']['documents']['lines'][] = sprintf(
@@ -130,7 +131,7 @@ class DocumentsEvents implements EventListenerInterface
                         'action' => 'view',
                         $document->id,
                     ], true),
-                    (string)$ArhintHelper->calendarDay($document->dat_issue)
+                    $ArhintHelper->calendarDay($document->dat_issue)
                 );
             }
         }

@@ -6,6 +6,15 @@ span.calendar-day {
     margin-left: auto;
     margin-right: auto;
 
+    &.today {
+        span.day, span.month {
+            background-color: #fffbce;
+        }
+        span.day-name, span.year-name {
+            background-color: #ffea00;
+            color: #000;
+        }
+    }
 
     span {
         width: 100%;
@@ -17,6 +26,7 @@ span.calendar-day {
         color: #ffffff;
         background-color: $secondary-color;
         font-size: 0.60rem;
+        border-right: solid 1px #c0c0c0;
 
         &.weekend {
             background-color: $primary-color;

@@ -239,14 +239,15 @@ class ArhintHelper extends Helper
     public function calendarDay(DateTime|Date $day, bool $isHoliday = false): string
     {
         $ret = sprintf(
-            '<span class="calendar-day">' .
+            '<span class="calendar-day%5$s">' .
                 '<span class="year-name%4$s">%3$s</span>' .
                 '<span class="day">%2$s</span><span class="month">%1$s</span>' .
                 '</span>',
             $day->i18nFormat('MMMM'),
             $day->i18nFormat('dd'),
             $day->i18nFormat('y'),
-            ($day->isWeekend() ? ' weekend' : '')
+            ($day->isWeekend() ? ' weekend' : ''),
+            ($day->isToday() ? ' today' : '')
         );
 
         return $ret;
