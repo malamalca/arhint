@@ -169,8 +169,6 @@ if ($fullBaseUrl) {
 }
 unset($fullBaseUrl);
 
-Router::extensions(['json', 'aht', 'xml', 'pdf', 'txt', 'png']);
-
 Cache::setConfig(Configure::consume('Cache'));
 ConnectionManager::setConfig(Configure::consume('Datasources'));
 TransportFactory::setConfig(Configure::consume('EmailTransport'));
@@ -200,6 +198,7 @@ ServerRequest::addDetector('lilScan', function ($request) {
 
 ServerRequest::addDetector('pdf', ['param' => '_ext', 'options' => ['pdf']]);
 ServerRequest::addDetector('aht', ['param' => '_ext', 'options' => ['aht']]);
+ServerRequest::addDetector('txt', ['param' => '_ext', 'options' => ['txt']]);
 
 $appEvents = new AppEvents();
 EventManager::instance()->on($appEvents);

@@ -99,6 +99,8 @@ class Application extends BaseApplication implements
     {
         $routes->setRouteClass(DashedRoute::class);
 
+        $routes->setExtensions(['json', 'aht', 'xml', 'pdf', 'txt', 'png']);
+
         $routes->scope('/', function (RouteBuilder $builder): void {
             $builder->connect('/', ['controller' => 'Pages', 'action' => 'dashboard']);
 

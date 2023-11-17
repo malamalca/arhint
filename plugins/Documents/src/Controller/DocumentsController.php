@@ -36,6 +36,10 @@ class DocumentsController extends BaseDocumentsController
         if (in_array($this->getRequest()->getParam('action'), ['edit', 'editPreview'])) {
             $this->FormProtection->setConfig('unlockedFields', ['company', 'receiver', 'issuer']);
         }
+
+        if ($this->getRequest()->hasHeader('Lil-Scan')) {
+            $this->FormProtection->setConfig('unlockedActions', ['edit']);
+        }
     }
 
     /**

@@ -48,6 +48,12 @@ class AppController extends Controller
         if ($this->request->is('aht')) {
             $this->viewBuilder()->setClassName('Aht');
         }
+
+        $this->response->setTypeMap('txt', ['text/plain']);
+
+        if ($this->request->is('txt')) {
+            $this->viewBuilder()->setClassName('Txt');
+        }
     }
 
     /**
