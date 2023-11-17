@@ -41,7 +41,7 @@ class ProjectsLogsController extends AppController
 
                     $user = TableRegistry::getTableLocator()->get('Users')->get($projectsLog->user_id);
                     $this->set(compact('projectsLog', 'user'));
-                    die((string)$this->render('/element/projects_log'));
+                    die((string)$this->render('/Element/projects_log'));
                 }
 
                 $this->Flash->success(__d('projects', 'The projects log has been saved.'));
