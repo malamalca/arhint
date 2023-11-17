@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Documents\Event;
 
+use App\View\Helper\ArhintHelper;
 use ArrayObject;
 use Cake\Event\Event;
 use Cake\Event\EventListenerInterface;
@@ -90,11 +91,11 @@ class DocumentsEvents implements EventListenerInterface
      */
     public function dashboardPanels(Event $event, ArrayObject $panels): void
     {
-        /** @var \App\View\AppView $view */
-        $view = $event->getSubject();
+        /** @var \App\View\AppController $controller */
+        $controller = $event->getSubject();
 
         /** @var \App\Model\Entity\User $user */
-        $user = $view->getCurrentUser();
+        $user = $controller->getCurrentUser();
 
         $DocumentsTable = TableRegistry::getTableLocator()->get('Documents.Documents');
         $newDocuments = $DocumentsTable->find()
@@ -112,22 +113,24 @@ class DocumentsEvents implements EventListenerInterface
                 '<h5>' . __d('documents', 'Last 6 documents') . '</h5>',
             ]];
 
+            $ArhintHelper = new ArhintHelper(new \Cake\View\View);
+
             foreach ($newDocuments as $document) {
                 $panels['panels']['documents']['lines'][] = sprintf(
-                    '<div><span style="display: block; width: 80px; float: left">%5$s</span> ' .
-                        '<a href="%4$s"><span class="title big">%1$s</span></a> %2$s %3$s</div>',
+                    '<div style="clear: both; height: 50px;">' .
+                        '<span style="display: block; width: 80px; float: left;">%5$s</span> ' .
+                        '<div class="project small light">%3$s</div>' .
+                        '<a href="%4$s"><span class="title big">%1$s</span></a> %2$s</div>',
                     h($document->title),
                     h($document->no),
-                    $document->project ?
-                        sprintf(' <span class="project small light">[%s]</span>', h($document->project->title)) :
-                        '',
+                    $document->project ? h($document->project->title) : '-',
                     Router::url([
                         'plugin' => 'Documents',
                         'controller' => 'Documents',
                         'action' => 'view',
                         $document->id,
                     ], true),
-                    (string)$document->dat_issue
+                    (string)$ArhintHelper->calendarDay($document->dat_issue)
                 );
             }
         }

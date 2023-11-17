@@ -63,7 +63,7 @@ class TasksEvents implements EventListenerInterface
 
         if (!$tasks->isEmpty()) {
             $panels['panels']['tasks'] = ['lines' => [
-                '<h5>' . __d('documents', 'Open Tasks') . '</h5>',
+                '<h5>' . __d('tasks', 'Open Tasks') . '</h5>',
             ]];
 
             foreach ($tasks as $task) {
