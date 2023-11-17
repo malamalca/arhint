@@ -1,12 +1,12 @@
 <?php
-use Cake\I18n\Date;
+use Cake\I18n\DateTime;
 use Cake\Routing\Router;
 
 if (empty($filter['month'])) {
-    $filter['month'] = (new Date())->format('Y-m');
+    $filter['month'] = (new DateTime())->format('Y-m');
 }
 
-$firstDayOfMonth = (new Date())->parse($filter['month'] . '-01');
+$firstDayOfMonth = (new DateTime())->parse($filter['month'] . '-01');
 
 $title = $firstDayOfMonth->i18nFormat('MMMM YYYY');
 
@@ -19,7 +19,7 @@ $buttons = sprintf(
     Router::url(['?' => array_merge($filter, ['month' => $firstDayOfMonth->addMonths(-1)->format('Y-m')])]),
     Router::url(['?' => array_merge($filter, ['month' => $firstDayOfMonth->addMonths(+1)->format('Y-m')])]),
     __d('calendar', 'Today'),
-    Router::url(['?' => array_merge($filter, ['month' => (new Date())->format('Y-m')])])
+    Router::url(['?' => array_merge($filter, ['month' => (new DateTime())->format('Y-m')])])
 );
 
 
@@ -87,6 +87,7 @@ foreach ($events as $event) {
 $weeksInMonth = ceil(($firstDayOfMonth->addMonths(1)->diffInDays($firstDayOfMonth->startOfWeek())) / 7);
 
 $currentDay = $firstDayOfMonth->startOfWeek();
+
 for ($weekNo = 1; $weekNo <= $weeksInMonth; $weekNo++) {
     $eventsIndex['panels']['calendar']['lines'][$weekNo] = '<div class="calendar-week">';
     for ($dow = 0; $dow < 7; $dow++) {
