@@ -221,7 +221,7 @@ class Application extends BaseApplication implements
             'fields' => $fields,
             'cookie' => [
                 'name' => self::REMEMBERME_COOKIE_NAME,
-                'expires' => (string)(new DateTime())->addDays(30),
+                'expires' => (new DateTime())->addDays(30)->toDateTimeString(),
             ],
         ]);
 
