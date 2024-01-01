@@ -494,25 +494,25 @@ class ActiveSyncContacts implements Syncroton_Data_IData
         $c->surname = $_entry->lastName;
 
         if (!empty($_entry->email1Address)) {
-            if (!isset($c->contacts_addresses[0])) {
-                $c->contacts_addresses[0] = $Contacts->ContactsEmails->newEmptyEntity();
+            if (!isset($c->contacts_emails[0])) {
+                $c->contacts_emails[0] = $Contacts->ContactsEmails->newEmptyEntity();
             }
-            $c->contacts_addresses[0]->contact_id = $c->id;
-            $c->contacts_addresses[0]->email = $_entry->email1Address;
+            $c->contacts_emails[0]->contact_id = $c->id;
+            $c->contacts_emails[0]->email = $_entry->email1Address;
         }
         if (!empty($_entry->email2Address)) {
-            if (!isset($c->contacts_addresses[1])) {
-                $c->contacts_addresses[1] = $Contacts->ContactsEmails->newEmptyEntity();
+            if (!isset($c->contacts_emails[1])) {
+                $c->contacts_emails[1] = $Contacts->ContactsEmails->newEmptyEntity();
             }
-            $c->contacts_addresses[1]->contact_id = $c->id;
-            $c->contacts_addresses[1]->email = $_entry->email2Address;
+            $c->contacts_emails[1]->contact_id = $c->id;
+            $c->contacts_emails[1]->email = $_entry->email2Address;
         }
         if (!empty($_entry->email3Address)) {
-            if (!isset($c->contacts_addresses[2])) {
-                $c->contacts_addresses[2] = $Contacts->ContactsEmails->newEmptyEntity();
+            if (!isset($c->contacts_emails[2])) {
+                $c->contacts_emails[2] = $Contacts->ContactsEmails->newEmptyEntity();
             }
-            $c->contacts_addresses[2]->contact_id = $c->id;
-            $c->contacts_addresses[2]->email = $_entry->email3Address;
+            $c->contacts_emails[2]->contact_id = $c->id;
+            $c->contacts_emails[2]->email = $_entry->email3Address;
         }
 
         // Sync phone numbers
