@@ -149,11 +149,14 @@ class ActiveSyncContacts implements Syncroton_Data_IData
         }
 
         foreach ($this->_phoneTrans as $kind => $propName) {
-            if (!empty($_entry->{$propName})) {
+            if (isset($_entry->{$propName}) && !empty($_entry->{$propName})) {
                 $c->contacts_phones[] = $Contacts->ContactsPhones->newEntity([
                     'no' => $_entry->{$propName},
                     'kind' => $kind,
                 ]);
+            }
+            if (!isset($_entry->{$propName})) {
+                Log::write('debug', 'ActiveSyncContacts: Trans property "' . $propName . '" does not exist.');
             }
         }
 
@@ -515,7 +518,7 @@ class ActiveSyncContacts implements Syncroton_Data_IData
         // Sync phone numbers
         $remotePhones = [];
         foreach ($this->_phoneTrans as $kind => $entryProperty) {
-            if (trim($_entry->{$entryProperty}) != '') {
+            if (isset($_entry->{$entryProperty}) && trim($_entry->{$entryProperty}) != '') {
                 $remotePhones[$kind] = $_entry->{$entryProperty};
             }
         }
