@@ -82,7 +82,7 @@ class ContactsAddressesTable extends Table
         $rules->add(function ($entity, $options) {
             $conditions = [
                 'contact_id' => $entity->contact_id,
-                'kind' => $entity->kind,
+                'kind' => empty($entity->kind) ? 'O' : $entity->kind,
             ];
             if ($entity->isNew() === false) {
                 $conditions['NOT'] = ['id' => $entity->id];
