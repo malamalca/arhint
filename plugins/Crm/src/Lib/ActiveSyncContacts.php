@@ -558,10 +558,10 @@ class ActiveSyncContacts implements Syncroton_Data_IData
         $remoteAddresses = [];
         foreach ($this->_addressTrans as $kind => $entryProperty) {
             if (
-                (isset($_entry->{$entryProperty . 'AddressStreet'}) && trim($_entry->{$entryProperty . 'AddressStreet'}) != '') ||
-                (isset($_entry->{$entryProperty . 'AddressCity'}) && trim($_entry->{$entryProperty . 'AddressCity'}) != '') ||
-                (isset($_entry->{$entryProperty . 'AddressCountry'}) && trim($_entry->{$entryProperty . 'AddressCountry'}) != '') ||
-                (isset($_entry->{$entryProperty . 'AddressPostalCode'}) && trim($_entry->{$entryProperty . 'AddressPostalCode'}) != '')
+                (!empty($_entry->{$entryProperty . 'AddressStreet'})) ||
+                (!empty($_entry->{$entryProperty . 'AddressCity'})) ||
+                (!empty($_entry->{$entryProperty . 'AddressCountry'})) ||
+                (!empty($_entry->{$entryProperty . 'AddressPostalCode'}))
             ) {
                 $remoteAddresses[$kind] = [
                     'street' => $_entry->{$entryProperty . 'AddressStreet'},
