@@ -265,7 +265,7 @@ class ActiveSyncTasks implements Syncroton_Data_IData
         }
 
         $TasksFolder = TableRegistry::getTableLocator()->get('Tasks.TasksFolders');
-        $f = $TasksFolder->newEntity();
+        $f = $TasksFolder->newEmptyEntity();
         $f->owner_id = $this->_ownerId;
         $f->title = $folder->displayName;
         $f->user_created = $folder->type == Syncroton_Command_FolderSync::FOLDERTYPE_TASK_USER_CREATED;

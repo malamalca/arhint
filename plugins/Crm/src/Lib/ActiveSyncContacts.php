@@ -492,21 +492,21 @@ class ActiveSyncContacts implements Syncroton_Data_IData
 
         if (!empty($_entry->email1Address)) {
             if (!isset($c->contacts_addresses[0])) {
-                $c->contacts_addresses[0] = $Contacts->ContactsEmails->newEntity();
+                $c->contacts_addresses[0] = $Contacts->ContactsEmails->newEmptyEntity();
             }
             $c->contacts_addresses[0]->contact_id = $c->id;
             $c->contacts_addresses[0]->email = $_entry->email1Address;
         }
         if (!empty($_entry->email2Address)) {
             if (!isset($c->contacts_addresses[1])) {
-                $c->contacts_addresses[1] = $Contacts->ContactsEmails->newEntity();
+                $c->contacts_addresses[1] = $Contacts->ContactsEmails->newEmptyEntity();
             }
             $c->contacts_addresses[1]->contact_id = $c->id;
             $c->contacts_addresses[1]->email = $_entry->email2Address;
         }
         if (!empty($_entry->email3Address)) {
             if (!isset($c->contacts_addresses[2])) {
-                $c->contacts_addresses[2] = $Contacts->ContactsEmails->newEntity();
+                $c->contacts_addresses[2] = $Contacts->ContactsEmails->newEmptyEntity();
             }
             $c->contacts_addresses[2]->contact_id = $c->id;
             $c->contacts_addresses[2]->email = $_entry->email3Address;
@@ -540,7 +540,7 @@ class ActiveSyncContacts implements Syncroton_Data_IData
         }
 
         foreach ($remotePhones as $kind => $no) {
-            $aPhone = $Contacts->ContactsPhones->newEntity();
+            $aPhone = $Contacts->ContactsPhones->newEmptyEntity();
             $aPhone->contact_id = $c->id;
             $aPhone->kind = $kind;
             $aPhone->no = $no;
@@ -592,7 +592,7 @@ class ActiveSyncContacts implements Syncroton_Data_IData
         }
 
         foreach ($remoteAddresses as $kind => $raddr) {
-            $anAddress = $Contacts->ContactsAddresses->newEntity();
+            $anAddress = $Contacts->ContactsAddresses->newEmptyEntity();
             $anAddress->contact_id = $c->id;
             $anAddress->kind = $kind;
             $anAddress->street = $raddr['street'];
