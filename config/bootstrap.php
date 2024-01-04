@@ -52,28 +52,6 @@ use Cake\Utility\Security;
 require CAKE . 'functions.php';
 
 /*
- * See https://github.com/josegonzalez/php-dotenv for API details.
- *
- * Uncomment block of code below if you want to use `.env` file during development.
- * You should copy `config/.env.example` to `config/.env` and set/modify the
- * variables as required.
- *
- * The purpose of the .env file is to emulate the presence of the environment
- * variables like they would be present in production.
- *
- * If you use .env files, be careful to not commit them to source control to avoid
- * security risks. See https://github.com/josegonzalez/php-dotenv#general-security-information
- * for more information for recommended practices.
-*/
-// if (!env('APP_NAME') && file_exists(CONFIG . '.env')) {
-//     $dotenv = new \josegonzalez\Dotenv\Loader([CONFIG . '.env']);
-//     $dotenv->parse()
-//         ->putenv()
-//         ->toEnv()
-//         ->toServer();
-// }
-
-/*
  * Read configuration file and inject configuration into various
  * CakePHP classes.
  *
@@ -142,28 +120,6 @@ if (PHP_SAPI === 'cli') {
  * This URL is used as the base of all absolute links.
  */
 $fullBaseUrl = Configure::read('App.fullBaseUrl');
-if (!$fullBaseUrl) {
-    /*
-     * When using proxies or load balancers, SSL/TLS connections might
-     * get terminated before reaching the server. If you trust the proxy,
-     * you can enable `$trustProxy` to rely on the `X-Forwarded-Proto`
-     * header to determine whether to generate URLs using `https`.
-     *
-     * See also https://book.cakephp.org/4/en/controllers/request-response.html#trusting-proxy-headers
-     */
-    $trustProxy = false;
-
-    $s = null;
-    if (env('HTTPS') || ($trustProxy && env('HTTP_X_FORWARDED_PROTO') === 'https')) {
-        $s = 's';
-    }
-
-    $httpHost = env('HTTP_HOST');
-    if (isset($httpHost)) {
-        $fullBaseUrl = 'http' . $s . '://' . $httpHost;
-    }
-    unset($httpHost, $s);
-}
 if ($fullBaseUrl) {
     Router::fullBaseUrl($fullBaseUrl);
 }

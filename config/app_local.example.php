@@ -19,7 +19,7 @@ return [
      * Development Mode:
      * true: Errors and warnings shown.
      */
-    'debug' => filter_var(env('DEBUG', true), FILTER_VALIDATE_BOOLEAN),
+    'debug' => true,
 
     /*
      * Security and encryption configuration
@@ -29,8 +29,8 @@ return [
      *   You should treat it as extremely sensitive data.
      */
     'Security' => [
-        'salt' => env('SECURITY_SALT', '__SALT__'),
-        'cookieKey' => env('COOKIE_KEY', '__COOKIEKEY__'),
+        'salt' => '__SALT__',
+        'cookieKey' => '__COOKIEKEY__',
     ],
 
     /*
@@ -62,7 +62,7 @@ return [
             /**
              * You can use a DSN string to set the entire configuration
              */
-            'url' => env('DATABASE_URL', null),
+            'url' => null,
         ],
 
         /*
@@ -92,7 +92,7 @@ return [
             'username' => null,
             'password' => null,
             'client' => null,
-            'url' => env('EMAIL_TRANSPORT_DEFAULT_URL', null),
+            'url' => null,
         ],
     ],
 ];

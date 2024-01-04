@@ -228,6 +228,7 @@ class Application extends BaseApplication implements
         if (
             $this->checkParams($request->getAttribute('params'), [
             ['controller' => 'Projects', 'action' => 'index', '_ext' => 'txt'],
+            ['controller' => 'Calendars', 'action' => 'view'],
             ['controller' => 'ProjectsWorkhours', 'action' => 'import'],
             ['controller' => ['Invoices', 'Documents'], 'action' => 'edit'],
             ])

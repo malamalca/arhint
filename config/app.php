@@ -17,7 +17,7 @@ return [
      * Development Mode:
      * true: Errors and warnings shown.
      */
-    'debug' => filter_var(env('DEBUG', false), FILTER_VALIDATE_BOOLEAN),
+    'debug' => false,
 
     /*
      * Configure basic information about the application.
@@ -50,14 +50,13 @@ return [
     'App' => [
         'title' => 'ARHIM Intranet',
         'namespace' => 'App',
-        'encoding' => env('APP_ENCODING', 'UTF-8'),
-        'defaultLocale' => env('APP_DEFAULT_LOCALE', 'en_US'),
-        'defaultTimezone' => env('APP_DEFAULT_TIMEZONE', 'UTC'),
+        'encoding' => 'UTF-8',
+        'defaultLocale' => 'en_US',
+        'defaultTimezone' => 'UTC',
         'base' => false,
         'dir' => 'src',
         'webroot' => 'webroot',
         'wwwRoot' => WWW_ROOT,
-        //'baseUrl' => env('SCRIPT_NAME'),
         'fullBaseUrl' => false,
         'imageBaseUrl' => 'img/',
         'cssBaseUrl' => 'css/',
@@ -83,8 +82,8 @@ return [
      * - cookieKey - A radnom string used for cookie auth hashing.
      */
     'Security' => [
-        'salt' => env('SECURITY_SALT'),
-        'cookieKey' => env('SECURITY_COOKIE_KEY'),
+        'salt' => null,
+        'cookieKey' => null,
     ],
 
     /*
@@ -107,7 +106,7 @@ return [
         'default' => [
             'className' => FileEngine::class,
             'path' => CACHE,
-            'url' => env('CACHE_DEFAULT_URL', null),
+            'url' => null,
         ],
 
         /*
@@ -122,7 +121,7 @@ return [
             'path' => CACHE . 'persistent' . DS,
             'serialize' => true,
             'duration' => '+1 years',
-            'url' => env('CACHE_CAKECORE_URL', null),
+            'url' => null,
         ],
 
         /*
@@ -137,7 +136,7 @@ return [
             'path' => CACHE . 'models' . DS,
             'serialize' => true,
             'duration' => '+1 years',
-            'url' => env('CACHE_CAKEMODEL_URL', null),
+            'url' => null,
         ],
 
         /*
@@ -151,7 +150,7 @@ return [
             'path' => CACHE,
             'serialize' => true,
             'duration' => '+1 years',
-            'url' => env('CACHE_CAKEROUTES_URL', null),
+            'url' => null,
         ],
     ],
 
@@ -236,7 +235,7 @@ return [
             //'password' => null,
             'client' => null,
             'tls' => false,
-            'url' => env('EMAIL_TRANSPORT_DEFAULT_URL', null),
+            'url' => null,
         ],
     ],
 
@@ -350,7 +349,7 @@ return [
             'className' => FileLog::class,
             'path' => LOGS,
             'file' => 'debug',
-            'url' => env('LOG_DEBUG_URL', null),
+            'url' => null,
             'scopes' => null,
             'levels' => ['notice', 'info', 'debug'],
         ],
@@ -358,7 +357,7 @@ return [
             'className' => FileLog::class,
             'path' => LOGS,
             'file' => 'error',
-            'url' => env('LOG_ERROR_URL', null),
+            'url' => null,
             'scopes' => null,
             'levels' => ['warning', 'error', 'critical', 'alert', 'emergency'],
         ],
@@ -367,7 +366,7 @@ return [
             'className' => FileLog::class,
             'path' => LOGS,
             'file' => 'queries',
-            'url' => env('LOG_QUERIES_URL', null),
+            'url' => null,
             'scopes' => ['cake.database.queries'],
         ],
     ],
