@@ -261,8 +261,8 @@ class SabreDAVSyncContacts extends AbstractBackend implements SyncSupport
         $contact->owner_id = $addressBookId;
         $contact->id = $cardUri;
         $contact->title = (string)$vcard->FN;
-        $contact->name = $vcard->N->getParts()[0] ?? null;
-        $contact->surname = $vcard->N->getParts()[1] ?? null;
+        $contact->name = $vcard->N->getParts()[1] ?? null;
+        $contact->surname = $vcard->N->getParts()[0] ?? null;
 
         if (isset($vcard->TEL)) {
             $phoneTypes = $vcard->TEL['TYPE'];
