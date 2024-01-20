@@ -141,7 +141,7 @@ class SabreDAVSyncContacts extends AbstractBackend implements SyncSupport
             $card = $this->contactToCard($contact);
 
             $row = [
-                'uri' => '/dav/addressboooks/miha.nahtigal/default/' . $contact->id,
+                'uri' => $contact->id,
                 'size' => strlen($card->serialize()),
                 'etag' => '"' . md5($contact->id . $contact->modified->setTimezone('UTC')->toUnixString()) . '"',
                 'lastmodifed' => $contact->modified->setTimezone('UTC')->toUnixString(),
@@ -166,9 +166,6 @@ class SabreDAVSyncContacts extends AbstractBackend implements SyncSupport
      */
     public function getCard($addressBookId, $cardUri): array
     {
-        $paths = explode('/', $cardUri);
-        $cardUri = array_pop($paths);
-
         $ContactsTable = TableRegistry::getTableLocator()->get('Crm.Contacts');
         $contact = $ContactsTable->find()
             ->select()
@@ -180,7 +177,7 @@ class SabreDAVSyncContacts extends AbstractBackend implements SyncSupport
             return [];
         }
 
-        $result['uri'] = '/dav/addressboooks/miha.nahtigal/default/' . $contact->id;
+        $result['uri'] = $contact->id;
         $result['etag'] = '"' . md5($contact->id . $contact->modified->setTimezone('UTC')->toUnixString()) . '"';
         $result['lastmodified'] = (int)$contact->modified->setTimezone('UTC')->toUnixString();
         $result['carddata'] = $this->contactToCard($contact)->serialize();
@@ -214,7 +211,7 @@ class SabreDAVSyncContacts extends AbstractBackend implements SyncSupport
 
         foreach ($contacts as $contact) {
             $result = [];
-            $result['uri'] = '/dav/addressboooks/miha.nahtigal/default/' . $contact->id;
+            $result['uri'] = $contact->id;
             $result['etag'] = '"' . md5($contact->id . $contact->modified->setTimezone('UTC')->toUnixString()) . '"';
             $result['lastmodified'] = (int)$contact->modified->setTimezone('UTC')->toUnixString();
             $result['carddata'] = $this->contactToCard($contact)->serialize();
