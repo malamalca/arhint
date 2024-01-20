@@ -167,7 +167,7 @@ class SabreDAVSyncContacts extends AbstractBackend implements SyncSupport
     public function getCard($addressBookId, $cardUri): array
     {
         $paths = explode('/', $cardUri);
-        $cardUri = pop($paths);
+        $cardUri = array_pop($paths);
 
         $ContactsTable = TableRegistry::getTableLocator()->get('Crm.Contacts');
         $contact = $ContactsTable->find()
