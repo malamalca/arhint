@@ -345,8 +345,8 @@ class SabreDAVSyncContacts extends AbstractBackend implements SyncSupport
         /** @var \Crm\Model\Entity\Contact $contact */
         $contact = $ContactsTable->get($cardUri, contain: ['ContactsPhones', 'ContactsAddresses', 'ContactsEmails']);
         $contact->title = (string)$vcard->FN;
-        $contact->name = $vcard->N->getParts()[0] ?? null;
-        $contact->surname = $vcard->N->getParts()[1] ?? null;
+        $contact->name = $vcard->N->getParts()[1] ?? null;
+        $contact->surname = $vcard->N->getParts()[0] ?? null;
 
         // Sync phone numbers
         $remotePhones = [];
@@ -534,7 +534,7 @@ class SabreDAVSyncContacts extends AbstractBackend implements SyncSupport
             'PRODID' => 'Arhint',
             'UID' => $contact->id,
             'FN' => $contact->title,
-            'N' => [$contact->name, $contact->surname],
+            'N' => [$contact->surname, $contact->name],
         ]);
 
         if (isset($contact->contacts_emails)) {
