@@ -551,7 +551,7 @@ class ActiveSyncContacts implements Syncroton_Data_IData
                 $c->contacts_phones = [];
             }
             $c->contacts_phones[] = $aPhone;
-            $c->setDirty('contacts_addresses', true);
+            $c->setDirty('contacts_phones', true);
         }
 
         // Sync addresses

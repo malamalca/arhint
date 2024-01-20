@@ -16,12 +16,13 @@
         "cakephp/migrations": "^4.0.0",
         "cakephp/plugin-installer": "^2.0",
         "ddn/sapp": "dev-main",
-        "kigkonsult/icalcreator": "^2.41",
         "krivart/php-qr-code": "dev-master",
         "malamalca/lil": "^4.6",
         "mikehaertl/phpwkhtmltopdf": "2.0.*@dev",
         "mobiledetect/mobiledetectlib": "^3.74",
         "phpoffice/phpword": "^0.18.2",
+        "sabre/dav": "~4.6.0",
+        "sabre/vobject": "4.5",
         "syncroton/syncroton": "dev-master",
         "tecnickcom/tcpdf": "dev-main",
         "zendframework/zendframework1": "1.12.20pl61 as 1.12.20"
@@ -101,8 +102,8 @@
             "@stan",
             "@psalm"
         ],
-        "cs-check": "phpcs --colors -p",
-        "cs-fix": "phpcbf --colors",
+        "cs-check": "phpcs --colors -p -s",
+        "cs-fix": "phpcbf --colors -p",
         "stan": "phpstan analyse",
         "test": "phpunit --colors=always",
         "psalm": "psalm"

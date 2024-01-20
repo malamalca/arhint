@@ -1,16 +1,19 @@
 <?xml version="1.0"?>
 <ruleset name="App">
-    <config name="installed_paths" value="../../cakephp/cakephp-codesniffer"/>
+<config name="installed_paths" value="../../cakephp/cakephp-codesniffer"/>
 
 	<exclude-pattern>*ActiveSync*\.php$</exclude-pattern>
 
-    <rule ref="CakePHP"/>
-    <rule ref="SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingNativeTypeHint">
-        <exclude-pattern>*/src/Controller/*</exclude-pattern>
-    </rule>
+	<rule ref="CakePHP"/>
+	<rule ref="SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingNativeTypeHint">
+		<exclude-pattern>*/src/Controller/*</exclude-pattern>
+	</rule>
+	<rule ref="SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint">
+		<exclude-pattern>*/src/Lib/*</exclude-pattern>
+	</rule>
 
-    <file>src/</file>
-    <file>tests/</file>
+	<file>src/</file>
+	<file>tests/</file>
 
 	<file>plugins/Calendar/src/</file>
 	<file>plugins/Calendar/tests/</file>

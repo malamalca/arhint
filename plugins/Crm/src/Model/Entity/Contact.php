@@ -29,10 +29,10 @@ use Cake\ORM\Entity;
  * @property \Crm\Model\Entity\ContactsEmail|null $primary_email
  * @property \Crm\Model\Entity\ContactsPhone|null $primary_phone
  *
- * @property \Crm\Model\Entity\ContactsAccount $contact_accounts
- * @property \Crm\Model\Entity\ContactsAddress $contact_addresses
- * @property \Crm\Model\Entity\ContactsEmail $contact_emails
- * @property \Crm\Model\Entity\ContactsPhone $contact_phones
+ * @property array $contacts_accounts
+ * @property array $contacts_addresses
+ * @property array $contacts_emails
+ * @property array $contacts_phones
  */
 class Contact extends Entity
 {

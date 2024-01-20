@@ -7,11 +7,13 @@ parameters:
         - vendor/cakephp/cakephp/src/functions.php
     excludePaths:
         - src/Console/Installer.php
+        - src/Lib/DAV/ArhintPrincipalBackend.php
         - src/App/Controller/ErrorController.php
         - src/App/Command/ConsoleCommand.php
         - src/App/Controller/PagesController.php
         - src/Controller/SyncController.php
         - plugins/Crm/src/Lib/ActiveSyncContacts.php
+        - plugins/Crm/src/Lib/SabreDAVSyncContacts.php
         - plugins/Tasks/src/Lib/ActiveSyncTasks.php
         - plugins/Calendar/src/Lib/ActiveSyncCalendar.php
     paths:
