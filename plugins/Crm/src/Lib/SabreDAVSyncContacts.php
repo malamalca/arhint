@@ -26,8 +26,8 @@ class SabreDAVSyncContacts extends AbstractBackend implements SyncSupport
         'P' => 'home',
     ];
 
-    protected array $_addressTrans = [
-        'H' => 'home',
+    protected array $_emailTrans = [
+        'P' => 'home',
         'W' => 'work',
         'O' => 'home',
     ];
@@ -273,8 +273,8 @@ class SabreDAVSyncContacts extends AbstractBackend implements SyncSupport
                 $contactPhone = $ContactsPhonesTable->newEmptyEntity();
                 $contactPhone->no = $tel->getParts()[0];
                 $contactPhone->primary = isset($tel['PREF']) && $tel['PREF']->getValue() == 1;
-                $contactPhone->kind = empty($phoneTypes[$i]) ? 'H' : (
-                    $phoneTypes[$i] == 'home' ? 'H' : ($phoneTypes[$i] == 'work' ? 'W' : 'O')
+                $contactPhone->kind = empty($phoneTypes[$i]) ? 'P' : (
+                    $phoneTypes[$i] == 'home' ? 'P' : ($phoneTypes[$i] == 'work' ? 'W' : 'P')
                 );
 
                 $contact->contacts_phones[] = $contactPhone;
@@ -397,7 +397,7 @@ class SabreDAVSyncContacts extends AbstractBackend implements SyncSupport
             $emailTypes = $vcard->EMAIL['TYPE'];
             foreach ($vcard->EMAIL as $i => $email) {
                 $kind = empty($emailTypes[$i]) ? 'H' : (
-                    $emailTypes[$i] == 'home' ? 'H' : ($emailTypes[$i] == 'work' ? 'W' : 'O')
+                    $emailTypes[$i] == 'home' ? 'H' : ($emailTypes[$i] == 'work' ? 'W' : 'H')
                 );
                 $remoteEmails[$kind] = $email->getParts()[0];
             }
@@ -540,7 +540,7 @@ class SabreDAVSyncContacts extends AbstractBackend implements SyncSupport
         if (isset($contact->contacts_emails)) {
             foreach ($contact->contacts_emails as $email) {
                 $vcard->add('EMAIL', $email->email, [
-                    'type' => $this->_addressTrans[$email->kind] ?? 'home',
+                    'type' => $this->_emailTrans[$email->kind] ?? 'home',
                     'pref' => $email->primary ? '1' : '100',
                 ]);
             }
