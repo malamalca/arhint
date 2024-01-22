@@ -6,6 +6,7 @@ namespace App\Command;
 use Cake\Command\Command;
 use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
+use Cake\Core\Configure;
 use Cake\Event\Event;
 use Cake\Event\EventManager;
 use Cake\Mailer\Mailer;
@@ -43,6 +44,7 @@ class HeartBeatCommand extends Command
                 $email = new Mailer('default');
                 $email
                     ->setEmailFormat('html')
+                    ->setFrom([Configure::read('App.fromEmail.from') => Configure::read('App.fromEmail.name')])
                     ->setTo($user->email)
                     ->setSubject(__('Intranet Report'))
                     ->setViewVars(['user' => $user, 'panels' => $emailPanels])
