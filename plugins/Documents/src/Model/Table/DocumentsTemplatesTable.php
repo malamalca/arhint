@@ -131,12 +131,8 @@ class DocumentsTemplatesTable extends Table
     public function findForOwner(string $ownerId): array
     {
         // In a controller or table method.
-        $query = $this->find('list', [
-
-            'keyField' => 'id',
-            'valueField' => 'title',
-            'groupField' => 'kind',
-        ])->where(['owner_id' => $ownerId]);
+        $query = $this->find('list', keyField: 'id', valueField: 'title', groupField: 'kind')
+            ->where(['owner_id' => $ownerId]);
         $data = $query->toArray();
 
         return $data;

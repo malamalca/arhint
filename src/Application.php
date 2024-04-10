@@ -116,7 +116,7 @@ class Application extends BaseApplication implements
      */
     public function middleware(MiddlewareQueue $middlewareQueue): MiddlewareQueue
     {
-        $csrf = new SessionCsrfProtectionMiddleware([]);
+        $csrf = new SessionCsrfProtectionMiddleware();
         $csrf->skipCheckCallback(function ($request) {
             return $this->checkParams($request->getAttribute('params'), [
                 ['controller' => 'ProjectsWorkhours', 'action' => 'import'],

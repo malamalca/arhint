@@ -57,10 +57,7 @@ class ItemsController extends AppController
             }
         }
 
-        $vats = $this->Items->Vats->find('list', [
-                'keyField' => 'id',
-                'valueField' => 'descript',
-            ])
+        $vats = $this->Items->Vats->find('list', keyField: 'id', valueField: 'descript')
             ->where(['owner_id' => $this->getCurrentUser()->get('company_id')])
             ->order(['descript'])
             ->toArray();

@@ -44,7 +44,7 @@ class ExpensesImport
 
         if (!empty($cachedPayments)) {
             $Payments = TableRegistry::getTableLocator()->get('Expenses.Payments');
-            $linkedPayments = $Payments->find('list', ['valueField' => 'sepa_id'])
+            $linkedPayments = $Payments->find('list', valueField: 'sepa_id')
                 ->where([
                     'Payments.owner_id' => $this->ownerId,
                     'Payments.sepa_id IN' => array_keys($cachedPayments),
