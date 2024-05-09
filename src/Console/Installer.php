@@ -21,7 +21,7 @@ use Migrations\Migrations;
 /**
  * Provides installation hooks for when this application is installed through
  * composer. Customize this class to suit your needs.
- * 
+ *
  * @psalm-suppress UnusedClass
  */
 class Installer

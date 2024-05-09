@@ -84,6 +84,7 @@ class EmailForm extends Form
                 $email = new Mailer('default');
 
                 $email
+                    ->setFrom([Configure::read('App.fromEmail.from') => Configure::read('App.fromEmail.name')])
                     ->setTo($this->request->getData('to'))
                     ->setSubject($this->request->getData('subject'));
 

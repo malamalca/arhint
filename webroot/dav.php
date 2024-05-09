@@ -2,6 +2,7 @@
 
 use App\Lib\DAV\ArhintBasicAuth;
 use App\Lib\DAV\ArhintPrincipalBackend;
+use Cake\Core\Configure;
 use Crm\Lib\SabreDAVSyncContacts;
 use Sabre\DAV;
 use Sabre\CalDAV;
@@ -37,7 +38,7 @@ $server = new DAV\Server($tree);
 // You are highly encouraged to set your WebDAV server base url. Without it,
 // SabreDAV will guess, but the guess is not always correct. Putting the
 // server on the root of the domain will improve compatibility.
-$server->setBaseUri('/arhint4/dav/');
+$server->setBaseUri(Configure::read('Dav.baseUrl'));
 
 // Authentication plugin
 $authPlugin = new DAV\Auth\Plugin($authBackend, 'ArhintDAV');

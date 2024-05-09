@@ -74,6 +74,18 @@ return [
     ],
 
     /*
+     * Dav configuration
+     *
+     * - salt - A random string used in security hashing methods.
+     *   The salt value is also used as the encryption key.
+     *   You should treat it as extremely sensitive data.
+     * - cookieKey - A radnom string used for cookie auth hashing.
+     */
+    'Dav' => [
+        'baseUrl' => '/dav/',
+    ],
+
+    /*
      * Security and encryption configuration
      *
      * - salt - A random string used in security hashing methods.
