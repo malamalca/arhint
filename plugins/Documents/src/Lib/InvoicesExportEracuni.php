@@ -144,6 +144,24 @@ class InvoicesExportEracuni
                     }
                 }
 
+                if ($doc->documents_counter->direction == 'received' && !empty($doc->invoices_taxes)) {
+                    foreach ($doc->invoices_taxes as $itm) {
+                        if (!isset($taxExcelHeaders[$itm->vat_id])) {
+                            // headers/columns for specified taxid dont exist yet
+                            $taxExcelHeaders[$itm->vat_id] = $taxExcelHeadersLastIndex;
+                            $activeSheet->SetCellValue([$taxExcelHeaders[$itm->vat_id], 1], $itm->vat_title);
+                            $activeSheet->SetCellValue([$taxExcelHeaders[$itm->vat_id]+1, 1], 'Osnova za ' . $itm->vat_title);
+                            $activeSheet->SetCellValue([$taxExcelHeaders[$itm->vat_id]+2, 1], 'Stopnja za ' . $itm->vat_title);
+
+                            $taxExcelHeadersLastIndex += 3;
+                        }
+
+                        $activeSheet->SetCellValue([$taxExcelHeaders[$itm->vat_id], $i], round($itm->base * $itm->vat_percent / 100, 2));
+                        $activeSheet->SetCellValue([$taxExcelHeaders[$itm->vat_id]+1, $i], $itm->base);
+                        $activeSheet->SetCellValue([$taxExcelHeaders[$itm->vat_id]+2, $i], $itm->vat_percent);
+                    }
+                }
+
                 $i++;
             }
 
