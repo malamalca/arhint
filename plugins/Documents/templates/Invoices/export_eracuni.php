@@ -139,9 +139,9 @@ $report = [
 
             'submit' => [
                 'class' => $this->Form,
-                'method' => 'submit',
+                'method' => 'button',
                 'parameters' => [
-                    'label' => __d('documents', 'Print'),
+                    __d('documents', 'Export'), ['type' => 'submit'],
                 ],
             ],
             'form_end' => [

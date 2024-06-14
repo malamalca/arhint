@@ -121,7 +121,7 @@ class DocumentsSidebar
                 'title' => __d('documents', 'Export'),
                 'url' => false,
                 'params' => [],
-                'active' => false,
+                'active' => $request->getParam('controller') == 'Invoices' && substr($request->getParam('action'), 0, 6) == 'export',
                 'submenu' => [
                     'eRacuni' => [
                         'visible' => true,

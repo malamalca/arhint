@@ -98,9 +98,17 @@ div.helper-text {
     }
 }
 
+/* Form error message is black by default */
 div.error-message {
     color: #d32f2f;
     font-size: 90% !important;
+}
+
+/* Additional spacing for submit button so it does not stick to the fieldset box */
+button.btn {
+    &[type="submit"] {
+        margin-top: 20px;
+    }
 }
 
 /*
