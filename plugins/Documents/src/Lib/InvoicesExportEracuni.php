@@ -86,7 +86,7 @@ class InvoicesExportEracuni
                 $activeSheet->getStyle('A' . $i)->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_TEXT); 
                 $activeSheet->SetCellValue('A' . $i, strtolower($documentTypes[$doc->documents_counter->doc_type]));
                 
-                $activeSheet->getStyle('B' . $i)->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_TEXT); 
+                $activeSheet->getStyle('B' . $i)->getNumberFormat()->setFormatCode('@'); 
                 $activeSheet->SetCellValue('B' . $i, $doc->no);
 
                 $activeSheet->getStyle('C' . $i)->getNumberFormat()->setFormatCode('d.m.yyyy'); 
