@@ -35,6 +35,10 @@ $report = [
                 'parameters' => [null, ['type' => 'GET']],
             ],
 
+            'counter_label' => [
+                'method' => 'label',
+                'parameters' => ['counter', __d('documents', 'Counter') . ':'],
+            ],
             'counters' => [
                 'class' => $this->Form,
                 'method' => 'control',
@@ -43,10 +47,7 @@ $report = [
                     'options' => [
                         'type' => 'select',
                         'options' => $counters,
-                        'label' => [
-                            'text' => __d('documents', 'Counter') . ':',
-                            'class' => 'active',
-                        ],
+                        'label' => false,
                         'empty' => '-- ' . __d('documents', 'All Counters') . ' --',
                         'class' => 'browser-default',
                     ],

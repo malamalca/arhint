@@ -35,16 +35,17 @@ if ($address->id) {
                     'parameters' => ['referer', 'options' => ['type' => 'hidden']],
                 ],
 
+                'kind_label' => [
+                    'method' => 'label',
+                    'parameters' => ['kind', __d('crm', 'Kind') . ':'],
+                ],
                 'kind' => [
                     'method' => 'control',
                     'parameters' => [
                         'field' => 'kind',
                         'options' => [
                             'type' => 'select',
-                            'label' => [
-                                'text' => __d('crm', 'Kind') . ':',
-                                'class' => 'active',
-                            ],
+                            'label' => false,
                             'options' => Configure::read('Crm.addressTypes'),
                             'error' => [
                                 'kindOccupied' => __d('crm', 'Entry of this type already exists.'),
@@ -67,7 +68,7 @@ if ($address->id) {
                     'method' => 'text',
                     'parameters' => [
                         'field' => 'zip',
-                        'options' => ['id' => 'contact-address-zip'],
+                        'options' => ['id' => 'contact-address-zip', 'style' => 'width: 100px'],
                     ],
                 ],
                 'address_city' => [
@@ -79,6 +80,10 @@ if ($address->id) {
                 ],
                 '<label for="contact-address-zip" class="active">' . __d('crm', 'ZIP and City') . ':</label>',
                 '</div>',
+                'address_country_label' => [
+                    'method' => 'label',
+                    'parameters' => ['contry_code', __d('crm', 'Country') . ':'],
+                ],
                 'address_country' => [
                     'method' => 'control',
                     'parameters' => [
@@ -86,10 +91,7 @@ if ($address->id) {
                         'options' => [
                             'type' => 'select',
                             'options' => Configure::read('Crm.countries'),
-                            'label' => [
-                                'text' => __d('crm', 'State') . ':',
-                                'class' => 'active',
-                            ],
+                            'label' => false,
                             'default' => Configure::read('Crm.defaultCountry'),
                             'empty' => true,
                             'class' => 'browser-default',
@@ -124,32 +126,43 @@ if ($address->id) {
     ?>
 <script type="text/javascript">
 
+    var AutocompleteZipCityUrl = "<?php echo Router::url([
+        'plugin' => 'Crm',
+        'controller' => 'ContactsAddresses',
+        'action' => 'autocomplete-zip-city'
+    ], true); ?>";
+
     $(document).ready(function() {
-        $('#contact-address-zip').autocompleteajax({
-            source: "<?php echo Router::url([
-                'plugin' => 'Crm',
-                'controller' => 'ContactsAddresses',
-                'action' => 'autocomplete-zip-city',
-                'zip',
-            ], true); ?>",
-            onSelect: function(item) {
-                $('#contact-address-zip').val(item.value);
-                $('#contact-address-city').val(item.label);
+        M.Autocomplete.init(
+            $('#contact-address-zip').get(0),
+            {
+                onSearch: (text, autocomplete) => {
+                    $.get(AutocompleteZipCityUrl + "/zip?term=" + $("#contact-address-zip").val()).done(function(data) {
+                        autocomplete.setMenuItems(data.map((item) => ({id: item.id, text: item.value + " " + item.label})));
+                    });
+                },
+                onAutocomplete: () => {
+                    let ZipFieldValue = $('#contact-address-zip').val();
+                    $('#contact-address-zip').val(ZipFieldValue.substring(0, ZipFieldValue.indexOf(" ")));
+                    $('#contact-address-city').val(ZipFieldValue.substring(ZipFieldValue.indexOf(" ")+ 1));
+                }
             }
-        });
+        );
 
-
-        $('#contact-address-city').autocompleteajax({
-            source: '<?php echo Router::url([
-                'plugin' => 'Crm',
-                'controller' => 'ContactsAddresses',
-                'action' => 'autocomplete-zip-city',
-                'city',
-            ], true); ?>',
-            onSelect: function(item) {
-                $('#contact-address-zip').val(item.id);
-                $('#contact-address-city').val(item.label);
+        M.Autocomplete.init(
+            $('#contact-address-city').get(0),
+            {
+                onSearch: (text, autocomplete) => {
+                    $.get(AutocompleteZipCityUrl + "/city?term=" + $("#contact-address-city").val()).done(function(data) {
+                        autocomplete.setMenuItems(data.map((item) => ({id: item.id, text: item.id + " " + item.label})));
+                    });
+                },
+                onAutocomplete: () => {
+                    let ZipFieldValue = $('#contact-address-city').val();
+                    $('#contact-address-zip').val(ZipFieldValue.substring(0, ZipFieldValue.indexOf(" ")));
+                    $('#contact-address-city').val(ZipFieldValue.substring(ZipFieldValue.indexOf(" ")+ 1));
+                }
             }
-        });
+        );
     });
 </script>

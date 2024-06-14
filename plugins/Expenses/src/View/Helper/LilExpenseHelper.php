@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Expenses\View\Helper;
 
 use Cake\Core\Plugin;
+use Cake\Routing\Router;
 use Cake\View\Helper;
 use Expenses\Model\Entity\Expense;
 
@@ -24,22 +25,31 @@ class LilExpenseHelper extends Helper
      * Build Expense icon
      *
      * @param \Expenses\Model\Entity\Expense $expense Expense entity.
+     * @param bool $urlOnly Return only url
      * @return string
      */
-    public function icon(Expense $expense): string
+    public function icon(Expense $expense, bool $urlOnly = false): string
     {
         $icon = '';
         // linked models
         switch ($expense->model) {
             case 'Document':
                 //if (!empty($expense->document->no)) {
+                if ($urlOnly) {
+                    $icon = Router::url('/expenses/img/document.png');
+                } else {
                     $icon = $this->Html->image('/expenses/img/document.png');
+                }
                 //} else {
                 //  $icon = $this->Html->image('/expenses/img/document_error.png');
                 //}
                 break;
             default:
-                $icon = $this->Html->image('/expenses/img/empty.png');
+                if ($urlOnly) {
+                    $icon = Router::url('/expenses/img/empty.png');
+                } else {
+                    $icon = $this->Html->image('/expenses/img/empty.png');
+                }
         }
 
         return $icon;
@@ -142,7 +152,7 @@ class LilExpenseHelper extends Helper
     {
         // this is default expense link
         $template =
-            '<span class="ac-expense-icon">%1$s</span>' .
+            '<span class="ac-expense-icon">%1$s</span> ' .
             '<span class="ac-expense-title">%2$s</span>' .
             '<span class="ac-expense-date">%3$s</span>' .
             '<span class="ac-expense-total">%4$s</span>';

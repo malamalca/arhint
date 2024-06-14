@@ -75,14 +75,14 @@ if ($data->count() > 0) {
             ],
             'total' => [
                 'parameters' => ['class' => 'right-align'],
-                'html' => $this->Number->currency($invoice->total),
+                'html' => $this->Number->currency($invoice->total ?? 0),
             ],
         ];
         $total += $invoice->total;
     }
 
     $invoicesTable['foot']['rows'][0]['columns']['total']['html'] =
-        $this->Number->currency($invoicesTotals['sumTotal']);
+        $this->Number->currency($invoicesTotals['sumTotal'] ?? 0);
 
     echo $this->Lil->table($invoicesTable, 'Documents.Invoices.Aht.index');
 } else {

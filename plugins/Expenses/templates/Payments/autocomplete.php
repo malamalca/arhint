@@ -5,7 +5,7 @@ $ret = [];
 foreach ($payments as $p) {
     $ret[] = [
         'id' => $p->id,
-        'label' =>
+        'text' =>
             '<span class="ac-payment-date">' . (string)$p->dat_happened . '</span>' .
             '<span class="ac-payment-descript">' . $p->descript . '</span>' .
             '<span class="ac-payment-amount">' . $this->Number->currency($p->amount) . '</span>',

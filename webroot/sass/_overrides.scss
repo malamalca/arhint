@@ -25,27 +25,15 @@ h3 {
     font-size: 30px;
 }
 
-button, input, optgroup, select, textarea {
-    line-height: 2 !important;
-}
-textarea {
-    background-color: #ffffff !important;
-}
-
-/* sidebar */
 main, footer, nav {
     padding-left: 300px !important;
 }
 
-@media #{$small-and-down} {
-    .zero-width-on-small-and-down {
-        display: none;
-        padding: 0;
-        white-space: nowrap;
-        overflow: hidden;
-        width: 0px;
-        border: solid 1px red;
-    }
+.btn-small {
+    padding: 0;
+    padding-left: 4px;
+    padding-right: 4px;
+    margin: 0;
 }
 
 @media #{$large-and-up} {
@@ -54,7 +42,6 @@ main, footer, nav {
             width: calc(100% - 80px);
         }
     }
-
 
     nav {
         & > div.nav-wrapper {
@@ -87,92 +74,36 @@ ul.main-menu {
     width: auto !important;
 }
 
-.sidenav {
-    @media print {
-        display: none;
+div.helper-text {
+    color: #606060;
+    font-size: 80%;
+    margin-left: 15px;
+}
+
+/* This is a fix for nested collapsibles */
+.collapsible-body {
+    height: 0px;
+    max-height:max-content;
+}
+
+/* Upper navbar links are white by default which is hard to read */
+.nav-wrapper {
+    ul {
+        padding-left: 0;
     }
-
-    .sidenav-user {
-        @extend .center-align !optional;
-
-        a.sidenav-avatar {
-            display: inline;
-            clear: both;
-            padding: 0;
-            background-color: transparent !important;
-        }
-        img {
-            width: 30%;
-            height: 90px;
-            cursor: pointer;
-            margin: 0px;
-            margin-top: 12px;
-        }
-
-        div {
-            display: block;
-            line-height: 20px;
-            height: 20px;
-            padding: 0px;
-            margin-top: 0px;
-            margin-bottom: 12px;
-        }
-
-        .sidenav-user-title {
-            cursor: pointer;
-        }
-    }
-
-    .sidenav-header {
-        text-transform: uppercase;
-        border-bottom: solid 1px #c0c0c0;
-        background-color: #e0e0e0 !important;
-    }
-    .sidenav-menu {
-        .chevron {
-            margin: 0px;
-        }
-
-        ul.collapsible {
-            li {
-                width: 100%;
-
-                a {
-                    font-size: 0.95rem;
-                }
-
-                .collapsible-header {
-                    .chevron {
-                        float: right;
-                    }
-                }
-
-                .sidenav-header {
-                    font-weight: bold;
-                }
-            }
-
-            li.active {
-                .sidenav-header {
-                    color: white !important;
-                    font-weight: bold;
-                    background-color: $secondary-color !important;
-                    text-shadow: 1px 1px black;
-                }
-            }
-        }
-    }
-
-    .sidenav-submenu {
-        li {
-            a {
-                font-size: 0.9rem !important;
-                font-weight: normal !important;
-            }
+    li {
+        a {
+            color: $primary-color !important;
         }
     }
 }
 
+div.error-message {
+    color: #d32f2f;
+    font-size: 90% !important;
+}
+
+/*
 .modal {
     .modal-header {
         border-radius: 0 0 2px 2px;
@@ -213,12 +144,6 @@ fieldset {
             }
         }
     }
-}
-
-div.helper-text {
-    color: #9e9e9e;
-    font-size: 80%;
-    margin-top: -20px;
 }
 
 .autocomplete-content, .dropdown-content {
@@ -284,32 +209,6 @@ input {
     }
 }
 
-table {
-    thead {
-        background-color: #f0f0f0 !important;
-    }
-
-    &.width-auto {
-        table-layout: auto;
-        width: auto;
-    }
-}
-
-ul.paginator {
-    padding: 0 !important;
-    margin: 0 !important;
-
-    li {
-        display: inline-block;
-        padding-right: 5px;
-        padding-left: 5px;
-    }
-
-    li.active {
-        border: solid 1px #c0c0c0 !important;
-    }
-}
-
 div.error-message {
     color: #d32f2f;
     font-size: 90% !important;
@@ -325,34 +224,6 @@ div.input-field.datetime input {
     width: auto !important;
 }
 
-.upload-area {
-    min-height: 200px;
-    border: 2px solid lightgray;
-    border-radius: 3px;
-    overflow: auto;
-
-    &.drag-over {
-        background-color: #f0f0f0;
-    }
-    
-}
-
-.upload-area:hover {
-    cursor: pointer;
-}
-
-.upload-area h1 {
-    text-align: center;
-    font-size: 32px;
-    font-weight: normal;
-    font-family: sans-serif;
-    color: darkslategray;
-}
-
-#upload-file{
-    display: none;
-}
-
 .input-field {
     &.file {
         input {
@@ -360,16 +231,4 @@ div.input-field.datetime input {
         }
     }
 }
-
-/* Thumbnail */
-.upload-thumbnail {
-    margin: 0 !important;
-
-    button.remove-item {
-        padding: 0;
-        padding-left: 4px;
-        padding-right: 4px;
-        height: 22px;
-        line-height: 22px !important;
-    }
-}
+    */

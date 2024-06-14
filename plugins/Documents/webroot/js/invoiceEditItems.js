@@ -99,16 +99,13 @@ jQuery.fn.InvoiceItemEditor = function (pOptions) {
         $('input.invoices-item-discount', rowClone).each(function () {
             $(this).blur($this.onInputsChange); });
 
-
-        //$('input.invoices-item-descript', rowClone).autocomplete($this.InvoicesItemAutocomplete);
-
         $('select.invoices-item-vat_id', rowClone).change($this.selectTax);
         $('a.invoices-item-remove', rowClone).click($this.onRemoveButtonClick);
         $('tbody:last', $this).append(rowClone);
 
         var elem = $('input.invoices-item-descript', rowClone).get(0);
-        M.AutocompleteAjax.init(elem, $this.InvoicesItemAutocomplete);
 
+        M.Autocomplete.init(elem, $this.InvoicesItemAutocomplete);
 
         return false;
     }
@@ -178,33 +175,42 @@ jQuery.fn.InvoiceItemEditor = function (pOptions) {
     ////////////////////////////////////////////////////////////////////////////////////////////////
     // AUTOCOMPLETE FUNCTIONALITY FOR ITEM DESCRIPTION
     this.InvoicesItemAutocomplete = {
-        source: options.itemsAutocompleteUrl,
-        onSearch: function () {
-            var row = $(this).closest('tr');
-            $('.invoices-item-item_id', row).val('');
-            $('.image-item-check', row).hide();
+        onSearch: (text, autocomplete) => {
+            $.get(options.itemsAutocompleteUrl + "?term=" + text).done(function(data) {
+                if (data.length > 1 || (data.length == 1 && text != data[0].value)) {
+                    autocomplete.setMenuItems(data);
+
+                    var row = $(this).closest('tr');
+                    $('.invoices-item-item_id', row).val('');
+                    $('.image-item-check', row).hide();
+                }
+            });
         },
-        onSelect: function (item) {
-            var row = $(this).closest('tr');
-            $('.td-invoices-item-descript > input:first', row).val(item.id);
-            $('.image-item-check', row).show();
+        onAutocomplete: (entries) => {
+            if (entries.length == 1) {
+                let item = entries[0];
+                let  row = $(this).closest('tr');
 
-            $('.invoices-item-qty', row).val(parseFloat(item.qty));
-            $('.invoices-item-unit', row).val(item.unit);
-            $('.invoices-item-price', row).val(parseFloat(item.price));
-            $('.invoices-item-discount', row).val(parseFloat(item.discount));
+                $('.td-invoices-item-descript > input:first', row).val(item.id);
+                $('.image-item-check', row).show();
 
-            $('.invoices-item-vat_id', row).val(item.vat.id);
-            $('.invoices-item-vat_title', row).val(item.vat.descript);
-            $('.invoices-item-vat_percent', row).val(parseFloat(item.vat.percent));
+                $('.invoices-item-qty', row).val(parseFloat(item.qty));
+                $('.invoices-item-unit', row).val(item.unit);
+                $('.invoices-item-price', row).val(parseFloat(item.price));
+                $('.invoices-item-discount', row).val(parseFloat(item.discount));
 
-            $this.recalculateRow(row);
+                $('.invoices-item-vat_id', row).val(item.vat.id);
+                $('.invoices-item-vat_title', row).val(item.vat.descript);
+                $('.invoices-item-vat_percent', row).val(parseFloat(item.vat.percent));
+
+                $this.recalculateRow(row);
+            }
         }
     };
 
 
     var elem = $('input.invoices-item-descript', this).get(0);
-    M.AutocompleteAjax.init(elem, $this.InvoicesItemAutocomplete);
+    M.Autocomplete.init(elem, $this.InvoicesItemAutocomplete);
 
     $('input.invoices-item-qty', this).blur($this.onInputsChange);
     $('input.invoices-item-price', this).blur($this.onInputsChange);

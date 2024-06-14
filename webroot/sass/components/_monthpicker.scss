@@ -87,7 +87,7 @@
 
       &.is-outside-current-month,
       &.is-disabled {
-        color: $datepicker-disabled-day-color;
+        color: $datepicker-day-font-color-disabled;
         pointer-events: none;
       }
 

@@ -59,10 +59,6 @@ $editAddressForm = [
                     ],
                 ],
             ],
-            'link_image' => $this->Html->image('/crm/img/ico_contact_check.gif', [
-                'style' => $address->contacts_address_id ? '' : 'display: none;',
-                'id' => 'ImageContactCheck',
-            ]),
             'street' => [
                 'method' => 'control',
                 'parameters' => [
@@ -74,7 +70,6 @@ $editAddressForm = [
                 ],
             ],
             '<div class="input-field text" id="contact-address-zip_city">',
-            '<label for="#contact-address-zip" class="active">' . __d('crm', 'ZIP and City') . ':</label>',
             'address_zip' => [
                 'method' => 'text',
                 'parameters' => [
@@ -83,6 +78,7 @@ $editAddressForm = [
                         'div' => false,
                         'disabled' => $address->contacts_address_id ? 'disabled' : '',
                         'id' => 'contact-address-zip',
+                        'style' => 'width: 100px',
                     ],
                 ],
             ],
@@ -98,17 +94,19 @@ $editAddressForm = [
                     ],
                 ],
             ],
+            '<label for="#contact-address-zip" class="active">' . __d('crm', 'ZIP and City') . ':</label>',
             '</div>',
+            'address_country_label' => [
+                    'method' => 'label',
+                    'parameters' => ['contry_code', __d('crm', 'Country') . ':'],
+                ],
             'country' => [
                 'method' => 'control',
                 'parameters' => [
                     'field' => 'country',
                     'options' => [
                         'type' => 'select',
-                        'label' => [
-                            'text' => __d('crm', 'Country') . ':',
-                            'class' => 'active',
-                        ],
+                        'label' => false,
                         'disabled' => $address->contacts_address_id ? 'disabled' : '',
                         'default' => Configure::read('Crm.defaultCountry'),
                         'options' => Configure::read('Crm.countries'),
@@ -124,7 +122,7 @@ $editAddressForm = [
             'submit' => [
                 'method' => 'button',
                 'parameters' => [
-                    __d('crm', 'Add'),
+                    __d('crm', 'Save'),
                     ['type' => 'submit'],
                 ],
             ],
@@ -144,20 +142,25 @@ echo $this->Lil->form($editAddressForm, 'Crm.Labels.edit_address');
         var elem = document.querySelector("#contacts-title");
 
         if (elem) {
-            var instance = M.AutocompleteAjax.init(elem, {
-                source: '<?php echo Router::url(['controller' => 'ContactsAddresses', 'action' => 'autocomplete']); ?>',
-                onSearch: function () {
-                    $('#contacts-address_id').val('');
-                    $('#ImageContactCheck').hide();
+            var instance = M.Autocomplete.init(elem, {
+                onSearch: (text, autocomplete) => {
+                    $.get("<?php echo Router::url(['controller' => 'ContactsAddresses', 'action' => 'autocomplete']); ?>?term=" + text).done(function(data) {
+                        if (data.length > 1 || (data.length == 1 && text != data[0].value)) {
+                            autocomplete.setMenuItems(data);
+                            $('#contacts-address_id').val('');
+                            $('#contact-address-street').attr('readonly', false);
+                            $('#contact-address-zip').attr('readonly', false);
+                            $('#contact-address-city').attr('readonly', false);
+                            $('#contact-address-country').attr('readonly', false);
 
-                    $('#contact-address-street').attr('readonly', false);
-                    $('#contact-address-zip').attr('readonly', false);
-                    $('#contact-address-city').attr('readonly', false);
-                    $('#contact-address-country').attr('readonly', false);
+                            // remove link icon
+                            $("#contacts-title").parent("div").children("div.suffix").remove();
+                        }
+                    });
                 },
-                onSelect: function (item) {
-                    if (item) {
-                        $('#ImageContactCheck').show();
+                onAutocomplete: (entries) => {
+                    if (entries.length == 1) {
+                        let item = entries[0];
                         $("#contacts-title").val(item.title);
                         $("#contacts-address_id").val(item.id);
 
@@ -166,7 +169,8 @@ echo $this->Lil->form($editAddressForm, 'Crm.Labels.edit_address');
                         $('#contact-address-city').val(item.city).attr('readonly', true);
                         $('#contact-address-country').val(item.country).attr('readonly', true);
 
-                        M.updateTextFields();
+                        // add link icon
+                        $("#contacts-title").parent("div").append("<div class='suffix'><i class='material-icons'>link</i></div>");
                     }
                 }
             });
@@ -175,7 +179,6 @@ echo $this->Lil->form($editAddressForm, 'Crm.Labels.edit_address');
                 .on("keyup", function () {
                     if ($(this).val() === "") {
                         $('#contacts-address_id').val('');
-                        $('#ImageContactCheck').hide();
 
                         $('#contact-address-street').attr('readonly', false);
                         $('#contact-address-zip').attr('readonly', false);

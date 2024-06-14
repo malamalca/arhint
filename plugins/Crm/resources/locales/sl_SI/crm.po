@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Crm\n"
-"POT-Creation-Date: 2022-05-08 06:34+0000\n"
-"PO-Revision-Date: 2022-05-08 08:43+0200\n"
+"POT-Creation-Date: 2024-06-14 06:28+0000\n"
+"PO-Revision-Date: 2024-06-14 08:29+0200\n"
 "Last-Translator: Malamalca <info@malamalca.com>\n"
 "Language-Team: \n"
 "Language: sl_SI\n"
@@ -69,31 +69,32 @@ msgstr "Naslova ni mogoče izbrisati. Poizkusite ponovno."
 msgid "Invalid address"
 msgstr "Naslov ne obstaja"
 
-#: plugins/Crm/src/Controller/ContactsController.php:172
+#: plugins/Crm/src/Controller/ContactsController.php:162
 msgid "Contact has been saved."
 msgstr "Kontakt je shranjen."
 
-#: plugins/Crm/src/Controller/ContactsController.php:177
+#: plugins/Crm/src/Controller/ContactsController.php:167
 msgid "Unable to save your contact."
 msgstr "Kontakta ni mogoče shraniti."
 
-#: plugins/Crm/src/Controller/ContactsController.php:200
+#: plugins/Crm/src/Controller/ContactsController.php:190
 msgid "The contact been deleted."
 msgstr "Kontakt je izbrisan."
 
-#: plugins/Crm/src/Controller/ContactsController.php:204
+#: plugins/Crm/src/Controller/ContactsController.php:194
 msgid "The contact could not be deleted. Please, try again."
 msgstr "Kontakta ni mogoče izbrisati. Poizkusite ponovno."
 
-#: plugins/Crm/src/Controller/ContactsController.php:267
+#: plugins/Crm/src/Controller/ContactsController.php:253
+#: plugins/Crm/src/Controller/ContactsController.php:316
 msgid "Invalid Request"
 msgstr "Napaka pri zahtevku"
 
-#: plugins/Crm/src/Controller/ContactsController.php:293
+#: plugins/Crm/src/Controller/ContactsController.php:342
 msgid "Invalid ajax call or contact does not exist."
 msgstr "Napaka pri povezavi, mogoče kontakt ne obstaja."
 
-#: plugins/Crm/src/Controller/ContactsController.php:379
+#: plugins/Crm/src/Controller/ContactsController.php:428
 msgid "Soap call failed"
 msgstr "Oddaljeni klic je spodletel"
 
@@ -137,35 +138,35 @@ msgstr "Adrema ne obstaja"
 msgid "Invalid label"
 msgstr "Nalepka ne obstaja"
 
-#: plugins/Crm/src/Controller/LabelsController.php:144
+#: plugins/Crm/src/Controller/LabelsController.php:148
 msgid "The address has been saved."
 msgstr "Naslov je shranjen."
 
-#: plugins/Crm/src/Controller/LabelsController.php:148
+#: plugins/Crm/src/Controller/LabelsController.php:152
 msgid "The address could not be saved. Please, try again."
 msgstr "Naslova ni mogoče shraniti. Preverite vpisana polja."
 
-#: plugins/Crm/src/Controller/LabelsController.php:170
+#: plugins/Crm/src/Controller/LabelsController.php:174
 msgid "The label has been deleted."
 msgstr "Nalepka je izbrisana."
 
-#: plugins/Crm/src/Controller/LabelsController.php:172
+#: plugins/Crm/src/Controller/LabelsController.php:176
 msgid "The label could not be deleted. Please, try again."
 msgstr "Nalepke ni mogoče izbrisati. Poizkusite ponovno."
 
-#: plugins/Crm/src/Event/CrmEvents.php:39 plugins/Crm/src/Lib/CrmSidebar.php:28
+#: plugins/Crm/src/Event/CrmEvents.php:65 plugins/Crm/src/Lib/CrmSidebar.php:33
 msgid "Costumers"
 msgstr "Stranke in kontakti"
 
-#: plugins/Crm/src/Lib/CrmSidebar.php:49
+#: plugins/Crm/src/Lib/CrmSidebar.php:54
 msgid "Contacts"
 msgstr "Kontakti"
 
-#: plugins/Crm/src/Lib/CrmSidebar.php:63
+#: plugins/Crm/src/Lib/CrmSidebar.php:68
 msgid "Companies"
 msgstr "Podjetja"
 
-#: plugins/Crm/src/Lib/CrmSidebar.php:78
+#: plugins/Crm/src/Lib/CrmSidebar.php:83
 msgid "Labels"
 msgstr "Nalepke in obrazci"
 
@@ -179,7 +180,7 @@ msgstr "Vpis adreme"
 
 #: plugins/Crm/templates/Adremas/edit.php:41
 #: plugins/Crm/templates/Contacts/edit.php:61
-#: plugins/Crm/templates/Contacts/index.php:61
+#: plugins/Crm/templates/Contacts/index.php:46
 #: plugins/Crm/templates/Labels/adrema.php:74
 #: plugins/Crm/templates/Labels/edit_address.php:55
 msgid "Title"
@@ -190,12 +191,12 @@ msgid "Adrema title is required."
 msgstr "Naziv je obvezno polje."
 
 #: plugins/Crm/templates/Adremas/edit.php:51
-#: plugins/Crm/templates/ContactsAccounts/edit.php:92
-#: plugins/Crm/templates/ContactsAddresses/edit.php:113
-#: plugins/Crm/templates/ContactsEmails/edit.php:78
-#: plugins/Crm/templates/ContactsPhones/edit.php:78
-#: plugins/Crm/templates/Contacts/edit.php:406
-#: plugins/Crm/templates/Labels/edit_address.php:127
+#: plugins/Crm/templates/ContactsAccounts/edit.php:93
+#: plugins/Crm/templates/ContactsAddresses/edit.php:115
+#: plugins/Crm/templates/ContactsEmails/edit.php:79
+#: plugins/Crm/templates/ContactsPhones/edit.php:79
+#: plugins/Crm/templates/Contacts/edit.php:418
+#: plugins/Crm/templates/Labels/edit_address.php:125
 msgid "Save"
 msgstr "Shrani"
 
@@ -208,36 +209,36 @@ msgstr "Uredi račun"
 msgid "Add an Account"
 msgstr "Nov račun"
 
-#: plugins/Crm/templates/ContactsAccounts/edit.php:44
-#: plugins/Crm/templates/ContactsAddresses/edit.php:45
-#: plugins/Crm/templates/ContactsEmails/edit.php:44
-#: plugins/Crm/templates/ContactsPhones/edit.php:44
+#: plugins/Crm/templates/ContactsAccounts/edit.php:39
+#: plugins/Crm/templates/ContactsAddresses/edit.php:40
+#: plugins/Crm/templates/ContactsEmails/edit.php:39
+#: plugins/Crm/templates/ContactsPhones/edit.php:39
 msgid "Kind"
 msgstr "Tip"
 
-#: plugins/Crm/templates/ContactsAccounts/edit.php:49
-#: plugins/Crm/templates/ContactsAddresses/edit.php:50
-#: plugins/Crm/templates/ContactsEmails/edit.php:49
-#: plugins/Crm/templates/ContactsPhones/edit.php:49
+#: plugins/Crm/templates/ContactsAccounts/edit.php:50
+#: plugins/Crm/templates/ContactsAddresses/edit.php:51
+#: plugins/Crm/templates/ContactsEmails/edit.php:50
+#: plugins/Crm/templates/ContactsPhones/edit.php:50
 msgid "Entry of this type already exists."
 msgstr "Zapis takega tipa že obstaja. Izberite drug tip."
 
-#: plugins/Crm/templates/ContactsAccounts/edit.php:61
-#: plugins/Crm/templates/Contacts/edit.php:309
+#: plugins/Crm/templates/ContactsAccounts/edit.php:62
+#: plugins/Crm/templates/Contacts/edit.php:321
 msgid "IBAN"
 msgstr "IBAN"
 
-#: plugins/Crm/templates/ContactsAccounts/edit.php:68
-#: plugins/Crm/templates/Contacts/edit.php:316
+#: plugins/Crm/templates/ContactsAccounts/edit.php:69
+#: plugins/Crm/templates/Contacts/edit.php:328
 msgid "BIC"
 msgstr "BIC"
 
-#: plugins/Crm/templates/ContactsAccounts/edit.php:75
-#: plugins/Crm/templates/Contacts/edit.php:323
+#: plugins/Crm/templates/ContactsAccounts/edit.php:76
+#: plugins/Crm/templates/Contacts/edit.php:335
 msgid "Bank"
 msgstr "Banka"
 
-#: plugins/Crm/templates/ContactsAccounts/edit.php:85
+#: plugins/Crm/templates/ContactsAccounts/edit.php:86
 msgid "This is a primary account"
 msgstr "To je glavni račun"
 
@@ -251,24 +252,27 @@ msgstr "Uredi naslov"
 msgid "Add an Address"
 msgstr "Nov naslov"
 
-#: plugins/Crm/templates/ContactsAddresses/edit.php:62
-#: plugins/Crm/templates/Contacts/edit.php:227
+#: plugins/Crm/templates/ContactsAddresses/edit.php:63
+#: plugins/Crm/templates/Contacts/edit.php:238
 #: plugins/Crm/templates/Labels/adrema.php:75
-#: plugins/Crm/templates/Labels/edit_address.php:71
+#: plugins/Crm/templates/Labels/edit_address.php:67
 msgid "Street"
 msgstr "Ulica"
 
-#: plugins/Crm/templates/ContactsAddresses/edit.php:80
-#: plugins/Crm/templates/Contacts/edit.php:234
-#: plugins/Crm/templates/Labels/edit_address.php:77
+#: plugins/Crm/templates/ContactsAddresses/edit.php:81
+#: plugins/Crm/templates/Contacts/edit.php:245
+#: plugins/Crm/templates/Labels/edit_address.php:97
 msgid "ZIP and City"
 msgstr "Pošta in kraj"
 
-#: plugins/Crm/templates/ContactsAddresses/edit.php:90
-msgid "State"
+#: plugins/Crm/templates/ContactsAddresses/edit.php:85
+#: plugins/Crm/templates/Contacts/edit.php:270
+#: plugins/Crm/templates/Labels/adrema.php:78
+#: plugins/Crm/templates/Labels/edit_address.php:101
+msgid "Country"
 msgstr "Država"
 
-#: plugins/Crm/templates/ContactsAddresses/edit.php:106
+#: plugins/Crm/templates/ContactsAddresses/edit.php:108
 msgid "This is a primary address"
 msgstr "To je glavni naslov"
 
@@ -281,15 +285,15 @@ msgstr "Uredi email"
 msgid "Add an Email"
 msgstr "Nov email"
 
-#: plugins/Crm/templates/ContactsEmails/edit.php:61
-#: plugins/Crm/templates/Contacts/edit.php:360
-#: plugins/Crm/templates/Contacts/index.php:65
+#: plugins/Crm/templates/ContactsEmails/edit.php:62
+#: plugins/Crm/templates/Contacts/edit.php:372
+#: plugins/Crm/templates/Contacts/index.php:50
 #: plugins/Crm/templates/Contacts/view.php:178
 #: plugins/Crm/templates/Contacts/view.php:272
 msgid "Email"
 msgstr "Email"
 
-#: plugins/Crm/templates/ContactsEmails/edit.php:71
+#: plugins/Crm/templates/ContactsEmails/edit.php:72
 msgid "This is a primary email"
 msgstr "To je glavni email naslov"
 
@@ -301,12 +305,12 @@ msgstr "Urejanje telefona"
 msgid "Add a Phone Number"
 msgstr "Nov telefon"
 
-#: plugins/Crm/templates/ContactsPhones/edit.php:61
-#: plugins/Crm/templates/Contacts/edit.php:394
+#: plugins/Crm/templates/ContactsPhones/edit.php:62
+#: plugins/Crm/templates/Contacts/edit.php:406
 msgid "Phone Number"
 msgstr "Telefonska številka"
 
-#: plugins/Crm/templates/ContactsPhones/edit.php:71
+#: plugins/Crm/templates/ContactsPhones/edit.php:72
 msgid "This is a primary phone"
 msgstr "To je glavna telefonska številka"
 
@@ -319,7 +323,7 @@ msgid "Add a Person"
 msgstr "Vpis kontakta"
 
 #: plugins/Crm/templates/Contacts/edit.php:10
-#: plugins/Crm/templates/Contacts/edit.php:447
+#: plugins/Crm/templates/Contacts/edit.php:461
 msgid "Add a Company"
 msgstr "Vpis podjetja"
 
@@ -336,7 +340,7 @@ msgstr "Vpišite naziv kontakta."
 msgid "Mat no."
 msgstr "Matična št."
 
-#: plugins/Crm/templates/Contacts/edit.php:74
+#: plugins/Crm/templates/Contacts/edit.php:83
 msgid "Tax no."
 msgstr "Davčna št."
 
@@ -358,7 +362,7 @@ msgid "Personal Data"
 msgstr "Osebni podatki"
 
 #: plugins/Crm/templates/Contacts/edit.php:116
-#: plugins/Crm/templates/Contacts/index.php:61
+#: plugins/Crm/templates/Contacts/index.php:46
 #: plugins/Crm/templates/Contacts/view.php:271
 msgid "Name"
 msgstr "Ime"
@@ -379,39 +383,33 @@ msgstr "Kontakt se sinhronizira na splet"
 msgid "Work Position"
 msgstr "Delavno mesto"
 
-#: plugins/Crm/templates/Contacts/edit.php:164
+#: plugins/Crm/templates/Contacts/edit.php:170
 msgid "Company Name"
 msgstr "Naziv podjetja"
 
-#: plugins/Crm/templates/Contacts/edit.php:170
+#: plugins/Crm/templates/Contacts/edit.php:181
 msgid "Start typing to select employer. You can also add a [$1new company]."
 msgstr ""
 "Začnite s tipkanjem za izbiro zaposlovalca. Lahko tudi vpišete [$1novo "
 "podjetje]."
 
-#: plugins/Crm/templates/Contacts/edit.php:192
+#: plugins/Crm/templates/Contacts/edit.php:203
 msgid "Job description"
 msgstr "Delovno mesto"
 
-#: plugins/Crm/templates/Contacts/edit.php:205
+#: plugins/Crm/templates/Contacts/edit.php:216
 msgid "Primary Address"
 msgstr "Glavni naslov"
 
-#: plugins/Crm/templates/Contacts/edit.php:265
-#: plugins/Crm/templates/Labels/adrema.php:78
-#: plugins/Crm/templates/Labels/edit_address.php:109
-msgid "Country"
-msgstr "Država"
-
-#: plugins/Crm/templates/Contacts/edit.php:281
+#: plugins/Crm/templates/Contacts/edit.php:293
 msgid "Primary Account"
 msgstr "Primarni račun"
 
-#: plugins/Crm/templates/Contacts/edit.php:332
+#: plugins/Crm/templates/Contacts/edit.php:344
 msgid "Primary Email"
 msgstr "Primarni email"
 
-#: plugins/Crm/templates/Contacts/edit.php:366
+#: plugins/Crm/templates/Contacts/edit.php:378
 msgid "Primary Phone"
 msgstr "Primarni telefon"
 
@@ -426,26 +424,22 @@ msgstr "Seznam kontaktov"
 msgid "Add"
 msgstr "Dodaj"
 
-#: plugins/Crm/templates/Contacts/index.php:47
-msgid "Search"
-msgstr "Išči"
-
-#: plugins/Crm/templates/Contacts/index.php:69
+#: plugins/Crm/templates/Contacts/index.php:54
 #: plugins/Crm/templates/Contacts/view.php:206
 #: plugins/Crm/templates/Contacts/view.php:273
 msgid "Phone"
 msgstr "Telefon"
 
-#: plugins/Crm/templates/Contacts/index.php:73
+#: plugins/Crm/templates/Contacts/index.php:58
 msgid "Syncable"
 msgstr "Sinhr."
 
-#: plugins/Crm/templates/Contacts/index.php:108
+#: plugins/Crm/templates/Contacts/index.php:94
 #: plugins/Crm/templates/Contacts/view.php:11
 msgid "employed"
 msgstr "zaposlen/a"
 
-#: plugins/Crm/templates/Contacts/index.php:110
+#: plugins/Crm/templates/Contacts/index.php:96
 #: plugins/Crm/templates/Contacts/view.php:16
 msgid "at"
 msgstr "pri"
@@ -522,19 +516,19 @@ msgstr "Zaposleni"
 msgid "Edit Phone"
 msgstr "Urejanje telefona"
 
-#: plugins/Crm/templates/Contacts/view.php:328
+#: plugins/Crm/templates/Contacts/view.php:332
 msgid "Add new Address"
 msgstr "Nov naslov"
 
-#: plugins/Crm/templates/Contacts/view.php:329
+#: plugins/Crm/templates/Contacts/view.php:333
 msgid "Add new Account"
 msgstr "Nov račun"
 
-#: plugins/Crm/templates/Contacts/view.php:330
+#: plugins/Crm/templates/Contacts/view.php:334
 msgid "Add new Email"
 msgstr "Nov email"
 
-#: plugins/Crm/templates/Contacts/view.php:331
+#: plugins/Crm/templates/Contacts/view.php:335
 msgid "Add new Phone"
 msgstr "Nov telefon"
 
@@ -567,19 +561,18 @@ msgid "Add new address"
 msgstr "Dodaj naslov"
 
 #: plugins/Crm/templates/Labels/adrema.php:100
-#: plugins/Crm/templates/Labels/label.php:48
 msgid "Next"
 msgstr "Naprej"
 
-#: plugins/Crm/templates/Labels/adrema.php:146
+#: plugins/Crm/templates/Labels/adrema.php:147
 msgid "Are you sure you want to remove this contact from adrema?"
 msgstr "Ste prepričani, da želite izbrisati kontakt iz adreme?"
 
-#: plugins/Crm/templates/Labels/adrema.php:154
+#: plugins/Crm/templates/Labels/adrema.php:155
 msgid "No adremas found. Please {0}."
 msgstr "Ni vpisane adreme. {0}."
 
-#: plugins/Crm/templates/Labels/adrema.php:155
+#: plugins/Crm/templates/Labels/adrema.php:156
 msgid "add new adrema"
 msgstr "nova adrema"
 
@@ -594,6 +587,16 @@ msgstr "Tiskaj adremo \"{0}\""
 #: plugins/Crm/templates/Labels/label.php:38
 msgid "Label"
 msgstr "Nalepka ali obrazec"
+
+#: plugins/Crm/templates/Labels/label.php:48
+msgid "Print"
+msgstr "Tiskaj"
+
+#~ msgid "State"
+#~ msgstr "Država"
+
+#~ msgid "Search"
+#~ msgstr "Išči"
 
 #~ msgid "Invalid contact"
 #~ msgstr "Kontakt ne obstaja."

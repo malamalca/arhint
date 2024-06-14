@@ -1,8 +1,10 @@
 .dropdown-content {
+  padding-left: 0;
+  list-style-type: none;
+
   &:focus {
     outline: 0;
   }
-
 
   @extend .z-depth-1;
   background-color: $dropdown-bg-color;
@@ -57,7 +59,7 @@
 
 
     clear: both;
-    color: $off-black;
+    color: $text-color;
     cursor: pointer;
     min-height: $dropdown-item-height;
     line-height: 1.5rem;
@@ -68,7 +70,7 @@
 
 body.keyboard-focused {
   .dropdown-content li:focus {
-    background-color: darken($dropdown-hover-bg-color, 8%);
+    background-color: $dropdown-focus-bg-color;
   }
 }
 

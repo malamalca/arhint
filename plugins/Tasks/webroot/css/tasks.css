@@ -133,7 +133,7 @@ div.lil-task-swipe-actions a.lil-task-swipe-delete {
 }
 
 /* EDIT FORM */
-input#task-title, input#task-deadline, textarea#task-descript, select#task-folder-id {
+input#task-title, input#task-deadline, textarea#task-descript, select#task-tasker-id, select#task-folder-id {
     width: 100%;
     max-width: 400px;
 }

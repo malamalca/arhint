@@ -26,14 +26,14 @@
   width: auto;
   margin-top: 10px;
   position: relative;
-  max-width:100%;
+  max-width: 100%;
   height: auto;
   min-height: $toast-height;
   line-height: 1.5em;
   background-color: $toast-color;
   padding: 10px 25px;
-  font-size: 1.1rem;
-  font-weight: 300;
+  font-size: 1rem;
+  font-weight: 400;
   color: $toast-text-color;
   display: flex;
   align-items: center;

@@ -50,10 +50,6 @@ $data = [
                     ],
                 ],
             ],
-            'img-link' => $this->Html->image('/documents/img/link.gif', [
-                'id' => 'image-check',
-                'style' => 'display:none',
-            ]),
             'submit' => [
                 'method' => 'submit',
                 'parameters' => [
@@ -72,34 +68,33 @@ echo $this->Lil->form($data, 'Documents.DocumentsLinks.link');
 ?>
 <script type="text/javascript">
     $(document).ready(function() {
-        // move link to position after field
-        var element = $('#image-check').detach();
-        $('#title').parent('div').append(element);
+        var DocumentsAutocompleteUrl = "<?php echo Router::url([
+            'plugin' => 'Documents',
+            'controller' => 'Documents',
+            'action' => 'autocomplete',
+        ], true); ?>";
 
-        let el = $('#title').get(0);
-        M.AutocompleteAjax.init(el, {
-            source: '<?php echo Router::url([
-                'plugin' => 'Documents',
-                'controller' => 'Documents',
-                'action' => 'autocomplete',
-            ], true); ?>',
-            onSearch: function() {
-                $('#document-id').val('');
-                $('#model').val('');
-                $('#image-check').hide();
+        let el = $("#title").get(0);
+        M.Autocomplete.init(el, {
+            allowUnsafeHTML: true,
+            onSearch: (text, autocomplete) => {
+                $.get(DocumentsAutocompleteUrl + "?term=" + text).done(function(data) {
+                    if (data.length > 1 || (data.length == 1 && text != data[0].title)) {
+                        autocomplete.setMenuItems(data);
+                        $("#document-id").val("");
+                        $("#model").val("");
+                        $("#title").parent("div").children("div.suffix").remove();
+                    }
+                });
             },
-            onSelect: function(item) {
-                $('#title').val(item.label);
-                $('#document-id').val(item.value);
-                $('#model').val(item.model);
-                $('#image-check').show();
-            },
-            onRenderItem: function(li, item) {
-                let li2 = $( "<li>" )
-                    .append( "<a><span class=\"document-autocomplete-no\">" + item.no + "</span> - " + item.label + " <span class=\"document-autocomplete-counter\">(" + item.counter + ")</span></a>" )
-                    .get(0);
-
-                return li2;
+            onAutocomplete: (entries) => {
+                if (entries.length == 1) {
+                    let item = entries[0];
+                    $("#title").val(item.title);
+                    $("#document-id").val(item.id);
+                    $("#model").val(item.model);
+                    $("#title").parent("div").append("<div class='suffix'><i class='material-icons'>link</i></div>");
+                }
             }
         });
     });

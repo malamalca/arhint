@@ -82,14 +82,15 @@ $payment_edit = [
                 ]],
             ],
 
+            'account_id_label' => !empty($expense->id) ? null : [
+                'method' => 'label',
+                'parameters' => ['kind', __d('expenses', 'Payment') . ':'],
+            ],
             'payment' => !empty($expense->id) ? null : [
                 'method' => 'control',
                 'parameters' => ['auto_payment', [
                     'type' => 'select',
-                    'label' => [
-                        'text' => __d('expenses', 'Payment') . ':',
-                        'class' => 'active',
-                    ],
+                    'label' => false,
                     'empty' => '-- ' . __d('expenses', 'do not create payment') . ' --',
                     'options' => $accounts,
                     'class' => 'browser-default',

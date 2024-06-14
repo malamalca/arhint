@@ -125,18 +125,22 @@ class PaymentsController extends AppController
      */
     public function autocomplete()
     {
-        $term = $this->getRequest()->getQuery('term');
-        if ($this->getRequest()->is('ajax') && !empty($term)) {
-            $payments = $this->Authorization->applyScope($this->Payments->find(), 'index')
-                ->select()
-                ->where([
-                    'Payments.owner_id' => $this->getCurrentUser()->get('company_id'),
-                    'Payments.descript LIKE' => '%' . $term . '%',
-                ])
-                ->order('Payments.dat_happened DESC')
-                ->limit(30)
-                ->all();
-            $this->set(compact('payments'));
+        if ($this->getRequest()->is('ajax') || Configure::read('debug')) {
+            $term = $this->getRequest()->getQuery('term');
+            if (is_string($term) && $term != '') {
+                $payments = $this->Authorization->applyScope($this->Payments->find(), 'index')
+                    ->select()
+                    ->where([
+                        'Payments.owner_id' => $this->getCurrentUser()->get('company_id'),
+                        'Payments.descript LIKE' => '%' . $term . '%',
+                    ])
+                    ->order('Payments.dat_happened DESC')
+                    ->limit(30)
+                    ->all();
+                $this->set(compact('payments'));
+            } else {
+                $this->Authorization->skipAuthorization();
+            }
         } else {
             throw new NotFoundException(__d('expenses', 'Invalid ajax call.'));
         }

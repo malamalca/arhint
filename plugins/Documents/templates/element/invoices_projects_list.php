@@ -103,7 +103,7 @@
                     [
                         'title' => __d('documents', 'Download Attachment(s)'),
                         'escape' => false,
-                        'class' => 'btn btn-small btn-floating waves-effect waves-light waves-circle',
+                        'class' => 'btn btn-small waves-effect waves-light waves-circle',
                     ]
                 ),
             ],

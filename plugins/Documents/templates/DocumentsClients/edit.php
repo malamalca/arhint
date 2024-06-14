@@ -70,12 +70,11 @@ $clientEdit = [
                 ],
             ],
             'address_zipcity_wrapper' => '<div class="input-field" id="client-address-zip_city">',
-            'address_zipcity_label' => '<label for="client-address-zip">' . __d('documents', 'ZIP and City') . ':</label>',
             'address_zip' => [
                 'method' => 'text',
                 'parameters' => [
                     'field' => 'zip',
-                    'options' => ['id' => 'client-address-zip'],
+                    'options' => ['id' => 'client-address-zip', 'style' => 'width: 100px;'],
                 ],
             ],
             'address_city' => [
@@ -85,6 +84,7 @@ $clientEdit = [
                     'options' => ['id' => 'client-address-city'],
                 ],
             ],
+            'address_zipcity_label' => '<label for="client-address-zip">' . __d('documents', 'ZIP and City') . ':</label>',
             'address_zipcity_end' => '</div>',
             'address_country' => [
                 'method' => 'hidden',
@@ -99,6 +99,10 @@ $clientEdit = [
                     'field' => 'country',
                 ],
             ],
+            'address_country_code_label' => [
+                'method' => 'label',
+                'parameters' => ['country_code', __d('documents', 'Country') . ':'],
+            ],
             'address_country_code' => [
                 'method' => 'control',
                 'parameters' => [
@@ -106,10 +110,7 @@ $clientEdit = [
                     'options' => [
                         'type' => 'select',
                         'options' => Configure::read('Crm.countries'),
-                        'label' => [
-                            'text' => __d('documents', 'Country') . ':',
-                            'class' => 'active',
-                        ],
+                        'label' => false,
                         'default' => Configure::read('Crm.defaultCountry'),
                         'empty' => true,
                         'class' => 'browser-default',

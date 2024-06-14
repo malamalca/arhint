@@ -81,7 +81,7 @@
 
 /* Focused styles */
 [type="radio"].tabbed:focus + span:before {
-  box-shadow: 0 0 0 10px rgba(0,0,0,.1);
+  box-shadow: 0 0 0 10px $primary-color-focus-opaque;
 }
 
 /* Disabled Radio With gap */

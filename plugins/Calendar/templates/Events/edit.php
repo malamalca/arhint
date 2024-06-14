@@ -109,15 +109,16 @@ $eventEdit = [
                     ],
                 ],
             ],
+            'reminder_label' => [
+                'method' => 'label',
+                'parameters' => ['reminder', __d('calendar', 'Alert') . ':'],
+            ],
             'reminder' => [
                 'method' => 'control',
                 'parameters' => [
                     'field' => 'reminder', [
                         'type' => 'select',
-                        'label' => [
-                            'text' => __d('calendar', 'Alert') . ':',
-                            'class' => 'active'
-                        ],
+                        'label' => false,
                         'class' => 'browser-default',
                         'empty' => __d('calendar', 'None'),
                         'options' => [

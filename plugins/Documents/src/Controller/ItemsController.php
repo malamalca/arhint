@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Documents\Controller;
 
+use Cake\Core\Configure;
 use Cake\Http\Exception\NotFoundException;
 use Cake\Http\Response;
 
@@ -95,13 +96,13 @@ class ItemsController extends AppController
      */
     public function autocomplete(): Response
     {
-        if ($this->getRequest()->is('ajax')) {
+        if ($this->getRequest()->is('ajax') || Configure::read('debug')) {
             $items = [];
             $term = $this->getRequest()->getQuery('term');
             if ($term) {
                 $items = $this->Authorization->applyScope($this->Items->find(), 'index')
                     ->select($this->Items)
-                    ->select(['value' => 'Items.descript', 'label' => 'Items.descript'])
+                    ->select(['value' => 'Items.descript', 'text' => 'Items.descript'])
                     ->select($this->Items->Vats)
                     ->contain(['Vats'])
                     ->where(['Items.descript LIKE' => '%' . $term . '%'])

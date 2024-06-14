@@ -1,26 +1,42 @@
 .tabs {
+  padding-left: 0;
+  list-style-type: none;
+
   &.tabs-transparent {
     background-color: transparent;
 
-    .tab a,
+    .tab a {
+      color: $font-on-primary-color-medium;
+    }
+
     .tab.disabled a,
-    .tab.disabled a:hover {
-      color: rgba(255,255,255,0.7);
+    .tab.disabled a:hover,
+    .tab.disabled a:focus {
+      color: $font-on-primary-color-disabled;
+    }
+
+    .tab a:hover {
+      background-color: $surface-hover-color-opaque;
+    }
+
+    .tab a.active,
+    .tab a:focus {
+      background-color: transparent;
     }
 
     .tab a:hover,
-    .tab a.active {
-      color: #fff;
+    .tab a.active,
+    .tab a:focus {
+      color: $font-on-primary-color-main;
     }
 
     .indicator {
-      background-color: #fff;
+      background-color: $font-on-primary-color-main;
     }
   }
 
   &.tabs-fixed-width {
     display: flex;
-
     .tab {
       flex-grow: 1;
     }
@@ -36,28 +52,37 @@
   white-space: nowrap;
 
   .tab {
+    padding-left: 0;
+    list-style-type: none;
     display: inline-block;
     text-align: center;
     line-height: 48px;
     height: 48px;
     padding: 0;
     margin: 0;
-    text-transform: uppercase;
 
     a {
+      &.active {
+        background-color: transparent;
+      }
+
+      &.active,
       &:focus,
-      &:focus.active {
-        background-color: transparentize($tabs-underline-color, .8);
+      &:hover {
+        color: $tabs-text-active-color;
+      }
+
+      &:hover {
+        background-color: $primary-color-hover-opaque;
+      }
+
+      &:focus,
+      &.active {
+        background-color: $primary-color-focus-opaque;
         outline: none;
       }
 
-      &:hover,
-      &.active {
-        background-color: transparent;
-        color: $tabs-text-color;
-      }
-
-      color: rgba($tabs-text-color, .7);
+      color: $tabs-text-inactive-color;
       display: block;
       width: 100%;
       height: 100%;
@@ -70,10 +95,16 @@
 
     &.disabled a,
     &.disabled a:hover {
-      color: rgba($tabs-text-color, .4);
+      &:not(:focus) {
+        background-color: transparent;
+      }
+
+      color: $tabs-text-disabled-color;
       cursor: default;
+      background-color: transparent;
     }
   }
+
   .indicator {
     position: absolute;
     bottom: 0;

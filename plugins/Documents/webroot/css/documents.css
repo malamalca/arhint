@@ -34,6 +34,22 @@ table#InvoicesPayment {
     padding-right: 3px !important;
 }
 
+#invoice-items-table td input,
+#invoice-tax-table td input,
+#invoice-items-table td select,
+#invoice-tax-table td select
+{
+    padding: 0;
+    height: 30px;
+}
+#invoice-items-table input.invoices-item-qty,
+#invoice-items-table input.invoices-item-price,
+#invoice-items-table input.invoices-item-discount
+{
+    text-align: right;
+    width: 60px;
+}
+
 #invoice-descript {
     width: 750px;
     box-sizing: border-box;

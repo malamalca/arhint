@@ -114,6 +114,29 @@ class DocumentsSidebar
             ['before' => 'reports']
         );
 
+        // EXPORT SIDEBAR SUBMENU
+        if (empty($sidebar['documents']['items']['exports'])) {
+            $sidebar['documents']['items']['exports'] = [
+                'visible' => true,
+                'title' => __d('documents', 'Export'),
+                'url' => false,
+                'params' => [],
+                'active' => false,
+                'submenu' => [
+                    'eRacuni' => [
+                        'visible' => true,
+                        'title' => __d('documents', 'eRacuni'),
+                        'url' => [
+                            'plugin' => 'Documents',
+                            'controller' => 'Invoices',
+                            'action' => 'export_eracuni',
+                        ],
+                        'active' => $request->getParam('controller') == 'Invoices',
+                    ],
+                ],
+            ];
+        }
+
         // LOOKUPS SIDEBAR SUBMENU
         if (empty($sidebar['documents']['items']['lookups'])) {
             $sidebar['documents']['items']['lookups'] = [

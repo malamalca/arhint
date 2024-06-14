@@ -255,7 +255,7 @@ if (!empty($document->documents_attachments)) {
                 ],
                 [
                     'escape' => false,
-                    'class' => 'btn btn-small btn-floating waves-effect waves-light waves-circle',
+                    'class' => 'btn btn-small waves-effect waves-light waves-circle',
                 ]
             ) . ' ' .
             $this->Html->link(
@@ -268,7 +268,7 @@ if (!empty($document->documents_attachments)) {
                 [
                     'escape' => false,
                     'confirm' => __d('documents', 'Are you sure you want to delete this attachment'),
-                    'class' => 'btn btn-small btn-floating waves-effect waves-light waves-circle',
+                    'class' => 'btn btn-small waves-effect waves-light waves-circle',
                 ]
             )
         );

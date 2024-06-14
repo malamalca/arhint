@@ -99,7 +99,7 @@ class ContactsAddressesController extends AppController
                 $data[] = [
                 'id' => $a->id,
                 'value' => $a->contact->title,
-                'label' => $a->contact->title,
+                'text' => $a->contact->title,
                 'title' => $a->contact->title,
                 'street' => $a->street,
                 'city' => $a->city,

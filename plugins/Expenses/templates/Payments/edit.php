@@ -65,16 +65,18 @@ $payment_edit = [
                     'default' => $this->getRequest()->getQuery('amount') ? : null,
                 ]],
             ],
+            
+            'account_id_label' => [
+                'method' => 'label',
+                'parameters' => ['kind', __d('expenses', 'From/To Account') . ':'],
+            ],
             'account_id' => [
                 'method' => 'control',
                 'parameters' => ['account_id', [
                     'type' => 'select',
-                    'label' => [
-                        'text' => __d('expenses', 'From/To Account') . ':',
-                        'class' => 'active',
-                    ],
-                    'options' => $accounts,
+                    'label' => false,
                     'class' => 'browser-default',
+                    'options' => $accounts,
                 ]],
             ],
             'descript' => [
@@ -99,14 +101,14 @@ $payment_edit = [
                 'parameters' => ['expense_descript', ['type' => 'text', 'id' => 'expense-descript']],
             ],
             'add_expense_cancel' => sprintf(
-                ' <a href="javascript:void(0);" onclick="toggleAddExpense();">%s</a>',
+                ' <a href="javascript:void(0);" onclick="toggleAddExpense();" class="btn-small">%s</a>',
                 __d('expenses', 'Cancel')
             ),
             'add_expense_end' => '</div>',
 
             'add_expense_link' => sprintf(
                 '<div id="add-expense-link">' .
-                '<a href="javascript:void(0);" id="add-expense-link" onclick="toggleAddExpense();">%s</a>' .
+                '<a href="javascript:void(0);" id="add-expense-link" onclick="toggleAddExpense();" class="btn-small">%s</a>' .
                 '</div>',
                 __d('expenses', 'Add Expense')
             ),
@@ -216,14 +218,25 @@ echo $this->Lil->form($payment_edit, 'Expenses.Payments.edit');
 
     $(document).ready(function() {
 
-        $("#expense-descript").autocompleteajax({
-            source: "<?= Router::url(['controller' => 'Expenses', 'action' => 'autocomplete'], true); ?>",
-            limit: 20,
-            onSelect: function(item) {
-                $("#expense-descript").val("");
-                addExpenseRow(item)
+        M.Autocomplete.init(
+            $("#expense-descript").get(0),
+            {
+                allowUnsafeHTML: true,
+                onSearch: (text, autocomplete) => {
+                    $.get("<?= Router::url(['controller' => 'Expenses', 'action' => 'autocomplete', '_ext' => 'json'], true); ?>" + "?term=" + text).done(function(data) {
+                        if (data.length > 1 || (data.length == 1 && text != data[0].value)) {
+                            autocomplete.setMenuItems(data);
+                        }
+                    });
+                },
+                onAutocomplete: (entries) => {
+                    if (entries.length == 1) {
+                        $("#expense-descript").val("");
+                        addExpenseRow(entries[0]);
+                    }
+                }
             }
-        });
+        );
 
         if ($("#add-expense-table tr").length > 0) {
             $("#add-expense-form").hide();

@@ -131,6 +131,38 @@ $documentEdit = [
                     ],
                 ],
             ],
+            'client_hint' => sprintf(
+                '<div class="helper-text">%s</div>',
+                $this->Lil->link(
+                    __d('documents', 'Start typing to select client or add a [$1new company] or [$2new contact].'),
+                    [
+                        1 => [
+                            [
+                                'plugin' => 'Crm',
+                                'controller' => 'Contacts',
+                                'action' => 'edit',
+                                '?' => ['kind' => 'C'],
+                            ],
+                            [
+                                'id' => 'AddCompanyLink',
+                                'tabIndex' => -1,
+                            ],
+                        ],
+                        2 => [
+                            [
+                                'plugin' => 'Crm',
+                                'controller' => 'Contacts',
+                                'action' => 'edit',
+                                '?' => ['kind' => 'T'],
+                            ],
+                            [
+                                'id' => 'AddContactLink',
+                                'tabIndex' => -1,
+                            ],
+                        ],
+                    ]
+                )
+            ),
             'client_error' => [
                 'method' => 'error',
                 'parameters' => [$client . '.title', __d('documents', 'Please choose a client')],
@@ -139,6 +171,7 @@ $documentEdit = [
                 'method' => 'error',
                 'parameters' => [$client . '.kind', __d('documents', 'Please choose a client')],
             ],
+            
             'no' => [
                 'method' => 'control',
                 'parameters' => [
@@ -157,15 +190,16 @@ $documentEdit = [
                     ],
                 ],
             ],
+            'project_id_label' => [
+                'method' => 'label',
+                'parameters' => ['project_id', __d('documents', 'Project') . ':'],
+            ],
             'project' => !Plugin::isLoaded('Projects') ? null : [
                 'method' => 'control',
                 'parameters' => [
                     'field' => 'project_id', [
                         'type' => 'select',
-                        'label' => [
-                            'text' => __d('documents', 'Project') . ':',
-                            'class' => 'active',
-                        ],
+                        'label' => false,
                         'options' => $projects,
                         'empty' => '-- ' . __d('documents', 'no project') . ' --',
                         'class' => 'browser-default',
@@ -217,14 +251,8 @@ $documentEdit = [
             'fs_attachments_start' => '<fieldset>',
             'fs_attachments_legend' => sprintf('<legend>%s</legend>', __d('documents', 'Archive')),
             'file.name.0' => [
-                'method' => 'control',
-                'parameters' => [
-                    'field' => 'documents_attachments.0.filename',
-                    'options' => [
-                        'type' => 'file',
-                        'label' => false,
-                    ],
-                ],
+                'method' => 'file',
+                'parameters' => ['documents_attachments.0.filename'],
             ],
             'file.model.0' => [
                 'method' => 'control',
@@ -245,7 +273,7 @@ $documentEdit = [
                     ],
                 ],
             ],
-            'file.scan.button' => [
+            'file.scan.button' => 1==1 ? null : [
                 'method' => 'button',
                 'parameters' => [
                     __d('documents', 'Scan a Document'),
@@ -399,6 +427,10 @@ $this->Lil->insertIntoArray($documentEdit['form']['lines'], $analytics, ['after'
 $paymentDetails = [
     'fs_payment_start' => '<fieldset>',
     'fs_payment_legend' => sprintf('<legend>%s</legend>', __d('documents', 'Payment')),
+    'pmt_kind_label' => [
+        'method' => 'label',
+        'parameters' => ['pmt_kind', __d('documents', 'Payment Kind') . ':'],
+    ],
     'pmt_kind' => [
         'method' => 'control',
         'parameters' => [
@@ -412,12 +444,13 @@ $paymentDetails = [
                 ],
                 'default' => 0,
                 'class' => 'browser-default',
-                'label' => [
-                    'class' => 'active',
-                    'text' => __d('documents', 'Payment Kind') . ':',
-                ],
+                'label' => false,
             ],
         ],
+    ],
+    'pmt_sepa_type_label' => [
+        'method' => 'label',
+        'parameters' => ['pmt_sepa_type', __d('documents', 'Sepa Type') . ':'],
     ],
     'pmt_sepa_type' => [
         'method' => 'control',
@@ -428,10 +461,7 @@ $paymentDetails = [
                 'options' => Configure::read('Documents.sepaTypes'),
                 'default' => 'OTHR',
                 'class' => 'browser-default',
-                'label' => [
-                    'class' => 'active',
-                    'text' => __d('documents', 'Sepa Type') . ':',
-                ],
+                'label' => false,
                 'error' => [
                     'format' => __d('documents', 'Invalid type'),
                 ],
@@ -558,10 +588,10 @@ echo $this->Lil->form($documentEdit, 'Documents.Invoices.edit');
         // EditPreview Javascript Code
         var iframe = $('<iframe frameborder="0" marginwidth="0" marginheight="0" style="width:100%; height: 99%" name="IframeEditPreview" id="IframeEditPreview"></iframe>');
 
-        var dialog = $("<div class=\"modal\" id=\"editPreviewWindow\"></div>")
-            .append(iframe)
-            .appendTo("body")
-            .modal();
+        //var dialog = $("<div class=\"modal\" id=\"editPreviewWindow\"></div>")
+        //    .append(iframe)
+        //    .appendTo("body")
+        //    .modal();
 
         $("#MenuEditPreview").click(function(e) {
             e.preventDefault();
@@ -578,7 +608,7 @@ echo $this->Lil->form($documentEdit, 'Documents.Invoices.edit');
                 .prop("action", defaultAction)
                 .prop("target", defaultTarger);
 
-            dialog.modal("open");
+            //dialog.modal("open");
 
 
             $("#editPreviewWindow").height($(window.top).height())

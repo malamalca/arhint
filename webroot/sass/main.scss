@@ -1,19 +1,23 @@
 @charset "UTF-8";
+@import "vendor/Materialize/components/tokens.module";
+@import "vendor/Materialize/components/colors.module";
+@import "vendor/Materialize/components/typography.module";
+@import "vendor/Materialize/components/theme.light.module";
+@import "vendor/Materialize/components/theme.dark.module";
+@import "vendor/Materialize/components/_theme_variables";
 
 // Color
 @import "vendor/Materialize/components/color-variables";
 @import "vendor/Materialize/components/color-classes";
-
 // Variables;
 @import "vendor/Materialize/components/variables";
-
 // Reset
 @import "vendor/Materialize/components/normalize";
-
 // components
 @import "vendor/Materialize/components/global";
+@import "vendor/Materialize/components/collection";
 @import "vendor/Materialize/components/badges";
-//@import "vendor/Materialize/components/icons-material-design";
+@import "vendor/Materialize/components/icons-material-design";
 @import "vendor/Materialize/components/grid";
 @import "vendor/Materialize/components/navbar";
 @import "vendor/Materialize/components/typography";
@@ -24,7 +28,6 @@
 @import "vendor/Materialize/components/tooltip";
 @import "vendor/Materialize/components/buttons";
 @import "vendor/Materialize/components/dropdown";
-@import "vendor/Materialize/components/waves";
 @import "vendor/Materialize/components/modal";
 @import "vendor/Materialize/components/collapsible";
 @import "vendor/Materialize/components/chips";
@@ -44,7 +47,7 @@
 
 $default-background-color: #f0f0f0 !default;
 
-@import "components/monthpicker";
+//@import "components/monthpicker";
 @import "components/calendarday";
 @import "components/timepanel";
 @import "components/duration-input";
@@ -52,6 +55,9 @@ $default-background-color: #f0f0f0 !default;
 @import "components/monthpicker-input";
 @import "components/view-panel";
 @import "components/search-panel";
+@import "components/_sidenav";
+@import "components/_paginator";
+@import "components/_upload-area";
 
 @import "material-icons";
 

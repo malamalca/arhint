@@ -303,7 +303,7 @@ if (!empty($job)) {
     }
 
     $contact_view['panels']['tabs'] = ['lines' => [
-        'pre' => '<div class="row view-panel"><div class="col s12"><ul class="tabs">',
+        'pre' => '<div class="row view-panel"><div class="col s12"><ul id="ContactTabs" class="tabs">',
         'post' => '</ul></div>',
     ]];
 
@@ -324,6 +324,10 @@ if (!empty($job)) {
         ');');
     $this->Lil->jsReady('$(".edit-element").hide()');
     $this->Lil->jsReady('$(".delete-element").hide()');
+
+    // needed for bug - must have active tab
+    //$this->Lil->jsReady('alert($("ul#ContactTabs>li>a").first().get(0));');
+    $this->Lil->jsReady('if(!$("ul#ContactTabs>li>a").hasClass("active")) { $("ul#ContactTabs>li>a").first().addClass("active"); }');
 
     $this->Lil->jsReady(sprintf('$(".AddAddressLink").modalPopup({title:"%s"})', __d('crm', 'Add new Address')));
     $this->Lil->jsReady(sprintf('$(".AddAccountLink").modalPopup({title:"%s"})', __d('crm', 'Add new Account')));

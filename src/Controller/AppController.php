@@ -49,6 +49,10 @@ class AppController extends Controller
             $this->viewBuilder()->setClassName('Aht');
         }
 
+        if ($this->request->is('json')) {
+            $this->viewBuilder()->setClassName('Json');
+        }
+
         $this->response->setTypeMap('txt', ['text/plain']);
 
         if ($this->request->is('txt')) {

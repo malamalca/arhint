@@ -9,10 +9,10 @@ $analytics['itm_' . $itmIx++] =
     sprintf('<th class="right-align">%s</th>', __d('documents', 'Quantity')) .
     sprintf('<th class="left-align">%s</th>', __d('documents', 'Unit')) .
     sprintf('<th class="right-align">%s</th>', __d('documents', 'Price per Unit')) .
-    sprintf('<th class="right-align nowrap">%s</th>', __d('documents', 'Discount [%]')) .
-    sprintf('<th class="right-align">%s</th>', __d('documents', 'Unit Total')) .
+    sprintf('<th class="right-align nowrap">%s</th>', __d('documents', 'Discount')) .
+    sprintf('<th class="right-align nowrap">%s</th>', __d('documents', 'Net total')) .
     sprintf('<th class="right-align nowrap">%s</th>', __d('documents', 'Tax [%]')) .
-    sprintf('<th class="right-align">%s</th>', __d('documents', 'Total with Tax')) .
+    sprintf('<th class="right-align">%s</th>', __d('documents', 'Total')) .
     '<th class="center-align">&nbsp;</th>' .
     '</tr></thead>';
 
@@ -25,8 +25,8 @@ $itemsTotal = 0;
 $invoices_items = $document->invoices_items;
 if (empty($invoices_items)) {
     $invoices_items[] = (object)[
-        'id' => null, 'item_id' => null, 'vat_id' => null, 'vat_percent' => 0, 'vat_title' => '',
-        'price' => null, 'discount' => null, 'qty' => null,
+        'id' => null, 'item_id' => null, 'vat_id' => null, 'vat_percent' => '0.0', 'vat_title' => '',
+        'price' => '0.00', 'discount' => null, 'qty' => '1.00',
     ];
 }
 
@@ -83,7 +83,7 @@ foreach ($invoices_items as $k => $item) {
                 'type' => 'number',
                 'step' => '0.01',
                 'label' => false,
-                'size' => 5,
+                'value' => number_format($item->qty, 2),
                 'class' => 'invoices-item-qty',
                 'error' => __d('documents', 'Blank'),
                 'id' => 'invoice-invoices-items-' . $k . '-qty',

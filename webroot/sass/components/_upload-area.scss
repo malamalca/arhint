@@ -1,0 +1,39 @@
+.upload-area {
+    min-height: 200px;
+    border: 2px solid lightgray;
+    border-radius: 3px;
+    padding: 10px;
+    overflow: auto;
+
+    &.drag-over {
+        background-color: #f0f0f0;
+    }
+
+    &:hover {
+        cursor: pointer;
+    }
+
+    h1 {
+        text-align: center;
+        font-size: 32px;
+        font-weight: normal;
+        font-family: sans-serif;
+        color: darkslategray;
+    }
+
+    .upload-thumbnail {
+        margin: 0 !important;
+    
+        button.remove-item {
+            padding: 0;
+            padding-left: 4px;
+            padding-right: 4px;
+            height: 22px;
+            line-height: 22px !important;
+        }
+    }
+}
+
+#upload-file {
+    display: none;
+}

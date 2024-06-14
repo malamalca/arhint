@@ -34,16 +34,17 @@ $editForm = [
                 'parameters' => ['referer', 'options' => ['type' => 'hidden']],
             ],
 
+            'kind_label' => [
+                'method' => 'label',
+                'parameters' => ['kind', __d('crm', 'Kind') . ':'],
+            ],
             'kind' => [
                 'method' => 'control',
                 'parameters' => [
                     'field' => 'kind',
                     'options' => [
                         'type' => 'select',
-                        'label' => [
-                            'text' => __d('crm', 'Kind') . ':',
-                            'class' => 'active',
-                        ],
+                        'label' => false,
                         'options' => Configure::read('Crm.accountTypes'),
                         'error' => [
                             'kindOccupied' => __d('crm', 'Entry of this type already exists.'),

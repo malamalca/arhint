@@ -26,6 +26,10 @@ $editForm = [
                 'method' => 'hidden',
                 'parameters' => ['field' => 'user_id'],
             ],
+            'user_label' => !$this->getCurrentUser()->hasRole('admin') ? null : [
+                'method' => 'label',
+                'parameters' => ['status_id', __d('projects', 'User') . ':'],
+            ],
             'user' => !$this->getCurrentUser()->hasRole('admin') ? null : [
                 'method' => 'control',
                 'parameters' => [
@@ -33,10 +37,7 @@ $editForm = [
                     'options' => [
                         'type' => 'select',
                         'options' => $users,
-                        'label' => [
-                            'text' => __d('projects', 'User') . ':',
-                            'class' => 'active',
-                        ],
+                        'label' => false,
                         'class' => 'browser-default',
                     ],
                 ],

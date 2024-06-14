@@ -18,12 +18,10 @@ use Cake\Routing\Router;
     <?= $this->fetch('css') ?>
 
     <?= $this->Html->script('/js/jquery/jquery-3.6.0.min.js') ?>
-    <?= $this->Html->script('/js/vendor/Materialize/bin/materialize.min.js') ?>
+    <?= $this->Html->script('/js/vendor/Materialize/bin/materialize.js') ?>
     <?= $this->Html->script('/lil/js/lil_float.js') ?>
     <?= $this->Html->script('/lil/js/lil_date.js') ?>
-    <?= $this->Html->script('monthpicker.js') ?>
     <?= $this->Html->script('modalPopup.js') ?>
-    <?= $this->Html->script('autocompleteAjax.js') ?>
 
     <?= $this->fetch('script') ?>
 </head>
@@ -122,14 +120,14 @@ use Cake\Routing\Router;
         lilFloatSetup.decimalSeparator = "<?= $formatter->getSymbol(\NumberFormatter::DECIMAL_SEPARATOR_SYMBOL); ?>";
         lilFloatSetup.thousandsSeparator = "<?= $formatter->getSymbol(\NumberFormatter::GROUPING_SEPARATOR_SYMBOL); ?>";
 
-        $(document).ready(function(){
+        $(document).ready(function() {
+            <?= $this->Lil->jsReadyOut(); ?>
+
             M.AutoInit();
 
             $(".sidenav-user-title").on("click", function(e) {
                 $("#user-settings").toggle();
             });
-
-            <?= $this->Lil->jsReadyOut(); ?>
         });
     </script>
 </body>

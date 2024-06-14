@@ -20,6 +20,7 @@
         "malamalca/lil": "^4.6",
         "mikehaertl/phpwkhtmltopdf": "2.0.*@dev",
         "mobiledetect/mobiledetectlib": "^3.74",
+        "phpoffice/phpspreadsheet": "*",
         "phpoffice/phpword": "^0.18.2",
         "sabre/dav": "~4.6.0",
         "sabre/vobject": "4.5",

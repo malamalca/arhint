@@ -127,6 +127,38 @@ $documentEdit = [
                     ],
                 ],
             ],
+            'client_hint' => sprintf(
+                '<div class="helper-text">%s</div>',
+                $this->Lil->link(
+                    __d('documents', 'Start typing to select client or add a [$1new company] or [$2new contact].'),
+                    [
+                        1 => [
+                            [
+                                'plugin' => 'Crm',
+                                'controller' => 'Contacts',
+                                'action' => 'edit',
+                                '?' => ['kind' => 'C'],
+                            ],
+                            [
+                                'id' => 'AddCompanyLink',
+                                'tabIndex' => -1,
+                            ],
+                        ],
+                        2 => [
+                            [
+                                'plugin' => 'Crm',
+                                'controller' => 'Contacts',
+                                'action' => 'edit',
+                                '?' => ['kind' => 'T'],
+                            ],
+                            [
+                                'id' => 'AddContactLink',
+                                'tabIndex' => -1,
+                            ],
+                        ],
+                    ]
+                )
+            ),
             'client_error' => [
                 'method' => 'error',
                 'parameters' => [$client . '.title', __d('documents', 'Please choose a client')],
@@ -153,15 +185,16 @@ $documentEdit = [
                     ],
                 ],
             ],
+            'project_id_label' => [
+                'method' => 'label',
+                'parameters' => ['project_id', __d('documents', 'Project') . ':'],
+            ],
             'project' => !Plugin::isLoaded('Projects') ? null : [
                 'method' => 'control',
                 'parameters' => [
                     'field' => 'project_id', [
                         'type' => 'select',
-                        'label' => [
-                            'text' => __d('documents', 'Project') . ':',
-                            'class' => 'active',
-                        ],
+                        'label' => false,
                         'options' => $projects,
                         'empty' => '-- ' . __d('documents', 'no project') . ' --',
                         'class' => 'browser-default',
@@ -187,6 +220,7 @@ $documentEdit = [
                     ],
                 ],
             ],
+            'fs_dates_end' => '</fieldset>',
 
             ////////////////////////////////////////////////////////////////////////////////////
             'fs_descript_start' => '<fieldset>',
@@ -236,7 +270,7 @@ $documentEdit = [
                     ],
                 ],
             ],
-            'file.scan.button' => [
+            'file.scan.button' => 1==1 ? null : [
                 'method' => 'button',
                 'parameters' => [
                     __d('documents', 'Scan a Document'),
@@ -325,10 +359,10 @@ echo $this->Lil->form($documentEdit, 'Documents.Invoices.edit');
         // EditPreview Javascript Code
         var iframe = $('<iframe frameborder="0" marginwidth="0" marginheight="0" style="width:100%; height: 99%" name="IframeEditPreview" id="IframeEditPreview"></iframe>');
 
-        var dialog = $("<div class=\"modal\" id=\"editPreviewWindow\"></div>")
-            .append(iframe)
-            .appendTo("body")
-            .modal();
+        //var dialog = $("<div class=\"modal\" id=\"editPreviewWindow\"></div>")
+        //    .append(iframe)
+        //    .appendTo("body")
+        //    .modal();
 
         $("#MenuEditPreview").click(function(e) {
             e.preventDefault();
@@ -346,7 +380,6 @@ echo $this->Lil->form($documentEdit, 'Documents.Invoices.edit');
                 .prop("target", defaultTarger);
 
             dialog.modal("open");
-
 
             $("#editPreviewWindow").height($(window.top).height())
         });

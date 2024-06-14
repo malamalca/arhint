@@ -14,12 +14,25 @@
     bottom: 0;
 
     ul.slides {
+      padding-left: 0;
+      list-style-type: none;
       height: 100%;
     }
 
     ul.indicators {
+      padding-left: 0;
+      list-style-type: none;
       z-index: 2;
       bottom: 30px;
+
+      .indicator-item {
+        background-color: $slider-fullscreen-indicator-color;
+
+        &.active {
+          background-color: $slider-fullscreen-indicator-color-active;
+        }
+      }
+
     }
   }
 
@@ -27,8 +40,12 @@
     background-color: $slider-bg-color;
     margin: 0;
     height: 400px;
+    padding-left: 0;
+    list-style-type: none;
 
     li {
+      padding-left: 0;
+      list-style-type: none; 
       opacity: 0;
       position: absolute;
       top: 0;
@@ -53,7 +70,9 @@
         width: 70%;
         opacity: 0;
 
-        p { color: $slider-bg-color-light; }
+        p {
+          color: rgba(255, 255, 255, 0.75);
+        }
       }
 
       &.active {
@@ -62,8 +81,9 @@
     }
   }
 
-
   .indicators {
+    padding-left: 0;
+    list-style-type: none;
     position: absolute;
     text-align: center;
     left: 0;
@@ -74,19 +94,28 @@
     .indicator-item {
       display: inline-block;
       position: relative;
-      cursor: pointer;
       height: 16px;
       width: 16px;
       margin: 0 12px;
-      background-color: $slider-bg-color-light;
+    }
+
+    .indicator-item-btn {
+      position: absolute;
+      top: 0;
+      left: 0;
+      cursor: pointer;
+      background-color: $slider-indicator-color;
 
       transition: background-color .3s;
       border-radius: 50%;
-
+      border-width: 0;
+      
       &.active {
-        background-color: $slider-indicator-color;
+        background-color: $slider-indicator-color-active;
       }
+
+      width: 100%;
+      height: 100%;
     }
   }
-
 }

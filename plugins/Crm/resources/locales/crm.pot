@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2022-09-07 10:56+0000\n"
+"POT-Creation-Date: 2024-06-14 06:28+0000\n"
 "PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
 "Last-Translator: NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
@@ -83,15 +83,16 @@ msgstr ""
 msgid "The contact could not be deleted. Please, try again."
 msgstr ""
 
-#: ./plugins/Crm/src/Controller/ContactsController.php:257
+#: ./plugins/Crm/src/Controller/ContactsController.php:253
+#: ./plugins/Crm/src/Controller/ContactsController.php:316
 msgid "Invalid Request"
 msgstr ""
 
-#: ./plugins/Crm/src/Controller/ContactsController.php:283
+#: ./plugins/Crm/src/Controller/ContactsController.php:342
 msgid "Invalid ajax call or contact does not exist."
 msgstr ""
 
-#: ./plugins/Crm/src/Controller/ContactsController.php:369
+#: ./plugins/Crm/src/Controller/ContactsController.php:428
 msgid "Soap call failed"
 msgstr ""
 
@@ -135,36 +136,36 @@ msgstr ""
 msgid "Invalid label"
 msgstr ""
 
-#: ./plugins/Crm/src/Controller/LabelsController.php:147
+#: ./plugins/Crm/src/Controller/LabelsController.php:148
 msgid "The address has been saved."
 msgstr ""
 
-#: ./plugins/Crm/src/Controller/LabelsController.php:151
+#: ./plugins/Crm/src/Controller/LabelsController.php:152
 msgid "The address could not be saved. Please, try again."
 msgstr ""
 
-#: ./plugins/Crm/src/Controller/LabelsController.php:173
+#: ./plugins/Crm/src/Controller/LabelsController.php:174
 msgid "The label has been deleted."
 msgstr ""
 
-#: ./plugins/Crm/src/Controller/LabelsController.php:175
+#: ./plugins/Crm/src/Controller/LabelsController.php:176
 msgid "The label could not be deleted. Please, try again."
 msgstr ""
 
-#: ./plugins/Crm/src/Event/CrmEvents.php:39
-#: ./plugins/Crm/src/Lib/CrmSidebar.php:28
+#: ./plugins/Crm/src/Event/CrmEvents.php:65
+#: ./plugins/Crm/src/Lib/CrmSidebar.php:33
 msgid "Costumers"
 msgstr ""
 
-#: ./plugins/Crm/src/Lib/CrmSidebar.php:49
+#: ./plugins/Crm/src/Lib/CrmSidebar.php:54
 msgid "Contacts"
 msgstr ""
 
-#: ./plugins/Crm/src/Lib/CrmSidebar.php:63
+#: ./plugins/Crm/src/Lib/CrmSidebar.php:68
 msgid "Companies"
 msgstr ""
 
-#: ./plugins/Crm/src/Lib/CrmSidebar.php:78
+#: ./plugins/Crm/src/Lib/CrmSidebar.php:83
 msgid "Labels"
 msgstr ""
 
@@ -189,12 +190,12 @@ msgid "Adrema title is required."
 msgstr ""
 
 #: ./plugins/Crm/templates/Adremas/edit.php:51
-#: ./plugins/Crm/templates/ContactsAccounts/edit.php:92
-#: ./plugins/Crm/templates/ContactsAddresses/edit.php:113
-#: ./plugins/Crm/templates/ContactsEmails/edit.php:78
-#: ./plugins/Crm/templates/ContactsPhones/edit.php:78
-#: ./plugins/Crm/templates/Contacts/edit.php:406
-#: ./plugins/Crm/templates/Labels/edit_address.php:127
+#: ./plugins/Crm/templates/ContactsAccounts/edit.php:93
+#: ./plugins/Crm/templates/ContactsAddresses/edit.php:115
+#: ./plugins/Crm/templates/ContactsEmails/edit.php:79
+#: ./plugins/Crm/templates/ContactsPhones/edit.php:79
+#: ./plugins/Crm/templates/Contacts/edit.php:418
+#: ./plugins/Crm/templates/Labels/edit_address.php:125
 msgid "Save"
 msgstr ""
 
@@ -207,36 +208,36 @@ msgstr ""
 msgid "Add an Account"
 msgstr ""
 
-#: ./plugins/Crm/templates/ContactsAccounts/edit.php:44
-#: ./plugins/Crm/templates/ContactsAddresses/edit.php:45
-#: ./plugins/Crm/templates/ContactsEmails/edit.php:44
-#: ./plugins/Crm/templates/ContactsPhones/edit.php:44
+#: ./plugins/Crm/templates/ContactsAccounts/edit.php:39
+#: ./plugins/Crm/templates/ContactsAddresses/edit.php:40
+#: ./plugins/Crm/templates/ContactsEmails/edit.php:39
+#: ./plugins/Crm/templates/ContactsPhones/edit.php:39
 msgid "Kind"
 msgstr ""
 
-#: ./plugins/Crm/templates/ContactsAccounts/edit.php:49
-#: ./plugins/Crm/templates/ContactsAddresses/edit.php:50
-#: ./plugins/Crm/templates/ContactsEmails/edit.php:49
-#: ./plugins/Crm/templates/ContactsPhones/edit.php:49
+#: ./plugins/Crm/templates/ContactsAccounts/edit.php:50
+#: ./plugins/Crm/templates/ContactsAddresses/edit.php:51
+#: ./plugins/Crm/templates/ContactsEmails/edit.php:50
+#: ./plugins/Crm/templates/ContactsPhones/edit.php:50
 msgid "Entry of this type already exists."
 msgstr ""
 
-#: ./plugins/Crm/templates/ContactsAccounts/edit.php:61
-#: ./plugins/Crm/templates/Contacts/edit.php:309
+#: ./plugins/Crm/templates/ContactsAccounts/edit.php:62
+#: ./plugins/Crm/templates/Contacts/edit.php:321
 msgid "IBAN"
 msgstr ""
 
-#: ./plugins/Crm/templates/ContactsAccounts/edit.php:68
-#: ./plugins/Crm/templates/Contacts/edit.php:316
+#: ./plugins/Crm/templates/ContactsAccounts/edit.php:69
+#: ./plugins/Crm/templates/Contacts/edit.php:328
 msgid "BIC"
 msgstr ""
 
-#: ./plugins/Crm/templates/ContactsAccounts/edit.php:75
-#: ./plugins/Crm/templates/Contacts/edit.php:323
+#: ./plugins/Crm/templates/ContactsAccounts/edit.php:76
+#: ./plugins/Crm/templates/Contacts/edit.php:335
 msgid "Bank"
 msgstr ""
 
-#: ./plugins/Crm/templates/ContactsAccounts/edit.php:85
+#: ./plugins/Crm/templates/ContactsAccounts/edit.php:86
 msgid "This is a primary account"
 msgstr ""
 
@@ -250,24 +251,27 @@ msgstr ""
 msgid "Add an Address"
 msgstr ""
 
-#: ./plugins/Crm/templates/ContactsAddresses/edit.php:62
-#: ./plugins/Crm/templates/Contacts/edit.php:227
+#: ./plugins/Crm/templates/ContactsAddresses/edit.php:63
+#: ./plugins/Crm/templates/Contacts/edit.php:238
 #: ./plugins/Crm/templates/Labels/adrema.php:75
-#: ./plugins/Crm/templates/Labels/edit_address.php:71
+#: ./plugins/Crm/templates/Labels/edit_address.php:67
 msgid "Street"
 msgstr ""
 
-#: ./plugins/Crm/templates/ContactsAddresses/edit.php:80
-#: ./plugins/Crm/templates/Contacts/edit.php:234
-#: ./plugins/Crm/templates/Labels/edit_address.php:77
+#: ./plugins/Crm/templates/ContactsAddresses/edit.php:81
+#: ./plugins/Crm/templates/Contacts/edit.php:245
+#: ./plugins/Crm/templates/Labels/edit_address.php:97
 msgid "ZIP and City"
 msgstr ""
 
-#: ./plugins/Crm/templates/ContactsAddresses/edit.php:90
-msgid "State"
+#: ./plugins/Crm/templates/ContactsAddresses/edit.php:85
+#: ./plugins/Crm/templates/Contacts/edit.php:270
+#: ./plugins/Crm/templates/Labels/adrema.php:78
+#: ./plugins/Crm/templates/Labels/edit_address.php:101
+msgid "Country"
 msgstr ""
 
-#: ./plugins/Crm/templates/ContactsAddresses/edit.php:106
+#: ./plugins/Crm/templates/ContactsAddresses/edit.php:108
 msgid "This is a primary address"
 msgstr ""
 
@@ -280,15 +284,15 @@ msgstr ""
 msgid "Add an Email"
 msgstr ""
 
-#: ./plugins/Crm/templates/ContactsEmails/edit.php:61
-#: ./plugins/Crm/templates/Contacts/edit.php:360
+#: ./plugins/Crm/templates/ContactsEmails/edit.php:62
+#: ./plugins/Crm/templates/Contacts/edit.php:372
 #: ./plugins/Crm/templates/Contacts/index.php:50
 #: ./plugins/Crm/templates/Contacts/view.php:178
 #: ./plugins/Crm/templates/Contacts/view.php:272
 msgid "Email"
 msgstr ""
 
-#: ./plugins/Crm/templates/ContactsEmails/edit.php:71
+#: ./plugins/Crm/templates/ContactsEmails/edit.php:72
 msgid "This is a primary email"
 msgstr ""
 
@@ -300,12 +304,12 @@ msgstr ""
 msgid "Add a Phone Number"
 msgstr ""
 
-#: ./plugins/Crm/templates/ContactsPhones/edit.php:61
-#: ./plugins/Crm/templates/Contacts/edit.php:394
+#: ./plugins/Crm/templates/ContactsPhones/edit.php:62
+#: ./plugins/Crm/templates/Contacts/edit.php:406
 msgid "Phone Number"
 msgstr ""
 
-#: ./plugins/Crm/templates/ContactsPhones/edit.php:71
+#: ./plugins/Crm/templates/ContactsPhones/edit.php:72
 msgid "This is a primary phone"
 msgstr ""
 
@@ -318,7 +322,7 @@ msgid "Add a Person"
 msgstr ""
 
 #: ./plugins/Crm/templates/Contacts/edit.php:10
-#: ./plugins/Crm/templates/Contacts/edit.php:447
+#: ./plugins/Crm/templates/Contacts/edit.php:461
 msgid "Add a Company"
 msgstr ""
 
@@ -335,7 +339,7 @@ msgstr ""
 msgid "Mat no."
 msgstr ""
 
-#: ./plugins/Crm/templates/Contacts/edit.php:74
+#: ./plugins/Crm/templates/Contacts/edit.php:83
 msgid "Tax no."
 msgstr ""
 
@@ -378,37 +382,31 @@ msgstr ""
 msgid "Work Position"
 msgstr ""
 
-#: ./plugins/Crm/templates/Contacts/edit.php:164
+#: ./plugins/Crm/templates/Contacts/edit.php:170
 msgid "Company Name"
 msgstr ""
 
-#: ./plugins/Crm/templates/Contacts/edit.php:170
+#: ./plugins/Crm/templates/Contacts/edit.php:181
 msgid "Start typing to select employer. You can also add a [$1new company]."
 msgstr ""
 
-#: ./plugins/Crm/templates/Contacts/edit.php:192
+#: ./plugins/Crm/templates/Contacts/edit.php:203
 msgid "Job description"
 msgstr ""
 
-#: ./plugins/Crm/templates/Contacts/edit.php:205
+#: ./plugins/Crm/templates/Contacts/edit.php:216
 msgid "Primary Address"
 msgstr ""
 
-#: ./plugins/Crm/templates/Contacts/edit.php:265
-#: ./plugins/Crm/templates/Labels/adrema.php:78
-#: ./plugins/Crm/templates/Labels/edit_address.php:109
-msgid "Country"
-msgstr ""
-
-#: ./plugins/Crm/templates/Contacts/edit.php:281
+#: ./plugins/Crm/templates/Contacts/edit.php:293
 msgid "Primary Account"
 msgstr ""
 
-#: ./plugins/Crm/templates/Contacts/edit.php:332
+#: ./plugins/Crm/templates/Contacts/edit.php:344
 msgid "Primary Email"
 msgstr ""
 
-#: ./plugins/Crm/templates/Contacts/edit.php:366
+#: ./plugins/Crm/templates/Contacts/edit.php:378
 msgid "Primary Phone"
 msgstr ""
 
@@ -515,19 +513,19 @@ msgstr ""
 msgid "Edit Phone"
 msgstr ""
 
-#: ./plugins/Crm/templates/Contacts/view.php:328
+#: ./plugins/Crm/templates/Contacts/view.php:332
 msgid "Add new Address"
 msgstr ""
 
-#: ./plugins/Crm/templates/Contacts/view.php:329
+#: ./plugins/Crm/templates/Contacts/view.php:333
 msgid "Add new Account"
 msgstr ""
 
-#: ./plugins/Crm/templates/Contacts/view.php:330
+#: ./plugins/Crm/templates/Contacts/view.php:334
 msgid "Add new Email"
 msgstr ""
 
-#: ./plugins/Crm/templates/Contacts/view.php:331
+#: ./plugins/Crm/templates/Contacts/view.php:335
 msgid "Add new Phone"
 msgstr ""
 
@@ -560,19 +558,18 @@ msgid "Add new address"
 msgstr ""
 
 #: ./plugins/Crm/templates/Labels/adrema.php:100
-#: ./plugins/Crm/templates/Labels/label.php:48
 msgid "Next"
 msgstr ""
 
-#: ./plugins/Crm/templates/Labels/adrema.php:146
+#: ./plugins/Crm/templates/Labels/adrema.php:147
 msgid "Are you sure you want to remove this contact from adrema?"
 msgstr ""
 
-#: ./plugins/Crm/templates/Labels/adrema.php:154
+#: ./plugins/Crm/templates/Labels/adrema.php:155
 msgid "No adremas found. Please {0}."
 msgstr ""
 
-#: ./plugins/Crm/templates/Labels/adrema.php:155
+#: ./plugins/Crm/templates/Labels/adrema.php:156
 msgid "add new adrema"
 msgstr ""
 
@@ -586,5 +583,9 @@ msgstr ""
 
 #: ./plugins/Crm/templates/Labels/label.php:38
 msgid "Label"
+msgstr ""
+
+#: ./plugins/Crm/templates/Labels/label.php:48
+msgid "Print"
 msgstr ""
 

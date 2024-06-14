@@ -1,0 +1,53 @@
+.sidenav {
+    @media print {
+        display: none;
+    }
+
+    .collapsible-header {
+        white-space: nowrap;
+    }
+
+    .sidenav-user {
+        @extend .center-align !optional;
+
+        a.sidenav-avatar {
+            display: inline;
+            height: 110px;
+            clear: both;
+            padding: 0;
+            background-color: transparent !important;
+        }
+        img {
+            height: 90px;
+            cursor: pointer;
+            margin: 0px;
+            margin-top: 12px;
+        }
+
+        div {
+            display: block;
+            line-height: 20px;
+            height: 20px;
+            padding: 0px;
+            margin-top: 0px;
+            margin-bottom: 12px;
+        }
+
+        .sidenav-user-title {
+            cursor: pointer;
+        }
+    }
+
+    .sidenav-header {
+        text-transform: uppercase;
+        border-bottom: solid 1px #c0c0c0;
+        background-color: #e0e0e0 !important;
+    }
+
+    .sidenav-submenu {
+        a {
+            font-weight: normal;
+        }
+    }
+
+}

@@ -131,7 +131,7 @@ class LabelsController extends AppController
         if ($id) {
             $address = $AdremasContacts->get($id, contain: ['ContactsAddresses']);
             if (!empty($address->contacts_address)) {
-                $AdremasContacts->patchEntity($address, $address->contacts_address);
+                $AdremasContacts->patchEntity($address, $address->contacts_address->toArray());
             }
         } else {
             /** @var \Crm\Model\Entity\AdremasContact $address */

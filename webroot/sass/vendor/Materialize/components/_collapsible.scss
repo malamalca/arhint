@@ -1,4 +1,7 @@
 .collapsible {
+  padding-left: 0;
+  list-style-type: none;
+
   border-top: 1px solid $collapsible-border-color;
   border-right: 1px solid $collapsible-border-color;
   border-left: 1px solid $collapsible-border-color;
@@ -16,8 +19,8 @@
   -webkit-tap-highlight-color: transparent;
   line-height: 1.5;
   padding: 1rem;
-  background-color: $collapsible-header-color;
   border-bottom: 1px solid $collapsible-border-color;
+  background-color: $collapsible-bg-color;
 
   i {
     width: 2rem;
@@ -27,49 +30,29 @@
     margin-right: 1rem;
   }
 }
+
+.collapsible-header::after {
+  content: '▾';
+  text-align: right;
+  margin-right: 0.25rem;
+  width: 100%;
+}
+.active .collapsible-header::after {
+  content: "▴";
+}
+
+
 .keyboard-focused .collapsible-header:focus {
-  background-color: #eee;
+  background-color: $surface-focus-color-opaque;
 }
 
 .collapsible-body {
-  display: none;
+  max-height: 0;
   border-bottom: 1px solid $collapsible-border-color;
   box-sizing: border-box;
-  padding: 2rem;
-}
-
-// Sidenav collapsible styling
-.sidenav,
-.sidenav.sidenav-fixed {
-
-  .collapsible {
-    border: none;
-    box-shadow: none;
-
-    li { padding: 0; }
-  }
-
-  .collapsible-header {
-    background-color: transparent;
-    border: none;
-    line-height: inherit;
-    height: inherit;
-    padding: 0 $sidenav-padding;
-
-    &:hover { background-color: rgba(0,0,0,.05); }
-    i { line-height: inherit; }
-  }
-
-  .collapsible-body {
-    border: 0;
-    background-color: $collapsible-header-color;
-
-    li a {
-      padding: 0 (7.5px + $sidenav-padding)
-               0 (15px + $sidenav-padding);
-    }
-  }
-
+  padding: 0 2rem;
+  overflow: hidden;
+  background-color: $collapsible-bg-color;
 }
 
 // Popout Collapsible
@@ -77,12 +60,14 @@
 .collapsible.popout {
   border: none;
   box-shadow: none;
+
   > li {
     box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
     // transform: scaleX(.92);
     margin: 0 24px;
     transition: margin .35s cubic-bezier(0.250, 0.460, 0.450, 0.940);
   }
+
   > li.active {
     box-shadow: 0 5px 11px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15);
     margin: 16px 0;

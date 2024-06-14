@@ -15,15 +15,6 @@ jQuery.fn.InvoiceEditClient = function (options) {
     };
     var $this = this;
 
-    var modalTemplate = [
-        '<div class="modal">',
-        '   <div class="modal-content">',
-        '   <h4>Modal Header</h4>',
-        '   <p></p>',
-        '   </div>',
-        '</div>'
-    ];
-
     this.fillClientData = function (target, client) {
         var kinds = {"buyer":"BY", "receiver":"IV", "issuer":"II"};
         $("#invoice-" + target + "-kind", $this).val(kinds[target]);
@@ -62,7 +53,7 @@ jQuery.fn.InvoiceEditClient = function (options) {
             }
         }
 
-        M.updateTextFields()
+        //M.updateTextFields()
     }
 
     this.collectClientData = function (target) {
@@ -116,60 +107,25 @@ jQuery.fn.InvoiceEditClient = function (options) {
         var elem = document.querySelector("#invoice-" + target + "-title");
 
         if (elem) {
-            var instance = M.AutocompleteAjax.init(elem, {
-                source: options.clientAutoCompleteUrl,
-                minLength: 0,
-                onSearch: function () {
-                    var title = $("#invoice-" + target + "-title", $this).val();
-                    $("input[id^='invoice-" + target + "-'").val("");
-                    $("#invoice-" + target + "-title", $this).val(title);
-                    $("#image-" + target + "-checked", $this).hide();
-                },
-                onSelect: function (item) {
-                    $this.selectClient(target, item.client);
-                },
-                onOpenEnd: function (el) {
-                    var li = $(
-                        "<li style=\"line-height: inherit; min-height: 0;\">" +
-                        "<button href=\"#\" class=\"\" style=\"width: 50%; min-height: 30px; float: left; \" id=\"AutocompleteAddPerson\">" +
-                            options.addPersonDialogTitle +
-                        "</button>" +
-                        "<button href=\"#\" class=\"\" style=\"width: 50%; min-height: 30px; float: left;\" id=\"AutocompleteAddCompany\">" +
-                            options.addCompanyDialogTitle +
-                        "</button>" +
-                        "</li>"
-                    );
-
-                    $(el).prepend(li);
-
-                    $(el).css({"padding-top": "30px", "min-width": "300px"});
-                    $(el).on('scroll', function () {
-                        $(li).css({'top': $(el).scrollTop()}); });
-                    $(li).css({'position': 'absolute', 'top': 0, 'background-color:': '#ff0000'});
-
-                    $("#AutocompleteAddPerson", el).modalPopup({
-                        url: options.addContactDialogUrl.replace("__kind__", "T"),
-                        title: options.addPersonDialogTitle,
-                        processSubmit: true,
-                        onBeforeRequest: function () {
-                            instance.close();
-                        },
-                        onJson: function (item) {
-                            $this.selectClient(target, item);
+            var instance = M.Autocomplete.init(elem, {
+                onSearch: (text, autocomplete) => {
+                    $.get(options.clientAutoCompleteUrl + "&term=" + text).done(function(data) {
+                        if (data.length > 1 || (data.length == 1 && text != data[0].value)) {
+                            autocomplete.setMenuItems(data);
+                            //$("#ImageContactCheck").hide();
+                            //$("#contact-company-id").val("");
+                            var title = $("#invoice-" + target + "-title", $this).val();
+                            $("input[id^='invoice-" + target + "-'").val("");
+                            $("#invoice-" + target + "-title", $this).val(title);
+                            $("#image-" + target + "-checked", $this).hide();
                         }
                     });
-
-                    $("#AutocompleteAddCompany", el).modalPopup({
-                        url: options.addContactDialogUrl.replace("__kind__", "C"),
-                        title: options.addCompanyDialogTitle,
-                        processSubmit: true,
-                        onBeforeRequest: function () {
-                            instance.close();
-                        },
-                        onJson: function (item) {
-                            $this.selectClient(target, item);
-                        }
-                    });
+                },
+                onAutocomplete: (entries) => {
+                    if (entries.length == 1) {
+                        //$("#ImageContactCheck").show();
+                        $this.selectClient(target, entries[0].client);
+                    }
                 }
             });
 
@@ -200,21 +156,38 @@ jQuery.fn.InvoiceEditClient = function (options) {
         }
     }
 
+    this.setPopupAddClient = function (target, clientType) {
+        $("#AddCompanyLink", $this).modalPopup({
+            title: "<?= __d('documents', 'Add a Company') ?>",
+            processSubmit: true,
+            onJson: function(client) {
+                $this.fillClientData(target, client);
+                $(".modal-container").html("");
+            }
+        });
+
+        $("#AddContactLink", $this).modalPopup({
+            title: "<?= __d('documents', 'Add a Contact') ?>",
+            processSubmit: true,
+            onJson: function(client) {
+                $this.fillClientData(target, client);
+            }
+        });
+    }
+
     // initialization
     options = jQuery().extend(true, {}, default_options, options);
-
-    $this.popup = $(modalTemplate.join("\n")).appendTo(document.body);
-    $this.popup.modal();
-    $this.popupInstance = M.Modal.getInstance($this.popup);
 
     if (options.mode == "received") {
         this.addCheckIconAfterClientTitleField("issuer");
         this.setAutocompleteTitleField("issuer");
+        this.setPopupAddClient("issuer");
     } else {
         this.addCheckIconAfterClientTitleField("receiver");
         this.addCheckIconAfterClientTitleField("buyer");
         this.setAutocompleteTitleField("receiver");
         this.setAutocompleteTitleField("buyer");
+        this.setPopupAddClient("receiver");
 
         if ($("#invoice-receiver-contact-id", $this).val() == $("#invoice-receiver-contact-id", $this).val()) {
             $("#buyer-wrapper", $this).hide();

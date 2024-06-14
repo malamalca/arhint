@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Expenses\Controller;
 
 use App\Lib\ArhintReport;
+use Cake\Core\Configure;
 use Cake\Core\Plugin;
 use Cake\Http\Exception\NotFoundException;
 use Cake\Http\Response;
@@ -60,19 +61,26 @@ class ExpensesController extends AppController
      */
     public function autocomplete()
     {
-        $term = $this->getRequest()->getQuery('term');
-        if ($this->getRequest()->is('ajax') && !empty($term)) {
-            $expenses = $this->Authorization->applyScope($this->Expenses->find(), 'index')
-                ->select()
-                ->where([
-                    'OR' => [
-                        'Expenses.title LIKE' => '%' . $term . '%',
-                        'Invoices.no LIKE' => $term . '%',
-                    ],
-                ])
-                ->contain(['Invoices'])
-                ->all();
-            $this->set(compact('expenses'));
+        if ($this->getRequest()->is('ajax') || Configure::read('debug')) {
+            $term = $this->getRequest()->getQuery('term');
+            if (is_string($term) && $term != '') {
+                $expenses = $this->Authorization->applyScope($this->Expenses->find(), 'index')
+                    ->select()
+                    ->where([
+                        'OR' => [
+                            'Expenses.title LIKE' => '%' . $term . '%',
+                            'Invoices.no LIKE' => $term . '%',
+                        ],
+                    ])
+                    ->limit(20)
+                    ->contain(['Invoices'])
+                    ->all();
+                $this->set(compact('expenses'));
+
+                $this->response = $this->response->withType('application/json');
+            } else {
+                $this->Authorization->skipAuthorization();
+            }
         } else {
             throw new NotFoundException(__d('expenses', 'Invalid ajax call.'));
         }

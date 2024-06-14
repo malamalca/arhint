@@ -11,6 +11,7 @@ use Cake\ORM\TableRegistry;
 use Cake\Routing\Router;
 use Documents\Lib\DocumentsUpnQr;
 use Documents\Lib\InvoicesExport;
+use Documents\Lib\InvoicesExportEracuni;
 use DOMDocument;
 
 /**
@@ -318,5 +319,57 @@ class InvoicesController extends BaseDocumentsController
         $this->set(compact('errors', 'id'));
 
         return null;
+    }
+
+    /**
+     * report method
+     *
+     * @return \Cake\Http\Response|void
+     */
+    public function exportEracuni()
+    {
+        $this->Authorization->skipAuthorization();
+
+        if (!empty($this->getRequest()->getQuery('kind'))) {
+            /** @var array<string, mixed> $filter */
+            $filter = $this->getRequest()->getQuery();
+
+            if ($filter['kind'] == 'span') {
+                unset($filter['month']);
+                $filter['start'] = $filter['start'];
+                $filter['end'] = $filter['end'];
+            } else {
+                unset($filter['start']);
+                unset($filter['end']);
+                $filter['month'] = $filter['year'] . '-' . str_pad($filter['month'], 2, '0', STR_PAD_LEFT);
+                unset($filter['year']);
+            }
+
+            $params = array_merge_recursive(
+                ['conditions' => [
+                    'DocumentsCounters.active' => true,
+                ],
+                'contain' => ['DocumentsCounters', 'InvoicesItems', 'InvoicesTaxes']],
+                $this->{$this->documentsScope}->filter($filter)
+            );
+            $data = $this->Authorization->applyScope($this->{$this->documentsScope}->find(), 'index')
+                ->where($params['conditions'])
+                ->contain($params['contain'])
+                ->order(['DocumentsCounters.title', 'Invoices.no'])
+                ->all();
+
+            $report = new InvoicesExportEracuni();
+            $tmpName = $report->export($data);
+        }
+
+        /** @var \Documents\Model\Table\DocumentsCountersTable $DocumentsCounters */
+        $DocumentsCounters = TableRegistry::getTableLocator()->get('Documents.DocumentsCounters');
+        $counters = $DocumentsCounters->rememberForUser(
+            $this->getCurrentUser()->id,
+            $this->Authorization->applyScope($DocumentsCounters->find(), 'index'),
+            $this->documentsScope
+        )->combine('id', 'title');
+
+        $this->set(compact('counters'));
     }
 }

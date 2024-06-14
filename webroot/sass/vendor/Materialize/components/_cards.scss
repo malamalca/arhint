@@ -4,19 +4,19 @@
   transition: box-shadow .25s;
   padding: $card-padding;
   margin: $element-top-margin 0 $element-bottom-margin 0;
-  border-radius: 2px;
+  border-radius: 12px;
   @extend .z-depth-1;
   background-color: $card-bg-color;
 }
 
 .card {
+  overflow: hidden;
   position: relative;
-  margin: $element-top-margin 0 $element-bottom-margin 0;
+  //margin: $element-top-margin 0 $element-bottom-margin 0;
   background-color: $card-bg-color;
   transition: box-shadow .25s;
-  border-radius: 2px;
+  border-radius: 12px;
   @extend .z-depth-1;
-
 
   .card-title {
     font-size: 24px;
@@ -160,18 +160,23 @@
     &:last-child {
       border-radius: 0 0 2px 2px;
     }
-    background-color: inherit; // Use inherit to inherit color classes
-    border-top: 1px solid rgba(160,160,160,.2);
+
+    border-top: 1px solid $divider-color;
     position: relative;
-    padding: 16px $card-padding;
+    background-color: inherit;
+
+    a {
+      padding: 16px $card-padding;
+      display: inline-block;
+    }
 
     a:not(.btn):not(.btn-large):not(.btn-floating) {
       color: $card-link-color;
-      margin-right: $card-padding;
       transition: color .3s ease;
-      text-transform: uppercase;
 
-      &:hover { color: $card-link-color-light; }
+      &:hover {
+        background-color: $primary-color-hover-opaque;
+      }
     }
   }
 

@@ -1,3 +1,4 @@
+/* This should be an UL-Element*/
 .sidenav {
   position: fixed;
   width: $sidenav-width;
@@ -6,13 +7,14 @@
   margin: 0;
   transform: translateX(-100%);
   height: 100vh;
-  padding-bottom: 60px;
+  padding: 0;
   background-color: $sidenav-bg-color;
   z-index: 999;
   overflow-y: auto;
   will-change: transform;
   backface-visibility: hidden;
-  transform: translateX(-105%);
+  transform: translateX(-105%); 
+  user-select: none;
 
   @extend .z-depth-1;
 
@@ -28,75 +30,92 @@
     margin: 0;
   }
 
-
-  li {
-    float: none;
-    line-height: $sidenav-line-height;
-
-    &.active { background-color: rgba(0,0,0,.05); }
+  /* Hover only on top row */
+  a:hover {
+    background-color: $button-flat-hover-background-color;
+  }
+  a:focus {
+    background-color: $button-flat-focus-background-color;
   }
 
+  li.active > a:not(.collapsible-header):not(.btn):not(.btn-large):not(.btn-small):not(.btn-flat):not(.btn-large):not(.btn-floating)  {
+    color: $font-on-secondary-container-color;
+    background-color: $secondary-container-color;
+  }
+
+  .collapsible-body > ul { padding-left: 10px; }
+
+  li {    
+    list-style: none;
+    display: grid;
+    align-content: center;
+  }
   li > a {
-    color: $sidenav-font-color;
-    display: block;
+    /* https://stackoverflow.com/questions/5848090/full-width-hover-background-for-nested-lists */
+    //padding-left: calc(100% + $sidenav-padding);
+    //margin-left: -100%;
+    margin: 0 12px;
+    padding: 0 $sidenav-padding;
+    //padding-left: $sidenav-padding;
+
+    // Truncate too long text
+    /*
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    */
+
+    display: flex;
+    height: $sidenav-item-height;
     font-size: $sidenav-font-size;
     font-weight: 500;
-    height: $sidenav-item-height;
-    line-height: $sidenav-line-height;
-    padding: 0 ($sidenav-padding * 2);
+    align-items: center;
+    overflow: hidden;
+    border-radius: 100px;
 
-    &:hover { background-color: rgba(0,0,0,.05);}
+    &:not(.btn):not(.btn-flat):not(.btn-large):not(.btn-floating) {
+      color: $sidenav-font-color;
+    }
 
     &.btn, &.btn-large, &.btn-flat, &.btn-floating {
       margin: 10px 15px;
     }
 
-    &.btn,
-    &.btn-large,
-    &.btn-floating { color: $button-raised-color; }
-    &.btn-flat { color: $button-flat-color; }
-
-    &.btn:hover,
-    &.btn-large:hover { background-color: lighten($button-raised-background, 5%); }
-    &.btn-floating:hover { background-color: $button-raised-background; }
-
-    & > i,
-    & > [class^="mdi-"], li > a > [class*="mdi-"],
-    & > i.material-icons {
-      float: left;
-      height: $sidenav-item-height;
-      line-height: $sidenav-line-height;
-      margin: 0 ($sidenav-padding * 2) 0 0;
-      width: $sidenav-item-height * 0.5;
-      color: rgba(0,0,0,.54);
+    /* TODO: Use special class in future like "mw-icon" */
+    & > .material-icons, & > .material-symbols-outlined,
+    & > .material-symbols-rounded, & > .material-symbols-sharp {
+      display: inline-flex;
+      vertical-align: middle;
+      color: $sidenav-icon-color;
+      margin-right: 12px;
     }
   }
-
 
   .divider {
     margin: ($sidenav-padding * 0.5) 0 0 0;
   }
 
   .subheader {
-    &:hover {
-      background-color: transparent;
-    }
-
     cursor: initial;
     pointer-events: none;
-    color: rgba(0,0,0,.54);
+    color: $sidenav-subheader-color;
     font-size: $sidenav-font-size;
     font-weight: 500;
     line-height: $sidenav-line-height;
   }
 
+  // Remove this? is very custom
   .user-view {
     position: relative;
     padding: ($sidenav-padding * 2) ($sidenav-padding * 2) 0;
     margin-bottom: $sidenav-padding * 0.5;
 
     & > a {
-      &:hover { background-color: transparent; }
+      &:hover {
+        background-color: transparent;
+      }
+
       height: auto;
       padding: 0;
     }
@@ -138,21 +157,18 @@
   }
 }
 
-
 // Touch interaction
 .drag-target {
   // Right Align
   &.right-aligned {
     right: 0;
   }
-
   height: 100%;
   position: fixed;
   top: 0;
   left: 0;
   z-index: 998;
 }
-
 
 // Fixed Sidenav shown
 .sidenav.sidenav-fixed {
@@ -161,7 +177,6 @@
     right: 0;
     left: auto;
   }
-
   left: 0;
   transform: translateX(0);
   position: fixed;
@@ -177,29 +192,18 @@
         transform: translateX(105%);
       }
     }
-
     > a {
       padding: 0 $sidenav-padding;
     }
-
     .user-view {
       padding: $sidenav-padding $sidenav-padding 0;
     }
   }
 }
 
-
-.sidenav .collapsible-body > ul:not(.collapsible) > li.active,
-.sidenav.sidenav-fixed .collapsible-body > ul:not(.collapsible) > li.active {
-  background-color: $primary-color;
-  a {
-    color: $sidenav-bg-color;
-  }
-}
 .sidenav .collapsible-body {
   padding: 0;
 }
-
 
 .sidenav-overlay {
   position: fixed;
@@ -208,7 +212,22 @@
   right: 0;
   opacity: 0;
   height: 120vh;
-  background-color: rgba(0,0,0,.5);
+  background-color: rgba(0, 0, 0, .5);
   z-index: 997;
   display: none;
+}
+
+// Sidenav collapsible styling (Taken from Collapsible.scss)
+.sidenav,
+.sidenav.sidenav-fixed {
+  .collapsible {
+    border: none;
+    box-shadow: none;
+  }
+  .collapsible-header {
+    border: none;
+  }
+  .collapsible-body {
+    border: none;
+  }
 }

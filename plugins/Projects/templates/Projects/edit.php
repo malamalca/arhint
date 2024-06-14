@@ -56,16 +56,17 @@ $editForm = [
                     ],
                 ],
             ],
+            'status_label' => [
+                'method' => 'label',
+                'parameters' => ['status_id', __d('projects', 'Status') . ':'],
+            ],
             'status' => empty($projectStatuses) ? null : [
                 'method' => 'control',
                 'parameters' => [
                     'status_id',
                     [
                         'type' => 'select',
-                        'label' => [
-                            'class' => 'active',
-                            'text' => __d('projects', 'Status') . ':',
-                        ],
+                        'label' => false,
                         'class' => 'browser-default',
                         'empty' => '-- ' . __d('projects', 'status') . ' --',
                         'options' => $projectStatuses,

@@ -71,7 +71,6 @@ if ($contact->kind != 'T') {
         ],
     ],
     'tax_no_div' => '<div class="input-field">',
-    'tax_no_labek' => '<label for="contact-tax-no">' . __d('crm', 'Tax no.') . ':</label>',
     'tax_no' => [
         'method' => 'text',
         'parameters' => [
@@ -81,6 +80,7 @@ if ($contact->kind != 'T') {
             ],
         ],
     ],
+    'tax_no_label' => '<label for="contact-tax-no">' . __d('crm', 'Tax no.') . ':</label>',
     'tax_no_magic' => ' ' . $this->Html->image('Crm.wand.png', ['id' => 'magic-tax-lookup', 'class' => 'btn-small']),
     'tax_no_error' => [
         'method' => 'error',
@@ -254,7 +254,7 @@ $editForm['form']['lines'] += [
         'method' => 'text',
         'parameters' => [
             'field' => 'primary_address.zip',
-            'options' => ['id' => 'contact-address-zip'],
+            'options' => ['id' => 'contact-address-zip', 'style' => 'width: 100px'],
         ],
     ],
     'address_city' => [
@@ -265,6 +265,10 @@ $editForm['form']['lines'] += [
         ],
     ],
     'address_zipcity_end' => '</div>',
+    'address_country_label' => [
+        'method' => 'label',
+        'parameters' => ['address-country', __d('crm', 'Country') . ':'],
+    ],
     'address_country_code' => [
         'method' => 'control',
         'parameters' => [
@@ -272,13 +276,10 @@ $editForm['form']['lines'] += [
             'options' => [
                 'type' => 'select',
                 'options' => Configure::read('Crm.countries'),
-                'label' => [
-                    'text' => __d('crm', 'Country') . ':',
-                    'class' => 'active',
-                ],
+                'label' => false,
                 'id' => 'contact-address-country',
-                'default' => Configure::read('Crm.defaultCountry'),
                 'class' => 'browser-default',
+                'default' => Configure::read('Crm.defaultCountry'),
                 'empty' => true,
             ],
         ],
@@ -413,8 +414,8 @@ $editForm['form']['lines'] += ['row_end' => '</div>'];
 
 $editForm['form']['lines'] += [
     'submit' => [
-        'method' => 'submit',
-        'parameters' => ['label' => __d('crm', 'Save')],
+        'method' => 'button',
+        'parameters' => [__d('crm', 'Save'), ['type' => 'submit']],
     ],
     'form_end' => [
         'method' => 'end',
@@ -436,68 +437,94 @@ echo $this->Lil->form($editForm, 'Crm.Contacts.edit');
     echo implode(', ', $bd);
     ?>};
 
-    // CLIENTS AUTOCOMPLETE
-    <?php
-        echo $this->element('Crm.autocomplete_contact', [
-            'autocomplete_client' => [
-                'image' => '#ImageContactCheck',
-                'id' => '#contact-company-id',
-                'title' => '#contact-company-title',
-                'kind' => 'C',
-            ],
-        ]);
-        ?>
+    var AutocompleteZipCityUrl = "<?php echo Router::url([
+        'plugin' => 'Crm',
+        'controller' => 'ContactsAddresses',
+        'action' => 'autocomplete-zip-city',
+    ], true); ?>";
 
+    var AutocompleteClientUrl = "<?php echo Router::url([
+        'plugin' => 'Crm',
+        'controller' => 'Contacts',
+        'action' => 'autocomplete',
+        'kind' => 'C',
+    ], true); ?>";
 
     $(document).ready(function() {
 
         <?php
         if ($contact->kind == "T") {
         ?>
+
+        // modal popup for adding new company
         $("#AddCompanyLink").modalPopup({
             title: "<?= __d('crm', 'Add a Company') ?>",
             processSubmit: true,
             onJson: function(company) {
                 $("#contact-company-id").val(company.id);
                 $("#contact-company-title").val(company.title);
-                $("#ImageContactCheck").show();
+                $("#contact-company-title").parent("div").append("<div class='suffix'><i class='material-icons'>link</i></div>");
             }
         });
+
+        // autocomplete for selecting company
+        M.Autocomplete.init(
+            $("#contact-company-title").get(0),
+            {
+                onSearch: (text, autocomplete) => {
+                    $.get(AutocompleteClientUrl + "?term=" + text).done(function(data) {
+                        if (data.length > 1 || (data.length == 1 && text != data[0].value)) {
+                            autocomplete.setMenuItems(data.map((item) => ({id: item.id, text: item.value})));
+                            $("#contact-company-id").val("");
+                            $("#contact-company-title").parent("div").children("div.suffix").remove();
+                        }
+                    });
+                },
+                onAutocomplete: (entries) => {
+                    if (entries.length == 1) {
+                        $("#contact-company-id").val(entries[0].id);
+                        $("#contact-company-title").parent("div").append("<div class='suffix'><i class='material-icons'>link</i></div>");
+                    }
+                }
+            }
+        );
+
         <?php
         }
         ?>
 
-        $("#contact-address-zip").autocomplete({
-            autoFocus: true,
-            source: "<?php echo Router::url([
-                'plugin' => 'Crm',
-                'controller' => 'ContactsAddresses',
-                'action' => 'autocomplete-zip-city',
-                'zip',
-            ], true); ?>",
-            select: function(event, ui) {
-                if (ui.item) {
-                    $("#contact-address-zip").val(ui.item.value);
-                    $("#contact-address-city").val(ui.item.label);
+        M.Autocomplete.init(
+            $("#contact-address-zip").get(0),
+            {
+                onSearch: (text, autocomplete) => {
+                    $.get(AutocompleteZipCityUrl + "/zip?term=" + $("#contact-address-zip").val()).done(function(data) {
+                        autocomplete.setMenuItems(data.map((item) => ({id: item.id, text: item.value + " " + item.label})));
+                    });
+                },
+                onAutocomplete: () => {
+                    let ZipFieldValue = $("#contact-address-zip").val();
+                    $("#contact-address-zip").val(ZipFieldValue.substring(0, ZipFieldValue.indexOf(" ")));
+                    $("#contact-address-city").val(ZipFieldValue.substring(ZipFieldValue.indexOf(" ")+ 1));
                 }
             }
-        });
+        );
 
-        $("#contact-address-city").autocomplete({
-            autoFocus: true,
-            source: "<?php echo Router::url([
-                'plugin' => 'Crm',
-                'controller' => 'ContactsAddresses',
-                'action' => 'autocomplete-zip-city',
-                'city',
-            ], true); ?>",
-            select: function(event, ui) {
-                if (ui.item) {
-                    $("#contact-address-zip").val(ui.item.id);
-                    $("#contact-address-city").val(ui.item.label);
+        M.Autocomplete.init(
+            $("#contact-address-city").get(0),
+            {
+                onSearch: (text, autocomplete) => {
+                    $.get(AutocompleteZipCityUrl + "/city?term=" + $("#contact-address-city").val()).done(function(data) {
+                        autocomplete.setMenuItems(data.map((item) => ({id: item.id, text: item.id + " " + item.label})));
+                    });
+                },
+                onAutocomplete: () => {
+                    let ZipFieldValue = $("#contact-address-city").val();
+                    $("#contact-address-zip").val(ZipFieldValue.substring(0, ZipFieldValue.indexOf(" ")));
+                    $("#contact-address-city").val(ZipFieldValue.substring(ZipFieldValue.indexOf(" ")+ 1));
+                    $("#contact-company-title").parent("div").append("<div class='suffix'><i class='material-icons'>link</i></div>");
                 }
             }
-        });
+        );
 
         $("#magic-tax-lookup").click(function() {
             let inetisUrl = "<?php echo Router::url([
@@ -534,24 +561,13 @@ echo $this->Lil->form($editForm, 'Crm.Contacts.edit');
                     $("#contact-account-bic", parentForm).val(data.primary_account.bic);
                     $("#contact-account-bank", parentForm).val(data.primary_account.bank);
                 }
-
-                M.updateTextFields()
             })
             .fail(function() { alert("INETIS request failed."); });
         });
 
-        // CREATE IMAGE
-        var contactCheck = $("<img />", {
-            id: "ImageContactCheck",
-            src: "<?= Router::url('/crm/img/ico_contact_check.gif'); ?>",
-            style: "display: none",
-            title: "<?= __d('lil_crm', 'Company') ?>"
-        });
-        $("#contact-company-title").after(contactCheck);
-
-        // SHOW CHECKMARK FOR CLIENT IF IT'S ID EXISTS
+        // SHOW LINK ICON FOR CLIENT IF IT'S ID EXISTS
         if ($("#contact-company-id").val() !== "") {
-            $("#ImageContactCheck").show();
+            $("#contact-company-title").parent("div").append("<div class='suffix'><i class='material-icons'>link</i></div>");
         }
 
         $("#contact-account-iban").blur(function() {

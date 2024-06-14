@@ -9,6 +9,7 @@
   display: flex;
   flex-direction: column;
   padding: 0;
+  background-color: $surface-color;
 }
 
 .datepicker-controls {
@@ -26,6 +27,7 @@
       &:focus {
         border-bottom: none;
       }
+
       border-bottom: none;
       text-align: center;
       margin: 0;
@@ -43,6 +45,17 @@
   .select-month input {
     width: 80px;
   }
+
+  .month-prev,
+  .month-next {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .month-prev > svg,
+  .month-next > svg {
+    fill: $button-flat-color;
+  }
 }
 
 .month-prev, .month-next {
@@ -56,8 +69,8 @@
 /* Date Display */
 .datepicker-date-display {
   flex: 1 auto;
-  background-color: $secondary-color;
-  color: #fff;
+  background-color: $primary-color;
+  color: $font-on-primary-color-main;
   padding: 20px 22px;
   font-weight: 500;
 
@@ -106,18 +119,20 @@
   }
 
   td {
+    color: $datepicker-day-font-color;
+
     &.is-today {
-      color: $secondary-color;
+      color: $primary-color;
     }
 
     &.is-selected {
-      background-color: $secondary-color;
-      color: #fff;
+      background-color: $primary-color;
+      color: $font-on-primary-color-main;
     }
 
     &.is-outside-current-month,
     &.is-disabled {
-      color: $datepicker-disabled-day-color;
+      color: $datepicker-day-font-color-disabled;
       pointer-events: none;
     }
 
@@ -127,10 +142,6 @@
 }
 
 .datepicker-day-button {
-  &:focus {
-    background-color: $datepicker-day-focus;
-  }
-
   background-color: transparent;
   border: none;
   line-height: 38px;
@@ -140,6 +151,14 @@
   padding: 0 5px;
   cursor: pointer;
   color: inherit;
+
+  &:hover {
+    background-color: $datepicker-day-hover;
+  }
+
+  &:focus {
+    background-color: $datepicker-day-focus;
+  }
 }
 
 
@@ -156,7 +175,7 @@
 .datepicker-clear,
 .datepicker-today,
 .datepicker-done {
-  color: $secondary-color;
+  color: $primary-color;
   padding: 0 1rem;
 }
 

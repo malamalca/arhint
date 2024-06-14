@@ -1,7 +1,11 @@
 /* Select Field
    ========================================================================== */
 
-select.browser-default { opacity: 1; }
+select.browser-default {
+  opacity: 1;
+  color: $select-input-color;
+}
+
 select {
   opacity: 0;
   background-color: $select-background;
@@ -12,11 +16,13 @@ select {
   height: $input-height;
 }
 
-.select-label {
-  position: absolute;
-}
+// .select-label {
+//   position: absolute;
+// }
+
 
 .select-wrapper {
+  /*
   &.valid .helper-text[data-success],
   &.invalid ~ .helper-text[data-error] {
     @extend %hidden-text;
@@ -26,9 +32,8 @@ select {
     & > input.select-dropdown {
       @extend %valid-input-style;
     }
-
     & ~ .helper-text:after {
-      @extend %custom-success-message;
+      //@extend %custom-success-message;
     }
   }
 
@@ -37,9 +42,8 @@ select {
     & > input.select-dropdown:focus {
       @extend %invalid-input-style;
     }
-
     & ~ .helper-text:after {
-      @extend %custom-error-message;
+      //@extend %custom-error-message;
     }
   }
 
@@ -48,14 +52,17 @@ select {
     width: 100%;
     pointer-events: none;
   }
-
   & + label:after {
-    @extend %input-after-style;
+    //@extend %input-after-style;
   }
+  */
+
+
 
   position: relative;
 
-  input.select-dropdown {
+  /*
+  input.select-dropdown {    
     &:focus {
       border-bottom: 1px solid $input-focus-color;
     }
@@ -74,7 +81,9 @@ select {
     display: block;
     user-select:none;
     z-index: 1;
+    color: $select-input-color;
   }
+  */
 
   .caret {
     position: absolute;
@@ -83,14 +92,16 @@ select {
     bottom: 0;
     margin: auto 0;
     z-index: 0;
-    fill: rgba(0,0,0,.87);
+    fill: $select-input-color;
   }
 
+  /*
   & + label {
     position: absolute;
     top: -26px;
     font-size: $label-font-size;
   }
+  */
 
   // Hide select with overflow hidden instead of using display none
   // (this prevents form validation errors with hidden form elements)
@@ -143,33 +154,32 @@ body.keyboard-focused {
 
 .select-dropdown.dropdown-content {
   li {
-    &:hover {
+    &:hover:not(.disabled) {
       background-color: $select-option-hover;
     }
 
-    &.selected {
+    &.selected:not(.disabled) {
       background-color: $select-option-selected;
     }
   }
 }
 
+/*
 // Prefix Icons
 .prefix ~ .select-wrapper {
   margin-left: 3rem;
   width: 92%;
   width: calc(100% - 3rem);
 }
-
 .prefix ~ label { margin-left: 3rem; }
-
 // Suffix Icons
 .suffix ~ .select-wrapper {
   margin-right: 3rem;
   width: 92%;
   width: calc(100% - 3rem);
 }
-
 .suffix ~ label { margin-right: 3rem; }
+*/
 
 // Icons
 .select-dropdown li {
@@ -186,11 +196,11 @@ body.keyboard-focused {
   border-top: 1px solid $dropdown-hover-bg-color;
 
   &.selected > span {
-    color: rgba(0, 0, 0, .7);
+    color: $font-color-main;
   }
 
   & > span {
-    color: rgba(0, 0, 0, .4);
+    color: $font-color-medium;
   }
 
   & ~ li.optgroup-option {

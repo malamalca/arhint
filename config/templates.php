@@ -11,7 +11,7 @@
         'nestingLabel' => '<p>{{hidden}}<label{{attrs}}>{{input}}<span>{{text}}</span></label></p>',
         'textarea' => '<textarea name="{{name}}" class="materialize-textarea"{{attrs}}>{{value}}</textarea>',
 
-        'durationWrapper' => '<div class="input-field row duration">{{hidden}}{{hours}}<span>:</span>{{minutes}}</div>',
+        'durationWrapper' => '{{hidden}}{{hours}}{{minutes}}',
 
         'hidden' => '<input type="hidden" name="{{name}}"{{attrs}} />',
 
@@ -59,7 +59,7 @@
 
         */
 
-        'linkedit' => '<a href="{{url}}" class="btn-small btn-floating waves-effect waves-light waves-circle {{class}}" role="button"><i class="material-icons">edit</i></a>',
-        'linkdelete' => '<a href="{{url}}" class="btn-small btn-floating waves-effect waves-light waves-circle {{class}}" role="button" onclick="return confirm(\'{{confirmation}}\');"><i class="material-icons">close</i></a>',
+        'linkedit' => '<a href="{{url}}" class="btn-small waves-effect waves-light waves-circle {{class}}" role="button"><i class="material-icons">edit</i></a>',
+        'linkdelete' => '<a href="{{url}}" class="btn-small waves-effect waves-light waves-circle {{class}}" role="button" onclick="return confirm(\'{{confirmation}}\');"><i class="material-icons">close</i></a>',
         'linkpopup' => '<a href="{{url}}" id="dropdown-{{name}}" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"{{attrs}}>{{content}}</a>'
     ];

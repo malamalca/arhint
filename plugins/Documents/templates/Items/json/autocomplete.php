@@ -3,6 +3,7 @@
 foreach ($items as $item) {
     $ret[] = [
         'id' => $item->id,
+        'text' => $item->descript,
         'label' => $item->descript,
         'value' => $item->descript,
 

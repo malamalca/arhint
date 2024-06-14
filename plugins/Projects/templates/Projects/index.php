@@ -110,7 +110,7 @@ foreach ($projects as $project) {
         'actions' => $this->Html->link(
             '<i class="material-icons chevron">chat_bubble_outline</i>',
             ['controller' => 'ProjectsLogs', 'action' => 'edit', '?' => ['project' => $project->id]],
-            ['escape' => false, 'class' => 'btn btn-small btn-floating add-projects-log']
+            ['escape' => false, 'class' => 'btn btn-small add-projects-log']
         ),
         'log' => [
             'params' => ['class' => 'last-log'],

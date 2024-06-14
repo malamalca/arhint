@@ -35,7 +35,6 @@ if (!empty($sidebar)) {
                             <li class="<?= !empty($item['active']) ? ' active' : '' ?>">
                                 <a class="collapsible-header"<?= !empty($item['url']) ? sprintf('href="%s"', $this->Url->build($item['url'])) : '' ?>>
                                     <?= h($item['title']) ?>
-                                    <i class="material-icons chevron">arrow_drop_down</i>
                                 </a>
                                 <div class="collapsible-body">
                                     <ul class="sidenav-submenu">

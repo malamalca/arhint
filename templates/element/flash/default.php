@@ -8,6 +8,6 @@ if (!isset($params['escape']) || $params['escape'] !== false) {
 }
 
 
-$this->Lil->jsReady(sprintf('M.toast({html: "%s"})', $message));
+$this->Lil->jsReady(sprintf('M.toast({text: "%s"})', $message));
 ?>
 

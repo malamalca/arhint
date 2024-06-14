@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Documents\Controller;
 
 use App\Lib\ArhintReport;
+use Cake\Core\Configure;
 use Cake\Event\EventInterface;
 use Cake\Http\Exception\NotFoundException;
 use Cake\Http\Response;
@@ -549,7 +550,7 @@ class BaseDocumentsController extends AppController
      */
     public function autocomplete(): Response
     {
-        if ($this->getRequest()->is('ajax')) {
+        if ($this->getRequest()->is('ajax') || Configure::read('debug')) {
             $term = $this->getRequest()->getQuery('term');
 
             $conditions = [
@@ -567,8 +568,13 @@ class BaseDocumentsController extends AppController
             $ret = [];
             foreach ($result as $i) {
                 $ret[] = [
-                    'label' => $i->title,
-                    'value' => $i->id,
+                    'id' => $i->id,
+                    'text' => '<span class="document-autocomplete-no">' . $i->no . '</span>' .
+                        ' - ' . $i->title .
+                        '<span class="document-autocomplete-counter">' .
+                        '(' . $i->documents_counter->title . ')' .
+                        '</span>',
+                    'title' => $i->title,
                     'no' => $i->no,
                     'model' => Inflector::singularize($this->documentsScope),
                     'counter' => $i->documents_counter->title,

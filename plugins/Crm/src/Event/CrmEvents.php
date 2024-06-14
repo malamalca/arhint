@@ -43,7 +43,7 @@ class CrmEvents implements EventListenerInterface
         ], true);
 
         $form->form['post'] .= '<script type="text/javascript">' . PHP_EOL .
-            sprintf('$("#to").autocompleteajax({source: "%s"});', $link) . PHP_EOL .
+            sprintf('M.Autocomplete.init($("#to").get(0), {onSearch: (text, autocomplete) => {$.get("%s" + "?term=" + text).done(function(data) {autocomplete.setMenuItems(data);})}});', $link) . PHP_EOL .
             '</script>' . PHP_EOL;
     }
 
