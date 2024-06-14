@@ -83,7 +83,10 @@ class InvoicesExportEracuni
 
             $i = 2;
             foreach ($data as $doc) {
+                $activeSheet->getStyle('A' . $i)->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_TEXT); 
                 $activeSheet->SetCellValue('A' . $i, strtolower($documentTypes[$doc->documents_counter->doc_type]));
+                
+                $activeSheet->getStyle('B' . $i)->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_TEXT); 
                 $activeSheet->SetCellValue('B' . $i, $doc->no);
 
                 $activeSheet->getStyle('C' . $i)->getNumberFormat()->setFormatCode('d.m.yyyy'); 
@@ -103,11 +106,22 @@ class InvoicesExportEracuni
 
                 $client = $doc->documents_counter->direction == 'issued' ? $doc->receiver : $doc->issuer;
 
+                $activeSheet->getStyle('K' . $i)->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_TEXT); 
                 $activeSheet->SetCellValue('K' . $i, $client->title);
+
+                $activeSheet->getStyle('L' . $i)->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_TEXT); 
                 $activeSheet->SetCellValue('L' . $i, $client->street);
+
+                $activeSheet->getStyle('M' . $i)->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_TEXT); 
                 $activeSheet->SetCellValue('M' . $i, $client->zip);
+
+                $activeSheet->getStyle('N' . $i)->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_TEXT); 
                 $activeSheet->SetCellValue('N' . $i, $client->city);
+
+                $activeSheet->getStyle('O' . $i)->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_TEXT); 
                 $activeSheet->SetCellValue('O' . $i, $client->tax_no);
+
+                $activeSheet->getStyle('P' . $i)->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_TEXT); 
                 $activeSheet->SetCellValue('P' . $i, $client->country_code);
 
                 if ($doc->documents_counter->direction == 'issued' && !empty($doc->invoices_items)) {
