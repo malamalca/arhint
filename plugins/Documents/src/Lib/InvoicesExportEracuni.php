@@ -4,26 +4,22 @@ declare(strict_types=1);
 namespace Documents\Lib;
 
 use Cake\Core\Configure;
-use Cake\Core\Plugin;
 use Cake\I18n\I18n;
-use Cake\I18n\Number;
+use PhpOffice\PhpSpreadsheet\Cell\DataType;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Settings;
-use PhpOffice\PhpSpreadsheet\Spreadsheet;
-use PhpOffice\PhpSpreadsheet\Cell\DataType;
-use PhpOffice\PhpSpreadsheet\Style\Alignment;
-use PhpOffice\PhpSpreadsheet\Style\Border;
-use PhpOffice\PhpSpreadsheet\Style\Color;
-use PhpOffice\PhpSpreadsheet\Style\Fill;
-use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
-use PhpOffice\PhpSpreadsheet\Style\Protection;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
-use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
-
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
 
 class InvoicesExportEracuni
 {
-    public function export($data)
+    /**
+     * Do a data export
+     *
+     * @param mixed $data Data
+     * @return void
+     */
+    public function export(mixed $data): void
     {
         Settings::setLocale(I18n::getLocale());
             //if (!$validLocale) {
@@ -68,7 +64,7 @@ class InvoicesExportEracuni
             $activeSheet->SetCellValue('G1', 'Valuta');
             $activeSheet->SetCellValue('H1', 'Način plačila');
             $activeSheet->SetCellValue('I1', 'Skupaj z davkom');
-            
+
             $activeSheet->SetCellValue('J1', 'Vrsta DDV');
             $activeSheet->SetCellValue('K1', 'Naziv');
             $activeSheet->SetCellValue('L1', 'Naslov');
@@ -80,92 +76,104 @@ class InvoicesExportEracuni
             $documentTypes = Configure::read('Documents.documentTypes');
             $pmtKinds = [0 => 'Nakazilo', 1 => 'Samodejno', 2 => 'Placano', 3 => 'BrezPlacila'];
 
-            $taxExcelHeaders = []; $taxExcelHeadersLastIndex = 17;
+            $taxExcelHeaders = [];
+        $taxExcelHeadersLastIndex = 17;
 
             $i = 2;
-            foreach ($data as $doc) {
-                $activeSheet->setCellValueExplicit('A' . $i, strtolower($documentTypes[$doc->documents_counter->doc_type]), DataType::TYPE_STRING);
-                
-                $activeSheet->setCellValueExplicit('B' . $i, $doc->no, DataType::TYPE_STRING);
+        foreach ($data as $doc) {
+            $activeSheet->setCellValueExplicit(
+                'A' . $i,
+                strtolower($documentTypes[$doc->documents_counter->doc_type]),
+                DataType::TYPE_STRING
+            );
 
-                $activeSheet->getStyle('C' . $i)->getNumberFormat()->setFormatCode('d.m.yyyy'); 
-                $activeSheet->SetCellValue('C' . $i, Date::PHPToExcel($doc->dat_issue->toUnixString()));
+            $activeSheet->setCellValueExplicit('B' . $i, $doc->no, DataType::TYPE_STRING);
 
-                $activeSheet->getStyle('D' . $i)->getNumberFormat()->setFormatCode('d.m.yyyy'); 
-                $activeSheet->SetCellValue('D' . $i, Date::PHPToExcel($doc->dat_service->toUnixString()));
+            $activeSheet->getStyle('C' . $i)->getNumberFormat()->setFormatCode('d.m.yyyy');
+            $activeSheet->SetCellValue('C' . $i, Date::PHPToExcel($doc->dat_issue->toUnixString()));
 
-                $activeSheet->getStyle('F' . $i)->getNumberFormat()->setFormatCode('d.m.yyyy'); 
-                $activeSheet->SetCellValue('F' . $i, Date::PHPToExcel($doc->dat_expire->toUnixString()));
+            $activeSheet->getStyle('D' . $i)->getNumberFormat()->setFormatCode('d.m.yyyy');
+            $activeSheet->SetCellValue('D' . $i, Date::PHPToExcel($doc->dat_service->toUnixString()));
 
-                $activeSheet->SetCellValue('G' . $i, 'EUR');
-                $activeSheet->SetCellValue('H' . $i, $pmtKinds[$doc->pmt_kind]);
-                $activeSheet->SetCellValue('I' . $i, $doc->total);
+            $activeSheet->getStyle('F' . $i)->getNumberFormat()->setFormatCode('d.m.yyyy');
+            $activeSheet->SetCellValue('F' . $i, Date::PHPToExcel($doc->dat_expire->toUnixString()));
 
-                $activeSheet->SetCellValue('J' . $i, 0);
+            $activeSheet->SetCellValue('G' . $i, 'EUR');
+            $activeSheet->SetCellValue('H' . $i, $pmtKinds[$doc->pmt_kind]);
+            $activeSheet->SetCellValue('I' . $i, $doc->total);
 
-                $client = $doc->documents_counter->direction == 'issued' ? $doc->receiver : $doc->issuer;
+            $activeSheet->SetCellValue('J' . $i, 0);
 
-                $activeSheet->setCellValueExplicit('K' . $i, $client->title, DataType::TYPE_STRING);
-                $activeSheet->setCellValueExplicit('L' . $i, $client->street, DataType::TYPE_STRING);
-                $activeSheet->setCellValueExplicit('M' . $i, $client->zip, DataType::TYPE_STRING);
-                $activeSheet->setCellValueExplicit('N' . $i, $client->city, DataType::TYPE_STRING);
-                $activeSheet->setCellValueExplicit('O' . $i, $client->tax_no, DataType::TYPE_STRING);
-                $activeSheet->setCellValueExplicit('P' . $i, $client->country_code, DataType::TYPE_STRING);
+            $client = $doc->documents_counter->direction == 'issued' ? $doc->receiver : $doc->issuer;
 
-                if ($doc->documents_counter->direction == 'issued' && !empty($doc->invoices_items)) {
-                    $tax_spec = [];
-                    $total_tax = $total_base = $total_grand = 0;
-                    foreach ($doc->invoices_items as $item) {
-                        if (!isset($tax_spec[$item->vat_id])) {
-                            $tax_spec[$item->vat_id] = ['title' => '', 'base' => 0, 'amount' => 0, 'percent' => 0];
-                        }
-                        
-                        $tax_spec[$item->vat_id]['title'] = $item->vat_title;
-                        $tax_spec[$item->vat_id]['base'] += $item->net_total;
-                        $tax_spec[$item->vat_id]['amount'] += $item->tax_total;
-                        $tax_spec[$item->vat_id]['percent'] = $item->vat_percent;
-    
-                        $total_base += $item->net_total;
-                        $total_tax += $item->tax_total;
+            $activeSheet->setCellValueExplicit('K' . $i, $client->title, DataType::TYPE_STRING);
+            $activeSheet->setCellValueExplicit('L' . $i, $client->street, DataType::TYPE_STRING);
+            $activeSheet->setCellValueExplicit('M' . $i, $client->zip, DataType::TYPE_STRING);
+            $activeSheet->setCellValueExplicit('N' . $i, $client->city, DataType::TYPE_STRING);
+            $activeSheet->setCellValueExplicit('O' . $i, $client->tax_no, DataType::TYPE_STRING);
+            $activeSheet->setCellValueExplicit(
+                'P' . $i,
+                empty($client->country_code) ? 'SI' : $client->country_code,
+                DataType::TYPE_STRING
+            );
+
+            if ($doc->documents_counter->direction == 'issued' && !empty($doc->invoices_items)) {
+                $tax_spec = [];
+                foreach ($doc->invoices_items as $item) {
+                    if (!isset($tax_spec[$item->vat_id])) {
+                        $tax_spec[$item->vat_id] = ['title' => '', 'base' => 0, 'amount' => 0, 'percent' => 0];
                     }
-                    
-                    foreach ($tax_spec as $vat_id => $tax) {
-                        if (!isset($taxExcelHeaders[$vat_id])) {
-                            // headers/columns for specified taxid dont exist yet
-                            $taxExcelHeaders[$vat_id] = $taxExcelHeadersLastIndex;
-                            $activeSheet->SetCellValue([$taxExcelHeaders[$vat_id], 1], $tax['title']);
-                            $activeSheet->SetCellValue([$taxExcelHeaders[$vat_id]+1, 1], 'Osnova za ' . $tax['title']);
-                            $activeSheet->SetCellValue([$taxExcelHeaders[$vat_id]+2, 1], 'Stopnja za ' . $tax['title']);
 
-                            $taxExcelHeadersLastIndex += 3;
-                        }
-
-                        $activeSheet->SetCellValue([$taxExcelHeaders[$vat_id], $i], $tax['amount']);
-                        $activeSheet->SetCellValue([$taxExcelHeaders[$vat_id]+1, $i], $tax['base']);
-                        $activeSheet->SetCellValue([$taxExcelHeaders[$vat_id]+2, $i], $tax['percent']);
-                    }
+                    $tax_spec[$item->vat_id]['title'] = $item->vat_title;
+                    $tax_spec[$item->vat_id]['base'] += $item->net_total;
+                    $tax_spec[$item->vat_id]['amount'] += $item->tax_total;
+                    $tax_spec[$item->vat_id]['percent'] = $item->vat_percent;
                 }
 
-                if ($doc->documents_counter->direction == 'received' && !empty($doc->invoices_taxes)) {
-                    foreach ($doc->invoices_taxes as $itm) {
-                        if (!isset($taxExcelHeaders[$itm->vat_id])) {
-                            // headers/columns for specified taxid dont exist yet
-                            $taxExcelHeaders[$itm->vat_id] = $taxExcelHeadersLastIndex;
-                            $activeSheet->SetCellValue([$taxExcelHeaders[$itm->vat_id], 1], $itm->vat_title);
-                            $activeSheet->SetCellValue([$taxExcelHeaders[$itm->vat_id]+1, 1], 'Osnova za ' . $itm->vat_title);
-                            $activeSheet->SetCellValue([$taxExcelHeaders[$itm->vat_id]+2, 1], 'Stopnja za ' . $itm->vat_title);
+                foreach ($tax_spec as $vat_id => $tax) {
+                    if (!isset($taxExcelHeaders[$vat_id])) {
+                        // headers/columns for specified taxid dont exist yet
+                        $taxExcelHeaders[$vat_id] = $taxExcelHeadersLastIndex;
+                        $activeSheet->SetCellValue([$taxExcelHeaders[$vat_id], 1], $tax['title']);
+                        $activeSheet->SetCellValue([$taxExcelHeaders[$vat_id] + 1, 1], 'Osnova za ' . $tax['title']);
+                        $activeSheet->SetCellValue([$taxExcelHeaders[$vat_id] + 2, 1], 'Stopnja za ' . $tax['title']);
 
-                            $taxExcelHeadersLastIndex += 3;
-                        }
-
-                        $activeSheet->SetCellValue([$taxExcelHeaders[$itm->vat_id], $i], round($itm->base * $itm->vat_percent / 100, 2));
-                        $activeSheet->SetCellValue([$taxExcelHeaders[$itm->vat_id]+1, $i], $itm->base);
-                        $activeSheet->SetCellValue([$taxExcelHeaders[$itm->vat_id]+2, $i], $itm->vat_percent);
+                        $taxExcelHeadersLastIndex += 3;
                     }
-                }
 
-                $i++;
+                    $activeSheet->SetCellValue([$taxExcelHeaders[$vat_id], $i], $tax['amount']);
+                    $activeSheet->SetCellValue([$taxExcelHeaders[$vat_id] + 1, $i], $tax['base']);
+                    $activeSheet->SetCellValue([$taxExcelHeaders[$vat_id] + 2, $i], $tax['percent']);
+                }
             }
+
+            if ($doc->documents_counter->direction == 'received' && !empty($doc->invoices_taxes)) {
+                foreach ($doc->invoices_taxes as $itm) {
+                    if (!isset($taxExcelHeaders[$itm->vat_id])) {
+                        // headers/columns for specified taxid dont exist yet
+                        $taxExcelHeaders[$itm->vat_id] = $taxExcelHeadersLastIndex;
+                        $activeSheet->SetCellValue([$taxExcelHeaders[$itm->vat_id], 1], $itm->vat_title);
+                        $activeSheet->SetCellValue(
+                            [$taxExcelHeaders[$itm->vat_id] + 1, 1],
+                            'Osnova za ' . $itm->vat_title
+                        );
+                        $activeSheet->SetCellValue(
+                            [$taxExcelHeaders[$itm->vat_id] + 2, 1],
+                            'Stopnja za ' . $itm->vat_title
+                        );
+
+                        $taxExcelHeadersLastIndex += 3;
+                    }
+
+                    $taxAmount = round($itm->base * $itm->vat_percent / 100, 2);
+                    $activeSheet->SetCellValue([$taxExcelHeaders[$itm->vat_id], $i], $taxAmount);
+                    $activeSheet->SetCellValue([$taxExcelHeaders[$itm->vat_id] + 1, $i], $itm->base);
+                    $activeSheet->SetCellValue([$taxExcelHeaders[$itm->vat_id] + 2, $i], $itm->vat_percent);
+                }
+            }
+
+            $i++;
+        }
 
             $excelFile = 'eRacuniExport';
 

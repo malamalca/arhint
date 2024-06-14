@@ -359,7 +359,7 @@ class InvoicesController extends BaseDocumentsController
                 ->all();
 
             $report = new InvoicesExportEracuni();
-            $tmpName = $report->export($data);
+            $report->export($data);
         }
 
         /** @var \Documents\Model\Table\DocumentsCountersTable $DocumentsCounters */

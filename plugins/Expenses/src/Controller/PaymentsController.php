@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Expenses\Controller;
 
+use Cake\Core\Configure;
 use Cake\Http\Exception\NotFoundException;
 use Cake\Http\Response;
 

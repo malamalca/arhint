@@ -241,7 +241,7 @@ class ContactsController extends AppController
                     $data[] = ['id' => $c->id, 'text' => $c->email, 'value' => $c->email, 'client' => $c];
                 }
             } else {
-                $this->Authorize->skipAuthorization();
+                $this->Authorization->skipAuthorization();
             }
 
             $response = $this->response
@@ -287,7 +287,13 @@ class ContactsController extends AppController
                     $contacts = $query->all();
 
                     foreach ($contacts as $c) {
-                        $data[] = ['id' => $c->id, 'text' => $c->title, 'label' => $c->title, 'value' => $c->title, 'client' => $c];
+                        $data[] = [
+                            'id' => $c->id,
+                            'text' => $c->title,
+                            'label' => $c->title,
+                            'value' => $c->title,
+                            'client' => $c,
+                        ];
                     }
                 } else {
                     $result = $this->Authorization->applyScope($this->Contacts->find(), 'index')
