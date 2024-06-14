@@ -10,6 +10,7 @@ use Cake\I18n\Number;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Settings;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Cell\DataType;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Border;
 use PhpOffice\PhpSpreadsheet\Style\Color;
@@ -83,11 +84,9 @@ class InvoicesExportEracuni
 
             $i = 2;
             foreach ($data as $doc) {
-                $activeSheet->getStyle('A' . $i)->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_TEXT); 
-                $activeSheet->SetCellValue('A' . $i, strtolower($documentTypes[$doc->documents_counter->doc_type]));
+                $activeSheet->setCellValueExplicit('A' . $i, strtolower($documentTypes[$doc->documents_counter->doc_type]), DataType::TYPE_STRING);
                 
-                $activeSheet->getStyle('B' . $i)->getNumberFormat()->setFormatCode('@'); 
-                $activeSheet->SetCellValue('B' . $i, $doc->no);
+                $activeSheet->setCellValueExplicit('B' . $i, $doc->no, DataType::TYPE_STRING);
 
                 $activeSheet->getStyle('C' . $i)->getNumberFormat()->setFormatCode('d.m.yyyy'); 
                 $activeSheet->SetCellValue('C' . $i, Date::PHPToExcel($doc->dat_issue->toUnixString()));
@@ -106,23 +105,12 @@ class InvoicesExportEracuni
 
                 $client = $doc->documents_counter->direction == 'issued' ? $doc->receiver : $doc->issuer;
 
-                $activeSheet->getStyle('K' . $i)->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_TEXT); 
-                $activeSheet->SetCellValue('K' . $i, $client->title);
-
-                $activeSheet->getStyle('L' . $i)->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_TEXT); 
-                $activeSheet->SetCellValue('L' . $i, $client->street);
-
-                $activeSheet->getStyle('M' . $i)->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_TEXT); 
-                $activeSheet->SetCellValue('M' . $i, $client->zip);
-
-                $activeSheet->getStyle('N' . $i)->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_TEXT); 
-                $activeSheet->SetCellValue('N' . $i, $client->city);
-
-                $activeSheet->getStyle('O' . $i)->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_TEXT); 
-                $activeSheet->SetCellValue('O' . $i, $client->tax_no);
-
-                $activeSheet->getStyle('P' . $i)->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_TEXT); 
-                $activeSheet->SetCellValue('P' . $i, $client->country_code);
+                $activeSheet->setCellValueExplicit('K' . $i, $client->title, DataType::TYPE_STRING);
+                $activeSheet->setCellValueExplicit('L' . $i, $client->street, DataType::TYPE_STRING);
+                $activeSheet->setCellValueExplicit('M' . $i, $client->zip, DataType::TYPE_STRING);
+                $activeSheet->setCellValueExplicit('N' . $i, $client->city, DataType::TYPE_STRING);
+                $activeSheet->setCellValueExplicit('O' . $i, $client->tax_no, DataType::TYPE_STRING);
+                $activeSheet->setCellValueExplicit('P' . $i, $client->country_code, DataType::TYPE_STRING);
 
                 if ($doc->documents_counter->direction == 'issued' && !empty($doc->invoices_items)) {
                     $tax_spec = [];
