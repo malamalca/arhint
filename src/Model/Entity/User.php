@@ -59,7 +59,7 @@ class User extends Entity implements AuthorizationIdentity, AuthenticationIdenti
     /**
      * Fields that are excluded from JSON versions of the entity.
      *
-     * @var array<string>
+     * @var array<int, string>
      */
     protected array $_hidden = [
         'passwd',
