@@ -199,6 +199,9 @@ echo $this->Lil->panels($report, 'Expenses.Expenses.import_sepa_step2');
                 let popUpinstance = M.Dropdown.getInstance(popupTriggerElement.get(0));
                 popUpinstance.close();
                 return modifyUrl(urlLinkPayment, paymentData[$(popupTriggerElement).data("payment")]);
+            },
+            onJson: function(data) {
+                $(popupTriggerElement).close();
             }
         })
 
@@ -209,6 +212,9 @@ echo $this->Lil->panels($report, 'Expenses.Expenses.import_sepa_step2');
                 let popUpinstance = M.Dropdown.getInstance(popupTriggerElement.get(0));
                 popUpinstance.close();
                 return modifyUrl(urlPayExpense, paymentData[$(popupTriggerElement).data("payment")]);
+            },
+            onJson: function(data) {
+                $(popupTriggerElement).close();
             }
         })
 
@@ -219,6 +225,9 @@ echo $this->Lil->panels($report, 'Expenses.Expenses.import_sepa_step2');
                 let popUpinstance = M.Dropdown.getInstance(popupTriggerElement.get(0));
                 popUpinstance.close();
                 return modifyUrl(urlAddExpense, paymentData[$(popupTriggerElement).data("payment")]);
+            },
+            onJson: function(data) {
+                $(popupTriggerElement).close();
             }
         })
     });
