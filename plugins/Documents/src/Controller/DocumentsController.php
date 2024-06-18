@@ -169,14 +169,14 @@ class DocumentsController extends BaseDocumentsController
      */
     public function editPreview(array ...$args)
     {
-        $id = $args[0] ?? [];
+        $document = $this->Documents->parseRequest($this->getRequest(), $this->getRequest()->getData('id'));
 
         $containTables = ['DocumentsCounters', 'DocumentsAttachments', 'DocumentsLinks', 'Issuers', 'Receivers'];
         if (Plugin::isLoaded('Projects')) {
             $containTables[] = 'Projects';
         }
 
-        parent::editPreview($id, $containTables);
+        return parent::editPreview([$document, $containTables]);
     }
 
     /**

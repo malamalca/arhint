@@ -329,8 +329,8 @@ class BaseDocumentsController extends AppController
      */
     public function editPreview(array ...$args)
     {
-        $document = $args[0];
-        $containTables = (array)$args[1];
+        $document = $args[0][0];
+        $containTables = (array)$args[0][1];
 
         $document = $this->{$this->documentsScope}->patchEntity($document, $this->getRequest()->getData(), [
             'associated' => $containTables,
