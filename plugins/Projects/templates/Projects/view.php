@@ -85,7 +85,7 @@ $projectView = [
                 '<li class="tab col"><a href="%1$s" target="_self"%3$s>%2$s</a></li>',
                 $this->Url->build([$project->id, '?' => ['tab' => 'logs']]),
                 __d('projects', 'Logs'),
-                $this->getRequest()->getQuery('tab') == 'logs' ? ' class="active"' : ''
+                !$this->getRequest()->getQuery('tab') || $this->getRequest()->getQuery('tab') == 'logs' ? ' class="active"' : ''
             ),
             'workhours' => sprintf(
                 '<li class="tab col"><a href="%1$s" target="_self"%3$s>%2$s</a></li>',
@@ -138,6 +138,10 @@ switch ($activeTab) {
                                 $this->Html->link(
                                     __d('projects', 'delete'),
                                     ['controller' => 'ProjectsLogs', 'action' => 'delete', $log->id]
+                                ) . ' ' .
+                                $this->Html->link(
+                                    __d('projects', 'edit'),
+                                    ['controller' => 'ProjectsLogs', 'action' => 'edit', $log->id]
                                 )
                                 :
                                 ''

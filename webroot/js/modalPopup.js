@@ -4,7 +4,9 @@ jQuery.fn.modalPopup = function(p_options) {
         title: "",
         url: $(this).prop("href"),
         processSubmit: false,
+        onBeforeSubmit: null,
         onJson: null,
+        onHtml: null,
         onBeforeRequest: null,
         onOpen: null,
         onClose: null,
@@ -88,10 +90,14 @@ jQuery.fn.modalPopup = function(p_options) {
     // Do an ajax form post
     this.popupFormSubmit = function(e)
     {
+        var submitData = $("form", $this.popup).serialize()
+        if ($this.options.onBeforeSubmit instanceof Function) {
+            submitData = $this.options.onBeforeSubmit($("form", $this.popup), $this.instance);
+        }
         $.ajax({
             type: "POST",
             url: $("form", $this.popup).prop("action"),
-            data: $("form", $this.popup).serialize(),
+            data: submitData.serialize(),
             success: function(data, status, xhr) {
                 let json = $this.isJson(data);
                 if (json) {
@@ -111,6 +117,10 @@ jQuery.fn.modalPopup = function(p_options) {
 
                     if ($this.options.processSubmit) {
                         $("form", $this.popup).submit($this.popupFormSubmit);
+                    }
+
+                    if ($this.options.onHtml instanceof Function) {
+                        $this.options.onHtml(data, $this);
                     }
                     // update text fields for label placement
                     //M.updateTextFields();

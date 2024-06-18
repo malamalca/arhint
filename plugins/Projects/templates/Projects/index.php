@@ -63,12 +63,11 @@ $index = [
                 'status' => ['params' => ['class' => 'center hide-on-small-only'], 'html' => __d('projects', 'Status')],
                 'actions' => '',
                 'log' => ['params' => ['class' => 'left'], 'html' => __d('projects', 'Last Log')],
-                'actions2' => '',
             ],
         ]]],
         'foot' => ['rows' => [['columns' => [
             'paginator' => [
-                'params' => ['colspan' => 6],
+                'params' => ['colspan' => 5],
                 'html' => '<ul class="paginator">' . $this->Paginator->numbers([
                     'first' => '<<',
                     'last' => '>>',
@@ -85,7 +84,7 @@ foreach ($projects as $project) {
     if (!empty($project->last_log)) {
         $lastLogDescript = sprintf(
             '<span class="small">%2$s, %3$s</span><div class="truncate">%1$s</div>',
-            strip_tags($project->last_log->descript),
+            $project->last_log->descript,
             $project->last_log->created,
             h($project->last_log->user->name)
         );
@@ -116,7 +115,6 @@ foreach ($projects as $project) {
             'params' => ['class' => 'last-log'],
             'html' => $lastLogDescript,
         ],
-        'actions2' => $this->Lil->editLink($project->id),
     ];
 }
 
@@ -159,8 +157,15 @@ echo $this->Lil->index($index, 'Projects.Projects.index');
                 processSubmit: true,
                 onOpen: function(popup) { $("#projects-logs-descript", popup).focus(); },
                 onHtml: function(data, popup) {
-                    $("td.last-log", popupElement.closest("tr")).html(data);
+                    // decode html entities
+                    var textArea = document.createElement("textarea");
+                    textArea.innerHTML = data;
+                    $("td.last-log", popupElement.closest("tr")).html(textArea.value);
                     popup.instance.close();
+                },
+                onBeforeSubmit: function(data, popup) {
+                    $("#projects-logs-descript", $(data)).html(tinyMCE.get('projects-logs-descript').getContent());
+                    return data;
                 }
             });
         });
