@@ -175,7 +175,8 @@ if ($contact->kind != 'T') {
                 ],
             ],
         ],
-        'company_hint' => sprintf(
+        // removed because double popup wont work with invoices
+        'company_hint' => 1==2 ? null : sprintf(
             '<div class="helper-text">%s</div>',
             $this->Lil->link(
                 __d('crm', 'Start typing to select employer. You can also add a [$1new company].'),
@@ -457,15 +458,16 @@ echo $this->Lil->form($editForm, 'Crm.Contacts.edit');
         ?>
 
         // modal popup for adding new company
-        $("#AddCompanyLink").modalPopup({
-            title: "<?= __d('crm', 'Add a Company') ?>",
-            processSubmit: true,
-            onJson: function(company) {
-                $("#contact-company-id").val(company.id);
-                $("#contact-company-title").val(company.title);
-                $("#contact-company-title").parent("div").append("<div class='suffix'><i class='material-icons'>link</i></div>");
-            }
-        });
+        // removed because double popup wont work with invoices
+        //$("#AddCompanyLink").modalPopup({
+        //    title: "<?= __d('crm', 'Add a Company') ?>",
+        //    processSubmit: true,
+        //    onJson: function(company) {
+        //        $("#contact-company-id").val(company.id);
+        //        $("#contact-company-title").val(company.title);
+        //        $("#contact-company-title").parent("div").append("<div class='suffix'><i class='material-icons'>link</i></div>");
+        //    }
+        //});
 
         // autocomplete for selecting company
         M.Autocomplete.init(

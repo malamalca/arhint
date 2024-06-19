@@ -162,7 +162,6 @@ jQuery.fn.InvoiceEditClient = function (options) {
             processSubmit: true,
             onJson: function(client) {
                 $this.fillClientData(target, client);
-                $(".modal-container").html("");
             }
         });
 
