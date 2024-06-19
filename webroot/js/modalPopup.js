@@ -90,7 +90,7 @@ jQuery.fn.modalPopup = function(p_options) {
     // Do an ajax form post
     this.popupFormSubmit = function(e)
     {
-        var submitData = $("form", $this.popup).serialize()
+        var submitData = $("form", $this.popup);
         if ($this.options.onBeforeSubmit instanceof Function) {
             submitData = $this.options.onBeforeSubmit($("form", $this.popup), $this.instance);
         }

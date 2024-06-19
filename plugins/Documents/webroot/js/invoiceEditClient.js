@@ -162,6 +162,7 @@ jQuery.fn.InvoiceEditClient = function (options) {
             processSubmit: true,
             onJson: function(client) {
                 $this.fillClientData(target, client);
+                $('#image-' + target + '-checked', $this).show();
             }
         });
 
@@ -170,6 +171,7 @@ jQuery.fn.InvoiceEditClient = function (options) {
             processSubmit: true,
             onJson: function(client) {
                 $this.fillClientData(target, client);
+                $('#image-' + target + '-checked', $this).show();
             }
         });
     }
