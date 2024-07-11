@@ -171,7 +171,7 @@ echo $this->Lil->form($payment_edit, 'Expenses.Payments.edit');
 
 <script type="text/javascript">
     function toggleAddExpense() {
-        if ($("#add-expense-link:visible").size() == 0) {
+        if ($("#add-expense-link:visible").length == 0) {
             $("#add-expense-link").show();
             $("#add-expense-form").hide();
         } else {

@@ -155,6 +155,9 @@ $admin_index = [
                     'descript' => [
                         'html' => __d('expenses', 'Description'),
                     ],
+                    'sepa_id' => [
+                        'html' => __d('expenses', 'Sepa ID'),
+                    ],
                     'payment' => [
                         'parameters' => ['class' => 'right-align'],
                         'html' => $this->Paginator->sort('amount', __d('expenses', 'Payment')),
@@ -164,7 +167,7 @@ $admin_index = [
         ]],
         'foot' => ['rows' => [['columns' => [
             'paginator' => [
-                'params' => ['colspan' => 2],
+                'params' => ['colspan' => 3],
                 'html' => '<ul class="paginator">' . $this->Paginator->numbers([
                     'first' => '<<',
                     'last' => '>>',
@@ -204,6 +207,9 @@ if (!empty($payments)) {
                 'action' => 'edit',
                 $p->id,
             ]),
+            'sepa_id' => [
+                'html' => h($p->sepa_id),
+            ],
             'payment' => [
                 'parameters' => ['class' => $p->amount < 0 ? 'right-align negative' : 'right-align positive'],
                 'html' => $this->Number->precision((float)$p->amount, 2),

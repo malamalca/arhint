@@ -156,6 +156,8 @@ class ExpensesImport
                 $cachedPayments[$payment['id']] = $payment;
             }
 
+            //usort($cachedPayments, fn($payment1, $payment2) => ($payment1['date'] == $payment2['date'] ? 0 : ($payment1['date'] < $payment2['date'] ? 0 : 1)));
+
             Cache::write('Expenses.sepaImportedPayments' . $this->ownerId, $cachedPayments);
 
             return true;

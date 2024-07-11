@@ -201,7 +201,7 @@ echo $this->Lil->panels($report, 'Expenses.Expenses.import_sepa_step2');
                 return modifyUrl(urlLinkPayment, paymentData[$(popupTriggerElement).data("payment")]);
             },
             onJson: function(data) {
-                $(popupTriggerElement).close();
+                $(popupTriggerElement).remove();
             }
         })
 
@@ -214,7 +214,7 @@ echo $this->Lil->panels($report, 'Expenses.Expenses.import_sepa_step2');
                 return modifyUrl(urlPayExpense, paymentData[$(popupTriggerElement).data("payment")]);
             },
             onJson: function(data) {
-                $(popupTriggerElement).close();
+                $(popupTriggerElement).remove();
             }
         })
 
@@ -227,7 +227,7 @@ echo $this->Lil->panels($report, 'Expenses.Expenses.import_sepa_step2');
                 return modifyUrl(urlAddExpense, paymentData[$(popupTriggerElement).data("payment")]);
             },
             onJson: function(data) {
-                $(popupTriggerElement).close();
+                $(popupTriggerElement).remove();
             }
         })
     });
