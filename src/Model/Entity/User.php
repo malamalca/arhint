@@ -15,15 +15,16 @@ use Cake\ORM\Entity;
  *
  * @property string $id
  * @property string|null $company_id
- * @property string|null $name
- * @property string|null $username
+ * @property string $name
+ * @property string $username
  * @property string|null $passwd
- * @property string|null $email
+ * @property string $email
  * @property string|null $reset_key
  * @property int $privileges
  * @property bool $active
  * @property string|null $login_redirect
  * @property string|null $avatar
+ * @property string|null $properties
  * @property \Cake\I18n\DateTime|null $created
  * @property \Cake\I18n\DateTime|null $modified
  *
@@ -229,5 +230,25 @@ class User extends Entity implements AuthorizationIdentity, AuthenticationIdenti
         }
 
         return $ret;
+    }
+
+    /**
+     * Properties field accessor
+     *
+     * @param string $key Properties key
+     * @param mixed $default Default return value
+     * @return mixed
+     * @psalm-suppress PossiblyUnusedMethod
+     */
+    public function getProperty(string $key, mixed $default = null): mixed
+    {
+        if ($this->properties !== null) {
+            $properties = json_decode($this->properties);
+            if (isset($properties->$key)) {
+                return $properties->$key;
+            }
+        }
+
+        return $default;
     }
 }

@@ -3,12 +3,12 @@ declare(strict_types=1);
 
 namespace Documents\Form;
 
+use App\Mailer\ArhintMailer;
 use Cake\Core\Configure;
 use Cake\Database\Expression\QueryExpression;
 use Cake\Form\Form;
 use Cake\Form\Schema;
 use Cake\Http\ServerRequest;
-use Cake\Mailer\Mailer;
 use Cake\ORM\Query\SelectQuery;
 use Cake\ORM\TableRegistry;
 use Cake\Validation\Validator;
@@ -81,10 +81,12 @@ class EmailForm extends Form
             $data = $Exporter->export('pdf', $documents);
 
             if (!empty($data)) {
-                $email = new Mailer('default');
+                /** @var \App\Model\Entity\User $currentUser */
+                $currentUser = $this->request->getAttribute('identity');
 
+                $email = new ArhintMailer('default', $currentUser);
                 $email
-                    ->setFrom([Configure::read('App.fromEmail.from') => Configure::read('App.fromEmail.name')])
+                    ->setFrom([(string)$currentUser->email => $currentUser->name])
                     ->setTo($this->request->getData('to'))
                     ->setSubject($this->request->getData('subject'));
 
@@ -93,7 +95,6 @@ class EmailForm extends Form
                     $email->addCc($cc);
                 }
                 if ($this->request->getData('cc_me')) {
-                    $currentUser = $this->request->getAttribute('identity');
                     $email->addCc($currentUser->email);
                 }
 
