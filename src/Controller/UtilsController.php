@@ -41,7 +41,8 @@ class UtilsController extends AppController
         if ($this->getRequest()->is(['patch', 'post', 'put'])) {
             $compression = $this->getRequest()->getData('compression', 'default');
             $gsProgram = Configure::read('Ghostscript.executable');
-            $gsParams = '-dBATCH -dNOPAUSE -sDEVICE=pdfwrite -dPDFSETTINGS=/' . $compression . ' -sOutputFile=%2$s %1$s';
+            $gsParams = '-dBATCH -dNOPAUSE -sDEVICE=pdfwrite -dPDFSETTINGS=/' . $compression . ' ' .
+                '-sOutputFile=%2$s %1$s';
 
             if ($this->getRequest()->getData('pdfa')) {
                 // slightly different parameters
