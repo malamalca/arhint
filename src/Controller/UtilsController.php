@@ -44,7 +44,7 @@ class UtilsController extends AppController
 
             if ($this->getRequest()->getData('pdfa')) {
                 // slightly different parameters
-                $gsParams = '-dPDFA -dBATCH -dNOPAUSE -sDEVICE=pdfwrite ' .
+                $gsParams = '-dPDFA -dNOPAUSE -sDEVICE=pdfwrite ' .
                     '-sColorConversionStrategy=UseDeviceIndependentColor -dPDFACompatibilityPolicy=2 ' .
                     '-sOutputFile=%2$s %1$s';
             }
