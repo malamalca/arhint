@@ -67,7 +67,7 @@
                     'params' => ['compression', [
                         'type' => 'select',
                         'id' => 'compression',
-                        'label' => __('Compression'),
+                        'label' => __('Compression') . ':',
                         'value' => 'default',
                         'options' => [
                             'default' => __('Default'),
