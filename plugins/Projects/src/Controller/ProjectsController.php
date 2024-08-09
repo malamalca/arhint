@@ -49,7 +49,7 @@ class ProjectsController extends AppController
             ->order(['title'])
             ->toArray();
 
-        $this->set(compact('projects', 'projectsStatuses'));
+        $this->set(compact('projects', 'projectsStatuses', 'filter'));
     }
 
     /**
