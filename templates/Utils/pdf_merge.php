@@ -62,6 +62,22 @@
                         'default' => 'download.pdf'
                     ]],
                 ],
+                'compression' => [
+                    'method' => 'control',
+                    'params' => ['compression', [
+                        'type' => 'select',
+                        'id' => 'compression',
+                        'label' => __('Compression'),
+                        'value' => 'default',
+                        'options' => [
+                            'default' => __('Default'),
+                            'printer ' => __('Printer (300 dpi)'),
+                            'prepress' => __('Prepress (300 dpi)'),
+                            'ebook ' => __('Ebook (150 dpi)'),
+                            'screen' => __('Screen (72 dpi)'),
+                        ],
+                    ]],
+                ],
                 'pdfa' => [
                     'method' => 'control',
                     'params' => ['pdfa', [
@@ -184,6 +200,7 @@
             fd.append("filename", $("#filename").val());
 
             fd.append("pdfa", $("#pdfa").prop("checked") ? "1" : "");
+            fd.append("compression", $("#compression").val());
 
             uploadData(fd);
 
