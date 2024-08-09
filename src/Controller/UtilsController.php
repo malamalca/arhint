@@ -40,11 +40,11 @@ class UtilsController extends AppController
 
         if ($this->getRequest()->is(['patch', 'post', 'put'])) {
             $gsProgram = Configure::read('Ghostscript.executable');
-            $gsParams = '-dBATCH -dNOPAUSE -sDEVICE=pdfwrite -sOutputFile=%2$s %1$s';
+            $gsParams = '-dBATCH -dNOPAUSE -sDEVICE=pdfwrite -dPDFSETTINGS=/printer -sOutputFile=%2$s %1$s';
 
             if ($this->getRequest()->getData('pdfa')) {
                 // slightly different parameters
-                $gsParams = '-dPDFA -dNOPAUSE -sDEVICE=pdfwrite ' .
+                $gsParams = '-dPDFA -dNOPAUSE -sDEVICE=pdfwrite -dPDFSETTINGS=/printer ' .
                     '-sColorConversionStrategy=UseDeviceIndependentColor -dPDFACompatibilityPolicy=2 ' .
                     '-sOutputFile=%2$s %1$s';
             }
