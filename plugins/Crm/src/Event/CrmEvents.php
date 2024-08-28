@@ -80,7 +80,7 @@ class CrmEvents implements EventListenerInterface
 
                     $fromEmail = empty($emailsDecoded[0][1]) ?
                         $emailsDecoded[0][2] :
-                        (h(iconv_mime_decode($emailsDecoded[0][1])) . '<' . $emailsDecoded[0][2] . '>');
+                        (h(iconv_mime_decode($emailsDecoded[0][1])) . ' <' . $emailsDecoded[0][2] . '>');
 
                     foreach ($contactsEmails as $contactEmail) {
                         $contactsLog = $ContactsLogsTable->newEmptyEntity();
@@ -102,6 +102,8 @@ class CrmEvents implements EventListenerInterface
                         $contactsLogArray[] = $contactsLog;
                     }
                 }
+
+                var_dump($contactsLogArray);
 
                 try {
                     $ContactsLogsTable->saveMany($contactsLogArray);
