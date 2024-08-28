@@ -103,8 +103,6 @@ class CrmEvents implements EventListenerInterface
                     }
                 }
 
-                var_dump($contactsLogArray);
-
                 try {
                     $ContactsLogsTable->saveMany($contactsLogArray);
                 } catch (Exception $e) {
