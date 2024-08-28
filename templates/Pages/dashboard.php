@@ -2,4 +2,4 @@
     use Cake\Core\Configure;
 
     $this->set('pageTitle', Configure::read('App.title'));
-    echo $this->Lil->panels($panels);
+    echo '<div class="row">' . $this->Lil->panels($panels) . '</div>';

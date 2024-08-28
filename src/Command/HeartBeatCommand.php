@@ -33,6 +33,9 @@ class HeartBeatCommand extends Command
                 'panels' => [],
             ];
 
+            $event = new Event('App.HeartBeat.hourly', $this, ['user' => $user]);
+            EventManager::instance()->dispatch($event);
+
             $event = new Event('App.HeartBeat.hourlyEmail', $this, ['panels' => $emailPanels, 'user' => $user]);
             EventManager::instance()->dispatch($event);
 

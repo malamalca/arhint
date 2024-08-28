@@ -110,9 +110,12 @@ class DocumentsEvents implements EventListenerInterface
             ->all();
 
         if (!$newDocuments->isEmpty()) {
-            $panels['panels']['documents'] = ['lines' => [
-                '<h5>' . __d('documents', 'Last 6 documents') . '</h5>',
-            ]];
+            $panels['panels']['documents'] = [
+                'params' => ['class' => 'dashboard-panel'],
+                'lines' => [
+                    '<h5>' . __d('documents', 'Last 6 documents') . '</h5>',
+                ],
+            ];
 
             $ArhintHelper = new ArhintHelper(new View());
 

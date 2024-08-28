@@ -55,9 +55,10 @@ $default-background-color: #f0f0f0 !default;
 @import "components/monthpicker-input";
 @import "components/view-panel";
 @import "components/search-panel";
-@import "components/_sidenav";
-@import "components/_paginator";
-@import "components/_upload-area";
+@import "components/sidenav";
+@import "components/paginator";
+@import "components/upload-area";
+@import "components/dashboard-panel";
 
 @import "material-icons";
 

@@ -1,0 +1,12 @@
+.dashboard-panel {
+    @extend .col, .s12;
+    //.s12, .l6
+
+    h5 {
+        margin-left: 1rem;
+    }
+
+    margin-top: 1rem;
+    border: solid 1px #808080;
+    border-radius: 4px;
+}

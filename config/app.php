@@ -121,6 +121,15 @@ return [
             'url' => null,
         ],
 
+        'imap-emails' => [
+            'className' => FileEngine::class,
+            'prefix' => 'imap_emails_',
+            'path' => CACHE . 'emails' . DS,
+            'serialize' => true,
+            'duration' => '+5 minutes',
+            'url' => null,
+        ],
+
         /*
          * Configure the cache used for general framework caching.
          * Translation cache files are stored with this configuration.

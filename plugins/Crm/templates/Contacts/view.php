@@ -1,9 +1,10 @@
 <?php
 use Cake\Core\Configure;
+use Cake\Routing\Router;
 
-    $title = h($contact->title);
+$title = h($contact->title);
 
-    $job = '';
+$job = '';
 if (!empty($contact->job)) {
     $job .= ', ' . h($contact->job);
 } else {
@@ -304,14 +305,49 @@ if (!empty($job)) {
 
     $contact_view['panels']['tabs'] = ['lines' => [
         'pre' => '<div class="row view-panel"><div class="col s12"><ul id="ContactTabs" class="tabs">',
+
+        'logs' => sprintf(
+            '<li class="tab col"><a href="%1$s" target="_self"%3$s>%2$s</a></li>',
+            $this->Url->build([$this->getRequest()->getParam('pass.0'), '?' => ['tab' => 'logs']]),
+            __d('crm', 'Logs'),
+            ($this->getRequest()->getQuery('tab') == 'logs' || !$this->getRequest()->getQuery('tab'))  ? ' class="active"' : ''
+        ),
+
         'post' => '</ul></div>',
     ]];
+
+    $activeTab = $this->getRequest()->getQuery('tab', 'logs');
+    if ($activeTab == 'logs') {
+        $contact_view['panels']['logs'] = '<div id="tab-content-logs"></div>';
+
+        $sourceRequest = Router::reverseToArray($this->getRequest());
+        unset($sourceRequest['?']['page']);
+        unset($sourceRequest['?']['sort']);
+        unset($sourceRequest['?']['direction']);
+
+        $url = Router::normalize($sourceRequest);
+        $params = [
+            'source' => $url,
+            'page' => $this->getRequest()->getQuery('page'),
+            'sort' => $this->getRequest()->getQuery('sort'),
+            'direction' => $this->getRequest()->getQuery('direction'),
+        ];
+
+        $url = Router::url([
+            'controller' => 'ContactsLogs',
+            'action' => 'index',
+            '_ext' => 'aht',
+            '?' => $params,
+        ]);
+        $this->Lil->jsReady('$.get("' . $url . '", function(data) { $("#tab-content-logs").html(data); });');
+    }
+
+    
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     echo $this->Lil->panels($contact_view, 'Crm.Contacts.view');
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    //$js_c = '$("%1$s").click(function(){popup(\'%2$s\', $(this).attr("href"), %3$s); return false;});';
     $js_c = '$("%1$s").each(function() { $(this).modalPopup({title:"%2$s"}); });';
     $this->Lil->jsReady(sprintf($js_c, '.edit-address', __d('crm', 'Edit Address'), '"auto"'));
     $this->Lil->jsReady(sprintf($js_c, '.edit-email', __d('crm', 'Edit Email'), '"auto"'));
@@ -326,8 +362,7 @@ if (!empty($job)) {
     $this->Lil->jsReady('$(".delete-element").hide()');
 
     // needed for bug - must have active tab
-    //$this->Lil->jsReady('alert($("ul#ContactTabs>li>a").first().get(0));');
-    $this->Lil->jsReady('if(!$("ul#ContactTabs>li>a").hasClass("active")) { $("ul#ContactTabs>li>a").first().addClass("active"); }');
+    //$this->Lil->jsReady('if(!$("ul#ContactTabs>li>a").hasClass("active")) { $("ul#ContactTabs>li>a").first().addClass("active"); }');
 
     $this->Lil->jsReady(sprintf('$(".AddAddressLink").modalPopup({title:"%s"})', __d('crm', 'Add new Address')));
     $this->Lil->jsReady(sprintf('$(".AddAccountLink").modalPopup({title:"%s"})', __d('crm', 'Add new Account')));

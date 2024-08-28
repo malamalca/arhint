@@ -63,6 +63,36 @@ div#PanelViewContactEmployees table {
 }
 
 
+
+.view-panel div#tab-content-logs {
+    margin: 0;
+}
+
+.view-panel div#tab-content-logs table {
+    width: 750px;
+    border-top: solid 1px #A8A8A8;
+    border-bottom: solid 1px #A8A8A8;
+
+}
+.view-panel div#tab-content-logs table td {
+    font-weight: normal;
+    vertical-align: top;
+}
+.view-panel div#tab-content-logs table td textarea {
+    border: solid 1px #A8A8A8;
+    background-color: #ffffff !important;
+}
+.view-panel div#tab-content-logs table tbody tr td:first-child {
+    width: 100px;
+}
+.view-panel div#tab-content-logs table td div.logs-header {
+    font-size: 80%;
+    border-bottom: solid 1px #A8A8A8;
+    text-align: right;
+    margin-bottom: 5px;
+}
+
+
 /* EDIT CONTACT */
 input#contact-tax-no {
     width: 150px !important;
