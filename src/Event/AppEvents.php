@@ -85,7 +85,7 @@ class AppEvents implements EventListenerInterface
 
                 $fromEmail = empty($emailsDecoded[0][1]) ?
                     $emailsDecoded[0][2] :
-                    (h(iconv_mime_decode($emailsDecoded[0][1])) . '<' . $emailsDecoded[0][2] . '>');
+                    (h(iconv_mime_decode($emailsDecoded[0][1])) . ' &lt;' . $emailsDecoded[0][2] . '&gt;');
 
                 $panels['panels']['email']['lines'][] = sprintf(
                     '<div ' .
