@@ -296,7 +296,7 @@ foreach ((array)$invoices as $invoice) {
                             'C_C516' => [
                                 'D_5025' => '38', // document item amount
                                 // ZnesekPostavke :: (cena*količina*znesekpopusta)* (1+davčnastopnja)
-                                'D_5004' => $this->Number->format($item->item_total, ['pattern' => '##0.00', 'locale' => 'en-US']),
+                                'D_5004' => $this->Number->format($item->items_total * (1+$item->vat_percent/100), ['pattern' => '##0.00', 'locale' => 'en-US']),
                             ],
                         ]],
                     ],
