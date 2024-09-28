@@ -125,6 +125,12 @@ class AppEvents implements EventListenerInterface
                     );
                 }
 
+		try {
+		$emailDate = DateTime::parse($overview->date);
+		} catch (\Exception $e) {
+			$emailDate = new DateTime();
+		}
+
                 $panels['panels']['email']['lines'][] = sprintf(
                     '<div ' .
                         'style="clear: both; height: 46px; ' .
@@ -141,7 +147,7 @@ class AppEvents implements EventListenerInterface
                         'https://webmail.arhim.si/?_task=mail&_uid=%s&_mbox=INBOX&_action=show',
                         $overview->uid
                     ),
-                    $ArhintHelper->calendarDay(DateTime::parse($overview->date)),
+                    $ArhintHelper->calendarDay($emailDate),
                     !empty($overview->seen) && $overview->seen == 1 ? '' : 'background-color: #cdffb0;'
                 );
             }
