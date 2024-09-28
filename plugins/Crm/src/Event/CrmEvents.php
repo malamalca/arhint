@@ -90,14 +90,14 @@ class CrmEvents implements EventListenerInterface
                         $contactsLog->descript =
                             'From: ' . $fromEmail . '<br />' . PHP_EOL .
                             'Subject: ' . iconv_mime_decode($overview->subject) . '<br />' . PHP_EOL .
-                            '<br />' .PHP_EOL .
+                            '<br />' . PHP_EOL .
                             sprintf(
                                 '<a href="%1$s" target="_blank">%1$s</a>',
                                 sprintf(
                                     'https://webmail.arhim.si/?_task=mail&_uid=%1$s&_mbox=INBOX&_action=show',
                                     $overview->uid
                                 )
-                            ). '<br />';
+                            ) . '<br />';
 
                         $contactsLogArray[] = $contactsLog;
                     }

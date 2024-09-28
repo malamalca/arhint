@@ -159,7 +159,7 @@ class DurationWidget implements WidgetInterface
      * {@inheritDoc}
      *
      * @param array<string, mixed> $data Fields data.
-     * @return array<array-key, string>
+     * @return list<string>
      */
     public function secureFields(array $data): array
     {

@@ -93,7 +93,6 @@ class AppEvents implements EventListenerInterface
                                 }
                             }
                         }
-        
                     }
 
                     imap_close($mbox);
@@ -115,21 +114,25 @@ class AppEvents implements EventListenerInterface
                 $fromEmail = empty($emailsDecoded[0][1]) ?
                     $emailsDecoded[0][2] :
                     (h(iconv_mime_decode($emailsDecoded[0][1])) . ' <' . $emailsDecoded[0][2] . '>');
-                
+
                 $emailLink = '<a href="mailto:' . $emailsDecoded[0][2] . '" target="_blank">' . h($fromEmail) . '</a>';
                 if (isset($overview->contacts)) {
                     $emailLink = sprintf(
                         '<a href="%1$s" target="_blank" style="font-weight: bold;">%2$s</a>',
-                        Router::url(['plugin' => 'Crm', 'controller' => 'Contacts', 'action' => 'view', $overview->contacts[0]]),
+                        Router::url([
+                            'plugin' => 'Crm',
+                            'controller' => 'Contacts',
+                            'action' => 'view',
+                            $overview->contacts[0]]),
                         h($fromEmail)
                     );
                 }
 
-		try {
-		$emailDate = DateTime::parse($overview->date);
-		} catch (\Exception $e) {
-			$emailDate = new DateTime();
-		}
+                try {
+                    $emailDate = DateTime::parse($overview->date);
+                } catch (Exception $e) {
+                    $emailDate = new DateTime();
+                }
 
                 $panels['panels']['email']['lines'][] = sprintf(
                     '<div ' .
