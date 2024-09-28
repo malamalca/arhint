@@ -183,6 +183,8 @@ jQuery.fn.InvoiceItemEditor = function (pOptions) {
                     var row = $(this).closest('tr');
                     $('.invoices-item-item_id', row).val('');
                     $('.image-item-check', row).hide();
+                } else {
+                    autocomplete.setMenuItems([]);
                 }
             });
         },

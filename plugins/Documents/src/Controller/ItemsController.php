@@ -108,6 +108,8 @@ class ItemsController extends AppController
                     ->where(['Items.descript LIKE' => '%' . $term . '%'])
                     ->order('Items.descript')
                     ->all();
+            } else {
+                $this->Authorization->skipAuthorization();
             }
 
             $response = $this->getResponse()

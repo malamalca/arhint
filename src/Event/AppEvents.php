@@ -9,6 +9,8 @@ use Cake\Cache\Cache;
 use Cake\Event\Event;
 use Cake\Event\EventListenerInterface;
 use Cake\I18n\DateTime;
+use Cake\ORM\TableRegistry;
+use Cake\Routing\Router;
 use Cake\View\View;
 use Exception;
 
@@ -52,6 +54,7 @@ class AppEvents implements EventListenerInterface
                 ],
             ];
 
+            //Cache::delete($user->id . '-emails');
             $emails = Cache::remember($user->id . '-emails', function () use ($imap) {
                 $mbox = imap_open($imap->url, $imap->username, $imap->password);
                 if ($mbox) {
@@ -65,6 +68,32 @@ class AppEvents implements EventListenerInterface
                         usort($result, function ($a, $b) {
                             return $b->udate - $a->udate;
                         });
+
+                        // link email with contact
+                        $ContactsEmailsTable = TableRegistry::getTableLocator()->get('Crm.ContactsEmails');
+                        foreach ($result as $overview) {
+                            $canDecodeEmail = preg_match_all(
+                                '/(?|(?|"([^"]+)"|([^<@]+)) ?<(.+?)>|()(.+?))(?:$|, ?)/',
+                                $overview->from,
+                                $emailsDecoded,
+                                PREG_SET_ORDER
+                            );
+
+                            if ($canDecodeEmail) {
+                                $contactsEmails = $ContactsEmailsTable->find()
+                                    ->select('contact_id')
+                                    ->where(['email' => $emailsDecoded[0][2]])
+                                    ->all();
+
+                                foreach ($contactsEmails as $contactsEmail) {
+                                    if (!isset($overview->contacts)) {
+                                        $overview->contacts = [];
+                                    }
+                                    $overview->contacts[] = $contactsEmail->contact_id;
+                                }
+                            }
+                        }
+        
                     }
 
                     imap_close($mbox);
@@ -85,7 +114,16 @@ class AppEvents implements EventListenerInterface
 
                 $fromEmail = empty($emailsDecoded[0][1]) ?
                     $emailsDecoded[0][2] :
-                    (h(iconv_mime_decode($emailsDecoded[0][1])) . ' &lt;' . $emailsDecoded[0][2] . '&gt;');
+                    (h(iconv_mime_decode($emailsDecoded[0][1])) . ' <' . $emailsDecoded[0][2] . '>');
+                
+                $emailLink = '<a href="mailto:' . $emailsDecoded[0][2] . '" target="_blank">' . h($fromEmail) . '</a>';
+                if (isset($overview->contacts)) {
+                    $emailLink = sprintf(
+                        '<a href="%1$s" target="_blank" style="font-weight: bold;">%2$s</a>',
+                        Router::url(['plugin' => 'Crm', 'controller' => 'Contacts', 'action' => 'view', $overview->contacts[0]]),
+                        h($fromEmail)
+                    );
+                }
 
                 $panels['panels']['email']['lines'][] = sprintf(
                     '<div ' .
@@ -98,8 +136,7 @@ class AppEvents implements EventListenerInterface
                         h(iconv_mime_decode($overview->subject)) :
                         '<b>' . h(iconv_mime_decode($overview->subject)) . '</b>',
                     h($overview->msgno),
-                    '<a href="mailto:' . $emailsDecoded[0][2] . '" target="_blank">' . $fromEmail .
-                    '</a>',
+                    $emailLink,
                     sprintf(
                         'https://webmail.arhim.si/?_task=mail&_uid=%s&_mbox=INBOX&_action=show',
                         $overview->uid
