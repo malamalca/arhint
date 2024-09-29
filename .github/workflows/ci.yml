@@ -72,13 +72,13 @@ jobs:
 
     - name: Run PHPUnit
       run: |
-        if [[ ${{ matrix.php-version }} == '8.1' ]]; then
+        if [[ ${{ matrix.php-version }} == '8.1' && ${{ matrix.php-version }} != 'prefer-lowest' ]]; then
           export CODECOVERAGE=1 && php -dpcov.enabled=1 -dpcov.directory=. vendor/bin/phpunit --coverage-clover=coverage.xml
         else
           vendor/bin/phpunit
         fi
     - name: Submit code coverage
-      if: matrix.php-version == '8.1'
+      if: matrix.php-version == '8.1' && matrix.prefer-lowest != 'prefer-lowest'
       uses: codecov/codecov-action@v4
       with:
         token: ${{ secrets.CODECOV_TOKEN }} # required
