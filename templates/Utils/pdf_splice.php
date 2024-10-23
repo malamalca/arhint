@@ -69,6 +69,13 @@ $uploadForm = [
                     ],
                 ]],
             ],
+            'multiplePages' => [
+                'method' => 'control',
+                'parameters' => ['multiPage', [
+                    'type' => 'checkbox',
+                    'label' => __('Split into multiple pages'),
+                ]],
+            ],
             'submit' => [
                 'method' => 'button',
                 'parameters' => [__('Submit'), [

@@ -10,6 +10,10 @@ use Cake\Http\Response;
 use Cake\I18n\Date;
 use Cake\I18n\DateTime;
 use ddn\sapp\PDFDoc;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
+use RegexIterator;
+use ZipArchive;
 
 /**
  * This controller is intended for Utility funcs
@@ -103,6 +107,12 @@ class UtilsController extends AppController
             if (!empty($file) && !$file->getError()) {
                 $outputPDF = $file->getClientFilename();
 
+                $doMultiPage = (bool)$this->getRequest()->getData('multiPage');
+
+                if ($doMultiPage) {
+                    $outputPDF = substr($outputPDF, 0, -4) . '_%03d' . substr($outputPDF, -4);
+                }
+
                 $command = escapeshellarg($gsProgram) . ' ' . $gsParams;
                 $command = sprintf(
                     $command,
@@ -114,8 +124,31 @@ class UtilsController extends AppController
 
                 exec($command);
 
+                $downloadFile = $outputPDF;
+                if ($doMultiPage) {
+                    $downloadFile = substr($file->getClientFilename(), 0, -4) . '.zip';
+
+                    $zip = new ZipArchive();
+                    $zip->open(TMP . $downloadFile, ZipArchive::OVERWRITE);
+
+                    $preg = '/' . preg_quote(substr($file->getClientFilename(), 0, -4)) .
+                        '_[0-9]{3}' .
+                        preg_quote(substr($file->getClientFilename(), -4)) . '/';
+
+                    $directoryIterator = new RecursiveDirectoryIterator(TMP);
+                    $iteratorIterator = new RecursiveIteratorIterator($directoryIterator);
+                    $fileList = new RegexIterator($iteratorIterator, $preg);
+                    foreach ($fileList as $pdfFilePart) {
+                        $zip->addFile($pdfFilePart->getPathname(), $pdfFilePart->getFilename());
+                    }
+                    $zip->close();
+                    foreach ($fileList as $pdfFilePart) {
+                        unlink($pdfFilePart->getPathname());
+                    }
+                }
+
                 $response = $this->getResponse()
-                    ->withFile(TMP . $outputPDF, ['download' => true, 'name' => $outputPDF]);
+                    ->withFile(TMP . $downloadFile, ['download' => true, 'name' => $downloadFile]);
 
                 return $response;
             } else {

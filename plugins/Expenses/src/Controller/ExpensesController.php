@@ -350,6 +350,8 @@ class ExpensesController extends AppController
         } elseif (!empty($Importer->getPayments())) {
             // TODO: check for count of payments
             $payments = $Importer->getPayments();
+            usort($payments, fn ($payment1, $payment2) => $payment1['date'] <=> $payment2['date']);
+
             $filter = $this->getRequest()->getQuery('filter');
             $this->set(compact('filter'));
             $this->set('importedPayments', $payments);
