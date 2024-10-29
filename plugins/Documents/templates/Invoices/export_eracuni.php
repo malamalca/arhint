@@ -1,14 +1,14 @@
 <?php
 use Cake\I18n\DateTime;
 
-$months = []; for (
-    $i = 1; $i <= 12;
-    $i++
-) {
-    $months[$i] = strftime('%B', mktime(0, 0, 0, $i));
+$months = [];
+
+for ($i = 1; $i <= 12; $i++) {
+    $months[$i] = (new DateTime())->setDate(2024, $i, 1)->i18nFormat('MMMM');
+    //strftime('%B', mktime(0, 0, 0, $i));
 }
 
-$cur_year = strftime('%Y');
+$cur_year = (new DateTime())->i18nFormat('yyyy');
 if (empty($min_year) || $min_year > $cur_year) {
     $min_year = $cur_year - 3;
 }
@@ -92,8 +92,7 @@ $report = [
                         'options' => $years,
                         'label' => false,
                         'default' => $time->i18nFormat('yyyy'),
-                        'class' => 'browser-default',
-                        'default' => $this->request->getQuery('year'),
+                        'class' => 'browser-default'
                     ],
                 ],
             ],
