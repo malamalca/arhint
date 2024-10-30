@@ -2,10 +2,8 @@
 use Cake\I18n\DateTime;
 
 $months = [];
-
 for ($i = 1; $i <= 12; $i++) {
     $months[$i] = (new DateTime())->setDate(2024, $i, 1)->i18nFormat('MMMM');
-    //strftime('%B', mktime(0, 0, 0, $i));
 }
 
 $cur_year = (new DateTime())->i18nFormat('yyyy');

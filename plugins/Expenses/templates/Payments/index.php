@@ -268,7 +268,7 @@ echo $this->Lil->index($admin_index, 'Expenses.Payments.index');
         });
 
         // dates picker
-        $("#lil-payments-input-date-start").datepicker({
+        M.Datepicker.init($("#lil-payments-input-date-start").get(0), {
             format: 'yy-mm-dd',
             setDefaultDate: true,
             onSelect: function(dateString, inst) {
@@ -280,11 +280,12 @@ echo $this->Lil->index($admin_index, 'Expenses.Payments.index');
             }
         });
         $("#lil-payments-link-date-start").click(function() {
-            $("#lil-payments-input-date-start").datepicker('show');
+            let datePicker = M.Datepicker.getInstance($("#lil-payments-input-date-start").get(0));
+            datePicker.open();
             return false;
         });
 
-        $("#lil-payments-input-date-end").datepicker({
+        M.Datepicker.init($("#lil-payments-input-date-end").get(0), {
             format: 'yy-mm-dd',
             setDefaultDate: true,
             onSelect: function(dateString, inst) {
@@ -296,7 +297,8 @@ echo $this->Lil->index($admin_index, 'Expenses.Payments.index');
             }
         });
         $("#lil-payments-link-date-end").click(function() {
-            $("#lil-payments-input-date-end").datepicker('show');
+            let datePicker = M.Datepicker.getInstance($("#lil-payments-input-date-end").get(0));
+            datePicker.open();
             return false;
         });
     });

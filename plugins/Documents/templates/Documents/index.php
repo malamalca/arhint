@@ -239,7 +239,7 @@ echo $this->Lil->index($documents_index, 'Documents.Documents.index');
 
         ////////////////////////////////////////////////////////////////////////////////////////////
         // Start-End date in title
-        $("#lil-documents-input-date-start").datepicker({
+        M.Datepicker.init($("#lil-documents-input-date-start").get(0), {
             format: "yyyy-mm-dd",
             setDefaultDate: true,
             onSelect: function(date, inst) {
@@ -250,11 +250,12 @@ echo $this->Lil->index($documents_index, 'Documents.Documents.index');
             }
         });
         $("#lil-documents-link-date-start").click(function() {
-            $("#lil-documents-input-date-start").datepicker("open");
+            let datePicker = M.Datepicker.getInstance($("#lil-documents-input-date-start").get(0));
+            datePicker.open();
             return false;
         });
 
-        $("#lil-documents-input-date-end").datepicker({
+        M.Datepicker.init($("#lil-documents-input-date-end").get(0), {
             format: "yyyy-mm-dd",
             setDefaultDate: true,
             onSelect: function(date) {
@@ -265,7 +266,8 @@ echo $this->Lil->index($documents_index, 'Documents.Documents.index');
             }
         });
         $("#lil-documents-link-date-end").click(function() {
-            $("#lil-documents-input-date-end").datepicker("open");
+            let datePicker = M.Datepicker.getInstance($("#lil-documents-input-date-end").get(0));
+            datePicker.open();
             return false;
         });
 

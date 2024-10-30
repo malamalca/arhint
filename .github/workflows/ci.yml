@@ -72,7 +72,7 @@ jobs:
 
     - name: Run PHPUnit
       run: |
-        if [[ ${{ matrix.php-version }} == '8.1' && ${{ matrix.php-version }} != 'prefer-lowest' ]]; then
+        if [[ ${{ matrix.php-version }} == '8.1' && ${{ matrix.prefer-lowest }} != 'prefer-lowest' ]]; then
           export CODECOVERAGE=1 && php -dpcov.enabled=1 -dpcov.directory=. vendor/bin/phpunit --coverage-clover=coverage.xml
         else
           vendor/bin/phpunit
