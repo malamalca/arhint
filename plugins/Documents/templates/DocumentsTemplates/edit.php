@@ -48,6 +48,7 @@ $templateEdit = [
                             'body' => __d('documents', 'Body'),
                             'header' => __d('documents', 'Header'),
                             'footer' => __d('documents', 'Footer'),
+                            'email' => __d('documents', 'Email'),
                         ],
                         'default' => 'body',
                     ],
@@ -56,7 +57,8 @@ $templateEdit = [
 
             ////////////////////////////////////////////////////////////////////////////////////////
             'fs_layout_body_div_start' => sprintf('<div class="input-field%s">', $attachedImage ? ' invisible' : ''),
-            'fs_layout_body_label' => sprintf('<label for="template-body" class="active">%s:</label>', __d('documents', 'Body')),
+            'fs_layout_body_label' => sprintf('<label for="template-body" class="active">%s:</label><br />', __d('documents', 'Body')),
+
             'body' => [
                 'method' => 'textarea',
                 'parameters' => [

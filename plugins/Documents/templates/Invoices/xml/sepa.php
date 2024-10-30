@@ -1,4 +1,5 @@
 <?php
+    use Cake\I18n\DateTime;
     use Cake\Utility\Xml;
 
     $transformed = ['Document' => [
@@ -13,7 +14,7 @@
 
     $transformed['Document']['CstmrCdtTrfInitn']['GrpHdr'] = [
         'MsgId'   => date('Y-m-d') . 'T' . date('G:i:s/u'),
-        'CreDtTm' => strftime('%Y-%m-%dT%H:%M:%S'),                 // creation date time :: 2011-12-10T09:28:24
+        'CreDtTm' => (new DateTime())->toIso8601String(),                 // creation date time :: 2011-12-10T09:28:24
         'NbOfTxs' => sizeof($invoices),                             // število transakcij v paketu
         'CtrlSum'   => '123.00',                                    // kontrolna vsota vseh transkacij
         'InitgPty' => [                                        // Podatki o iniciatorju plačila.

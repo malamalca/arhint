@@ -4,7 +4,9 @@ declare(strict_types=1);
 namespace App\Mailer;
 
 use App\Model\Entity\User;
+use App\View\AppView;
 use Cake\Mailer\Mailer;
+use Cake\ORM\TableRegistry;
 
 /**
  * @psalm-suppress UnusedClass
@@ -27,13 +29,33 @@ class ArhintMailer extends Mailer
     /**
      * Render content and send email using configured transport.
      *
-     * @param string $content Content.
+     * @param string $contents Content.
      * @return array
      * @psalm-return array{headers: string, message: string}
      */
-    public function deliver(string $content = ''): array
+    public function deliver(string $contents = ''): array
     {
-        $result = parent::deliver($content);
+        // setup email template
+        $DocumentsTemplatesTable = TableRegistry::getTableLocator()->get('Documents.DocumentsTemplates');
+        $template = $DocumentsTemplatesTable->find()
+            ->select()
+            ->where(['owner_id' => $this->currentUser->get('company_id'), 'kind' => 'email', 'main' => 1])
+            ->first();
+
+        if ($template) {
+            $this->setEmailFormat('html');
+            $uniqueFile = TMP . uniqid() . '.php';
+            file_put_contents($uniqueFile, $template->body);
+
+            ob_start();
+            include($uniqueFile);
+            $contents = ob_get_contents();
+            ob_end_clean();
+
+            unlink($uniqueFile);
+        }
+
+        $result = parent::deliver($contents);
 
         // save email message to Sent IMAP folder
         $imap = $this->currentUser->getProperty('imap');

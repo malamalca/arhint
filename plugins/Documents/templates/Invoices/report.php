@@ -1,17 +1,12 @@
 <?php
 use Cake\I18n\DateTime;
 
-/**
- * This is tmtr_groups/admin_edit template file.
- */
-$months = []; for (
-    $i = 1; $i <= 12;
-    $i++
-) {
-    $months[$i] = strftime('%B', mktime(0, 0, 0, $i));
+$months = [];
+for ($i = 1; $i <= 12; $i++) {
+    $months[$i] = (new DateTime())->setDate(2024, $i, 1)->i18nFormat('MMMM');
 }
 
-$cur_year = strftime('%Y');
+$cur_year = (new DateTime())->i18nFormat('yyyy');
 if (empty($min_year) || $min_year > $cur_year) {
     $min_year = $cur_year - 3;
 }

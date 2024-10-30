@@ -129,6 +129,9 @@ use Cake\Routing\Router;
 
             M.AutoInit();
 
+            var elems = document.querySelectorAll('.collapsible');
+            var instances = M.Collapsible.init(elems);
+
             $(".sidenav-user-title").on("click", function(e) {
                 $("#user-settings").toggle();
             });
