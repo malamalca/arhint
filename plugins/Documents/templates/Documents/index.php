@@ -128,8 +128,6 @@ $documents_index = [
 
 $link_template = '<a href="' . Router::url(['action' => 'view', '__id__']) . '">__title__</a>';
 foreach ($data as $document) {
-    $project = $projects[$document->project_id] ?? null;
-
     $documents_index['table']['body']['rows'][]['columns'] = [
         'no' => [
             'parameters' => ['class' => 'nowrap'],
@@ -162,16 +160,16 @@ foreach ($data as $document) {
             'parameters' => ['class' => 'invoices-client left-align hide-on-small-only'],
             'html' => '<div class="truncate">' . h($document->Client['title'] ?? '') . '</div>',
         ],
-        'project' => empty($project) ? null : [
+        'project' => empty($document->project) ? null : [
             'parameters' => ['class' => 'documents-project left-align'],
             'html' => '<div style="height: 20px; overflow: hidden; scroll: none;">' .
-                ($project ? $this->Html->link(
-                    $project,
+                ($document->project ? $this->Html->link(
+                    $document->project,
                     [
                         'plugin' => 'Projects',
                         'controller' => 'projects',
                         'action' => 'view',
-                        $project->id,
+                        $document->project->id,
                     ]
                 ) : '') .
                 '</div>',

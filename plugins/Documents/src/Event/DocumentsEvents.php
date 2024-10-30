@@ -7,6 +7,7 @@ use App\View\Helper\ArhintHelper;
 use ArrayObject;
 use Cake\Event\Event;
 use Cake\Event\EventListenerInterface;
+use Cake\Event\EventManager;
 use Cake\I18n\DateTime;
 use Cake\ORM\TableRegistry;
 use Cake\Routing\Router;
@@ -99,15 +100,15 @@ class DocumentsEvents implements EventListenerInterface
         $user = $controller->getCurrentUser();
 
         $DocumentsTable = TableRegistry::getTableLocator()->get('Documents.Documents');
-        $newDocuments = $DocumentsTable->find()
-            ->select()
-            ->contain(['Projects'])
-            ->where([
-                'Documents.owner_id' => $user->company_id,
-            ])
+        $newDocumentsQuery = $controller->Authorization->applyScope($DocumentsTable->find(), 'index')
+            ->select(['id', 'no', 'dat_issue', 'title', 'project_id'])
             ->order(['Documents.created DESC'])
-            ->limit(6)
-            ->all();
+            ->limit(6);
+
+        $event = new Event('Documents.Dashboard.queryDocuments', $controller, [$newDocumentsQuery]);
+        EventManager::instance()->dispatch($event);
+        
+        $newDocuments = $newDocumentsQuery->all();
 
         if (!$newDocuments->isEmpty()) {
             $panels['panels']['documents'] = [

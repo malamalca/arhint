@@ -69,14 +69,14 @@ $projectView = [
                     'label' => __d('projects', 'Status') . ':',
                     'text' => empty($project->status_id) ? '' : ('<div class="chip z-depth-1">' . h($projectsStatuses[$project->status_id]) . '</div>'),
                 ],
-                'work_duration' => [
+                /*'work_duration' => [
                     'label' => __d('projects', 'Work Duration') . ':',
                     'text' => $this->Html->link($this->Arhint->duration($workDuration), [
                         'controller' => 'ProjectsWorkhours',
                         'action' => 'index',
                         '?' => ['project' => $project->id],
                     ]),
-                ],
+                ],*/
             ],
         ],
         'tabs' => ['lines' => [

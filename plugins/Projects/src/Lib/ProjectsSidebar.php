@@ -29,6 +29,10 @@ class ProjectsSidebar
             return;
         }
 
+        if (!$controller->getCurrentUser()->hasAccess(\App\AppPluginsEnum::Projects)) {
+            return;
+        }
+
         $request = $controller->getRequest();
         $currentUser = $controller->getCurrentUser();
 

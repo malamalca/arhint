@@ -28,6 +28,10 @@ class ExpensesSidebar
             return;
         }
 
+        if (!$controller->getCurrentUser()->hasAccess(\App\AppPluginsEnum::Expenses)) {
+            return;
+        }
+
         $request = $controller->getRequest();
 
         $accounting['title'] = __d('expenses', 'Accounting');

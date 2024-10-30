@@ -78,6 +78,10 @@ class TasksSidebar
             return;
         }
 
+        if (!$controller->getCurrentUser()->hasAccess(\App\AppPluginsEnum::Tasks)) {
+            return;
+        }
+
         $request = $event->getSubject()->getRequest();
         $currentUser = $event->getSubject()->getCurrentUser();
 

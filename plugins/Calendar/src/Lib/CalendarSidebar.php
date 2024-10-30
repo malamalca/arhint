@@ -29,6 +29,10 @@ class CalendarSidebar
             return;
         }
 
+        if (!$controller->getCurrentUser()->hasAccess(\App\AppPluginsEnum::Calendar)) {
+            return;
+        }
+
         $request = $controller->getRequest();
 
         $calendar = [];

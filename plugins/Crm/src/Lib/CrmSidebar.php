@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Crm\Lib;
 
+use App\AppPluginsEnum;
 use App\Controller\AppController;
 use ArrayObject;
 use Cake\Event\Event;
@@ -25,6 +26,10 @@ class CrmSidebar
         /** @var \App\Controller\AppController $controller */
         $controller = $event->getSubject();
         if (!$controller->hasCurrentUser()) {
+            return;
+        }
+
+        if (!$controller->getCurrentUser()->hasAccess(AppPluginsEnum::Crm)) {
             return;
         }
 

@@ -6,6 +6,8 @@ namespace Projects\Event;
 use ArrayObject;
 use Cake\Event\Event;
 use Cake\Event\EventListenerInterface;
+use Cake\ORM\Query\SelectQuery;
+use Cake\ORM\TableRegistry;
 use Projects\Lib\ProjectsSidebar;
 
 class ProjectsEvents implements EventListenerInterface
@@ -20,6 +22,8 @@ class ProjectsEvents implements EventListenerInterface
         return [
             'View.beforeRender' => 'addScripts',
             'Lil.Sidebar.beforeRender' => 'modifySidebar',
+            'Documents.Dashboard.queryDocuments' => 'filterDashboardDocuments',
+            'Documents.Documents.indexQuery' => 'filterDashboardDocuments',
         ];
     }
 
@@ -52,5 +56,40 @@ class ProjectsEvents implements EventListenerInterface
     public function modifySidebar(Event $event, ArrayObject $sidebar): void
     {
         ProjectsSidebar::setAdminSidebar($event, $sidebar);
+    }
+
+    /**
+     * Filter dashboard documents
+     *
+     * @param \Cake\Event\Event $event Event object.
+     * @param \Cake\ORM\Query\SelectQuery $q Query object.
+     * @return void
+     */
+    public function filterDashboardDocuments(Event $event, SelectQuery $q): void
+    {
+        /** @var \App\Controller\AppController $controller */
+        $controller = $event->getSubject();
+        if (!$controller->hasCurrentUser()) {
+            return;
+        }
+
+        $user = $controller->getCurrentUser();
+
+        $q->contain(['Projects']);
+        $q->select(TableRegistry::getTableLocator()->get('Projects.Projects'));
+
+        // if user is not admin than filter documents by user access
+        if (!$controller->getCurrentUser()->hasRole('admin')) {
+            /** @var \Projects\Model\Table\ProjectsUsersTable $ProjectsUsersTable */
+            $ProjectsUsersTable = TableRegistry::getTableLocator()->get('Projects.ProjectsUsers');
+
+            $projectsList = $ProjectsUsersTable->find()
+                ->where(['user_id' => $user->id])
+                ->all()
+                ->combine('project_id', 'user_id')
+                ->toArray();
+
+            $q->where(['Projects.id IN' => array_keys($projectsList)]);
+        }
     }
 }

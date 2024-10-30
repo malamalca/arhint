@@ -4,7 +4,9 @@ declare(strict_types=1);
 namespace Documents\Controller;
 
 use Cake\Core\Plugin;
+use Cake\Event\Event;
 use Cake\Event\EventInterface;
+use Cake\Event\EventManager;
 use Cake\Http\Response;
 use Cake\Http\ServerRequest;
 use Cake\ORM\TableRegistry;
@@ -77,29 +79,14 @@ class DocumentsController extends BaseDocumentsController
             ->where($params['conditions'])
             ->order($params['order']);
 
+        $event = new Event('Documents.Documents.indexQuery', $this, [$query]);
+        EventManager::instance()->dispatch($event);
+
         $data = $this->paginate($query);
 
         $dateSpan = $this->Documents->maxSpan($filter['counter']);
 
-        $projects = [];
-        if (Plugin::isLoaded('Projects')) {
-            /** @var \Projects\Model\Table\ProjectsTable $ProjectsTable */
-            $ProjectsTable = TableRegistry::getTableLocator()->get('Projects.Projects');
-
-            $projectsIds = array_filter(array_unique($query->all()->extract('project_id')->toList()));
-
-            $projects = [];
-            if (!empty($projectsIds)) {
-                $projects = $ProjectsTable->find()
-                    ->select(['id', 'no', 'title'])
-                    ->where(['id IN' => $projectsIds])
-                    ->all()
-                    ->combine('id', fn ($entity) => $entity)
-                    ->toArray();
-            }
-        }
-
-        $this->set(compact('data', 'dateSpan', 'filter', 'projects'));
+        $this->set(compact('data', 'dateSpan', 'filter'));
     }
 
     /**

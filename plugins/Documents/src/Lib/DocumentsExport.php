@@ -227,11 +227,7 @@ class DocumentsExport
 
         $result = $xslt->transformToXml($xml);
 
-        $event = new Event(
-            'Documents.Documents.Export.Html',
-            $document,
-            [$result]
-        );
+        $event = new Event('Documents.Documents.Export.Html', $document, [$result]);
         EventManager::instance()->dispatch($event);
         $eventResult = $event->getResult();
         if (!empty($eventResult)) {

@@ -35,6 +35,7 @@ class ProjectsWorkhoursTablePolicy
                 $conditions['ProjectsWorkhours.id IS'] = null;
             } else {
                 $conditions['ProjectsWorkhours.project_id IN'] = array_keys($projectsList);
+                $conditions['ProjectsWorkhours.user_id'] = $user->id;
             }
 
             return $query->where($conditions);

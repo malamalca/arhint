@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Model\Entity;
 
+use App\AppPluginsEnum;
 use Authentication\IdentityInterface as AuthenticationIdentity;
 use Authentication\PasswordHasher\DefaultPasswordHasher;
 use Authorization\AuthorizationServiceInterface;
@@ -20,6 +21,7 @@ use Cake\ORM\Entity;
  * @property string|null $passwd
  * @property string $email
  * @property string|null $reset_key
+ * @property int $access
  * @property int $privileges
  * @property bool $active
  * @property string|null $login_redirect
@@ -49,6 +51,7 @@ class User extends Entity implements AuthorizationIdentity, AuthenticationIdenti
         'email' => true,
         'reset_key' => true,
         'privileges' => true,
+        'access' => true,
         'active' => true,
         'avatar' => true,
         'login_redirect' => true,
@@ -168,6 +171,21 @@ class User extends Entity implements AuthorizationIdentity, AuthenticationIdenti
         }
 
         return false;
+    }
+
+    /**
+     * Checks user's access to plugins
+     *
+     * @param App\AppPluginsEnum $plugin Plugin
+     * @return bool
+     */
+    public function hasAccess(AppPluginsEnum $plugin): bool
+    {
+        if ($this->privileges <= 5) {
+            return true;
+        }
+
+        return ($this->access & (1 << $plugin->getOrdinal())) > 0;
     }
 
     /**

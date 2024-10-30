@@ -32,6 +32,10 @@ class DocumentsSidebar
             return;
         }
 
+        if (!$controller->getCurrentUser()->hasAccess(\App\AppPluginsEnum::Documents)) {
+            return;
+        }
+
         $request = $controller->getRequest();
         $currentUser = $controller->getCurrentUser();
 
@@ -117,7 +121,7 @@ class DocumentsSidebar
         // EXPORT SIDEBAR SUBMENU
         if (empty($sidebar['documents']['items']['exports'])) {
             $sidebar['documents']['items']['exports'] = [
-                'visible' => true,
+                'visible' => $currentUser->hasRole('admin'),
                 'title' => __d('documents', 'Export'),
                 'url' => false,
                 'params' => [],
@@ -253,6 +257,13 @@ class DocumentsSidebar
                     ],
                     'active' => $currentCounter == $c->id,
                 ];
+            }
+
+            // when user has no rights to access any of counter kinds
+            foreach ($sidebar['documents']['items'] as $i => $counterSubmenu) {
+                if (empty($sidebar['documents']['items'][$i]['submenu'])) {
+                    unset($sidebar['documents']['items'][$i]);
+                }
             }
         }
 
