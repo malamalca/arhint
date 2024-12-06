@@ -71,7 +71,6 @@ $userForm = [
                 'parameters' => ['email_hourly', [
                     'type' => 'checkbox',
                     'label' => __('Receive Notifications Email'),
-                    'class' => 'browser-default',
                 ]],
             ],
             'fs_emails_end' => '</fieldset>',

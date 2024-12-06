@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Tasks\Controller;
 
+use App\AppPluginsEnum;
 use App\Controller\AppController as BaseController;
 use Cake\Event\EventInterface;
 use Cake\Http\Exception\UnauthorizedException;
@@ -19,7 +20,7 @@ class AppController extends BaseController
     {
         parent::beforeFilter($event);
 
-        if (!$this->getCurrentUser()->hasAccess(\App\AppPluginsEnum::Tasks)) {
+        if (!$this->getCurrentUser()->hasAccess(AppPluginsEnum::Tasks)) {
             throw new UnauthorizedException(__d('tasks', 'No Access'));
         }
     }

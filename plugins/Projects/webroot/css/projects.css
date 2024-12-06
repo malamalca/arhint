@@ -126,3 +126,43 @@ div.add-material-bar button {
     width: 120px;
     border: solid 1px #A8A8A8;
 }
+
+
+div#ProjectDescriptPanel {
+    background-color: #f0f0f0;
+    padding: 0.2em;
+    padding-bottom: 1em;
+    font-family: Calibri, Arial, Helvetica, sans-serif;
+}
+div#ProjectDescriptPanel h1 {
+    font-size: 24px;
+    margin: 0;
+    margin-bottom: 0.5em;
+}
+div#ProjectDescriptPanel h2 {
+    font-size: 20px;
+    margin: 0;
+    margin-bottom: 0.5em;
+}
+div#ProjectDescriptPanel h3 {
+    font-size: 18px;
+    margin: 0;
+    margin-bottom: 0.5em;
+}
+
+div#ProjectDescriptPanel p {
+    margin-block-start: 0.2em;
+    margin-block-end: 0.4em;
+    margin-top: 0.2em;
+    margin-bottom: 0.4em;
+}
+
+div#ProjectDescriptPanel table {
+    border-top: solid 1px #A8A8A8;
+    border-left: solid 1px #A8A8A8;
+}
+div#ProjectDescriptPanel td, div#ProjectDescriptPanel th {
+    padding: 0.2em;
+    border-bottom: solid 1px #A8A8A8;
+    border-right: solid 1px #A8A8A8;
+}

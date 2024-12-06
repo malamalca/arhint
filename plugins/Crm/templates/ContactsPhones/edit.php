@@ -49,7 +49,6 @@ $editForm = [
                         'error' => [
                             'kindOccupied' => __d('crm', 'Entry of this type already exists.'),
                         ],
-                        'class' => 'browser-default',
                     ],
                 ],
             ],

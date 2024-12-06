@@ -132,6 +132,10 @@ use Cake\Routing\Router;
             var elems = document.querySelectorAll('.collapsible');
             var instances = M.Collapsible.init(elems);
 
+            document.querySelectorAll('.materialize-textarea').forEach(function(element){
+                M.Forms.InitTextarea(element);
+            });
+
             $(".sidenav-user-title").on("click", function(e) {
                 $("#user-settings").toggle();
             });

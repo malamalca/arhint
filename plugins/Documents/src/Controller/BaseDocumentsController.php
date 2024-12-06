@@ -383,7 +383,8 @@ class BaseDocumentsController extends AppController
      */
     public function email(): ?Response
     {
-        $email = new EmailForm($this->getRequest());
+        $exporterClass = '\\Documents\\Lib\\' . $this->documentsScope . 'Export';
+        $email = new EmailForm($this->getRequest(), $exporterClass);
 
         if ($this->getRequest()->is('post')) {
             if ($email->execute($this->getRequest()->getData())) {
@@ -398,11 +399,10 @@ class BaseDocumentsController extends AppController
         $filter = (array)$this->getRequest()->getQuery();
         $params = $this->{$this->documentsScope}->filter($filter);
 
-        $attachments = $this->Authorization->applyScope($this->{$this->documentsScope}->find('list'), 'index')
+        $attachments = $this->Authorization->applyScope($this->{$this->documentsScope}->find(), 'index')
             ->where($params['conditions'])
             ->contain($params['contain'])
-            ->limit(20)
-            ->toArray();
+            ->all();
 
         $this->set(compact('email', 'attachments'));
 
@@ -463,7 +463,7 @@ class BaseDocumentsController extends AppController
             $options = ['download' => $this->getRequest()->getQuery('download')];
             if (count($documents) == 1) {
                 $first = reset($documents);
-                $options['filename'] = Text::slug($first->title);
+                $options['filename'] = Text::slug($name ?? $first->title);
             }
 
             return $Exporter->response($ext, $data, $options);

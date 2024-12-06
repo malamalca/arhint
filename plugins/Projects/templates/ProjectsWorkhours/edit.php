@@ -38,7 +38,6 @@ $editForm = [
                         'type' => 'select',
                         'options' => $users,
                         'label' => false,
-                        'class' => 'browser-default',
                     ],
                 ],
             ],
@@ -53,11 +52,7 @@ $editForm = [
                     'options' => [
                         'type' => 'select',
                         'options' => $projects,
-                        'label' => [
-                            'text' => __d('projects', 'Project') . ':',
-                            'class' => 'active',
-                        ],
-                        'class' => 'browser-default',
+                        'label' => __d('projects', 'Project') . ':',
                     ],
                 ],
             ],

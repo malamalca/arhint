@@ -111,7 +111,6 @@ $editAddressForm = [
                         'default' => Configure::read('Crm.defaultCountry'),
                         'options' => Configure::read('Crm.countries'),
                         'empty' => true,
-                        'class' => 'browser-default',
                     ],
                 ],
             ],

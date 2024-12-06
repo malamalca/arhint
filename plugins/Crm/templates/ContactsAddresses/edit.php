@@ -50,7 +50,6 @@ if ($address->id) {
                             'error' => [
                                 'kindOccupied' => __d('crm', 'Entry of this type already exists.'),
                             ],
-                            'class' => 'browser-default',
                         ],
                     ],
                 ],
@@ -94,7 +93,6 @@ if ($address->id) {
                             'label' => false,
                             'default' => Configure::read('Crm.defaultCountry'),
                             'empty' => true,
-                            'class' => 'browser-default',
                         ],
                     ],
                 ],

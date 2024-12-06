@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Tasks\Lib;
 
+use App\AppPluginsEnum;
 use App\Controller\AppController;
 use ArrayObject;
 use Cake\Cache\Cache;
@@ -78,7 +79,7 @@ class TasksSidebar
             return;
         }
 
-        if (!$controller->getCurrentUser()->hasAccess(\App\AppPluginsEnum::Tasks)) {
+        if (!$controller->getCurrentUser()->hasAccess(AppPluginsEnum::Tasks)) {
             return;
         }
 

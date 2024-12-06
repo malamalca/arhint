@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Calendar\Lib;
 
+use App\AppPluginsEnum;
 use App\Controller\AppController;
 use ArrayObject;
 
@@ -29,7 +30,7 @@ class CalendarSidebar
             return;
         }
 
-        if (!$controller->getCurrentUser()->hasAccess(\App\AppPluginsEnum::Calendar)) {
+        if (!$controller->getCurrentUser()->hasAccess(AppPluginsEnum::Calendar)) {
             return;
         }
 

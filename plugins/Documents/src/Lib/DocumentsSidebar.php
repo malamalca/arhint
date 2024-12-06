@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Documents\Lib;
 
+use App\AppPluginsEnum;
 use App\Controller\AppController;
 use ArrayObject;
 use Cake\ORM\TableRegistry;
@@ -32,7 +33,7 @@ class DocumentsSidebar
             return;
         }
 
-        if (!$controller->getCurrentUser()->hasAccess(\App\AppPluginsEnum::Documents)) {
+        if (!$controller->getCurrentUser()->hasAccess(AppPluginsEnum::Documents)) {
             return;
         }
 

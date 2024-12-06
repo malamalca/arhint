@@ -93,7 +93,6 @@ $payment_edit = [
                     'label' => false,
                     'empty' => '-- ' . __d('expenses', 'do not create payment') . ' --',
                     'options' => $accounts,
-                    'class' => 'browser-default',
                 ]],
             ],
             'payment_sepa_id' => !empty($expense->id) ? null : [

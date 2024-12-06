@@ -143,8 +143,8 @@ class AppEvents implements EventListenerInterface
                         '<div class="project small light">%3$s</div>' .
                         '<a href="%4$s" target="_blank"><span class="title big">%1$s</span></a></div>',
                     $overview->seen ?
-                        h(iconv_mime_decode($overview->subject)) :
-                        '<b>' . h(iconv_mime_decode($overview->subject)) . '</b>',
+                        h(iconv_mime_decode($overview->subject ?? '')) :
+                        '<b>' . h(iconv_mime_decode($overview->subject ?? '')) . '</b>',
                     h($overview->msgno),
                     $emailLink,
                     sprintf(

@@ -1,6 +1,7 @@
 <?php
 
 use Cake\Routing\Router;
+use Michelf\MarkdownExtra;
 use Projects\Lib\ProjectsFuncs;
 
 $projectView = [
@@ -77,6 +78,14 @@ $projectView = [
                         '?' => ['project' => $project->id],
                     ]),
                 ],*/
+            ],
+        ],
+        'descript' => empty($project->descript) ? null : [
+            'params' => ['id' => 'ProjectDescriptPanel'],
+            'lines' => [
+                0 => [
+                    'text' => MarkdownExtra::defaultTransform($project->descript),
+                ],
             ],
         ],
         'tabs' => ['lines' => [

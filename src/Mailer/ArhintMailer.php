@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace App\Mailer;
 
 use App\Model\Entity\User;
-use App\View\AppView;
 use Cake\Mailer\Mailer;
 use Cake\ORM\TableRegistry;
 
@@ -29,11 +28,11 @@ class ArhintMailer extends Mailer
     /**
      * Render content and send email using configured transport.
      *
-     * @param string $contents Content.
+     * @param string $content Content.
      * @return array
      * @psalm-return array{headers: string, message: string}
      */
-    public function deliver(string $contents = ''): array
+    public function deliver(string $content = ''): array
     {
         // setup email template
         $DocumentsTemplatesTable = TableRegistry::getTableLocator()->get('Documents.DocumentsTemplates');
@@ -48,14 +47,14 @@ class ArhintMailer extends Mailer
             file_put_contents($uniqueFile, $template->body);
 
             ob_start();
-            include($uniqueFile);
-            $contents = ob_get_contents();
+            include $uniqueFile;
+            $content = ob_get_contents();
             ob_end_clean();
 
             unlink($uniqueFile);
         }
 
-        $result = parent::deliver($contents);
+        $result = parent::deliver((string)$content);
 
         // save email message to Sent IMAP folder
         $imap = $this->currentUser->getProperty('imap');

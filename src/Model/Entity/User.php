@@ -176,7 +176,7 @@ class User extends Entity implements AuthorizationIdentity, AuthenticationIdenti
     /**
      * Checks user's access to plugins
      *
-     * @param App\AppPluginsEnum $plugin Plugin
+     * @param \App\AppPluginsEnum $plugin Plugin
      * @return bool
      */
     public function hasAccess(AppPluginsEnum $plugin): bool
@@ -185,7 +185,7 @@ class User extends Entity implements AuthorizationIdentity, AuthenticationIdenti
             return true;
         }
 
-        return ($this->access & (1 << $plugin->getOrdinal())) > 0;
+        return ($this->access & 1 << $plugin->getOrdinal()) > 0;
     }
 
     /**

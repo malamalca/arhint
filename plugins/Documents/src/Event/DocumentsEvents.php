@@ -96,9 +96,6 @@ class DocumentsEvents implements EventListenerInterface
         /** @var \App\Controller\AppController $controller */
         $controller = $event->getSubject();
 
-        /** @var \App\Model\Entity\User $user */
-        $user = $controller->getCurrentUser();
-
         $DocumentsTable = TableRegistry::getTableLocator()->get('Documents.Documents');
         $newDocumentsQuery = $controller->Authorization->applyScope($DocumentsTable->find(), 'index')
             ->select(['id', 'no', 'dat_issue', 'title', 'project_id'])
@@ -107,7 +104,7 @@ class DocumentsEvents implements EventListenerInterface
 
         $event = new Event('Documents.Dashboard.queryDocuments', $controller, [$newDocumentsQuery]);
         EventManager::instance()->dispatch($event);
-        
+
         $newDocuments = $newDocumentsQuery->all();
 
         if (!$newDocuments->isEmpty()) {

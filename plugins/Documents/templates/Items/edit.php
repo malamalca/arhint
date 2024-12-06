@@ -85,11 +85,7 @@ $itemEdit = [
                     'options' => [
                         'type' => 'select',
                         'options' => $vats,
-                        'label' => [
-                            'class' => 'active',
-                            'text' => __d('documents', 'Vat') . ':',
-                        ],
-                        'class' => 'browser-default',
+                        'label' => __d('documents', 'Vat') . ':',
                     ],
                 ],
             ],

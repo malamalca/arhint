@@ -10,6 +10,7 @@ use Cake\Http\Response;
 use Cake\I18n\Date;
 use Cake\I18n\DateTime;
 use ddn\sapp\PDFDoc;
+use Exception;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use RegexIterator;
@@ -129,22 +130,34 @@ class UtilsController extends AppController
                     $downloadFile = substr($file->getClientFilename(), 0, -4) . '.zip';
 
                     $zip = new ZipArchive();
-                    $zip->open(TMP . $downloadFile, ZipArchive::OVERWRITE);
+                    $res = $zip->open(TMP . $downloadFile, ZIPARCHIVE::CREATE | ZipArchive::OVERWRITE);
 
-                    $preg = '/' . preg_quote(substr($file->getClientFilename(), 0, -4)) .
-                        '_[0-9]{3}' .
-                        preg_quote(substr($file->getClientFilename(), -4)) . '/';
+                    if ($res) {
+                        $preg = '/' . preg_quote(substr($file->getClientFilename(), 0, -4)) .
+                            '_[0-9]{3}' .
+                            preg_quote(substr($file->getClientFilename(), -4)) . '/';
 
-                    $directoryIterator = new RecursiveDirectoryIterator(TMP);
-                    $iteratorIterator = new RecursiveIteratorIterator($directoryIterator);
-                    $fileList = new RegexIterator($iteratorIterator, $preg);
-                    foreach ($fileList as $pdfFilePart) {
-                        $zip->addFile($pdfFilePart->getPathname(), $pdfFilePart->getFilename());
+                        $directoryIterator = new RecursiveDirectoryIterator(TMP);
+                        $iteratorIterator = new RecursiveIteratorIterator($directoryIterator);
+                        $fileList = new RegexIterator($iteratorIterator, $preg);
+                        foreach ($fileList as $pdfFilePart) {
+                            $zip->addFile($pdfFilePart->getPathname(), $pdfFilePart->getBasename());
+                        }
+
+                        if ($zip->count() == 0) {
+                            throw new Exception('No files in archive.');
+                        }
+                        $zip->close();
+                        foreach ($fileList as $pdfFilePart) {
+                            unlink($pdfFilePart->getPathname());
+                        }
+                    } else {
+                        $downloadFile = false;
                     }
-                    $zip->close();
-                    foreach ($fileList as $pdfFilePart) {
-                        unlink($pdfFilePart->getPathname());
-                    }
+                }
+
+                if (!$downloadFile || !file_exists(TMP . $downloadFile)) {
+                    throw new Exception('Download File Does Not Exist.');
                 }
 
                 $response = $this->getResponse()

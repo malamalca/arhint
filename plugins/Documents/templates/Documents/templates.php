@@ -47,7 +47,6 @@ $templateEdit = [
                     'label' => false,
                     'empty' => '-- ' . __d('documents', 'none') . ' --',
                     'options' => empty($templates['header']) ? [] : $templates['header'],
-                    'class' => 'browser-default',
                 ]],
             ],
 
@@ -62,7 +61,6 @@ $templateEdit = [
                     'label' => false,
                     'empty' => '-- ' . __d('documents', 'default') . ' --',
                     'options' => empty($templates['body']) ? [] : $templates['body'],
-                    'class' => 'browser-default',
                 ]],
             ],
 
@@ -77,7 +75,6 @@ $templateEdit = [
                     'label' => false,
                     'empty' => '-- ' . __d('documents', 'none') . ' --',
                     'options' => empty($templates['footer']) ? [] : $templates['footer'],
-                    'class' => 'browser-default',
                 ]],
             ],
 

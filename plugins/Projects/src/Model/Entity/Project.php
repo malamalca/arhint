@@ -12,6 +12,7 @@ use Cake\ORM\Entity;
  * @property string $owner_id
  * @property string $no
  * @property string $title
+ * @property string $descript
  * @property float $lat
  * @property float $lon
  * @property string $ico
@@ -38,6 +39,7 @@ class Project extends Entity
         'status_id' => true,
         'no' => true,
         'title' => true,
+        'descript' => true,
         'lat' => true,
         'lon' => true,
         'ico' => true,

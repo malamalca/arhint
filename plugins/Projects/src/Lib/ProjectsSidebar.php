@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Projects\Lib;
 
+use App\AppPluginsEnum;
 use App\Controller\AppController;
 use ArrayObject;
 
@@ -29,7 +30,7 @@ class ProjectsSidebar
             return;
         }
 
-        if (!$controller->getCurrentUser()->hasAccess(\App\AppPluginsEnum::Projects)) {
+        if (!$controller->getCurrentUser()->hasAccess(AppPluginsEnum::Projects)) {
             return;
         }
 

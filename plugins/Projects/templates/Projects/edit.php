@@ -56,6 +56,17 @@ $editForm = [
                     ],
                 ],
             ],
+            'descript' => [
+                'method' => 'control',
+                'parameters' => [
+                    'descript',
+                    [
+                        'type' => 'textarea',
+                        'label' => __d('projects', 'Description') . ':',
+                        'style' => 'min-height: 150px; font-family: ui-monospace;',
+                    ],
+                ],
+            ],
             'status_label' => [
                 'method' => 'label',
                 'parameters' => ['status_id', __d('projects', 'Status') . ':'],
@@ -67,7 +78,6 @@ $editForm = [
                     [
                         'type' => 'select',
                         'label' => false,
-                        'class' => 'browser-default',
                         'empty' => '-- ' . __d('projects', 'status') . ' --',
                         'options' => $projectStatuses,
                     ],
@@ -107,7 +117,7 @@ $editForm = [
                     ],
                 ],
             ],
-            'picker' => '<button data-target="modal1" class="btn modal-trigger">' .
+            'picker' => '<button id="MapPicker" class="btn">' .
                 __d('projects', 'Pick on Map') . '</button>',
 
             'ico' => [
@@ -153,47 +163,69 @@ $editForm = [
 $this->Lil->jsReady('$("#project-no").focus();');
 echo $this->Lil->form($editForm, 'Projects.Projects.edit');
 ?>
-<div id="modal1" class="modal">
-<div class="modal-content">
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+     integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+     crossorigin=""/>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+     crossorigin=""></script>
+
+<div id="modalMapPopup" class="modal">
+<div class="modal-content right-align">
 <div id="map" style="min-height: 300px;"></div>
+<button class="modal-close waves-effect btn" id="closeModalMapPopup"><?= __d('projects', 'OK') ?></button>
 </div>
 </div>
 <script>
-    var map;
-    var marker = null;
+    var latValue = $("#project-lat").val();
+    var lonValue = $("#project-lon").val();
 
-    function initMap() {
-        map = new google.maps.Map(document.getElementById('map'), {
-            center: {lat: 46.056946, lng: 14.505751},
-            zoom: 9
-        });
+    var map = L.map('map').setView([latValue || 46.056946, lonValue || 14.505751], latValue ? 15 : 9);
+    var marker = null
+    var modalInstance;
 
-        let latValue = $("#project-lat").val();
-        let lonValue = $("#project-lon").val();
+    $(document).ready(function() {
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        }).addTo(map);
 
         if (latValue && lonValue) {
-            let myLatlng = new google.maps.LatLng(latValue, lonValue);
-        
-            marker = new google.maps.Marker({
-                position: myLatlng,
-                title: "<?= __d('projects', 'Project Position') ?>",
-                map: map
-            });
+            marker = L.marker([latValue, lonValue]).addTo(map);
+        };
+
+        map.on("click", addMarker);
+
+        var modalEl = M.Modal.init(document.getElementById("modalMapPopup"), {
+            "onOpenEnd": function () { map.invalidateSize(); }
+        });
+
+        $("#MapPicker").on("click", function(e) {
+            modalEl.open();
+            e.preventDefault();
+            return false;
+        });
+
+        $("#closeModalMapPopup").on("click", function(e) {
+            modalEl.close();
+            e.preventDefault();
+            return false;
+        });
+    });
+
+    function addMarker(e) {
+        if (marker) {
+            var newLatLng = new L.LatLng(e.latlng.lat, e.latlng.lng);
+            marker.setLatLng(newLatLng); 
+        } else {
+            marker = new L.marker(e.latlng).addTo(map);
         }
 
-        google.maps.event.addListener(map, "click", function(event) {
-            if (marker) {
-                marker.setPosition(event.latLng);
-            } else {
-                marker = new google.maps.Marker({
-                    position: event.latLng,
-                    title: "Project Position",
-                    map: map
-                });
-            }
-            $("#project-lat").val(parseFloat(event.latLng.lat()).toFixed(4));
-            $("#project-lon").val(parseFloat(event.latLng.lng()).toFixed(4));
-        });
+        $("#project-lat").val(parseFloat(e.latlng.lat).toFixed(4));
+        $("#project-lon").val(parseFloat(e.latlng.lng).toFixed(4));
     }
+
 </script>
-<script src="https://maps.googleapis.com/maps/api/js?key=<?= Configure::read('Projects.mapsApiKey') ?>&callback=initMap" async defer></script>
+<script2 src="https://maps.googleapis.com/maps/api/js?key=<?= Configure::read('Projects.mapsApiKey') ?>&callback=initMap" async defer></script2>

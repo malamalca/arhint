@@ -12,7 +12,6 @@ use Cake\Http\ServerRequest;
 use Cake\ORM\Query\SelectQuery;
 use Cake\ORM\TableRegistry;
 use Cake\Validation\Validator;
-use Documents\Lib\DocumentsExport;
 use Documents\Model\Entity\Invoice;
 use Documents\Model\Entity\TravelOrder;
 
@@ -24,14 +23,21 @@ class EmailForm extends Form
     private ServerRequest $request;
 
     /**
+     * @var mixed
+     */
+    private mixed $exporter;
+
+    /**
      * Form constructor.
      *
      * @param \Cake\Http\ServerRequest $request Request object.
+     * @param string $exporterClass Exporter class string
      * @return void
      */
-    public function __construct(ServerRequest $request)
+    public function __construct(ServerRequest $request, string $exporterClass = '\\Documents\\Lib\\DocumentsExport')
     {
         $this->request = $request;
+        $this->exporter = new $exporterClass();
     }
 
     /**
@@ -72,13 +78,12 @@ class EmailForm extends Form
 
         $identity = $this->request->getAttribute('identity');
 
-        $Exporter = new DocumentsExport();
-        $documents = $Exporter->find($filter);
+        $documents = $this->exporter->find($filter);
         $identity->applyScope('index', $documents);
         $documents = $documents->toArray();
 
         if (count($documents) > 0) {
-            $data = $Exporter->export('pdf', $documents);
+            $data = $this->exporter->export('pdf', $documents);
 
             if (!empty($data)) {
                 /** @var \App\Model\Entity\User $currentUser */
@@ -98,26 +103,36 @@ class EmailForm extends Form
                     $email->addCc($currentUser->email);
                 }
 
-                $attachmentName = 'documents.pdf';
-                if (count($documents) == 1) {
-                    $attachmentName = $documents[0]->title;
-                    $attachmentName = (string)mb_ereg_replace("([^\w\s\d\-_~,;\[\]\(\).])", '', $attachmentName);
-                    $attachmentName = (string)mb_ereg_replace("([\.]{2,})", '', $attachmentName);
-                }
-
                 // base attachments (document export)
-                $attachments = [
-                    $attachmentName => [
+                $attachments = [];
+
+                if (count($documents) == 1) {
+                    // do not attach base document with received invoiced
+                    if ($documents[0]->documents_counter->direction != 'received') {
+                        $attachmentName = $documents[0]->title;
+                        $attachmentName = (string)mb_ereg_replace("([^\w\s\d\-_~,;\[\]\(\).])", '', $attachmentName);
+                        $attachmentName = (string)mb_ereg_replace("([\.]{2,})", '', $attachmentName);
+
+                        $attachments[$attachmentName] = [
+                            'data' => $data,
+                            'mimetype' => 'application/pdf',
+                        ];
+                    }
+                } else {
+                    $attachmentName = 'documents.pdf';
+                    $attachments[$attachmentName] = [
                         'data' => $data,
                         'mimetype' => 'application/pdf',
-                    ],
-                ];
+                    ];
+                }
 
                 // documents file attachments
                 $DocumentsAttachmentsTable = TableRegistry::getTableLocator()->get('Documents.DocumentsAttachments');
                 $docAttachments = $DocumentsAttachmentsTable->find()
                     ->select(['id', 'original', 'filename'])
                     ->where(function (QueryExpression $exp, SelectQuery $query) use ($documents) {
+
+                        $atchs = [];
                         foreach ($documents as $doc) {
                             switch (get_class($doc)) {
                                 case Invoice::class:

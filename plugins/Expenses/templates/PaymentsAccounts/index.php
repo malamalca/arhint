@@ -35,7 +35,7 @@
             'active' => [
                 'parameters' => ['class' => 'center'],
                 'html' => sprintf(
-                    '<input type="checkbox" disabled="disabled" class="browser-default" %s/>',
+                    '<input type="checkbox" disabled="disabled" %s/>',
                     $item->active ? 'checked="checked" ' : ''
                 ),
             ],

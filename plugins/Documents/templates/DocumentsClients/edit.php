@@ -113,7 +113,6 @@ $clientEdit = [
                         'label' => false,
                         'default' => Configure::read('Crm.defaultCountry'),
                         'empty' => true,
-                        'class' => 'browser-default',
                     ],
                 ],
             ],

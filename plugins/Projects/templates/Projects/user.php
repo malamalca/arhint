@@ -34,7 +34,6 @@ $editForm = [
                     'options' => [
                         'type' => 'select',
                         'options' => $users,
-                        'class' => 'browser-default',
                         'label' => false,
                     ],
                 ],

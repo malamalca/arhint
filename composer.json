@@ -26,6 +26,7 @@
         "sabre/vobject": "4.5",
         "syncroton/syncroton": "dev-master",
         "tecnickcom/tcpdf": "dev-main",
+        "michelf/php-markdown": "^2.0",
         "zendframework/zendframework1": "1.12.20pl61 as 1.12.20"
     },
     "require-dev": {

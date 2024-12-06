@@ -197,7 +197,6 @@ $documentEdit = [
                         'label' => false,
                         'options' => $projects,
                         'empty' => '-- ' . __d('documents', 'no project') . ' --',
-                        'class' => 'browser-default',
                         'default' => $this->getRequest()->getQuery('project'),
                     ],
                 ],

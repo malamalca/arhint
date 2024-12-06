@@ -187,7 +187,7 @@ foreach ($invoices_items as $k => $item) {
                 'type' => 'select',
                 'label' => false,
                 'value' => $item->vat_id,
-                'class' => 'invoices-item-vat_id browser-default',
+                'class' => 'invoices-item-vat_id',
                 'id' => 'invoice-invoices-items-' . $k . '-vat-id',
                 'empty' => true,
             ],

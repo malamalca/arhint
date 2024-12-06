@@ -39,16 +39,12 @@ $counter_edit = [
                     'field' => 'kind',
                     'options' => [
                         'type' => 'select',
-                        'label' => [
-                            'text' => __d('documents', 'Kind') . ':',
-                            'class' => 'active',
-                        ],
+                        'label' => __d('documents', 'Kind') . ':',
                         'options' => [
                             'Documents' => __d('documents', 'Documents'),
                             'Invoices' => __d('documents', 'Invoices'),
                             'TravelOrders' => __d('documents', 'Travel Orders'),
                         ],
-                        'class' => 'browser-default',
                     ],
                 ],
             ],
@@ -58,15 +54,11 @@ $counter_edit = [
                     'field' => 'direction',
                     'options' => [
                         'type' => 'select',
-                        'label' => [
-                            'text' => __d('documents', 'Direction') . ':',
-                            'class' => 'active',
-                        ],
+                        'label' => __d('documents', 'Direction') . ':',
                         'options' => [
                             'issued' => __d('documents', 'Issued'),
                             'received' => __d('documents', 'Received'),
                         ],
-                        'class' => 'browser-default',
                     ],
                 ],
             ],
@@ -76,13 +68,9 @@ $counter_edit = [
                     'field' => 'doc_type',
                     'options' => [
                         'type' => 'select',
-                        'label' => [
-                            'text' => __d('documents', 'Type') . ':',
-                            'class' => 'active',
-                        ],
+                        'label' => __d('documents', 'Type') . ':',
                         'options' => Configure::read('Documents.documentTypes'),
                         'empty' => '-- ' . __d('documents', 'unspecified') . ' --',
-                        'class' => 'browser-default',
                     ],
                 ],
             ],
@@ -164,13 +152,9 @@ $counter_edit = [
                     'field' => 'tpl_header_id',
                     'options' => [
                         'type' => 'select',
-                        'label' => [
-                            'text' => __d('documents', 'Header') . ':',
-                            'class' => 'active',
-                        ],
+                        'label' => __d('documents', 'Header') . ':',
                         'options' => $templates['header'] ?? [],
                         'empty' => '-- ' . __d('documents', 'none') . ' --',
-                        'class' => 'browser-default',
                     ],
                 ],
             ],
@@ -180,13 +164,9 @@ $counter_edit = [
                     'field' => 'tpl_body_id',
                     'options' => [
                         'type' => 'select',
-                        'label' => [
-                            'text' => __d('documents', 'Body') . ':',
-                            'class' => 'active',
-                        ],
+                        'label' => __d('documents', 'Body') . ':',
                         'options' => $templates['body'] ?? [],
                         'empty' => '-- ' . __d('documents', 'default') . ' --',
-                        'class' => 'browser-default',
                     ],
                 ],
             ],
@@ -196,13 +176,9 @@ $counter_edit = [
                     'field' => 'tpl_footer_id',
                     'options' => [
                         'type' => 'select',
-                        'label' => [
-                            'text' => __d('documents', 'Footer') . ':',
-                            'class' => 'active',
-                        ],
+                        'label' => __d('documents', 'Footer') . ':',
                         'options' => $templates['footer'] ?? [],
                         'empty' => '-- ' . __d('documents', 'none') . ' --',
-                        'class' => 'browser-default',
                     ],
                 ],
             ],

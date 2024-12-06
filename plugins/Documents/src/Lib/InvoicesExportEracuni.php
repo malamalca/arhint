@@ -57,27 +57,28 @@ class InvoicesExportEracuni
             // project
             $activeSheet->SetCellValue('A1', 'Tip');
             $activeSheet->SetCellValue('B1', 'Številka');
-            $activeSheet->SetCellValue('C1', 'Datum');
-            $activeSheet->SetCellValue('D1', 'Datum storitve');
-            $activeSheet->SetCellValue('E1', 'do');
-            $activeSheet->SetCellValue('F1', 'Rok plačila');
-            $activeSheet->SetCellValue('G1', 'Valuta');
-            $activeSheet->SetCellValue('H1', 'Način plačila');
-            $activeSheet->SetCellValue('I1', 'Skupaj z davkom');
+            $activeSheet->SetCellValue('C1', 'Opis');
+            $activeSheet->SetCellValue('D1', 'Datum');
+            $activeSheet->SetCellValue('E1', 'Datum storitve');
+            $activeSheet->SetCellValue('F1', 'do');
+            $activeSheet->SetCellValue('G1', 'Rok plačila');
+            $activeSheet->SetCellValue('H1', 'Valuta');
+            $activeSheet->SetCellValue('I1', 'Način plačila');
+            $activeSheet->SetCellValue('J1', 'Skupaj z davkom');
 
-            $activeSheet->SetCellValue('J1', 'Vrsta DDV');
-            $activeSheet->SetCellValue('K1', 'Naziv');
-            $activeSheet->SetCellValue('L1', 'Naslov');
-            $activeSheet->SetCellValue('M1', 'Poštna št.');
-            $activeSheet->SetCellValue('N1', 'Mesto');
-            $activeSheet->SetCellValue('O1', 'Davčna št.');
-            $activeSheet->SetCellValue('P1', 'Država');
+            $activeSheet->SetCellValue('K1', 'Vrsta DDV');
+            $activeSheet->SetCellValue('L1', 'Naziv');
+            $activeSheet->SetCellValue('M1', 'Naslov');
+            $activeSheet->SetCellValue('N1', 'Poštna št.');
+            $activeSheet->SetCellValue('O1', 'Mesto');
+            $activeSheet->SetCellValue('P1', 'Davčna št.');
+            $activeSheet->SetCellValue('Q1', 'Država');
 
             $documentTypes = Configure::read('Documents.documentTypes');
             $pmtKinds = [0 => 'Nakazilo', 1 => 'Samodejno', 2 => 'Placano', 3 => 'BrezPlacila'];
 
             $taxExcelHeaders = [];
-        $taxExcelHeadersLastIndex = 17;
+            $taxExcelHeadersLastIndex = 18;
 
             $i = 2;
         foreach ($data as $doc) {
@@ -88,31 +89,32 @@ class InvoicesExportEracuni
             );
 
             $activeSheet->setCellValueExplicit('B' . $i, $doc->no, DataType::TYPE_STRING);
-
-            $activeSheet->getStyle('C' . $i)->getNumberFormat()->setFormatCode('d.m.yyyy');
-            $activeSheet->SetCellValue('C' . $i, Date::PHPToExcel($doc->dat_issue->toUnixString()));
+            $activeSheet->setCellValueExplicit('C' . $i, $doc->title, DataType::TYPE_STRING);
 
             $activeSheet->getStyle('D' . $i)->getNumberFormat()->setFormatCode('d.m.yyyy');
-            $activeSheet->SetCellValue('D' . $i, Date::PHPToExcel($doc->dat_service->toUnixString()));
+            $activeSheet->SetCellValue('D' . $i, Date::PHPToExcel($doc->dat_issue->toUnixString()));
 
-            $activeSheet->getStyle('F' . $i)->getNumberFormat()->setFormatCode('d.m.yyyy');
-            $activeSheet->SetCellValue('F' . $i, Date::PHPToExcel($doc->dat_expire->toUnixString()));
+            $activeSheet->getStyle('E' . $i)->getNumberFormat()->setFormatCode('d.m.yyyy');
+            $activeSheet->SetCellValue('E' . $i, Date::PHPToExcel($doc->dat_service->toUnixString()));
 
-            $activeSheet->SetCellValue('G' . $i, 'EUR');
-            $activeSheet->SetCellValue('H' . $i, $pmtKinds[$doc->pmt_kind]);
-            $activeSheet->SetCellValue('I' . $i, $doc->total);
+            $activeSheet->getStyle('G' . $i)->getNumberFormat()->setFormatCode('d.m.yyyy');
+            $activeSheet->SetCellValue('G' . $i, Date::PHPToExcel($doc->dat_expire->toUnixString()));
 
-            $activeSheet->SetCellValue('J' . $i, 0);
+            $activeSheet->SetCellValue('H' . $i, 'EUR');
+            $activeSheet->SetCellValue('I' . $i, $pmtKinds[$doc->pmt_kind]);
+            $activeSheet->SetCellValue('J' . $i, $doc->total);
+
+            $activeSheet->SetCellValue('K' . $i, 0);
 
             $client = $doc->documents_counter->direction == 'issued' ? $doc->receiver : $doc->issuer;
 
-            $activeSheet->setCellValueExplicit('K' . $i, $client->title, DataType::TYPE_STRING);
-            $activeSheet->setCellValueExplicit('L' . $i, $client->street, DataType::TYPE_STRING);
-            $activeSheet->setCellValueExplicit('M' . $i, $client->zip, DataType::TYPE_STRING);
-            $activeSheet->setCellValueExplicit('N' . $i, $client->city, DataType::TYPE_STRING);
-            $activeSheet->setCellValueExplicit('O' . $i, $client->tax_no, DataType::TYPE_STRING);
+            $activeSheet->setCellValueExplicit('L' . $i, $client->title, DataType::TYPE_STRING);
+            $activeSheet->setCellValueExplicit('M' . $i, $client->street, DataType::TYPE_STRING);
+            $activeSheet->setCellValueExplicit('N' . $i, $client->zip, DataType::TYPE_STRING);
+            $activeSheet->setCellValueExplicit('O' . $i, $client->city, DataType::TYPE_STRING);
+            $activeSheet->setCellValueExplicit('P' . $i, $client->tax_no, DataType::TYPE_STRING);
             $activeSheet->setCellValueExplicit(
-                'P' . $i,
+                'Q' . $i,
                 empty($client->country_code) ? 'SI' : $client->country_code,
                 DataType::TYPE_STRING
             );

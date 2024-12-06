@@ -1,8 +1,11 @@
 <?php
+use Cake\Core\Configure;
 use Cake\Core\Plugin;
 use Cake\Utility\Text;
 
 $document->client = $document->documents_counter->direction == 'issued' ? $document->receiver : $document->issuer;
+
+$docTypes = Configure::read('Documents.documentTypes');
 
 $invoiceView = [
     'title_for_layout' => __d(
@@ -120,7 +123,10 @@ $invoiceView = [
                     'url' => [
                         'action' => 'export',
                         $document->id,
-                        Text::slug($document->title) . '.pdf',
+                        Text::slug(
+                            mb_strtoupper($docTypes[$document->documents_counter->doc_type] ?? __d('documents', 'Unknown Type')) . ' - ' .
+                            $document->title
+                        ) . '.pdf',
                         '?' => ['download' => 1],
                     ],
                 ],
@@ -130,7 +136,10 @@ $invoiceView = [
                     'url' => [
                         'action' => 'export',
                         $document->id,
-                        Text::slug($document->title) . '.sepa.xml',
+                        Text::slug(
+                            mb_strtoupper($docTypes[$document->documents_counter->doc_type] ?? __d('documents', 'Unknown Type')) . ' - ' .
+                            $document->title
+                        ) . '.sepa.xml',
                         '?' => ['download' => 1],
                     ],
                 ],
@@ -140,7 +149,10 @@ $invoiceView = [
                     'url' => [
                         'action' => 'export',
                         $document->id,
-                        Text::slug($document->title) . '.eslog.xml',
+                        Text::slug(
+                            mb_strtoupper($docTypes[$document->documents_counter->doc_type] ?? __d('documents', 'Unknown Type')) . ' - ' .
+                            $document->title
+                        ) . '.eslog.xml',
                         '?' => ['download' => 1],
                     ],
                 ],
@@ -150,7 +162,10 @@ $invoiceView = [
                     'url' => [
                         'action' => 'export',
                         $document->id,
-                        Text::slug($document->title) . '.eslog20.xml',
+                        Text::slug(
+                            mb_strtoupper($docTypes[$document->documents_counter->doc_type] ?? __d('documents', 'Unknown Type')) . ' - ' .
+                            $document->title
+                        ) . '.eslog20.xml',
                         '?' => ['download' => 1],
                     ],
                 ],

@@ -75,7 +75,6 @@ $payment_edit = [
                 'parameters' => ['account_id', [
                     'type' => 'select',
                     'label' => false,
-                    'class' => 'browser-default',
                     'options' => $accounts,
                 ]],
             ],

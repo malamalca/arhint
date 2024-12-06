@@ -53,9 +53,9 @@ class InvoicesExport
     public function find(array $filter): SelectQuery
     {
         $conditions = [];
-        if (!empty($filter['id'])) {
-            $conditions['Invoices.id IN'] = (array)$filter['id'];
-        }
+        //if (!empty($filter['id'])) {
+        //    $conditions['Invoices.id IN'] = (array)$filter['id'];
+        //}
 
         /** @var \Documents\Model\Table\InvoicesTable $Invoices */
         $Invoices = TableRegistry::getTableLocator()->get('Documents.Invoices');

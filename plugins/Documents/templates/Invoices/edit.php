@@ -202,7 +202,6 @@ $documentEdit = [
                         'label' => false,
                         'options' => $projects,
                         'empty' => '-- ' . __d('documents', 'no project') . ' --',
-                        'class' => 'browser-default',
                         'default' => $this->getRequest()->getQuery('project'),
                     ],
                 ],
@@ -443,7 +442,6 @@ $paymentDetails = [
                     3 => __d('documents', 'Other. No payment needed.'),
                 ],
                 'default' => 0,
-                'class' => 'browser-default',
                 'label' => false,
             ],
         ],
@@ -460,7 +458,6 @@ $paymentDetails = [
                 'type' => 'select',
                 'options' => Configure::read('Documents.sepaTypes'),
                 'default' => 'OTHR',
-                'class' => 'browser-default',
                 'label' => false,
                 'error' => [
                     'format' => __d('documents', 'Invalid type'),

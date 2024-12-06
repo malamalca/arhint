@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Expenses\Lib;
 
+use App\AppPluginsEnum;
 use App\Controller\AppController;
 use ArrayObject;
 use Cake\Event\Event;
@@ -28,7 +29,7 @@ class ExpensesSidebar
             return;
         }
 
-        if (!$controller->getCurrentUser()->hasAccess(\App\AppPluginsEnum::Expenses)) {
+        if (!$controller->getCurrentUser()->hasAccess(AppPluginsEnum::Expenses)) {
             return;
         }
 

@@ -88,17 +88,13 @@ class ExpensesEvents implements EventListenerInterface
             'expense_kind' => [
                 'method' => 'control',
                 'parameters' => ['expense', [
-                    'label' => [
-                        'text' => __d('expenses', 'Income/Expense') . ':',
-                        'class' => 'active',
-                    ],
+                    'label' => __d('expenses', 'Income/Expense') . ':',
                     'type' => 'select',
                     'options' => [
                         constant('EXPENSES_COUNTER_INCOME') => __d('expenses', 'Income'),
                         constant('EXPENSES_COUNTER_EXPENSE') => __d('expenses', 'Expense'),
                     ],
                     'empty' => __d('expenses', 'Neither expense nor income'),
-                    'class' => 'browser-default',
                 ]],
             ],
             'fs_expense_end' => '</fieldset>',

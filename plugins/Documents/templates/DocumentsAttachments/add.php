@@ -36,7 +36,6 @@ $attachment_add = [
                         'error' => [
                             'empty' => __d('documents', 'A file must be selected for upload.'),
                         ],
-                        'class' => 'browser-default',
                     ],
                 ],
             ],

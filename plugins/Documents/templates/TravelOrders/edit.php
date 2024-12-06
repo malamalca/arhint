@@ -157,12 +157,8 @@ $documentEdit = [
                     $this->getCurrentUser()->hasRole('admin') ?
                         [
                             'type' => 'select',
-                            'label' => [
-                                'text' => __d('documents', 'Traveller') . ':',
-                                'class' => 'active',
-                            ],
+                            'label' => __d('documents', 'Traveller') . ':',
                             'default' => $this->getCurrentUser()->get('id'),
-                            'class' => 'browser-default',
                             'options' => $users,
                         ]
                         :

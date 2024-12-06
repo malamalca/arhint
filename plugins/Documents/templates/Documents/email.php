@@ -2,6 +2,14 @@
 
 use Cake\Routing\Router;
 
+if ($attachments->count() == 1) {
+    $emailSubject = $this->getRequest()->getQuery('subject', __d('documents', 'ARHINT document') . ' #' . $attachments->first()->no);
+} else {
+    $emailSubject = $this->getRequest()->getQuery('subject', __d('documents', 'ARHINT documents'));
+}
+
+$emailBody = $this->getRequest()->getQuery('body', __d('documents', 'Regards') . ', ' . PHP_EOL . h($this->getCurrentUser()->name));
+
 $send_document = [
     'title_for_layout' => __d('documents', 'Email Document'),
     'form' => [
@@ -57,7 +65,7 @@ $send_document = [
                     'options' => [
                         'type' => 'text',
                         'label' => __d('documents', 'Subject') . ':',
-                        'default' => $this->getRequest()->getQuery('subject'),
+                        'default' => $emailSubject,
                     ],
                 ],
             ],
@@ -68,7 +76,7 @@ $send_document = [
                     'options' => [
                         'type' => 'textarea',
                         'label' => __d('documents', 'Body') . ':',
-                        'default' => $this->getRequest()->getQuery('body'),
+                        'default' => $emailBody,
                     ],
                 ],
             ],
@@ -91,16 +99,16 @@ $documents_display = [];
 $documents_display[] = '<div>';
 $documents_display[] = sprintf('<label>%1$s:</label>', __d('documents', 'Attachments'));
 
-foreach ($attachments as $document_id => $document_title) {
+foreach ($attachments as $document) {
     $documents_display[] = sprintf(
         '<div class="email-attachment" id="email-attachment-%3$s">%2$s %1$s</div>',
-        $document_title,
+        h($document->title),
         $this->Html->image('/documents/img/attachment.png'),
-        $document_id
+        $document->id
     );
     $documents_display[] = [
         'method' => 'hidden',
-        'parameters' => ['documents', ['value' => $document_id, 'id' => 'attachment-' . $document_id]],
+        'parameters' => ['documents', ['value' => $document->id, 'id' => 'attachment-' . $document->id]],
     ];
 }
 $documents_display[] = '</div>';

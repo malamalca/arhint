@@ -51,9 +51,9 @@ class DocumentsExport
     public function find(array $filter): SelectQuery
     {
         $conditions = [];
-        if (!empty($filter['id'])) {
-            $conditions['Documents.id IN'] = (array)$filter['id'];
-        }
+        //if (!empty($filter['id'])) {
+        //    $conditions['Documents.id IN'] = (array)$filter['id'];
+        //}
 
         /** @var \Documents\Model\Table\DocumentsTable $DocumentsTable */
         $DocumentsTable = TableRegistry::getTableLocator()->get('Documents.Documents');
