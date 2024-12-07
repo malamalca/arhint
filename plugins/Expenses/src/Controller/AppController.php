@@ -23,7 +23,7 @@ class AppController extends BaseController
     {
         parent::beforeFilter($event);
 
-        if (!$this->getCurrentUser()->hasAccess(AppPluginsEnum::Expenses)) {
+        if ($this->hasCurrentUser() && !$this->getCurrentUser()->hasAccess(AppPluginsEnum::Expenses)) {
             throw new UnauthorizedException(__d('expenses', 'No Access'));
         }
     }

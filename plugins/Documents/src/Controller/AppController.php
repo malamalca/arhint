@@ -23,7 +23,7 @@ class AppController extends BaseController
     {
         parent::beforeFilter($event);
 
-        if (!$this->getCurrentUser()->hasAccess(AppPluginsEnum::Documents)) {
+        if ($this->hasCurrentUser() && !$this->getCurrentUser()->hasAccess(AppPluginsEnum::Documents)) {
             throw new UnauthorizedException(__d('documents', 'No Access'));
         }
     }

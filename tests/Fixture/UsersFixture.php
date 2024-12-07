@@ -40,6 +40,7 @@ class UsersFixture extends TestFixture
                 'email' => 'user@arhim.si',
                 'reset_key' => null,
                 'privileges' => 10,
+                'access' => 65535,
                 'active' => 1,
                 'created' => '2020-01-12 19:40:23',
                 'modified' => '2020-01-12 19:40:23',

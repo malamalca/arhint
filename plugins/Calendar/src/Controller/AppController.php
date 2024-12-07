@@ -20,7 +20,7 @@ class AppController extends BaseController
     {
         parent::beforeFilter($event);
 
-        if (!$this->getCurrentUser()->hasAccess(AppPluginsEnum::Calendar)) {
+        if ($this->hasCurrentUser() && !$this->getCurrentUser()->hasAccess(AppPluginsEnum::Calendar)) {
             throw new UnauthorizedException(__d('calendar', 'No Access'));
         }
     }

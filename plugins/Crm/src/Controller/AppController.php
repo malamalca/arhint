@@ -24,7 +24,7 @@ class AppController extends BaseController
     {
         parent::beforeFilter($event);
 
-        if (!$this->getCurrentUser()->hasAccess(AppPluginsEnum::Crm)) {
+        if ($this->hasCurrentUser() && !$this->getCurrentUser()->hasAccess(AppPluginsEnum::Crm)) {
             throw new UnauthorizedException(__d('crm', 'No Access'));
         }
     }
