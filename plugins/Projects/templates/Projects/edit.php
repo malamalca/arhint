@@ -67,17 +67,13 @@ $editForm = [
                     ],
                 ],
             ],
-            'status_label' => [
-                'method' => 'label',
-                'parameters' => ['status_id', __d('projects', 'Status') . ':'],
-            ],
             'status' => empty($projectStatuses) ? null : [
                 'method' => 'control',
                 'parameters' => [
                     'status_id',
                     [
                         'type' => 'select',
-                        'label' => false,
+                        'label' => __d('projects', 'Status') . ':',
                         'empty' => '-- ' . __d('projects', 'status') . ' --',
                         'options' => $projectStatuses,
                     ],
@@ -117,8 +113,7 @@ $editForm = [
                     ],
                 ],
             ],
-            'picker' => '<button id="MapPicker" class="btn">' .
-                __d('projects', 'Pick on Map') . '</button>',
+            'picker' => '<button id="MapPicker" class="btn">' . __d('projects', 'Pick on Map') . '</button>',
 
             'ico' => [
                 'method' => 'control',
@@ -126,8 +121,7 @@ $editForm = [
                     'ico_file',
                     [
                         'type' => 'file',
-                        //'label' => __d('projects', 'Icon') . ':',
-                        'label' => false,
+                        'label' => __d('projects', 'Icon') . ':',
                     ],
                 ],
             ],
@@ -195,6 +189,8 @@ echo $this->Lil->form($editForm, 'Projects.Projects.edit');
         if (latValue && lonValue) {
             marker = L.marker([latValue, lonValue]).addTo(map);
         };
+
+        map.invalidateSize();
 
         map.on("click", addMarker);
 

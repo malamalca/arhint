@@ -23,10 +23,6 @@ $editForm = [
                 'method' => 'hidden',
                 'parameters' => ['field' => 'referer'],
             ],
-            'user_label' => [
-                'method' => 'label',
-                'parameters' => ['user_id', __d('projects', 'User') . ':'],
-            ],
             'user' => [
                 'method' => 'control',
                 'parameters' => [
@@ -34,7 +30,7 @@ $editForm = [
                     'options' => [
                         'type' => 'select',
                         'options' => $users,
-                        'label' => false,
+                        'label' => __d('projects', 'User') . ':',
                     ],
                 ],
             ],

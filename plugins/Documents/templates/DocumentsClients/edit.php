@@ -99,10 +99,6 @@ $clientEdit = [
                     'field' => 'country',
                 ],
             ],
-            'address_country_code_label' => [
-                'method' => 'label',
-                'parameters' => ['country_code', __d('documents', 'Country') . ':'],
-            ],
             'address_country_code' => [
                 'method' => 'control',
                 'parameters' => [
@@ -110,7 +106,7 @@ $clientEdit = [
                     'options' => [
                         'type' => 'select',
                         'options' => Configure::read('Crm.countries'),
-                        'label' => false,
+                        'label' => __d('documents', 'Country') . ':',
                         'default' => Configure::read('Crm.defaultCountry'),
                         'empty' => true,
                     ],

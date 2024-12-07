@@ -74,16 +74,12 @@ $taskEdit = [
                 ],
             ],
 
-            'tasks_label' => [
-                'method' => 'label',
-                'parameters' => ['tasker_id', __d('tasks', 'Assigned To') . ':'],
-            ],
             'tasker' => [
                 'method' => 'control',
                 'parameters' => [
                     'field' => 'tasker_id', [
                         'type' => 'select',
-                        'label' => false,
+                        'label' => __d('tasks', 'Assigned To') . ':',
                         'empty' => '-- ' . __d('tasks', 'anyone') . ' --',
                         'options' => $users,
                         'default' => $this->getCurrentUser()->id,
@@ -101,16 +97,12 @@ $taskEdit = [
                 ],
             ],
 
-            'folder_id_label' => [
-                'method' => 'label',
-                'parameters' => ['folder_id', __d('tasks', 'List') . ':'],
-            ],
             'folder' => [
                 'method' => 'control',
                 'parameters' => [
                     'field' => 'folder_id', [
                         'type' => 'select',
-                        'label' => false,
+                        'label' => __d('tasks', 'List') . ':',
                         'options' => $folders,
                         'default' => $this->getRequest()->getQuery('folder'),
                     ],

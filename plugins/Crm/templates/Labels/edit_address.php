@@ -96,17 +96,13 @@ $editAddressForm = [
             ],
             '<label for="#contact-address-zip" class="active">' . __d('crm', 'ZIP and City') . ':</label>',
             '</div>',
-            'address_country_label' => [
-                    'method' => 'label',
-                    'parameters' => ['contry_code', __d('crm', 'Country') . ':'],
-                ],
             'country' => [
                 'method' => 'control',
                 'parameters' => [
                     'field' => 'country',
                     'options' => [
                         'type' => 'select',
-                        'label' => false,
+                        'label' => __d('crm', 'Country') . ':',
                         'disabled' => $address->contacts_address_id ? 'disabled' : '',
                         'default' => Configure::read('Crm.defaultCountry'),
                         'options' => Configure::read('Crm.countries'),

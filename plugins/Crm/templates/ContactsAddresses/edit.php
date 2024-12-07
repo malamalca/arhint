@@ -35,17 +35,13 @@ if ($address->id) {
                     'parameters' => ['referer', 'options' => ['type' => 'hidden']],
                 ],
 
-                'kind_label' => [
-                    'method' => 'label',
-                    'parameters' => ['kind', __d('crm', 'Kind') . ':'],
-                ],
                 'kind' => [
                     'method' => 'control',
                     'parameters' => [
                         'field' => 'kind',
                         'options' => [
                             'type' => 'select',
-                            'label' => false,
+                            'label' => __d('crm', 'Kind') . ':',
                             'options' => Configure::read('Crm.addressTypes'),
                             'error' => [
                                 'kindOccupied' => __d('crm', 'Entry of this type already exists.'),
@@ -79,10 +75,6 @@ if ($address->id) {
                 ],
                 '<label for="contact-address-zip" class="active">' . __d('crm', 'ZIP and City') . ':</label>',
                 '</div>',
-                'address_country_label' => [
-                    'method' => 'label',
-                    'parameters' => ['contry_code', __d('crm', 'Country') . ':'],
-                ],
                 'address_country' => [
                     'method' => 'control',
                     'parameters' => [
@@ -90,7 +82,7 @@ if ($address->id) {
                         'options' => [
                             'type' => 'select',
                             'options' => Configure::read('Crm.countries'),
-                            'label' => false,
+                            'label' => __d('crm', 'Country') . ':',
                             'default' => Configure::read('Crm.defaultCountry'),
                             'empty' => true,
                         ],

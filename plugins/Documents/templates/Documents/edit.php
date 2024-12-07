@@ -185,16 +185,12 @@ $documentEdit = [
                     ],
                 ],
             ],
-            'project_id_label' => [
-                'method' => 'label',
-                'parameters' => ['project_id', __d('documents', 'Project') . ':'],
-            ],
             'project' => !Plugin::isLoaded('Projects') ? null : [
                 'method' => 'control',
                 'parameters' => [
                     'field' => 'project_id', [
                         'type' => 'select',
-                        'label' => false,
+                        'label' => __d('documents', 'Project') . ':',
                         'options' => $projects,
                         'empty' => '-- ' . __d('documents', 'no project') . ' --',
                         'default' => $this->getRequest()->getQuery('project'),

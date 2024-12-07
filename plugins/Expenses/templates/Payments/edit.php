@@ -66,15 +66,11 @@ $payment_edit = [
                 ]],
             ],
             
-            'account_id_label' => [
-                'method' => 'label',
-                'parameters' => ['kind', __d('expenses', 'From/To Account') . ':'],
-            ],
             'account_id' => [
                 'method' => 'control',
                 'parameters' => ['account_id', [
                     'type' => 'select',
-                    'label' => false,
+                    'label' => __d('expenses', 'From/To Account') . ':',
                     'options' => $accounts,
                 ]],
             ],

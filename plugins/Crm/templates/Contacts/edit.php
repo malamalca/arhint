@@ -266,10 +266,6 @@ $editForm['form']['lines'] += [
         ],
     ],
     'address_zipcity_end' => '</div>',
-    'address_country_label' => [
-        'method' => 'label',
-        'parameters' => ['address-country', __d('crm', 'Country') . ':'],
-    ],
     'address_country_code' => [
         'method' => 'control',
         'parameters' => [
@@ -277,7 +273,7 @@ $editForm['form']['lines'] += [
             'options' => [
                 'type' => 'select',
                 'options' => Configure::read('Crm.countries'),
-                'label' => false,
+                'label' => __d('crm', 'Country') . ':',
                 'id' => 'contact-address-country',
                 'class' => 'browser-default',
                 'default' => Configure::read('Crm.defaultCountry'),

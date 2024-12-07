@@ -78,7 +78,7 @@ $countersIndex = [
 
 foreach ($counters as $counter) {
     $countersIndex['table']['body']['rows'][]['columns'] = [
-        'descript' => $this->Html->link($counter->title, ['controller' => 'Documents', 'action' => 'index', '?' => ['counter' => $counter->id]]),
+        'title' => $this->Html->link($counter->title, ['controller' => $counter->kind, 'action' => 'index', '?' => ['counter' => $counter->id]]),
         'doc_type' => isset($documentTypes[$counter->doc_type]) ? h($documentTypes[$counter->doc_type]) : __d('documents', 'N/A'),
         'no' => [
             'parameters' => ['class' => 'right-align'],
@@ -89,7 +89,7 @@ foreach ($counters as $counter) {
             'html' =>
                 $this->Html->link(
                     '<i class="material-icons chevron">list</i>',
-                    ['controller' => 'Documents', 'action' => 'index', '?' => ['counter' => $counter->id]],
+                    ['controller' => $counter->kind, 'action' => 'index', '?' => ['counter' => $counter->id]],
                     ['escape' => false, 'class' => 'btn btn-small waves-effect waves-light waves-circle']
                 ) . ' ' .
                 (!$this->getCurrentUser()->hasRole('editor') ? '' : (

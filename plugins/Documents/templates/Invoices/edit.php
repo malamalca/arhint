@@ -190,16 +190,12 @@ $documentEdit = [
                     ],
                 ],
             ],
-            'project_id_label' => [
-                'method' => 'label',
-                'parameters' => ['project_id', __d('documents', 'Project') . ':'],
-            ],
             'project' => !Plugin::isLoaded('Projects') ? null : [
                 'method' => 'control',
                 'parameters' => [
                     'field' => 'project_id', [
                         'type' => 'select',
-                        'label' => false,
+                        'label' => __d('documents', 'Project') . ':',
                         'options' => $projects,
                         'empty' => '-- ' . __d('documents', 'no project') . ' --',
                         'default' => $this->getRequest()->getQuery('project'),
@@ -426,10 +422,6 @@ $this->Lil->insertIntoArray($documentEdit['form']['lines'], $analytics, ['after'
 $paymentDetails = [
     'fs_payment_start' => '<fieldset>',
     'fs_payment_legend' => sprintf('<legend>%s</legend>', __d('documents', 'Payment')),
-    'pmt_kind_label' => [
-        'method' => 'label',
-        'parameters' => ['pmt_kind', __d('documents', 'Payment Kind') . ':'],
-    ],
     'pmt_kind' => [
         'method' => 'control',
         'parameters' => [
@@ -442,13 +434,9 @@ $paymentDetails = [
                     3 => __d('documents', 'Other. No payment needed.'),
                 ],
                 'default' => 0,
-                'label' => false,
+                'label' => __d('documents', 'Payment Kind') . ':',
             ],
         ],
-    ],
-    'pmt_sepa_type_label' => [
-        'method' => 'label',
-        'parameters' => ['pmt_sepa_type', __d('documents', 'Sepa Type') . ':'],
     ],
     'pmt_sepa_type' => [
         'method' => 'control',
@@ -458,7 +446,7 @@ $paymentDetails = [
                 'type' => 'select',
                 'options' => Configure::read('Documents.sepaTypes'),
                 'default' => 'OTHR',
-                'label' => false,
+                'label' => __d('documents', 'Sepa Type') . ':',
                 'error' => [
                     'format' => __d('documents', 'Invalid type'),
                 ],

@@ -36,43 +36,31 @@ $templateEdit = [
                 'parameters' => ['id', ['type' => 'hidden']],
             ],
 
-            'tpl_header_id_label' => [
-                'method' => 'label',
-                'parameters' => ['tpl_header_id', __d('documents', 'Page Header') . ':'],
-            ],
             'tpl_header_id' => [
                 'method' => 'control',
                 'parameters' => ['tpl_header_id', [
                     'type' => 'select',
-                    'label' => false,
+                    'label' => __d('documents', 'Page Header') . ':',
                     'empty' => '-- ' . __d('documents', 'none') . ' --',
                     'options' => empty($templates['header']) ? [] : $templates['header'],
                 ]],
             ],
 
-            'tpl_body_id_label' => [
-                'method' => 'label',
-                'parameters' => ['tpl_body_id', __d('documents', 'Page Body') . ':'],
-            ],
             'tpl_body_id' => [
                 'method' => 'control',
                 'parameters' => ['tpl_body_id', [
                     'type' => 'select',
-                    'label' => false,
+                    'label' => __d('documents', 'Page Body') . ':',
                     'empty' => '-- ' . __d('documents', 'default') . ' --',
                     'options' => empty($templates['body']) ? [] : $templates['body'],
                 ]],
             ],
 
-            'tpl_footer_id_label' => [
-                'method' => 'label',
-                'parameters' => ['tpl_footer_id', __d('documents', 'Page Footer') . ':'],
-            ],
             'tpl_footer_id' => [
                 'method' => 'control',
                 'parameters' => ['tpl_footer_id', [
                     'type' => 'select',
-                    'label' => false,
+                    'label' => __d('documents', 'Page Footer') . ':',
                     'empty' => '-- ' . __d('documents', 'none') . ' --',
                     'options' => empty($templates['footer']) ? [] : $templates['footer'],
                 ]],

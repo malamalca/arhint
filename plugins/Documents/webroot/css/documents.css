@@ -2,7 +2,11 @@
 #invoice-title, #invoice-receiver-title, #invoice-buyer-title, #invoice-issuer-title,
 #invoice-no, #invoice-location, #invoice-project-id,
 #invoice-total,
-#invoice-pmt-kind, #invoice-pmt-sepa-type, #invoice-pmt-descript {
+#invoice-pmt-kind, #invoice-pmt-sepa-type, #invoice-pmt-descript,
+div.select:has(select#invoice-project-id),
+div.select:has(select#invoice-pmt-kind),
+div.select:has(select#invoice-pmt-sepa-type)
+{
     width: 400px !important;
 }
 
