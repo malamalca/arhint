@@ -58,6 +58,8 @@ class ProjectsWorkhoursController extends AppController
             ->first();
         $totalDuration = $totalDuration['sumDurations'];
 
+        $query->contain(['Projects', 'Users']);
+
         $projectsWorkhours = $this->paginate($query, ['order' => ['started' => 'DESC']]);
 
         if ($this->getCurrentUser()->hasRole('admin')) {
@@ -153,10 +155,17 @@ class ProjectsWorkhoursController extends AppController
 
         /** @var \App\Model\Table\UsersTable $UsersTable */
         $UsersTable = TableRegistry::getTableLocator()->get('App.Users');
-        $users = $UsersTable->fetchForCompany($this->getCurrentUser()->get('company_id'));
+        $users = $UsersTable->fetchForCompany(
+            $this->getCurrentUser()->get('company_id'),
+            ['includeUsers' => $projectsWorkhour->user_id]
+        );
 
+        $projectsFilter = ['active' => true];
+        if (!empty($projectsWorkhour->project_id)) {
+            $projectsFilter = ['OR' => ['active' => true, 'id' => $projectsWorkhour->project_id]];
+        }
         $projects = $this->Authorization->applyScope($this->ProjectsWorkhours->Projects->find(), 'index')
-            ->where(['active' => true])
+            ->where($projectsFilter)
             ->order(['no DESC', 'title'])
             ->all()
             ->combine('id', function ($entity) {

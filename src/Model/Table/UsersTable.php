@@ -260,6 +260,7 @@ class UsersTable extends Table
     {
         $defaultOptions = [
             'inactive' => false,
+            'includeUsers' => null,
         ];
         $options = array_merge($defaultOptions, $options);
 
@@ -267,7 +268,11 @@ class UsersTable extends Table
         $query->where(['Users.company_id' => $companyId]);
 
         if (!$options['inactive']) {
-            $query->andWhere(['Users.active' => 1]);
+            if (!empty($options['includeUsers'])) {
+                $query->andWhere(['OR' => ['Users.active' => 1, 'Users.id IN' => (array)$options['includeUsers']]]);
+            } else {
+                $query->andWhere(['Users.active' => 1]);
+            }
         }
 
         $ret = $query->toArray();

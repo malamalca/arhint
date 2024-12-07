@@ -166,3 +166,7 @@ div#ProjectDescriptPanel td, div#ProjectDescriptPanel th {
     border-bottom: solid 1px #A8A8A8;
     border-right: solid 1px #A8A8A8;
 }
+
+ul#dropdown-projects {
+    width: auto !important;
+}

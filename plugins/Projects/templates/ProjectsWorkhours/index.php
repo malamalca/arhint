@@ -123,10 +123,10 @@ $tableIndex = [
 foreach ($projectsWorkhours as $workhour) {
     $descriptData = [];
     if (empty($filter['project'])) {
-        $descriptData[] = h($projects[$workhour->project_id]);
+        $descriptData[] = h((string)$workhour->project);
     }
     if (empty($filter['user']) && count($users) > 1) {
-        $descriptData[] = h($users[$workhour->user_id]);
+        $descriptData[] = h((string)$workhour->user->name);
     }
 
     $canEdit = $this->getCurrentUser()->hasRole('admin') || 
