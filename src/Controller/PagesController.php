@@ -1,19 +1,6 @@
 <?php
 declare(strict_types=1);
 
-/**
- * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
- * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
- *
- * Licensed under The MIT License
- * For full copyright and license information, please see the LICENSE.txt
- * Redistributions of files must retain the above copyright notice.
- *
- * @copyright Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
- * @link      https://cakephp.org CakePHP(tm) Project
- * @since     0.2.9
- * @license   https://opensource.org/licenses/mit-license.php MIT License
- */
 namespace App\Controller;
 
 use ArrayObject;
@@ -23,14 +10,17 @@ use Cake\Event\EventManager;
 use Cake\Http\Exception\ForbiddenException;
 use Cake\Http\Exception\NotFoundException;
 use Cake\Http\Response;
+use Cake\ORM\TableRegistry;
+use Cake\Routing\Router;
 use Cake\View\Exception\MissingTemplateException;
+use Cake\View\View;
+use Lil\View\Helper\LilHelper;
+use Michelf\MarkdownExtra;
 
 /**
  * Static content controller
  *
  * This controller will render views from templates/Pages/
- *
- * @link https://book.cakephp.org/4/en/controllers/pages-controller.html
  */
 class PagesController extends AppController
 {
@@ -164,8 +154,42 @@ class PagesController extends AppController
                     ],
                 ],
             ],
-            'panels' => [],
+            'panels' => [
+                'notes' => [
+                    'params' => ['class' => 'dashboard-panel', 'id' => 'DashboardNote'],
+                    'lines' => [
+                        '<h5>' . __('Dashboard Note') . '</h5>',
+                    ],
+                ],
+            ],
         ]);
+
+        if ($this->hasCurrentUser()) {
+            $DashboardNotes = TableRegistry::getTableLocator()->get('DashboardNotes');
+            $lastNote = $DashboardNotes->find()
+                ->select()
+                ->where(['user_id' => $this->getCurrentUser()->id])
+                ->order('created')
+                ->limit(1)
+                ->first();
+
+            $LilHelper = new LilHelper(new View());
+
+            if ($lastNote) {
+                $dashboardPanels['panels']['notes']['lines'][] = sprintf('<div class="details">%1$s | %2$s</div>',
+                    __('Created {0}', $lastNote->created),
+                    $LilHelper->Link(__('edit'), ['controller' => 'DashboardNotes', 'action' => 'edit', $lastNote->id], [])
+                );
+                
+                $dashboardPanels['panels']['notes']['lines'][] = MarkdownExtra::defaultTransform($lastNote->note);
+            } else {
+                $dashboardPanels['panels']['notes']['lines'][] = '<p>' .
+                    $LilHelper->link(__('No notes found. [$1Add] your first note.'), [
+                        1 => [['controller' => 'DashboardNotes', 'action' => 'edit']]
+                    ]) .
+                    '</p>';
+            }
+        }
 
         $event = new Event('App.dashboard', $this, ['panels' => $dashboardPanels]);
         EventManager::instance()->dispatch($event);
