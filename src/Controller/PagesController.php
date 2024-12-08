@@ -11,11 +11,10 @@ use Cake\Http\Exception\ForbiddenException;
 use Cake\Http\Exception\NotFoundException;
 use Cake\Http\Response;
 use Cake\ORM\TableRegistry;
-use Cake\Routing\Router;
 use Cake\View\Exception\MissingTemplateException;
 use Cake\View\View;
+use League\CommonMark\GithubFlavoredMarkdownConverter;
 use Lil\View\Helper\LilHelper;
-use Michelf\MarkdownExtra;
 
 /**
  * Static content controller
@@ -123,7 +122,7 @@ class PagesController extends AppController
     {
         $this->Authorization->skipAuthorization();
 
-        $dashboardPanels = new ArrayObject([
+        $dashboardPanels = [
             'title' => '&nbsp;',
             'menu' => [
                 'sign' => [
@@ -156,13 +155,13 @@ class PagesController extends AppController
             ],
             'panels' => [
                 'notes' => [
-                    'params' => ['class' => 'dashboard-panel', 'id' => 'DashboardNote'],
+                    'params' => ['class' => 'dashboard-panel', 'id' => 'DashboardNotes'],
                     'lines' => [
                         '<h5>' . __('Dashboard Note') . '</h5>',
                     ],
                 ],
             ],
-        ]);
+        ];
 
         if ($this->hasCurrentUser()) {
             $DashboardNotes = TableRegistry::getTableLocator()->get('DashboardNotes');
@@ -176,22 +175,32 @@ class PagesController extends AppController
             $LilHelper = new LilHelper(new View());
 
             if ($lastNote) {
-                $dashboardPanels['panels']['notes']['lines'][] = sprintf('<div class="details">%1$s | %2$s</div>',
+                $dashboardPanels['panels']['notes']['lines'][] = sprintf(
+                    '<div class="details">%1$s | %2$s</div>',
                     __('Created {0}', $lastNote->created),
-                    $LilHelper->Link(__('edit'), ['controller' => 'DashboardNotes', 'action' => 'edit', $lastNote->id], [])
+                    $LilHelper->Link(
+                        __('edit'),
+                        ['controller' => 'DashboardNotes', 'action' => 'edit', $lastNote->id],
+                        []
+                    )
                 );
-                
-                $dashboardPanels['panels']['notes']['lines'][] = MarkdownExtra::defaultTransform($lastNote->note);
+
+                $converter = new GithubFlavoredMarkdownConverter([
+                    'html_input' => 'strip',
+                    'allow_unsafe_links' => false,
+                ]);
+
+                $dashboardPanels['panels']['notes']['lines'][] = (string)$converter->convert($lastNote->note);
             } else {
                 $dashboardPanels['panels']['notes']['lines'][] = '<p>' .
                     $LilHelper->link(__('No notes found. [$1Add] your first note.'), [
-                        1 => [['controller' => 'DashboardNotes', 'action' => 'edit']]
+                        1 => [['controller' => 'DashboardNotes', 'action' => 'edit']],
                     ]) .
                     '</p>';
             }
         }
 
-        $event = new Event('App.dashboard', $this, ['panels' => $dashboardPanels]);
+        $event = new Event('App.dashboard', $this, ['panels' => new ArrayObject($dashboardPanels)]);
         EventManager::instance()->dispatch($event);
 
         $this->set(['panels' => (array)$event->getResult()['panels']]);

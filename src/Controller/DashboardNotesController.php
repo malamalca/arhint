@@ -3,8 +3,6 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use Cake\Http\Response;
-
 /**
  * DashboardNotes Controller
  *
@@ -23,6 +21,7 @@ class DashboardNotesController extends AppController
     public function edit(?string $id = null)
     {
         if (empty($id)) {
+            /** @var \App\Model\Entity\DashboardNote $note */
             $note = $this->DashboardNotes->newEmptyEntity();
             $note->user_id = $this->getCurrentUser()->get('id');
         } else {

@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace App\Model\Entity;
 
-use App\AppPluginsEnum;
 use Cake\ORM\Entity;
 
 /**
@@ -15,7 +14,8 @@ use Cake\ORM\Entity;
  * @property \Cake\I18n\DateTime|null $created
  * @property \Cake\I18n\DateTime|null $modified
  */
-class DashboardNote extends Entity {
+class DashboardNote extends Entity
+{
     /**
      * Fields that can be mass assigned using newEntity() or patchEntity().
      *

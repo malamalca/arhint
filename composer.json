@@ -17,6 +17,7 @@
         "cakephp/plugin-installer": "^2.0",
         "ddn/sapp": "dev-main",
         "krivart/php-qr-code": "dev-master",
+        "league/commonmark": "*",
         "malamalca/lil": "^4.6",
         "mikehaertl/phpwkhtmltopdf": "2.0.*@dev",
         "mobiledetect/mobiledetectlib": "^3.74",
@@ -26,7 +27,6 @@
         "sabre/vobject": "4.5",
         "syncroton/syncroton": "dev-master",
         "tecnickcom/tcpdf": "dev-main",
-        "michelf/php-markdown": "^2.0",
         "zendframework/zendframework1": "1.12.20pl61 as 1.12.20"
     },
     "require-dev": {

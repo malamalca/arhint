@@ -1,8 +1,13 @@
 <?php
 
 use Cake\Routing\Router;
-use Michelf\MarkdownExtra;
+use League\CommonMark\GithubFlavoredMarkdownConverter;
 use Projects\Lib\ProjectsFuncs;
+
+$converter = new GithubFlavoredMarkdownConverter([
+    'html_input' => 'strip',
+    'allow_unsafe_links' => false,
+]);
 
 $projectView = [
     'title_for_layout' =>
@@ -84,7 +89,7 @@ $projectView = [
             'params' => ['id' => 'ProjectDescriptPanel'],
             'lines' => [
                 0 => [
-                    'text' => MarkdownExtra::defaultTransform($project->descript),
+                    'text' => (string)$converter->convert($project->descript),
                 ],
             ],
         ],

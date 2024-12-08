@@ -1,0 +1,40 @@
+div#DashboardNotes {
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-bottom: 15px;
+
+    > * {
+        margin-left: 0;
+    }
+
+    div.details {
+        font-size: 10px;
+    }
+
+    input[type=checkbox] {
+        @extend .browser-default;
+        opacity: 100;
+        position: inherit;
+    }
+
+    h1, h2, h3, h4  {
+        font-weight: bold;
+        font-size: 16px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+    h1 {
+        font-size: 24px;
+    }
+    h2 {
+        font-size: 20px;
+    }
+    h3 {
+        font-size: 18px;
+    }
+
+    table {
+        width: auto;
+        border: solid 1px #cacaca;
+    }
+}
