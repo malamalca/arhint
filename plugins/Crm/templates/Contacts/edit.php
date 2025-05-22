@@ -275,7 +275,6 @@ $editForm['form']['lines'] += [
                 'options' => Configure::read('Crm.countries'),
                 'label' => __d('crm', 'Country') . ':',
                 'id' => 'contact-address-country',
-                'class' => 'browser-default',
                 'default' => Configure::read('Crm.defaultCountry'),
                 'empty' => true,
             ],

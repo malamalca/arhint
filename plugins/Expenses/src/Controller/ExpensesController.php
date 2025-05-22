@@ -72,6 +72,7 @@ class ExpensesController extends AppController
                             'Invoices.no LIKE' => $term . '%',
                         ],
                     ])
+                    ->order(['Expenses.dat_happened DESC'])
                     ->limit(20)
                     ->contain(['Invoices'])
                     ->all();

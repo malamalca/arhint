@@ -3,7 +3,7 @@ use Cake\Core\Configure;
 use Cake\Routing\Router;
 
 $noteForm = [
-    'title_for_layout' => __('Edit Note'),
+    'title_for_layout' => $note->isNew() ? __('Add Note') : __('Edit Note'),
     'form' => [
         'defaultHelper' => $this->Form,
         'lines' => [

@@ -4,7 +4,7 @@
     $label_select = [
         'title_for_layout' => __d('crm', 'Select and Edit Adrema'),
         'menu' => [
-            'save' => [
+            /*'save' => [
                 'title' => __d('crm', 'Save As'),
                 'visible' => !empty($adremaId),
                 'url' => [
@@ -13,7 +13,7 @@
                     'action' => 'duplicate',
                     '?' => ['adrema' => $adremaId ?? 'default'],
                 ],
-            ],
+            ],*/
             'edit' => [
                 'title' => __d('crm', 'Edit'),
                 'visible' => !empty($adremaId),
@@ -66,16 +66,18 @@
                         ],
                     ],
                 ],
+                'fs_adrema_spacer' => '<br />',
                 'fs_adrema_start' => '<fieldset>',
                 'fs_adrema_legend' => sprintf('<legend>%s</legend>', 'Adrema'),
-                'fs_table_header' => '<table cellpadding="0" cellspacing="0" class="index-static" id="crm-adrema">' .
+                'fs_table_header' => '<table cellpadding="0" cellspacing="0" id="crm-adrema">' .
                     '<thead><tr>' .
                     sprintf('<th class="td-adrema-link">&nbsp;</th>') .
                     sprintf('<th class="td-adrema-title">%s</th>', __d('crm', 'Title')) .
                     sprintf('<th class="td-adrema-street">%s</th>', __d('crm', 'Street')) .
                     sprintf('<th class="td-adrema-city">%s</th>', __d('crm', 'City')) .
-                    sprintf('<th class="td-adrema-zip">%s</th>', __d('crm', 'ZIP')) .
-                    sprintf('<th class="td-adrema-contry">%s</th>', __d('crm', 'Country')) .
+                    sprintf('<th class="td-adrema-zip nowrap">%s</th>', __d('crm', 'ZIP')) .
+                    sprintf('<th class="td-adrema-contry nowrap">%s</th>', __d('crm', 'Country')) .
+                    sprintf('<th class="td-adrema-email nowrap">%s</th>', __d('crm', 'Email')) .
                     sprintf('<th class="td-adrema-remove">&nbsp;</th>') .
                     '</tr></thead>',
                 'fs_table_footer' =>
@@ -89,16 +91,27 @@
                                 'controller' => 'Labels',
                                 'action' => 'editAddress',
                                 '?' => ['adrema' => $adremaId],
+                            ],
+                            [
+                                'class' => 'btn-small',
                             ]
                         )
                     ) .
                     '</tr></tfoot></table>',
                 'fs_adrema_end' => '</fieldset>',
-                'submit' => [
+                'submit_print' => [
                     'method' => 'button',
                     'parameters' => [
-                        __d('crm', 'Next'),
-                        ['type' => 'submit'],
+                        __d('crm', 'Print'),
+                        ['type' => 'submit', 'name' => 'process', 'value' => 'print'],
+                    ],
+                ],
+                'submit_spacer' => '&nbsp;',
+                'submit_email' => [
+                    'method' => 'button',
+                    'parameters' => [
+                        __d('crm', 'Email'),
+                        ['type' => 'submit', 'name' => 'process', 'value' => 'email'],
                     ],
                 ],
                 'form_end' => [
@@ -122,7 +135,7 @@
             empty($address->contacts_address) ? '' : Router::url('/crm/img/link.gif')
         );
         $adr['adr' . $k . '_2'] = sprintf(
-            '<td class="td-adrema-title"><a href="%1$s">%2$s</a></td>',
+            '<td class="td-adrema-title nowrap"><a href="%1$s">%2$s</a></td>',
             Router::url(['action' => 'edit-address', $address->id]),
             h($address->title)
         );
@@ -140,8 +153,12 @@
             h($source->country)
         );
         $adr['adr' . $k . '_7'] = sprintf(
+            '<td class="td-adrema-email">%s</td>',
+            h($address->email)
+        );
+        $adr['adr' . $k . '_8'] = sprintf(
             '<td class="td-adrema-remove">' .
-            '<a href="%1$s" onclick="return confirm(\'%3$s\');"><img src="%2$s" /></a></td>',
+            '<a href="%1$s" onclick="return confirm(\'%3$s\');" class="btn-small btn-flat"><img src="%2$s" /></a></td>',
             Router::url(['action' => 'delete-address', $address->id]),
             Router::url('/crm/img/remove.gif'),
             h(__d('crm', 'Are you sure you want to remove this contact from adrema?'))

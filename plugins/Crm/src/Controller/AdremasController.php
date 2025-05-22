@@ -3,6 +3,9 @@ declare(strict_types=1);
 
 namespace Crm\Controller;
 
+use Cake\Core\Plugin;
+use Cake\ORM\TableRegistry;
+
 /**
  * Adremas Controller
  *
@@ -45,7 +48,16 @@ class AdremasController extends AppController
                 $this->Flash->error(__d('crm', 'The adrema could not be saved. Please, try again.'));
             }
         }
-        $this->set(compact('adrema'));
+
+        $projects = [];
+        if (Plugin::isLoaded('Projects')) {
+            /** @var \Projects\Model\Table\ProjectsTable $ProjectsTable */
+            $ProjectsTable = TableRegistry::getTableLocator()->get('Projects.Projects');
+            $projectsQuery = $this->Authorization->applyScope($ProjectsTable->find(), 'index');
+            $projects = $ProjectsTable->findForOwner($this->getCurrentUser()->company_id, $projectsQuery);
+        }
+
+        $this->set(compact('adrema', 'projects'));
     }
 
     /**

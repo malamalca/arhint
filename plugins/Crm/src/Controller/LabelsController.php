@@ -81,7 +81,7 @@ class LabelsController extends AppController
      */
     public function export()
     {
-        $data = $this->getRequest()->getQueryParams();
+        $data = $this->getRequest()->getData();
         if (empty($data['label'])) {
             throw new NotFoundException(__d('crm', 'Invalid label'));
         }
@@ -96,11 +96,9 @@ class LabelsController extends AppController
         $this->viewBuilder()->setOptions($settings);
         $this->viewBuilder()->setTemplate($data['label']);
 
-        $adremaId = $this->getRequest()->getQuery('adrema');
-
         /** @var \Crm\Model\Table\AdremasTable $AdremasTable */
         $AdremasTable = $this->fetchTable('Crm.Adremas');
-        $adrema = $AdremasTable->get($adremaId);
+        $adrema = $AdremasTable->get($data['adrema']);
 
         $this->Authorization->authorize($adrema, 'view');
 
@@ -118,6 +116,42 @@ class LabelsController extends AppController
     }
 
     /**
+     * export method
+     *
+     * STEP 3: Email adrema
+     *
+     * @return void
+     */
+    public function email()
+    {
+        $data = $this->getRequest()->getData();
+        if (empty($data['label'])) {
+            throw new NotFoundException(__d('crm', 'Invalid label'));
+        }
+
+        $settings = Configure::read('Crm.emailAdrema.' . $data['label']);
+        unset($settings['form']);
+
+        /** @var \Crm\Model\Table\AdremasTable $AdremasTable */
+        $AdremasTable = $this->fetchTable('Crm.Adremas');
+        $adrema = $AdremasTable->get($data['adrema']);
+
+        $this->Authorization->authorize($adrema, 'view');
+
+        /** @var \Crm\Model\Table\AdremasContactsTable $AdremasContactsTable */
+        $AdremasContactsTable = TableRegistry::getTableLocator()->get('Crm.AdremasContacts');
+        $addresses = $AdremasContactsTable
+            ->find()
+            ->where(['adrema_id' => $adrema->id])
+            ->contain(['ContactsAddresses'])
+            ->all();
+
+        $this->viewBuilder()->setTemplate('Labels' . DS . 'email' . DS . $data['label']);
+
+        $this->set(compact('addresses', 'data'));
+    }
+
+    /**
      * Edit method
      *
      * @param string|null $id Address id.
@@ -131,7 +165,7 @@ class LabelsController extends AppController
         if ($id) {
             $address = $AdremasContacts->get($id, contain: ['ContactsAddresses']);
             if (!empty($address->contacts_address)) {
-                $AdremasContacts->patchEntity($address, $address->contacts_address);
+                $AdremasContacts->patchEntity($address, $address->contacts_address->toArray());
             }
         } else {
             /** @var \Crm\Model\Entity\AdremasContact $address */

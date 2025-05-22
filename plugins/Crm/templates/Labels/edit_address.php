@@ -37,9 +37,20 @@ $editAddressForm = [
                     ['id' => 'contacts-address_id'],
                 ],
             ],
+            'email_id' => [
+                'method' => 'hidden',
+                'parameters' => [
+                    'field' => 'contacts_email_id',
+                    ['id' => 'contacts-email_id'],
+                ],
+            ],
             'address_id_unlock' => [
                 'method' => 'unlockField',
                 'parameters' => ['contacts_address_id'],
+            ],
+            'email_id_unlock' => [
+                'method' => 'unlockField',
+                'parameters' => ['contacts_email_id'],
             ],
             'adrema_id' => [
                 'method' => 'hidden',
@@ -55,6 +66,19 @@ $editAddressForm = [
                         'label' => __d('crm', 'Title') . ':',
                         'error' => __d('crm', 'Title is required.'),
                         'id' => 'contacts-title',
+                        'autocomplete' => 'off',
+                    ],
+                ],
+            ],
+            'address_start' => '<br /><fieldset id="ManualAddress">',
+            'email' => [
+                'method' => 'control',
+                'parameters' => [
+                    'field' => 'email',
+                    'options' => [
+                        'label' => __d('crm', 'Email') . ':',
+                        'disabled' => $address->email ? 'disabled' : '',
+                        'id' => 'contacts-email',
                         'autocomplete' => 'off',
                     ],
                 ],
@@ -114,6 +138,7 @@ $editAddressForm = [
                 'method' => 'unlockField',
                 'parameters' => ['country'],
             ],
+            'address_end' => '</fieldset>',
             'submit' => [
                 'method' => 'button',
                 'parameters' => [
@@ -139,30 +164,42 @@ echo $this->Lil->form($editAddressForm, 'Crm.Labels.edit_address');
         if (elem) {
             var instance = M.Autocomplete.init(elem, {
                 onSearch: (text, autocomplete) => {
-                    $.get("<?php echo Router::url(['controller' => 'ContactsAddresses', 'action' => 'autocomplete']); ?>?term=" + text).done(function(data) {
+                    $.get("<?php echo Router::url(['controller' => 'Contacts', 'action' => 'autocomplete']); ?>?full=1&term=" + text).done(function(data) {
+
                         if (data.length > 1 || (data.length == 1 && text != data[0].value)) {
-                            autocomplete.setMenuItems(data);
                             $('#contacts-address_id').val('');
+                            $('#contacts-email_id').val('');
                             $('#contact-address-street').attr('readonly', false);
                             $('#contact-address-zip').attr('readonly', false);
                             $('#contact-address-city').attr('readonly', false);
                             $('#contact-address-country').attr('readonly', false);
+                            $('#contacts-email').attr('readonly', false);
 
                             // remove link icon
                             $("#contacts-title").parent("div").children("div.suffix").remove();
                         }
+
+                        autocomplete.setMenuItems(data);
                     });
                 },
                 onAutocomplete: (entries) => {
                     if (entries.length == 1) {
                         let item = entries[0];
-                        $("#contacts-title").val(item.title);
-                        $("#contacts-address_id").val(item.id);
+                        $("#contacts-title").val(item.client.title);
+                        
+                        if (item.client.contacts_addresses.length > 0) {
+                            $("#contacts-address_id").val(item.client.contacts_addresses[0].id);
+                            $('#contact-address-street').val(item.client.contacts_addresses[0].street).attr('readonly', true);
+                            $('#contact-address-zip').val(item.client.contacts_addresses[0].zip).attr('readonly', true);
+                            $('#contact-address-city').val(item.client.contacts_addresses[0].city).attr('readonly', true);
+                            $('#contact-address-country').val(item.client.contacts_addresses[0].country).attr('readonly', true);
+                        }
 
-                        $('#contact-address-street').val(item.street).attr('readonly', true);
-                        $('#contact-address-zip').val(item.zip).attr('readonly', true);
-                        $('#contact-address-city').val(item.city).attr('readonly', true);
-                        $('#contact-address-country').val(item.country).attr('readonly', true);
+                        console.log(item.client.contacts_emails);
+                        if (item.client.contacts_emails.length > 0) {
+                            $("#contacts-email_id").val(item.client.contacts_emails[0].id);
+                            $('#contacts-email').val(item.client.contacts_emails[0].email).attr('readonly', true);
+                        }
 
                         // add link icon
                         $("#contacts-title").parent("div").append("<div class='suffix'><i class='material-icons'>link</i></div>");
@@ -174,11 +211,13 @@ echo $this->Lil->form($editAddressForm, 'Crm.Labels.edit_address');
                 .on("keyup", function () {
                     if ($(this).val() === "") {
                         $('#contacts-address_id').val('');
+                        $('#contacts-email_id').val('');
 
                         $('#contact-address-street').attr('readonly', false);
                         $('#contact-address-zip').attr('readonly', false);
                         $('#contact-address-city').attr('readonly', false);
                         $('#contact-address-country').attr('readonly', false);
+                        $('#contacts-email').attr('readonly', false);
                     }
                 });
         }

@@ -216,7 +216,9 @@ echo $this->Lil->index($documents_index, 'Documents.Documents.index');
     function searchDocuments()
     {
         var rx_term = new RegExp("__term__", "i");
-        $.get(searchUrl.replace(rx_term, encodeURIComponent($(".search-panel input").val())), function(response) {
+        let url = searchUrl.replace(rx_term, encodeURIComponent($(".search-panel input").val()));
+        $.get(url, function(response) {
+            window.history.pushState({}, "<?= h(__('Documents Search')) ?>", url);
             let tBody = response
                 .substring(response.indexOf("<table class=\"index"), response.indexOf("</table>")+8);
             $("#AdminInvoicesIndex").html(tBody);

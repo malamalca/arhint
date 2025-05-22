@@ -59,7 +59,7 @@ class ProjectsSidebar
             ],
             'workhours' => [
                 'title' => __d('projects', 'Workhours'),
-                'visible' => true,
+                'visible' => $currentUser->hasRole('editor'),
                 'url' => [
                     'plugin' => 'Projects',
                     'controller' => 'ProjectsWorkhours',

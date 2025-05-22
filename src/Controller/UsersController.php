@@ -221,6 +221,10 @@ class UsersController extends AppController
         if ($this->getRequest()->is(['patch', 'post', 'put'])) {
             $user = $this->Users->patchEntity($user, $this->getRequest()->getData());
 
+            if (empty($this->getRequest()->getData('passwd'))) {
+                unset($user->passwd);
+            }
+
             if ($this->Users->save($user)) {
                 $this->Flash->success(__('The user has been saved.'));
 
@@ -263,6 +267,8 @@ class UsersController extends AppController
 
             if (empty($this->getRequest()->getData('passwd'))) {
                 unset($user->passwd);
+            } else {
+                $user->passwd = $this->getRequest()->getData('passwd');
             }
 
             if ($this->Users->save($user)) {

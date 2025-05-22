@@ -92,13 +92,28 @@ td.td-invoices-item-vat select {
 }
 
 /* VIEW INVOICE */
+h3 {
+    font-size: 20px;
+    font-weight: bold;
+    margin-top: 2rem;
+    margin-bottom: 0.5rem;
+    border-bottom: solid 1px #404040;
+    max-width: 700px;
+}
 #invoice-view-items-table, #invoice-view-tax-table {
     margin-left: 0px;
     font-weight: normal;
 }
 
-#invoice-analytics-table, #view-invoice-payments, #invoice-taxes-table {
-    width: 700px !important;
+#invoice-analytics-table,
+#view-invoice-payments,
+#invoice-logs-table,
+#invoice-taxes-table {
+    max-width: 700px !important;
+}
+
+#invoice-logs-table td {
+    padding: 0;
 }
 
 #invoice-descript-preview {

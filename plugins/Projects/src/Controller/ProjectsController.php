@@ -155,6 +155,10 @@ class ProjectsController extends AppController
             ->order(['title'])
             ->toArray();
 
+        $this->viewBuilder()
+            ->setOption('rootNode', 'arhint')
+            ->setOption('serialize', ['project']);
+
         $this->set(compact('project', 'logs', 'users', 'projectsStatuses', 'workDuration'));
     }
 

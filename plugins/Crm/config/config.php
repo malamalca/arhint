@@ -59,6 +59,25 @@ $config = [
         'smak_s47' => 'Nalepke Smak S-47',
     ],
 
+    'Crm.emailTemplates' => [
+        'slo_pogoji' => 'Projektni pogoji',
+    ],
+
+    'Crm.email.slo_pogoji' => [
+        'form' => [
+            'zip' => [
+                'method' => 'control',
+                'parameters' => [
+                    'field' => 'xls',
+                    'options' => [
+                        'type' => 'file',
+                        'label' => 'Priloga 8 [xlsx]' . ':',
+                    ],
+                ],
+            ],
+        ],
+    ],
+
     'Crm.label.slo_priporoceno' => [
         'header' => false,
         'footer' => false,

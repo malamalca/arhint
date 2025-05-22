@@ -11,6 +11,7 @@ use Cake\Http\Exception\ForbiddenException;
 use Cake\Http\Exception\NotFoundException;
 use Cake\Http\Response;
 use Cake\ORM\TableRegistry;
+use Cake\Routing\Router;
 use Cake\View\Exception\MissingTemplateException;
 use Cake\View\View;
 use League\CommonMark\GithubFlavoredMarkdownConverter;
@@ -122,6 +123,18 @@ class PagesController extends AppController
     {
         $this->Authorization->skipAuthorization();
 
+        $noteCount = 0;
+        if ($this->hasCurrentUser()) {
+            $noteCount = TableRegistry::getTableLocator()->get('DashboardNotes')->find()
+                ->select()
+                ->where(['user_id' => $this->getCurrentUser()->id])
+                ->count();
+        }
+
+        $noteOffset = $this->request->getQuery('offset', 1);
+        $nextNoteOffset = $noteOffset > 1 ? $noteOffset - 1 : 1;
+        $prevNoteOffset = ($noteOffset == $noteCount ? $noteCount : $noteOffset + 1);
+
         $dashboardPanels = [
             'title' => '&nbsp;',
             'menu' => [
@@ -152,24 +165,47 @@ class PagesController extends AppController
                         'action' => 'pdfSplice',
                     ],
                 ],
+                'add-note' => [
+                    'title' => __('Add Note'),
+                    'visible' => $this->getCurrentUser()->hasRole('editor'),
+                    'url' => [
+                        'plugin' => false,
+                        'controller' => 'DashboardNotes',
+                        'action' => 'edit',
+                    ],
+                ],
             ],
             'panels' => [
-                'notes' => [
+                'notes' => !$this->hasCurrentUser() || !$this->getCurrentUser()->hasRole('editor') ? null : [
                     'params' => ['class' => 'dashboard-panel', 'id' => 'DashboardNotes'],
                     'lines' => [
-                        '<h5>' . __('Dashboard Note') . '</h5>',
+                        '<h5>' . __('Dashboard Note') . '<span class="actions" style="display: block; float: right">' .
+                            sprintf(
+                                '<a href="%2$s" class="btn-small"%3$s>%1$s</a>',
+                                __('Prev'),
+                                Router::url(['?' => ['offset' => $prevNoteOffset]]),
+                                $prevNoteOffset == $noteOffset ? ' disabled' : ''
+                            ) . ' ' .
+                            sprintf(
+                                '<a href="%2$s" class="btn-small"%3$s>%1$s</a>',
+                                __('Next'),
+                                Router::url(['?' => ['offset' => $nextNoteOffset]]),
+                                $nextNoteOffset == $noteOffset ? ' disabled' : ''
+                            ) .
+                        '</span></h5>',
                     ],
                 ],
             ],
         ];
 
-        if ($this->hasCurrentUser()) {
+        if ($this->hasCurrentUser() && $this->getCurrentUser()->hasRole('editor')) {
             $DashboardNotes = TableRegistry::getTableLocator()->get('DashboardNotes');
             $lastNote = $DashboardNotes->find()
                 ->select()
                 ->where(['user_id' => $this->getCurrentUser()->id])
-                ->order('created')
+                ->order('created DESC')
                 ->limit(1)
+                ->page((int)$noteOffset)
                 ->first();
 
             $LilHelper = new LilHelper(new View());

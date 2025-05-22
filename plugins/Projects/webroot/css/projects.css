@@ -129,6 +129,7 @@ div.add-material-bar button {
 
 
 div#ProjectDescriptPanel {
+    width: 750px;
     background-color: #f0f0f0;
     padding: 0.2em;
     padding-bottom: 1em;
@@ -169,4 +170,11 @@ div#ProjectDescriptPanel td, div#ProjectDescriptPanel th {
 
 ul#dropdown-projects {
     width: auto !important;
+}
+
+textarea#project-descript {
+    white-space: pre;
+    overflow-wrap: normal;
+    overflow-x: scroll;
+    font-family:Consolas,Monaco,"Lucida Console","Liberation Mono","DejaVu Sans Mono","Bitstream Vera Sans Mono","Courier New", monospace !important;
 }

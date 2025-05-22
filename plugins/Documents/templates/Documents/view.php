@@ -94,7 +94,7 @@ $invoiceView = [
             'url' => [
                 'action' => 'preview',
                 $document->id,
-                $document->no,
+                base64_encode($document->no),
             ],
         ],
         'email' => [

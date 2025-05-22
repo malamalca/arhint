@@ -230,10 +230,11 @@ echo $this->Lil->index($invoicesIndex, 'Documents.Invoices.index');
 
     function searchDocuments()
     {
-        var rx_term = new RegExp("__term__", "i");
-        $.get(searchUrl.replace(rx_term, encodeURIComponent($(".search-panel input").val())), function(response) {
-            let tBody = response
-                .substring(response.indexOf("<table class=\"index"), response.indexOf("</table>")+8);
+        let rx_term = new RegExp("__term__", "i");
+        let url = searchUrl.replace(rx_term, encodeURIComponent($(".search-panel input").val()));
+        $.get(url, function(response) {
+            window.history.pushState({}, "<?= h(__('Invoice Search')) ?>", url);
+            let tBody = response.substring(response.indexOf("<table class=\"index"), response.indexOf("</table>") + 8);
             $("#AdminInvoicesIndex").html(tBody);
         });
     }
@@ -265,7 +266,7 @@ echo $this->Lil->index($invoicesIndex, 'Documents.Invoices.index');
             }
         });
         $("#lil-invoices-link-date-start").click(function() {
-            let datePicker = M.Datepicker.getInstance($("#lil-documents-input-date-start").get(0));
+            let datePicker = M.Datepicker.getInstance($("#lil-invoices-input-date-start").get(0));
             datePicker.open();
             return false;
         });

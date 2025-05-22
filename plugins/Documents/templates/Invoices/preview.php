@@ -13,7 +13,7 @@ if (empty($id)) {
         $name = $id;
     }
     $name = sprintf(__d('documents', 'Invoice #%1$s'), h($name));
-    $action = Router::url(['action' => 'export', $id, $name . '.pdf'], true);
+    $action = Router::url(['action' => 'export', $id, strtr($name, '/', '-') . '.pdf'], true);
 }
 
 $invoicePreview = [

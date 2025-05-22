@@ -13,12 +13,13 @@ use Cake\ORM\Entity;
  * @property string|null $adrema_id
  * @property string|null $contacts_address_id
  * @property string|null $title
+ * @property string|null $email
  * @property string|null $street
  * @property string|null $city
  * @property string|null $country
  * @property \Cake\I18n\DateTime|null $created
  * @property \Cake\I18n\DateTime|null $modified
- * @property array|null $contacts_address
+ * @property \Crm\Model\Entity\ContactsAddress|null $contacts_address
  */
 class AdremasContact extends Entity
 {

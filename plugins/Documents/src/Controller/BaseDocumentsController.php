@@ -112,6 +112,10 @@ class BaseDocumentsController extends AppController
         $LinksTable = TableRegistry::getTableLocator()->get('Documents.DocumentsLinks');
         $links = $LinksTable->forDocument($id, $this->documentsScope);
 
+        /** @var \Documents\Model\Table\DocumentsLogsTable $LogsTable */
+        $LogsTable = TableRegistry::getTableLocator()->get('Documents.DocumentsLogs');
+        $logs = $LogsTable->forDocument($id, $this->documentsScope);
+
         /** @var \Documents\Model\Table\DocumentsCountersTable $DocumentsCounters */
         $DocumentsCounters = TableRegistry::getTableLocator()->get('Documents.DocumentsCounters');
         $counters = $DocumentsCounters->rememberForUser(
@@ -122,7 +126,7 @@ class BaseDocumentsController extends AppController
 
         $currentCounter = $document->documents_counter->id;
 
-        $this->set(compact('document', 'counters', 'links', 'currentCounter'));
+        $this->set(compact('document', 'counters', 'links', 'logs', 'currentCounter'));
     }
 
     /**
@@ -422,6 +426,7 @@ class BaseDocumentsController extends AppController
         if (empty($id)) {
             $this->set('filter', $this->getRequest()->getQuery());
         } else {
+            $name = base64_decode((string)$name);
             $this->set(compact('id', 'name'));
         }
     }

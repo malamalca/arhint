@@ -38,7 +38,7 @@ $projectView = [
         ],
         'log' => [
             'title' => __d('projects', 'Add Log'),
-            'visible' => true,
+            'visible' => $this->getCurrentUser()->hasRole('editor'),
             'url' => [
                 'controller' => 'ProjectsLogs',
                 'action' => 'edit',
@@ -48,7 +48,7 @@ $projectView = [
         ],
         'workhour' => [
             'title' => __d('projects', 'Add Workhour'),
-            'visible' => true,
+            'visible' => $this->getCurrentUser()->hasRole('editor'),
             'url' => [
                 'controller' => 'ProjectsWorkhours',
                 'action' => 'edit',

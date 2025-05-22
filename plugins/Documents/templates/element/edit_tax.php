@@ -98,7 +98,7 @@ foreach ($invoices_taxes as $k => $invoices_tax) {
                 'type' => 'number',
                 'step' => '0.01',
                 'label' => false,
-                'class' => 'invoices-tax-base right-align',
+                'class' => 'invoices-tax-base right-align browser-default',
                 'error' => __d('documents', 'Blank'),
                 'id' => 'invoice-invoices-taxes-' . $k . '-base',
             ],

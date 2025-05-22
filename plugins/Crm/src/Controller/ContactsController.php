@@ -295,6 +295,24 @@ class ContactsController extends AppController
                             'client' => $c,
                         ];
                     }
+                } elseif ($this->getRequest()->getQuery('full')) {
+                    $query = $this->Authorization->applyScope($this->Contacts->find(), 'index')
+                        ->select()
+                        ->where($conditions)
+                        ->order('title')
+                        ->contain(['ContactsAddresses', 'ContactsAccounts', 'ContactsEmails', 'ContactsPhones'])
+                        ->limit(50);
+                    $contacts = $query->all();
+
+                    foreach ($contacts as $c) {
+                        $data[] = [
+                            'id' => $c->id,
+                            'text' => $c->title,
+                            'label' => $c->title,
+                            'value' => $c->title,
+                            'client' => $c,
+                        ];
+                    }
                 } else {
                     $result = $this->Authorization->applyScope($this->Contacts->find(), 'index')
                         ->select()

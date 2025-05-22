@@ -72,6 +72,14 @@ $userForm = [
                     ]
                 ]]
             ],
+            'access' => [
+                'method' => 'control',
+                'parameters' => ['access', [
+                    'type' => 'text',
+                    'label' => __('Plugin Access') . ':',
+                    'enabled' => $this->getCurrentUser()->hasRole('admin')
+                ]]
+            ],
             'username' => [
                 'method' => 'control',
                 'parameters' => ['username', [
@@ -99,10 +107,10 @@ $userForm = [
             'fs_login_end' => '</fieldset>',
 
             'submit' => [
-                'method' => 'submit',
+                'method' => 'button',
                 'parameters' => [
-                    'label' => __('Save')
-                ]
+                    __('Save'), ['type' => 'submit'],
+                ],
             ],
             'form_end' => [
                 'method' => 'end',

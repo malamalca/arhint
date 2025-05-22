@@ -13,6 +13,7 @@ use Cake\ORM\TableRegistry;
 use Cake\Routing\Router;
 use Cake\View\View;
 use Documents\Lib\DocumentsSidebar;
+use Exception;
 
 class DocumentsEvents implements EventListenerInterface
 {
@@ -105,7 +106,11 @@ class DocumentsEvents implements EventListenerInterface
         $event = new Event('Documents.Dashboard.queryDocuments', $controller, [$newDocumentsQuery]);
         EventManager::instance()->dispatch($event);
 
-        $newDocuments = $newDocumentsQuery->all();
+        try {
+            $newDocuments = $newDocumentsQuery->all();
+        } catch (Exception $e) {
+            return;
+        }
 
         if (!$newDocuments->isEmpty()) {
             $panels['panels']['documents'] = [

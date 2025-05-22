@@ -120,7 +120,7 @@ img#magic-tax-lookup {
 
 /* Adrema */
 table#crm-adrema {
-    width: 600px;
+    min-width: 700px;
 }
 .td-adrema-title {
     width: 25%;

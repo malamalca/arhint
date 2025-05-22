@@ -54,7 +54,7 @@ class AdremasContactsTable extends Table
             ->allowEmptyString('adrema_id')
             //->add('contacts_address_id', 'valid', ['rule' => 'uuid'])
             ->allowEmptyString('contacts_address_id')
-            ->allowEmptyString('title')
+            ->notEmptyString('title')
             ->allowEmptyString('street')
             ->allowEmptyString('city')
             ->allowEmptyString('zip')
