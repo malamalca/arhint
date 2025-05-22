@@ -27,7 +27,7 @@ class DocumentsCountersController extends AppController
             [
                 'conditions' => ['DocumentsCounters.active IN' => [true]],
             ],
-            $this->DocumentsCounters->filter($filter)
+            $this->DocumentsCounters->filter($filter),
         );
 
         $query = $this->Authorization->applyScope($this->DocumentsCounters->find())

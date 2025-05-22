@@ -74,7 +74,7 @@ class CrmCommand extends Command
             'count' => $q->func()->count('*'),
         ])
         ->where(['tax_no IS NOT' => null])
-        ->group(['owner_id', 'tax_no'])
+        ->groupBy(['owner_id', 'tax_no'])
         ->having(['count >' => 1])
         ->all();
 
@@ -129,7 +129,7 @@ class CrmCommand extends Command
                             if (
                                 $io->askChoice(sprintf(
                                     'Keep address "%s"?',
-                                    $address->street . ', ' . $address->zip . ' ' . $address->city
+                                    $address->street . ', ' . $address->zip . ' ' . $address->city,
                                 ), ['Y', 'N'], 'N') == 'Y'
                             ) {
                                 $address->contact_id = $keepContact->id;
@@ -153,12 +153,12 @@ class CrmCommand extends Command
 
                         $DocumentsClients->updateAll(
                             ['contact_id' => $keepContact->id],
-                            ['contact_id' => $disposeContact->id]
+                            ['contact_id' => $disposeContact->id],
                         );
 
                         $ContactsTable->updateAll(
                             ['company_id' => $keepContact->id],
-                            ['company_id' => $disposeContact->id]
+                            ['company_id' => $disposeContact->id],
                         );
 
                         $ContactsTable->delete($disposeContact);

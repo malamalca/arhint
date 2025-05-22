@@ -26,7 +26,7 @@ use Projects\Model\Entity\Project;
  * @method \Projects\Model\Entity\Project|false save(\Cake\Datasource\EntityInterface $entity, $options = [])
  * @method \Projects\Model\Entity\Project patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
  * @method \Projects\Model\Entity\Project[] patchEntities($entities, array $data, array $options = [])
- * @method \Projects\Model\Entity\Project findOrCreate($search, callable $callback = null, $options = [])
+ * @method \Projects\Model\Entity\Project findOrCreate($search, array<array-key, mixed>|callable|null $callback = null, $options = [])
  * @mixin \Cake\ORM\Behavior\TimestampBehavior
  */
 class ProjectsTable extends Table
@@ -74,7 +74,7 @@ class ProjectsTable extends Table
                 $subquery->select(['SubLastLog.id'])
                     ->from(['SubLastLog' => 'projects_logs'])
                     ->where(['Projects.id = SubLastLog.project_id'])
-                    ->order(['SubLastLog.created' => 'DESC'])
+                    ->orderBy(['SubLastLog.created' => 'DESC'])
                     ->limit(1);
 
                 return $exp->add(['LastLog.id' => $subquery]);
@@ -228,13 +228,13 @@ class ProjectsTable extends Table
             function () use ($query) {
                 return $query
                     ->where(['active' => true])
-                    ->order(['no DESC', 'title'])
+                    ->orderBy(['no DESC', 'title'])
                     ->all()
                     ->combine('id', function ($entity) {
                         return $entity;
                     })
                     ->toArray();
-            }
+            },
         );
 
         return $data;

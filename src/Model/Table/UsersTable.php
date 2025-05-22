@@ -25,7 +25,7 @@ use Cake\Validation\Validator;
  * @method \App\Model\Entity\User saveOrFail(\Cake\Datasource\EntityInterface $entity, $options = [])
  * @method \App\Model\Entity\User patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
  * @method \App\Model\Entity\User[] patchEntities($entities, array $data, array $options = [])
- * @method \App\Model\Entity\User findOrCreate($search, callable $callback = null, $options = [])
+ * @method \App\Model\Entity\User findOrCreate($search, array<array-key, mixed>|callable|null $callback = null, $options = [])
  * @mixin \Cake\ORM\Behavior\TimestampBehavior
  */
 class UsersTable extends Table
@@ -136,7 +136,7 @@ class UsersTable extends Table
                 'repeat_passwd',
                 function ($context) {
                     return !empty($context['data']['repeat_passwd']);
-                }
+                },
             )
             ->notEmptyString('repeat_passwd')
             ->add('repeat_passwd', 'match', [
@@ -159,8 +159,7 @@ class UsersTable extends Table
         $validator = new Validator();
         $validator
             ->allowEmptyFile('avatar_file')
-            ->add('avatar_file', 'file', ['rule' => ['mimeType', ['image/png']]])
-            ->add('avatar_file', 'file', ['rule' => ['filesize', '<', '30KB']])
+            ->add('avatar_file', 'file', ['rule' => [['mimeType', ['image/png']], ['filesize', '<', '30KB']]])
 
             ->allowEmptyString('passwd')
             ->add('passwd', 'minLength', ['rule' => ['minLength', 4]])
@@ -264,7 +263,7 @@ class UsersTable extends Table
         ];
         $options = array_merge($defaultOptions, $options);
 
-        $query = $this->find('list', keyField: 'id', valueField: fn ($e) => $e);
+        $query = $this->find('list', keyField: 'id', valueField: fn($e) => $e);
         $query->where(['Users.company_id' => $companyId]);
 
         if (!$options['inactive']) {

@@ -72,7 +72,7 @@ class ProjectsWorkhoursController extends AppController
 
         $projects = $this->Authorization->applyScope($this->ProjectsWorkhours->Projects->find(), 'index')
             ->where(['active' => true])
-            ->order(['no DESC', 'title'])
+            ->orderBy(['no DESC', 'title'])
             ->all()
             ->combine('id', function ($entity) {
                 return $entity;
@@ -139,7 +139,7 @@ class ProjectsWorkhoursController extends AppController
         if ($this->getRequest()->is(['patch', 'post', 'put'])) {
             $projectsWorkhour = $this->ProjectsWorkhours->patchEntity(
                 $projectsWorkhour,
-                $this->getRequest()->getData()
+                $this->getRequest()->getData(),
             );
             if ($this->ProjectsWorkhours->save($projectsWorkhour)) {
                 $this->Flash->success(__d('projects', 'The projects workhour has been saved.'));
@@ -147,7 +147,7 @@ class ProjectsWorkhoursController extends AppController
                 $referer = $this->getRequest()->getData('referer');
 
                 return $this->redirect(
-                    $referer ?? ['action' => 'index', '?' => ['project' => $projectsWorkhour->project_id]]
+                    $referer ?? ['action' => 'index', '?' => ['project' => $projectsWorkhour->project_id]],
                 );
             }
             $this->Flash->error(__d('projects', 'The projects workhour could not be saved. Please, try again.'));
@@ -157,7 +157,7 @@ class ProjectsWorkhoursController extends AppController
         $UsersTable = TableRegistry::getTableLocator()->get('App.Users');
         $users = $UsersTable->fetchForCompany(
             $this->getCurrentUser()->get('company_id'),
-            ['includeUsers' => $projectsWorkhour->user_id]
+            ['includeUsers' => $projectsWorkhour->user_id],
         );
 
         $projectsFilter = ['active' => true];
@@ -166,7 +166,7 @@ class ProjectsWorkhoursController extends AppController
         }
         $projects = $this->Authorization->applyScope($this->ProjectsWorkhours->Projects->find(), 'index')
             ->where($projectsFilter)
-            ->order(['no DESC', 'title'])
+            ->orderBy(['no DESC', 'title'])
             ->all()
             ->combine('id', function ($entity) {
                 return $entity;
@@ -198,7 +198,8 @@ class ProjectsWorkhoursController extends AppController
         }
 
         return $this->redirect(
-            $this->getRequest()->referer() ?? ['action' => 'index', '?' => ['project' => $projectsWorkhour->project_id]]
+            $this->getRequest()->referer() ??
+            ['action' => 'index', '?' => ['project' => $projectsWorkhour->project_id]],
         );
     }
 
@@ -216,7 +217,7 @@ class ProjectsWorkhoursController extends AppController
             $projects = $this->Authorization->applyScope($this->ProjectsWorkhours->Projects->find('list'), 'index')
                 ->select()
                 ->where(['active' => true])
-                ->order('title')
+                ->orderBy('title')
                 ->toArray();
 
             foreach ((array)$data as $registration) {
@@ -248,7 +249,7 @@ class ProjectsWorkhoursController extends AppController
                                 $workhour = $this->ProjectsWorkhours->find()
                                     ->select()
                                     ->where(['user_id' => $this->getCurrentUser()->get('id')])
-                                    ->order('started DESC')
+                                    ->orderBy('started DESC')
                                     ->limit(1)
                                     ->first();
                                 if ($workhour->project_id != $registration['project_id']) {

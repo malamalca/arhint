@@ -43,7 +43,7 @@ class TravelOrdersController extends BaseDocumentsController
             ->select(['id', 'no', 'dat_task', 'title', 'descript', 'total', 'departure', 'arrival', 'Employees.name'])
             ->contain(['Employees'])
             ->where($params['conditions'])
-            ->order($params['order']);
+            ->orderBy($params['order']);
 
         $data = $this->paginate($query);
 

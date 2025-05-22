@@ -77,7 +77,7 @@ class DocumentsController extends BaseDocumentsController
                 ],
             ])
             ->where($params['conditions'])
-            ->order($params['order']);
+            ->orderBy($params['order']);
 
         $event = new Event('Documents.Documents.indexQuery', $this, [$query]);
         EventManager::instance()->dispatch($event);
@@ -121,7 +121,7 @@ class DocumentsController extends BaseDocumentsController
             ->select(['id', 'no', 'counter', 'counter_id', 'dat_issue', 'title', 'project_id',
                 'attachments_count'])
             ->where($params['conditions'])
-            ->order($params['order']);
+            ->orderBy($params['order']);
 
         $data = $this->paginate($query, ['limit' => 5]);
 

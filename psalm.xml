@@ -24,4 +24,8 @@
         <file name="config/paths.php" />
 		<file name="vendor/cakephp/cakephp/src/functions.php" />
     </stubs>
+
+    <issueHandlers>
+        <MissingTemplateParam errorLevel="suppress" />
+    </issueHandlers>
 </psalm>

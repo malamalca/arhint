@@ -80,7 +80,7 @@ class VatsTable extends Table
             ->find()
             ->where(['owner_id' => $ownerId])
             ->all()
-            ->combine('id', fn ($entity) => $entity)
+            ->combine('id', fn($entity) => $entity)
             ->toArray();
 
         return $vats;

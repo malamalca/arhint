@@ -37,7 +37,7 @@ class EventsController extends AppController
             ->select()
             ->where($params['conditions'])
             ->contain($params['contain'])
-            ->order($params['order'])
+            ->orderBy($params['order'])
             ->all();
 
         $this->set(compact('events', 'filter'));

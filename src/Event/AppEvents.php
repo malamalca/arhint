@@ -76,10 +76,10 @@ class AppEvents implements EventListenerInterface
                                 '/(?|(?|"([^"]+)"|([^<@]+)) ?<(.+?)>|()(.+?))(?:$|, ?)/',
                                 $overview->from,
                                 $emailsDecoded,
-                                PREG_SET_ORDER
+                                PREG_SET_ORDER,
                             );
 
-                            if ($canDecodeEmail) {
+                            if ($canDecodeEmail && !empty($emailsDecoded[0][2])) {
                                 $contactsEmails = $ContactsEmailsTable->find()
                                     ->select('contact_id')
                                     ->where(['email' => $emailsDecoded[0][2]])
@@ -108,14 +108,15 @@ class AppEvents implements EventListenerInterface
                     '/(?|(?|"([^"]+)"|([^<@]+)) ?<(.+?)>|()(.+?))(?:$|, ?)/',
                     $overview->from,
                     $emailsDecoded,
-                    PREG_SET_ORDER
+                    PREG_SET_ORDER,
                 );
 
-                $fromEmail = empty($emailsDecoded[0][1]) ?
-                    $emailsDecoded[0][2] :
-                    (h(iconv_mime_decode($emailsDecoded[0][1])) . ' <' . $emailsDecoded[0][2] . '>');
+                $email = $emailsDecoded[0][2] ?? 'unknown';
 
-                $emailLink = '<a href="mailto:' . $emailsDecoded[0][2] . '" target="_blank">' . h($fromEmail) . '</a>';
+                $fromEmail = empty($emailsDecoded[0][1]) ?
+                    $email : (h(iconv_mime_decode($emailsDecoded[0][1])) . ' <' . $email . '>');
+
+                $emailLink = '<a href="mailto:' . $email . '" target="_blank">' . h($fromEmail) . '</a>';
                 if (isset($overview->contacts)) {
                     $emailLink = sprintf(
                         '<a href="%1$s" target="_blank" style="font-weight: bold;">%2$s</a>',
@@ -125,7 +126,7 @@ class AppEvents implements EventListenerInterface
                             'action' => 'view',
                             $overview->contacts[0],
                         ]),
-                        h($fromEmail)
+                        h($fromEmail),
                     );
                 }
 
@@ -149,10 +150,10 @@ class AppEvents implements EventListenerInterface
                     $emailLink,
                     sprintf(
                         'https://webmail.arhim.si/?_task=mail&_uid=%s&_mbox=INBOX&_action=show',
-                        $overview->uid
+                        $overview->uid,
                     ),
                     $ArhintHelper->calendarDay($emailDate),
-                    !empty($overview->seen) && $overview->seen == 1 ? '' : 'background-color: #cdffb0;'
+                    !empty($overview->seen) && $overview->seen == 1 ? '' : 'background-color: #cdffb0;',
                 );
             }
         }

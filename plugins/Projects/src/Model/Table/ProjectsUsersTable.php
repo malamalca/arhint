@@ -16,7 +16,7 @@ use Cake\Validation\Validator;
  * @method \Projects\Model\Entity\ProjectsUser newEntity(array $data, array $options = [])
  * @method \Projects\Model\Entity\ProjectsUser[] newEntities(array $data, array $options = [])
  * @method \Projects\Model\Entity\ProjectsUser get(mixed $primaryKey, array|string $finder = 'all', \Psr\SimpleCache\CacheInterface|string|null $cache = null, \Closure|string|null $cacheKey = null, mixed ...$args)
- * @method \Projects\Model\Entity\ProjectsUser findOrCreate($search, ?callable $callback = null, $options = [])
+ * @method \Projects\Model\Entity\ProjectsUser findOrCreate($search, array<array-key, mixed>|callable|null $callback = null, $options = [])
  * @method \Projects\Model\Entity\ProjectsUser patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
  * @method \Projects\Model\Entity\ProjectsUser[] patchEntities(iterable $entities, array $data, array $options = [])
  * @method \Projects\Model\Entity\ProjectsUser|false save(\Cake\Datasource\EntityInterface $entity, $options = [])

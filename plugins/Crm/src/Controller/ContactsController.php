@@ -46,14 +46,14 @@ class ContactsController extends AppController
                 'conditions' => [],
                 'order' => 'Contacts.title',
             ],
-            $this->Contacts->filter($filter)
+            $this->Contacts->filter($filter),
         );
 
         $query = $this->Authorization->applyScope($this->Contacts->find())
             ->select(['id', 'kind', 'title', 'job', 'descript', 'syncable'])
             ->where($params['conditions'])
             ->contain($params['contain'])
-            ->order($params['order']);
+            ->orderBy($params['order']);
 
         $contacts = $this->paginate($query, ['limit' => 20]);
 
@@ -224,7 +224,7 @@ class ContactsController extends AppController
                     ->select($this->Contacts)
                     ->select(['Contacts__email' => 'c.email'])
                     ->where($conditions)
-                    ->order('title')
+                    ->orderBy('title')
                     ->join([
                         'table' => 'contacts_emails',
                         'alias' => 'c',
@@ -281,7 +281,7 @@ class ContactsController extends AppController
                     $query = $this->Authorization->applyScope($this->Contacts->find(), 'index')
                         ->select()
                         ->where($conditions)
-                        ->order('title')
+                        ->orderBy('title')
                         ->contain(['PrimaryAddresses', 'PrimaryAccounts', 'PrimaryEmails', 'PrimaryPhones'])
                         ->limit(50);
                     $contacts = $query->all();
@@ -299,7 +299,7 @@ class ContactsController extends AppController
                     $query = $this->Authorization->applyScope($this->Contacts->find(), 'index')
                         ->select()
                         ->where($conditions)
-                        ->order('title')
+                        ->orderBy('title')
                         ->contain(['ContactsAddresses', 'ContactsAccounts', 'ContactsEmails', 'ContactsPhones'])
                         ->limit(50);
                     $contacts = $query->all();
@@ -317,7 +317,7 @@ class ContactsController extends AppController
                     $result = $this->Authorization->applyScope($this->Contacts->find(), 'index')
                         ->select()
                         ->where($conditions)
-                        ->order('title')
+                        ->orderBy('title')
                         ->limit(50)
                         ->all()
                         ->combine('id', 'title')

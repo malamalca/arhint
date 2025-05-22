@@ -31,7 +31,7 @@ class Plugin extends BasePlugin
         if (isset($defaults['Projects'])) {
             Configure::write(
                 'Projects',
-                Hash::merge((array)Configure::read('Projects'), (array)$defaults['Projects'])
+                Hash::merge((array)Configure::read('Projects'), (array)$defaults['Projects']),
             );
         }
 
@@ -56,7 +56,7 @@ class Plugin extends BasePlugin
             function (RouteBuilder $builder): void {
                 // Add custom routes here
                 $builder->fallbacks();
-            }
+            },
         );
         parent::routes($routes);
     }

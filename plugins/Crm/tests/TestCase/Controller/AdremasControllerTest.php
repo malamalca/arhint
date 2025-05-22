@@ -50,7 +50,6 @@ class AdremasControllerTest extends TestCase
     public function testAdd()
     {
         $data = [
-            'id' => '',
             'owner_id' => COMPANY_FIRST,
             'title' => 'Test Add Adrema',
         ];

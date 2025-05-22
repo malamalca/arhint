@@ -103,15 +103,13 @@ class ExpensesTable extends Table
      * @param \Cake\Event\Event $event Event object.
      * @param \Expenses\Model\Entity\Expense $entity Entity object.
      * @param \ArrayObject $options Array object.
-     * @return bool
+     * @return void
      */
-    public function beforeSave(Event $event, Entity $entity, ArrayObject $options): bool
+    public function beforeSave(Event $event, Entity $entity, ArrayObject $options): void
     {
         if ($entity->isNew() && !empty($entity->dat_happened) && empty($entity->month)) {
             $entity->month = (string)$entity->dat_happened->i18nFormat('yyyy-MM');
         }
-
-        return true;
     }
 
     /**
@@ -224,7 +222,7 @@ class ExpensesTable extends Table
 
         $query = $query
             ->select(['Expenses.month', 'monthly_amount' => $query->func()->sum('Expenses.total')])
-            ->where(['Expenses.month LIKE' => $year . '-%'])->group('Expenses.month');
+            ->where(['Expenses.month LIKE' => $year . '-%'])->groupBy('Expenses.month');
 
         if (isset($options['kind']) && $options['kind'] == 'expenses') {
             $query = $query->andWhere(['Expenses.total <' => 0]);

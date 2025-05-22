@@ -48,7 +48,7 @@ class DocumentsSidebar
 
         $counters = $DocumentsCounters->rememberForUser(
             $currentUser->id,
-            $controller->Authorization->applyScope($DocumentsCounters->find(), 'index')
+            $controller->Authorization->applyScope($DocumentsCounters->find(), 'index'),
         );
 
         $documents['title'] = __d('documents', 'Documents');
@@ -116,7 +116,7 @@ class DocumentsSidebar
                     'active' => false,
                 ],
             ],
-            ['before' => 'reports']
+            ['before' => 'reports'],
         );
 
         // EXPORT SIDEBAR SUBMENU

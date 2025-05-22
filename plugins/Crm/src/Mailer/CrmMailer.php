@@ -61,7 +61,7 @@ class CrmMailer extends Mailer
                 imap_append(
                     $mbox,
                     $imap->url . ($imap->folder ?? 'Sent'),
-                    $result['headers'] . "\r\n\r\n" . $result['message']
+                    $result['headers'] . "\r\n\r\n" . $result['message'],
                 );
                 imap_close($mbox);
             }

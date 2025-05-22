@@ -5,7 +5,7 @@ use Cake\Routing\Router;
 $process = $this->getRequest()->getQuery('process', 'print');
 
 $labelSelectForm = [
-    'title_for_layout' => $porcess == 'print' ? __d('crm', 'Print Adrema "{0}"', h($adrema->title)) : __d('crm', 'Email Adrema "{0}"', h($adrema->title)),
+    'title_for_layout' => $process == 'print' ? __d('crm', 'Print Adrema "{0}"', h($adrema->title)) : __d('crm', 'Email Adrema "{0}"', h($adrema->title)),
     'form' => [
         'defaultHelper' => $this->Form,
         'pre' => '<div class="form">',

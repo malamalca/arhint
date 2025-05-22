@@ -91,7 +91,7 @@ class DocumentsCountersTable extends Table
                     '[[no]]' => (int)$data['counter'] + 1,
                     '[[no.2]]' => str_pad((string)((int)$data['counter'] + 1), 2, '0', STR_PAD_LEFT),
                     '[[no.3]]' => str_pad((string)((int)$data['counter'] + 1), 3, '0', STR_PAD_LEFT),
-                ]
+                ],
             );
         }
 
@@ -113,13 +113,13 @@ class DocumentsCountersTable extends Table
             function () use ($scopedQuery) {
                 return $scopedQuery
                     ->where(['active' => true])
-                    ->order(['active', 'direction DESC', 'title'])
+                    ->orderBy(['active', 'direction DESC', 'title'])
                     ->all();
-            }
+            },
         );
 
         if (!empty($filterKind)) {
-            $counters = $counters->filter(fn ($value, $key) => $value->kind == $filterKind);
+            $counters = $counters->filter(fn($value, $key) => $value->kind == $filterKind);
         }
 
         return $counters;
@@ -152,7 +152,7 @@ class DocumentsCountersTable extends Table
         $ret = $query
             ->select()
             ->where($params['conditions'])
-            ->order($params['order'])
+            ->orderBy($params['order'])
             ->first();
 
         return $ret;

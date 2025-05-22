@@ -157,15 +157,13 @@ class ContactsTable extends Table
      * @param \Cake\Event\Event $event Event object.
      * @param \Crm\Model\Entity\Contact $entity Entity object.
      * @param \ArrayObject $options Options array.
-     * @return bool
+     * @return void
      */
-    public function beforeSave(Event $event, Entity $entity, ArrayObject $options): bool
+    public function beforeSave(Event $event, Entity $entity, ArrayObject $options): void
     {
         if ($entity->kind == 'T') {
             $entity->title = implode(' ', array_filter([$entity->surname, $entity->name]));
         }
-
-        return true;
     }
 
     /**
@@ -206,7 +204,7 @@ class ContactsTable extends Table
                         return $exp->like(
                             //$q->func()->replace(['ContactsPhones.no' => 'identifier', ' ', '']),
                             new FunctionExpression('replace', ['ContactsPhones.no' => 'identifier', ' ', '']),
-                            '%' . preg_replace('/\s+/', '', $filter['search']) . '%'
+                            '%' . preg_replace('/\s+/', '', $filter['search']) . '%',
                         );
                     },
                 ]);

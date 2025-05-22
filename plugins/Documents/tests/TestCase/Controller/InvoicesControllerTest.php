@@ -176,7 +176,7 @@ class InvoicesControllerTest extends TestCase
             ->find()
             ->contain(['InvoicesItems'])
             ->where(['counter_id' => '1d53bc5b-de2d-4e85-b13b-81b39a97fc89'])
-            ->order(['created DESC'])->first();
+            ->orderBy(['created DESC'])->first();
 
         $this->assertRedirect(['action' => 'view', $invoice->id]);
 
@@ -236,7 +236,7 @@ class InvoicesControllerTest extends TestCase
             100963,
             UPLOAD_ERR_OK,
             'sunset.jpg',
-            'image/jpg'
+            'image/jpg',
         );
 
         $data = [
@@ -266,7 +266,7 @@ class InvoicesControllerTest extends TestCase
             ->find()
             ->contain(['InvoicesItems'])
             ->where(['counter_id' => '1d53bc5b-de2d-4e85-b13b-81b39a97fc89'])
-            ->order(['created DESC'])->first();
+            ->orderBy(['created DESC'])->first();
 
         $this->assertEquals('Uploaded Document', $invoice->title);
         $this->assertEquals($counter->counter + 1, $invoice->counter);

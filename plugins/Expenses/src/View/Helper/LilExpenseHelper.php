@@ -76,7 +76,7 @@ class LilExpenseHelper extends Helper
                 'controller' => 'Expenses',
                 'action' => 'view',
                 $expense->id,
-            ]
+            ],
         );
 
         // linked models
@@ -98,9 +98,9 @@ class LilExpenseHelper extends Helper
                                     'controller' => 'Invoices',
                                     'action' => 'view',
                                     $expense->foreign_id,
-                                ]
+                                ],
                             ),
-                            $expense->title
+                            $expense->title,
                         );
                     }
                     break;
@@ -182,7 +182,7 @@ class LilExpenseHelper extends Helper
             $this->icon($expense),
             $title,
             (string)$expense->dat_happened,
-            $this->Number->precision((float)$expense->total, 2)
+            $this->Number->precision((float)$expense->total, 2),
         );
 
         return $title;

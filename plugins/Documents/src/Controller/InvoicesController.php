@@ -40,7 +40,7 @@ class InvoicesController extends BaseDocumentsController
         if (in_array($this->getRequest()->getParam('action'), ['edit', 'editPreview'])) {
             $this->FormProtection->setConfig(
                 'unlockedFields',
-                ['invoices_taxes', 'invoices_items', 'receiver', 'buyer', 'issuer']
+                ['invoices_taxes', 'invoices_items', 'receiver', 'buyer', 'issuer'],
             );
         }
     }
@@ -78,7 +78,7 @@ class InvoicesController extends BaseDocumentsController
                 ],
             ])
             ->where($params['conditions'])
-            ->order($params['order']);
+            ->orderBy($params['order']);
 
         $data = $this->paginate($query);
 
@@ -158,7 +158,7 @@ class InvoicesController extends BaseDocumentsController
             ->select(['id', 'no', 'counter', 'counter_id', 'dat_issue', 'title', 'net_total', 'total', 'project_id',
                 'attachments_count'])
             ->where($params['conditions'])
-            ->order($params['order']);
+            ->orderBy($params['order']);
 
         $data = $this->paginate($query, ['limit' => 5]);
 
@@ -350,12 +350,12 @@ class InvoicesController extends BaseDocumentsController
                     'DocumentsCounters.active' => true,
                 ],
                 'contain' => ['DocumentsCounters', 'InvoicesItems', 'InvoicesTaxes']],
-                $this->{$this->documentsScope}->filter($filter)
+                $this->{$this->documentsScope}->filter($filter),
             );
             $data = $this->Authorization->applyScope($this->{$this->documentsScope}->find(), 'index')
                 ->where($params['conditions'])
                 ->contain($params['contain'])
-                ->order(['DocumentsCounters.title', 'Invoices.no'])
+                ->orderBy(['DocumentsCounters.title', 'Invoices.no'])
                 ->all();
 
             $report = new InvoicesExportEracuni();
@@ -367,7 +367,7 @@ class InvoicesController extends BaseDocumentsController
         $counters = $DocumentsCounters->rememberForUser(
             $this->getCurrentUser()->id,
             $this->Authorization->applyScope($DocumentsCounters->find(), 'index'),
-            $this->documentsScope
+            $this->documentsScope,
         )->combine('id', 'title');
 
         $this->set(compact('counters'));

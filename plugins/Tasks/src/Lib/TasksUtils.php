@@ -56,7 +56,7 @@ class TasksUtils
             $dueSpan = __d('tasks', ' :: due {0}', sprintf(
                 '<span class="%1$s">%2$s</span> ',
                 $dueSpanClass,
-                $dueDate
+                $dueDate,
             ));
         }
 
@@ -126,7 +126,7 @@ class TasksUtils
                         ],
                         [
                             'class' => 'lil-task-edit',
-                        ]
+                        ],
                     ),
                 'descript' => sprintf('<div class="userdue">%s</div>', $usersDescript . $dueSpan),
                 'descript2' => empty($task->descript) ?

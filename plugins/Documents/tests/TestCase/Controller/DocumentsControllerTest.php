@@ -138,7 +138,7 @@ class DocumentsControllerTest extends TestCase
         $document = $Documents
             ->find()
             ->where(['counter_id' => '1d53bc5b-de2d-4e85-b13b-81b39a97fc90'])
-            ->order(['created DESC'])->first();
+            ->orderBy(['created DESC'])->first();
 
         $this->assertRedirect(['action' => 'view', $document->id]);
 
@@ -195,7 +195,7 @@ class DocumentsControllerTest extends TestCase
             100963,
             UPLOAD_ERR_OK,
             'sunset.jpg',
-            'image/jpg'
+            'image/jpg',
         );
 
         $data = [
@@ -225,7 +225,7 @@ class DocumentsControllerTest extends TestCase
             ->find()
             ->contain(['DocumentsAttachments'])
             ->where(['counter_id' => '1d53bc5b-de2d-4e85-b13b-81b39a97fc90'])
-            ->order(['created DESC'])->first();
+            ->orderBy(['created DESC'])->first();
 
         $this->assertFalse(empty($document->documents_attachments[0]));
         $this->assertEquals('Document', $document->documents_attachments[0]->model);

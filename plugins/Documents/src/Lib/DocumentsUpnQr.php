@@ -46,7 +46,7 @@ class DocumentsUpnQr
             'referenca_prejemnika' => mb_substr(
                 ($invoice->pmt_type ?? '') . ($invoice->pmt_module ?? '') . ($invoice->pmt_ref ?? ''),
                 0,
-                22
+                22,
             ),
             'ime_prejemnika' => mb_substr($invoice->issuer->title ?? '', 0, 33),
             'ulica_prejemnika' => mb_substr($invoice->issuer->street ?? '', 0, 33),
@@ -82,7 +82,7 @@ class DocumentsUpnQr
             15, // min qr version
             15, // max qr version
             -1, // mask auto
-            false // boost ecc
+            false, // boost ecc
         );
 
         $qrPng = new Png($finalQr); // default 512x512

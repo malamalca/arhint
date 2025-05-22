@@ -38,7 +38,7 @@ class AppView extends View
         ?ServerRequest $request = null,
         ?Response $response = null,
         ?EventManager $eventManager = null,
-        array $viewOptions = []
+        array $viewOptions = [],
     ) {
         $currentUser = $request?->getAttribute('identity');
         if ($currentUser) {

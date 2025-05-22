@@ -247,7 +247,7 @@ class ArhintHelper extends Helper
             $day->i18nFormat('dd'),
             $day->i18nFormat('y'),
             ($day->isWeekend() ? ' weekend' : ''),
-            ($day->isToday() ? ' today' : '')
+            ($day->isToday() ? ' today' : ''),
         );
 
         return $ret;
@@ -272,7 +272,7 @@ class ArhintHelper extends Helper
             substr($time, 0, 1),
             substr($time, 1, 1),
             substr($time, 3, 1),
-            substr($time, 4, 1)
+            substr($time, 4, 1),
         );
 
         return $ret;
@@ -292,7 +292,7 @@ class ArhintHelper extends Helper
             //$dateTime->i18nFormat('HH:mm'),
             '<div><span class="time">%1$s</span>%2$s</div>',
             $this->timePanel($dateTime),
-            $descript
+            $descript,
         );
 
         return $ret;
@@ -336,7 +336,7 @@ class ArhintHelper extends Helper
         return sprintf(
             '<div class="search-panel"><input type="text" placeholder ="%1$s" value="%2$s"></div>',
             __('Search'),
-            $defaultValue
+            $defaultValue,
         );
     }
 }

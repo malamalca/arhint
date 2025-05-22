@@ -95,9 +95,9 @@ class ContactsAccountsTable extends Table
      * @param \Cake\Event\Event $event Event object.
      * @param \Crm\Model\Entity\ContactsAccount $entity Entity object.
      * @param \ArrayObject $options Array object.
-     * @return bool
+     * @return void
      */
-    public function beforeSave(Event $event, Entity $entity, ArrayObject $options): bool
+    public function beforeSave(Event $event, Entity $entity, ArrayObject $options): void
     {
         if (!$this->exists(['contact_id' => $entity->contact_id, 'primary' => true])) {
             $entity->primary = true;
@@ -115,8 +115,6 @@ class ContactsAccountsTable extends Table
                 }
             }
         }
-
-        return true;
     }
 
     /**

@@ -39,7 +39,7 @@ class ContactsLogsController extends AppController
         $query = $this->ContactsLogs->find()
             ->select()
             ->where(['contact_id' => $contactId])
-            ->order('created DESC');
+            ->orderBy('created DESC');
 
         $contactsLogs = $this->paginate($query, ['limit' => 20]);
 

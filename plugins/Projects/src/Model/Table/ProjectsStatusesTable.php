@@ -15,7 +15,7 @@ use Cake\Validation\Validator;
  * @method \Projects\Model\Entity\ProjectsStatus newEntity(array $data, array $options = [])
  * @method \Projects\Model\Entity\ProjectsStatus[] newEntities(array $data, array $options = [])
  * @method \Projects\Model\Entity\ProjectsStatus get(mixed $primaryKey, array|string $finder = 'all', \Psr\SimpleCache\CacheInterface|string|null $cache = null, \Closure|string|null $cacheKey = null, mixed ...$args)
- * @method \Projects\Model\Entity\ProjectsStatus findOrCreate($search, ?callable $callback = null, $options = [])
+ * @method \Projects\Model\Entity\ProjectsStatus findOrCreate($search, array<array-key, mixed>|callable|null $callback = null, $options = [])
  * @method \Projects\Model\Entity\ProjectsStatus patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
  * @method \Projects\Model\Entity\ProjectsStatus[] patchEntities(iterable $entities, array $data, array $options = [])
  * @method \Projects\Model\Entity\ProjectsStatus|false save(\Cake\Datasource\EntityInterface $entity, $options = [])

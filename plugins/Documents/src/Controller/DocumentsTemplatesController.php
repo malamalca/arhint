@@ -20,7 +20,7 @@ class DocumentsTemplatesController extends AppController
     public function index()
     {
         $templates = $this->Authorization->applyScope($this->DocumentsTemplates->find())
-            ->order('title')
+            ->orderBy('title')
             ->all();
         $this->set(compact('templates'));
     }

@@ -17,7 +17,7 @@ use Cake\Validation\Validator;
  * @method \App\Model\Entity\DashboardNote saveOrFail(\Cake\Datasource\EntityInterface $entity, $options = [])
  * @method \App\Model\Entity\DashboardNote patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
  * @method \App\Model\Entity\DashboardNote[] patchEntities($entities, array $data, array $options = [])
- * @method \App\Model\Entity\DashboardNote findOrCreate($search, callable $callback = null, $options = [])
+ * @method \App\Model\Entity\DashboardNote findOrCreate($search, array<array-key, mixed>|callable|null $callback = null, $options = [])
  * @mixin \Cake\ORM\Behavior\TimestampBehavior
  */
 class DashboardNotesTable extends Table

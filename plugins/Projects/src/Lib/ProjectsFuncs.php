@@ -34,7 +34,7 @@ class ProjectsFuncs
                 (int)hexdec(substr($textColor, 1, 2)),
                 (int)hexdec(substr($textColor, 3, 2)),
                 (int)hexdec(substr($textColor, 5, 2)),
-                0
+                0,
             );
             $white = (int)imagecolorallocatealpha($newImage, 255, 255, 255, 127);
 
@@ -53,7 +53,7 @@ class ProjectsFuncs
                 (int)(0.75 * $thumbSize),
                 $textColor,
                 $fontFile,
-                strtoupper($caption)
+                strtoupper($caption),
             );
         } else {
             $im = imagecreatefromstring(base64_decode($project->ico));
@@ -96,7 +96,7 @@ class ProjectsFuncs
                     IMG_FILTER_COLORIZE,
                     (int)hexdec(substr($project->colorize, 1, 2)),
                     (int)hexdec(substr($project->colorize, 3, 2)),
-                    (int)hexdec(substr($project->colorize, 5, 2))
+                    (int)hexdec(substr($project->colorize, 5, 2)),
                 );
             }
         }

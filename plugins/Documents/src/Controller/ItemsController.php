@@ -22,7 +22,7 @@ class ItemsController extends AppController
     public function index()
     {
         $items = $this->Authorization->applyScope($this->Items->find())
-            ->order('Items.descript')
+            ->orderBy('Items.descript')
             ->all();
         $this->set(compact('items'));
     }
@@ -60,7 +60,7 @@ class ItemsController extends AppController
 
         $vats = $this->Items->Vats->find('list', keyField: 'id', valueField: 'descript')
             ->where(['owner_id' => $this->getCurrentUser()->get('company_id')])
-            ->order(['descript'])
+            ->orderBy(['descript'])
             ->toArray();
 
         $this->set(compact('item', 'vats'));
@@ -106,7 +106,7 @@ class ItemsController extends AppController
                     ->select($this->Items->Vats)
                     ->contain(['Vats'])
                     ->where(['Items.descript LIKE' => '%' . $term . '%'])
-                    ->order('Items.descript')
+                    ->orderBy('Items.descript')
                     ->all();
             } else {
                 $this->Authorization->skipAuthorization();

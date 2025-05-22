@@ -203,7 +203,7 @@ class Installer
                 '<info>Set Folder Permissions ? (Default to Y)</info> [<comment>Y,n</comment>]? ',
                 $validator,
                 10,
-                'Y'
+                'Y',
             );
 
             if (in_array($setFolderPermissions, ['n', 'N'])) {
@@ -398,7 +398,7 @@ class Installer
 
             $adminName = $io->ask(
                 '<info>Enter admin\'s display name ?</info> [<comment>Administrator</comment>]? ',
-                'Administrator'
+                'Administrator',
             );
             $adminEmail = $io->ask('<info>Enter admin\'s email ?</info> ');
 
@@ -432,7 +432,7 @@ class Installer
                     'email' => 'string',
                     'username' => 'string',
                     'pass' => 'string',
-                ]
+                ],
             );
 
             $conn->execute(
@@ -451,7 +451,7 @@ class Installer
                     'title' => 'string',
                     'mat_no' => 'string',
                     'tax_no' => 'string',
-                ]
+                ],
             );
         } else {
             $io->writeError('Cannot connect to mysql database to create admin user');
@@ -473,7 +473,7 @@ class Installer
         string $db,
         string $dbUser,
         string $dbPassword,
-        IOInterface $io
+        IOInterface $io,
     ): bool {
         try {
             ConnectionManager::drop('install');
@@ -525,7 +525,7 @@ class Installer
         string $dbPassword,
         string $dir,
         string $file,
-        IOInterface $io
+        IOInterface $io,
     ): void {
         $config = $dir . '/config/' . $file;
         $content = file_get_contents($config);

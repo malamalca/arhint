@@ -46,7 +46,7 @@ class Plugin extends BasePlugin
             function (RouteBuilder $builder): void {
                 // Add custom routes here
                 $builder->fallbacks();
-            }
+            },
         );
         parent::routes($routes);
     }

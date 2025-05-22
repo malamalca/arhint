@@ -147,7 +147,7 @@ class UsersControllerTest extends TestCase
 
         $this->post(
             '/users/change-password/' . $user->reset_key,
-            ['passwd' => 'newpass', 'repeat_passwd' => 'newpass']
+            ['passwd' => 'newpass', 'repeat_passwd' => 'newpass'],
         );
         $this->assertRedirect();
 

@@ -172,9 +172,9 @@ class InvoicesTable extends Table
      * @param \Cake\Event\Event $event Event object.
      * @param \Documents\Model\Entity\Invoice $invoice Entity object.
      * @param \ArrayObject $options Array object.
-     * @return bool
+     * @return void
      */
-    public function beforeSave(Event $event, Entity $invoice, ArrayObject $options): bool
+    public function beforeSave(Event $event, Entity $invoice, ArrayObject $options): void
     {
         if ($invoice->isDirty('invoices_taxes')) {
             $invoice->net_total = 0;
@@ -190,8 +190,6 @@ class InvoicesTable extends Table
                 $invoice->total += $item->total;
             }
         }
-
-        return true;
     }
 
     /**

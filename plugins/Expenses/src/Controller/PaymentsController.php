@@ -38,7 +38,7 @@ class PaymentsController extends AppController
         $query = $this->Authorization->applyScope($this->Payments->find())
             ->select(['id', 'account_id', 'dat_happened', 'sepa_id', 'amount', 'descript'])
             ->where($params['conditions'])
-            ->order($params['order']);
+            ->orderBy($params['order']);
 
         $payments = $this->paginate($query);
 
@@ -135,7 +135,7 @@ class PaymentsController extends AppController
                         'Payments.owner_id' => $this->getCurrentUser()->get('company_id'),
                         'Payments.descript LIKE' => '%' . $term . '%',
                     ])
-                    ->order('Payments.dat_happened DESC')
+                    ->orderBy('Payments.dat_happened DESC')
                     ->limit(30)
                     ->all();
                 $this->set(compact('payments'));

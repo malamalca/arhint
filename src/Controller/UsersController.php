@@ -156,7 +156,7 @@ class UsersController extends AppController
     public function index(): ?Response
     {
         $q = $this->Authorization->applyScope($this->Users->find())
-            ->order('name');
+            ->orderBy('name');
 
         $this->Users->filter($q, $this->getRequest());
         $users = $q->all();

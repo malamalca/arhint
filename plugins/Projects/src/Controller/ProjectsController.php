@@ -33,20 +33,20 @@ class ProjectsController extends AppController
                 ],
                 'order' => ['Projects.no DESC'],
             ],
-            $this->Projects->filter($filter)
+            $this->Projects->filter($filter),
         );
 
         $query = $this->Authorization->applyScope($this->Projects->find())
             ->select()
             ->contain(['LastLog' => ['Users']])
             ->where($params['conditions'])
-            ->order($params['order']);
+            ->orderBy($params['order']);
 
         $projects = $this->paginate($query);
 
         $projectsStatuses = $this->Authorization->applyScope($this->Projects->ProjectsStatuses->find('list'), 'index')
             ->cache('Projects.ProjectsStatuses.' . $this->getCurrentUser()->get('company_id'))
-            ->order(['title'])
+            ->orderBy(['title'])
             ->toArray();
 
         $this->set(compact('projects', 'projectsStatuses', 'filter'));
@@ -64,7 +64,7 @@ class ProjectsController extends AppController
             ->where([
                 'active' => true,
             ])
-            ->order('title')
+            ->orderBy('title')
             ->all();
 
         $this->set(compact('projects'));
@@ -126,7 +126,7 @@ class ProjectsController extends AppController
         $logs = TableRegistry::getTableLocator()->get('Projects.ProjectsLogs')->find()
             ->select()
             ->where(['project_id' => $id])
-            ->order('ProjectsLogs.created DESC')
+            ->orderBy('ProjectsLogs.created DESC')
             ->limit(5)
             ->all();
 
@@ -152,7 +152,7 @@ class ProjectsController extends AppController
         }
 
         $projectsStatuses = $this->Authorization->applyScope($this->Projects->ProjectsStatuses->find('list'), 'index')
-            ->order(['title'])
+            ->orderBy(['title'])
             ->toArray();
 
         $this->viewBuilder()
@@ -208,7 +208,7 @@ class ProjectsController extends AppController
         }
 
         $projectStatuses = $this->Authorization->applyScope($this->Projects->ProjectsStatuses->find('list'), 'index')
-            ->order(['title'])
+            ->orderBy(['title'])
             ->toArray();
 
         $this->set(compact('project', 'projectStatuses'));

@@ -39,7 +39,7 @@ class ExpensesImport
             'Expenses.sepaImportedPayments' . $this->ownerId,
             function () {
                 return [];
-            }
+            },
         );
 
         if (!empty($cachedPayments)) {
@@ -95,7 +95,7 @@ class ExpensesImport
                         if ($fileInfo->isFile()) {
                             $this->addFromFile(
                                 $fileInfo->getPathname(),
-                                pathinfo($fileInfo->getPathname(), PATHINFO_EXTENSION)
+                                pathinfo($fileInfo->getPathname(), PATHINFO_EXTENSION),
                             );
                             unlink($fileInfo->getPathname());
                         }

@@ -30,7 +30,7 @@ class DocumentsPlugin extends BasePlugin
         if (isset($defaults['Documents'])) {
             Configure::write(
                 'Documents',
-                Hash::merge((array)Configure::read('Documents'), (array)$defaults['Documents'])
+                Hash::merge((array)Configure::read('Documents'), (array)$defaults['Documents']),
             );
         }
 
@@ -55,7 +55,7 @@ class DocumentsPlugin extends BasePlugin
             function (RouteBuilder $builder): void {
                 // Add custom routes here
                 $builder->fallbacks();
-            }
+            },
         );
         parent::routes($routes);
     }

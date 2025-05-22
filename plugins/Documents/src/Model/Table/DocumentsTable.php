@@ -23,7 +23,7 @@ use Documents\Model\Entity\Document;
  * @method \Documents\Model\Entity\Document newEntity(array $data, array $options = [])
  * @method \Documents\Model\Entity\Document[] newEntities(array $data, array $options = [])
  * @method \Documents\Model\Entity\Document get(mixed $primaryKey, array|string $finder = 'all', \Psr\SimpleCache\CacheInterface|string|null $cache = null, \Closure|string|null $cacheKey = null, mixed ...$args)
- * @method \Documents\Model\Entity\Document findOrCreate($search, ?callable $callback = null, $options = [])
+ * @method \Documents\Model\Entity\Document findOrCreate($search, array<array-key, mixed>|callable|null $callback = null, $options = [])
  * @method \Documents\Model\Entity\Document patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
  * @method \Documents\Model\Entity\Document[] patchEntities(iterable $entities, array $data, array $options = [])
  * @method \Documents\Model\Entity\Document|false save(\Cake\Datasource\EntityInterface $entity, $options = [])

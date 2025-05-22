@@ -120,7 +120,7 @@ class UtilsController extends AppController
                     escapeshellarg($file->getStream()->getMetadata('uri')),
                     escapeshellarg(TMP . $outputPDF),
                     $this->getRequest()->getData('firstPage'),
-                    $this->getRequest()->getData('lastPage')
+                    $this->getRequest()->getData('lastPage'),
                 );
 
                 exec($command);
@@ -203,7 +203,7 @@ class UtilsController extends AppController
             (int)hexdec(substr($textColor, 1, 2)),
             (int)hexdec(substr($textColor, 3, 2)),
             (int)hexdec(substr($textColor, 5, 2)),
-            0
+            0,
         );
         $transparent = (int)imagecolorallocate($newImage, 240, 240, 240);
         $gray = (int)imagecolorallocatealpha($newImage, 200, 200, 200, 0);
@@ -282,7 +282,7 @@ class UtilsController extends AppController
                 $command = sprintf(
                     $command,
                     escapeshellarg($file->getStream()->getMetadata('uri')),
-                    escapeshellarg($tmpPDF)
+                    escapeshellarg($tmpPDF),
                 );
 
                 $ret = exec($command);
@@ -354,12 +354,12 @@ class UtilsController extends AppController
                 $pdfObj->set_signature_appearance(
                     (int)$this->getRequest()->getData('page'),
                     [ $p_x, $p_y, $p_x + $i_w, $p_y + $i_h ],
-                    $image
+                    $image,
                 );
 
                 $res = $pdfObj->set_signature_certificate(
                     $cert->getStream()->getMetadata('uri'),
-                    $this->getRequest()->getData('pass')
+                    $this->getRequest()->getData('pass'),
                 );
 
                 if ($res) {

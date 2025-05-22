@@ -47,7 +47,7 @@ class Plugin extends BasePlugin
             ['path' => '/calendar'],
             function (RouteBuilder $builder): void {
                 $builder->fallbacks();
-            }
+            },
         );
         parent::routes($routes);
     }

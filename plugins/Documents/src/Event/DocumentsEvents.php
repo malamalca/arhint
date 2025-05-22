@@ -56,7 +56,7 @@ class DocumentsEvents implements EventListenerInterface
                 'Documents.owner_id' => $user->company_id,
                 'Documents.created >' => (new DateTime())->addHours(-1),
             ])
-            ->order(['Documents.created'])
+            ->orderBy(['Documents.created'])
             ->all();
 
         if (!$newDocuments->isEmpty()) {
@@ -77,7 +77,7 @@ class DocumentsEvents implements EventListenerInterface
                         'controller' => 'Documents',
                         'action' => 'view',
                         $document->id,
-                    ], true)
+                    ], true),
                 );
             }
         }
@@ -100,7 +100,7 @@ class DocumentsEvents implements EventListenerInterface
         $DocumentsTable = TableRegistry::getTableLocator()->get('Documents.Documents');
         $newDocumentsQuery = $controller->Authorization->applyScope($DocumentsTable->find(), 'index')
             ->select(['id', 'no', 'dat_issue', 'title', 'project_id'])
-            ->order(['Documents.created DESC'])
+            ->orderBy(['Documents.created DESC'])
             ->limit(6);
 
         $event = new Event('Documents.Dashboard.queryDocuments', $controller, [$newDocumentsQuery]);
@@ -137,7 +137,7 @@ class DocumentsEvents implements EventListenerInterface
                         'action' => 'view',
                         $document->id,
                     ], true),
-                    $ArhintHelper->calendarDay($document->dat_issue)
+                    $ArhintHelper->calendarDay($document->dat_issue),
                 );
             }
         }
@@ -181,9 +181,9 @@ class DocumentsEvents implements EventListenerInterface
      *
      * @param \Cake\Event\Event $event Event object.
      * @param mixed $panels Panels object.
-     * @return mixed
+     * @return void
      */
-    public function showDocumentsTable(Event $event, mixed $panels): mixed
+    public function showDocumentsTable(Event $event, mixed $panels): void
     {
         /** @var \App\View\AppView $view */
         $view = $event->getSubject();
@@ -192,20 +192,20 @@ class DocumentsEvents implements EventListenerInterface
             '<li class="tab col"><a href="%1$s" target="_self"%3$s>%2$s</a></li>',
             $view->Url->build([$view->getRequest()->getParam('pass.0'), '?' => ['tab' => 'invoices']]),
             __d('documents', 'Invoices'),
-            $view->getRequest()->getQuery('tab') == 'invoices' ? ' class="active"' : ''
+            $view->getRequest()->getQuery('tab') == 'invoices' ? ' class="active"' : '',
         );
 
         $documentsTab = sprintf(
             '<li class="tab col"><a href="%1$s" target="_self"%3$s>%2$s</a></li>',
             $view->Url->build([$view->getRequest()->getParam('pass.0'), '?' => ['tab' => 'documents']]),
             __d('documents', 'Documents'),
-            $view->getRequest()->getQuery('tab') == 'documents' ? ' class="active"' : ''
+            $view->getRequest()->getQuery('tab') == 'documents' ? ' class="active"' : '',
         );
 
         $view->Lil->insertIntoArray(
             $panels->panels['tabs']['lines'],
             ['documents' => $documentsTab, 'invoices' => $invoicesTab],
-            ['before' => 'post']
+            ['before' => 'post'],
         );
 
         //$url = $view->getRequest()->getRequestTarget();
@@ -260,6 +260,7 @@ class DocumentsEvents implements EventListenerInterface
             $view->Lil->jsReady('$.get("' . $url . '", function(data) { $("#tab-content-documents").html(data); });');
         }
 
-        return $panels;
+        //return $panels;
+        $event->setResult($panels);
     }
 }

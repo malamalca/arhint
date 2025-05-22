@@ -69,15 +69,13 @@ class PaymentsAccountsTable extends Table
      * @param \Cake\Event\Event $event Event object.
      * @param \Expenses\Model\Entity\PaymentsAccount $entity Entity object.
      * @param \ArrayObject $options Options array.
-     * @return bool
+     * @return void
      */
-    public function beforeSave(Event $event, Entity $entity, ArrayObject $options): bool
+    public function beforeSave(Event $event, Entity $entity, ArrayObject $options): void
     {
         if (!$this->exists(['owner_id' => $entity->owner_id, 'primary' => true])) {
             $entity->primary = true;
         }
-
-        return true;
     }
 
     /**

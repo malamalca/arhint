@@ -83,7 +83,7 @@ class DocumentsAttachmentsController extends AppController
             $path = Configure::read('Documents.uploadFolder') . DS . $attachments->first()->filename;
             $this->response = $this->response->withFile(
                 $path,
-                ['name' => $attachments->first()->original, 'download' => true]
+                ['name' => $attachments->first()->original, 'download' => true],
             );
         } else {
             $tmpFilename = uniqid('attachments') . '.zip';
@@ -97,7 +97,7 @@ class DocumentsAttachmentsController extends AppController
             $zip->close();
             $this->response = $this->response->withFile(
                 constant('TMP') . $tmpFilename,
-                ['name' => $tmpFilename, 'download' => true]
+                ['name' => $tmpFilename, 'download' => true],
             );
             unlink(constant('TMP') . $tmpFilename);
         }

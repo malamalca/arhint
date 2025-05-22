@@ -70,36 +70,38 @@ class CrmEvents implements EventListenerInterface
                         '/(?|(?|"([^"]+)"|([^<@]+)) ?<(.+?)>|()(.+?))(?:$|, ?)/',
                         $overview->from,
                         $emailsDecoded,
-                        PREG_SET_ORDER
+                        PREG_SET_ORDER,
                     );
 
-                    $contactsEmails = $ContactsEmailsTable->find()
-                        ->select('contact_id')
-                        ->where(['email' => $emailsDecoded[0][2]])
-                        ->all();
+                    $email = $emailsDecoded[0][2] ?? null;
+                    if (!empty($email)) {
+                        $contactsEmails = $ContactsEmailsTable->find()
+                            ->select('contact_id')
+                            ->where(['email' => $email])
+                            ->all();
 
-                    $fromEmail = empty($emailsDecoded[0][1]) ?
-                        $emailsDecoded[0][2] :
-                        (h(iconv_mime_decode($emailsDecoded[0][1])) . ' <' . $emailsDecoded[0][2] . '>');
+                        $fromEmail = empty($emailsDecoded[0][1]) ?
+                            $email : (h(iconv_mime_decode($emailsDecoded[0][1])) . ' <' . $email . '>');
 
-                    foreach ($contactsEmails as $contactEmail) {
-                        $contactsLog = $ContactsLogsTable->newEmptyEntity();
-                        $contactsLog->contact_id = $contactEmail->contact_id;
-                        $contactsLog->kind = 'E';
-                        $contactsLog->email_uid = $overview->uid;
-                        $contactsLog->descript =
-                            'From: ' . $fromEmail . '<br />' . PHP_EOL .
-                            'Subject: ' . iconv_mime_decode($overview->subject) . '<br />' . PHP_EOL .
-                            '<br />' . PHP_EOL .
-                            sprintf(
-                                '<a href="%1$s" target="_blank">%1$s</a>',
+                        foreach ($contactsEmails as $contactEmail) {
+                            $contactsLog = $ContactsLogsTable->newEmptyEntity();
+                            $contactsLog->contact_id = $contactEmail->contact_id;
+                            $contactsLog->kind = 'E';
+                            $contactsLog->email_uid = $overview->uid;
+                            $contactsLog->descript =
+                                'From: ' . $fromEmail . '<br />' . PHP_EOL .
+                                'Subject: ' . iconv_mime_decode($overview->subject) . '<br />' . PHP_EOL .
+                                '<br />' . PHP_EOL .
                                 sprintf(
-                                    'https://webmail.arhim.si/?_task=mail&_uid=%1$s&_mbox=INBOX&_action=show',
-                                    $overview->uid
-                                )
-                            ) . '<br />';
+                                    '<a href="%1$s" target="_blank">%1$s</a>',
+                                    sprintf(
+                                        'https://webmail.arhim.si/?_task=mail&_uid=%1$s&_mbox=INBOX&_action=show',
+                                        $overview->uid,
+                                    ),
+                                ) . '<br />';
 
-                        $contactsLogArray[] = $contactsLog;
+                            $contactsLogArray[] = $contactsLog;
+                        }
                     }
                 }
 

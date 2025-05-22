@@ -45,7 +45,7 @@ class DocumentsLinksController extends AppController
                     $model,
                     $documentId,
                     $this->getRequest()->getData('model'),
-                    $this->getRequest()->getData('document_id')
+                    $this->getRequest()->getData('document_id'),
                 )
             ) {
                 $this->Flash->success(__d('documents', 'Documents have been successfully linked.'));

@@ -82,7 +82,7 @@ class InvoicesExport
             ->find()
             ->where($params['conditions'])
             ->contain($params['contain'])
-            ->order($params['order']);
+            ->orderBy($params['order']);
 
         return $documents;
     }
@@ -272,7 +272,7 @@ class InvoicesExport
         $event = new Event(
             'Documents.Invoices.Export.Html',
             $document,
-            [$result]
+            [$result],
         );
         EventManager::instance()->dispatch($event);
         $eventResult = $event->getResult();
@@ -333,8 +333,8 @@ class InvoicesExport
         if ($br) {
             $pee = (string)preg_replace_callback(
                 '/<(script|style).*?<\/\\1>/s',
-                fn ($matches) => str_replace("\n", '<PreserveNewline />', $matches[0]),
-                $pee
+                fn($matches) => str_replace("\n", '<PreserveNewline />', $matches[0]),
+                $pee,
             );
             $pee = (string)preg_replace('|(?<!<br />)\s*\n|', "<br />\n", $pee); // optionally make line breaks
             $pee = (string)str_replace('<PreserveNewline />', "\n", $pee);

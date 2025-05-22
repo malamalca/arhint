@@ -110,9 +110,9 @@ class ExpensesEvents implements EventListenerInterface
      *
      * @param \Cake\Event\Event $event Event object
      * @param mixed $panels Panels array
-     * @return mixed
+     * @return void
      */
-    public function modifyDocumentsView(Event $event, mixed $panels): mixed
+    public function modifyDocumentsView(Event $event, mixed $panels): void
     {
         /** @var \App\View\AppView $view */
         $view = $event->getSubject();
@@ -144,14 +144,15 @@ class ExpensesEvents implements EventListenerInterface
             if ($expenses->count() > 1) {
                 $paymentsPanels['payments_warning'] = sprintf(
                     '<div class="error">%s</div>',
-                    __d('expenses', 'WARNING: There are multiple expenses for this document!')
+                    __d('expenses', 'WARNING: There are multiple expenses for this document!'),
                 );
             }
 
             $view->Lil->insertIntoArray($panels->panels, $paymentsPanels);
         }
 
-        return $panels;
+        //return $panels;
+        $event->setResult($panels);
     }
 
     /**

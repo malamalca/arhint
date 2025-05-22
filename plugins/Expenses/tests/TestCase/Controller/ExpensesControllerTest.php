@@ -79,7 +79,6 @@ class ExpensesControllerTest extends TestCase
         $this->login(USER_ADMIN);
 
         $data = [
-            'id' => '',
             'owner_id' => COMPANY_FIRST,
             'model' => null,
             'foreign_id' => null,
@@ -109,7 +108,6 @@ class ExpensesControllerTest extends TestCase
         $this->login(USER_ADMIN);
 
         $data = [
-            'id' => '',
             'owner_id' => COMPANY_FIRST,
             'model' => null,
             'foreign_id' => null,

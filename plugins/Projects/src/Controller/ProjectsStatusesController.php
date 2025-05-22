@@ -23,7 +23,7 @@ class ProjectsStatusesController extends AppController
     {
         $projectsStatuses = $this->Authorization->applyScope($this->ProjectsStatuses->find())
             ->select()
-            ->order('title')
+            ->orderBy('title')
             ->all();
 
         $this->set(compact('projectsStatuses'));

@@ -47,7 +47,7 @@ class ExpensesController extends AppController
         $expenses = $this->Authorization->applyScope($this->Expenses->find())
             ->where($params['conditions'])
             ->contain($params['contain'])
-            ->order($params['order'])
+            ->orderBy($params['order'])
             ->all();
 
         $minYear = $this->Expenses->minYear($ownerId);
@@ -72,7 +72,7 @@ class ExpensesController extends AppController
                             'Invoices.no LIKE' => $term . '%',
                         ],
                     ])
-                    ->order(['Expenses.dat_happened DESC'])
+                    ->orderBy(['Expenses.dat_happened DESC'])
                     ->limit(20)
                     ->contain(['Invoices'])
                     ->all();
@@ -198,7 +198,7 @@ class ExpensesController extends AppController
             $DocumentsCounters = TableRegistry::getTableLocator()->get('Documents.DocumentsCounters');
             $counters = $this->Authorization->applyScope($DocumentsCounters->find(), 'index')
                 ->where(['active' => true, 'kind' => 'invoices'])
-                ->order(['kind', 'title'])
+                ->orderBy(['kind', 'title'])
                 ->all()
                 ->combine('id', function ($entity) {
                     return $entity;
@@ -225,7 +225,7 @@ class ExpensesController extends AppController
                 ])
                 ->contain('Payments')
                 ->where(['PaymentsExpenses.expense_id' => $paymentsQuery->newExpr()->add('Expenses.id')])
-                ->group('PaymentsExpenses.expense_id');
+                ->groupBy('PaymentsExpenses.expense_id');
 
             $query = $this->Authorization->applyScope($this->Expenses->find(), 'index');
             $query
@@ -241,14 +241,14 @@ class ExpensesController extends AppController
                     'Expenses.model' => 'Invoice',
                     'Invoices.counter_id IN' => (array)$filter['counter'],
                 ])
-                ->order('Expenses.dat_happened DESC')
+                ->orderBy('Expenses.dat_happened DESC')
                 ->having($query->newExpr()->add('ABS(Expenses.total - COALESCE(payments_total, 0)) > 0.01'));
             $data = $query->all();
 
             $report = new ArhintReport(
                 'Expenses.unpaid',
                 $this->request,
-                ['title' => __d('expenses', 'Unpaid Expenses')]
+                ['title' => __d('expenses', 'Unpaid Expenses')],
             );
             $report->set(compact('data', 'filter', 'counters'));
 
@@ -311,13 +311,13 @@ class ExpensesController extends AppController
             $query = $this->Authorization->applyScope($this->Expenses->find(), 'index');
             $data1 = $this->Expenses->monthlyTotals(
                 $query,
-                array_merge($options, ['kind' => 'expenses', 'year' => $year])
+                array_merge($options, ['kind' => 'expenses', 'year' => $year]),
             );
 
             $query = $this->Authorization->applyScope($this->Expenses->find(), 'index');
             $data2 = $this->Expenses->monthlyTotals(
                 $query,
-                array_merge($options, ['kind' => 'income', 'year' => $year])
+                array_merge($options, ['kind' => 'income', 'year' => $year]),
             );
 
             $this->set(compact('data1', 'data2', 'year'));
@@ -351,7 +351,7 @@ class ExpensesController extends AppController
         } elseif (!empty($Importer->getPayments())) {
             // TODO: check for count of payments
             $payments = $Importer->getPayments();
-            usort($payments, fn ($payment1, $payment2) => $payment1['date'] <=> $payment2['date']);
+            usort($payments, fn($payment1, $payment2) => $payment1['date'] <=> $payment2['date']);
 
             $filter = $this->getRequest()->getQuery('filter');
             $this->set(compact('filter'));

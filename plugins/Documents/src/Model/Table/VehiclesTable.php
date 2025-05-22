@@ -14,7 +14,7 @@ use Cake\Validation\Validator;
  * @method \Documents\Model\Entity\Vehicle newEntity(array $data, array $options = [])
  * @method \Documents\Model\Entity\Vehicle[] newEntities(array $data, array $options = [])
  * @method \Documents\Model\Entity\Vehicle get(mixed $primaryKey, array|string $finder = 'all', \Psr\SimpleCache\CacheInterface|string|null $cache = null, \Closure|string|null $cacheKey = null, mixed ...$args)
- * @method \Documents\Model\Entity\Vehicle findOrCreate($search, ?callable $callback = null, $options = [])
+ * @method \Documents\Model\Entity\Vehicle findOrCreate($search, array<array-key, mixed>|callable|null $callback = null, $options = [])
  * @method \Documents\Model\Entity\Vehicle patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
  * @method \Documents\Model\Entity\Vehicle[] patchEntities(iterable $entities, array $data, array $options = [])
  * @method \Documents\Model\Entity\Vehicle|false save(\Cake\Datasource\EntityInterface $entity, $options = [])
@@ -95,7 +95,7 @@ class VehiclesTable extends Table
         }
 
         return $query
-            ->order(['title'])
+            ->orderBy(['title'])
             ->all()
             ->combine('id', function ($entity) {
                 return $entity;

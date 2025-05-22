@@ -20,7 +20,7 @@ class VatsController extends AppController
     public function index()
     {
         $vats = $this->Authorization->applyScope($this->Vats->find())
-            ->order('descript')
+            ->orderBy('descript')
             ->all();
         $this->set(compact('vats'));
     }

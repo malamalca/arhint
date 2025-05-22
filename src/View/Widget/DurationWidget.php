@@ -119,7 +119,7 @@ class DurationWidget implements WidgetInterface
                 'name' => $data['name'] . '[hours]',
                 'id' => $data['name'] . '-hours',
                 'attrs' => $this->templates->formatAttributes($attrHours, ['name']),
-            ]
+            ],
         );
 
         $minutesControl = $this->templates->format(
@@ -129,12 +129,12 @@ class DurationWidget implements WidgetInterface
                 'name' => $data['name'] . '[minutes]',
                 'id' => $data['name'] . '-minutes',
                 'attrs' => $this->templates->formatAttributes($attrMins, ['name']),
-            ]
+            ],
         );
 
         $label = $this->templates->format(
             'label',
-            ['text' => $data['label'] ?? '']
+            ['text' => $data['label'] ?? ''],
         );
 
         $hidden = $this->templates->format(
@@ -142,7 +142,7 @@ class DurationWidget implements WidgetInterface
             [
                 'name' => $data['name'] . '[duration]',
                 'attrs' => $this->templates->formatAttributes(['value' => true]),
-            ]
+            ],
         );
 
         $ret = $this->templates->format('durationWrapper', [

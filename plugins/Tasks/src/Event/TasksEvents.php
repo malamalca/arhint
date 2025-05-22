@@ -61,7 +61,7 @@ class TasksEvents implements EventListenerInterface
             ->select()
             ->where($params['conditions'])
             ->contain($params['contain'])
-            ->order($params['order'])
+            ->orderBy($params['order'])
             ->all();
 
         if (!$tasks->isEmpty()) {

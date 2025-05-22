@@ -65,7 +65,7 @@ class DocumentsLinksControllerTest extends TestCase
                 'document_id' => 'd0d59a31-6de7-4eb4-8230-ca09113a7fe6',
                 'title' => '',
                 'model' => 'Invoice',
-            ]
+            ],
         );
 
         $this->assertFlashElement('flash/success');

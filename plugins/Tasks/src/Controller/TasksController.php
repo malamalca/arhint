@@ -45,7 +45,7 @@ class TasksController extends AppController
             ->select()
             ->where($params['conditions'])
             ->contain($params['contain'])
-            ->order($params['order'])
+            ->orderBy($params['order'])
             ->all();
 
         /** @var \App\Model\Table\UsersTable $UsersTable */

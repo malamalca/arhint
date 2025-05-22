@@ -90,7 +90,7 @@ class ContactsAddressesController extends AppController
                     'Contacts.title LIKE' => '%' . $term . '%',
                     'ContactsAddresses.street LIKE' => '%' . $term . '%',
                 ]])
-                ->order('Contacts.title')
+                ->orderBy('Contacts.title')
                 ->contain(['Contacts'])
                 ->all();
 

@@ -20,7 +20,7 @@ class VehiclesController extends AppController
     public function index()
     {
         $vehicles = $this->Authorization->applyScope($this->Vehicles->find())
-            ->order('Vehicles.title')
+            ->orderBy('Vehicles.title')
             ->all();
         $this->set(compact('vehicles'));
     }

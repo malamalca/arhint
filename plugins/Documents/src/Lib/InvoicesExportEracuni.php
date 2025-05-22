@@ -45,10 +45,12 @@ class InvoicesExportEracuni
 
             // header and footer
             $activeSheet->getHeaderFooter()->setOddFooter(
-                '&L' . $objPHPExcel->getProperties()->getTitle() . '&R' . __('documents', 'Page {0} of {1}', '&P', '&N')
+                '&L' . $objPHPExcel->getProperties()->getTitle() . '&R' .
+                __('documents', 'Page {0} of {1}', '&P', '&N'),
             );
             $activeSheet->getHeaderFooter()->setEvenFooter(
-                '&L' . $objPHPExcel->getProperties()->getTitle() . '&R' . __('documents', 'Page {0} of {1}', '&P', '&N')
+                '&L' . $objPHPExcel->getProperties()->getTitle() . '&R' .
+                __('documents', 'Page {0} of {1}', '&P', '&N'),
             );
 
             // title
@@ -85,7 +87,7 @@ class InvoicesExportEracuni
             $activeSheet->setCellValueExplicit(
                 'A' . $i,
                 strtolower($documentTypes[$doc->documents_counter->doc_type]),
-                DataType::TYPE_STRING
+                DataType::TYPE_STRING,
             );
 
             $activeSheet->setCellValueExplicit('B' . $i, $doc->no, DataType::TYPE_STRING);
@@ -116,7 +118,7 @@ class InvoicesExportEracuni
             $activeSheet->setCellValueExplicit(
                 'Q' . $i,
                 empty($client->country_code) ? 'SI' : $client->country_code,
-                DataType::TYPE_STRING
+                DataType::TYPE_STRING,
             );
 
             if ($doc->documents_counter->direction == 'issued' && !empty($doc->invoices_items)) {
@@ -157,11 +159,11 @@ class InvoicesExportEracuni
                         $activeSheet->SetCellValue([$taxExcelHeaders[$itm->vat_id], 1], $itm->vat_title);
                         $activeSheet->SetCellValue(
                             [$taxExcelHeaders[$itm->vat_id] + 1, 1],
-                            'Osnova za ' . $itm->vat_title
+                            'Osnova za ' . $itm->vat_title,
                         );
                         $activeSheet->SetCellValue(
                             [$taxExcelHeaders[$itm->vat_id] + 2, 1],
-                            'Stopnja za ' . $itm->vat_title
+                            'Stopnja za ' . $itm->vat_title,
                         );
 
                         $taxExcelHeadersLastIndex += 3;

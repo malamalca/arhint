@@ -74,7 +74,7 @@ class DocumentsAttachmentsControllerTest extends TestCase
             100963,
             UPLOAD_ERR_OK,
             'sunset_uploaded.jpg',
-            'image/jpg'
+            'image/jpg',
         );
 
         $data = [

@@ -59,7 +59,7 @@ class DocumentsClient extends Entity
             /** @var \Crm\Model\Entity\Contact $company */
             $company = TableRegistry::getTableLocator()->get('Crm.Contacts')->get(
                 $user->company_id,
-                contain: ['PrimaryAddresses', 'PrimaryAccounts']
+                contain: ['PrimaryAddresses', 'PrimaryAccounts'],
             );
         } else {
             /** @var \Crm\Model\Entity\Contact $company */

@@ -184,13 +184,13 @@ class PagesController extends AppController
                                 '<a href="%2$s" class="btn-small"%3$s>%1$s</a>',
                                 __('Prev'),
                                 Router::url(['?' => ['offset' => $prevNoteOffset]]),
-                                $prevNoteOffset == $noteOffset ? ' disabled' : ''
+                                $prevNoteOffset == $noteOffset ? ' disabled' : '',
                             ) . ' ' .
                             sprintf(
                                 '<a href="%2$s" class="btn-small"%3$s>%1$s</a>',
                                 __('Next'),
                                 Router::url(['?' => ['offset' => $nextNoteOffset]]),
-                                $nextNoteOffset == $noteOffset ? ' disabled' : ''
+                                $nextNoteOffset == $noteOffset ? ' disabled' : '',
                             ) .
                         '</span></h5>',
                     ],
@@ -203,7 +203,7 @@ class PagesController extends AppController
             $lastNote = $DashboardNotes->find()
                 ->select()
                 ->where(['user_id' => $this->getCurrentUser()->id])
-                ->order('created DESC')
+                ->orderBy('created DESC')
                 ->limit(1)
                 ->page((int)$noteOffset)
                 ->first();
@@ -217,8 +217,8 @@ class PagesController extends AppController
                     $LilHelper->Link(
                         __('edit'),
                         ['controller' => 'DashboardNotes', 'action' => 'edit', $lastNote->id],
-                        []
-                    )
+                        [],
+                    ),
                 );
 
                 $converter = new GithubFlavoredMarkdownConverter([

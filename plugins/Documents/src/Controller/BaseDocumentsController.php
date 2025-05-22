@@ -67,7 +67,7 @@ class BaseDocumentsController extends AppController
         $counters = $DocumentsCountersTable->rememberForUser(
             $this->getCurrentUser()->id,
             $this->Authorization->applyScope($DocumentsCountersTable->find(), 'index'),
-            $this->documentsScope
+            $this->documentsScope,
         );
 
         if (!empty($filter['counter'])) {
@@ -77,7 +77,7 @@ class BaseDocumentsController extends AppController
             $counter = $DocumentsCountersTable->findDefaultCounter(
                 $this->Authorization->applyScope($DocumentsCountersTable->find(), 'index'),
                 strtolower($this->documentsScope),
-                $this->getRequest()->getQuery('direction')
+                $this->getRequest()->getQuery('direction'),
             );
             if (!$counter) {
                 $this->Authorization->skipAuthorization();
@@ -121,7 +121,7 @@ class BaseDocumentsController extends AppController
         $counters = $DocumentsCounters->rememberForUser(
             $this->getCurrentUser()->id,
             $this->Authorization->applyScope($DocumentsCounters->find(), 'index'),
-            $this->documentsScope
+            $this->documentsScope,
         );
 
         $currentCounter = $document->documents_counter->id;
@@ -227,7 +227,7 @@ class BaseDocumentsController extends AppController
                     $response = $this->getResponse()
                         ->withType('application/json')
                         ->withStringBody(
-                            (string)json_encode(['document' => $document, 'errors' => $document->getErrors()])
+                            (string)json_encode(['document' => $document, 'errors' => $document->getErrors()]),
                         );
 
                     return $response;
@@ -511,18 +511,18 @@ class BaseDocumentsController extends AppController
                     'DocumentsCounters.active' => true,
                 ],
                 'contain' => ['DocumentsCounters']],
-                $this->{$this->documentsScope}->filter($filter)
+                $this->{$this->documentsScope}->filter($filter),
             );
             $data = $this->Authorization->applyScope($this->{$this->documentsScope}->find(), 'index')
                 ->where($params['conditions'])
                 ->contain($params['contain'])
-                ->order(['DocumentsCounters.title', 'Invoices.no'])
+                ->orderBy(['DocumentsCounters.title', 'Invoices.no'])
                 ->all();
 
             $report = new ArhintReport(
                 'Invoices.index',
                 $this->request,
-                ['title' => __d('documents', 'Documents')]
+                ['title' => __d('documents', 'Documents')],
             );
             $report->set(compact('data', 'filter'));
 
@@ -542,7 +542,7 @@ class BaseDocumentsController extends AppController
         $counters = $DocumentsCounters->rememberForUser(
             $this->getCurrentUser()->id,
             $this->Authorization->applyScope($DocumentsCounters->find(), 'index'),
-            $this->documentsScope
+            $this->documentsScope,
         );
 
         $this->set(compact('counters'));
@@ -566,7 +566,7 @@ class BaseDocumentsController extends AppController
             $result = $this->Authorization->applyScope($this->{$this->documentsScope}->find(), 'index')
                 ->where($conditions)
                 ->contain('DocumentsCounters')
-                ->order($this->documentsScope . '.title')
+                ->orderBy($this->documentsScope . '.title')
                 ->limit(30)
                 ->all();
 

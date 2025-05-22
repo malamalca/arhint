@@ -36,7 +36,7 @@ class DashboardNotesController extends AppController
                 $this->Flash->success(__('The note has been saved.'));
 
                 return $this->redirect(
-                    $this->getRequest()->getData('referer', ['controller' => 'Pages', 'action' => 'dashboard'])
+                    $this->getRequest()->getData('referer', ['controller' => 'Pages', 'action' => 'dashboard']),
                 );
             } else {
                 $this->Flash->error(__('The note could not be saved. Please, try again.'));

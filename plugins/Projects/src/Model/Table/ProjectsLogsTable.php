@@ -20,7 +20,7 @@ use Cake\Validation\Validator;
  * @method \Projects\Model\Entity\ProjectsLog saveOrFail(\Cake\Datasource\EntityInterface $entity, $options = [])
  * @method \Projects\Model\Entity\ProjectsLog patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
  * @method \Projects\Model\Entity\ProjectsLog[] patchEntities($entities, array $data, array $options = [])
- * @method \Projects\Model\Entity\ProjectsLog findOrCreate($search, callable $callback = null, $options = [])
+ * @method \Projects\Model\Entity\ProjectsLog findOrCreate($search, array<array-key, mixed>|callable|null $callback = null, $options = [])
  * @mixin \Cake\ORM\Behavior\TimestampBehavior
  */
 class ProjectsLogsTable extends Table
