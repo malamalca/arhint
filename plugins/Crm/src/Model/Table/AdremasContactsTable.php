@@ -31,9 +31,17 @@ class AdremasContactsTable extends Table
             'foreignKey' => 'adrema_id',
             'className' => 'Crm.Adremas',
         ]);
+        $this->belongsTo('Contact', [
+            'foreignKey' => 'contact_id',
+            'className' => 'Crm.Contacts',
+        ]);
         $this->belongsTo('ContactsAddresses', [
             'foreignKey' => 'contacts_address_id',
             'className' => 'Crm.ContactsAddresses',
+        ]);
+        $this->belongsTo('ContactsEmails', [
+            'foreignKey' => 'contacts_email_id',
+            'className' => 'Crm.ContactsEmails',
         ]);
     }
 
@@ -53,12 +61,7 @@ class AdremasContactsTable extends Table
             ->add('adrema_id', 'valid', ['rule' => 'uuid'])
             ->allowEmptyString('adrema_id')
             //->add('contacts_address_id', 'valid', ['rule' => 'uuid'])
-            ->allowEmptyString('contacts_address_id')
-            ->notEmptyString('title')
-            ->allowEmptyString('street')
-            ->allowEmptyString('city')
-            ->allowEmptyString('zip')
-            ->allowEmptyString('country');
+            ->allowEmptyString('contacts_address_id');
 
         return $validator;
     }

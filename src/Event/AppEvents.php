@@ -183,13 +183,12 @@ class AppEvents implements EventListenerInterface
      *
      * @param \Cake\Event\Event $event Event.
      * @param \ArrayObject $sidebar Sidebar.
-     * @return \ArrayObject
+     * @return void
      */
-    public function modifySidebar(Event $event, ArrayObject $sidebar): ArrayObject
+    public function modifySidebar(Event $event, ArrayObject $sidebar): void
     {
-        $ret = $sidebar;
         unset($sidebar['welcome']);
 
-        return $ret;
+        $event->setResult($sidebar);
     }
 }

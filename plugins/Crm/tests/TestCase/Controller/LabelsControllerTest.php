@@ -25,6 +25,7 @@ class LabelsControllerTest extends TestCase
         'AdremasContacts' => 'plugin.Crm.AdremasContacts',
         'Contacts' => 'plugin.Crm.Contacts',
         'ContactsAddresses' => 'plugin.Crm.ContactsAddresses',
+        'ContactsEmails' => 'plugin.Crm.ContactsEmails',
         'Users' => 'app.Users',
     ];
 

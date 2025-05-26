@@ -124,37 +124,32 @@
 
     $adr = [];
     foreach ($addresses as $k => $address) {
-        $source = $address;
-        if ($address->contacts_address) {
-            $source = $address->contacts_address;
-        }
-
         $adr['adr' . $k . '_1'] = '<tr>';
         $adr['adr' . $k . '_11'] = sprintf(
             '<td class="td-adrema-link"><img src="%s" /></td>',
-            empty($address->contacts_address) ? '' : Router::url('/crm/img/link.gif')
+            empty($address->contact) ? '' : Router::url('/crm/img/link.gif')
         );
         $adr['adr' . $k . '_2'] = sprintf(
             '<td class="td-adrema-title nowrap"><a href="%1$s">%2$s</a></td>',
             Router::url(['action' => 'edit-address', $address->id]),
-            h($address->title)
+            h($address->contact->title ?? 'N/A')
         );
-        $adr['adr' . $k . '_3'] = sprintf('<td class="td-adrema-street">%s</td>', h($source->street));
+        $adr['adr' . $k . '_3'] = sprintf('<td class="td-adrema-street">%s</td>', h($address->contacts_address->street ?? ''));
         $adr['adr' . $k . '_4'] = sprintf(
             '<td class="td-adrema-city">%s</td>',
-            h($source->city)
+            h($address->contacts_address->city ?? '')
         );
         $adr['adr' . $k . '_5'] = sprintf(
             '<td class="td-adrema-zip">%s</td>',
-            h($source->zip)
+            h($address->contacts_address->zip ?? '')
         );
         $adr['adr' . $k . '_6'] = sprintf(
             '<td class="td-adrema-country">%s</td>',
-            h($source->country)
+            h($address->contacts_address->country ?? '')
         );
         $adr['adr' . $k . '_7'] = sprintf(
             '<td class="td-adrema-email">%s</td>',
-            h($address->email)
+            h($address->contacts_email->email ?? '')
         );
         $adr['adr' . $k . '_8'] = sprintf(
             '<td class="td-adrema-remove">' .

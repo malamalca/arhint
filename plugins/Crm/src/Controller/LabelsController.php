@@ -40,7 +40,7 @@ class LabelsController extends AppController
             $addresses = TableRegistry::getTableLocator()->get('Crm.AdremasContacts')
                 ->find()
                 ->where(['adrema_id' => $adremaId])
-                ->contain(['ContactsAddresses'])
+                ->contain(['Contact', 'ContactsAddresses', 'ContactsEmails'])
                 ->all();
 
             if (!in_array($adremaId, array_keys($adremas))) {
@@ -163,14 +163,29 @@ class LabelsController extends AppController
         /** @var \Crm\Model\Table\AdremasContactsTable $AdremasContacts */
         $AdremasContacts = TableRegistry::getTableLocator()->get('Crm.AdremasContacts');
         if ($id) {
-            $address = $AdremasContacts->get($id, contain: ['ContactsAddresses']);
+            $address = $AdremasContacts->get($id, contain: ['Contact', 'ContactsAddresses', 'ContactsEmails']);
             if (!empty($address->contacts_address)) {
                 $AdremasContacts->patchEntity($address, $address->contacts_address->toArray());
             }
+
+            $addresses = TableRegistry::getTableLocator()->get('Crm.ContactsAddresses')->find()
+                ->where(['contact_id' => $address->contact_id])
+                ->all()
+                ->combine('id', fn($entity) => $entity)
+                ->toArray();
+
+            $emails = TableRegistry::getTableLocator()->get('Crm.ContactsEmails')->find()
+                ->where(['contact_id' => $address->contact_id])
+                ->all()
+                ->combine('id', fn($entity) => $entity)
+                ->toArray();
         } else {
             /** @var \Crm\Model\Entity\AdremasContact $address */
             $address = $AdremasContacts->newEmptyEntity();
             $address->adrema_id = $this->getRequest()->getQuery('adrema');
+
+            $addresses = [];
+            $emails = [];
         }
 
         $this->Authorization->authorize($address, 'edit');
@@ -186,7 +201,7 @@ class LabelsController extends AppController
                 $this->Flash->error(__d('crm', 'The address could not be saved. Please, try again.'));
             }
         }
-        $this->set(compact('address'));
+        $this->set(compact('address', 'addresses', 'emails'));
     }
 
     /**

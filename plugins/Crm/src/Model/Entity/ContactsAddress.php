@@ -32,4 +32,14 @@ class ContactsAddress extends Entity implements EntityInterface
         '*' => true,
         'id' => false,
     ];
+
+    /**
+     * Magic method __toString
+     *
+     * @return string
+     */
+    public function __toString(): string
+    {
+        return (string)$this->street . ', ' . $this->zip . ' ' . $this->city . ', ' . $this->country;
+    }
 }
