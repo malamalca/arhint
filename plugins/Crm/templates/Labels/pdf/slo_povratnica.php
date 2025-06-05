@@ -16,7 +16,7 @@ foreach ($addresses as $address) {
     $this->Text(123, $topX * 6 + 9, 'Slakova ulica 36');
     $this->Text(123, $topX * 6 + 18, '8210 Trebnje');
 
-    $this->Text(7, $topX + 5, $address->title);
+    $this->Text(7, $topX + 5, $address->contact->title);
     $this->Text(7, $topX + 10, $source->street);
     $this->Text(7, $topX + 15, $source->zip . ' ' . $source->city);
 

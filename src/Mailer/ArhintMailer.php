@@ -46,15 +46,32 @@ class ArhintMailer extends Mailer
             $uniqueFile = TMP . uniqid() . '.php';
             file_put_contents($uniqueFile, $template->body);
 
-            ob_start();
-            include $uniqueFile;
-            $content = ob_get_contents();
-            ob_end_clean();
+            if (!empty($content)) {
+                ob_start();
+                include $uniqueFile;
+                $content = ob_get_contents();
+                ob_end_clean();
 
-            unlink($uniqueFile);
+                unlink($uniqueFile);
+            } else {
+                $this->viewBuilder()
+                    ->setClassName('Tmp')
+                    ->setLayout(basename($uniqueFile, '.php'));
+            }
         }
 
-        $result = parent::deliver((string)$content);
+        $companyLogoFilePath = dirname(APP) . DS . 'uploads' . DS . 'Contacts' . DS . $this->currentUser->get('company_id') . '.png';
+        if (file_exists($companyLogoFilePath)) {
+            $this->addAttachments([
+                'logo.png' => [
+                    'file' => $companyLogoFilePath,
+                    'mimetype' => 'image/png',
+                    'contentId' => 'embedded-logo',
+                ],
+            ]);
+        }
+
+        $result = parent::deliver($content);
 
         // save email message to Sent IMAP folder
         $imap = $this->currentUser->getProperty('imap');

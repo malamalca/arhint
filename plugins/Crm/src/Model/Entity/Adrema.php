@@ -10,7 +10,9 @@ use Cake\ORM\Entity;
  *
  * @property string $id
  * @property string|null $owner_id
+ * @property string|null $project_id
  * @property string|null $title
+ * @property string|null $additional_fields
  * @property \Cake\I18n\DateTime|null $created
  * @property \Cake\I18n\DateTime|null $modified
  */

@@ -14,6 +14,7 @@ use Cake\ORM\Entity;
  * @property string|null $contact_id
  * @property string|null $contacts_address_id
  * @property string|null $contacts_email_id
+ * @property string|null $descript
  * @property \Cake\I18n\DateTime|null $created
  * @property \Cake\I18n\DateTime|null $modified
  * @property \Crm\Model\Entity\ContactsAddress|null $address
@@ -30,4 +31,14 @@ class AdremasContact extends Entity
         '*' => true,
         'id' => false,
     ];
+
+    /**
+     * Calculated property
+     *
+     * @return array
+     */
+    protected function _getDescript2(): array|null
+    {
+        return empty($this->descript) ? null : json_decode($this->descript, true);
+    }
 }

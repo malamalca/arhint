@@ -59,6 +59,16 @@ $adremaEdit = [
                     ],
                 ],
             ],
+            'additional_fields' => [
+                'method' => 'control',
+                'parameters' => [
+                    'field' => 'additional_fields',
+                    'options' => [
+                        'type' => 'textarea',
+                        'label' => __d('crm', 'Additional Fields') . ':',
+                    ],
+                ],
+            ],
             'submit' => [
                 'method' => 'button',
                 'parameters' => [

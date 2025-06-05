@@ -40,7 +40,7 @@ class LabelsController extends AppController
             $addresses = TableRegistry::getTableLocator()->get('Crm.AdremasContacts')
                 ->find()
                 ->where(['adrema_id' => $adremaId])
-                ->contain(['Contact', 'ContactsAddresses', 'ContactsEmails'])
+                ->contain(['Contacts', 'ContactsAddresses', 'ContactsEmails'])
                 ->all();
 
             if (!in_array($adremaId, array_keys($adremas))) {
@@ -107,7 +107,7 @@ class LabelsController extends AppController
         $addresses = $AdremasContactsTable
             ->find()
             ->where(['adrema_id' => $adrema->id])
-            ->contain(['ContactsAddresses'])
+            ->contain(['Contacts', 'ContactsAddresses', 'ContactsEmails'])
             ->all();
 
         $this->set(compact('addresses', 'data'));
@@ -143,7 +143,7 @@ class LabelsController extends AppController
         $addresses = $AdremasContactsTable
             ->find()
             ->where(['adrema_id' => $adrema->id])
-            ->contain(['ContactsAddresses'])
+            ->contain(['Contacts', 'ContactsAddresses', 'ContactsEmails'])
             ->all();
 
         $this->viewBuilder()->setTemplate('Labels' . DS . 'email' . DS . $data['label']);
@@ -163,7 +163,7 @@ class LabelsController extends AppController
         /** @var \Crm\Model\Table\AdremasContactsTable $AdremasContacts */
         $AdremasContacts = TableRegistry::getTableLocator()->get('Crm.AdremasContacts');
         if ($id) {
-            $address = $AdremasContacts->get($id, contain: ['Contact', 'ContactsAddresses', 'ContactsEmails']);
+            $address = $AdremasContacts->get($id, contain: ['Contacts', 'ContactsAddresses', 'ContactsEmails']);
             if (!empty($address->contacts_address)) {
                 $AdremasContacts->patchEntity($address, $address->contacts_address->toArray());
             }
@@ -188,6 +188,8 @@ class LabelsController extends AppController
             $emails = [];
         }
 
+        $adrema = TableRegistry::getTableLocator()->get('Crm.Adremas')->get($address->adrema_id);
+
         $this->Authorization->authorize($address, 'edit');
 
         if ($this->getRequest()->is(['patch', 'post', 'put'])) {
@@ -201,7 +203,7 @@ class LabelsController extends AppController
                 $this->Flash->error(__d('crm', 'The address could not be saved. Please, try again.'));
             }
         }
-        $this->set(compact('address', 'addresses', 'emails'));
+        $this->set(compact('adrema', 'address', 'addresses', 'emails'));
     }
 
     /**

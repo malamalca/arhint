@@ -76,6 +76,18 @@ $config = [
                 ],
             ],
         ],
+        'address' => [
+            'descript' => [
+                'method' => 'control',
+                'parameters' => [
+                    'field' => 'descript',
+                    'options' => [
+                        'type' => 'text',
+                        'label' => 'Opis' . ':',
+                    ],
+                ],
+            ],
+        ],
     ],
 
     'Crm.label.slo_priporoceno' => [

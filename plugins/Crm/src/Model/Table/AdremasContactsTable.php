@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace Crm\Model\Table;
 
+use ArrayObject;
+use Cake\Event\Event;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
@@ -24,14 +26,13 @@ class AdremasContactsTable extends Table
     public function initialize(array $config): void
     {
         $this->setTable('adremas_contacts');
-        $this->setDisplayField('title');
         $this->setPrimaryKey('id');
         $this->addBehavior('Timestamp');
         $this->belongsTo('Adremas', [
             'foreignKey' => 'adrema_id',
             'className' => 'Crm.Adremas',
         ]);
-        $this->belongsTo('Contact', [
+        $this->belongsTo('Contacts', [
             'foreignKey' => 'contact_id',
             'className' => 'Crm.Contacts',
         ]);
@@ -59,7 +60,8 @@ class AdremasContactsTable extends Table
             //->add('owner_id', 'valid', ['rule' => 'uuid'])
             ->allowEmptyString('owner_id')
             ->add('adrema_id', 'valid', ['rule' => 'uuid'])
-            ->allowEmptyString('adrema_id')
+            ->notEmptyString('adrema_id')
+            ->notEmptyString('contact_id')
             //->add('contacts_address_id', 'valid', ['rule' => 'uuid'])
             ->allowEmptyString('contacts_address_id');
 
@@ -76,8 +78,26 @@ class AdremasContactsTable extends Table
     public function buildRules(RulesChecker $rules): RulesChecker
     {
         $rules->add($rules->existsIn(['adrema_id'], 'Adremas'));
-        //$rules->add($rules->existsIn(['contacts_address_id'], 'ContactsAddresses'));
+        $rules->add($rules->existsIn(['contact_id'], 'Contacts'));
+        $rules->add($rules->existsIn(['contacts_address_id'], 'ContactsAddresses'));
+        $rules->add($rules->existsIn(['contacts_email_id'], 'ContactsEmails'));
         return $rules;
+    }
+
+    /**
+     * beforeMarshal method
+     *
+     * @param \Cake\Event\Event $event Event object.
+     * @param \ArrayObject $data Post data.
+     * @param \ArrayObject $options Array object.
+     * @return void
+     */
+    public function beforeMarshal(Event $event, ArrayObject $data, ArrayObject $options): void
+    {
+        if (!empty($data['data'])) {
+            $data['descript'] = json_encode($data['data']);
+            $event->setResult($data);
+        }
     }
 
     /**

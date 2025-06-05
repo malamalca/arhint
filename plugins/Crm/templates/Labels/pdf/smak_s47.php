@@ -41,7 +41,7 @@ foreach ($addresses as $address) {
 
     $this->setXY($top_x, $top_y);
     $this->multiCell(60, 0, implode(PHP_EOL, array_filter([
-        $address->title,
+        $address->contact->title,
         $source->street,
         PHP_EOL . trim($source->zip) . ' ' . $source->city,
     ])), 0, 'L');

@@ -47,6 +47,14 @@ $editAddressForm = [
                 'method' => 'unlockField',
                 'parameters' => ['contact_id'],
             ],
+             'unlock_contacts_address_id' => [
+                'method' => 'unlockField',
+                'parameters' => ['contacts_address_id'],
+            ],
+             'unlock_contacts_email_id' => [
+                'method' => 'unlockField',
+                'parameters' => ['contacts_email_id'],
+            ],
             'title' => [
                 'method' => 'control',
                 'parameters' => [
@@ -102,6 +110,28 @@ $editAddressForm = [
     ],
 ];
 
+/** Show costum fields form selected label */
+$fields = explode(PHP_EOL, $adrema->additional_fields);
+if (count($fields) > 0) {
+    $additionalFields = [];
+    $additionalData = $address->descript ? json_decode($address->descript, true) : [];
+    foreach ($fields as $field) {
+        $fieldParts = explode(':', $field);
+        $additionalFields[$fieldParts[0]] = [
+            'method' => 'control',
+            'parameters' => [
+                'field' => 'data.' . $fieldParts[0],
+                [
+                    'type' => $fieldParts[1],
+                    'value' => $additionalData[$fieldParts[0]] ?? '',
+                ],
+            ],
+        ];
+    }
+    $this->Lil->insertIntoArray($editAddressForm['form']['lines'], $additionalFields, ['before' => 'submit']);
+}
+
+
 echo $this->Lil->form($editAddressForm, 'Crm.Labels.edit_address');
 
 ?>
@@ -116,8 +146,8 @@ echo $this->Lil->form($editAddressForm, 'Crm.Labels.edit_address');
 
                         if (data.length > 1 || (data.length == 1 && text != data[0].value)) {
                             $('#contacts-contact_id').val('');
-                            $('#contacts-address_id').find('option').remove();
-                            $('#contacts-email_id').find('option').remove();
+                            $('#contacts-address_id').find("option").remove();
+                            $('#contacts-email_id').find("option").remove();
 
                             // remove link icon
                             $("#contacts-title").parent("div").children("div.suffix").remove();
@@ -132,15 +162,15 @@ echo $this->Lil->form($editAddressForm, 'Crm.Labels.edit_address');
                         $('#contacts-contact_id').val(item.client.id);
                         $("#contacts-title").val(item.client.title);
 
-                        $('#contacts-address_id').find('option').remove();
-                        $('#contacts-email_id').find('option').remove();
+                        $('#contacts-address_id').find("option").remove();
+                        $('#contacts-email_id').find("option").remove();
                         
                         if (item.client.contacts_addresses.length > 0) {
                             $(item.client.contacts_addresses).each(function () {
                                 $("<option />", {
                                     val: this.id,
                                     text: this.street + ', ' + this.zip + ' ' + this.city + ', ' + this.country
-                                }).appendTo($('#contacts-address_id'));
+                                }).appendTo($("#contacts-address_id"));
                             });
                         }
 
@@ -149,7 +179,7 @@ echo $this->Lil->form($editAddressForm, 'Crm.Labels.edit_address');
                                 $("<option />", {
                                     val: this.id,
                                     text: this.email
-                                }).appendTo($('#contacts-email_id'));
+                                }).appendTo($("#contacts-email_id"));
                             });
                         }
 
@@ -163,8 +193,8 @@ echo $this->Lil->form($editAddressForm, 'Crm.Labels.edit_address');
                 .on("keyup", function () {
                     if ($(this).val() === "") {
                         $('#contacts-contact_id').val('');
-                        $('#contacts-address_id').find('option').remove();
-                        $('#contacts-email_id').find('option').remove();
+                        $('#contacts-address_id').find("option").remove();
+                        $('#contacts-email_id').find("option").remove();
 
                         // remove link icon
                         $("#contacts-title").parent("div").children("div.suffix").remove();

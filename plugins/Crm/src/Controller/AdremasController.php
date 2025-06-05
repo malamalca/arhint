@@ -14,6 +14,19 @@ use Cake\ORM\TableRegistry;
 class AdremasController extends AppController
 {
     /**
+     * Index method
+     *
+     * @return \Cake\Http\Response|void
+     */
+    public function index()
+    {
+        $adremas = $this->Authorization->applyScope($this->Adremas->find())
+            ->orderBy('created')
+            ->all();
+        $this->set(compact('adremas'));
+    }
+
+    /**
      * Edit method
      *
      * @param string|null $id Adrema id.
