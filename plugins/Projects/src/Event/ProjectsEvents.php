@@ -24,6 +24,8 @@ class ProjectsEvents implements EventListenerInterface
             'Lil.Sidebar.beforeRender' => 'modifySidebar',
             'Documents.Dashboard.queryDocuments' => 'filterDashboardDocuments',
             'Documents.Documents.indexQuery' => 'filterDashboardDocuments',
+            'Lil.Form.Crm.Adremas.edit' => 'addProjectToAdremas',
+            'Lil.Index.Crm.Adremas.index' => 'addProjectToAdremas',
         ];
     }
 
@@ -56,6 +58,80 @@ class ProjectsEvents implements EventListenerInterface
     public function modifySidebar(Event $event, ArrayObject $sidebar): void
     {
         ProjectsSidebar::setAdminSidebar($event, $sidebar);
+    }
+
+    /**
+     * Add project to adremas index.
+     *
+     * @param \Cake\Event\Event $event Event object.
+     * @param mixed $data LilForm or LilPanels object.
+     * @return void
+     */
+    public function addProjectToAdremas(Event $event, mixed $data): void
+    {
+        /** @var \App\View\AppView $view */
+        $view = $event->getSubject();
+        if (!$view->hasCurrentUser()) {
+            return;
+        }
+
+        $ProjectsTable = TableRegistry::getTableLocator()->get('Projects.Projects');
+        $projectsQuery = $view->getCurrentUser()->applyScope('index', $ProjectsTable->find());
+
+        if ($event->getName() == 'Lil.Form.Crm.Adremas.edit') {
+            $projects = $ProjectsTable->findForOwner($view->getCurrentUser()->company_id, $projectsQuery);
+
+            $projectField = [
+                'method' => 'control',
+                'parameters' => [
+                    'field' => 'project_id', [
+                        'type' => 'select',
+                        'label' => __d('projects', 'Project') . ':',
+                        'options' => $projects,
+                        'empty' => '-- ' . __d('projects', 'no project') . ' --',
+                        'default' => $view->getRequest()->getQuery('project'),
+                    ],
+                ],
+            ];
+
+            $view->set(compact('projects'));
+            $view->Lil->insertIntoArray($data->form['lines'], ['project' => $projectField], ['before' => 'submit']);
+        }
+
+        if ($event->getName() == 'Lil.Index.Crm.Adremas.index') {
+            $projects = [];
+
+            // extract unqiue project ids from adremas
+            $uniqueProjectIds = array_filter(array_unique($view->get('adremas')->extract('project_id')->toArray()));
+
+            // fetch projects with these ids
+            if (count($uniqueProjectIds) > 0) {
+                $projects = $projectsQuery
+                    ->where(['id IN' => $uniqueProjectIds])
+                    ->orderBy(['no DESC', 'title'])
+                    ->all()
+                    ->combine('id', function ($entity) {
+                        return $entity;
+                    })
+                    ->toArray();
+            }
+
+            // add project to table header
+            $view->Lil->insertIntoArray(
+                $data->table['head']['rows'][0]['columns'],
+                ['project' => __d('crm', 'Project')],
+                ['after' => 'title']
+            );
+
+            // add project to each table line
+            foreach ($view->get('adremas') as $k => $adrema) {
+                $view->Lil->insertIntoArray(
+                    $data->table['body']['rows'][$k]['columns'],
+                    ['project' => $adrema->project_id ? (string)$projects[$adrema->project_id] : '&nbsp;'],
+                    ['after' => 'title']
+                );
+            }
+        }
     }
 
     /**

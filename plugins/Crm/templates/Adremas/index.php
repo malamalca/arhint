@@ -25,7 +25,7 @@ $indexTable = [
 
 foreach ($adremas as $adrema) {
     $indexTable['table']['body']['rows'][]['columns'] = [
-        'title' => h($adrema->title),
+        'title' => $this->Html->link($adrema->title, ['action' => 'view', $adrema->id]),
         'created' => (string)$adrema->created,
         'actions' => !$this->getCurrentUser()->hasRole('editor') ? '' : [
             'parameters' => ['class' => 'right-align'],

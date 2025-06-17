@@ -81,6 +81,7 @@ class AdremasContactsTable extends Table
         $rules->add($rules->existsIn(['contact_id'], 'Contacts'));
         $rules->add($rules->existsIn(['contacts_address_id'], 'ContactsAddresses'));
         $rules->add($rules->existsIn(['contacts_email_id'], 'ContactsEmails'));
+
         return $rules;
     }
 

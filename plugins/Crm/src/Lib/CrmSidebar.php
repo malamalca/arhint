@@ -83,13 +83,13 @@ class CrmSidebar
                 'expand' => false,
                 'submenu' => [],
             ],
-            'labels' => [
+            'adremas' => [
                 'visible' => true,
                 'title' => __d('crm', 'Labels'),
                 'url' => [
                     'plugin' => 'Crm',
-                    'controller' => 'Labels',
-                    'action' => 'adrema',
+                    'controller' => 'Adremas',
+                    'action' => 'index',
                 ],
                 'params' => [],
                 'active' => in_array($request->getParam('controller'), ['Labels', 'Adremas']),

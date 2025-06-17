@@ -37,7 +37,7 @@ class AdremasContact extends Entity
      *
      * @return array
      */
-    protected function _getDescript2(): array|null
+    protected function _getDescript2(): ?array
     {
         return empty($this->descript) ? null : json_decode($this->descript, true);
     }

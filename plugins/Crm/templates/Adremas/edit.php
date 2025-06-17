@@ -2,8 +2,7 @@
 use Cake\Core\Plugin;
 
 $adremaEdit = [
-    'title_for_layout' =>
-        $adrema->id ? __d('crm', 'Edit Adrema') : __d('crm', 'Add Adrema'),
+    'title_for_layout' => $adrema->id ? __d('crm', 'Edit Adrema') : __d('crm', 'Add Adrema'),
     'form' => [
         'defaultHelper' => $this->Form,
         'pre' => '<div class="form">',
@@ -44,18 +43,6 @@ $adremaEdit = [
                         'error' => [
                             'empty' => __d('crm', 'Adrema title is required.'),
                         ],
-                    ],
-                ],
-            ],
-            'project' => !Plugin::isLoaded('Projects') ? null : [
-                'method' => 'control',
-                'parameters' => [
-                    'field' => 'project_id', [
-                        'type' => 'select',
-                        'label' => __d('documents', 'Project') . ':',
-                        'options' => $projects,
-                        'empty' => '-- ' . __d('documents', 'no project') . ' --',
-                        'default' => $this->getRequest()->getQuery('project'),
                     ],
                 ],
             ],

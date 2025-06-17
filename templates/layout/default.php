@@ -129,8 +129,8 @@ use Cake\Routing\Router;
 
             M.AutoInit();
 
-            var elems = document.querySelectorAll('.collapsible');
-            var instances = M.Collapsible.init(elems);
+            //var elems = document.querySelectorAll('.collapsible');
+            //var instances = M.Collapsible.init(elems);
 
             document.querySelectorAll('.materialize-textarea').forEach(function(element){
                 M.Forms.InitTextarea(element);

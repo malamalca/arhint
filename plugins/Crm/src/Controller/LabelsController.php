@@ -16,42 +16,6 @@ use Cake\ORM\TableRegistry;
 class LabelsController extends AppController
 {
     /**
-     * adrema method
-     *
-     * STEP 1: Select adrema, add contact to adrema, save, rename, duplicate and delete
-     * selected adrema.
-     *
-     * @param string $adremaId Adremas uuid.
-     * @return void
-     */
-    public function adrema(?string $adremaId = null)
-    {
-        $AdremasTable = $this->fetchTable('Crm.Adremas');
-        $adremas = $this->Authorization->applyScope($AdremasTable->find('list'), 'index')
-            ->toArray();
-
-        if (empty($adremaId)) {
-            $adremaId = key((array)$adremas);
-        }
-
-        $addresses = [];
-
-        if (!empty($adremaId)) {
-            $addresses = TableRegistry::getTableLocator()->get('Crm.AdremasContacts')
-                ->find()
-                ->where(['adrema_id' => $adremaId])
-                ->contain(['Contacts', 'ContactsAddresses', 'ContactsEmails'])
-                ->all();
-
-            if (!in_array($adremaId, array_keys($adremas))) {
-                throw new NotFoundException(__d('crm', 'Invalid adrema'));
-            }
-        }
-
-        $this->set(compact('addresses', 'adremas', 'adremaId'));
-    }
-
-    /**
      * label method
      *
      * STEP 2: Select label template from predefined list. Template will be used for preselected
@@ -149,84 +113,5 @@ class LabelsController extends AppController
         $this->viewBuilder()->setTemplate('Labels' . DS . 'email' . DS . $data['label']);
 
         $this->set(compact('addresses', 'data'));
-    }
-
-    /**
-     * Edit method
-     *
-     * @param string|null $id Address id.
-     * @return mixed Redirects on successful edit, renders view otherwise.
-     * @throws \Cake\Http\Exception\NotFoundException When record not found.
-     */
-    public function editAddress(?string $id = null)
-    {
-        /** @var \Crm\Model\Table\AdremasContactsTable $AdremasContacts */
-        $AdremasContacts = TableRegistry::getTableLocator()->get('Crm.AdremasContacts');
-        if ($id) {
-            $address = $AdremasContacts->get($id, contain: ['Contacts', 'ContactsAddresses', 'ContactsEmails']);
-            if (!empty($address->contacts_address)) {
-                $AdremasContacts->patchEntity($address, $address->contacts_address->toArray());
-            }
-
-            $addresses = TableRegistry::getTableLocator()->get('Crm.ContactsAddresses')->find()
-                ->where(['contact_id' => $address->contact_id])
-                ->all()
-                ->combine('id', fn($entity) => $entity)
-                ->toArray();
-
-            $emails = TableRegistry::getTableLocator()->get('Crm.ContactsEmails')->find()
-                ->where(['contact_id' => $address->contact_id])
-                ->all()
-                ->combine('id', fn($entity) => $entity)
-                ->toArray();
-        } else {
-            /** @var \Crm\Model\Entity\AdremasContact $address */
-            $address = $AdremasContacts->newEmptyEntity();
-            $address->adrema_id = $this->getRequest()->getQuery('adrema');
-
-            $addresses = [];
-            $emails = [];
-        }
-
-        $adrema = TableRegistry::getTableLocator()->get('Crm.Adremas')->get($address->adrema_id);
-
-        $this->Authorization->authorize($address, 'edit');
-
-        if ($this->getRequest()->is(['patch', 'post', 'put'])) {
-            /** @var \Crm\Model\Entity\AdremasContact $address */
-            $address = $AdremasContacts->patchEntity($address, $this->getRequest()->getData());
-            if (!$address->getErrors() && $AdremasContacts->save($address)) {
-                $this->Flash->success(__d('crm', 'The address has been saved.'));
-
-                return $this->redirect(['action' => 'adrema', $address->adrema_id]);
-            } else {
-                $this->Flash->error(__d('crm', 'The address could not be saved. Please, try again.'));
-            }
-        }
-        $this->set(compact('adrema', 'address', 'addresses', 'emails'));
-    }
-
-    /**
-     * Delete method
-     *
-     * @param string|null $id Label id.
-     * @return mixed Redirects to index.
-     * @throws \Cake\Http\Exception\NotFoundException When record not found.
-     */
-    public function deleteAddress(?string $id = null)
-    {
-        $AdremasContacts = TableRegistry::getTableLocator()->get('Crm.AdremasContacts');
-        /** @var \Crm\Model\Entity\AdremasContact $address */
-        $address = $AdremasContacts->get($id);
-
-        $this->Authorization->authorize($address, 'delete');
-
-        if ($AdremasContacts->delete($address)) {
-            $this->Flash->success(__d('crm', 'The label has been deleted.'));
-        } else {
-            $this->Flash->error(__d('crm', 'The label could not be deleted. Please, try again.'));
-        }
-
-        return $this->redirect(['action' => 'adrema', $address->adrema_id]);
     }
 }

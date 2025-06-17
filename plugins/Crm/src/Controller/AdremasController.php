@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Crm\Controller;
 
-use Cake\Core\Plugin;
 use Cake\ORM\TableRegistry;
 
 /**
@@ -56,21 +55,33 @@ class AdremasController extends AppController
                 }
                 $this->Flash->success(__d('crm', 'The adrema has been saved.'));
 
-                return $this->redirect(['controller' => 'Labels', 'action' => 'adrema', $adrema->id]);
+                return $this->redirect(['action' => 'view', $adrema->id]);
             } else {
                 $this->Flash->error(__d('crm', 'The adrema could not be saved. Please, try again.'));
             }
         }
 
-        $projects = [];
-        if (Plugin::isLoaded('Projects')) {
-            /** @var \Projects\Model\Table\ProjectsTable $ProjectsTable */
-            $ProjectsTable = TableRegistry::getTableLocator()->get('Projects.Projects');
-            $projectsQuery = $this->Authorization->applyScope($ProjectsTable->find(), 'index');
-            $projects = $ProjectsTable->findForOwner($this->getCurrentUser()->company_id, $projectsQuery);
-        }
+        $this->set(compact('adrema'));
+    }
 
-        $this->set(compact('adrema', 'projects'));
+    /**
+     * View method
+     *
+     * @param string|null $id Adrema id.
+     * @throws \Cake\Http\Exception\NotFoundException When record not found.
+     */
+    public function view(?string $id = null)
+    {
+        $adrema = $this->Adremas->get($id);
+        $this->Authorization->authorize($adrema);
+
+        $addresses = TableRegistry::getTableLocator()->get('Crm.AdremasContacts')
+            ->find()
+            ->where(['adrema_id' => $adrema->id])
+            ->contain(['Contacts', 'ContactsAddresses', 'ContactsEmails'])
+            ->all();
+
+        $this->set(compact('addresses', 'adrema'));
     }
 
     /**
@@ -91,6 +102,6 @@ class AdremasController extends AppController
             $this->Flash->error(__d('crm', 'The adrema could not be deleted. Please, try again.'));
         }
 
-        return $this->redirect(['controller' => 'Labels', 'action' => 'adrema']);
+        return $this->redirect(['action' => 'index']);
     }
 }

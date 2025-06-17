@@ -21,6 +21,8 @@ $counterLink = $this->Html->link(
     ['action' => 'filter'],
     ['class' => 'dropdown-trigger', 'id' => 'filter-counters', 'data-target' => 'dropdown-counters']
 );
+//$counterLink = $counter->title;
+
 $popupCounters = [];
 foreach ($counters as $cntr) {
     $menuItem = [
@@ -251,11 +253,11 @@ echo $this->Lil->index($documents_index, 'Documents.Documents.index');
                 filterByDate(dateString, "start");
             }
         });
-        $("#lil-documents-link-date-start").click(function() {
-            let datePicker = M.Datepicker.getInstance($("#lil-documents-input-date-start").get(0));
-            datePicker.open();
-            return false;
-        });
+        //$("#lil-documents-link-date-start").click(function() {
+        //    let datePicker = M.Datepicker.getInstance($("#lil-documents-input-date-start").get(0));
+       //     datePicker.open();
+        //    return false;
+        //});
 
         M.Datepicker.init($("#lil-documents-input-date-end").get(0), {
             format: "yyyy-mm-dd",
@@ -267,11 +269,11 @@ echo $this->Lil->index($documents_index, 'Documents.Documents.index');
                 filterByDate(dateString, "end");
             }
         });
-        $("#lil-documents-link-date-end").click(function() {
-            let datePicker = M.Datepicker.getInstance($("#lil-documents-input-date-end").get(0));
-            datePicker.open();
-            return false;
-        });
+        //$("#lil-documents-link-date-end").click(function() {
+        //    let datePicker = M.Datepicker.getInstance($("#lil-documents-input-date-end").get(0));
+        //    datePicker.open();
+        //    return false;
+        //});
 
         ////////////////////////////////////////////////////////////////////////////////////////////
         $('#MenuItemExportSepaXml, #MenuItemExportPdf, #MenuItemEmail, #MenuItemPrint').click(function(e) {

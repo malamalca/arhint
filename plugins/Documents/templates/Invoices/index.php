@@ -21,6 +21,8 @@ $counterLink = $this->Html->link(
     ['action' => 'filter'],
     ['class' => 'dropdown-trigger', 'id' => 'filter-counters', 'data-target' => 'dropdown-counters']
 );
+$counterLink = $counter->title;
+
 $popupCounters = [];
 foreach ($counters as $cntr) {
     $menuItem = [

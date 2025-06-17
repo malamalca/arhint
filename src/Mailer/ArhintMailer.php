@@ -60,7 +60,8 @@ class ArhintMailer extends Mailer
             }
         }
 
-        $companyLogoFilePath = dirname(APP) . DS . 'uploads' . DS . 'Contacts' . DS . $this->currentUser->get('company_id') . '.png';
+        $companyLogoFilePath = dirname(APP) . DS . 'uploads' . DS . 'Contacts' . DS;
+        $companyLogoFilePath .= $this->currentUser->get('company_id') . '.png';
         if (file_exists($companyLogoFilePath)) {
             $this->addAttachments([
                 'logo.png' => [

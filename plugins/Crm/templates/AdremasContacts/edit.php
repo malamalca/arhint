@@ -21,15 +21,6 @@ $editAddressForm = [
                 'method' => 'hidden',
                 'parameters' => ['field' => 'referer'],
             ],
-            'owner_id' => [
-                'method' => 'hidden',
-                'parameters' => [
-                    'field' => 'owner_id',
-                    'options' => [
-                        'default' => '1',
-                    ],
-                ],
-            ],
             'adrema_id' => [
                 'method' => 'hidden',
                 'parameters' => [
@@ -111,7 +102,7 @@ $editAddressForm = [
 ];
 
 /** Show costum fields form selected label */
-$fields = explode(PHP_EOL, $adrema->additional_fields);
+$fields = array_filter(explode(PHP_EOL, $adrema->additional_fields));
 if (count($fields) > 0) {
     $additionalFields = [];
     $additionalData = $address->descript ? json_decode($address->descript, true) : [];
@@ -132,7 +123,7 @@ if (count($fields) > 0) {
 }
 
 
-echo $this->Lil->form($editAddressForm, 'Crm.Labels.edit_address');
+echo $this->Lil->form($editAddressForm, 'Crm.AdremasContacts.edit');
 
 ?>
 <script type="text/javascript">

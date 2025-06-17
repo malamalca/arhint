@@ -19,7 +19,7 @@ enum AppPluginsEnum
      */
     public function getOrdinal(): int
     {
-        $value = array_filter($this->cases(), fn($case) => $this == $case);
+        $value = array_filter($this->cases(), fn ($case) => $this == $case);
 
         if (!empty($value)) {
             return array_keys($value)[0];

@@ -119,7 +119,7 @@ class DocumentsCountersTable extends Table
         );
 
         if (!empty($filterKind)) {
-            $counters = $counters->filter(fn($value, $key) => $value->kind == $filterKind);
+            $counters = $counters->filter(fn ($value, $key) => $value->kind == $filterKind);
         }
 
         return $counters;
