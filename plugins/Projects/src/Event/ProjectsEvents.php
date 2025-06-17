@@ -75,6 +75,7 @@ class ProjectsEvents implements EventListenerInterface
             return;
         }
 
+        /** @var \Projects\Model\Table\ProjectsTable $ProjectsTable */
         $ProjectsTable = TableRegistry::getTableLocator()->get('Projects.Projects');
         $projectsQuery = $view->getCurrentUser()->applyScope('index', $ProjectsTable->find());
 
@@ -120,7 +121,7 @@ class ProjectsEvents implements EventListenerInterface
             $view->Lil->insertIntoArray(
                 $data->table['head']['rows'][0]['columns'],
                 ['project' => __d('crm', 'Project')],
-                ['after' => 'title']
+                ['after' => 'title'],
             );
 
             // add project to each table line
@@ -128,7 +129,7 @@ class ProjectsEvents implements EventListenerInterface
                 $view->Lil->insertIntoArray(
                     $data->table['body']['rows'][$k]['columns'],
                     ['project' => $adrema->project_id ? (string)$projects[$adrema->project_id] : '&nbsp;'],
-                    ['after' => 'title']
+                    ['after' => 'title'],
                 );
             }
         }

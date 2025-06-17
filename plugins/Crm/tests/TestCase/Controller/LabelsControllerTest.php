@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Crm\Test\TestCase\Controller;
 
-use Cake\Http\Exception\NotFoundException;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\IntegrationTestTrait;
 use Cake\TestSuite\TestCase;
@@ -43,29 +42,6 @@ class LabelsControllerTest extends TestCase
     {
         $user = TableRegistry::getTableLocator()->get('Users')->get($userId);
         $this->session(['Auth' => $user]);
-    }
-
-    /**
-     * Test adrema method
-     *
-     * @return void
-     */
-    public function testAdrema()
-    {
-        $this->get('/crm/labels/adrema/49a90cfe-fda4-49ca-b7ec-ca5534465431');
-        $this->assertRedirect(); // to login
-
-        $this->login(USER_ADMIN);
-
-        $this->get('/crm/labels/adrema/49a90cfe-fda4-49ca-b7ec-ca5534465431');
-        $this->assertNoRedirect();
-
-        $this->get('/crm/labels/adrema/');
-        $this->assertNoRedirect();
-
-        $this->disableErrorHandlerMiddleware();
-        $this->expectException(NotFoundException::class);
-        $this->get('/crm/labels/adrema/49a90cfe-fda4-49ca-b7ec-nonexistant');
     }
 
     /**

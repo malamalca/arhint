@@ -23,9 +23,12 @@ class AdremasContactsController extends AppController
     {
         if ($id) {
             $address = $this->AdremasContacts->get($id, contain: ['Contacts', 'ContactsAddresses', 'ContactsEmails']);
+            /** @var \Crm\Model\Entity\Adrema $adrema */
             $adrema = TableRegistry::getTableLocator()->get('Crm.Adremas')->get($address->adrema_id);
         } else {
             $adremaId = $this->getRequest()->getQuery('adrema');
+
+            /** @var \Crm\Model\Entity\Adrema $adrema */
             $adrema = TableRegistry::getTableLocator()->get('Crm.Adremas')->get($adremaId);
 
             $address = $this->AdremasContacts->newEmptyEntity();
@@ -51,13 +54,13 @@ class AdremasContactsController extends AppController
             $addresses = TableRegistry::getTableLocator()->get('Crm.ContactsAddresses')->find()
                 ->where(['contact_id' => $address->contact_id])
                 ->all()
-                ->combine('id', fn ($entity) => $entity)
+                ->combine('id', fn($entity) => $entity)
                 ->toArray();
 
             $emails = TableRegistry::getTableLocator()->get('Crm.ContactsEmails')->find()
                 ->where(['contact_id' => $address->contact_id])
                 ->all()
-                ->combine('id', fn ($entity) => $entity)
+                ->combine('id', fn($entity) => $entity)
                 ->toArray();
         }
 

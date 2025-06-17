@@ -72,7 +72,7 @@ class ArhintMailer extends Mailer
             ]);
         }
 
-        $result = parent::deliver($content);
+        $result = parent::deliver((string)$content);
 
         // save email message to Sent IMAP folder
         $imap = $this->currentUser->getProperty('imap');

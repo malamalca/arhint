@@ -263,7 +263,7 @@ class UsersTable extends Table
         ];
         $options = array_merge($defaultOptions, $options);
 
-        $query = $this->find('list', keyField: 'id', valueField: fn ($e) => $e);
+        $query = $this->find('list', keyField: 'id', valueField: fn($e) => $e);
         $query->where(['Users.company_id' => $companyId]);
 
         if (!$options['inactive']) {

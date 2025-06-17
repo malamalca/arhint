@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Crm\Test\TestCase\Controller;
 
+use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\IntegrationTestTrait;
 use Cake\TestSuite\TestCase;
@@ -66,7 +67,7 @@ class AdremasControllerTest extends TestCase
         $this->enableSecurityToken();
 
         $this->post(['plugin' => 'Crm', 'controller' => 'Adremas', 'action' => 'edit'], $data);
-        $this->assertRedirectContains('/crm/labels/adrema/');
+        $this->assertRedirectContains('/crm/adremas/view/');
     }
 
     /**
@@ -94,7 +95,30 @@ class AdremasControllerTest extends TestCase
         $this->enableSecurityToken();
 
         $this->post(['plugin' => 'Crm', 'controller' => 'Adremas', 'action' => 'edit', '49a90cfe-fda4-49ca-b7ec-ca5534465431'], $data);
-        $this->assertRedirectContains('/crm/labels/adrema/');
+        $this->assertRedirectContains('/crm/adremas/view/');
+    }
+
+    /**
+     * Test adrema method
+     *
+     * @return void
+     */
+    public function testView()
+    {
+        $this->get('/crm/adremas/view/49a90cfe-fda4-49ca-b7ec-ca5534465431');
+        $this->assertRedirect(); // to login
+
+        $this->login(USER_ADMIN);
+
+        $this->get('/crm/adremas/view/49a90cfe-fda4-49ca-b7ec-ca5534465431');
+        $this->assertNoRedirect();
+
+        $this->get('/crm/adremas/view/');
+        $this->assertNoRedirect();
+
+        $this->disableErrorHandlerMiddleware();
+        $this->expectException(RecordNotFoundException::class);
+        $this->get('/crm/adremas/view/49a90cfe-fda4-49ca-b7ec-nonexistant');
     }
 
     /**
@@ -110,6 +134,6 @@ class AdremasControllerTest extends TestCase
         $this->login(USER_ADMIN);
 
         $this->get('/crm/adremas/delete/49a90cfe-fda4-49ca-b7ec-ca5534465431');
-        $this->assertRedirectContains('/crm/labels/adrema'); // no trailing slash = no trailing adrema id!!!
+        $this->assertRedirect('/crm/adremas'); // no trailing slash = no trailing adrema id!!!
     }
 }

@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Crm\Controller;
 
 use Cake\Core\Configure;
-use Cake\Http\Exception\NotFoundException;
+use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\ORM\TableRegistry;
 
 /**
@@ -47,7 +47,7 @@ class LabelsController extends AppController
     {
         $data = $this->getRequest()->getData();
         if (empty($data['label'])) {
-            throw new NotFoundException(__d('crm', 'Invalid label'));
+            throw new RecordNotFoundException(__d('crm', 'Invalid label'));
         }
 
         $settings = Configure::read('Crm.label.' . $data['label']);
@@ -90,7 +90,7 @@ class LabelsController extends AppController
     {
         $data = $this->getRequest()->getData();
         if (empty($data['label'])) {
-            throw new NotFoundException(__d('crm', 'Invalid label'));
+            throw new RecordNotFoundException(__d('crm', 'Invalid label'));
         }
 
         $settings = Configure::read('Crm.emailAdrema.' . $data['label']);

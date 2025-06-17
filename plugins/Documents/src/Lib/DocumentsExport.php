@@ -287,7 +287,7 @@ class DocumentsExport
         if ($br) {
             $pee = (string)preg_replace_callback(
                 '/<(script|style).*?<\/\\1>/s',
-                fn ($matches) => str_replace("\n", '<PreserveNewline />', $matches[0]),
+                fn($matches) => str_replace("\n", '<PreserveNewline />', $matches[0]),
                 $pee,
             );
             $pee = (string)preg_replace('|(?<!<br />)\s*\n|', "<br />\n", $pee); // optionally make line breaks

@@ -68,6 +68,7 @@ class AdremasController extends AppController
      * View method
      *
      * @param string|null $id Adrema id.
+     * @return void
      * @throws \Cake\Http\Exception\NotFoundException When record not found.
      */
     public function view(?string $id = null)

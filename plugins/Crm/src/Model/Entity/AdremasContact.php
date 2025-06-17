@@ -31,14 +31,4 @@ class AdremasContact extends Entity
         '*' => true,
         'id' => false,
     ];
-
-    /**
-     * Calculated property
-     *
-     * @return array
-     */
-    protected function _getDescript2(): ?array
-    {
-        return empty($this->descript) ? null : json_decode($this->descript, true);
-    }
 }
