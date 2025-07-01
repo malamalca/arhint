@@ -1,20 +1,11 @@
 <?php
 declare(strict_types=1);
 
-use Cake\Core\Configure;
 use Migrations\AbstractMigration;
-use Phinx\Db\Adapter\MysqlAdapter;
 
-class AddAccessToUsers extends AbstractMigration
+class CreateTableAttachments extends AbstractMigration
 {
-    /**
-     * Change Method.
-     *
-     * More information on this method is available here:
-     * https://book.cakephp.org/phinx/0/en/migrations.html#the-change-method
-     * @return void
-     */
-    public function change(): void
+    public function up()
     {
         $this->table('attachments', ['id' => false, 'primary_key' => ['id']])
             ->addColumn('id', 'uuid', [
@@ -37,6 +28,11 @@ class AddAccessToUsers extends AbstractMigration
                 'limit' => 255,
                 'null' => true,
             ])
+            ->addColumn('ext', 'string', [
+                'default' => null,
+                'limit' => 20,
+                'null' => true,
+            ])
             ->addColumn('mimetype', 'string', [
                 'default' => null,
                 'limit' => 30,
@@ -45,11 +41,6 @@ class AddAccessToUsers extends AbstractMigration
             ->addColumn('filesize', 'integer', [
                 'default' => null,
                 'limit' => 11,
-                'null' => true,
-            ])
-            ->addColumn('title', 'string', [
-                'default' => null,
-                'limit' => 100,
                 'null' => true,
             ])
             ->addColumn('description', 'text', [
@@ -68,5 +59,10 @@ class AddAccessToUsers extends AbstractMigration
                 'null' => true,
             ])
             ->create();
+    }
+
+    public function down()
+    {
+        $this->table('attachments')->drop()->save();
     }
 }

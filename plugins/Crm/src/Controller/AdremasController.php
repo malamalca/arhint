@@ -82,7 +82,12 @@ class AdremasController extends AppController
             ->contain(['Contacts', 'ContactsAddresses', 'ContactsEmails'])
             ->all();
 
-        $this->set(compact('addresses', 'adrema'));
+        $attachments = TableRegistry::getTableLocator()->get('Attachments')
+            ->find('forModel', ['Adrema', $adrema->id])
+            ->select()
+            ->all();
+
+        $this->set(compact('addresses', 'adrema', 'attachments'));
     }
 
     /**

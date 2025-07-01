@@ -121,9 +121,12 @@ class Installer
      * @throws \Exception Exception raised by validator.
      * @return void
      */
-    public static function postUpdate(Event $event): void
+    public static function postUpdate(?Event $event): void
     {
-        $io = $event->getIO();
+        $io = null;
+        if ($event) {
+            $io = $event->getIO();
+        }
         $rootDir = dirname(dirname(__DIR__));
 
         if (file_exists($rootDir . '/config/app_local.php')) {
@@ -137,11 +140,6 @@ class Installer
             ConnectionManager::setConfig('default', Configure::read('Datasources.default'));
 
             static::executeMigrations($rootDir, $io, 'default');
-        }
-
-        $class = 'Cake\Codeception\Console\Installer';
-        if (class_exists($class)) {
-            $class::customizeCodeceptionBinary($event);
         }
     }
 
@@ -362,7 +360,7 @@ class Installer
      * @param string $connection Connection name
      * @return void
      */
-    public static function executeMigrations(string $dir, IOInterface $io, string $connection = 'install'): void
+    public static function executeMigrations(string $dir, ?IOInterface $io, string $connection = 'install'): void
     {
         if (!defined('ROOT')) {
             define('ROOT', $dir);
