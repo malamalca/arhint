@@ -11,49 +11,32 @@ namespace App\Controller;
 class AttachmentsController extends AppController
 {
     /**
-     * Index method
-     *
-     * @return \Cake\Http\Response|null|void Renders view
-     */
-    public function index()
-    {
-        $query = $this->Attachments->find();
-        $attachments = $this->paginate($query);
-
-        $this->set(compact('attachments'));
-    }
-
-    /**
-     * View method
+     * Download method
      *
      * @param string|null $id Attachment id.
      * @return \Cake\Http\Response|null|void Renders view
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function view(?string $id = null)
+    public function download(?string $id = null)
     {
         $attachment = $this->Attachments->get($id, contain: []);
-        $this->set(compact('attachment'));
-    }
 
-    /**
-     * Add method
-     *
-     * @return \Cake\Http\Response|null|void Redirects on successful add, renders view otherwise.
-     */
-    public function add()
-    {
-        $attachment = $this->Attachments->newEmptyEntity();
-        if ($this->request->is('post')) {
-            $attachment = $this->Attachments->patchEntity($attachment, $this->request->getData());
-            if ($this->Attachments->save($attachment)) {
-                $this->Flash->success(__('The attachment has been saved.'));
+        $this->Authorization->authorize($attachment);
 
-                return $this->redirect(['action' => 'index']);
+        $response = $this->response->withFile(
+            $attachment->getFilePath(),
+            ['name' => $attachment->filename, 'download' => true],
+        );
+
+        $finfoType = finfo_open(FILEINFO_MIME_TYPE);
+        if ($finfoType) {
+            $mimeType = finfo_file($finfoType, $attachment->getFilePath());
+            if ($mimeType) {
+                $response = $response->withType($mimeType);
             }
-            $this->Flash->error(__('The attachment could not be saved. Please, try again.'));
         }
-        $this->set(compact('attachment'));
+
+        return $response;
     }
 
     /**

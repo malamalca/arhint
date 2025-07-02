@@ -48,11 +48,6 @@ class Initial extends AbstractMigration
                 'limit' => 4,
                 'null' => false,
             ])
-            ->addColumn('access', 'integer', [
-                'default' => null,
-                'limit' => 4,
-                'null' => true,
-            ])
             ->addColumn('active', 'boolean', [
                 'default' => true,
                 'limit' => null,
