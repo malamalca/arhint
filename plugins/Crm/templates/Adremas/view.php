@@ -24,6 +24,15 @@ $viewAdremaPanels = [
                 'confirm' => __d('crm', 'Are you sure you want to delete the adrema?'),
             ],
         ],
+        'email' => [
+            'title' => __d('crm', 'Email'),
+            'visible' => true,
+            'url' => [
+                'controller' => 'Labels',
+                'action' => 'label',
+                '?' => ['adrema' => $adrema->id, 'process' => 'email'],
+            ],
+        ],
     ],
     'panels' => [
         'title_addresses' => ['lines' => [sprintf('<h3>%s</h3>', __d('crm', 'Addresses'))]],

@@ -53,38 +53,6 @@ $labelSelectForm = [
                     ],
                 ],
             ],
-
-            'atch.1' => $process == 'print' ? null : [
-                'method' => 'control',
-                'parameters' => [
-                    'field' => 'attachment.1',
-                    'options' => [
-                        'type' => 'file',
-                        'label' => __d('crm', 'Attachment 1') . ':',
-                    ],
-                ],
-            ],
-            'atch.2' => $process == 'print' ? null : [
-                'method' => 'control',
-                'parameters' => [
-                    'field' => 'attachment.2',
-                    'options' => [
-                        'type' => 'file',
-                        'label' => __d('crm', 'Attachment 2') . ':',
-                    ],
-                ],
-            ],
-            'atch.3' => $process == 'print' ? null : [
-                'method' => 'control',
-                'parameters' => [
-                    'field' => 'attachment.3',
-                    'options' => [
-                        'type' => 'file',
-                        'label' => __d('crm', 'Attachment 3') . ':',
-                    ],
-                ],
-            ],
-
             'submit' => [
                 'method' => 'button',
                 'parameters' => [

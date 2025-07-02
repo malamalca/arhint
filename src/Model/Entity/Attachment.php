@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Model\Entity;
 
+use Cake\Core\Configure;
 use Cake\ORM\Entity;
 
 /**
@@ -30,4 +31,14 @@ class Attachment extends Entity
         '*' => true,
         'id' => false,
     ];
+
+    /**
+     * Returns full path for attachment
+     *
+     * @return string
+     */
+    public function getFilePath(): string
+    {
+        return Configure::read('App.uploadFolder') . DS . $this->filename;
+    }
 }

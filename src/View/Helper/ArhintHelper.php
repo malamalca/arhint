@@ -4,12 +4,15 @@ declare(strict_types=1);
 namespace App\View\Helper;
 
 use App\Model\Entity\User;
+use Cake\Collection\Collection;
 use Cake\I18n\Date;
 use Cake\I18n\DateTime;
 use Cake\View\Helper;
 
 /**
  * @property \Cake\View\Helper\HtmlHelper $Html
+ * @property \Cake\View\Helper\NumberHelper $Number
+ * @property \Lil\View\Helper\LilHelper $Lil
  */
 class ArhintHelper extends Helper
 {
@@ -343,19 +346,23 @@ class ArhintHelper extends Helper
     /**
      * Output line with search panel
      *
-     * @param Query $attachments Attachments list
+     * @param \Cake\Collection\Collection $attachments Attachments list
      * @param string $model Attachments table model.
      * @param string $foreignId Foreign key.
-     * @return array
+     * @param array<string, mixed> $options Options
+     * @return array<mixed>
      */
-    public function attachmentsTable($attachments, string $model, string $foreignId, array $options = []): array
-    {
+    public function attachmentsTable(
+        Collection $attachments,
+        string $model,
+        string $foreignId,
+        array $options = [],
+    ): array {
         $defaultOptions = [
             'redirectUrl' => '/',
         ];
 
         $_options = array_merge($defaultOptions, $options);
-
 
         $attachmentsTable = [];
 
@@ -365,10 +372,11 @@ class ArhintHelper extends Helper
                 'head' => ['rows' => [['columns' => [
                     __('Filename'),
                     __('Size'),
-                    '&nbsp;'
+                    '&nbsp;',
                 ]]]],
             ]];
             foreach ($attachments as $attachment) {
+                /** @var \App\Model\Entity\Attachment $attachment */
                 $attachmentsTable['table']['body']['rows'][] = ['columns' => [
                     h($attachment->filename ?? 'N/A'),
                     $this->Number->toReadableSize((int)$attachment->filesize),
@@ -385,7 +393,7 @@ class ArhintHelper extends Helper
                                     $attachment->id,
                                     '?' => ['redirect' => $_options['redirectUrl']],
                                 ],
-                                ['escape' => false, 'class' => 'btn btn-small']
+                                ['escape' => false, 'class' => 'btn btn-small'],
                             ) . ' ' .
                             $this->Lil->deleteLink([
                                 'prefix' => false,
@@ -398,7 +406,8 @@ class ArhintHelper extends Helper
                     ],
                 ]];
             }
-            $attachmentsTable['table']['post'] = sprintf('<p>%s</p>',
+            $attachmentsTable['table']['post'] = sprintf(
+                '<p>%s</p>',
                 $this->Html->link(
                     __('Add New Attachment'),
                     [
@@ -409,10 +418,10 @@ class ArhintHelper extends Helper
                         '?' => ['model' => $model, 'foreign_id' => $foreignId, 'redirect' => $_options['redirectUrl']],
                     ],
                     ['class' => 'btn btn-small'],
-                )
+                ),
             );
         } else {
-            $attachmentsTable['lines'][] = 
+            $attachmentsTable['lines'][] =
                 __('No attachments found.') . ' ' .
                 $this->Html->link(__('Add New Attachment'), [
                     'prefix' => false,

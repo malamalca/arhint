@@ -83,7 +83,7 @@ class AdremasController extends AppController
             ->all();
 
         $attachments = TableRegistry::getTableLocator()->get('Attachments')
-            ->find('forModel', ['Adrema', $adrema->id])
+            ->find('forModel', model: 'Adrema', foreignId: $adrema->id)
             ->select()
             ->all();
 

@@ -35,4 +35,23 @@ class TmpView extends AppView
     {
         yield TMP;
     }
+
+    /**
+     * Fetch the content for a block. If a block is
+     * empty or undefined '' will be returned.
+     *
+     * @param string $name Name of the block
+     * @param string $default Default text
+     * @return string The block content or $default if the block does not exist.
+     * @see \Cake\View\ViewBlock::get()
+     */
+    public function fetch(string $name, string $default = ''): string
+    {
+        $varValue = $this->get('_' . $name . 'Block');
+        if ($varValue) {
+            return $varValue;
+        } else {
+            return $this->Blocks->get($name, $default);
+        }
+    }
 }

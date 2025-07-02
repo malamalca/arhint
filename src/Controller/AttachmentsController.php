@@ -30,7 +30,7 @@ class AttachmentsController extends AppController
      * @return \Cake\Http\Response|null|void Renders view
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function view($id = null)
+    public function view(?string $id = null)
     {
         $attachment = $this->Attachments->get($id, contain: []);
         $this->set(compact('attachment'));
@@ -63,7 +63,7 @@ class AttachmentsController extends AppController
      * @return \Cake\Http\Response|null|void Redirects on successful edit, renders view otherwise.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function edit($id = null)
+    public function edit(?string $id = null)
     {
         if ($id) {
             $attachment = $this->Attachments->get($id);
@@ -74,14 +74,14 @@ class AttachmentsController extends AppController
         }
 
         $this->Authorization->authorize($attachment);
-        
+
         if ($this->request->is(['patch', 'post', 'put'])) {
             $tmpNames = [];
             $uploadedFile = $this->getRequest()->getData('filename');
             if (!empty($uploadedFile) && !$uploadedFile->getError()) {
                 $tmpNames[$uploadedFile->getClientFilename()] = $uploadedFile->getStream()->getMetadata('uri');
             }
-            
+
             $attachment = $this->Attachments->patchEntity($attachment, $this->request->getData());
             if ($this->Attachments->save($attachment, ['uploadedFilename' => $tmpNames])) {
                 $this->Flash->success(__('The attachment has been saved.'));
@@ -102,13 +102,13 @@ class AttachmentsController extends AppController
      * @return \Cake\Http\Response|null Redirects to index.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function delete($id = null)
+    public function delete(?string $id = null)
     {
         $this->request->allowMethod(['post', 'delete', 'get']);
         $attachment = $this->Attachments->get($id);
 
         $this->Authorization->authorize($attachment);
-        
+
         if ($this->Attachments->delete($attachment)) {
             $this->Flash->success(__('The attachment has been deleted.'));
         } else {

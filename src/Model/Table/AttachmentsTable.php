@@ -7,19 +7,17 @@ use ArrayObject;
 use Cake\Core\Configure;
 use Cake\Event\Event;
 use Cake\ORM\Entity;
-use Cake\ORM\RulesChecker;
 use Cake\ORM\Query\SelectQuery;
+use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
-use Cake\ORM\TableRegistry;
 use Cake\Validation\Validator;
-use App\Model\Entity\Attachment;
 
 /**
  * Attachments Model
  *
- * @method \Documents\Model\Entity\Attachment get(mixed $primaryKey, array|string $finder = 'all', \Psr\SimpleCache\CacheInterface|string|null $cache = null, \Closure|string|null $cacheKey = null, mixed ...$args)
- * @method \Documents\Model\Entity\Attachment newEmptyEntity()
- * @method \Documents\Model\Entity\Attachment patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
+ * @method \App\Model\Entity\Attachment get(mixed $primaryKey, array|string $finder = 'all', \Psr\SimpleCache\CacheInterface|string|null $cache = null, \Closure|string|null $cacheKey = null, mixed ...$args)
+ * @method \App\Model\Entity\Attachment newEmptyEntity()
+ * @method \App\Model\Entity\Attachment patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
  */
 class AttachmentsTable extends Table
 {

@@ -32,32 +32,31 @@ class ArhintMailer extends Mailer
      * @return array
      * @psalm-return array{headers: string, message: string}
      */
-    public function deliver(string $content = ''): array
+    public function deliver(?string $content = null): array
     {
         // setup email template
         $DocumentsTemplatesTable = TableRegistry::getTableLocator()->get('Documents.DocumentsTemplates');
-        $template = $DocumentsTemplatesTable->find()
+        $layout = $DocumentsTemplatesTable->find()
             ->select()
             ->where(['owner_id' => $this->currentUser->get('company_id'), 'kind' => 'email', 'main' => 1])
             ->first();
 
-        if ($template) {
+        // user defined template exists
+        if ($layout) {
             $this->setEmailFormat('html');
             $uniqueFile = TMP . uniqid() . '.php';
-            file_put_contents($uniqueFile, $template->body);
+            file_put_contents($uniqueFile, $layout->body);
 
             if (!empty($content)) {
-                ob_start();
-                include $uniqueFile;
-                $content = ob_get_contents();
-                ob_end_clean();
-
-                unlink($uniqueFile);
-            } else {
+                // this is a functionality of TmpView
+                // to mimic $content as ViewBlock
                 $this->viewBuilder()
-                    ->setClassName('Tmp')
-                    ->setLayout(basename($uniqueFile, '.php'));
+                    ->setVar('_contentBlock', $content);
             }
+
+            $this->viewBuilder()
+                ->setClassName('Tmp')
+                ->setLayout(basename($uniqueFile, '.php'));
         }
 
         $companyLogoFilePath = dirname(APP) . DS . 'uploads' . DS . 'Contacts' . DS;
