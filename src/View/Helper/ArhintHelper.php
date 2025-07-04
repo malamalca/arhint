@@ -4,12 +4,15 @@ declare(strict_types=1);
 namespace App\View\Helper;
 
 use App\Model\Entity\User;
+use Cake\Collection\Collection;
 use Cake\I18n\Date;
 use Cake\I18n\DateTime;
 use Cake\View\Helper;
 
 /**
  * @property \Cake\View\Helper\HtmlHelper $Html
+ * @property \Cake\View\Helper\NumberHelper $Number
+ * @property \Lil\View\Helper\LilHelper $Lil
  */
 class ArhintHelper extends Helper
 {
@@ -20,7 +23,7 @@ class ArhintHelper extends Helper
     /**
      * @var array<string> $helpers
      */
-    protected array $helpers = ['Html'];
+    protected array $helpers = ['Html', 'Number', 'Lil.Lil'];
 
     /**
      * Returns duration in form HH:MM
@@ -338,5 +341,97 @@ class ArhintHelper extends Helper
             __('Search'),
             $defaultValue,
         );
+    }
+
+    /**
+     * Output line with search panel
+     *
+     * @param \Cake\Collection\Collection $attachments Attachments list
+     * @param string $model Attachments table model.
+     * @param string $foreignId Foreign key.
+     * @param array<string, mixed> $options Options
+     * @return array<mixed>
+     */
+    public function attachmentsTable(
+        Collection $attachments,
+        string $model,
+        string $foreignId,
+        array $options = [],
+    ): array {
+        $defaultOptions = [
+            'redirectUrl' => '/',
+        ];
+
+        $_options = array_merge($defaultOptions, $options);
+
+        $attachmentsTable = [];
+
+        if ($attachments->count() > 0) {
+            $attachmentsTable = ['table' => [
+                'parameters' => ['id' => 'AttachmentsList'],
+                'head' => ['rows' => [['columns' => [
+                    __('Filename'),
+                    __('Size'),
+                    '&nbsp;',
+                ]]]],
+            ]];
+            foreach ($attachments as $attachment) {
+                /** @var \App\Model\Entity\Attachment $attachment */
+                $attachmentsTable['table']['body']['rows'][] = ['columns' => [
+                    h($attachment->filename ?? 'N/A'),
+                    $this->Number->toReadableSize((int)$attachment->filesize),
+                    'actions' => [
+                        'params' => ['class' => 'right-align'],
+                        'html' =>
+                            $this->Html->link(
+                                '<i class="material-icons">file_download</i>',
+                                [
+                                    'prefix' => false,
+                                    'plugin' => false,
+                                    'controller' => 'Attachments',
+                                    'action' => 'download',
+                                    $attachment->id,
+                                    '?' => ['redirect' => $_options['redirectUrl']],
+                                ],
+                                ['escape' => false, 'class' => 'btn btn-small'],
+                            ) . ' ' .
+                            $this->Lil->deleteLink([
+                                'prefix' => false,
+                                'plugin' => false,
+                                'controller' => 'Attachments',
+                                'action' => 'delete',
+                                $attachment->id,
+                                '?' => ['redirect' => $_options['redirectUrl']],
+                            ]),
+                    ],
+                ]];
+            }
+            $attachmentsTable['table']['post'] = sprintf(
+                '<p>%s</p>',
+                $this->Html->link(
+                    __('Add New Attachment'),
+                    [
+                        'prefix' => false,
+                        'plugin' => false,
+                        'controller' => 'Attachments',
+                        'action' => 'edit',
+                        '?' => ['model' => $model, 'foreign_id' => $foreignId, 'redirect' => $_options['redirectUrl']],
+                    ],
+                    ['class' => 'btn btn-small'],
+                ),
+            );
+        } else {
+            $attachmentsTable['lines'][] =
+                __('No attachments found.') . ' ' .
+                $this->Html->link(__('Add New Attachment'), [
+                    'prefix' => false,
+                    'plugin' => false,
+                    'controller' => 'Attachments',
+                    'action' => 'edit',
+                    '?' => ['model' => $model, 'foreign_id' => $foreignId, 'redirect' => $_options['redirectUrl']],
+                ]);
+        }
+
+        return $attachmentsTable;
     }
 }

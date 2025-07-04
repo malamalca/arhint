@@ -102,6 +102,11 @@ class LabelsController extends AppController
 
         $this->Authorization->authorize($adrema, 'view');
 
+        $attachments = TableRegistry::getTableLocator()->get('Attachments')
+            ->find('forModel', model: 'Adrema', foreignId: $adrema->id)
+            ->select()
+            ->all();
+
         /** @var \Crm\Model\Table\AdremasContactsTable $AdremasContactsTable */
         $AdremasContactsTable = TableRegistry::getTableLocator()->get('Crm.AdremasContacts');
         $addresses = $AdremasContactsTable
@@ -112,6 +117,6 @@ class LabelsController extends AppController
 
         $this->viewBuilder()->setTemplate('Labels' . DS . 'email' . DS . $data['label']);
 
-        $this->set(compact('addresses', 'data'));
+        $this->set(compact('addresses', 'data', 'attachments'));
     }
 }

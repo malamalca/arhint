@@ -119,8 +119,8 @@ img#magic-tax-lookup {
 
 
 /* Adrema */
-table#crm-adrema {
-    min-width: 700px;
+table#AddressesList, table#AttachmentsList {
+    width: 700px;
 }
 .td-adrema-title {
     width: 25%;

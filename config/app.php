@@ -58,6 +58,7 @@ return [
         'webroot' => 'webroot',
         'wwwRoot' => WWW_ROOT,
         'fullBaseUrl' => false,
+        'uploadFolder' => ROOT . DS . 'uploads' . DS,
         'imageBaseUrl' => 'img/',
         'cssBaseUrl' => 'css/',
         'jsBaseUrl' => 'js/',
