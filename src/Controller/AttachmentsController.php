@@ -34,6 +34,7 @@ class AttachmentsController extends AppController
             if ($mimeType) {
                 $response = $response->withType($mimeType);
             }
+            finfo_close($finfoType);
         }
 
         return $response;
