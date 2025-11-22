@@ -18,7 +18,7 @@ use Documents\Model\Entity\Document;
  * @property \Documents\Model\Table\UsersTable&\Cake\ORM\Association\BelongsTo $Users
  * @property \Documents\Model\Table\CountersTable&\Cake\ORM\Association\BelongsTo $Counters
  * @property \Documents\Model\Table\ProjectsTable&\Cake\ORM\Association\BelongsTo $Projects
- * @property \Documents\Model\Table\DocumentsAttachmentsTable&\Cake\ORM\Association\HasMany $DocumentsAttachments
+ * @property \App\Model\Table\AttachmentsTable&\Cake\ORM\Association\HasMany $Attachments
  * @method \Documents\Model\Entity\Document newEmptyEntity()
  * @method \Documents\Model\Entity\Document newEntity(array $data, array $options = [])
  * @method \Documents\Model\Entity\Document[] newEntities(array $data, array $options = [])
@@ -70,8 +70,9 @@ class DocumentsTable extends Table
             'foreignKey' => 'document_id',
             'dependant' => true,
         ]);
-        $this->hasMany('Documents.DocumentsAttachments', [
-            'foreignKey' => 'document_id',
+        $this->hasMany('App.Attachments', [
+            'foreignKey' => 'foreign_id',
+            'conditions' => ['Attachments.model' => 'Document'],
             'dependant' => true,
         ]);
 

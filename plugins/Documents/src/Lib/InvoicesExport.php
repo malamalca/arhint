@@ -70,7 +70,7 @@ class InvoicesExport
                 'Receivers',
                 'Buyers',
                 'Issuers',
-                'DocumentsAttachments',
+                'Attachments',
                 'DocumentsLinks' => ['Invoices'],
                 'TplHeaders', 'TplBodies', 'TplFooters',
             ],

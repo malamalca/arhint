@@ -49,7 +49,7 @@ use Cake\ORM\TableRegistry;
  * @property \Documents\Model\Entity\DocumentsClient $receiver
  * @property array $invoices_items
  * @property array $invoices_taxes
- * @property array $documents_attachments
+ * @property array $attachments
  *
  * @property array $deleteTaxesList
  * @property array $deleteItemsList

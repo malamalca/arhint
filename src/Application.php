@@ -195,19 +195,23 @@ class Application extends BaseApplication implements
             AbstractIdentifier::CREDENTIAL_PASSWORD => 'passwd',
         ];
 
-        // Load identifiers
-        $service->loadIdentifier('Authentication.Password', [
-            'fields' => $fields,
-            'passwordHasher' => [
-                'className' => 'Authentication.Fallback',
-                'hashers' => [
-                    'Authentication.Default',
-                    [
-                        'className' => 'Authentication.Legacy',
-                        'hashType' => 'sha1',
+        $service->loadAuthenticator('Authentication.Form', [
+            'urlChecker' => 'Authentication.CakeRouter',
+            'identifier' => ['Authentication.Password' => [
+                'fields' => $fields,
+                'passwordHasher' => [
+                    'className' => 'Authentication.Fallback',
+                    'hashers' => [
+                        'Authentication.Default',
+                        [
+                            'className' => 'Authentication.Legacy',
+                            'hashType' => 'sha1',
+                        ],
                     ],
                 ],
-            ],
+            ]],
+            'fields' => $fields,
+            'loginUrl' => [$this->getLoginPath()],
         ]);
 
         // Load the authenticators, you want session first

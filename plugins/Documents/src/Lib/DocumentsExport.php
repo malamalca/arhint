@@ -65,7 +65,7 @@ class DocumentsExport
                 'DocumentsCounters',
                 'Receivers',
                 'Issuers',
-                'DocumentsAttachments',
+                'Attachments',
                 'DocumentsLinks' => ['Invoices'],
                 'TplHeaders', 'TplBodies', 'TplFooters',
             ],

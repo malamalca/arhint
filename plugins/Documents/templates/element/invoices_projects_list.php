@@ -95,8 +95,8 @@
                 'html' => $invoice->attachments_count == 0 ? '' : $this->Html->link(
                     '<i class="material-icons">cloud_download</i>',
                     [
-                        'plugin' => 'Documents',
-                        'controller' => 'DocumentsAttachments',
+                        'plugin' => false,
+                        'controller' => 'Attachments',
                         'action' => 'downloadAll',
                         $invoice->id,
                     ],

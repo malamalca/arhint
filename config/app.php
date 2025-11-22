@@ -465,6 +465,17 @@ return [
         'ignoreAuthorization' => true,
     ],
 
+    'OCRMyPDF' => [
+        'executable' => 'C:\bin\ocrmypdf\ocrmypdf.exe',
+        'options' => [
+            '--skip-text',
+            '--rotate-pages',
+            '--deskew',
+            '--output-type pdf',
+            '-l eng+slv',
+        ],
+    ],
+
     'Ghostscript' => [
         'executable' => 'D:\bin\Ghostscript\gswin64c.exe'
     ],
