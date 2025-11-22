@@ -6,8 +6,6 @@ namespace Documents\Test\TestCase\Controller;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\IntegrationTestTrait;
 use Cake\TestSuite\TestCase;
-use Laminas\Diactoros\UploadedFile;
-use const UPLOAD_ERR_OK;
 
 /**
  * Documents\Controller\DocumentsController Test Case
