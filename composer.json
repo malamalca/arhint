@@ -118,6 +118,9 @@
             "dealerdirect/phpcodesniffer-composer-installer": true,
             "composer/package-versions-deprecated": true,
             "cakephp/plugin-installer": true
+        },
+        "audit": {
+            "block-insecure": false
         }
     },
     "minimum-stability": "dev"
