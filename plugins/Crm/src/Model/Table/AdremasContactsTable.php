@@ -53,7 +53,6 @@ class AdremasContactsTable extends Table
             'conditions' => ['model' => 'AdremasContact'],
             'dependant' => true,
         ]);
-
     }
 
     /**
