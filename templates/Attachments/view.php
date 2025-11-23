@@ -1,7 +1,6 @@
 <?php
 use Cake\Routing\Router;
 use Cake\Core\Configure;
-use mishagp\OCRmyPDF\OCRmyPDF;
 
 $this->set('head_for_layout', false);
 

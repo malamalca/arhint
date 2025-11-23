@@ -5,7 +5,7 @@ namespace App\Controller;
 
 use Cake\Core\Configure;
 use Cake\Http\Exception\NotFoundException;
-use mishagp\OCRmyPDF\OCRmyPDF;
+use mishahawthorn\OCRmyPDF\OCRmyPDF;
 
 /**
  * Attachments Controller
