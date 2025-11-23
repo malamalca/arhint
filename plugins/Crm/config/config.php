@@ -61,6 +61,7 @@ $config = [
 
     'Crm.emailTemplates' => [
         'slo_pogoji' => 'Projektni pogoji',
+        'slo_mnenja' => 'Mnenja',
     ],
 
     'Crm.email.slo_pogoji' => [
@@ -71,7 +72,33 @@ $config = [
                     'field' => 'xls',
                     'options' => [
                         'type' => 'file',
-                        'label' => 'Priloga 8 [xlsx]' . ':',
+                        'label' => 'Priloga 8A [xlsx]' . ':',
+                    ],
+                ],
+            ],
+        ],
+        'address' => [
+            'descript' => [
+                'method' => 'control',
+                'parameters' => [
+                    'field' => 'descript',
+                    'options' => [
+                        'type' => 'text',
+                        'label' => 'Opis' . ':',
+                    ],
+                ],
+            ],
+        ],
+    ],
+    'Crm.email.slo_mnenja' => [
+        'form' => [
+            'zip' => [
+                'method' => 'control',
+                'parameters' => [
+                    'field' => 'xls',
+                    'options' => [
+                        'type' => 'file',
+                        'label' => 'Priloga 9A [xlsx]' . ':',
                     ],
                 ],
             ],

@@ -11,7 +11,7 @@ $editAddressForm = [
         'lines' => [
             'form_start' => [
                 'method' => 'create',
-                'parameters' => [$address, ['idPrefix' => 'contact-address']],
+                'parameters' => [$address, ['type' => 'file', 'idPrefix' => 'contact-address']],
             ],
             'id' => [
                 'method' => 'hidden',
@@ -113,11 +113,27 @@ if (count($fields) > 0) {
             'parameters' => [
                 'field' => 'data.' . $fieldParts[0],
                 [
-                    'type' => $fieldParts[1],
+                    'type' => trim($fieldParts[1]),
                     'value' => $additionalData[$fieldParts[0]] ?? '',
                 ],
             ],
         ];
+    }
+    if (!empty($address->attachments)) {
+        foreach ($address->attachments as $k => $attachment) {
+            $additionalFields['attachment_'.$k] =
+                '<p>' .
+                $this->Html->link(
+                    $attachment->filename,
+                    ['plugin' => false, 'controller' => 'Attachments', 'action' => 'download', $attachment->id, '?' => ['redirect' => Router::url(null, true)]]
+                ) .
+                ' ' .
+                $this->Html->link(
+                    __d('crm', 'remove'),
+                    ['plugin' => false, 'controller' => 'Attachments', 'action' => 'delete', $attachment->id, '?' => ['redirect' => Router::url(null, true)]]
+                ) .
+                '</p>';
+        }
     }
     $this->Lil->insertIntoArray($editAddressForm['form']['lines'], $additionalFields, ['before' => 'submit']);
 }

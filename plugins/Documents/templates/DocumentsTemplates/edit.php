@@ -65,6 +65,7 @@ $templateEdit = [
                     'field' => 'body', [
                         'id' => 'template-body',
                         'value' => $attachedImage ? '' : $template->body,
+                        'maxlength' => null,
                     ],
                 ],
             ],
@@ -134,7 +135,7 @@ echo $this->Lil->form($templateEdit, 'Documents.DocumentsTemplates.edit');
             }
         });
 
-        $("textarea").keydown(function(e) {
+        $("textarea2").keydown(function(e) {
             if(e.keyCode === 9) { // tab was pressed
                 // get caret position/selection
                 var start = this.selectionStart;

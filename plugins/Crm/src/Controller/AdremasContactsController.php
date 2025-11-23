@@ -22,7 +22,7 @@ class AdremasContactsController extends AppController
     public function edit(?string $id = null)
     {
         if ($id) {
-            $address = $this->AdremasContacts->get($id, contain: ['Contacts', 'ContactsAddresses', 'ContactsEmails']);
+            $address = $this->AdremasContacts->get($id, contain: ['Contacts', 'ContactsAddresses', 'ContactsEmails', 'Attachments']);
             /** @var \Crm\Model\Entity\Adrema $adrema */
             $adrema = TableRegistry::getTableLocator()->get('Crm.Adremas')->get($address->adrema_id);
         } else {
@@ -39,13 +39,14 @@ class AdremasContactsController extends AppController
 
         if ($this->getRequest()->is(['patch', 'post', 'put'])) {
             $address = $this->AdremasContacts->patchEntity($address, $this->getRequest()->getData());
-            if (!$address->getErrors() && $this->AdremasContacts->save($address)) {
+            if (!$address->getErrors() && $this->AdremasContacts->save($address, ['uploadedFiles' => $this->getRequest()->getUploadedFiles()['data'] ?? []])) {
                 $this->Flash->success(__d('crm', 'The address has been saved.'));
 
                 return $this->redirect(['controller' => 'Adremas', 'action' => 'view', $address->adrema_id]);
             } else {
                 $this->Flash->error(__d('crm', 'The address could not be saved. Please, try again.'));
             }
+
         }
 
         $addresses = [];

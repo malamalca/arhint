@@ -280,7 +280,22 @@
 										</xsl:for-each>
 									</xsl:variable>
 									<xsl:variable name="kolicina" select="format-number(KolicinaArtikla/Kolicina, '###.###.##0,##', 'dec')"/>
-									<xsl:variable name="enota_mere" select="KolicinaArtikla/EnotaMere"/>
+                                    <xsl:variable name="enota_mere">
+                                        <xsl:choose>
+                                            <xsl:when test="KolicinaArtikla/EnotaMere='PCE'">kos</xsl:when>
+                                            <xsl:when test="KolicinaArtikla/EnotaMere='KG'">kg</xsl:when>
+                                            <xsl:when test="KolicinaArtikla/EnotaMere='LTR'">l</xsl:when>
+                                            <xsl:when test="KolicinaArtikla/EnotaMere='MTR'">m</xsl:when>
+                                            <xsl:when test="KolicinaArtikla/EnotaMere='CM'">cm</xsl:when>
+                                            <xsl:when test="KolicinaArtikla/EnotaMere='MTK'">m<sup>2</sup></xsl:when>
+                                            <xsl:when test="KolicinaArtikla/EnotaMere='MTQ'">m<sup>3</sup></xsl:when>
+                                            <xsl:when test="KolicinaArtikla/EnotaMere='CMT'">cm</xsl:when>
+                                            <xsl:when test="KolicinaArtikla/EnotaMere='DAY'">dan</xsl:when>
+                                            <xsl:otherwise>
+                                                <xsl:value-of select="KolicinaArtikla/EnotaMere"/>
+                                            </xsl:otherwise>
+                                        </xsl:choose>
+                                    </xsl:variable>
 									<xsl:variable name="cena" select="format-number(CenaPostavke/Cena, '###.###.##0,00', 'dec')"/>
 									<xsl:variable name="koncna_vrednost" select="format-number(ZneskiPostavke[VrstaZneskaPostavke='38']/ZnesekPostavke, '###.###.##0,00', 'dec')"/>
 									<xsl:variable name="popust_znesek">

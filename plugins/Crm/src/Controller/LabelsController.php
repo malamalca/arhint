@@ -71,7 +71,7 @@ class LabelsController extends AppController
         $addresses = $AdremasContactsTable
             ->find()
             ->where(['adrema_id' => $adrema->id])
-            ->contain(['Contacts', 'ContactsAddresses', 'ContactsEmails'])
+            ->contain(['Contacts', 'ContactsAddresses', 'ContactsEmails', 'Attachments'])
             ->all();
 
         $this->set(compact('addresses', 'data'));
@@ -112,7 +112,7 @@ class LabelsController extends AppController
         $addresses = $AdremasContactsTable
             ->find()
             ->where(['adrema_id' => $adrema->id])
-            ->contain(['Contacts', 'ContactsAddresses', 'ContactsEmails'])
+            ->contain(['Contacts', 'ContactsAddresses', 'ContactsEmails', 'Attachments'])
             ->all();
 
         $this->viewBuilder()->setTemplate('Labels' . DS . 'email' . DS . $data['label']);

@@ -533,7 +533,7 @@ class SabreDAVSyncContacts extends AbstractBackend implements SyncSupport
         $vcard = new VObject\Component\VCard([
             'PRODID' => 'Arhint',
             'UID' => $contact->id,
-            'FN' => $contact->title,
+            'FN' => implode(' ', array_filter([$contact->name, $contact->surname])),
             'N' => [$contact->surname, $contact->name],
         ]);
 

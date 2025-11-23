@@ -193,6 +193,7 @@ class UsersController extends AppController
      */
     public function loginAs(string $id): ?Response
     {
+        $this->Authorization->skipAuthorization();
         $user = $this->Users->get($id);
         $this->Authentication->setIdentity($user);
 

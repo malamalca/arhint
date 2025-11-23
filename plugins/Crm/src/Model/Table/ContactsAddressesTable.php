@@ -79,7 +79,7 @@ class ContactsAddressesTable extends Table
         $rules->add($rules->existsIn(['contact_id'], 'Contacts'));
 
         // check that only one entry for specified kind
-        $rules->add(function ($entity, $options) {
+        /*$rules->add(function ($entity, $options) {
             $conditions = [
                 'contact_id' => $entity->contact_id,
                 'kind' => empty($entity->kind) ? 'O' : $entity->kind,
@@ -89,7 +89,7 @@ class ContactsAddressesTable extends Table
             }
 
             return !$this->exists($conditions);
-        }, ['errorField' => 'kind', 'message' => 'kindOccupied']);
+        }, ['errorField' => 'kind', 'message' => 'kindOccupied']);*/
 
         return $rules;
     }

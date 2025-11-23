@@ -31,6 +31,7 @@ class AdremasContactsTable extends Table
         $this->setTable('adremas_contacts');
         $this->setPrimaryKey('id');
         $this->addBehavior('Timestamp');
+        $this->addBehavior('ArhintAttachment', ['field' => '*']);
         $this->belongsTo('Adremas', [
             'foreignKey' => 'adrema_id',
             'className' => 'Crm.Adremas',
@@ -47,6 +48,12 @@ class AdremasContactsTable extends Table
             'foreignKey' => 'contacts_email_id',
             'className' => 'Crm.ContactsEmails',
         ]);
+        $this->hasMany('Attachments', [
+            'foreignKey' => 'foreign_id',
+            'conditions' => ['model' => 'AdremasContact'],
+            'dependant' => true,
+        ]);
+
     }
 
     /**

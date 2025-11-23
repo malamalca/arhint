@@ -39,6 +39,6 @@ class Attachment extends Entity
      */
     public function getFilePath(): string
     {
-        return Configure::read('App.uploadFolder') . DS . $this->filename;
+        return Configure::read('App.uploadFolder') . DS . $this->model . DS . $this->filename;
     }
 }

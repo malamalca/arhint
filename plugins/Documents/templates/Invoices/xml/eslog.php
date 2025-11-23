@@ -200,6 +200,9 @@
                         case 'cm':
                             $em = 'CMT';
                             break;
+                        case 'cm2':
+                            $em = 'CMK';
+                            break;
                         case 'dan':
                             $em = 'DAY';
                             break;
@@ -233,6 +236,12 @@
                             break;
                         case 'm':
                             $em = 'MTR';
+                            break;
+                        case 'm2':
+                            $em = 'MTK';
+                            break;
+                        case 'm3':
+                            $em = 'MTQ';
                             break;
                         default:
                             $em = 'PCE';

@@ -12,29 +12,29 @@
 
 		<html>
 			<head>
-                <meta name="viewport" content="width=device-width, user-scalable=no initial-scale=1.0, minimum-scale=1.0" />
+				<meta name="viewport" content="width=device-width, user-scalable=no initial-scale=1.0, minimum-scale=1.0" />
 				<title>
 					<xsl:value-of select="concat('Dokument [ ', $naslov,' ] - št.: ', $stevilka)"/>
 				</title>
 				<style type="text/css">
-                    #folding-line {
-                        position: absolute;
-                        top: 7cm;
-                        left: 0cm;
-                        width: 1cm;
-                        border-top: solid 1px #000;
-                    }
-                    td#narocnik-wrapper{
-                        height: 5.5cm;
-                        padding-top: 1.5cm;
-                        vertical-align: top;
-                    }
-                    table.narocnik .posta_kraj {
-                        padding-top: 0.5cm;
-                    }
+					#folding-line {
+						position: absolute;
+						top: 7cm;
+						left: 0cm;
+						width: 1cm;
+						border-top: solid 1px #000;
+					}
+					td#narocnik-wrapper{
+						height: 5.5cm;
+						padding-top: 1.5cm;
+						vertical-align: top;
+					}
+					table.narocnik .posta_kraj {
+						padding-top: 0.5cm;
+					}
 
-                    .bold { font-weight: bold; }
-                </style>
+					.bold { font-weight: bold; }
+				</style>
 			</head>
 			<body>
 				<xsl:variable name="narocnik" select="PodatkiPodjetja[NazivNaslovPodjetja/VrstaPartnerja='IV']"/>
@@ -52,37 +52,37 @@
 				<xsl:variable name="datum_izdaje" select="Datum"/>
 				<xsl:variable name="besedilo" select="Besedilo"/>
 
-                <div id="folding-line"></div>
+				<div id="folding-line"></div>
 				<div id="print-area">
-				    <div id="header2"><xsl:value-of select="$header" disable-output-escaping="yes" /></div>
-				    <div id="content">
-    				<table width="100%" border="0" cellpadding="0" cellspacing="0">
-                        <tr>
-    						<td>
-    							<table width="70%" class="basics" cellpadding="0" cellspacing="0">
-                                    <tr>
-    									<td width="40%">Datum:</td>
-    									<td width="60%">
-    										<xsl:call-template name="format_date">
-    											<xsl:with-param name="date" select="$datum_izdaje"/>
-    										</xsl:call-template>
-    									</td>
-    								</tr>
-    								<tr>
-    									<td width="40%">Kraj:</td>
-    									<td width="60%"><xsl:value-of select="$kraj_izdaje"/></td>
-    								</tr>
-    								<tr>
-    									<td width="40%">Št. dokumenta:</td>
-    									<td width="60%"><xsl:value-of select="$stevilka"/></td>
-    								</tr>
-    							</table>
-    						</td>
-    					</tr>
-                      <tr>
-                        <td id="narocnik-wrapper">
-                            <br /><br /><br />
-                            <table width="70%" class="narocnik" cellpadding="0" cellspacing="0">
+					<div id="header2"><xsl:value-of select="$header" disable-output-escaping="yes" /></div>
+					<div id="content">
+					<table width="100%" border="0" cellpadding="0" cellspacing="0">
+						<tr>
+							<td>
+								<table width="70%" class="basics" cellpadding="0" cellspacing="0">
+									<tr>
+										<td width="40%">Datum:</td>
+										<td width="60%">
+											<xsl:call-template name="format_date">
+												<xsl:with-param name="date" select="$datum_izdaje"/>
+											</xsl:call-template>
+										</td>
+									</tr>
+									<tr>
+										<td width="40%">Kraj:</td>
+										<td width="60%"><xsl:value-of select="$kraj_izdaje"/></td>
+									</tr>
+									<tr>
+										<td width="40%">Št. dokumenta:</td>
+										<td width="60%"><xsl:value-of select="$stevilka"/></td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+					  <tr>
+						<td id="narocnik-wrapper">
+							<br /><br /><br />
+							<table width="70%" class="narocnik" cellpadding="0" cellspacing="0">
 								<tr>
 									<td colspan="2"><xsl:value-of select="$narocnik_naziv_1"/></td>
 								</tr>
@@ -96,9 +96,9 @@
 								</tr>
 								<xsl:if test="string-length($narocnik_naslov_2) &gt; 0">
 									<tr>
-                                        <td>
-                                          <xsl:value-of select="$narocnik_naslov_2"/>
-                                        </td>
+										<td>
+										  <xsl:value-of select="$narocnik_naslov_2"/>
+										</td>
 									</tr>
 								</xsl:if>
 								<tr>
@@ -111,19 +111,19 @@
 									<td colspan="2" height="30px"/>
 								</tr>
 							</table>
-                        </td>
+						</td>
 					</tr>
 					<tr>
 						<td height="50px"/>
 					</tr>
 				</table>
-				    <h1>
+					<h1>
 							<xsl:value-of select="$naslov" disable-output-escaping="yes"/>
 						</h1>
-				    <xsl:value-of select="$besedilo" disable-output-escaping="yes"/>
-                    </div>
-                    <div id="footer2"><xsl:value-of select="$footer" disable-output-escaping="yes" /></div>
-                </div>
+					<xsl:value-of select="$besedilo" disable-output-escaping="yes"/>
+					</div>
+					<div id="footer2"><xsl:value-of select="$footer" disable-output-escaping="yes" /></div>
+				</div>
 			</body>
 		</html>
 	</xsl:template>

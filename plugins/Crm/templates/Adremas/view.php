@@ -48,6 +48,19 @@ $viewAdremaPanels = [
                 ]]]],
             ]
         ],
+        'add_address' => ['lines' => [
+            $this->Html->link(
+                __d('crm', 'Add new address'),
+                [
+                    'controller' => 'AdremasContacts',
+                    'action' => 'edit',
+                    '?' => ['adrema' => $adrema->id],
+                ],
+                [
+                    'class' => 'btn-small',
+                ]
+                ),
+        ]],
         'title_attachments' => ['lines' => [sprintf('<h3>%s</h3>', __d('crm', 'Attachments'))]],
         'attachments' => '',
     ],
@@ -59,9 +72,12 @@ foreach ($addresses as $k => $address) {
         'title' => h($address->contact->title ?? 'N/A'),
         'address' => h($address->contacts_address ?? ''),
         'email' => h($address->contacts_email->email ?? ''),
-        'actions' => 
+        'actions' => [
+            'params' => ['class' => 'nowrap'],
+            'html' =>
             $this->Lil->editLink(['controller' => 'AdremasContacts', 'action' => 'edit', $address->id]) . ' ' .
             $this->Lil->deleteLink(['controller' => 'AdremasContacts', 'action' => 'delete', $address->id]),
+        ]
     ]];
 }
 

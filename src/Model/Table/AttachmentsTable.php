@@ -97,19 +97,19 @@ class AttachmentsTable extends Table
         if (!empty($data['filename']) && is_array($data['filename'])) {
             $fileData = $data['filename'];
             $data['filename'] = $fileData['name'];
-            $data['mime'] = $fileData['type'];
+            $data['mimetype'] = $fileData['type'];
             $data['filesize'] = $fileData['size'];
         }
         if (!empty($data['filename']) && is_a($data['filename'], '\Laminas\Diactoros\UploadedFile')) {
             $fileData = $data['filename'];
             $data['filename'] = $fileData->getClientFilename();
-            $data['mime'] = $fileData->getClientMediaType();
+            $data['mimetype'] = $fileData->getClientMediaType();
             $data['filesize'] = $fileData->getSize();
         }
         if (!empty($data['scanned'])) {
             $data['filename'] = uniqid('');
             $data['original'] = 'scanned.pdf';
-            $data['mime'] = 'application/pdf';
+            $data['mimetype'] = 'application/pdf';
             $data['filesize'] = strlen(base64_encode($data['scanned']));
         }
     }
@@ -129,7 +129,11 @@ class AttachmentsTable extends Table
             !empty($entity->filename) &&
             file_exists($options['uploadedFilename'][$entity->filename])
         ) {
-            $fileDest = Configure::read('App.uploadFolder') . DS . $entity->filename;
+            $folderDest = Configure::read('App.uploadFolder') . DS . $entity->model . DS;
+            if (!file_exists($folderDest)) {
+                mkdir($folderDest, 0777);
+            }
+            $fileDest = $folderDest . $entity->filename;
             copy($options['uploadedFilename'][$entity->filename], $fileDest);
             unlink($options['uploadedFilename'][$entity->filename]);
         }
@@ -145,7 +149,7 @@ class AttachmentsTable extends Table
      */
     public function afterDelete(Event $event, Entity $entity, ArrayObject $options): void
     {
-        $fileName = (string)Configure::read('App.uploadFolder') . DS . $entity->filename;
+        $fileName = (string)Configure::read('App.uploadFolder') . DS . $entity->model . DS . $entity->filename;
         if (file_exists($fileName) && is_file($fileName)) {
             unlink($fileName);
         }

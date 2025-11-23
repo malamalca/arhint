@@ -21,20 +21,26 @@
                 ->setFrom($this->getCurrentUser()->email)
                 ->setTo($address->contacts_email->email)
                 //->setTo('miha.nahtigal@arhim.si')
-                ->setSubject('Vloga za projektne pogoje za gradnjo')
+                ->setSubject('Vloga za mnenje za gradnjo')
                 ->setViewVars(['user' => $this->getCurrentUser(), 'address' => $address, 'data' => $this->getRequest()->getData()])
                 ->setEmailFormat('both')
                 ->viewBuilder()
-                    ->setTemplate('Crm.slo_pogoji')
+                    ->setTemplate('Crm.slo_mnenja')
                     ->addHelper('Html');
 
             $atts = [];
+
+            $data = json_decode($address->descript, true);
 
             // excel attachment
             //change it
             $sheet = $spreadsheet->getActiveSheet();
             $sheet->setCellValue('C32', $address->contact->title);
             $sheet->setCellValue('C33', (string)$address->contacts_address);
+            $sheet->setCellValue('C34', (string)($data['opis'] ?? ''));
+
+            $sheet->setCellValue('C38', (string)($data['stPogojev'] ?? ''));
+            $sheet->setCellValue('C39', (string)($data['datumPogojev'] ?? ''));
 
             //write it again to Filesystem with the same name (=replace)
             //$writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Tcpdf');
@@ -46,6 +52,9 @@
             $atts[$xlsFile->getClientFilename()] = ['data' => $excelOutput];
 
             // other attachemts
+            foreach ((array)$address->attachments as $attachment) {
+                $atts[$attachment->filename] = $attachment->getFilePath();
+            }
             foreach ($attachments as $attachment) {
                 $atts[$attachment->filename] = $attachment->getFilePath();
             }
