@@ -27,7 +27,7 @@ class CrmMailer extends Mailer
      *
      * @param string $content Content.
      * @return array
-     * @psalm-return array{headers: string, message: string}
+     * @phpstan-return array{headers: string, message: string, ...}
      */
     public function deliverAdrema(string $content = ''): array
     {

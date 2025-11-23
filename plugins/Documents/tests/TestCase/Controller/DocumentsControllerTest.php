@@ -6,8 +6,6 @@ namespace Documents\Test\TestCase\Controller;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\IntegrationTestTrait;
 use Cake\TestSuite\TestCase;
-use Laminas\Diactoros\UploadedFile;
-use const UPLOAD_ERR_OK;
 
 /**
  * Documents\Controller\DocumentsController Test Case
@@ -28,7 +26,7 @@ class DocumentsControllerTest extends TestCase
         'ContactsAccounts' => 'plugin.Crm.ContactsAccounts',
         'Documents' => 'plugin.Documents.Documents',
         'DocumentsCounters' => 'plugin.Documents.DocumentsCounters',
-        'DocumentsAttachments' => 'plugin.Documents.DocumentsAttachments',
+        'Attachments' => 'app.Attachments',
         'DocumentsLinks' => 'plugin.Documents.DocumentsLinks',
         'DocumentsClients' => 'plugin.Documents.DocumentsClients',
         'Expenses' => 'plugin.Expenses.Expenses',
@@ -165,77 +163,6 @@ class DocumentsControllerTest extends TestCase
             ->first();
         $this->assertFalse(empty($issuer));
         $this->assertTextEquals('Arhim d.o.o.', $issuer->title);
-    }
-
-    /**
-     * Test add from ArhintScan
-     *
-     * * ..\..\vendor\bin\phpunit --filter testAddArhintScan tests\TestCase\Controller\DocumentsControllerTest.php
-     *
-     * @return void
-     */
-    public function testAddArhintScan()
-    {
-        // External program has to send a valid header
-        $this->configRequest([
-            'headers' => ['Lil-Scan' => 'Valid'],
-            //'environment' => [
-            //    'PHP_AUTH_USER' => 'admin',
-            //    'PHP_AUTH_PW' => 'pass',
-            //]
-        ]);
-        // Set session data
-        $this->login(USER_ADMIN);
-
-        $counters = TableRegistry::getTableLocator()->get('Documents.DocumentsCounters');
-        $counter = $counters->get('1d53bc5b-de2d-4e85-b13b-81b39a97fc90');
-
-        $jpgAttachment = new UploadedFile(
-            dirname(__FILE__) . DS . 'data' . DS . 'sunset.jpg',
-            100963,
-            UPLOAD_ERR_OK,
-            'sunset.jpg',
-            'image/jpg',
-        );
-
-        $data = [
-            'counter_id' => '1d53bc5b-de2d-4e85-b13b-81b39a97fc90',
-            'title' => 'Uploaded Document',
-            'dat_issue' => '2020-05-31',
-            'documents_attachments' => [
-                0 => [
-                    'filename' => $jpgAttachment,
-                ],
-            ],
-        ];
-
-        $this->enableSecurityToken();
-        $this->enableCsrfToken();
-
-        $this->post('/documents/documents/edit', $data);
-
-        $this->assertResponseSuccess();
-        $this->assertContentType('application/json');
-        $this->assertResponseContains('{"document":{');
-
-        //dd((string)$this->_response->getBody());
-
-        $Documents = TableRegistry::getTableLocator()->get('Documents.Documents');
-        $document = $Documents
-            ->find()
-            ->contain(['DocumentsAttachments'])
-            ->where(['counter_id' => '1d53bc5b-de2d-4e85-b13b-81b39a97fc90'])
-            ->orderBy(['created DESC'])->first();
-
-        $this->assertFalse(empty($document->documents_attachments[0]));
-        $this->assertEquals('Document', $document->documents_attachments[0]->model);
-
-        $this->assertEquals('Uploaded Document', $document->title);
-        $this->assertEquals($counter->counter + 1, $document->counter);
-
-        // test if counter increases
-        $newCounter = $counters->get('1d53bc5b-de2d-4e85-b13b-81b39a97fc90');
-        $this->assertEquals($counter->counter + 1, $newCounter->counter);
     }
 
     /**

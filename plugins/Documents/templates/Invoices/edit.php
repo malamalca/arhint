@@ -243,49 +243,6 @@ $documentEdit = [
             'fs_descript_end' => '</fieldset>',
 
             ////////////////////////////////////////////////////////////////////////////////////
-            'fs_attachments_start' => '<fieldset>',
-            'fs_attachments_legend' => sprintf('<legend>%s</legend>', __d('documents', 'Archive')),
-            'file.name.0' => [
-                'method' => 'file',
-                'parameters' => ['documents_attachments.0.filename'],
-            ],
-            'file.model.0' => [
-                'method' => 'control',
-                'parameters' => [
-                    'field' => 'documents_attachments.0.model',
-                    'options' => [
-                        'type' => 'hidden',
-                        'value' => 'Invoice',
-                    ],
-                ],
-            ],
-            'file.document_id.0' => [
-                'method' => 'control',
-                'parameters' => [
-                    'field' => 'documents_attachments.0.document_id',
-                    'options' => [
-                        'type' => 'hidden',
-                    ],
-                ],
-            ],
-            'file.scan.button' => 1==1 ? null : [
-                'method' => 'button',
-                'parameters' => [
-                    __d('documents', 'Scan a Document'),
-                    ['id' => 'DoScanBtn'],
-                ],
-            ],
-            'file.scan.scanned' => [
-                'method' => 'hidden',
-                'parameters' => ['documents_attachments.0.scanned', ['id' => 'scanned']],
-            ],
-            'file.scan.scanned_unlock' => [
-                'method' => 'unlockField',
-                'parameters' => ['documents_attachments.0.scanned'],
-            ],
-            'fs_attachments_end' => '</fieldset>',
-
-            ////////////////////////////////////////////////////////////////////////////////////
             'submit' => [
                 'method' => 'button',
                 'parameters' => [
@@ -613,33 +570,6 @@ echo $this->Lil->form($documentEdit, 'Documents.Invoices.edit');
             paste_auto_cleanup_on_paste : true,
             autoresize_max_height: 500,
             width: "750px"
-        });
-
-        // websocket server for scanning
-        $("#DoScanBtn").click(function(e) {
-            var wsImpl = window.WebSocket || window.MozWebSocket;
-            window.ws = new wsImpl("ws://localhost:8080/");
-
-            ws.onmessage = function(e) {
-                if (e.data == "cancel") {
-                } else {
-                    $("#scanned").val(e.data);
-                    ws.send("done");
-                }
-                window.ws = null;
-            };
-            ws.onopen = function() {
-                ws.send("EE");
-            };
-            ws.onclose = function() {
-                window.ws = null;
-            };
-            ws.onerror = function(e) {
-                alert("No Scanner Found!");
-                window.ws = null;
-            }
-            e.preventDefault();
-            return false;
         });
 
         $("#invoice-title").focus();

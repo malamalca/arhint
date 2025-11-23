@@ -3,6 +3,10 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use Cake\Core\Configure;
+use Cake\Http\Exception\NotFoundException;
+use mishahawthorn\OCRmyPDF\OCRmyPDF;
+
 /**
  * Attachments Controller
  *
@@ -11,13 +15,45 @@ namespace App\Controller;
 class AttachmentsController extends AppController
 {
     /**
+     * View method
+     *
+     * @param string $id Documents Attachment id.
+     * @return void
+     * @throws \Cake\Http\Exception\NotFoundException When record not found.
+     */
+    public function view(string $id)
+    {
+        $attachment = $this->Attachments->get($id);
+
+        $this->Authorization->authorize($attachment, 'view');
+
+        $this->set(compact('attachment'));
+    }
+
+    /**
+     * Preview method
+     *
+     * @param string $id Documents Attachment id.
+     * @return void
+     * @throws \Cake\Http\Exception\NotFoundException When record not found.
+     */
+    public function preview(string $id)
+    {
+        $attachment = $this->Attachments->get($id);
+
+        $this->Authorization->authorize($attachment, 'view');
+
+        $this->set(compact('attachment'));
+    }
+
+    /**
      * Download method
      *
      * @param string|null $id Attachment id.
      * @return \Cake\Http\Response|null|void Renders view
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function download(?string $id = null)
+    public function download(?string $id = null, ?bool $forceDownload = true)
     {
         $attachment = $this->Attachments->get($id, contain: []);
 
@@ -25,7 +61,7 @@ class AttachmentsController extends AppController
 
         $response = $this->response->withFile(
             $attachment->getFilePath(),
-            ['name' => $attachment->filename, 'download' => true],
+            ['name' => $attachment->filename, 'download' => (bool)$forceDownload],
         );
 
         $finfoType = finfo_open(FILEINFO_MIME_TYPE);
@@ -34,6 +70,7 @@ class AttachmentsController extends AppController
             if ($mimeType) {
                 $response = $response->withType($mimeType);
             }
+            finfo_close($finfoType);
         }
 
         return $response;
@@ -54,6 +91,9 @@ class AttachmentsController extends AppController
             $attachment = $this->Attachments->newEmptyEntity();
             $attachment->model = $this->getRequest()->getQuery('model');
             $attachment->foreign_id = $this->getRequest()->getQuery('foreign_id');
+            if (!$attachment->model || !$attachment->foreign_id) {
+                throw new NotFoundException(__('Invalid attachment model or foreign ID.'));
+            }
         }
 
         $this->Authorization->authorize($attachment);
@@ -101,5 +141,40 @@ class AttachmentsController extends AppController
         $redirect = $this->getRequest()->getQuery('redirect', ['action' => 'index']);
 
         return $this->redirect($redirect);
+    }
+
+    /**
+     * ocr method
+     *
+     * @param string|null $id Attachment id.
+     * @return \Cake\Http\Response|void Redirects to index.
+     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
+     */
+    public function ocr(?string $id = null)
+    {
+        $attachment = $this->Attachments->get($id);
+
+        $this->Authorization->authorize($attachment, 'edit');
+
+        putenv('PATH=' . getenv('PATH') . ';' . dirname(Configure::read('Ghostscript.executable')));
+
+        $ocr = OCRmyPDF::make($attachment->getFilePath());
+        $ocr->setExecutable(Configure::read('OCRMyPDF.executable'));
+        foreach (Configure::read('OCRMyPDF.options') as $option) {
+            $parts = explode(' ', $option, 2);
+            $ocr->setParam($parts[0], $parts[1] ?? null);
+        }
+
+        $newTmpPfdFilename = $ocr->run();
+
+        if (!file_exists($newTmpPfdFilename) || !is_file($newTmpPfdFilename) || !filesize($newTmpPfdFilename)) {
+            $this->Flash->error(__('OCR processing failed. Please, try again.'));
+
+            $redirect = $this->getRequest()->getQuery('redirect', ['action' => 'index']);
+
+            return $this->redirect($redirect);
+        }
+
+        rename($newTmpPfdFilename, $attachment->getFilePath());
     }
 }

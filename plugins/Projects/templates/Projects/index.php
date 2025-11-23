@@ -62,7 +62,7 @@ $index = [
                 'title' => __d('projects', 'Title'),
                 'status' => ['params' => ['class' => 'center hide-on-small-only'], 'html' => __d('projects', 'Status')],
                 'actions' => '',
-                'log' => ['params' => ['class' => 'left'], 'html' => __d('projects', 'Last Log')],
+                'log' => __d('projects', 'Last Log'),
             ],
         ]]],
         'foot' => ['rows' => [['columns' => [

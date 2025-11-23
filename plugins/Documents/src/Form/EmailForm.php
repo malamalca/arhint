@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace Documents\Form;
 
 use App\Mailer\ArhintMailer;
-use Cake\Core\Configure;
 use Cake\Database\Expression\QueryExpression;
 use Cake\Form\Form;
 use Cake\Form\Schema;
@@ -127,9 +126,9 @@ class EmailForm extends Form
                 }
 
                 // documents file attachments
-                $DocumentsAttachmentsTable = TableRegistry::getTableLocator()->get('Documents.DocumentsAttachments');
-                $docAttachments = $DocumentsAttachmentsTable->find()
-                    ->select(['id', 'original', 'filename'])
+                $AttachmentsTable = TableRegistry::getTableLocator()->get('App.Attachments');
+                $docAttachments = $AttachmentsTable->find()
+                    ->select(['id', 'model', 'filename'])
                     ->where(function (QueryExpression $exp, SelectQuery $query) use ($documents) {
 
                         $atchs = [];
@@ -145,7 +144,7 @@ class EmailForm extends Form
                                     $modelName = 'Document';
                             }
 
-                            $atchs[] = $query->newExpr()->and(['model' => $modelName, 'document_id' => $doc->id]);
+                            $atchs[] = $query->newExpr()->and(['model' => $modelName, 'foreign_id' => $doc->id]);
                         }
 
                         return $exp->or($atchs);
@@ -153,8 +152,8 @@ class EmailForm extends Form
                     ->all();
 
                 foreach ($docAttachments as $attachment) {
-                    $attachments[$attachment->original] = [
-                        'file' => Configure::read('Documents.uploadFolder') . DS . $attachment->filename,
+                    $attachments[$attachment->filename] = [
+                        'file' => $attachment->getFilePath(),
                     ];
                 }
 

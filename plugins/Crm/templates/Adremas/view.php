@@ -72,12 +72,10 @@ foreach ($addresses as $k => $address) {
         'title' => h($address->contact->title ?? 'N/A'),
         'address' => h($address->contacts_address ?? ''),
         'email' => h($address->contacts_email->email ?? ''),
-        'actions' => [
-            'params' => ['class' => 'nowrap'],
-            'html' =>
+        'actions' => ['params' => ['class' => 'nowrap'], 'html' =>
             $this->Lil->editLink(['controller' => 'AdremasContacts', 'action' => 'edit', $address->id]) . ' ' .
-            $this->Lil->deleteLink(['controller' => 'AdremasContacts', 'action' => 'delete', $address->id]),
-        ]
+            $this->Lil->deleteLink(['controller' => 'AdremasContacts', 'action' => 'delete', $address->id])
+        ],
     ]];
 }
 

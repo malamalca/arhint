@@ -346,25 +346,30 @@ class ArhintHelper extends Helper
     /**
      * Output line with search panel
      *
-     * @param \Cake\Collection\Collection $attachments Attachments list
+     * @param \Cake\Collection\Collection|array<\App\Model\Entity\Attachment> $attachments Attachments list
      * @param string $model Attachments table model.
      * @param string $foreignId Foreign key.
      * @param array<string, mixed> $options Options
      * @return array<mixed>
      */
     public function attachmentsTable(
-        Collection $attachments,
+        Collection|array $attachments,
         string $model,
         string $foreignId,
         array $options = [],
     ): array {
         $defaultOptions = [
             'redirectUrl' => '/',
+            'showAddButton' => true,
         ];
 
         $_options = array_merge($defaultOptions, $options);
 
         $attachmentsTable = [];
+
+        if (is_array($attachments)) {
+            $attachments = new Collection($attachments);
+        }
 
         if ($attachments->count() > 0) {
             $attachmentsTable = ['table' => [
@@ -378,11 +383,34 @@ class ArhintHelper extends Helper
             foreach ($attachments as $attachment) {
                 /** @var \App\Model\Entity\Attachment $attachment */
                 $attachmentsTable['table']['body']['rows'][] = ['columns' => [
-                    h($attachment->filename ?? 'N/A'),
+                    $this->Html->link(
+                        $attachment->filename ?? 'N/A',
+                        [
+                            'prefix' => false,
+                            'plugin' => false,
+                            'controller' => 'Attachments',
+                            'action' => 'preview',
+                            $attachment->id,
+                            '?' => ['redirect' => $_options['redirectUrl']],
+                        ],
+                        ['class' => 'AttacmhmentPreviewLink'],
+                    ),
                     $this->Number->toReadableSize((int)$attachment->filesize),
                     'actions' => [
                         'params' => ['class' => 'right-align'],
                         'html' =>
+                            $this->Html->link(
+                                '<i class="material-icons">description</i>',
+                                [
+                                    'prefix' => false,
+                                    'plugin' => false,
+                                    'controller' => 'Attachments',
+                                    'action' => 'view',
+                                    $attachment->id,
+                                    '?' => ['redirect' => $_options['redirectUrl']],
+                                ],
+                                ['escape' => false, 'class' => 'btn btn-small'],
+                            ) . ' ' .
                             $this->Html->link(
                                 '<i class="material-icons">file_download</i>',
                                 [
@@ -406,7 +434,7 @@ class ArhintHelper extends Helper
                     ],
                 ]];
             }
-            $attachmentsTable['table']['post'] = sprintf(
+            $attachmentsTable['table']['post'] = !$_options['showAddButton'] ? null : sprintf(
                 '<p>%s</p>',
                 $this->Html->link(
                     __('Add New Attachment'),
@@ -420,6 +448,20 @@ class ArhintHelper extends Helper
                     ['class' => 'btn btn-small'],
                 ),
             );
+
+            $this->Lil->jsReady(sprintf(
+                '$(".AttacmhmentPreviewLink").each(function(){ $(this).modalPopup({' .
+                    'title: "%s", ' .
+                    'onOpen: function(popup) { ' .
+                        '$(popup).height(window.innerHeight); ' .
+                        '$("#attachment-view", popup).height($(popup).innerHeight() - 100); ' .
+                    '}, ' .
+                    'onResize: function(popup) { ' .
+                        '$("#attachment-view", popup).height($(popup).innerHeight() - 100); ' .
+                    '} ' .
+                '})});',
+                __('Attachment Preview'),
+            ));
         } else {
             $attachmentsTable['lines'][] =
                 __('No attachments found.') . ' ' .

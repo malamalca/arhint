@@ -30,7 +30,7 @@ class ArhintMailer extends Mailer
      *
      * @param string $content Content.
      * @return array
-     * @psalm-return array{headers: string, message: string}
+     * @phpstan-return array{headers: string, message: string, ...}
      */
     public function deliver(?string $content = null): array
     {

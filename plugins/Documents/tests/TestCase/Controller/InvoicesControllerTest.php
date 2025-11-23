@@ -23,12 +23,12 @@ class InvoicesControllerTest extends TestCase
      */
     public array $fixtures = [
         'Users' => 'app.Users',
+        'Attachments' => 'app.Attachments',
         'Contacts' => 'plugin.Crm.Contacts',
         'ContactsAddresses' => 'plugin.Crm.ContactsAddresses',
         'ContactsAccounts' => 'plugin.Crm.ContactsAccounts',
         'Invoices' => 'plugin.Documents.Invoices',
         'DocumentsCounters' => 'plugin.Documents.DocumentsCounters',
-        'DocumentsAttachments' => 'plugin.Documents.DocumentsAttachments',
         'DocumentsLinks' => 'plugin.Documents.DocumentsLinks',
         'InvoicesItems' => 'plugin.Documents.InvoicesItems',
         'InvoicesTaxes' => 'plugin.Documents.InvoicesTaxes',
@@ -243,7 +243,7 @@ class InvoicesControllerTest extends TestCase
             'counter_id' => '1d53bc5b-de2d-4e85-b13b-81b39a97fc89',
             'title' => 'Uploaded Document',
             'dat_issue' => '2020-05-31',
-            'documents_attachments' => [
+            'attachments' => [
                 0 => [
                     'filename' => $jpgAttachment,
                 ],

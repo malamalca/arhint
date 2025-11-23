@@ -188,7 +188,7 @@ class InvoicesController extends BaseDocumentsController
     {
         $containTables = [
             'Issuers', 'Buyers', 'Receivers',
-            'DocumentsCounters', 'InvoicesItems', 'InvoicesTaxes', 'DocumentsAttachments',
+            'DocumentsCounters', 'InvoicesItems', 'InvoicesTaxes', 'Attachments',
         ];
         if (Plugin::isLoaded('Projects')) {
             $containTables[] = 'Projects';
@@ -208,7 +208,7 @@ class InvoicesController extends BaseDocumentsController
     {
         $containTables = [
             'Issuers', 'Buyers', 'Receivers',
-            'InvoicesItems', 'InvoicesTaxes', 'DocumentsAttachments',
+            'InvoicesItems', 'InvoicesTaxes', 'Attachments',
         ];
 
         $document = $this->Invoices->parseRequest($this->getRequest(), $id);
@@ -243,7 +243,7 @@ class InvoicesController extends BaseDocumentsController
     public function editPreview(array ...$args)
     {
         $invoice = $this->Invoices->parseRequest($this->getRequest(), $this->getRequest()->getData('id'));
-        $assocModels = ['InvoicesTaxes', 'InvoicesItems', 'DocumentsAttachments', 'Issuers', 'Buyers', 'Receivers'];
+        $assocModels = ['InvoicesTaxes', 'InvoicesItems', 'Attachments', 'Issuers', 'Buyers', 'Receivers'];
 
         return parent::editPreview([$invoice, $assocModels]);
     }

@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Model\Table;
 
+use App\Model\Entity\Attachment;
 use ArrayObject;
 use Cake\Core\Configure;
 use Cake\Event\Event;
@@ -10,6 +11,7 @@ use Cake\ORM\Entity;
 use Cake\ORM\Query\SelectQuery;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
+use Cake\ORM\TableRegistry;
 use Cake\Validation\Validator;
 
 /**
@@ -118,7 +120,7 @@ class AttachmentsTable extends Table
      * afterSave method
      *
      * @param \Cake\Event\Event $event Event object.
-     * @param \Documents\Model\Entity\DocumentsAttachment $entity Entity object.
+     * @param \App\Model\Entity\Attachment $entity Entity object.
      * @param \ArrayObject $options Array object.
      * @return void
      */
@@ -143,7 +145,7 @@ class AttachmentsTable extends Table
      * afterDelete method
      *
      * @param \Cake\Event\Event $event Event object.
-     * @param \Documents\Model\Entity\DocumentsAttachment $entity Entity object.
+     * @param \App\Model\Entity\Attachment $entity Entity object.
      * @param \ArrayObject $options Array object.
      * @return void
      */
@@ -153,5 +155,40 @@ class AttachmentsTable extends Table
         if (file_exists($fileName) && is_file($fileName)) {
             unlink($fileName);
         }
+    }
+
+    /**
+     * Checks if entity belongs to user.
+     *
+     * @param \App\Model\Entity\Attachment $entity Entity.
+     * @param string|null $ownerId User Id.
+     * @return bool
+     */
+    public function isOwnedBy(Attachment $entity, ?string $ownerId): bool
+    {
+        if (empty($ownerId)) {
+            return false;
+        }
+
+        switch ($entity->model) {
+            case 'Document':
+                /** @var \Documents\Model\Table\DocumentsTable $ModelTable */
+                $ModelTable = TableRegistry::getTableLocator()->get('Documents.Documents');
+                break;
+            case 'Invoice':
+                /** @var \Documents\Model\Table\InvoicesTable $ModelTable */
+                $ModelTable = TableRegistry::getTableLocator()->get('Documents.Invoices');
+                break;
+            case 'TravelOrder':
+                /** @var \Documents\Model\Table\TravelOrdersTable $ModelTable */
+                $ModelTable = TableRegistry::getTableLocator()->get('Documents.TravelOrders');
+                break;
+            default:
+                /** @var \Documents\Model\Table\InvoicesTable $ModelTable */
+                $ModelTable = TableRegistry::getTableLocator()->get('Documents.Invoices');
+        }
+
+        return !$ModelTable->exists(['id' => $entity->foreign_id]) ||
+            $ModelTable->isOwnedBy($entity->foreign_id, $ownerId);
     }
 }

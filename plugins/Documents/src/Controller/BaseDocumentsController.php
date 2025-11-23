@@ -158,49 +158,8 @@ class BaseDocumentsController extends AppController
                     $document->getNextCounterNo();
                 }
 
-                // if there is no uploaded file, unset documents_attachments
-                $tmpNames = [];
-
-                $tmpAttachments = $this->getRequest()->getData('documents_attachments');
-                if (!empty($tmpAttachments)) {
-                    foreach ((array)$tmpAttachments as $tmpAttachment) {
-                        if (!empty($tmpAttachment['filename']) && !$tmpAttachment['filename']->getError()) {
-                            $tmpNames[$tmpAttachment['filename']->getClientFilename()] =
-                                $tmpAttachment['filename']->getStream()->getMetadata('uri');
-                        }
-                    }
-                }
-                $scannedData = $this->getRequest()->getData('documents_attachments.0.scanned');
-                if (!empty($scannedData)) {
-                    $tmpName = tempnam(constant('TMP'), 'LilScan') . '.pdf';
-                    file_put_contents($tmpName, base64_decode($scannedData));
-                    $tmpNames['scanned.pdf'] = $tmpName;
-                }
-
-                if (count($tmpNames) == 0 && isset($document->documents_attachments)) {
-                    unset($document->documents_attachments);
-                }
-
-                if (!empty($document->documents_attachments)) {
-                    $attachmentsModel = null;
-                    switch ($this->documentsScope) {
-                        case 'Invoices':
-                            $attachmentsModel = 'Invoice';
-                            break;
-                        case 'Documents':
-                            $attachmentsModel = 'Document';
-                            break;
-                    }
-                    foreach ($document->documents_attachments as $k => $attachment) {
-                        $document->documents_attachments[$k]['model'] = $attachmentsModel;
-                    }
-                }
-
                 if (
-                    $this->{$this->documentsScope}->save($document, [
-                        'uploadedFilename' => $tmpNames,
-                        'associated' => $containTables,
-                    ])
+                    $this->{$this->documentsScope}->save($document, ['associated' => $containTables])
                 ) {
                     $conn->commit();
                     if ($this->getRequest()->is('ajax') || $this->getRequest()->is('lilScan')) {
