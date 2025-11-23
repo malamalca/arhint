@@ -111,6 +111,18 @@ button.btn {
     }
 }
 
+table {
+    th {
+        background-color: #f0f0f0;
+    }
+}
+
+table#AttachmentsList {
+    td, th {
+        padding: 4px 4px !important;
+    }
+}
+
 /*
 .modal {
     .modal-header {

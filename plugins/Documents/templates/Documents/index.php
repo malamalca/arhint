@@ -95,7 +95,7 @@ $documents_index = [
                     'html' => $this->Paginator->sort('dat_task', __d('documents', 'Date')),
                 ],
                 'title' => [
-                    'parameters' => ['class' => 'left-align hide-on-small-only'],
+                    'parameters' => ['class' => 'left-align'],
                     'html' => $this->Paginator->sort('title', __d('documents', 'Title')),
                 ],
                 'client' => [
@@ -103,7 +103,7 @@ $documents_index = [
                     'html' => __d('documents', 'Client'),
                 ],
                 'project' => [
-                    'parameters' => ['class' => 'left-align'],
+                    'parameters' => ['class' => 'left-align hide-on-small-only'],
                     'html' => __d('documents', 'Project'),
                 ],
             ]],
@@ -122,6 +122,10 @@ $documents_index = [
             ],
             'title' => [
                 'parameters' => ['class' => 'documents-title right-align hide-on-small-only'],
+                'html' => '',
+            ],
+            'project' => [
+                'parameters' => ['class' => 'right-align hide-on-small-only'],
                 'html' => '',
             ],
         ]]]],
@@ -152,7 +156,7 @@ foreach ($data as $document) {
             'html' => $this->Arhint->calendarDay($document->dat_issue),
         ],
         'title' => [
-            'parameters' => ['class' => 'documents-title left-align hide-on-small-only'],
+            'parameters' => ['class' => 'documents-title left-align'],
             'html' => h($document->title) .
                 // attachment
                 ($document->attachments_count == 0 ? '' :
@@ -163,7 +167,7 @@ foreach ($data as $document) {
             'html' => '<div class="truncate">' . h($document->Client['title'] ?? '') . '</div>',
         ],
         'project' => empty($document->project) ? null : [
-            'parameters' => ['class' => 'documents-project left-align'],
+            'parameters' => ['class' => 'documents-project left-align hide-on-small-only'],
             'html' => '<div style="height: 20px; overflow: hidden; scroll: none;">' .
                 ($document->project ? $this->Html->link(
                     $document->project,

@@ -7,12 +7,14 @@ use Cake\Core\Configure;
 use Cake\ORM\Entity;
 
 /**
- * DocumentsAttachment Entity.
+ * Attachment Entity.
  *
  * @property string $id
  * @property string|null $foreign_id
  * @property string|null $model
  * @property string|null $filename
+ * @property string $original This is temporary, only used during conversion
+ * @property string $document_id This is temporary, only used during conversion
  * @property string|null $ext
  * @property string|null $mimetype
  * @property int|null $filesize
@@ -39,6 +41,6 @@ class Attachment extends Entity
      */
     public function getFilePath(): string
     {
-        return Configure::read('App.uploadFolder') . DS . $this->filename;
+        return Configure::read('App.uploadFolder') . DS . $this->model . DS . $this->filename;
     }
 }

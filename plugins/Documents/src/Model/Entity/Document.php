@@ -36,7 +36,7 @@ use Cake\ORM\TableRegistry;
  * @property \Documents\Model\Entity\DocumentsTemplate $tpl_header
  * @property \Documents\Model\Entity\DocumentsTemplate $tpl_body
  * @property \Documents\Model\Entity\DocumentsTemplate $tpl_footer
- * @property \Documents\Model\Entity\DocumentsAttachment[] $documents_attachments
+ * @property \App\Model\Entity\Attachment[] $attachments
  * @property \Documents\Model\Entity\DocumentsClient[] $documents_clients
  * @property \Documents\Model\Entity\DocumentsLink[] $documents_links
  */
@@ -76,7 +76,7 @@ class Document extends Entity
         'tpl_header' => true,
         'tpl_body' => true,
         'tpl_footer' => true,
-        'documents_attachments' => true,
+        'attachments' => true,
         'documents_clients' => true,
         'documents_links' => true,
     ];

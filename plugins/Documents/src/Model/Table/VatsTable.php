@@ -72,7 +72,7 @@ class VatsTable extends Table
      * Fetch vat levels
      *
      * @param string $ownerId Company id.
-     * @return array<string, \Documents\Model\Entity\Vat>
+     * @return array<string|int, mixed>
      */
     public function levels(string $ownerId): array
     {

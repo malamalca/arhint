@@ -139,7 +139,7 @@ class DocumentsController extends BaseDocumentsController
      */
     public function view(?string $id = null)
     {
-        $containTables = ['DocumentsCounters', 'DocumentsAttachments', 'DocumentsLinks', 'Issuers', 'Receivers'];
+        $containTables = ['DocumentsCounters', 'Attachments', 'DocumentsLinks', 'Issuers', 'Receivers'];
         if (Plugin::isLoaded('Projects')) {
             $containTables[] = 'Projects';
         }
@@ -158,7 +158,7 @@ class DocumentsController extends BaseDocumentsController
     {
         $document = $this->Documents->parseRequest($this->getRequest(), $this->getRequest()->getData('id'));
 
-        $containTables = ['DocumentsCounters', 'DocumentsAttachments', 'DocumentsLinks', 'Issuers', 'Receivers'];
+        $containTables = ['DocumentsCounters', 'Attachments', 'DocumentsLinks', 'Issuers', 'Receivers'];
         if (Plugin::isLoaded('Projects')) {
             $containTables[] = 'Projects';
         }
@@ -175,7 +175,7 @@ class DocumentsController extends BaseDocumentsController
      */
     public function edit(?string $id = null): ?Response
     {
-        $containTables = ['Issuers', 'Receivers', 'DocumentsAttachments'];
+        $containTables = ['Issuers', 'Receivers', 'Attachments'];
 
         $document = $this->Documents->parseRequest($this->getRequest(), $id);
 

@@ -1,6 +1,7 @@
 <?php
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
+use Cake\Routing\Router;
 use Cake\Utility\Text;
 
 $document->client = $document->documents_counter->direction == 'issued' ? $document->receiver : $document->issuer;
@@ -41,22 +42,25 @@ $invoiceView = [
                     'title' => __d('documents', 'File'),
                     'visible' => $this->Lil->userLevel('admin'),
                     'url' => [
-                        'plugin' => 'Documents',
-                        'controller' => 'DocumentsAttachments',
-                        'action' => 'add',
-                        'Invoice',
-                        $document->id,
+                        'plugin' => false,
+                        'controller' => 'Attachments',
+                        'action' => 'edit',
+                        '?' => [
+                            'model' => 'Invoice',
+                            'foreign_id' => $document->id,
+                            'redirect' => Router::url(null, true),
+                        ],
                     ],
                     'params' => [
                         'id' => 'AttachFile',
                     ],
                 ],
-                'scan' => [
+                /*'scan' => [
                     'title' => __d('documents', 'Scan'),
                     'visible' => $this->Lil->userLevel('admin'),
                     'url' => [
-                        'plugin' => 'Documents',
-                        'controller' => 'DocumentsAttachments',
+                        'plugin' => false,
+                        'controller' => 'Attachments',
                         'action' => 'add',
                         'Invoice',
                         $document->id,
@@ -65,7 +69,7 @@ $invoiceView = [
                     'params' => [
                         'id' => 'AttachScan',
                     ],
-                ],
+                ],*/
                 'link' => [
                     'title' => __d('documents', 'Linked Document'),
                     'visible' => true,
@@ -519,53 +523,14 @@ if ($document->documents_counter->direction == 'received') {
 ////////////////////////////////////////////////////////////////////////////////////////////////
 // ATTACHMENTS
 
-if (!empty($document->documents_attachments)) {
+if (!empty($document->attachments)) {
     $invoiceView['panels']['attachments_title'] = sprintf('<h3>%s</h3>', __d('documents', 'Attachments'));
-    $i = 0;
-    foreach ($document->documents_attachments as $atch) {
-        $invoiceView['panels']['attachments_' . $atch->id] = sprintf(
-            '<div>%1$s (%2$s) %3$s</div>',
-            $this->Html->link(
-                $atch['original'],
-                [
-                    'controller' => 'DocumentsAttachments',
-                    'action' => 'view',
-                    $atch->id,
-                ],
-                [
-                    'class' => 'AttachmentPreview',
-                ]
-            ),
-            $this->Number->toReadableSize((int)$atch->filesize),
-            $this->Html->link(
-                '<i class="material-icons">get_app</i>',
-                [
-                    'controller' => 'DocumentsAttachments',
-                    'action' => 'download',
-                    $atch->id,
-                    1,
-                    $atch->original,
-                ],
-                [
-                    'escape' => false,
-                    'class' => 'btn btn-small waves-effect waves-light waves-circle',
-                ]
-            ) . ' ' .
-            $this->Html->link(
-                '<i class="material-icons">delete</i>',
-                [
-                    'controller' => 'DocumentsAttachments',
-                    'action' => 'delete',
-                    $atch->id,
-                ],
-                [
-                    'escape' => false,
-                    'confirm' => __d('documents', 'Are you sure you want to delete this attachment'),
-                    'class' => 'btn btn-small waves-effect waves-light waves-circle',
-                ]
-            )
-        );
-    }
+    $invoiceView['panels']['attachments'] = $this->Arhint->attachmentsTable(
+        $document->attachments,
+        'Invoice',
+        $document->id,
+        ['redirectUrl' => Router::url(null, true), 'showAddButton' => false]
+    );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////

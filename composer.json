@@ -20,6 +20,7 @@
         "league/commonmark": "*",
         "malamalca/lil": "^4.6",
         "mikehaertl/phpwkhtmltopdf": "2.0.*@dev",
+        "mishahawthorn/ocrmypdf": "*",
         "mobiledetect/mobiledetectlib": "^4.8.03",
         "phpoffice/phpspreadsheet": "*",
         "phpoffice/phpword": "^0.18.2",
@@ -117,6 +118,9 @@
             "dealerdirect/phpcodesniffer-composer-installer": true,
             "composer/package-versions-deprecated": true,
             "cakephp/plugin-installer": true
+        },
+        "audit": {
+            "block-insecure": false
         }
     },
     "minimum-stability": "dev"
