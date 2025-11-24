@@ -283,7 +283,7 @@ class Application extends BaseApplication implements
                 if (is_numeric($paramName) && !$paramValue) {
                     $result = false;
                 }
-                if (isset($params[$paramName]) || is_null($params[$paramName])) {
+                if (isset($params[$paramName]) || (isset($params[$paramName]) && is_null($params[$paramName]))) {
                     if (is_array($paramValue) && !in_array($params[$paramName], $paramValue)) {
                         $result = false;
                     }
