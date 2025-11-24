@@ -59,7 +59,7 @@ class TasksController extends AppController
      * Edit method
      *
      * @param string|null $id Task id.
-     * @return \Cake\Http\Response|null
+     * @return \Cake\Http\Response|void|null
      */
     public function edit(?string $id = null): ?Response
     {
@@ -88,7 +88,6 @@ class TasksController extends AppController
 
         /** @var \Tasks\Model\Table\TasksFoldersTable $TasksFolders */
         $TasksFolders = TableRegistry::getTableLocator()->get('Tasks.TasksFolders');
-
         $folders = $TasksFolders->listForOwner($this->getCurrentUser()->get('company_id'));
 
         /** @var \App\Model\Table\UsersTable $UsersTable */

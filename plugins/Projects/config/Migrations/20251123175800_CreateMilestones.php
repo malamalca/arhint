@@ -37,10 +37,23 @@ class CreateMilestones extends AbstractMigration
                 'limit' => null,
                 'null' => true,
             ])
-            ->addColumn('due', 'date', [
+            ->addColumn('date_due', 'date', [
                 'default' => null,
                 'limit' => null,
                 'null' => true,
+            ])
+            ->addColumn('date_complete', 'date', [
+                'default' => null,
+                'limit' => null,
+                'null' => true,
+            ])
+            ->addColumn('count_tasks_open', 'integer', [
+                'default' => 0,
+                'null' => false,
+            ])
+            ->addColumn('count_tasks_done', 'integer', [
+                'default' => 0,
+                'null' => false,
             ])
             ->addColumn('created', 'datetime', [
                 'default' => null,

@@ -11,7 +11,10 @@ use Cake\ORM\Entity;
  * @property string $id
  * @property string|null $project_id
  * @property string|null $title
- * @property \Cake\I18n\DateTime|null $due
+ * @property \Cake\I18n\Date|null $date_due
+ * @property \Cake\I18n\Date|null $date_date_complete
+ * @property int $count_tasks_open
+ * @property int $count_tasks_done
  * @property \Cake\I18n\DateTime|null $created
  * @property \Cake\I18n\DateTime|null $modified
  *
@@ -31,7 +34,10 @@ class ProjectsMilestone extends Entity
     protected array $_accessible = [
         'project_id' => true,
         'title' => true,
-        'due' => true,
+        'date_due' => true,
+        'date_complete' => true,
+        'count_tasks_open' => true,
+        'count_tasks_done' => true,
         'created' => true,
         'modified' => true,
         'project' => true,

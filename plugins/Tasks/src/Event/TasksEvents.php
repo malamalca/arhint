@@ -65,12 +65,15 @@ class TasksEvents implements EventListenerInterface
             ->all();
 
         if (!$tasks->isEmpty()) {
-            $panels['panels']['tasks'] = ['lines' => [
-                '<h5>' . __d('tasks', 'Open Tasks') . '</h5>',
-            ]];
+            $panels['panels']['tasks'] = [
+                'params' => ['class' => 'dashboard-panel'],
+                'lines' => [
+                    '<h5>' . __d('tasks', 'Open Tasks') . '</h5>',
+                ],
+            ];
 
             foreach ($tasks as $task) {
-                $panels['panels']['tasks-' . $task->id] = TasksUtils::taskPanel($task, $view);
+                $panels['panels']['tasks']['lines'][] = $view->Lil->panels(['panels' => [TasksUtils::taskPanel($task, $view)]]);
             }
         }
 

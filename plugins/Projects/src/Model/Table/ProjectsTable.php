@@ -62,6 +62,11 @@ class ProjectsTable extends Table
             'className' => 'Projects.ProjectsLogs',
         ]);
 
+        $this->hasMany('ProjectsMilestones', [
+            'foreignKey' => 'project_id',
+            'className' => 'Projects.ProjectsMilestones',
+        ]);
+
         $this->belongsToMany('Users', [
             'joinTable' => 'projects_users',
         ]);
