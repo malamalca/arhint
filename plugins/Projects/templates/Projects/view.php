@@ -36,35 +36,61 @@ $projectView = [
                 'confirm' => __d('projects', 'Are you sure you want to delete this project?'),
             ],
         ],
-        'log' => [
-            'title' => __d('projects', 'Add Log'),
+        'add' => [
+            'title' => __d('projects', 'Add'),
             'visible' => $this->getCurrentUser()->hasRole('editor'),
-            'url' => [
-                'controller' => 'ProjectsLogs',
-                'action' => 'edit',
-                '?' => ['project' => $project->id],
+            'submenu' => [
+                'log' => [
+                    'title' => __d('projects', 'Add Log'),
+                    'visible' => $this->getCurrentUser()->hasRole('editor'),
+                    'url' => [
+                        'controller' => 'ProjectsLogs',
+                        'action' => 'edit',
+                        '?' => ['project' => $project->id],
+                    ],
+                    'params' => ['id' => 'add-projects-log'],
+                ],
+                'log' => [
+                    'title' => __d('projects', 'Add Log'),
+                    'visible' => $this->getCurrentUser()->hasRole('editor'),
+                    'url' => [
+                        'controller' => 'ProjectsLogs',
+                        'action' => 'edit',
+                        '?' => ['project' => $project->id],
+                    ],
+                    'params' => ['id' => 'add-projects-log'],
+                ],
+                'workhour' => [
+                    'title' => __d('projects', 'Add Workhour'),
+                    'visible' => $this->getCurrentUser()->hasRole('editor'),
+                    'url' => [
+                        'controller' => 'ProjectsWorkhours',
+                        'action' => 'edit',
+                        '?' => ['project' => $project->id],
+                    ],
+                    'params' => ['id' => 'add-projects-workhour'],
+                ],
+                'users' => [
+                    'title' => __d('projects', 'Add User'),
+                    'visible' => $this->getCurrentUser()->hasRole('admin'),
+                    'url' => [
+                        'controller' => 'Projects',
+                        'action' => 'user',
+                        $project->id,
+                    ],
+                    'params' => ['id' => 'add-projects-user'],
+                ],
+                'milestones' => [
+                    'title' => __d('projects', 'Add Milestone'),
+                    'visible' => $this->getCurrentUser()->hasRole('admin'),
+                    'url' => [
+                        'controller' => 'ProjectsMilestones',
+                        'action' => 'edit',
+                        '?' => ['project' => $project->id],
+                    ],
+                    'params' => ['id' => 'add-projects-milestone'],
+                ],
             ],
-            'params' => ['id' => 'add-projects-log'],
-        ],
-        'workhour' => [
-            'title' => __d('projects', 'Add Workhour'),
-            'visible' => $this->getCurrentUser()->hasRole('editor'),
-            'url' => [
-                'controller' => 'ProjectsWorkhours',
-                'action' => 'edit',
-                '?' => ['project' => $project->id],
-            ],
-            'params' => ['id' => 'add-projects-workhour'],
-        ],
-        'users' => [
-            'title' => __d('projects', 'Add User'),
-            'visible' => $this->getCurrentUser()->hasRole('admin'),
-            'url' => [
-                'controller' => 'Projects',
-                'action' => 'user',
-                $project->id,
-            ],
-            'params' => ['id' => 'add-projects-user'],
         ],
     ],
     'entity' => $project,
