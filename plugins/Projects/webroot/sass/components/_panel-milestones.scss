@@ -1,0 +1,45 @@
+.panel-milestones {
+    padding: 0;
+    max-width: 750px;
+    border: solid 1px #ccc;
+
+    div.title {
+        background-color: #e0e0e0;
+        padding: 0.8rem 1rem;
+
+        img {
+            margin-right: 0.5rem;
+            vertical-align: middle;
+        }
+    }
+
+    div.milestone-item {
+        border-bottom: solid 1px #ccc;
+        padding: 0.8rem 1rem;
+        width: 50%;
+
+        &:last-child {
+            border-bottom: none;
+        }
+
+        h3 {
+            margin: 0;
+            padding-bottom: 0.6rem;
+            font-weight: normal;
+            font-size: 1.5rem;
+            border: 0;
+        }
+
+        div.dates {
+            color: #666;
+            font-size: 0.8rem;
+            img {
+                margin-right: 0.5rem;
+                margin-top: -0.4rem;
+                vertical-align: middle;
+                filter: opacity(0.7);
+                height: 14px;
+            }
+        }
+    }
+}

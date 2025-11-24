@@ -9,7 +9,7 @@
         "runOnSave.commands": [
             {
                 "match": ".*\\.scss$",
-                "notMatch": "[\\\\\\/]t[^\\\\\\/]*\\.scss$",
+                "notMatch": "[\\\\\\/]t[^\\\\\\/]*\\.2scss$",
                 "command": "D:\\bin\\dart-sass\\sass.bat --style=compressed ${workspaceFolder}\\webroot\\sass\\main.scss ${workspaceFolder}\\webroot\\css\\main.css",
                 "runIn": "terminal",
                 "runningStatusMessage": "Compiling CSS",

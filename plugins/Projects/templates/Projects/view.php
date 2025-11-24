@@ -11,10 +11,10 @@ $converter = new GithubFlavoredMarkdownConverter([
 
 $projectView = [
     'title_for_layout' =>
-    $this->Html->image(
-        'data:image/png;base64, ' . base64_encode(ProjectsFuncs::thumb($project, 80)),
-        ['style' => 'float: left; margin-right: 20px;', 'class' => 'project-avatar', 'quote' => false]
-    ).
+        $this->Html->image(
+            'data:image/png;base64, ' . base64_encode(ProjectsFuncs::thumb($project, 80)),
+            ['style' => 'float: left; margin-right: 20px;', 'class' => 'project-avatar', 'quote' => false]
+        ) .
         '<div><div class="small">' . $project->no . ' </div>' . $project->title . '</div>',
     'menu' => [
         'edit' => [
@@ -73,7 +73,7 @@ $projectView = [
             'lines' => [
                 'status' => [
                     'label' => __d('projects', 'Status') . ':',
-                    'text' => empty($project->status_id) ? '' : ('<div class="chip z-depth-1">' . h($projectsStatuses[$project->status_id]) . '</div>'),
+                    'text' => empty($project->status_id) ? '' : h($projectsStatuses[$project->status_id]),
                 ],
                 /*'work_duration' => [
                     'label' => __d('projects', 'Work Duration') . ':',
@@ -91,6 +91,13 @@ $projectView = [
                 0 => [
                     'text' => (string)$converter->convert($project->descript),
                 ],
+            ],
+        ],
+        'milestones' => [
+            'title' => __d('projects', 'Milestones'),
+            'params' => ['id' => 'ProjectMilestonesPanel', 'class' => 'panel-milestones'],
+            'lines' => [
+                $this->element('Projects.milestones_list', ['milestones' => $milestones, 'project' => $project]),
             ],
         ],
         'tabs' => ['lines' => [

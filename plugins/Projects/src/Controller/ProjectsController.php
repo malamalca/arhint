@@ -5,6 +5,7 @@ namespace Projects\Controller;
 
 use Cake\Http\Response;
 use Cake\ORM\TableRegistry;
+use Cake\Utility\Hash;
 use Projects\Lib\ProjectsFuncs;
 
 /**
@@ -130,10 +131,14 @@ class ProjectsController extends AppController
             ->limit(5)
             ->all();
 
-        $userIds = [];
-        foreach ($logs as $log) {
-            $userIds[] = $log->user_id;
-        }
+        $milestones = TableRegistry::getTableLocator()->get('Projects.ProjectsMilestones')->find()
+            ->select()
+            ->where(['project_id' => $id])
+            ->orderBy('due ASC')
+            ->all();
+
+        $userIds = array_unique(Hash::extract($logs->toArray(), '{n}.user_id') +
+            Hash::extract($milestones->toArray(), '{n}.user_id'));
 
         $users = [];
         if (!empty($userIds)) {
@@ -159,7 +164,7 @@ class ProjectsController extends AppController
             ->setOption('rootNode', 'arhint')
             ->setOption('serialize', ['project']);
 
-        $this->set(compact('project', 'logs', 'users', 'projectsStatuses', 'workDuration'));
+        $this->set(compact('project', 'logs', 'users', 'projectsStatuses', 'workDuration', 'milestones'));
     }
 
     /**
