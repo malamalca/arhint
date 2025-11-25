@@ -48,6 +48,11 @@ class ProjectsMilestonesTable extends Table
             'foreignKey' => 'project_id',
             'className' => 'Projects.Projects',
         ]);
+
+        $this->hasMany('ProjectsTasks', [
+            'foreignKey' => 'milestone_id',
+            'className' => 'Projects.ProjectsTasks',
+        ]);
     }
 
     /**
@@ -67,8 +72,8 @@ class ProjectsMilestonesTable extends Table
             ->allowEmptyString('title');
 
         $validator
-            ->date('due')
-            ->allowEmptyDate('due');
+            ->date('date_due')
+            ->allowEmptyDate('date_due');
 
         return $validator;
     }

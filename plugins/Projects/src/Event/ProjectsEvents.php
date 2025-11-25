@@ -9,7 +9,6 @@ use Cake\Event\EventListenerInterface;
 use Cake\ORM\Query\SelectQuery;
 use Cake\ORM\TableRegistry;
 use Projects\Lib\ProjectsSidebar;
-use Tasks\Model\Table\TasksTable;
 
 class ProjectsEvents implements EventListenerInterface
 {
@@ -28,7 +27,6 @@ class ProjectsEvents implements EventListenerInterface
             'Lil.Form.Crm.Adremas.edit' => 'addProjectToAdremas',
             'Lil.Index.Crm.Adremas.index' => 'addProjectToAdremas',
             'Lil.Form.Tasks.Tasks.edit' => 'addProjectToTasks',
-            'Model.afterSave' => 'updateTasksMilestonesCounters',
         ];
     }
 
@@ -188,7 +186,6 @@ class ProjectsEvents implements EventListenerInterface
             return;
         }
 
-        
         /** @var \Projects\Model\Table\ProjectsTable $ProjectsTable */
         $ProjectsTable = TableRegistry::getTableLocator()->get('Projects.Projects');
         $projectsQuery = $view->getCurrentUser()->applyScope('index', $ProjectsTable->find())
@@ -196,63 +193,41 @@ class ProjectsEvents implements EventListenerInterface
 
         $projects = $ProjectsTable->findForOwner($view->getCurrentUser()->company_id, $projectsQuery);
 
-        $fields = [
-            'project' => [
-                'method' => 'control',
-                'parameters' => [
-                    'field' => 'project_id', [
-                        'type' => 'select',
-                        'label' => __d('projects', 'Project') . ':',
-                        'options' => $projects,
-                        'empty' => '-- ' . __d('projects', 'no project') . ' --',
-                        'default' => $view->getRequest()->getQuery('project'),
+        $ProjectsMilestonesTable = TableRegistry::getTableLocator()->get('Projects.ProjectsMilestones');
+        $projectsWithMilestones = $ProjectsMilestonesTable->find()
+            ->contain(['Projects'])
+            ->where(['project_id IN' => array_keys($projects)])
+            ->all()
+            ->combine('id', fn($entity) => (string)$entity->project . ' :: ' . $entity->title)
+            ->toArray();
+
+        if (count($projectsWithMilestones) > 0) {
+            $fields = [
+                'model' => [
+                    'method' => 'control',
+                    'parameters' => [
+                        'field' => 'model', [
+                            'type' => 'hidden',
+                            'default' => 'ProjectsMilestone',
+                        ],
                     ],
                 ],
-            ],
-        ];
+                'project' => [
+                    'method' => 'control',
+                    'parameters' => [
+                        'field' => 'foreign_id', [
+                            'type' => 'select',
+                            'label' => __d('projects', 'Project') . ':',
+                            'options' => $projectsWithMilestones,
+                            'empty' => '-- ' . __d('projects', 'no project') . ' --',
+                            'default' => $view->getRequest()->getQuery('project'),
+                        ],
+                    ],
+                ],
+            ];
 
-        $view->set(compact('projects'));
-        $view->Lil->insertIntoArray($data->form['lines'], $fields, ['before' => 'submit']);
-    }
-
-    /**
-     * Update tasks count for milestones 
-     *
-     * @param \Cake\Event\Event $event Event object
-     * @param \Cake\Datasource\EntityInterface $entity Entity object
-     * @param \ArrayObject $options Options array
-     * @return void
-     */
-    public function updateTasksMilestonesCounters(Event $event, EntityInterface $entity, ArrayObject $options): void
-    {
-        if (get_class($event->getSubject()) == TasksTable::class) {
-            /** @var \Tasks\Model\Table\TasksTable $TasksTable */
-            $TasksTable = $event->getSubject();
-
-            if ($entity->model = 'ProjectsMilestone' && !is_null($entity->foreign_id)) {
-                // recalculate tasks count for milestone
-                $allTasksCount = $TasksTable->find()
-                    ->where([
-                        'model' => 'ProjectsMilestone',
-                        'foreign_id' => $entity->foreign_id,
-                    ])
-                    ->count();
-
-                $openTasksCount = $TasksTable->find()
-                    ->where([
-                        'model' => 'ProjectsMilestone',
-                        'foreign_id' => $entity->foreign_id,
-                        'completed IS' => null,
-                    ])
-                    ->count();
-
-                /** @var \Projects\Model\Table\ProjectsMilestonesTable $ProjectsMilestonesTable */
-                $ProjectsMilestonesTable = TableRegistry::getTableLocator()->get('Projects.ProjectsMilestones');
-                $milestone = $ProjectsMilestonesTable->get($entity->foreign_id);
-                $milestone->task_count = $allTasksCount;
-                $milestone->count_tasks_open = $openTasksCount;
-                $ProjectsMilestonesTable->save($milestone);
-            }
+            $view->set(compact('projects'));
+            $view->Lil->insertIntoArray($data->form['lines'], $fields, ['before' => 'submit']);
         }
     }
 }

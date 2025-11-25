@@ -134,7 +134,7 @@ class ProjectsController extends AppController
         $milestones = TableRegistry::getTableLocator()->get('Projects.ProjectsMilestones')->find()
             ->select()
             ->where(['project_id' => $id])
-            ->orderBy('due ASC')
+            ->orderBy('date_due ASC')
             ->all();
 
         $userIds = array_unique(Hash::extract($logs->toArray(), '{n}.user_id') +

@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 use Migrations\AbstractMigration;
+use Phinx\Db\Adapter\MysqlAdapter;
 
 class CreateMilestones extends AbstractMigration
 {
@@ -15,6 +16,59 @@ class CreateMilestones extends AbstractMigration
      */
     public function change(): void
     {
+        $table = $this->table('projects_tasks', ['id' => false, 'primary_key' => ['id']]);
+        $table
+            ->addColumn('id', 'uuid', [
+                'default' => null,
+                'limit' => null,
+                'null' => false,
+            ])
+            ->addColumn('project_id', 'uuid', [
+                'default' => null,
+                'limit' => null,
+                'null' => true,
+            ])
+            ->addColumn('user_id', 'uuid', [
+                'default' => null,
+                'limit' => null,
+                'null' => true,
+            ])
+            ->addColumn('milestone_id', 'uuid', [
+                'default' => null,
+                'limit' => null,
+                'null' => true,
+            ])
+            ->addColumn('no', 'integer', [
+                'default' => 1,
+                'limit' => null,
+                'null' => false,
+            ])
+            ->addColumn('title', 'text', [
+                'default' => null,
+                'limit' => null,
+                'null' => true,
+            ])
+            ->addColumn('descript', 'text', [
+                'default' => null,
+                'limit' => MysqlAdapter::TEXT_MEDIUM,
+                'null' => true,
+            ])
+            ->addColumn('date_complete', 'date', [
+                'default' => null,
+                'limit' => null,
+                'null' => true,
+            ])
+            ->addColumn('created', 'datetime', [
+                'default' => null,
+                'limit' => null,
+                'null' => true,
+            ])
+            ->addColumn('modified', 'datetime', [
+                'default' => null,
+                'limit' => null,
+                'null' => true,
+            ])
+            ->create();
         $table = $this->table('projects_milestones', ['id' => false, 'primary_key' => ['id']]);
         $table
             ->addColumn('id', 'uuid', [
@@ -47,11 +101,11 @@ class CreateMilestones extends AbstractMigration
                 'limit' => null,
                 'null' => true,
             ])
-            ->addColumn('count_tasks_open', 'integer', [
+            ->addColumn('tasks_open', 'integer', [
                 'default' => 0,
                 'null' => false,
             ])
-            ->addColumn('count_tasks_done', 'integer', [
+            ->addColumn('tasks_done', 'integer', [
                 'default' => 0,
                 'null' => false,
             ])

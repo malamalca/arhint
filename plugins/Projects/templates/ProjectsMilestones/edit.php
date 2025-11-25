@@ -46,7 +46,7 @@ $editForm = [
             'due' => [
                 'method' => 'control',
                 'parameters' => [
-                    'due',
+                    'date_due',
                     [
                         'type' => 'date',
                         'label' => __d('projects', 'Due'),

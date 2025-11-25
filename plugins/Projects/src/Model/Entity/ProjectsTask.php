@@ -6,21 +6,23 @@ namespace Projects\Model\Entity;
 use Cake\ORM\Entity;
 
 /**
- * ProjectsMilestone Entity
+ * ProjectsTask Entity
  *
  * @property string $id
  * @property string|null $project_id
+ * @property string|null $milestone_id
+ * @property string|null $user_id
+ * @property int $no
  * @property string|null $title
- * @property \Cake\I18n\Date|null $date_due
- * @property \Cake\I18n\Date|null $date_date_complete
- * @property int $tasks_open
- * @property int $tasks_done
+ * @property string|null $descript
+ * @property \Cake\I18n\Date|null $date_complete
  * @property \Cake\I18n\DateTime|null $created
  * @property \Cake\I18n\DateTime|null $modified
  *
  * @property \Projects\Model\Entity\Project $project
+ * @property \Projects\Model\Entity\User $user
  */
-class ProjectsMilestone extends Entity
+class ProjectsTask extends Entity
 {
     /**
      * Fields that can be mass assigned using newEntity() or patchEntity().
@@ -33,13 +35,16 @@ class ProjectsMilestone extends Entity
      */
     protected array $_accessible = [
         'project_id' => true,
+        'user_id' => true,
+        'project_id' => true,
+        'milestone_id' => true,
+        'no' => true,
         'title' => true,
-        'date_due' => true,
+        'descript' => true,
         'date_complete' => true,
-        'tasks_open' => true,
-        'tasks_done' => true,
         'created' => true,
         'modified' => true,
         'project' => true,
+        'user' => true,
     ];
 }

@@ -20,6 +20,11 @@
 
 h2 {
     font-size: 36px;
+
+    .small {
+        font-size: 60% !important;
+        margin-bottom: -0.8rem;
+    }
 }
 h3 {
     font-size: 30px;
