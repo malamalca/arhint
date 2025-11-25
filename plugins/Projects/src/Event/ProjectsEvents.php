@@ -26,7 +26,6 @@ class ProjectsEvents implements EventListenerInterface
             'Documents.Documents.indexQuery' => 'filterDashboardDocuments',
             'Lil.Form.Crm.Adremas.edit' => 'addProjectToAdremas',
             'Lil.Index.Crm.Adremas.index' => 'addProjectToAdremas',
-            'Lil.Form.Tasks.Tasks.edit' => 'addProjectToTasks',
         ];
     }
 
@@ -168,66 +167,6 @@ class ProjectsEvents implements EventListenerInterface
                 ->toArray();
 
             $q->where(['Projects.id IN' => array_keys($projectsList)]);
-        }
-    }
-
-    /**
-     * Add project to adremas index.
-     *
-     * @param \Cake\Event\Event $event Event object.
-     * @param mixed $data LilForm or LilPanels object.
-     * @return void
-     */
-    public function addProjectToTasks(Event $event, mixed $data): void
-    {
-        /** @var \App\View\AppView $view */
-        $view = $event->getSubject();
-        if (!$view->hasCurrentUser()) {
-            return;
-        }
-
-        /** @var \Projects\Model\Table\ProjectsTable $ProjectsTable */
-        $ProjectsTable = TableRegistry::getTableLocator()->get('Projects.Projects');
-        $projectsQuery = $view->getCurrentUser()->applyScope('index', $ProjectsTable->find())
-            ->contain(['ProjectsMilestones']);
-
-        $projects = $ProjectsTable->findForOwner($view->getCurrentUser()->company_id, $projectsQuery);
-
-        $ProjectsMilestonesTable = TableRegistry::getTableLocator()->get('Projects.ProjectsMilestones');
-        $projectsWithMilestones = $ProjectsMilestonesTable->find()
-            ->contain(['Projects'])
-            ->where(['project_id IN' => array_keys($projects)])
-            ->all()
-            ->combine('id', fn($entity) => (string)$entity->project . ' :: ' . $entity->title)
-            ->toArray();
-
-        if (count($projectsWithMilestones) > 0) {
-            $fields = [
-                'model' => [
-                    'method' => 'control',
-                    'parameters' => [
-                        'field' => 'model', [
-                            'type' => 'hidden',
-                            'default' => 'ProjectsMilestone',
-                        ],
-                    ],
-                ],
-                'project' => [
-                    'method' => 'control',
-                    'parameters' => [
-                        'field' => 'foreign_id', [
-                            'type' => 'select',
-                            'label' => __d('projects', 'Project') . ':',
-                            'options' => $projectsWithMilestones,
-                            'empty' => '-- ' . __d('projects', 'no project') . ' --',
-                            'default' => $view->getRequest()->getQuery('project'),
-                        ],
-                    ],
-                ],
-            ];
-
-            $view->set(compact('projects'));
-            $view->Lil->insertIntoArray($data->form['lines'], $fields, ['before' => 'submit']);
         }
     }
 }

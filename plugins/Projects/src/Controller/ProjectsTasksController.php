@@ -3,9 +3,8 @@ declare(strict_types=1);
 
 namespace Projects\Controller;
 
-use Cake\Cache\Cache;
-use Cake\ORM\TableRegistry;
 use Cake\Http\Response;
+use Cake\ORM\TableRegistry;
 
 /**
  * ProjectsTasks Controller
@@ -86,8 +85,7 @@ class ProjectsTasksController extends AppController
         $this->set('milestones', $this->ProjectsTasks->Milestones->find('list')
             ->where(['project_id' => $projectsTask->project_id])
             ->orderBy('title')
-            ->toArray()
-        );
+            ->toArray());
 
         return null;
     }

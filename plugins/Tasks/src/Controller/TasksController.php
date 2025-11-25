@@ -59,7 +59,7 @@ class TasksController extends AppController
      * Edit method
      *
      * @param string|null $id Task id.
-     * @return \Cake\Http\Response|void|null
+     * @return \Cake\Http\Response|null|void
      */
     public function edit(?string $id = null): ?Response
     {

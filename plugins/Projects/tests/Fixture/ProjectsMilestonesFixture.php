@@ -8,6 +8,4 @@ use Cake\TestSuite\Fixture\TestFixture;
  */
 class ProjectsMilestonesFixture extends TestFixture
 {
-
-
 }

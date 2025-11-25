@@ -10,5 +10,4 @@ use Cake\TestSuite\Fixture\TestFixture;
  */
 class ProjectsTasksFixture extends TestFixture
 {
-
 }

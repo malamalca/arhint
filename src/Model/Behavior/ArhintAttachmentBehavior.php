@@ -1,21 +1,21 @@
 <?php
+declare(strict_types=1);
+
 namespace App\Model\Behavior;
 
 use ArrayObject;
-use ReflectionClass;
 use Cake\Datasource\EntityInterface;
 use Cake\Event\EventInterface;
-use Cake\Event\Event;
-use Cake\ORM\TableRegistry;
 use Cake\ORM\Behavior;
+use Cake\ORM\TableRegistry;
 use Laminas\Diactoros\UploadedFile;
+use ReflectionClass;
 
 class ArhintAttachmentBehavior extends Behavior
 {
     protected array $_defaultConfig = [
         'field' => 'filename',
     ];
-
 
     public function afterSave(EventInterface $event, EntityInterface $entity, ArrayObject $options): void
     {
@@ -35,7 +35,7 @@ class ArhintAttachmentBehavior extends Behavior
                 }
             }
         }
-    
+
         /** @var \App\Model\Table\AttachmentsTable $AttachmentsTable */
         $AttachmentsTable = TableRegistry::getTableLocator()->get('Attachments');
 
