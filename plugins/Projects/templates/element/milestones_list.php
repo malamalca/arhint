@@ -1,3 +1,6 @@
+<?php
+    use Cake\Routing\Router;
+?>
 <div class="title"><?= $this->Html->image('/projects/img/milestone-16.svg') ?> 0 open 0 closed</div>
 <?php
 
@@ -26,19 +29,54 @@ foreach ($milestones as $milestone):
                 <span><a href="<?= $this->Url->build([
                     'controller' => 'ProjectsTasks',
                     'action' => 'index',
-                    '?' => ['project' => $milestone->project_id, 'milestone' => $milestone->id, 'status' => 'open']
+                    '?' => [
+                        'project' => $milestone->project_id,
+                        'q' => 'milestone:' . escapeshellarg($milestone->title) . ' status:open',
+                    ]
                 ]) ?>"><strong><?= $milestone->tasks_open ?></strong> open</a></span>
-                <span><strong><?= $milestone->tasks_done ?></strong> closed</span>
+                <span><a href="<?= $this->Url->build([
+                    'controller' => 'ProjectsTasks',
+                    'action' => 'index',
+                    '?' => [
+                        'project' => $milestone->project_id,
+                        'q' => 'milestone:' . escapeshellarg($milestone->title) . ' status:closed',
+                    ],
+                ]) ?>"><strong><?= $milestone->tasks_done ?></strong> closed</a></span>
             </div>
             <div class="actions">
                 <?= $this->Html->link(
                         __d('projects', 'Add Task'),
-                        ['controller' => 'ProjectsTasks', 'action' => 'edit', '?' => ['project' => $milestone->project_id, 'milestone' => $milestone->id]],
-                        ['class' => 'button small btn-add-task', 'onclick' => 'popup(); return false;']
+                        [
+                            'controller' => 'ProjectsTasks',
+                            'action' => 'edit',
+                            '?' => [
+                                'project' => $milestone->project_id,
+                                'milestone' => $milestone->id,
+                                'redirect' => Router::url(),
+                            ],
+                        ],
+                        ['class' => 'btn btn-small text btn-add-task', 'onclick' => 'popup(); return false;']
                     )
                 ?>
-                <?= $this->Html->link(__d('projects', 'Edit'), ['controller' => 'ProjectsMilestones', 'action' => 'edit', $milestone->id], ['class' => 'button small']) ?>
-                <?= $this->Html->link(__d('projects', 'Close'), ['controller' => 'ProjectsMilestones', 'action' => 'close', $milestone->id], ['class' => 'button small', 'confirm' => __d('projects', 'Are you sure?')]) ?>
+                <?= $this->Html->link(
+                    __d('projects', 'Edit'),
+                    [
+                        'controller' => 'ProjectsMilestones',
+                        'action' => 'edit',
+                        $milestone->id,
+                        '?' => ['redirect' => Router::url()],
+                    ],
+                    ['class' => 'btn btn-small text btn-edit-milestone']
+                ) ?>
+                <?= $this->Html->link(
+                    __d('projects', 'Close'),
+                    [
+                        'controller' => 'ProjectsMilestones',
+                        'action' => 'close',
+                        $milestone->id
+                    ],
+                    ['class' => 'btn btn-small text', 'confirm' => __d('projects', 'Are you sure?')]
+                ) ?>
             </div>
         </div>
     </div>

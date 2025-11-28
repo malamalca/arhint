@@ -42,4 +42,14 @@ class ProjectsMilestone extends Entity
         'modified' => true,
         'project' => true,
     ];
+
+    /**
+     * Magic method __toString
+     *
+     * @return string
+     */
+    public function __toString(): string
+    {
+        return $this->title;
+    }
 }

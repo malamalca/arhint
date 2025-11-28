@@ -1,48 +1,16 @@
 <?php
 
-$pageTitle = __d('projects', 'Tasks');
-if (!empty($filter['project'])) {
-    $pageTitle = sprintf(
-        '<div class="small">%1$s</div>%2$s',
-        $this->Html->link((string)$projects[$filter['project']], [
-            'controller' => 'Projects',
-            'action' => 'view',
-            $filter['project'],
-            '?' => ['tab' => 'milestones'],
-        ]),
-        __d('projects', 'Tasks'),
-    );
-}
-
-// FILTER by project
-$activeProject = $filter['project'] ?? null;
-$projectLink = $this->Html->link(
-    $projects[$activeProject] ?? __d('projects', 'All Projects'),
-    ['action' => 'filter'],
-    ['class' => 'dropdown-trigger', 'id' => 'filter-projects', 'data-target' => 'dropdown-projects']
+$pageTitle = sprintf(
+    '<div class="small">%1$s</div>',
+    $this->Html->link((string)$projects[$filter['project']], [
+        'controller' => 'Projects',
+        'action' => 'view',
+        $filter['project'],
+        '?' => ['tab' => 'milestones'],
+    ])
 );
-$popupProjects = ['items' => [[
-    'title' => __d('projects', 'All Projects'),
-    'url' => ['?' => array_merge($this->getRequest()->getQuery(), ['project' => null])],
-    'params' => ['class' => 'nowrap'],
-]]];
-foreach ($projects as $project) {
-    $popupProjects['items'][] = [
-        'title' => $project->title,
-        'url' => ['?' => array_merge($this->getRequest()->getQuery(), ['project' => $project->id])],
-        'active' => ($activeProject == $project->id),
-        'params' => ['class' => 'nowrap'],
-    ];
-}
-$popupProjects = $this->Lil->popup('projects', $popupProjects, true);
 
-// FILTER by project
-$activeUser = $filter['user'] ?? null;
-$usersLink = $this->Html->link(
-    $users[$activeUser] ?? __d('projects', 'All Users'),
-    ['action' => 'filter'],
-    ['class' => 'dropdown-trigger', 'id' => 'filter-users', 'data-target' => 'dropdown-users']
-);
+// FILTER by user
 $popupUsers = ['items' => [[
     'title' => __d('projects', 'All Users'),
     'active' => false,
@@ -59,11 +27,26 @@ foreach ($users as $user) {
 }
 $popupUsers = $this->Lil->popup('users', $popupUsers, true);
 
-$pageTitle = __d('projects', 'Tasks for {0} by {1}', $projectLink, $usersLink);
+// FILTER by milestone
+$popupMilestones = ['items' => [[
+    'title' => __d('projects', 'All Milestones'),
+    'active' => false,
+    'url' => ['?' => array_merge($this->getRequest()->getQuery(), ['milestone' => null])],
+    'params' => ['class' => 'nowrap'],
+]]];
+foreach ($milestones as $milestone) {
+    $popupMilestones['items'][] = [
+        'title' => (string)$milestone,
+        'url' => ['?' => array_merge($this->getRequest()->getQuery(), ['milestone' => $milestone->id])],
+        'active' => ($filter['milestone'] == $milestone->id),
+        'params' => ['class' => 'nowrap'],
+    ];
+}
+$popupMilestones = $this->Lil->popup('milestones', $popupMilestones, true);
 
 $tableIndex = [
-    'title_for_layout' => '<div class="small">' . (string)$projects[$filter['project']] . '</div>',
-    'actions' => ['lines' => [$popupProjects, $popupUsers]],
+    'title_for_layout' => $pageTitle,
+    'actions' => ['lines' => [$popupUsers, $popupMilestones]],
     'menu' => [
         'add' => empty($filter['project']) ? null : [
             'title' => __d('projects', 'Add'),
@@ -79,14 +62,15 @@ $tableIndex = [
     'pre' => '<div id="tasks-index">',
     'post' => '</div>',
     'panels' => [
-        'search' => '<div id="tasks-search"><input name="q" id="query" />' .
+        'search' => '<div id="tasks-search">' .
+            sprintf('<input name="q" id="query" value="%s" />', $this->request->getQuery('q')) .
             '<button class="btn btn-small tonal" id="btn-search"><i class="material-icons">search</i></button>' .
             '<button class="btn btn-small" id="btn-add"><i class="material-icons">add</i>New Task</button>' .
             '</div>',
         'filter' => '<div id="tasks-filter"><ul>' .
-            '<li><a href="#" class="btn text">Author</a></li>' .
-            '<li><a href="#" class="btn text">Milestone</a></li>' .
-            '<li><a href="#" class="btn text">Newest</a></li>' .
+            '<li><a href="#" class="btn text dropdown-trigger-costum" data-target="dropdown-users">Author</a></li>' .
+            '<li><a href="#" class="btn text dropdown-trigger-costum" data-target="dropdown-milestones">Milestone</a></li>' .
+            '<li><a href="#" class="btn text"><i class="material-icons">sort</i>Newest &#128899;</a></li>' .
             '</ul>' .
             '<div id="">Open 1  Closed 1</div>' .
             '</div>',
@@ -107,3 +91,15 @@ foreach ($projectsTasks as $task) {
 }
 
 echo $this->Lil->panels($tableIndex, 'Projects.ProjectsTasks.index');
+?>
+<script type="text/javascript">
+    document.addEventListener('DOMContentLoaded', function() {
+        const elems = document.querySelectorAll('.dropdown-trigger-costum');
+        elems.forEach((dropdown) => {
+            M.Dropdown.init(dropdown, {
+                constrainWidth: false,
+                coverTrigger: false
+            });
+        });
+    });
+</script>

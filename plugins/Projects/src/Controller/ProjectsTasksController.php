@@ -34,13 +34,19 @@ class ProjectsTasksController extends AppController
         $UsersTable = TableRegistry::getTableLocator()->get('App.Users');
         $users = $UsersTable->fetchForCompany($this->getCurrentUser()->get('company_id'));
 
+        $milestones = $this->ProjectsTasks->getAssociation('Milestones')
+            ->find()
+            ->where(['project_id' => $this->request->getQuery('project')])
+            ->order('title')
+            ->all()
+            ->combine('id', fn($entity) => $entity)
+            ->toArray();
+
         $projects = $this->Authorization->applyScope($this->ProjectsTasks->Projects->find(), 'index')
             ->where(['active' => true])
             ->orderBy(['no DESC', 'title'])
             ->all()
-            ->combine('id', function ($entity) {
-                return $entity;
-            })
+            ->combine('id', fn($entity) => $entity)
             ->toArray();
 
         $this->set(compact('projectsTasks', 'filter', 'users', 'projects'));

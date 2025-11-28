@@ -287,6 +287,13 @@ echo $this->Lil->panels($projectView, 'Projects.Projects.view');
         $(".btn-add-task").each(function() {
             $(this).modalPopup({
                 title: "<?= __d('projects', 'Add Task') ?>",
+                onOpen: function(popup) { $("#title", popup).focus(); }
+            });
+        });
+
+        $(".btn-edit-milestone").each(function() {
+            $(this).modalPopup({
+                title: "<?= __d('projects', 'Edit Milestone') ?>",
                 onOpen: function(popup) { $("#projects-milestone-title", popup).focus(); }
             });
         });
