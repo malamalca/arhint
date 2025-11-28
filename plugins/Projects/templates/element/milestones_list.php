@@ -1,7 +1,8 @@
 <div class="title"><?= $this->Html->image('/projects/img/milestone-16.svg') ?> 0 open 0 closed</div>
 <?php
-    foreach ($milestones as $milestone):
-        $completedPercent = ($milestone->tasks_done + $milestone->tasks_open) > 0 ? round($milestone->tasks_done / ($milestone->tasks_done + $milestone->tasks_open), 2) * 100 : 0;
+
+foreach ($milestones as $milestone):
+    $completedPercent = ($milestone->tasks_done + $milestone->tasks_open) > 0 ? round($milestone->tasks_done / ($milestone->tasks_done + $milestone->tasks_open), 2) * 100 : 0;
 ?>
     <div class="milestone-item">
         <div class="milestone-info">
