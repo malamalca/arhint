@@ -140,7 +140,12 @@ class ProjectsTasksTable extends Table
         }
 
         if (!empty($filter['milestone'])) {
-            $ret['conditions'][]['ProjectsTasks.milestone_id IN'] = (array)$filter['milestone'];
+            $matchingMilestones = $this->getAssociation('Milestones')->find()
+                ->select(['id'])
+                ->distinct()
+                ->where(['title LIKE' => $filter['milestone']]);
+
+            $ret['conditions'][]['ProjectsTasks.milestone_id IN'] = $matchingMilestones;
         }
 
         if (!empty($filter['user'])) {

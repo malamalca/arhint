@@ -1,12 +1,17 @@
 <div class="title"><?= $this->Html->image('/projects/img/milestone-16.svg') ?> 0 open 0 closed</div>
 <?php
-    foreach ($milestones as $milestone):
-        $completedPercent = ($milestone->tasks_done + $milestone->tasks_open) > 0 ? round($milestone->tasks_done / ($milestone->tasks_done + $milestone->tasks_open), 2) * 100 : 0;
+
+foreach ($milestones as $milestone):
+    $completedPercent = ($milestone->tasks_done + $milestone->tasks_open) > 0 ? round($milestone->tasks_done / ($milestone->tasks_done + $milestone->tasks_open), 2) * 100 : 0;
 ?>
     <div class="milestone-item">
         <div class="milestone-info">
             <div class="milestone-title">
-                <?= $this->Html->link(h($milestone->title), ['controller' => 'ProjectsMilestones', 'action' => 'view', $milestone->id]) ?>
+                <?= $this->Html->link(h($milestone->title), [
+                    'controller' => 'ProjectsTasks',
+                    'action' => 'index',
+                    '?' => ['project' => $milestone->project_id, 'milestone' => $milestone->title],
+                ]) ?>
             </div>
             
             <span><?= $this->Html->image('/projects/img/calendar-16.svg') ?><?= __d('projects', 'Due') ?>: <?= $milestone->date_due ? h($milestone->date_due->nice()) : __d('projects', 'not set') ?></span>
