@@ -6,7 +6,10 @@
     <div class="milestone-item">
         <div class="milestone-info">
             <div class="milestone-title">
-                <?= $this->Html->link(h($milestone->title), ['controller' => 'ProjectsMilestones', 'action' => 'view', $milestone->id]) ?>
+                <?= $this->Html->link(h($milestone->title), [
+                    'controller' => 'ProjectsTasks',
+                    'action' => 'index',
+                    '?' => ['project' => $milestone->project_id, 'q' => 'milestone:' . escapeshellarg($milestone->title)]]) ?>
             </div>
             
             <span><?= $this->Html->image('/projects/img/calendar-16.svg') ?><?= __d('projects', 'Due') ?>: <?= $milestone->date_due ? h($milestone->date_due->nice()) : __d('projects', 'not set') ?></span>

@@ -60,6 +60,6 @@
         */
 
         'linkedit' => '<a href="{{url}}" class="btn-small waves-effect waves-light waves-circle {{class}}" role="button"><i class="material-icons">edit</i></a>',
-        'linkdelete' => '<a href="{{url}}" class="btn-small waves-effect waves-light waves-circle {{class}}" role="button" onclick="return confirm(\'{{confirmation}}\');"><i class="material-icons">close</i></a>',
+        'linkdelete' => '<a href="{{url}}" class="btn-small waves-effect waves-light waves-circle {{class}}" role="button" onclick="return confirm(\'{{confirmation}}\');"><i class="material-icons">delete</i></a>',
         'linkpopup' => '<a href="{{url}}" id="dropdown-{{name}}" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"{{attrs}}>{{content}}</a>'
     ];

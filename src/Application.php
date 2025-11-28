@@ -220,7 +220,7 @@ class Application extends BaseApplication implements
             ['controller' => ['Invoices', 'Documents'], 'action' => 'edit'],
             ])
         ) {
-            $service->loadAuthenticator('Authentication.HttpBasic', ['realm' => 'intranet']);
+            $service->loadAuthenticator('Authentication.HttpBasic', ['realm' => 'intranet', 'fields' => $fields]);
         }
 
         return $service;

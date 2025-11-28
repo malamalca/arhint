@@ -10,6 +10,94 @@ use Cake\Core\Configure;
 
 class GlobalAttachmentsCommand extends Command
 {
+    public function execute(Arguments $args, ConsoleIo $io): int
+    {
+        //select * from documents_attachments where original in (select original from documents_attachments group by original having count(original) > 1) ORDER BY `filename` ASC
+
+        $subquery = $this->fetchTable('Documents.DocumentsAttachments')->find();
+        $expr = $subquery->newExpr()->add('count(original) > 1');
+
+        $subquery
+            ->select(['original'])
+            ->groupBy(['original'])
+            ->having($expr);
+
+
+        $attachments = $this->fetchTable('Documents.DocumentsAttachments')->find()
+            ->select()
+            ->where(['original IN' => $subquery])
+            ->all();
+
+
+        $AttachmentsTable = $this->fetchTable('Attachments');
+
+        // najprej zbiršem vse neveljavne fajle
+        foreach ($attachments as $atch) {
+            $targetFolder = Configure::read('App.uploadFolder') . $atch->model . DS;
+            $filePath = $targetFolder . $atch->filename;
+
+            if (file_exists($filePath)) {
+                $io->out('Deleting ...' . $filePath); 
+                unlink($filePath);
+            }
+        }
+
+        // potem filam še enkrat
+        foreach ($attachments as $atch) {
+            $globalAtch = $AttachmentsTable->find()
+                ->select()
+                ->where(['foreign_id' => $atch->document_id])
+                ->first();
+
+            if ($globalAtch) {
+                $filePath = Configure::read('App.uploadFolder') . 'duplicates' . DS . $atch->filename;
+                if (file_exists($filePath)) {
+                    $io->out('Processing: ' . $filePath);
+
+                    // check for existing file
+                    $folderDest = Configure::read('App.uploadFolder') . $atch->model . DS;
+                    $fileDest = $folderDest . $atch->original;
+
+                    // if file exists, add or increment index _XX before extension until unique
+                    if (file_exists($fileDest)) {
+                        $ext = pathinfo($atch->original, PATHINFO_EXTENSION);
+                        $name = pathinfo($atch->original, PATHINFO_FILENAME);
+
+                        // detect existing trailing _NN (two digits or more)
+                        if (preg_match('/^(.*)_([0-9]+)$/', $name, $m)) {
+                            $base = $m[1];
+                            $index = (int)$m[2];
+                        } else {
+                            $base = $name;
+                            $index = 0;
+                        }
+
+                        do {
+                            $index++;
+                            $indexedName = sprintf('%s_%d', $base, $index);
+                            $newFilename = $ext !== '' ? $indexedName . '.' . $ext : $indexedName;
+                            $fileDest = $folderDest . $newFilename;
+                        } while (file_exists($fileDest));
+
+                        // update entity filename so DB / further code sees the new name
+                        $io->out('Changing filename ...' . $globalAtch->filename . ' -> ' . $newFilename); 
+                        $globalAtch->filename = $newFilename;
+                        $io->out('Saving..');
+                        $AttachmentsTable->save($globalAtch);
+                    }
+
+                    $io->out('Copying ...' . $filePath . ' -> ' . $fileDest); 
+                    copy($filePath, $fileDest);
+                    $io->out('Deleting ...' . $filePath); 
+                    unlink($filePath);
+                } else {
+                    $io->out('File does not exist: ' . $filePath);
+                }
+            }
+        }
+
+        return 1;
+    }
     /**
      * Hourly heartbeat function
      *
@@ -17,7 +105,7 @@ class GlobalAttachmentsCommand extends Command
      * @param \Cake\Console\ConsoleIo $io Console IO
      * @return int
      */
-    public function execute(Arguments $args, ConsoleIo $io): int
+    public function executeOld(Arguments $args, ConsoleIo $io): int
     {
         $AttachmentsTable = $this->fetchTable('Attachments');
 
