@@ -73,7 +73,8 @@ class TasksEvents implements EventListenerInterface
             ];
 
             foreach ($tasks as $task) {
-                $panels['panels']['tasks']['lines'][] = $view->Lil->panels(['panels' => [TasksUtils::taskPanel($task, $view)]]);
+                $panels['panels']['tasks']['lines'][] =
+                    $view->Lil->panels(['panels' => [TasksUtils::taskPanel($task, $view)]]);
             }
         }
 

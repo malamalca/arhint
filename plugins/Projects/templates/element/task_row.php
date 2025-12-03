@@ -2,14 +2,18 @@
     use Cake\Routing\Router;
 ?>
 <div class="task-row">
-    <div class="checkbox">o</div>
-    <div class="status">o</div>
+    <div class="checkbox"><input type="checkbox" /></div>
+    <div class="status"><?= $this->Html->image(
+        sprintf('/projects/img/issue-%s-16.svg', empty($task->date_complete) ? 'opened' : 'closed'),
+        ['class' => empty($task->date_complete) ? 'opened' : 'closed'],
+    ) ?></div>
     <div class="title"><?= $this->Html->link(
         $task->title,
         [
-            'action' => 'view',
+            'action' => 'edit',
             $task->id,
-            '?' => ['redirect' => Router::url()]
-        ]) ?></div>
+            '?' => ['redirect' => Router::url(null, true)],
+        ],
+    ) ?></div>
     <div class="details">#<?= $task->no ?> · <?= $users[$task->user_id] ?> opened <?= h($task->created->nice()) ?></div>
 </div>

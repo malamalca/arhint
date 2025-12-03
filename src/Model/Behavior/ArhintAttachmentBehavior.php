@@ -5,7 +5,7 @@ namespace App\Model\Behavior;
 
 use ArrayObject;
 use Cake\Datasource\EntityInterface;
-use Cake\Event\EventInterface;
+use Cake\Event\Event;
 use Cake\ORM\Behavior;
 use Cake\ORM\TableRegistry;
 use Laminas\Diactoros\UploadedFile;
@@ -17,7 +17,15 @@ class ArhintAttachmentBehavior extends Behavior
         'field' => 'filename',
     ];
 
-    public function afterSave(EventInterface $event, EntityInterface $entity, ArrayObject $options): void
+    /**
+     * After Save Event
+     *
+     * @param \Cake\Event\Event $event Event
+     * @param \Cake\Datasource\EntityInterface $entity Entity
+     * @param \ArrayObject $options Options
+     * @return void
+     */
+    public function afterSave(Event $event, EntityInterface $entity, ArrayObject $options): void
     {
         $config = $this->getConfig();
 
@@ -30,8 +38,11 @@ class ArhintAttachmentBehavior extends Behavior
             }
         } else {
             foreach ((array)$config['field'] as $field) {
-                if (isset($options['uploadedFiles'][$field]) && $options['uploadedFiles'][$field] instanceof UploadedFile) {
-                    $processFiles[$field] = $data['data'][$field];
+                if (
+                    isset($options['uploadedFiles'][$field]) &&
+                    $options['uploadedFiles'][$field] instanceof UploadedFile
+                ) {
+                    $processFiles[$field] = $options['uploadedFiles'][$field];
                 }
             }
         }
@@ -45,13 +56,20 @@ class ArhintAttachmentBehavior extends Behavior
             if ($fileData->getError() === UPLOAD_ERR_OK) {
                 $attachment = $AttachmentsTable->newEmptyEntity();
                 $attachment->model = $reflect->getShortName();
-                $attachment->foreign_id = $entity->id;
+                $attachment->foreign_id = $entity->get('id');
 
                 $attachment->filename = $fileData->getClientFilename();
                 $attachment->mimetype = $fileData->getClientMediaType();
                 $attachment->filesize = $fileData->getSize();
 
-                $AttachmentsTable->save($attachment, ['uploadedFilename' => [$attachment->filename => $fileData->getStream()->getMetadata('uri')]]);
+                if (is_string($attachment->filename)) {
+                    $AttachmentsTable->save(
+                        $attachment,
+                        ['uploadedFilename' => [
+                            $attachment->filename => $fileData->getStream()->getMetadata('uri'),
+                        ]],
+                    );
+                }
             }
         }
     }

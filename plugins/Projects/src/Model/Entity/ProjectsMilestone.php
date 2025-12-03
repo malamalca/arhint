@@ -10,6 +10,7 @@ use Cake\ORM\Entity;
  *
  * @property string $id
  * @property string|null $project_id
+ * @property string|null $user_id
  * @property string|null $title
  * @property \Cake\I18n\Date|null $date_due
  * @property \Cake\I18n\Date|null $date_date_complete
@@ -33,6 +34,7 @@ class ProjectsMilestone extends Entity
      */
     protected array $_accessible = [
         'project_id' => true,
+        'user_id' => true,
         'title' => true,
         'date_due' => true,
         'date_complete' => true,
@@ -50,6 +52,6 @@ class ProjectsMilestone extends Entity
      */
     public function __toString(): string
     {
-        return $this->title;
+        return (string)$this->title;
     }
 }

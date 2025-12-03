@@ -16,6 +16,7 @@ use Cake\Routing\Router;
 use Cake\View\View;
 use Documents\Lib\DocumentsSidebar;
 use Exception;
+use Throwable;
 
 class DocumentsEvents implements EventListenerInterface
 {
@@ -282,10 +283,12 @@ class DocumentsEvents implements EventListenerInterface
             /** @var \App\Model\Table\AttachmentsTable $attachmentsTable */
             $attachmentsTable = $event->getSubject();
 
+            /** @var \App\Model\Entity\Attachment $entity */
+
             if (in_array($entity->model, ['Invoice', 'Document'])) {
                 try {
                     // count attachments for that model + foreign id
-                    $count = (int)$attachmentsTable->find()
+                    $count = $attachmentsTable->find()
                         ->where([
                             'model' => $entity->model,
                             'foreign_id' => $entity->foreign_id,
@@ -299,13 +302,13 @@ class DocumentsEvents implements EventListenerInterface
                     }
 
                     // update attachments_count on the parent record
-                    $ret = $targetTable->updateQuery()
+                    $targetTable->updateQuery()
                         ->set(['attachments_count' => $count])
                         ->where(['id' => $entity->foreign_id])
                         ->execute();
-                } catch (\Throwable $e) {
+                } catch (Throwable $e) {
                     // silently ignore errors to avoid breaking the saved flow
-                    var_dump($e); die;
+                    die;
                 }
             }
         }

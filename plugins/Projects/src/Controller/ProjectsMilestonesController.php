@@ -69,10 +69,10 @@ class ProjectsMilestonesController extends AppController
     public function delete(?string $id = null): ?Response
     {
         $this->request->allowMethod(['post', 'delete', 'get']);
-        $projectsMilestone = $this->projectsMilestones->get($id);
+        $projectsMilestone = $this->ProjectsMilestones->get($id);
         $this->Authorization->Authorize($projectsMilestone);
 
-        if ($this->projectsMilestones->delete($projectsMilestone)) {
+        if ($this->ProjectsMilestones->delete($projectsMilestone)) {
             $this->Flash->success(__d('projects', 'The projects milestone has been deleted.'));
         } else {
             $this->Flash->error(__d('projects', 'The projects milestone could not be deleted. Please, try again.'));

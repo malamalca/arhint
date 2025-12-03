@@ -13,17 +13,9 @@ use Cake\Validation\Validator;
  * @property \Projects\Model\Table\ProjectsTable&\Cake\ORM\Association\BelongsTo $Projects
  * @method \Projects\Model\Entity\ProjectsMilestone newEmptyEntity()
  * @method \Projects\Model\Entity\ProjectsMilestone newEntity(array $data, array $options = [])
- * @method array<\Projects\Model\Entity\ProjectsMilestone> newEntities(array $data, array $options = [])
  * @method \Projects\Model\Entity\ProjectsMilestone get(mixed $primaryKey, array|string $finder = 'all', \Psr\SimpleCache\CacheInterface|string|null $cache = null, \Closure|string|null $cacheKey = null, mixed ...$args)
- * @method \Projects\Model\Entity\ProjectsMilestone findOrCreate($search, ?callable $callback = null, array $options = [])
  * @method \Projects\Model\Entity\ProjectsMilestone patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
- * @method array<\Projects\Model\Entity\ProjectsMilestone> patchEntities(iterable $entities, array $data, array $options = [])
  * @method \Projects\Model\Entity\ProjectsMilestone|false save(\Cake\Datasource\EntityInterface $entity, array $options = [])
- * @method \Projects\Model\Entity\ProjectsMilestone saveOrFail(\Cake\Datasource\EntityInterface $entity, array $options = [])
- * @method iterable<\Projects\Model\Entity\ProjectsMilestone>|\Cake\Datasource\ResultSetInterface<\Projects\Model\Entity\ProjectsMilestone>|false saveMany(iterable $entities, array $options = [])
- * @method iterable<\Projects\Model\Entity\ProjectsMilestone>|\Cake\Datasource\ResultSetInterface<\Projects\Model\Entity\ProjectsMilestone> saveManyOrFail(iterable $entities, array $options = [])
- * @method iterable<\Projects\Model\Entity\ProjectsMilestone>|\Cake\Datasource\ResultSetInterface<\Projects\Model\Entity\ProjectsMilestone>|false deleteMany(iterable $entities, array $options = [])
- * @method iterable<\Projects\Model\Entity\ProjectsMilestone>|\Cake\Datasource\ResultSetInterface<\Projects\Model\Entity\ProjectsMilestone> deleteManyOrFail(iterable $entities, array $options = [])
  * @mixin \Cake\ORM\Behavior\TimestampBehavior
  */
 class ProjectsMilestonesTable extends Table

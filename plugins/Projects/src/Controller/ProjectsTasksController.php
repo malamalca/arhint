@@ -5,6 +5,7 @@ namespace Projects\Controller;
 
 use Cake\Http\Response;
 use Cake\ORM\TableRegistry;
+use Projects\Filter\ProjectsTasksFilter;
 
 /**
  * ProjectsTasks Controller
@@ -17,18 +18,31 @@ class ProjectsTasksController extends AppController
     /**
      * Index method
      *
+     * @param string $projectId
      * @return void
      */
-    public function index()
+    public function index(string $projectId)
     {
-        $filter = (array)$this->getRequest()->getQuery();
+        $project = $this->ProjectsTasks->getAssociation('Projects')->get($projectId);
 
-        $params = $this->ProjectsTasks->filter($filter);
+        $filter = new ProjectsTasksFilter($this->getRequest()->getQuery('q'));
+        $params = $filter->getParams();
+
         $query = $this->Authorization->applyScope($this->ProjectsTasks->find(), 'index')
+            ->select($this->ProjectsTasks)
+            ->select(['Users.id', 'Users.name'])
+            ->contain(['Users'])
+            ->where(['project_id' => $project->id])
             ->where($params['conditions']);
 
-        $query->contain(['Projects', 'Users']);
-        $projectsTasks = $this->paginate($query, ['order' => ['started' => 'DESC']]);
+        $projectsTasks = $this->paginate($query, [
+            'order' => $params['order'] ?? ['ProjectsTasks.created DESC'],
+            'limit' => 10,
+        ]);
+
+        $tasksCount = $this->ProjectsTasks->find('tasksCount', $project->id, clone $filter)
+            ->first()
+            ->toArray();
 
         /** @var \App\Model\Table\UsersTable $UsersTable */
         $UsersTable = TableRegistry::getTableLocator()->get('App.Users');
@@ -36,20 +50,14 @@ class ProjectsTasksController extends AppController
 
         $milestones = $this->ProjectsTasks->getAssociation('Milestones')
             ->find()
-            ->where(['project_id' => $this->request->getQuery('project')])
-            ->order('title')
+            ->select(['id', 'title'])
+            ->where(['project_id' => $projectId])
+            ->orderBy('title')
             ->all()
             ->combine('id', fn($entity) => $entity)
             ->toArray();
 
-        $projects = $this->Authorization->applyScope($this->ProjectsTasks->Projects->find(), 'index')
-            ->where(['active' => true])
-            ->orderBy(['no DESC', 'title'])
-            ->all()
-            ->combine('id', fn($entity) => $entity)
-            ->toArray();
-
-        $this->set(compact('projectsTasks', 'filter', 'users', 'projects'));
+        $this->set(compact('project', 'projectsTasks', 'filter', 'users', 'milestones', 'tasksCount'));
     }
 
     /**
@@ -65,7 +73,6 @@ class ProjectsTasksController extends AppController
             $projectsTask = $this->ProjectsTasks->get($id);
         } else {
             $projectsTask = $this->ProjectsTasks->newEmptyEntity();
-            $projectsTask->owner_id = $this->getCurrentUser()->get('company_id');
             $projectsTask->user_id = $this->getCurrentUser()->get('id');
             $projectsTask->project_id = $this->request->getQuery('project');
         }

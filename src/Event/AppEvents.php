@@ -6,16 +6,24 @@ namespace App\Event;
 use App\View\Helper\ArhintHelper;
 use ArrayObject;
 use Cake\Cache\Cache;
+use Cake\Datasource\EntityInterface;
 use Cake\Event\Event;
 use Cake\Event\EventListenerInterface;
 use Cake\I18n\DateTime;
 use Cake\ORM\TableRegistry;
 use Cake\Routing\Router;
 use Cake\View\View;
+use Documents\Model\Table\DocumentsTable;
+use Documents\Model\Table\InvoicesTable;
 use Exception;
 
 class AppEvents implements EventListenerInterface
 {
+    /**
+     * @var array<int,mixed> $attachments
+     */
+    private ?array $attachments = null;
+
     /**
      * Return implemented events.
      *
@@ -27,6 +35,7 @@ class AppEvents implements EventListenerInterface
             'App.dashboard' => 'dashboardPanels',
             'Lil.Sidebar.beforeRender' => 'modifySidebar',
             'Model.beforeMarshal' => 'marshalDuration',
+            'Model.afterSave' => 'updateModelAttachments',
         ];
     }
 
@@ -174,6 +183,43 @@ class AppEvents implements EventListenerInterface
         foreach ($data as $fieldName => $fieldValue) {
             if (is_array($fieldValue) && !empty($fieldValue['duration'])) {
                 $data[$fieldName] = (int)$data[$fieldName]['hours'] * 3600 + (int)$data[$fieldName]['minutes'] * 60;
+            }
+        }
+        if (isset($data['documents_attachments'])) {
+            $this->attachments = $data['documents_attachments'];
+        }
+    }
+
+    /**
+     * Update attachments
+     *
+     * @param \Cake\Event\Event $event Event object
+     * @param \Cake\Datasource\EntityInterface $entity Entity object
+     * @param \ArrayObject $options Options array
+     * @return void
+     */
+    public function updateModelAttachments(Event $event, EntityInterface $entity, ArrayObject $options): void
+    {
+        if (in_array(get_class($event->getSubject()), [DocumentsTable::class, InvoicesTable::class])) {
+            if (!empty($this->attachments)) {
+                $AttachmentsTable = TableRegistry::getTableLocator()->get('Attachments');
+
+                foreach ($this->attachments as $attch) {
+                    if (isset($attch['filename']) && is_a($attch['filename'], '\Laminas\Diactoros\UploadedFile')) {
+                        $attachment = $AttachmentsTable->newEntity(
+                            array_merge($attch, ['foreign_id' => $entity->get('id')]),
+                        );
+                        $AttachmentsTable->save(
+                            $attachment,
+                            ['uploadedFilename' => [
+                                (string)$attch['filename']->getClientFilename() =>
+                                    $attch['filename']->getStream()->getMetadata('uri'),
+                            ]],
+                        );
+                    }
+                }
+
+                $this->attachments = null;
             }
         }
     }

@@ -3,28 +3,26 @@ declare(strict_types=1);
 
 namespace Projects\Model\Table;
 
+use ArrayObject;
+use Cake\Database\Query\SelectQuery;
+use Cake\Event\Event;
+use Cake\ORM\Entity;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
+use Projects\Filter\ProjectsTasksFilter;
 
 /**
  * ProjectsTasks Model
  *
  * @property \Projects\Model\Table\ProjectsTable&\Cake\ORM\Association\BelongsTo $Projects
  * @property \Projects\Model\Table\UsersTable&\Cake\ORM\Association\BelongsTo $Users
+ * @property \Projects\Model\Table\ProjectsMilestonesTable&\Cake\ORM\Association\BelongsTo $Milestones
  * @method \Projects\Model\Entity\ProjectsTask newEmptyEntity()
  * @method \Projects\Model\Entity\ProjectsTask newEntity(array $data, array $options = [])
- * @method array<\Projects\Model\Entity\ProjectsTask> newEntities(array $data, array $options = [])
  * @method \Projects\Model\Entity\ProjectsTask get(mixed $primaryKey, array|string $finder = 'all', \Psr\SimpleCache\CacheInterface|string|null $cache = null, \Closure|string|null $cacheKey = null, mixed ...$args)
- * @method \Projects\Model\Entity\ProjectsTask findOrCreate($search, ?callable $callback = null, array $options = [])
  * @method \Projects\Model\Entity\ProjectsTask patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
- * @method array<\Projects\Model\Entity\ProjectsTask> patchEntities(iterable $entities, array $data, array $options = [])
  * @method \Projects\Model\Entity\ProjectsTask|false save(\Cake\Datasource\EntityInterface $entity, array $options = [])
- * @method \Projects\Model\Entity\ProjectsTask saveOrFail(\Cake\Datasource\EntityInterface $entity, array $options = [])
- * @method iterable<\Projects\Model\Entity\ProjectsTask>|\Cake\Datasource\ResultSetInterface<\Projects\Model\Entity\ProjectsTask>|false saveMany(iterable $entities, array $options = [])
- * @method iterable<\Projects\Model\Entity\ProjectsTask>|\Cake\Datasource\ResultSetInterface<\Projects\Model\Entity\ProjectsTask> saveManyOrFail(iterable $entities, array $options = [])
- * @method iterable<\Projects\Model\Entity\ProjectsTask>|\Cake\Datasource\ResultSetInterface<\Projects\Model\Entity\ProjectsTask>|false deleteMany(iterable $entities, array $options = [])
- * @method iterable<\Projects\Model\Entity\ProjectsTask>|\Cake\Datasource\ResultSetInterface<\Projects\Model\Entity\ProjectsTask> deleteManyOrFail(iterable $entities, array $options = [])
  * @mixin \Cake\ORM\Behavior\TimestampBehavior
  */
 class ProjectsTasksTable extends Table
@@ -122,44 +120,52 @@ class ProjectsTasksTable extends Table
     }
 
     /**
-     * filter method
+     * beforeSave method
      *
-     * @param array<string, mixed> $filter Filter data.
-     * @return array<string, mixed>
+     * @param \Cake\Event\Event $event Event object.
+     * @param \Crm\Model\Entity\ContactsAccount $entity Entity object.
+     * @param \ArrayObject $options Array object.
+     * @return void
      */
-    public function filter(array &$filter): array
+    public function beforeSave(Event $event, Entity $entity, ArrayObject $options): void
     {
-        $ret = ['conditions' => [], 'contain' => []];
-
-        if (!empty($filter['id'])) {
-            $ret['conditions'] = ['ProjectsTasks.id' => $filter['id']];
+        /** @var \Projects\Model\Entity\ProjectsTask $entity */
+        if ($entity->isNew()) {
+            $maxNo = $this->find()
+                ->where(['project_id' => $entity->project_id])
+                ->select(['max_no' => $this->find()->func()->max('no')])
+                ->first()
+                ->get('max_no');
+            $entity->no = $maxNo + 1;
         }
+    }
 
-        if (!empty($filter['project'])) {
-            $ret['conditions'][]['ProjectsTasks.project_id IN'] = (array)$filter['project'];
-        }
+    /**
+     * Find tasks count
+     *
+     * @param \Cake\Database\Query\SelectQuery<mixed> $query Query object.
+     * @param string $projectId Project id.
+     * @param \Projects\Filter\ProjectsTasksFilter $filter Filter object.
+     * @return \Cake\Database\Query\SelectQuery<mixed>
+     */
+    public function findTasksCount(SelectQuery $query, string $projectId, ProjectsTasksFilter $filter): SelectQuery
+    {
+        $filter->delete('status');
 
-        if (!empty($filter['milestone'])) {
-            $matchingMilestones = $this->getAssociation('Milestones')->find()
-                ->select(['id'])
-                ->distinct()
-                ->where(['title LIKE' => $filter['milestone']]);
-
-            $ret['conditions'][]['ProjectsTasks.milestone_id IN'] = $matchingMilestones;
-        }
-
-        if (!empty($filter['user'])) {
-            $ret['conditions'][]['ProjectsTasks.user_id IN'] = (array)$filter['user'];
-        }
-
-        $ret['contain'] = [];
-
-        if (isset($filter['sort'])) {
-            $ret['order'] = [];
-        } else {
-            $ret['order'] = $filter['order'] ?? [];
-        }
-
-        return $ret;
+        return $query
+            ->select([
+                'open' => $query->func()->count(
+                    $query->newExpr()->case()
+                        ->when(['date_complete IS' => null])
+                        ->then(1),
+                ),
+                'closed' => $query->func()->count(
+                    $query->newExpr()->case()
+                        ->when(['date_complete IS NOT' => null])
+                        ->then(1),
+                ),
+            ])
+            ->where(['project_id' => $projectId])
+            ->where($filter->getParams()['conditions']);
     }
 }

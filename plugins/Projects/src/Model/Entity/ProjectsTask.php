@@ -21,6 +21,7 @@ use Cake\ORM\Entity;
  *
  * @property \Projects\Model\Entity\Project $project
  * @property \Projects\Model\Entity\User $user
+ * @property \Projects\Model\Entity\Milestone $milestone
  */
 class ProjectsTask extends Entity
 {
@@ -36,7 +37,6 @@ class ProjectsTask extends Entity
     protected array $_accessible = [
         'project_id' => true,
         'user_id' => true,
-        'project_id' => true,
         'milestone_id' => true,
         'no' => true,
         'title' => true,
@@ -46,5 +46,6 @@ class ProjectsTask extends Entity
         'modified' => true,
         'project' => true,
         'user' => true,
+        'milestone' => true,
     ];
 }
