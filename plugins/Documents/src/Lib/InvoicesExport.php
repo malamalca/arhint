@@ -110,6 +110,12 @@ class InvoicesExport
                     $pdf = LilPdfFactory::create($pdfEngine, (array)$pdfOptions);
                 }
 
+                if (!$pdf && $ext == 'pdf') {
+                    $this->lastError = 'PDF engine not found';
+
+                    return false;
+                }
+
                 $responseHtml = '';
 
                 foreach ($invoices as $invoice) {
@@ -138,7 +144,7 @@ class InvoicesExport
                                 $templateBody = $this->_autop($templateBody);
                             }
 
-                            $pdf->setHeaderHtml($templateBody);
+                            $pdf->setHeaderHtml((string)$templateBody);
                         }
                         if (!empty($invoice->tpl_footer)) {
                             $templateBody = $invoice->tpl_footer->body;
@@ -150,7 +156,7 @@ class InvoicesExport
                                 $templateBody = $this->_autop($templateBody);
                             }
 
-                            $pdf->setFooterHtml($templateBody);
+                            $pdf->setFooterHtml((string)$templateBody);
                         }
                         $pdf->newPage($this->toHtml($invoice, $outputHtml), $pageOptions);
                     }

@@ -130,6 +130,7 @@ class CrmEvents implements EventListenerInterface
             'action' => 'autocomplete-email',
         ], true);
 
+        $form->form['post'] = $form->form['post'] ?? '';
         $form->form['post'] .= '<script type="text/javascript">' . PHP_EOL .
             sprintf('M.Autocomplete.init($("#to").get(0), {' .
                 'onSearch: (text, autocomplete) => {$.get("%s" + "?term=" + text)' .

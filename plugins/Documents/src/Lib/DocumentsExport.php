@@ -93,8 +93,6 @@ class DocumentsExport
     {
         $result = null;
 
-        $pdf = null;
-
         if ($ext == 'pdf') {
             $pdfEngine = Configure::read('Lil.pdfEngine');
             $pdfOptions = Configure::read('Lil.' . $pdfEngine);
@@ -113,7 +111,7 @@ class DocumentsExport
                 $responseHtml .= $outputHtml;
             }
 
-            if ($ext == 'pdf') {
+            if ($ext == 'pdf' && !empty($pdf)) {
                 // PDF
                 $pageOptions = [];
                 if (!empty($document->tpl_header)) {
@@ -125,7 +123,7 @@ class DocumentsExport
                     } else {
                         $templateBody = $this->_autop($templateBody);
                     }
-                    $pdf->setHeaderHtml($templateBody);
+                    $pdf->setHeaderHtml((string)$templateBody);
                 }
                 if (!empty($document->tpl_footer)) {
                     $templateBody = $document->tpl_footer->body ?? '';
@@ -137,7 +135,7 @@ class DocumentsExport
                         $templateBody = $this->_autop($templateBody);
                     }
 
-                    $pdf->setFooterHtml($templateBody);
+                    $pdf->setFooterHtml((string)$templateBody);
                 }
                 $pdf->newPage($this->toHtml($document, $outputHtml), $pageOptions);
             }
@@ -151,14 +149,16 @@ class DocumentsExport
                 $result = $responseHtml;
                 break;
             default:
-                $tmpFilename = constant('TMP') . uniqid('xml2pdf') . '.pdf';
-                if (!$pdf->saveAs($tmpFilename)) {
-                    $this->lastError = $pdf->getError();
+                if ($ext == 'pdf' && !empty($pdf)) {
+                    $tmpFilename = constant('TMP') . uniqid('xml2pdf') . '.pdf';
+                    if (!$pdf->saveAs($tmpFilename)) {
+                        $this->lastError = $pdf->getError();
 
-                    return false;
+                        return false;
+                    }
+                    $result = file_get_contents($tmpFilename);
+                    unlink($tmpFilename);
                 }
-                $result = file_get_contents($tmpFilename);
-                unlink($tmpFilename);
         }
 
         return $result;
