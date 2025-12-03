@@ -23,6 +23,7 @@ class ProjectsTasksController extends AppController
      */
     public function index(string $projectId)
     {
+        /** @var \Projects\Model\Entity\Project $project */
         $project = $this->ProjectsTasks->getAssociation('Projects')->get($projectId);
 
         $filter = new ProjectsTasksFilter($this->getRequest()->getQuery('q'));
