@@ -18,7 +18,7 @@
         "ddn/sapp": "dev-main",
         "krivart/php-qr-code": "dev-master",
         "league/commonmark": "*",
-        "malamalca/lil": "^4.6",
+        "malamalca/lil": "^4.8",
         "mikehaertl/phpwkhtmltopdf": "2.0.*@dev",
         "mishahawthorn/ocrmypdf": "*",
         "mobiledetect/mobiledetectlib": "^4.8.03",
