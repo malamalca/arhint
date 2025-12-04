@@ -88,7 +88,7 @@ class EmailForm extends Form
                 /** @var \App\Model\Entity\User $currentUser */
                 $currentUser = $this->request->getAttribute('identity');
 
-                $email = new ArhintMailer('default', $currentUser);
+                $email = new ArhintMailer($currentUser);
                 $email
                     ->setFrom([(string)$currentUser->email => $currentUser->name])
                     ->setTo($this->request->getData('to'))

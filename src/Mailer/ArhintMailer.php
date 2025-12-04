@@ -19,7 +19,7 @@ class ArhintMailer extends Mailer
      *
      * @param array<string, mixed>|string|null $config Array of configs, or string to load configs from app.php
      */
-    public function __construct(array|string|null $config = null, User $currentUser)
+    public function __construct(User $currentUser, array|string|null $config = null)
     {
         parent::__construct($config);
         $this->currentUser = $currentUser;

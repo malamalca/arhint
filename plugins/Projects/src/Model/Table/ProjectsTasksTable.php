@@ -17,7 +17,7 @@ use Projects\Filter\ProjectsTasksFilter;
  * ProjectsTasks Model
  *
  * @property \Projects\Model\Table\ProjectsTable&\Cake\ORM\Association\BelongsTo $Projects
- * @property \Projects\Model\Table\UsersTable&\Cake\ORM\Association\BelongsTo $Users
+ * @property \App\Model\Table\UsersTable&\Cake\ORM\Association\BelongsTo $Users
  * @property \Projects\Model\Table\ProjectsMilestonesTable&\Cake\ORM\Association\BelongsTo $Milestones
  * @method \Projects\Model\Entity\ProjectsTask newEmptyEntity()
  * @method \Projects\Model\Entity\ProjectsTask newEntity(array $data, array $options = [])
