@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Projects\Model\Table;
 
+use App\Model\Entity\User;
 use ArrayObject;
 use Cake\Database\Query\SelectQuery;
 use Cake\Event\Event;
@@ -145,11 +146,16 @@ class ProjectsTasksTable extends Table
      *
      * @param \Cake\Database\Query\SelectQuery<mixed> $query Query object.
      * @param string $projectId Project id.
+     * @param \App\Model\Entity\User $currentUser Current user.
      * @param \Projects\Filter\ProjectsTasksFilter $filter Filter object.
      * @return \Cake\Database\Query\SelectQuery<mixed>
      */
-    public function findTasksCount(SelectQuery $query, string $projectId, ProjectsTasksFilter $filter): SelectQuery
-    {
+    public function findTasksCount(
+        SelectQuery $query,
+        string $projectId,
+        User $currentUser,
+        ProjectsTasksFilter $filter,
+    ): SelectQuery {
         $filter->delete('status');
 
         return $query
@@ -166,6 +172,6 @@ class ProjectsTasksTable extends Table
                 ),
             ])
             ->where(['project_id' => $projectId])
-            ->where($filter->getParams()['conditions']);
+            ->where($filter->getParams($projectId, $currentUser)['conditions']);
     }
 }

@@ -193,6 +193,9 @@ div#tasks-index {
                     &.closed {
                         filter: brightness(0) saturate(100%) invert(34%) sepia(70%) saturate(2504%) hue-rotate(242deg) brightness(90%) contrast(93%);
                     }
+                    &.invalid {
+                        filter: brightness(0) saturate(100%) invert(37%) sepia(10%) saturate(727%) hue-rotate(171deg) brightness(92%) contrast(78%);
+                    }
                 }
             }
 
@@ -220,6 +223,23 @@ div#tasks-index {
                 font-size: 0.8rem;
                 color: #666;
                 margin-left: 0.5rem;
+
+                a {
+                    color: #666;
+                    text-decoration: none;
+
+                    &:hover {
+                        text-decoration: underline;
+                    }
+                }
+
+                img {
+                    width: 12px;
+                    height: 12px;
+                    vertical-align: middle;
+                    margin-right: 0;
+                    margin-bottom: 0.3rem;
+                }
             }
         }
     }

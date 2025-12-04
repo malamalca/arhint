@@ -26,8 +26,10 @@ class ProjectsTasksController extends AppController
         /** @var \Projects\Model\Entity\Project $project */
         $project = $this->ProjectsTasks->getAssociation('Projects')->get($projectId);
 
+        $this->Authorization->authorize($project, 'view');
+
         $filter = new ProjectsTasksFilter($this->getRequest()->getQuery('q'));
-        $params = $filter->getParams();
+        $params = $filter->getParams($projectId, $this->getCurrentUser());
 
         $query = $this->Authorization->applyScope($this->ProjectsTasks->find(), 'index')
             ->select($this->ProjectsTasks)
@@ -41,7 +43,7 @@ class ProjectsTasksController extends AppController
             'limit' => 10,
         ]);
 
-        $tasksCount = $this->ProjectsTasks->find('tasksCount', $project->id, clone $filter)
+        $tasksCount = $this->ProjectsTasks->find('tasksCount', $project->id, $this->getCurrentUser(), clone $filter)
             ->first()
             ->toArray();
 
@@ -100,6 +102,7 @@ class ProjectsTasksController extends AppController
             ->where(['project_id' => $projectsTask->project_id])
             ->orderBy('title')
             ->toArray());
+        $this->set('users', $this->ProjectsTasks->Users->fetchForCompany($this->getCurrentUser()->get('company_id')));
 
         return null;
     }

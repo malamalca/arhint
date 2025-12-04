@@ -112,18 +112,6 @@ abstract class Filter implements ValidatorAwareInterface
         $this->validFields[] = $fieldName;
     }
 
-    /** Checks filter status
-     *
-     * @param string $fieldName Field name
-     * @param string $fieldValue FieldValue
-     * @return bool
-     */
-    public function check(string $fieldName, string $fieldValue): bool
-    {
-        return isset($this->fields['fields'][$fieldName]) &&
-            strtolower($this->fields['fields'][$fieldName]) == strtolower($fieldValue);
-    }
-
     /** Get field value
      *
      * @param string $fieldName Field name
@@ -146,6 +134,18 @@ abstract class Filter implements ValidatorAwareInterface
         }
     }
 
+    /** Checks filter status
+     *
+     * @param string $fieldName Field name
+     * @param string $fieldValue FieldValue
+     * @return bool
+     */
+    public function check(string $fieldName, string $fieldValue): bool
+    {
+        return isset($this->fields['fields'][$fieldName]) &&
+            strtolower($this->fields['fields'][$fieldName]) == strtolower($fieldValue);
+    }
+
     /** Checks right part of filter status
      *
      * @param string $fieldName Field name
@@ -155,7 +155,19 @@ abstract class Filter implements ValidatorAwareInterface
     public function checkRight(string $fieldName, string $fieldValue): bool
     {
         return isset($this->fields['fields'][$fieldName]) &&
-            substr(strtolower($this->fields['fields'][$fieldName]), 0, -strlen($fieldValue)) == strtolower($fieldValue);
+            substr(strtolower($this->fields['fields'][$fieldName]), -strlen($fieldValue)) == strtolower($fieldValue);
+    }
+
+    /** Checks left part of filter status
+     *
+     * @param string $fieldName Field name
+     * @param string $fieldValue FieldValue
+     * @return bool
+     */
+    public function checkLeft(string $fieldName, string $fieldValue): bool
+    {
+        return isset($this->fields['fields'][$fieldName]) &&
+            substr(strtolower($this->fields['fields'][$fieldName]), 0, strlen($fieldValue)) == strtolower($fieldValue);
     }
 
     /**

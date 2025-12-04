@@ -10,6 +10,11 @@ class ProjectsFuncs
 {
     protected const THUMB_SIZE = 50;
 
+    public const STATUS_OPEN = 1;
+    public const STATUS_REOPENED = 2;
+    public const STATUS_CLOSED = 3;
+    public const STATUS_INVALID = 4;
+
     /**
      * Return thumbnail image for specified project
      *

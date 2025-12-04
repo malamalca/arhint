@@ -13,6 +13,7 @@ use Cake\ORM\Entity;
  * @property string|null $milestone_id
  * @property string|null $user_id
  * @property int $no
+ * @property int $status
  * @property string|null $title
  * @property string|null $descript
  * @property \Cake\I18n\Date|null $date_complete
@@ -39,6 +40,7 @@ class ProjectsTask extends Entity
         'user_id' => true,
         'milestone_id' => true,
         'no' => true,
+        'status' => true,
         'title' => true,
         'descript' => true,
         'date_complete' => true,

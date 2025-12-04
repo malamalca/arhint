@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Projects\Filter;
 
 use App\Filter\Filter;
+use App\Model\Entity\User;
 use Cake\ORM\TableRegistry;
 use Cake\Validation\Validator;
 
@@ -38,9 +39,11 @@ class ProjectsTasksFilter extends Filter
     /**
      * Get query parameters
      *
+     * @param string $projectId Project ID
+     * @param \App\Model\Entity\User $currentUser Current user
      * @return array<string,mixed>
      */
-    public function getParams(): array
+    public function getParams(string $projectId, User $currentUser): array
     {
         $ret = ['conditions' => []];
 
@@ -50,14 +53,24 @@ class ProjectsTasksFilter extends Filter
             $MilestonesTable = TableRegistry::getTableLocator()->get('Projects.ProjectsMilestones');
             $matchingMilestones = $MilestonesTable->find()
                 ->select(['id'])
-                ->distinct()
-                ->where(['title LIKE' => $fields['fields']['milestone']]);
+                ->where([
+                    'project_id' => $projectId,
+                    'title LIKE' => $fields['fields']['milestone'],
+                ]);
 
             $ret['conditions'][]['ProjectsTasks.milestone_id IN'] = $matchingMilestones;
         }
 
         if (!empty($fields['fields']['user'])) {
-            $ret['conditions'][]['ProjectsTasks.user_id IN'] = (array)$fields['fields']['user'];
+            $UsersTable = TableRegistry::getTableLocator()->get('App.Users');
+            $matchingUsers = $UsersTable->find()
+                ->select(['id'])
+                ->where([
+                    'company_id' => $currentUser->get('company_id'),
+                    'name LIKE' => $fields['fields']['user'],
+                ]);
+
+            $ret['conditions'][]['ProjectsTasks.user_id IN'] = $matchingUsers;
         }
 
         if (!empty($fields['fields']['status'])) {

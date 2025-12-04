@@ -16,7 +16,7 @@ $pageTitle = sprintf(
 // FILTER by user
 $popupUsers = ['items' => [[
     'title' => __d('projects', 'All Users'),
-    'active' => false,
+    'active' => $filter->get('user') === null,
     'url' => [
         $project->id,
         '?' => ['q' => $filter->buildQuery('user', null)],
@@ -39,7 +39,7 @@ $popupUsers = $this->Lil->popup('users', $popupUsers, true);
 // FILTER by milestone
 $popupMilestones = ['items' => [[
     'title' => __d('projects', 'All Milestones'),
-    'active' => false,
+    'active' => $filter->get('milestone') === null,
     'url' => [
         $project->id,
         '?' => ['q' => $filter->buildQuery('milestone', null)],
@@ -63,16 +63,17 @@ $popupMilestones = $this->Lil->popup('milestones', $popupMilestones, true);
 $popupSort = ['items' => [
     [
         'title' => __d('projects', 'Created on'),
-        'active' => false,
+        'active' => $filter->checkLeft('sort', 'created') || !$filter->get('sort'),
         'url' => [$project->id, '?' => ['q' => $filter->buildQuery(
             'sort',
-            'created' . ($filter->checkRight('sort', '-desc') ? '-desc' : ''),
+            !$filter->checkRight('sort', '-desc') ? null :
+                'created' . ($filter->checkRight('sort', '-desc') ? '-desc' : ''),
         )]],
         'params' => ['class' => 'nowrap'],
     ],
     [
         'title' => __d('projects', 'Last Updated'),
-        'active' => false,
+        'active' => $filter->checkLeft('sort', 'updated'),
         'url' => [$project->id, '?' => ['q' => $filter->buildQuery(
             'sort',
             'updated' . ($filter->checkRight('sort', '-desc') ? '-desc' : ''),
@@ -81,7 +82,7 @@ $popupSort = ['items' => [
     ],
     [
         'title' => __d('projects', 'Total Comments'),
-        'active' => false,
+        'active' => $filter->checkLeft('sort', 'comments'),
         'url' => [$project->id, '?' => ['q' => $filter->buildQuery(
             'sort',
             'comments' . ($filter->checkRight('sort', '-desc') ? '-desc' : ''),
@@ -92,10 +93,11 @@ $popupSort = ['items' => [
     [
         'title' => '<i class="material-icons">arrow_upward</i>' .
             (substr((string)$filter->get('sort'), 0, 8) == 'comments' ? __d('projects', 'Ascending') : __d('projects', 'Oldest')),
-        'active' => (bool)$filter->get('sort'), // todo
+        'active' => !$filter->checkRight('sort', '-desc'),
         'url' => [$project->id, '?' => ['q' => $filter->buildQuery(
             'sort',
-            strstr((string)$filter->get('sort'), '-', true) ?: $filter->get('sort'),
+            $filter->checkLeft('sort', 'created') ? null :
+                (strstr((string)$filter->get('sort'), '-', true) ?: $filter->get('sort')),
         )]],
         'params' => ['class' => 'nowrap'],
     ],
@@ -105,7 +107,7 @@ $popupSort = ['items' => [
         'active' => $filter->checkRight('sort', '-desc'),
         'url' => [$project->id, '?' => ['q' => $filter->buildQuery(
             'sort',
-            (explode('-', (string)$filter->get('sort'))[0] ?: 'created') . '-desc', // todo
+            (explode('-', (string)$filter->get('sort'))[0] ?: 'created') . '-desc',
         )]],
         'params' => ['class' => 'nowrap'],
     ],
@@ -138,7 +140,18 @@ $tableIndex = [
             sprintf('<input name="q" id="query" value="%s" />', htmlspecialchars($this->request->getQuery('q'))) .
             '<button type="submit" class="btn btn-small tonal" id="btn-search"><i class="material-icons">search</i></button>' .
             '</form>' .
-            '<button class="btn btn-small" id="btn-add"><i class="material-icons">add</i>New Task</button>' .
+            sprintf(
+                '<a href="%s" class="btn btn-small" id="btn-add"><i class="material-icons">add</i>New Task</a>',
+                $this->Url->build([
+                    'plugin' => 'Projects',
+                    'controller' => 'ProjectsTasks',
+                    'action' => 'edit',
+                    '?' => [
+                        'project' => $project->id,
+                        'redirect' => Router::url(null, true),
+                    ],
+                ]),
+            ) .
             '</div>',
         'filter' => '<div id="tasks-filter"><ul>' .
             '<li><a href="#" class="btn text dropdown-trigger-costum" data-target="dropdown-users">Author &#128899;</a></li>' .
@@ -151,7 +164,7 @@ $tableIndex = [
                     h(__d('projects', 'Open')) . sprintf('<span class="badge">%d</span></a>', $tasksCount['open']),
                     [
                         $project->id,
-                        '?' => ['q' => $filter->buildQuery('status', 'open')],
+                        '?' => ['q' => $filter->buildQuery('status', $filter->check('status', 'open') ? null : 'open')],
                     ],
                     [
                         'class' => 'btn text' . ($filter->check('status', 'open') ? ' active' : ''),
@@ -162,7 +175,7 @@ $tableIndex = [
                     h(__d('projects', 'Closed')) . sprintf('<span class="badge">%d</span></a>', $tasksCount['closed']),
                     [
                         $project->id,
-                        '?' => ['q' => $filter->buildQuery('status', 'closed')],
+                        '?' => ['q' => $filter->buildQuery('status', $filter->check('status', 'closed') ? null : 'closed')],
                     ],
                     [
                         'class' => 'btn text' . ($filter->check('status', 'closed') ? ' active' : ''),

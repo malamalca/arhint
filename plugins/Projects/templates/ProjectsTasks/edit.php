@@ -46,12 +46,29 @@ $editForm = [
                     'descript',
                 ],
             ],
-            'date_complete' => [
+            'status' => [
                 'method' => 'control',
                 'parameters' => [
-                    'date_complete',
+                    'status',
                     [
-                        'label' => __d('projects', 'Completition Date') . ':',
+                        'type' => 'select',
+                        'options' => [
+                            1 => __d('projects', 'Open'),
+                            3 => __d('projects', 'Closed'),
+                            4 => __d('projects', 'Invalid'),
+                        ],
+                        'label' => __d('projects', 'Status') . ':',
+                    ],
+                ],
+            ],
+            'user' => [
+                'method' => 'control',
+                'parameters' => [
+                    'user_id',
+                    [
+                        'type' => 'select',
+                        'options' => $users,
+                        'label' => __d('projects', 'Assigned User') . ':',
                     ],
                 ],
             ],
