@@ -31,7 +31,7 @@ switch ($task->status) {
     <div class="title"><?= $this->Html->link(
         $task->title,
         [
-            'action' => 'edit',
+            'action' => 'view',
             $task->id,
             '?' => ['redirect' => Router::url(null, true)],
         ],

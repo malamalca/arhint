@@ -108,6 +108,34 @@ class ProjectsTasksController extends AppController
     }
 
     /**
+     * View method
+     *
+     * @param string $id Projects Task id.
+     * @return \Cake\Http\Response|null
+     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
+     */
+    public function view(string $id): ?Response
+    {
+        $task = $this->ProjectsTasks->get($id, [
+            'contain' => ['Users', 'Milestones', 'Projects', 'Comments' => ['Users']],
+        ]);
+
+        $this->Authorization->authorize($task);
+
+        /** @var \Projects\Model\Table\ProjectsTasksCommentsTable  $TasksCommentsTable */
+        $TasksCommentsTable = TableRegistry::getTableLocator()->get('Projects.ProjectsTasksComments');
+
+        $comment = $TasksCommentsTable->newEmptyEntity();
+        $comment->task_id = $task->id;
+        $comment->user_id = $this->getCurrentUser()->id;
+        $comment->kind = $TasksCommentsTable::KIND_TASK_COMMENT;
+
+        $this->set(compact('task', 'comment'));
+
+        return null;
+    }
+
+    /**
      * Delete method
      *
      * @param string|null $id Projects Status id.

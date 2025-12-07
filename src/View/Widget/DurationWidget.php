@@ -84,7 +84,7 @@ class DurationWidget implements WidgetInterface
 
         $hours = '';
         if (!empty($data['val'])) {
-            if (!empty($data['val']['hours'])) {
+            if (is_array($data['val']) && !empty($data['val']['hours'])) {
                 $hours = $data['val']['hours'];
             } elseif (is_int($data['val'])) {
                 $hours = floor($data['val'] / 3600);
@@ -99,7 +99,7 @@ class DurationWidget implements WidgetInterface
 
         $minutes = '';
         if (!empty($data['val'])) {
-            if (!empty($data['val']['minutes'])) {
+            if (is_array($data['val']) && !empty($data['val']['minutes'])) {
                 $minutes = $data['val']['minutes'];
             } elseif (is_int($data['val'])) {
                 $minutes = floor($data['val'] / 60) % 60;

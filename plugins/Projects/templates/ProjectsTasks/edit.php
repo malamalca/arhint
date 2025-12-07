@@ -44,6 +44,9 @@ $editForm = [
                 'method' => 'control',
                 'parameters' => [
                     'descript',
+                    [
+                        'label' => __d('projects', 'Description') . ':',
+                    ],
                 ],
             ],
             'status' => [

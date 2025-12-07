@@ -65,48 +65,51 @@ class AppEvents implements EventListenerInterface
 
             //Cache::delete($user->id . '-emails');
             $emails = Cache::remember($user->id . '-emails', function () use ($imap) {
-                $mbox = imap_open($imap->url, $imap->username, $imap->password);
-                if ($mbox) {
-                    $MC = imap_check($mbox);
-                    if (!$MC) {
-                        throw new Exception('Failure Checking Imap');
-                    }
-                    $result = imap_fetch_overview($mbox, "1:{$MC->Nmsgs}", 0);
+                try {
+                    $mbox = imap_open($imap->url, $imap->username, $imap->password);
+                    if ($mbox) {
+                        $MC = imap_check($mbox);
+                        if (!$MC) {
+                            throw new Exception('Failure Checking Imap');
+                        }
+                        $result = imap_fetch_overview($mbox, "1:{$MC->Nmsgs}", 0);
 
-                    if (is_array($result) && count($result) > 0) {
-                        usort($result, function ($a, $b) {
-                            return $b->udate - $a->udate;
-                        });
+                        if (is_array($result) && count($result) > 0) {
+                            usort($result, function ($a, $b) {
+                                return $b->udate - $a->udate;
+                            });
 
-                        // link email with contact
-                        $ContactsEmailsTable = TableRegistry::getTableLocator()->get('Crm.ContactsEmails');
-                        foreach ($result as $overview) {
-                            $canDecodeEmail = preg_match_all(
-                                '/(?|(?|"([^"]+)"|([^<@]+)) ?<(.+?)>|()(.+?))(?:$|, ?)/',
-                                $overview->from,
-                                $emailsDecoded,
-                                PREG_SET_ORDER,
-                            );
+                            // link email with contact
+                            $ContactsEmailsTable = TableRegistry::getTableLocator()->get('Crm.ContactsEmails');
+                            foreach ($result as $overview) {
+                                $canDecodeEmail = preg_match_all(
+                                    '/(?|(?|"([^"]+)"|([^<@]+)) ?<(.+?)>|()(.+?))(?:$|, ?)/',
+                                    $overview->from,
+                                    $emailsDecoded,
+                                    PREG_SET_ORDER,
+                                );
 
-                            if ($canDecodeEmail && !empty($emailsDecoded[0][2])) {
-                                $contactsEmails = $ContactsEmailsTable->find()
-                                    ->select('contact_id')
-                                    ->where(['email' => $emailsDecoded[0][2]])
-                                    ->all();
+                                if ($canDecodeEmail && !empty($emailsDecoded[0][2])) {
+                                    $contactsEmails = $ContactsEmailsTable->find()
+                                        ->select('contact_id')
+                                        ->where(['email' => $emailsDecoded[0][2]])
+                                        ->all();
 
-                                foreach ($contactsEmails as $contactsEmail) {
-                                    if (!isset($overview->contacts)) {
-                                        $overview->contacts = [];
+                                    foreach ($contactsEmails as $contactsEmail) {
+                                        if (!isset($overview->contacts)) {
+                                            $overview->contacts = [];
+                                        }
+                                        $overview->contacts[] = $contactsEmail->contact_id;
                                     }
-                                    $overview->contacts[] = $contactsEmail->contact_id;
                                 }
                             }
                         }
+
+                        imap_close($mbox);
+
+                        return $result;
                     }
-
-                    imap_close($mbox);
-
-                    return $result;
+                } catch (Exception $e) {
                 }
             }, 'imap-emails');
 

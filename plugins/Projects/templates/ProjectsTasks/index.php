@@ -244,7 +244,7 @@ echo $this->Lil->panels($tableIndex, 'Projects.ProjectsTasks.index');
         elems.forEach((dropdown) => {
             M.Dropdown.init(dropdown, {
                 constrainWidth: false,
-                coverTrigger: false
+                coverTrigger: false,
             });
         });
 

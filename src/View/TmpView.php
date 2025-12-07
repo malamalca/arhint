@@ -48,7 +48,7 @@ class TmpView extends AppView
     public function fetch(string $name, string $default = ''): string
     {
         $varValue = $this->get('_' . $name . 'Block');
-        if ($varValue) {
+        if (is_string($varValue)) {
             return $varValue;
         } else {
             return $this->Blocks->get($name, $default);

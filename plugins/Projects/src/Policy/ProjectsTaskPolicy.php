@@ -27,6 +27,19 @@ class ProjectsTaskPolicy
     }
 
     /**
+     * Authorize view action
+     *
+     * @param \App\Model\Entity\User $user User
+     * @param \Projects\Model\Entity\ProjectsTask $entity Entity
+     * @return bool
+     */
+    public function canView(User $user, ProjectsTask $entity): bool
+    {
+        return $this->canAccess($entity->project_id, $user) &&
+            ($entity->isNew() || $entity->user_id == $user->id || $user->hasRole('editor'));
+    }
+
+    /**
      * Authorize delete action
      *
      * @param \App\Model\Entity\User $user User

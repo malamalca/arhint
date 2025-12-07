@@ -19,6 +19,7 @@ use Projects\Filter\ProjectsTasksFilter;
  * @property \Projects\Model\Table\ProjectsTable&\Cake\ORM\Association\BelongsTo $Projects
  * @property \App\Model\Table\UsersTable&\Cake\ORM\Association\BelongsTo $Users
  * @property \Projects\Model\Table\ProjectsMilestonesTable&\Cake\ORM\Association\BelongsTo $Milestones
+ * @property \Projects\Model\Table\ProjectsTasksCommentsTable&\Cake\ORM\Association\HasMany $Comments
  * @method \Projects\Model\Entity\ProjectsTask newEmptyEntity()
  * @method \Projects\Model\Entity\ProjectsTask newEntity(array $data, array $options = [])
  * @method \Projects\Model\Entity\ProjectsTask get(mixed $primaryKey, array|string $finder = 'all', \Psr\SimpleCache\CacheInterface|string|null $cache = null, \Closure|string|null $cacheKey = null, mixed ...$args)
@@ -55,6 +56,13 @@ class ProjectsTasksTable extends Table
         $this->belongsTo('Milestones', [
             'foreignKey' => 'milestone_id',
             'className' => 'Projects.ProjectsMilestones',
+        ]);
+        $this->hasMany('Comments', [
+            'foreignKey' => 'task_id',
+            'className' => 'Projects.ProjectsTasksComments',
+            'dependent' => true,
+            'cascadeCallbacks' => true,
+            'sort' => ['Comments.created' => 'ASC'],
         ]);
 
         $this->addBehavior('CounterCache', [

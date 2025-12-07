@@ -1,0 +1,115 @@
+div#task-view {
+    div.task-view-details {
+        display: flex;
+        align-items: center;
+        margin-bottom: 1rem;
+        align-items: flex-start;
+
+        .avatar {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin-right: 1rem;
+            margin-top: 0.2rem;
+
+            img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+        }
+
+        .task-view-description {
+            flex: 1;
+            color: #333;
+
+            .task-view-add {
+                padding-bottom: 0.5rem;
+                font-weight: bold;
+            }
+
+            .section-title {
+                border: solid 1px #ccc;
+                border-bottom: none;
+                padding: 0.5rem;
+                border-top-left-radius: 4px;
+                border-top-right-radius: 4px;
+                
+                background-color: #ddd;
+
+                div.actions {
+                    float: right;
+
+                    a.dropdown-task, a.dropdown-comment {
+                        @extend  .btn, .btn-small, .text;
+                        color: #333;
+                        padding: 0;
+                        height: auto;
+                        &:hover {
+                            background-color: #ccc;
+                        }
+                    }
+                }
+            }
+
+            .section-body {
+                margin-top: 0;
+                padding: 0.5rem;
+                border: solid 1px #ccc;
+                border-top: none;
+                border-bottom-left-radius: 4px;
+                border-bottom-right-radius: 4px;
+
+                &.task-add-comment {
+                    border-top: solid 1px #ccc;
+                    border-top-left-radius: 4px;
+                    border-top-right-radius: 4px;
+                }
+
+                h1, h2, h3, h4, h5, h6 {
+                    font-size: 1.5rem;
+                    padding: 0.5rem 0;
+                    margin: 0;
+                }
+                h2 {
+                    font-size: 1.25rem;
+                }
+                h3 {
+                    font-size: 1.1rem;
+                }
+                p, ul, ol, blockquote, pre, table, code, img {
+                    margin: 0.5rem 0;
+                }
+
+                textarea {
+                    border: 0;
+                    resize: none;
+                    padding: 0 !important;
+                    overflow-y: hidden;
+
+                    &:focus {
+                        border: solid 1px #ccc;
+                        border-radius: 0;
+                    }
+                }
+
+                button {
+                    margin-top: 0.5rem;
+                }
+            }
+        }
+
+        #edittask {
+            li {
+                color:#333;
+                a {
+                    color:#333;
+                    i.material-icons {
+                        margin-right: 0.5rem;
+                    }
+                }
+            }
+        }
+    }
+}
