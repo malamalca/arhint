@@ -35,8 +35,7 @@ class ProjectsTaskPolicy
      */
     public function canView(User $user, ProjectsTask $entity): bool
     {
-        return $this->canAccess($entity->project_id, $user) &&
-            ($entity->isNew() || $entity->user_id == $user->id || $user->hasRole('editor'));
+        return $this->canAccess($entity->project_id, $user);
     }
 
     /**

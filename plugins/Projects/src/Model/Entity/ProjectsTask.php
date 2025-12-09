@@ -12,11 +12,13 @@ use Cake\ORM\Entity;
  * @property string|null $project_id
  * @property string|null $milestone_id
  * @property string|null $user_id
+ * @property string|null $assigned_user_id
  * @property int $no
  * @property int $status
  * @property string|null $title
  * @property string|null $descript
- * @property \Cake\I18n\Date|null $date_complete
+ * @property \Cake\I18n\DateTime|null $reopened
+ * @property \Cake\I18n\Date|null $closed
  * @property \Cake\I18n\DateTime|null $created
  * @property \Cake\I18n\DateTime|null $modified
  *
@@ -37,13 +39,15 @@ class ProjectsTask extends Entity
      */
     protected array $_accessible = [
         'project_id' => true,
-        'user_id' => true,
         'milestone_id' => true,
+        'user_id' => true,
+        'assigned_user_id' => true,
         'no' => true,
         'status' => true,
         'title' => true,
         'descript' => true,
-        'date_complete' => true,
+        'reopened' => true,
+        'closed' => true,
         'created' => true,
         'modified' => true,
         'project' => true,

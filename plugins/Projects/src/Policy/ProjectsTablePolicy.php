@@ -27,6 +27,7 @@ class ProjectsTablePolicy
             $ProjectsUsersTable = TableRegistry::getTableLocator()->get('Projects.ProjectsUsers');
 
             $projectsList = $ProjectsUsersTable->find()
+                ->select(['project_id', 'user_id'])
                 ->where(['user_id' => $user->id])
                 ->all()
                 ->combine('project_id', 'user_id')

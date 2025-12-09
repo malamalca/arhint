@@ -13,7 +13,7 @@ $editForm = [
                 'method' => 'hidden',
                 'parameters' => ['field' => 'id'],
             ],
-            'user_id' => [
+            'user_id' => $this->getCurrentUser()->hasRole('admin') ? null : [
                 'method' => 'hidden',
                 'parameters' => ['user_id'],
             ],
@@ -24,6 +24,16 @@ $editForm = [
             'redirect' => [
                 'method' => 'hidden',
                 'parameters' => ['field' => 'redirect', ['value' => $this->request->getQuery('redirect')]],
+            ],
+            'user' => !$this->getCurrentUser()->hasRole('admin') ? null : [
+                'method' => 'control',
+                'parameters' => [
+                    'user_id',
+                    [
+                        'label' => __d('projects', 'User') . ':',
+                        'options' => $users,
+                    ],
+                ],
             ],
             'descript' => [
                 'method' => 'control',

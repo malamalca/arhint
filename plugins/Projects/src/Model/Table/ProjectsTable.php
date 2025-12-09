@@ -19,6 +19,7 @@ use Projects\Model\Entity\Project;
  *
  * @property \Projects\Model\Table\ProjectsLogsTable|\Cake\ORM\Association\HasMany $ProjectsLogs
  * @property \Projects\Model\Table\ProjectsStatusesTable|\Cake\ORM\Association\HasMany $ProjectsStatuses
+ * @property \App\Model\Table\UsersTable&\Cake\ORM\Association\BelongsTo $Users
  * @method \Projects\Model\Entity\Project get(mixed $primaryKey, array|string $finder = 'all', \Psr\SimpleCache\CacheInterface|string|null $cache = null, \Closure|string|null $cacheKey = null, mixed ...$args)
  * @method \Projects\Model\Entity\Project newEntity($data = null, array $options = [])
  * @method \Projects\Model\Entity\Project newEmptyEntity(array $options = [])
@@ -235,9 +236,7 @@ class ProjectsTable extends Table
                     ->where(['active' => true])
                     ->orderBy(['no DESC', 'title'])
                     ->all()
-                    ->combine('id', function ($entity) {
-                        return $entity;
-                    })
+                    ->combine('id', fn($entity) => $entity)
                     ->toArray();
             },
         );

@@ -224,6 +224,8 @@ class UsersController extends AppController
 
             if (empty($this->getRequest()->getData('passwd'))) {
                 unset($user->passwd);
+            } else {
+                $user->passwd = $this->getRequest()->getData('passwd');
             }
 
             if ($this->Users->save($user)) {

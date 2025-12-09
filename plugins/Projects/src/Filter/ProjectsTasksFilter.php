@@ -75,10 +75,10 @@ class ProjectsTasksFilter extends Filter
 
         if (!empty($fields['fields']['status'])) {
             if (strtolower($fields['fields']['status']) == 'closed') {
-                $ret['conditions']['ProjectsTasks.date_complete IS NOT'] = null;
+                $ret['conditions']['ProjectsTasks.closed IS NOT'] = null;
             }
             if (strtolower($fields['fields']['status']) == 'open') {
-                $ret['conditions']['ProjectsTasks.date_complete IS'] = null;
+                $ret['conditions']['ProjectsTasks.closed IS'] = null;
             }
         }
 

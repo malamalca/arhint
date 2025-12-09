@@ -46,7 +46,7 @@ switch ($task->status) {
             if ($task->status === ProjectsFuncs::STATUS_OPEN) {
                 echo __('{0} opened {1}', $userLink, h((new Date($task->created))->nice()));
             } else {
-                echo __('{0} closed {1}', $userLink, h((new Date($task->date_complete))->nice()));
+                echo __('{0} closed {1}', $userLink, h((new Date($task->closed))->nice()));
             }
 
             if (isset($milestones[$task->milestone_id])) {

@@ -28,7 +28,7 @@ class ProjectsTasksController extends AppController
 
         $this->Authorization->authorize($project, 'view');
 
-        $filter = new ProjectsTasksFilter($this->getRequest()->getQuery('q'));
+        $filter = new ProjectsTasksFilter($this->getRequest()->getQuery('q', ''));
         $params = $filter->getParams($projectId, $this->getCurrentUser());
 
         $query = $this->Authorization->applyScope($this->ProjectsTasks->find(), 'index')
@@ -84,7 +84,7 @@ class ProjectsTasksController extends AppController
 
         if ($this->request->is(['patch', 'post', 'put'])) {
             $projectsTask = $this->ProjectsTasks->patchEntity($projectsTask, $this->request->getData());
-            if ($this->ProjectsTasks->save($projectsTask)) {
+            if ($this->ProjectsTasks->save($projectsTask, ['auditUserId' => $this->getCurrentUser()->get('id')])) {
                 $this->Flash->success(__d('projects', 'The projects task has been saved.'));
 
                 return $this->redirect($this->getRequest()->getData('redirect', [
@@ -125,12 +125,19 @@ class ProjectsTasksController extends AppController
         /** @var \Projects\Model\Table\ProjectsTasksCommentsTable  $TasksCommentsTable */
         $TasksCommentsTable = TableRegistry::getTableLocator()->get('Projects.ProjectsTasksComments');
 
+        /* Create new comment entity */
         $comment = $TasksCommentsTable->newEmptyEntity();
         $comment->task_id = $task->id;
         $comment->user_id = $this->getCurrentUser()->id;
         $comment->kind = $TasksCommentsTable::KIND_TASK_COMMENT;
 
-        $this->set(compact('task', 'comment'));
+        /** @var \Projects\Model\Table\ProjectsTable  $ProjectsTable */
+        $ProjectsTable = TableRegistry::getTableLocator()->get('Projects.Projects');
+        $projects = $ProjectsTable->findForOwner($this->getCurrentUser()->get('company_id'));
+
+        $users = $this->ProjectsTasks->Users->fetchForCompany($this->getCurrentUser()->get('company_id'));
+
+        $this->set(compact('task', 'comment', 'projects', 'users'));
 
         return null;
     }

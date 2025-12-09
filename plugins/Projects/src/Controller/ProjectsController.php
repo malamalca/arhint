@@ -24,33 +24,45 @@ class ProjectsController extends AppController
     public function index()
     {
         $filter = (array)$this->getRequest()->getQuery();
-
         $filter['order'] = 'Projects.no';
 
         $params = array_merge_recursive(
             [
-                'conditions' => [
-                    'Projects.active IN' => [true],
-                ],
+                'conditions' => ['Projects.active IN' => [true]],
                 'order' => ['Projects.no DESC'],
             ],
             $this->Projects->filter($filter),
         );
 
         $query = $this->Authorization->applyScope($this->Projects->find())
-            ->select()
+            ->select($this->Projects)
+            ->select(['LastLog.id', 'LastLog.user_id', 'LastLog.project_id', 'LastLog.created', 'LastLog.descript'])
             ->contain(['LastLog' => ['Users']])
             ->where($params['conditions'])
             ->orderBy($params['order']);
 
         $projects = $this->paginate($query);
 
+        /* Get last log users */
+        $userIds = Hash::extract($projects->toArray(), '{n}.last_log.user_id');
+        $userIds = array_filter(array_unique($userIds));
+        $lastLogUsers = [];
+        if (count($userIds) > 0) {
+            $lastLogUsers = $this->Projects->Users->find()
+                ->select(['id', 'name'])
+                ->where(['id IN' => $userIds])
+                ->all()
+                ->combine('id', fn($entity) => $entity)
+                ->toArray();
+        }
+
+        /* Get project statuses */
         $projectsStatuses = $this->Authorization->applyScope($this->Projects->ProjectsStatuses->find('list'), 'index')
             ->cache('Projects.ProjectsStatuses.' . $this->getCurrentUser()->get('company_id'))
             ->orderBy(['title'])
             ->toArray();
 
-        $this->set(compact('projects', 'projectsStatuses', 'filter'));
+        $this->set(compact('projects', 'projectsStatuses', 'filter', 'lastLogUsers'));
     }
 
     /**

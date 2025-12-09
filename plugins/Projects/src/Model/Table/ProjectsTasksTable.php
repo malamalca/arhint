@@ -11,7 +11,10 @@ use Cake\ORM\Entity;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
+use DateTime;
+use DateTimeInterface;
 use Projects\Filter\ProjectsTasksFilter;
+use Throwable;
 
 /**
  * ProjectsTasks Model
@@ -68,10 +71,10 @@ class ProjectsTasksTable extends Table
         $this->addBehavior('CounterCache', [
             'Milestones' => [
                 'tasks_done' => [
-                    'conditions' => ['ProjectsTasks.date_complete IS NOT' => null],
+                    'conditions' => ['ProjectsTasks.closed IS NOT' => null],
                 ],
                 'tasks_open' => [
-                    'conditions' => ['ProjectsTasks.date_complete IS' => null],
+                    'conditions' => ['ProjectsTasks.closed IS' => null],
                 ],
             ],
         ]);
@@ -107,8 +110,8 @@ class ProjectsTasksTable extends Table
             ->allowEmptyString('descript');
 
         $validator
-            ->date('date_complete')
-            ->allowEmptyDate('date_complete');
+            ->date('closed')
+            ->allowEmptyDate('closed');
 
         return $validator;
     }
@@ -126,6 +129,73 @@ class ProjectsTasksTable extends Table
         $rules->add($rules->existsIn(['user_id'], 'Users'), ['errorField' => 'user_id']);
 
         return $rules;
+    }
+
+    /**
+     * afterSave method
+     *
+     * Store changed fields as JSON into ProjectsTasksComments.descript
+     *
+     * @param \Cake\Event\Event $event Event object.
+     * @param \Cake\ORM\Entity $entity Entity object.
+     * @param \ArrayObject $options Array object.
+     * @return void
+     */
+    public function afterSave(Event $event, Entity $entity, ArrayObject $options): void
+    {
+        /** @var \Projects\Model\Entity\ProjectsTask $entity */
+        if ($entity->isNew()) {
+            return;
+        }
+
+        $dirty = $entity->getDirty();
+        if (empty($dirty)) {
+            return;
+        }
+
+        $normalize = function ($val) {
+            if ($val instanceof DateTimeInterface) {
+                return $val->format(DateTime::ATOM);
+            }
+            if (is_object($val)) {
+                if (method_exists($val, '__toString')) {
+                    return (string)$val;
+                }
+
+                return json_decode((string)json_encode($val), true);
+            }
+
+            return $val;
+        };
+
+        $changes = [];
+        foreach ($dirty as $field) {
+            if (in_array($field, ['modified', 'created'], true)) {
+                continue;
+            }
+            $original = $entity->getOriginal($field);
+            $current = $entity->get($field);
+
+            $changes[$field] = [
+                'old' => $normalize($original),
+                'new' => $normalize($current),
+            ];
+        }
+
+        try {
+            $commentsTable = $this->Comments;
+            $commentData = [
+                'task_id' => $entity->id ?? null,
+                'user_id' => $options['auditUserId'] ?? ($entity->user_id ?? null),
+                'kind' => ProjectsTasksCommentsTable::KIND_STATUS_CHANGE,
+                'descript' => json_encode($changes, JSON_UNESCAPED_UNICODE),
+            ];
+
+            $comment = $commentsTable->newEntity($commentData);
+            $commentsTable->save($comment);
+        } catch (Throwable $e) {
+            // Do not break task save on comment failures. Fail silently.
+        }
     }
 
     /**
@@ -170,12 +240,12 @@ class ProjectsTasksTable extends Table
             ->select([
                 'open' => $query->func()->count(
                     $query->newExpr()->case()
-                        ->when(['date_complete IS' => null])
+                        ->when(['closed IS' => null])
                         ->then(1),
                 ),
                 'closed' => $query->func()->count(
                     $query->newExpr()->case()
-                        ->when(['date_complete IS NOT' => null])
+                        ->when(['closed IS NOT' => null])
                         ->then(1),
                 ),
             ])

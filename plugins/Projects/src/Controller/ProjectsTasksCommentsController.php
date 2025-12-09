@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Projects\Controller;
 
 use App\Controller\AppController;
+use Cake\ORM\TableRegistry;
 
 /**
  * ProjectsTasksComments Controller
@@ -21,16 +22,12 @@ class ProjectsTasksCommentsController extends AppController
      */
     public function edit(?string $id = null)
     {
-        $TasksTable = $this->getTableLocator()->get('Projects.ProjectsTasks');
-
         if ($id) {
             $taskComment = $this->ProjectsTasksComments->get($id, contain: []);
-            $task = $TasksTable->get($taskComment->task_id);
         } else {
             $taskComment = $this->ProjectsTasksComments->newEmptyEntity();
-            $task = $TasksTable->get($this->request->getData('task_id'));
         }
-        $this->Authorization->authorize($task);
+        $this->Authorization->authorize($taskComment);
 
         if ($this->request->is(['patch', 'post', 'put'])) {
             $taskComment = $this->ProjectsTasksComments->patchEntity($taskComment, $this->request->getData());
@@ -47,7 +44,12 @@ class ProjectsTasksCommentsController extends AppController
             }
             $this->Flash->error(__('The projects tasks comment could not be saved. Please, try again.'));
         }
-        $this->set(compact('taskComment'));
+
+        /** @var \App\Model\Table\UsersTable  $UsersTable */
+        $UsersTable = TableRegistry::getTableLocator()->get('App.Users');
+        $users = $UsersTable->fetchForCompany($this->getCurrentUser()->get('company_id'));
+
+        $this->set(compact('taskComment', 'users'));
     }
 
     /**
@@ -60,10 +62,7 @@ class ProjectsTasksCommentsController extends AppController
     public function delete(string $id)
     {
         $projectsTasksComment = $this->ProjectsTasksComments->get($id);
-
-        $TasksTable = $this->getTableLocator()->get('Projects.ProjectsTasks');
-        $task = $TasksTable->get($projectsTasksComment->task_id);
-        $this->Authorization->authorize($task, 'edit');
+        $this->Authorization->authorize($projectsTasksComment);
 
         if ($this->ProjectsTasksComments->delete($projectsTasksComment)) {
             $this->Flash->success(__('The projects tasks comment has been deleted.'));

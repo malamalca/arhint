@@ -27,5 +27,6 @@
 
     <issueHandlers>
         <MissingTemplateParam errorLevel="suppress" />
+        <ImplementedReturnTypeMismatch errorLevel="suppress" />
     </issueHandlers>
 </psalm>

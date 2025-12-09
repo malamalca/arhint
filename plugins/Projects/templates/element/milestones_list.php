@@ -49,39 +49,42 @@ foreach ($milestones as $milestone) :
                 ]) ?>"><strong><?= $milestone->tasks_done ?></strong> closed</a></span>
             </div>
             <div class="actions">
-                <?= $this->Html->link(
-                    __d('projects', 'Add Task'),
-                    [
-                        'controller' => 'ProjectsTasks',
-                        'action' => 'edit',
-                        '?' => [
-                            'project' => $milestone->project_id,
-                            'milestone' => $milestone->id,
-                            'redirect' => Router::url(),
+                <?php
+                if ($this->getCurrentUser()->can('edit', $milestone)) {
+                    echo $this->Html->link(
+                        __d('projects', 'Add Task'),
+                        [
+                            'controller' => 'ProjectsTasks',
+                            'action' => 'edit',
+                            '?' => [
+                                'project' => $milestone->project_id,
+                                'milestone' => $milestone->id,
+                                'redirect' => Router::url(),
+                            ],
                         ],
-                    ],
-                    ['class' => 'btn btn-small text btn-add-task', 'onclick' => 'popup(); return false;'],
-                )
+                        ['class' => 'btn btn-small text btn-add-task', 'onclick' => 'popup(); return false;'],
+                    );
+                    echo $this->Html->link(
+                        __d('projects', 'Edit'),
+                        [
+                            'controller' => 'ProjectsMilestones',
+                            'action' => 'edit',
+                            $milestone->id,
+                            '?' => ['redirect' => Router::url()],
+                        ],
+                        ['class' => 'btn btn-small text btn-edit-milestone'],
+                    );
+                    echo $this->Html->link(
+                        __d('projects', 'Close'),
+                        [
+                            'controller' => 'ProjectsMilestones',
+                            'action' => 'close',
+                            $milestone->id,
+                        ],
+                        ['class' => 'btn btn-small text', 'confirm' => __d('projects', 'Are you sure?')],
+                    );
+                }
                 ?>
-                <?= $this->Html->link(
-                    __d('projects', 'Edit'),
-                    [
-                        'controller' => 'ProjectsMilestones',
-                        'action' => 'edit',
-                        $milestone->id,
-                        '?' => ['redirect' => Router::url()],
-                    ],
-                    ['class' => 'btn btn-small text btn-edit-milestone'],
-                ) ?>
-                <?= $this->Html->link(
-                    __d('projects', 'Close'),
-                    [
-                        'controller' => 'ProjectsMilestones',
-                        'action' => 'close',
-                        $milestone->id,
-                    ],
-                    ['class' => 'btn btn-small text', 'confirm' => __d('projects', 'Are you sure?')],
-                ) ?>
             </div>
         </div>
     </div>

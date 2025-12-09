@@ -29,6 +29,11 @@ $editForm = [
                 'method' => 'hidden',
                 'parameters' => ['field' => 'redirect', ['value' => $this->request->getQuery('redirect')]],
             ],
+
+            'status' => [
+                'method' => 'hidden',
+                'parameters' => ['field' => 'status', ['default' => 1]],
+            ],
             'title' => [
                 'method' => 'control',
                 'parameters' => [
@@ -49,25 +54,10 @@ $editForm = [
                     ],
                 ],
             ],
-            'status' => [
+            'assigned_user' => [
                 'method' => 'control',
                 'parameters' => [
-                    'status',
-                    [
-                        'type' => 'select',
-                        'options' => [
-                            1 => __d('projects', 'Open'),
-                            3 => __d('projects', 'Closed'),
-                            4 => __d('projects', 'Invalid'),
-                        ],
-                        'label' => __d('projects', 'Status') . ':',
-                    ],
-                ],
-            ],
-            'user' => [
-                'method' => 'control',
-                'parameters' => [
-                    'user_id',
+                    'assigned_user_id',
                     [
                         'type' => 'select',
                         'options' => $users,

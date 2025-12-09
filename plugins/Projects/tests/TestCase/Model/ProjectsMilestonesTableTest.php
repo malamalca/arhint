@@ -65,7 +65,7 @@ class ProjectsMilestonesTableTest extends TestCase
         $task1 = $this->getTableLocator()->get('Projects.ProjectsTasks')->newEmptyEntity();
         $task1->project_id = '4dd53305-9715-4be4-b169-20defe113d2a';
         $task1->milestone_id = $milestone->id;
-        $task1->date_complete = null;
+        $task1->closed = null;
         $task1->title = 'First Task';
         $this->getTableLocator()->get('Projects.ProjectsTasks')->save($task1);
 
@@ -74,7 +74,7 @@ class ProjectsMilestonesTableTest extends TestCase
         $this->assertEquals(1, $milestone->tasks_open);
         $this->assertEquals(0, $milestone->tasks_done);
 
-        $task1->date_complete = date('Y-m-d H:i:s');
+        $task1->closed = date('Y-m-d H:i:s');
         $this->getTableLocator()->get('Projects.ProjectsTasks')->save($task1);
 
         $milestone = $this->ProjectsMilestones->get($milestone->id);
