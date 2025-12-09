@@ -30,7 +30,7 @@ foreach ($milestones as $milestone) :
                 <div class="completed" style="width: <?= $completedPercent ?>%;"></div>
             </div>
             <div class="labels">
-                <span><strong><?= $completedPercent ?> %</strong> complete</span>
+                <span><strong><?= $completedPercent ?> %</strong> <?= __d('projects', 'complete') ?></span>
                 <span><a href="<?= $this->Url->build([
                     'controller' => 'ProjectsTasks',
                     'action' => 'index',
@@ -38,7 +38,7 @@ foreach ($milestones as $milestone) :
                     '?' => [
                         'q' => 'milestone:' . Filter::escapeQueryArgument($milestone->title) . ' status:open',
                     ],
-                ]) ?>"><strong><?= $milestone->tasks_open ?></strong> open</a></span>
+                ]) ?>"><strong><?= $milestone->tasks_open ?></strong> <?= __d('projects', 'open') ?></a></span>
                 <span><a href="<?= $this->Url->build([
                     'controller' => 'ProjectsTasks',
                     'action' => 'index',
@@ -46,7 +46,7 @@ foreach ($milestones as $milestone) :
                     '?' => [
                         'q' => 'milestone:' . Filter::escapeQueryArgument($milestone->title) . ' status:closed',
                     ],
-                ]) ?>"><strong><?= $milestone->tasks_done ?></strong> closed</a></span>
+                ]) ?>"><strong><?= $milestone->tasks_done ?></strong> <?= __d('projects', 'closed') ?></a></span>
             </div>
             <div class="actions">
                 <?php

@@ -120,7 +120,7 @@ class ProjectsEvents implements EventListenerInterface
             // add project to table header
             $view->Lil->insertIntoArray(
                 $data->table['head']['rows'][0]['columns'],
-                ['project' => __d('crm', 'Project')],
+                ['project' => __d('projects', 'Project')],
                 ['after' => 'title'],
             );
 

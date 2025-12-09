@@ -44,9 +44,9 @@ switch ($task->status) {
                 [$project->id, '?' => ['q' => $filter->buildQuery('user', (string)$users[$task->user_id])]],
             );
             if ($task->status === ProjectsFuncs::STATUS_OPEN) {
-                echo __('{0} opened {1}', $userLink, h((new Date($task->created))->nice()));
+                echo __d('projects', '{0} opened {1}', $userLink, h((new Date($task->created))->nice()));
             } else {
-                echo __('{0} closed {1}', $userLink, h((new Date($task->closed))->nice()));
+                echo __d('projects', '{0} closed {1}', $userLink, h((new Date($task->closed))->nice()));
             }
 
             if (isset($milestones[$task->milestone_id])) {

@@ -119,7 +119,7 @@ $tableIndex = [
     'actions' => ['lines' => [$popupUsers, $popupMilestones, $popupSort]],
     'menu' => [
         'add' => [
-            'title' => __d('projects', 'Add'),
+            'title' => __d('projects', 'Add Task'),
             'visible' => true,
             'url' => [
                 'plugin' => 'Projects',
@@ -130,6 +130,7 @@ $tableIndex = [
                     'redirect' => Router::url(null, true),
                 ],
             ],
+            'params' => ['id' => 'menu-add-task'],
         ],
     ],
     'pre' => '<div id="tasks-index">',
@@ -141,7 +142,8 @@ $tableIndex = [
             '<button type="submit" class="btn btn-small tonal" id="btn-search"><i class="material-icons">search</i></button>' .
             '</form>' .
             sprintf(
-                '<a href="%s" class="btn btn-small" id="btn-add"><i class="material-icons">add</i>New Task</a>',
+                '<a href="%2$s" class="btn btn-small" id="btn-add"><i class="material-icons">add</i>%1$s</a>',
+                __d('projects', 'New Task'),
                 $this->Url->build([
                     'plugin' => 'Projects',
                     'controller' => 'ProjectsTasks',
@@ -154,8 +156,8 @@ $tableIndex = [
             ) .
             '</div>',
         'filter' => '<div id="tasks-filter"><ul>' .
-            '<li><a href="#" class="btn text dropdown-trigger-costum" data-target="dropdown-users">Author &#128899;</a></li>' .
-            '<li><a href="#" class="btn text dropdown-trigger-costum" data-target="dropdown-milestones">Milestone &#128899;</a></li>' .
+            sprintf('<li><a href="#" class="btn text dropdown-trigger-costum" data-target="dropdown-users">%s &#128899;</a></li>', __d('projects', 'Author')) .
+            sprintf('<li><a href="#" class="btn text dropdown-trigger-costum" data-target="dropdown-milestones">%s &#128899;</a></li>', __d('projects', 'Milestone')) .
             sprintf('<li><a href="#" class="btn text dropdown-trigger-costum" data-target="dropdown-sort"><i class="material-icons">sort</i>%s &#128899;</a></li>', h(__d('projects', 'Newest'))) .
             '</ul>' .
             '<div class="checkbox"><input type="checkbox" id="select-all-tasks" /></div>' .
@@ -246,6 +248,13 @@ echo $this->Lil->panels($tableIndex, 'Projects.ProjectsTasks.index');
                 constrainWidth: false,
                 coverTrigger: false,
             });
+        });
+
+        $("#menu-add-task, #btn-add").modalPopup({
+            title: "<?= __d('projects', 'Add Task') ?>",
+            onOpen: function(popup) {
+                $("#title", popup).focus();
+            }
         });
 
         $("#select-all-tasks").on("change", function(e) {

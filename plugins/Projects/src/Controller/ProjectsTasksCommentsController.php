@@ -32,7 +32,7 @@ class ProjectsTasksCommentsController extends AppController
         if ($this->request->is(['patch', 'post', 'put'])) {
             $taskComment = $this->ProjectsTasksComments->patchEntity($taskComment, $this->request->getData());
             if ($this->ProjectsTasksComments->save($taskComment)) {
-                $this->Flash->success(__('The projects tasks comment has been saved.'));
+                $this->Flash->success(__d('projects', 'The projects tasks comment has been saved.'));
 
                 $redirectUrl = $this->request->getData('redirect', [
                     'controller' => 'ProjectsTasks',
@@ -42,7 +42,7 @@ class ProjectsTasksCommentsController extends AppController
 
                 return $this->redirect($redirectUrl);
             }
-            $this->Flash->error(__('The projects tasks comment could not be saved. Please, try again.'));
+            $this->Flash->error(__d('projects', 'The projects tasks comment could not be saved. Please, try again.'));
         }
 
         /** @var \App\Model\Table\UsersTable  $UsersTable */
@@ -65,9 +65,9 @@ class ProjectsTasksCommentsController extends AppController
         $this->Authorization->authorize($projectsTasksComment);
 
         if ($this->ProjectsTasksComments->delete($projectsTasksComment)) {
-            $this->Flash->success(__('The projects tasks comment has been deleted.'));
+            $this->Flash->success(__d('projects', 'The projects tasks comment has been deleted.'));
         } else {
-            $this->Flash->error(__('The projects tasks comment could not be deleted. Please, try again.'));
+            $this->Flash->error(__d('projects', 'The projects tasks comment could not be deleted. Please, try again.'));
         }
 
         $redirectUrl = $this->request->getQuery('redirect', [

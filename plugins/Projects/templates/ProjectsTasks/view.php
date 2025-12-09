@@ -11,7 +11,6 @@ $converter = new GithubFlavoredMarkdownConverter([
 
 $filter = new ProjectsTasksFilter('');
 
-
 $dropdownEditTaskPopup = ['items' => [
     !$this->getCurrentUser()->can('edit', $task) ? null : [
         'title' => '<i class="material-icons tiny">edit</i>' . h(__d('projects', 'Edit')),
@@ -194,7 +193,7 @@ foreach ($task->comments as $comment) {
         ) .*/
         sprintf(
             '<div class="avatar"><img src="https://gravatar.com/avatar/%s?d=robohash" /></div>',
-            hash('sha256',strtolower(trim($comment->user->email)))
+            hash('sha256',strtolower(trim($comment->user->email))),
         ) .
         '<div class="task-view-description">' .
             sprintf(
