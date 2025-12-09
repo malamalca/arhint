@@ -244,6 +244,40 @@ $documentEdit = [
                 ],
             ],
 
+                        ////////////////////////////////////////////////////////////////////////////////////
+            'fs_attachments_start' => '<fieldset>',
+            'fs_attachments_legend' => sprintf('<legend>%s</legend>', __d('documents', 'Archive')),
+            'file.name.0' => [
+                'method' => 'control',
+                'parameters' => [
+                    'field' => 'documents_attachments.0.filename',
+                    'options' => [
+                        'type' => 'file',
+                        'label' => false,
+                    ],
+                ],
+            ],
+            'file.document_id.0' => [
+                'method' => 'control',
+                'parameters' => [
+                    'field' => 'documents_attachments.0.document_id',
+                    'options' => [
+                        'type' => 'hidden',
+                    ],
+                ],
+            ],
+            'file.model.0' => [
+                'method' => 'control',
+                'parameters' => [
+                    'field' => 'documents_attachments.0.model',
+                    'options' => [
+                        'type' => 'hidden',
+                        'value' => 'Document',
+                    ],
+                ],
+            ],
+            'fs_attachments_end' => '</fieldset>',
+
             'loop' => /*!$document->isNew()*/ 1 == 1 ? null : [
                 'method' => 'control',
                 'parameters' => [

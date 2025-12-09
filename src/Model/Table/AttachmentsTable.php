@@ -135,9 +135,37 @@ class AttachmentsTable extends Table
             if (!file_exists($folderDest)) {
                 mkdir($folderDest, 0777);
             }
+            $existingFileName = $entity->filename;
             $fileDest = $folderDest . $entity->filename;
-            copy($options['uploadedFilename'][$entity->filename], $fileDest);
-            unlink($options['uploadedFilename'][$entity->filename]);
+
+            // if file exists, add or increment index _XX before extension until unique
+            if (file_exists($fileDest)) {
+                $ext = pathinfo($entity->filename, PATHINFO_EXTENSION);
+                $name = pathinfo($entity->filename, PATHINFO_FILENAME);
+
+                // detect existing trailing _NN (two digits or more)
+                if (preg_match('/^(.*)_([0-9]+)$/', $name, $m)) {
+                    $base = $m[1];
+                    $index = (int)$m[2];
+                } else {
+                    $base = $name;
+                    $index = 0;
+                }
+
+                do {
+                    $index++;
+                    $indexedName = sprintf('%s_%d', $base, $index);
+                    $newFilename = $ext !== '' ? $indexedName . '.' . $ext : $indexedName;
+                    $fileDest = $folderDest . $newFilename;
+                } while (file_exists($fileDest));
+
+                // update entity filename so DB / further code sees the new name
+                $entity->filename = $newFilename;
+                $this->updateAll(['filename' => $newFilename], ['id' => $entity->id]);
+            }
+
+            copy($options['uploadedFilename'][$existingFileName], $fileDest);
+            unlink($options['uploadedFilename'][$existingFileName]);
         }
     }
 

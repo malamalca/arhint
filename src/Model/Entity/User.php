@@ -251,6 +251,20 @@ class User extends Entity implements AuthorizationIdentity, AuthenticationIdenti
     }
 
     /**
+     * Returns base64 encoded avatar
+     *
+     * @return string
+     */
+    public function getAvatar(): string
+    {
+        if (!empty($this->avatar)) {
+            return $this->avatar;
+        } else {
+            return (string)base64_encode((string)file_get_contents(WWW_ROOT . 'img' . DS . 'avatar.png'));
+        }
+    }
+
+    /**
      * Properties field accessor
      *
      * @param string $key Properties key

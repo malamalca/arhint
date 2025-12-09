@@ -88,7 +88,6 @@ class TasksController extends AppController
 
         /** @var \Tasks\Model\Table\TasksFoldersTable $TasksFolders */
         $TasksFolders = TableRegistry::getTableLocator()->get('Tasks.TasksFolders');
-
         $folders = $TasksFolders->listForOwner($this->getCurrentUser()->get('company_id'));
 
         /** @var \App\Model\Table\UsersTable $UsersTable */

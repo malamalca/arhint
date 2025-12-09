@@ -194,27 +194,13 @@ class Application extends BaseApplication implements
             AbstractIdentifier::CREDENTIAL_USERNAME => 'username',
             AbstractIdentifier::CREDENTIAL_PASSWORD => 'passwd',
         ];
-        // Load the authenticators, you want session first
-        $service->loadAuthenticator('Authentication.Session');
 
         $service->loadAuthenticator('Authentication.Form', [
-            'urlChecker' => 'Authentication.CakeRouter',
-            'identifier' => ['Authentication.Password' => [
-                'fields' => $fields,
-                'passwordHasher' => [
-                    'className' => 'Authentication.Fallback',
-                    'hashers' => [
-                        'Authentication.Default',
-                        [
-                            'className' => 'Authentication.Legacy',
-                            'hashType' => 'sha1',
-                        ],
-                    ],
-                ],
-            ]],
             'fields' => $fields,
             'loginUrl' => [$this->getLoginPath()],
         ]);
+
+        $service->loadAuthenticator('Authentication.Session');
 
         $service->loadAuthenticator('Authentication.Cookie', [
             'fields' => $fields,
@@ -234,7 +220,7 @@ class Application extends BaseApplication implements
             ['controller' => ['Invoices', 'Documents'], 'action' => 'edit'],
             ])
         ) {
-            $service->loadAuthenticator('Authentication.HttpBasic', ['realm' => 'intranet']);
+            $service->loadAuthenticator('Authentication.HttpBasic', ['realm' => 'intranet', 'fields' => $fields]);
         }
 
         return $service;
@@ -309,6 +295,6 @@ class Application extends BaseApplication implements
      */
     private function getLoginPath(): string
     {
-        return /*Configure::read('App.fullBaseUrl') . Configure::read('App.base') . */Router::url('/users/login');
+        return Router::url('/users/login');
     }
 }

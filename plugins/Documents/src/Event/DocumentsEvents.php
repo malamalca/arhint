@@ -3,8 +3,10 @@ declare(strict_types=1);
 
 namespace Documents\Event;
 
+use App\Model\Table\AttachmentsTable;
 use App\View\Helper\ArhintHelper;
 use ArrayObject;
+use Cake\Datasource\EntityInterface;
 use Cake\Event\Event;
 use Cake\Event\EventListenerInterface;
 use Cake\Event\EventManager;
@@ -14,6 +16,7 @@ use Cake\Routing\Router;
 use Cake\View\View;
 use Documents\Lib\DocumentsSidebar;
 use Exception;
+use Throwable;
 
 class DocumentsEvents implements EventListenerInterface
 {
@@ -32,6 +35,8 @@ class DocumentsEvents implements EventListenerInterface
             'Lil.Sidebar.beforeRender' => 'modifySidebar',
             'Lil.Panels.Crm.Contacts.view' => 'showDocumentsTable',
             'Lil.Panels.Projects.Projects.view' => 'showDocumentsTable',
+            'Model.afterSaveCommit' => 'updateAttachmentsCounter',
+            'Model.afterDelete' => 'updateAttachmentsCounter',
         ];
     }
 
@@ -262,5 +267,50 @@ class DocumentsEvents implements EventListenerInterface
 
         //return $panels;
         $event->setResult($panels);
+    }
+
+    /**
+     * Update attachments count
+     *
+     * @param \Cake\Event\Event $event Event object
+     * @param \Cake\Datasource\EntityInterface $entity Entity object
+     * @param \ArrayObject $options Options array
+     * @return void
+     */
+    public function updateAttachmentsCounter(Event $event, EntityInterface $entity, ArrayObject $options): void
+    {
+        if (get_class($event->getSubject()) == AttachmentsTable::class) {
+            /** @var \App\Model\Table\AttachmentsTable $attachmentsTable */
+            $attachmentsTable = $event->getSubject();
+
+            /** @var \App\Model\Entity\Attachment $entity */
+
+            if (in_array($entity->model, ['Invoice', 'Document'])) {
+                try {
+                    // count attachments for that model + foreign id
+                    $count = $attachmentsTable->find()
+                        ->where([
+                            'model' => $entity->model,
+                            'foreign_id' => $entity->foreign_id,
+                        ])
+                        ->count();
+
+                    if ($entity->model == 'Invoice') {
+                        $targetTable = TableRegistry::getTableLocator()->get('Documents.Invoices');
+                    } else {
+                        $targetTable = TableRegistry::getTableLocator()->get('Documents.Documents');
+                    }
+
+                    // update attachments_count on the parent record
+                    $targetTable->updateQuery()
+                        ->set(['attachments_count' => $count])
+                        ->where(['id' => $entity->foreign_id])
+                        ->execute();
+                } catch (Throwable $e) {
+                    // silently ignore errors to avoid breaking the saved flow
+                    die;
+                }
+            }
+        }
     }
 }

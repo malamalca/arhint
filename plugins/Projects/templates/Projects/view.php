@@ -11,10 +11,10 @@ $converter = new GithubFlavoredMarkdownConverter([
 
 $projectView = [
     'title_for_layout' =>
-    $this->Html->image(
-        'data:image/png;base64, ' . base64_encode(ProjectsFuncs::thumb($project, 80)),
-        ['style' => 'float: left; margin-right: 20px;', 'class' => 'project-avatar', 'quote' => false]
-    ).
+        $this->Html->image(
+            'data:image/png;base64, ' . base64_encode(ProjectsFuncs::thumb($project, 80)),
+            ['style' => 'float: left; margin-right: 20px;', 'class' => 'project-avatar', 'quote' => false]
+        ) .
         '<div><div class="small">' . $project->no . ' </div>' . $project->title . '</div>',
     'menu' => [
         'edit' => [
@@ -36,35 +36,61 @@ $projectView = [
                 'confirm' => __d('projects', 'Are you sure you want to delete this project?'),
             ],
         ],
-        'log' => [
-            'title' => __d('projects', 'Add Log'),
+        'add' => [
+            'title' => __d('projects', 'Add'),
             'visible' => $this->getCurrentUser()->hasRole('editor'),
-            'url' => [
-                'controller' => 'ProjectsLogs',
-                'action' => 'edit',
-                '?' => ['project' => $project->id],
+            'submenu' => [
+                'log' => [
+                    'title' => __d('projects', 'Add Log'),
+                    'visible' => $this->getCurrentUser()->hasRole('editor'),
+                    'url' => [
+                        'controller' => 'ProjectsLogs',
+                        'action' => 'edit',
+                        '?' => ['project' => $project->id],
+                    ],
+                    'params' => ['id' => 'add-projects-log'],
+                ],
+                'log' => [
+                    'title' => __d('projects', 'Add Log'),
+                    'visible' => $this->getCurrentUser()->hasRole('editor'),
+                    'url' => [
+                        'controller' => 'ProjectsLogs',
+                        'action' => 'edit',
+                        '?' => ['project' => $project->id],
+                    ],
+                    'params' => ['id' => 'add-projects-log'],
+                ],
+                'workhour' => [
+                    'title' => __d('projects', 'Add Workhour'),
+                    'visible' => $this->getCurrentUser()->hasRole('editor'),
+                    'url' => [
+                        'controller' => 'ProjectsWorkhours',
+                        'action' => 'edit',
+                        '?' => ['project' => $project->id],
+                    ],
+                    'params' => ['id' => 'add-projects-workhour'],
+                ],
+                'users' => [
+                    'title' => __d('projects', 'Add User'),
+                    'visible' => $this->getCurrentUser()->hasRole('admin'),
+                    'url' => [
+                        'controller' => 'Projects',
+                        'action' => 'user',
+                        $project->id,
+                    ],
+                    'params' => ['id' => 'add-projects-user'],
+                ],
+                'milestones' => [
+                    'title' => __d('projects', 'Add Milestone'),
+                    'visible' => $this->getCurrentUser()->hasRole('admin'),
+                    'url' => [
+                        'controller' => 'ProjectsMilestones',
+                        'action' => 'edit',
+                        '?' => ['project' => $project->id],
+                    ],
+                    'params' => ['id' => 'add-projects-milestone'],
+                ],
             ],
-            'params' => ['id' => 'add-projects-log'],
-        ],
-        'workhour' => [
-            'title' => __d('projects', 'Add Workhour'),
-            'visible' => $this->getCurrentUser()->hasRole('editor'),
-            'url' => [
-                'controller' => 'ProjectsWorkhours',
-                'action' => 'edit',
-                '?' => ['project' => $project->id],
-            ],
-            'params' => ['id' => 'add-projects-workhour'],
-        ],
-        'users' => [
-            'title' => __d('projects', 'Add User'),
-            'visible' => $this->getCurrentUser()->hasRole('admin'),
-            'url' => [
-                'controller' => 'Projects',
-                'action' => 'user',
-                $project->id,
-            ],
-            'params' => ['id' => 'add-projects-user'],
         ],
     ],
     'entity' => $project,
@@ -73,16 +99,8 @@ $projectView = [
             'lines' => [
                 'status' => [
                     'label' => __d('projects', 'Status') . ':',
-                    'text' => empty($project->status_id) ? '' : ('<div class="chip z-depth-1">' . h($projectsStatuses[$project->status_id]) . '</div>'),
+                    'text' => empty($project->status_id) ? '' : h($projectsStatuses[$project->status_id]),
                 ],
-                /*'work_duration' => [
-                    'label' => __d('projects', 'Work Duration') . ':',
-                    'text' => $this->Html->link($this->Arhint->duration($workDuration), [
-                        'controller' => 'ProjectsWorkhours',
-                        'action' => 'index',
-                        '?' => ['project' => $project->id],
-                    ]),
-                ],*/
             ],
         ],
         'descript' => empty($project->descript) ? null : [
@@ -95,11 +113,17 @@ $projectView = [
         ],
         'tabs' => ['lines' => [
             'pre' => '<div class="row view-panel"><div class="col s12"><ul class="tabs">',
+            'milestones' => sprintf(
+                '<li class="tab col"><a href="%1$s" target="_self"%3$s>%2$s</a></li>',
+                $this->Url->build([$project->id, '?' => ['tab' => 'milestones']]),
+                __d('projects', 'Milestones'),
+                !$this->getRequest()->getQuery('tab') || $this->getRequest()->getQuery('tab') == 'milestones' ? ' class="active"' : ''
+            ),
             'logs' => sprintf(
                 '<li class="tab col"><a href="%1$s" target="_self"%3$s>%2$s</a></li>',
                 $this->Url->build([$project->id, '?' => ['tab' => 'logs']]),
                 __d('projects', 'Logs'),
-                !$this->getRequest()->getQuery('tab') || $this->getRequest()->getQuery('tab') == 'logs' ? ' class="active"' : ''
+                $this->getRequest()->getQuery('tab') == 'logs' ? ' class="active"' : ''
             ),
             'workhours' => sprintf(
                 '<li class="tab col"><a href="%1$s" target="_self"%3$s>%2$s</a></li>',
@@ -119,10 +143,21 @@ $projectView = [
     ],
 ];
 
-$activeTab = $this->getRequest()->getQuery('tab', 'logs');
+$activeTab = $this->getRequest()->getQuery('tab', 'milestones');
 $this->set('tab', $activeTab);
 
 switch ($activeTab) {
+    case 'milestones':
+        // milestones tab panel
+        $milestonesPanel = [
+            'milestones_list' => [
+                'params' => ['id' => 'projects-milestones'],
+                'lines' => [$this->Element('Projects.milestones_list', ['milestones' => $milestones])],
+            ],
+        ];
+        $this->Lil->insertIntoArray($projectView['panels'], $milestonesPanel);
+
+        break;
     case 'logs':
         if ($logs->isEmpty()) {
             $table = [
@@ -239,6 +274,27 @@ echo $this->Lil->panels($projectView, 'Projects.Projects.view');
             $(this).modalPopup({
                 title: "<?= __d('projects', 'Add Workhour') ?>",
                 onOpen: function(popup) { $("#projects-work-descript", popup).focus(); }
+            });
+        });
+
+        $("#add-projects-milestone").each(function() {
+            $(this).modalPopup({
+                title: "<?= __d('projects', 'Add Milestone') ?>",
+                onOpen: function(popup) { $("#projects-milestone-title", popup).focus(); }
+            });
+        });
+
+        $(".btn-add-task").each(function() {
+            $(this).modalPopup({
+                title: "<?= __d('projects', 'Add Task') ?>",
+                onOpen: function(popup) { $("#title", popup).focus(); }
+            });
+        });
+
+        $(".btn-edit-milestone").each(function() {
+            $(this).modalPopup({
+                title: "<?= __d('projects', 'Edit Milestone') ?>",
+                onOpen: function(popup) { $("#projects-milestone-title", popup).focus(); }
             });
         });
     });

@@ -100,6 +100,7 @@ class ExpensesEvents implements EventListenerInterface
             'fs_expense_end' => '</fieldset>',
         ];
 
+        $form->form['lines'] = $form->form['lines'] ?? [];
         $view->Lil->insertIntoArray($form->form['lines'], $expenseFieldset, ['after' => 'fs_basics_end']);
 
         return $form;

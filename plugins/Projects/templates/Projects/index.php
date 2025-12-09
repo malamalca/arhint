@@ -86,7 +86,7 @@ foreach ($projects as $project) {
             '<span class="small">%2$s, %3$s</span><div class="truncate">%1$s</div>',
             $project->last_log->descript,
             $project->last_log->created,
-            h($project->last_log->user->name)
+            h((string)($lastLogUsers[$project->last_log->user_id] ?? 'N/A')),
         );
     }
 
@@ -109,7 +109,7 @@ foreach ($projects as $project) {
         'actions' => $this->Html->link(
             '<i class="material-icons chevron">chat_bubble_outline</i>',
             ['controller' => 'ProjectsLogs', 'action' => 'edit', '?' => ['project' => $project->id]],
-            ['escape' => false, 'class' => 'btn btn-small add-projects-log']
+            ['escape' => false, 'class' => 'btn btn-small add-projects-log'],
         ),
         'log' => [
             'params' => ['class' => 'last-log'],

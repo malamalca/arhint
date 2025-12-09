@@ -3,6 +3,9 @@ declare(strict_types=1);
 
 namespace Documents\Test\TestCase\Controller;
 
+use Cake\Core\Configure;
+use Cake\Event\EventList;
+use Cake\Event\EventManager;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\IntegrationTestTrait;
 use Cake\TestSuite\TestCase;
@@ -50,6 +53,8 @@ class InvoicesControllerTest extends TestCase
                 'SERVER_NAME' => 'localhost',
             ],
         ]);
+
+        EventManager::instance()->setEventList(new EventList());
     }
 
     private function login($userId)
@@ -220,10 +225,6 @@ class InvoicesControllerTest extends TestCase
         // External program has to send a valid header
         $this->configRequest([
             'headers' => ['Lil-Scan' => 'Valid'],
-            //'environment' => [
-            //    'PHP_AUTH_USER' => 'admin',
-            //    'PHP_AUTH_PW' => 'pass',
-            //]
         ]);
         // Set session data
         $this->login(USER_ADMIN);
@@ -238,6 +239,7 @@ class InvoicesControllerTest extends TestCase
             'sunset.jpg',
             'image/jpg',
         );
+        Configure::write('App.uploadFolder', TMP);
 
         $data = [
             'counter_id' => '1d53bc5b-de2d-4e85-b13b-81b39a97fc89',
@@ -274,6 +276,11 @@ class InvoicesControllerTest extends TestCase
         // test if counter increases
         $newCounter = $counters->get('1d53bc5b-de2d-4e85-b13b-81b39a97fc89');
         $this->assertEquals($counter->counter + 1, $newCounter->counter);
+
+        $this->assertEventFired('Model.beforeSave');
+
+        // test if file exists
+        // $this->assertTrue(file_exists(Configure::read('App.uploadFolder') . DS . 'Invoice' . DS . 'sunset.jpg'));
     }
 
     /**

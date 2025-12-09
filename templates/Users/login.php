@@ -1,6 +1,4 @@
 <?php
-    use Cake\Core\Configure;
-
     $userLogin = [
         'title_for_layout' => __('Login'),
         'form' => [
@@ -17,9 +15,9 @@
                         'username',
                         [
                             'label' => __('Username') . ':',
-                            'type' => 'text'
-                        ]
-                    ]
+                            'type' => 'text',
+                        ],
+                    ],
                 ],
                 'password' => [
                     'method' => 'control',
@@ -27,9 +25,9 @@
                         'passwd',
                         [
                             'label' => __('Password') . ':',
-                            'type' => 'password'
-                        ]
-                    ]
+                            'type' => 'password',
+                        ],
+                    ],
                 ],
                 'remember_me' => [
                     'method' => 'control',
@@ -38,15 +36,15 @@
                         [
                             'type' => 'checkbox',
                             'label' => __('Remember me on this computer'),
-                        ]
-                    ]
+                        ],
+                    ],
                 ],
                 'submit' => [
                     'method' => 'submit',
-                    'parameters' => [__('OK')]
+                    'parameters' => [__('OK')],
                 ],
                 'form_end' => [
-                    'method'  => 'end',
+                    'method' => 'end',
                 ],
                 'passwd_reset' => sprintf(
                     '<div id="UserLoginPasswordReset">%s</div>',
@@ -54,10 +52,10 @@
                         'plugin' => false,
                         'controller' => 'Users',
                         'action' => 'reset',
-                    ])
+                    ]),
                 ),
-            ]
-        ]
+            ],
+        ],
     ];
 
     echo $this->Lil->form($userLogin, 'Users.login');

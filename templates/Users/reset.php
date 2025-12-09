@@ -1,6 +1,4 @@
 <?php
-use Cake\Core\Configure;
-
 $passwordReset = [
     'title_for_layout' => __('Password Reset'),
     'form' => [
@@ -13,32 +11,32 @@ $passwordReset = [
             ],
             'referer' => [
                 'method' => 'hidden',
-                'parameters' => ['referer']
+                'parameters' => ['referer'],
             ],
 
             'email' => [
-                'method' => 'input',
+                'method' => 'control',
                 'parameters' => [
                     'field' => 'email',
                     'options' => [
                         'label' => __('Email') . ':',
                         'error' => __('Email is required, format must be valid.'),
-                    ]
-                ]
+                    ],
+                ],
             ],
 
             'submit' => [
                 'method' => 'submit',
                 'parameters' => [
-                    'label' => __('Request new Password')
-                ]
+                    'label' => __('Request new Password'),
+                ],
             ],
             'form_end' => [
                 'method' => 'end',
-                'parameters' => []
+                'parameters' => [],
             ],
-        ]
-    ]
+        ],
+    ],
 ];
 
 echo $this->Lil->form($passwordReset, 'Users.reset');

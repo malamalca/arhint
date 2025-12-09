@@ -60,9 +60,14 @@ class CrmCommand extends Command
     public function findDuplicates(ConsoleIo $io): void
     {
         $ContactsTable = TableRegistry::getTableLocator()->get('Crm.Contacts');
+
+        /** @var \Crm\Model\Table\ContactsAccountsTable $ContactsAccountsTable */
         $ContactsAccountsTable = TableRegistry::getTableLocator()->get('Crm.ContactsAccounts');
+        /** @var \Crm\Model\Table\ContactsAddressesTable $ContactsAddressesTable */
         $ContactsAddressesTable = TableRegistry::getTableLocator()->get('Crm.ContactsAddresses');
+        /** @var \Crm\Model\Table\ContactsPhonesTable $ContactsPhonesTable */
         $ContactsPhonesTable = TableRegistry::getTableLocator()->get('Crm.ContactsPhones');
+        /** @var \Crm\Model\Table\ContactsEmailsTable $ContactsEmailsTable */
         $ContactsEmailsTable = TableRegistry::getTableLocator()->get('Crm.ContactsEmails');
 
         $DocumentsClients = TableRegistry::getTableLocator()->get('Documents.DocumentsClients');

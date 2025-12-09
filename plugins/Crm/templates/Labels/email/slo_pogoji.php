@@ -16,7 +16,7 @@
 
     foreach ($addresses as $address) {
         if (!empty($address->contacts_email->email)) {
-            $mailer = new ArhintMailer(null, $this->getCurrentUser());
+            $mailer = new ArhintMailer($this->getCurrentUser());
             $mailer
                 ->setFrom($this->getCurrentUser()->email)
                 ->setTo($address->contacts_email->email)

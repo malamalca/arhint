@@ -1,7 +1,8 @@
 parameters:
     level: 8
     treatPhpDocTypesAsCertain: false
-    checkGenericClassInNonGenericObjectType: false
+    ignoreErrors:
+        - identifier: missingType.generics
     bootstrapFiles:
         - config/paths.php
         - vendor/cakephp/cakephp/src/functions.php
