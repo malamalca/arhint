@@ -1,5 +1,5 @@
 <?php
-use Cake\Core\Plugin;
+use Cake\Core\Configure;
 
 $adremaEdit = [
     'title_for_layout' => $adrema->id ? __d('crm', 'Edit Adrema') : __d('crm', 'Add Adrema'),
@@ -33,7 +33,48 @@ $adremaEdit = [
                     'options' => ['type' => 'hidden'],
                 ],
             ],
-
+            'kind' => [
+                'method' => 'control',
+                'parameters' => [
+                    'field' => 'kind',
+                    'options' => [
+                        'type' => 'select',
+                        'options' => [
+                            'labels' => __d('crm', 'Labels'),
+                            'email' => __d('crm', 'Emails'),
+                        ],
+                        'label' => __d('crm', 'Kind') . ':',
+                        'error' => [
+                            'empty' => __d('crm', 'Adrema kind is required.'),
+                        ],
+                        'id' => 'kind-select',
+                    ],
+                ],
+            ],
+            'kind_label' => [
+                'method' => 'control',
+                'parameters' => [
+                    'field' => 'kind_type',
+                    'options' => [
+                        'type' => 'select',
+                        'label' => __d('crm', 'Label Type') . ':',
+                        'options' => Configure::read('Crm.labelTemplates'),
+                        'id' => 'label-template-select',
+                    ],
+                ],
+            ],
+            'kind_email' => [
+                'method' => 'control',
+                'parameters' => [
+                    'field' => 'kind_type',
+                    'options' => [
+                        'type' => 'select',
+                        'label' => __d('crm', 'Email Template') . ':',
+                        'options' => Configure::read('Crm.emailTemplates'),
+                        'id' => 'email-template-select',
+                    ],
+                ],
+            ],
             'title' => [
                 'method' => 'control',
                 'parameters' => [
@@ -52,7 +93,7 @@ $adremaEdit = [
                     'field' => 'additional_fields',
                     'options' => [
                         'type' => 'textarea',
-                        'label' => __d('crm', 'Additional Fields') . ':',
+                        'label' => __d('crm', 'Additional Recipient Fields') . ':',
                     ],
                 ],
             ],
@@ -72,3 +113,24 @@ $adremaEdit = [
 ];
 
 echo $this->Lil->form($adremaEdit, 'Crm.Adremas.edit');
+?>
+<script type="text/javascript">
+    $(document).ready(function() {
+        // Toggle visibility of template fields based on selected kind
+        function toggleTemplateFields() {
+            var labelsTemplateSelect = $("#label-template-select");
+            var emailTemplateSelect = $("#email-template-select");
+            
+            if ($("#kind-select").val() === 'labels') {
+                $(labelsTemplateSelect).closest(".input-field.select").show();
+                $(emailTemplateSelect).closest(".input-field.select").hide();
+            } else {
+                $(labelsTemplateSelect).closest(".input-field.select").hide();
+                $(emailTemplateSelect).closest(".input-field.select").show();
+            }
+        }
+
+        $("#kind-select").on("change", toggleTemplateFields);
+        toggleTemplateFields(); // Initial call to set the correct visibility
+    });
+</script>

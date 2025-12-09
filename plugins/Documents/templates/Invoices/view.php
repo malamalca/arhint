@@ -611,7 +611,12 @@ echo $this->Lil->panels($invoiceView, 'Documents.Invoices.view');
         $("#EditTemplates").modalPopup({title: "<?= __d('documents', 'Edit Templates') ?>"});
         $("#EmailDocument").modalPopup({title: "<?= __d('documents', 'Email Document') ?>"});
 
-        $("#AttachFile").modalPopup({title: "<?= __d('documents', 'Attach File') ?>"});
+        $("#AttachFile").modalPopup({
+            title: "<?= __d('documents', 'Attach File') ?>",
+            onOpen: function(popup) {
+                $("#filename", popup).focus().click();
+            },
+        });
         $("#AttachLink").modalPopup({title: "<?= __d('documents', 'Link Document') ?>"});
         $("#AttachScan").modalPopup({title: "<?= __d('documents', 'Scan Document') ?>", onClose: function() {
             if (typeof window.ws != "undefined" && window.ws) {

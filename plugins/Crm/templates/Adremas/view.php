@@ -46,7 +46,7 @@ $viewAdremaPanels = [
                     'email' => __d('crm', 'Email'),
                     'actions' => '&nbsp;',
                 ]]]],
-            ]
+                ],
         ],
         'add_address' => ['lines' => [
             $this->Html->link(
@@ -58,15 +58,15 @@ $viewAdremaPanels = [
                 ],
                 [
                     'class' => 'btn-small',
-                ]
-                ),
+                ],
+            ),
         ]],
         'title_attachments' => ['lines' => [sprintf('<h3>%s</h3>', __d('crm', 'Attachments'))]],
         'attachments' => '',
     ],
 ];
 
-foreach ($addresses as $k => $address) {
+foreach ($addresses as $address) {
     $viewAdremaPanels['panels']['addresses']['table']['body']['rows'][] = ['columns' => [
         'checked' => '&nbsp;',
         'title' => h($address->contact->title ?? 'N/A'),
@@ -74,13 +74,16 @@ foreach ($addresses as $k => $address) {
         'email' => h($address->contacts_email->email ?? ''),
         'actions' => ['params' => ['class' => 'nowrap'], 'html' =>
             $this->Lil->editLink(['controller' => 'AdremasContacts', 'action' => 'edit', $address->id]) . ' ' .
-            $this->Lil->deleteLink(['controller' => 'AdremasContacts', 'action' => 'delete', $address->id])
+            $this->Lil->deleteLink(['controller' => 'AdremasContacts', 'action' => 'delete', $address->id]),
         ],
     ]];
 }
 
 $viewAdremaPanels['panels']['attachments'] = $this->Arhint->attachmentsTable(
-    $attachments, 'Adrema', $adrema->id, ['redirectUrl' => Router::url(null, true)]
+    $attachments,
+    'Adrema',
+    $adrema->id,
+    ['redirectUrl' => Router::url(null, true)],
 );
 
 ////////////////////////////////////////////////////////////////////////////////////////////////

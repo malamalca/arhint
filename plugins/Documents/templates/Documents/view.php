@@ -50,21 +50,6 @@ $invoiceView = [
                         'id' => 'AttachFile',
                     ],
                 ],
-                /*'scan' => [
-                    'title' => __d('documents', 'Scan'),
-                    'visible' => $this->Lil->userLevel('admin'),
-                    'url' => [
-                        'plugin' => false,
-                        'controller' => 'Attachments',
-                        'action' => 'add',
-                        'Document',
-                        $document->id,
-                        'scan',
-                    ],
-                    'params' => [
-                        'id' => 'AttachScan',
-                    ],
-                ],*/
                 'link' => [
                     'title' => __d('documents', 'Linked Document'),
                     'visible' => true,
@@ -243,7 +228,6 @@ if (!empty($document->attachments)) {
 // LINKS
 if (!empty($links)) {
     $invoiceView['panels']['links_title'] = sprintf('<h3>%s</h3>', __d('documents', 'Linked Documents'));
-    $i = 0;
     foreach ($links as $link) {
         $invoiceView['panels']['links_' . $link->id] = sprintf(
             '<div>%1$s %2$s</div>',
@@ -265,14 +249,13 @@ if (!empty($links)) {
                 [
                     'escape' => false,
                     'confirm' => __d('documents', 'Are you sure you want to delete this link?'),
-                ]
-            )
+                ],
+            ),
         );
     }
 }
 
 if (!empty($document->descript)) {
-    //$invoiceView['panels']['text_title'] = sprintf('<h3>%s</h3>', __d('documents', 'Description'));
     $invoiceView['panels']['text_data'] = sprintf('<div id="invoice-descript-preview">%s</div>', $document->descript);
 }
 
@@ -284,7 +267,12 @@ echo $this->Lil->panels($invoiceView, 'Documents.Documents.view');
         $("#EditTemplates").modalPopup({title: "<?= __d('documents', 'Edit Templates') ?>"});
         $("#EmailDocument").modalPopup({title: "<?= __d('documents', 'Email Document') ?>"});
 
-        $("#AttachFile").modalPopup({title: "<?= __d('documents', 'Attach File') ?>"});
+        $("#AttachFile").modalPopup({
+            title: "<?= __d('documents', 'Attach File') ?>",
+            onOpen: function(popup) {
+                $("#filename", popup).focus().click();
+            },
+        });
         $("#AttachLink").modalPopup({title: "<?= __d('documents', 'Link Document') ?>"});
         $("#AttachScan").modalPopup({title: "<?= __d('documents', 'Scan Document') ?>", onClose: function() {
             if (typeof window.ws != "undefined" && window.ws) {

@@ -60,6 +60,7 @@ $config = [
     ],
 
     'Crm.emailTemplates' => [
+        'dopis' => 'Splošni dopis',
         'slo_pogoji' => 'Projektni pogoji',
         'slo_mnenja' => 'Mnenja',
     ],

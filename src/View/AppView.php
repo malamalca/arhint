@@ -68,8 +68,6 @@ class AppView extends View
         $this->loadHelper('Form', [
             'templates' => 'templates',
                 'widgets' => [
-                    'lil-decimal' => ['Lil.LilDecimal', '_view'],
-                    'lil-date' => ['Lil.LilDate', '_view'],
                     'duration' => ['Duration', '_view'],
                 ],
         ]);
