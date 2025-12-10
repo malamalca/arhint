@@ -355,13 +355,13 @@ if (!empty($job)) {
         '$(".edit-element, .delete-element", this).show();})' .
         '.mouseout(function(){$(".edit-element, .delete-element", this).hide();}' .
         ');');
-    $this->Lil->jsReady('$(".edit-element").hide()');
-    $this->Lil->jsReady('$(".delete-element").hide()');
+    $this->Lil->jsReady('$(".edit-element").hide();');
+    $this->Lil->jsReady('$(".delete-element").hide();');
 
     // needed for bug - must have active tab
     //$this->Lil->jsReady('if(!$("ul#ContactTabs>li>a").hasClass("active")) { $("ul#ContactTabs>li>a").first().addClass("active"); }');
 
-    $this->Lil->jsReady(sprintf('$(".AddAddressLink").modalPopup({title:"%s"})', __d('crm', 'Add new Address')));
-    $this->Lil->jsReady(sprintf('$(".AddAccountLink").modalPopup({title:"%s"})', __d('crm', 'Add new Account')));
-    $this->Lil->jsReady(sprintf('$(".AddEmailLink").modalPopup({title:"%s"})', __d('crm', 'Add new Email')));
-    $this->Lil->jsReady(sprintf('$(".AddPhoneLink").modalPopup({title:"%s"})', __d('crm', 'Add new Phone')));
+    $this->Lil->jsReady(sprintf('$(".AddAddressLink").modalPopup({title:"%s"});', __d('crm', 'Add new Address')));
+    $this->Lil->jsReady(sprintf('$(".AddAccountLink").modalPopup({title:"%s"});', __d('crm', 'Add new Account')));
+    $this->Lil->jsReady(sprintf('$(".AddEmailLink").modalPopup({title:"%s"});', __d('crm', 'Add new Email')));
+    $this->Lil->jsReady(sprintf('$(".AddPhoneLink").modalPopup({title:"%s"});', __d('crm', 'Add new Phone')));

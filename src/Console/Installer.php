@@ -139,7 +139,7 @@ class Installer
 
             ConnectionManager::setConfig('default', Configure::read('Datasources.default'));
 
-            static::executeMigrations($rootDir, $io, 'default');
+            //static::executeMigrations($rootDir, $io, 'default');
         }
     }
 

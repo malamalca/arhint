@@ -15,7 +15,7 @@ $popupActive = ['items' => [
 $popupActive = $this->Lil->popup('active', $popupActive, true);
 
 // FILTER by status
-$activeStatus = $this->getRequest()->getQuery('status');
+$activeStatus = $this->getRequest()->getQuery('status', '');
 $statusLink = $this->Html->link(
     $projectsStatuses[$activeStatus] ?? __d('projects', 'All Statuses'),
     ['action' => 'filter'],
@@ -78,7 +78,7 @@ $index = [
 ];
 
 foreach ($projects as $project) {
-    $projectStatus = $projectsStatuses[$project->status_id] ?? '';
+    $projectStatus = $project->status_id ? $projectsStatuses[$project->status_id] ?? '' : '';
 
     $lastLogDescript = '';
     if (!empty($project->last_log)) {

@@ -238,13 +238,11 @@ class User extends Entity implements AuthorizationIdentity, AuthenticationIdenti
             $transparent = (int)imagecolorallocatealpha($newImage, 255, 255, 255, 127);
             imagefilledrectangle($newImage, 0, 0, $avatarSize, $avatarSize, $transparent);
             imagecopyresampled($newImage, $im, 0, 0, $cropX, $cropY, $newWidth, $newHeight, $width, $height);
-            imagedestroy($im);
 
             ob_start();
             imagepng($newImage);
             $ret = ob_get_contents();
             ob_end_clean();
-            imagedestroy($newImage);
         }
 
         return $ret;

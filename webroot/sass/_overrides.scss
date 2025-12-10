@@ -31,20 +31,16 @@ nav {
         padding-left: 0 !important;
     }
 
-    div.nav-wrapper {
-        overflow: hidden !important;
-    }
-
     /** Hide the logo in navigation on small screens **/
     .brand-logo {
         @extend .hide-on-large-only;
     }
 
-    /* Upper navbar links are white by default which is hard to read */
+    /* Upper navbar links are light/white by default which is hard to read */
     ul {
         li {
-            a {
-                color: var(--md-sys-color-primary) !important;
+            a:not(:hover) {
+                color: var(--md-sys-color-on-secondary-container) !important;
             }
         }
     }
@@ -107,12 +103,10 @@ button.btn {
     &[type="submit"] {
         margin-top: 20px;
     }
-}
+}*/
 
 table {
     th {
-        background-color: #f0f0f0;
+        background-color: var(--md-sys-color-secondary-container);
     }
 }
-
-*/

@@ -14,18 +14,17 @@ jQuery.fn.modalPopup = function(p_options) {
 	};
 	var $this       = this;
     var options     = [];
-    var popup       = null;
-    var instance    = null;
+    var dialog      = null;
     var oldHeight   = null;
 
     var template = [
-        '<div class="modal">',
-        '   <div class="modal-content">',
-        '   <a href="#" class="btn btn-small modal-close" style="float: right">x</a>',
+        '<dialog>',
+        '   <div class="dialog-header">',
+        '   <a href="#" class="modal-close"><i class="material-icons">close</i></a>',
         '   <h3 id="modal-title">Modal Header</h3>',
-        '   <p class="modal-container"></p>',
         '   </div>',
-        '</div>'
+        '   <p class="dialog-content"></p>',
+        '</dialog>'
     ];
 
 
@@ -42,29 +41,27 @@ jQuery.fn.modalPopup = function(p_options) {
             .done(function(html) {
                 let json = $this.isJson(html);
                 if (json) {
-                    $this.instance.close();
+                    $this.dialog.close();
                     if ($this.options.onJson instanceof Function) {
                         $this.options.onJson(html, $this);
                     }
                 } else {
-                    $("p", $this.popup).html(html);
-                    $("#modal-title", $this.popup).html($this.options.title);
+                    $("p", $this.dialog).html(html);
+                    $("#modal-title", $this.dialog).html($this.options.title);
 
                     if ($this.options.processSubmit) {
-                        $("form", $this.popup).submit($this.popupFormSubmit);
+                        $("form", $this.dialog).submit($this.popupFormSubmit);
+                        $("form", $this.dialog).attr("method", "dialog");
                     }
 
-                    // update text fields for label placement
-                    var selectInputs = $this.popup.get(0).querySelectorAll('select');
+                    var selectInputs = $this.dialog.querySelectorAll("select");
                     var instances = M.FormSelect.init(selectInputs);
-                    //M.updateTextFields();
-                    //M.AutoInit();
                 }
 
-                $this.instance.open();
+                $this.dialog.showModal();
 
                 if ($this.options.onOpen instanceof Function) {
-                    $this.options.onOpen($this.popup, $this.instance);
+                    $this.options.onOpen($this.popup, $this);
                 }
             })
             .fail(function() {
@@ -76,54 +73,41 @@ jQuery.fn.modalPopup = function(p_options) {
         return false;
     };
 
-    this.checkResize = function(e)
-    {
-        let popupHeight = $($this.popup).height();
-        if ($this.oldHeight != popupHeight) {
-            if ($this.options.onResize instanceof Function) {
-                $this.options.onResize($this.popup, $this.instance);
-            }
-        }
-        $this.oldHeight = popupHeight;
-    }
-
     // Do an ajax form post
     this.popupFormSubmit = function(e)
     {
-        var submitData = $("form", $this.popup);
+        var submitData = $("form", $this.dialog);
         if ($this.options.onBeforeSubmit instanceof Function) {
-            submitData = $this.options.onBeforeSubmit($("form", $this.popup), $this.instance);
+            submitData = $this.options.onBeforeSubmit($("form", $this.dialog), $this);
         }
         $.ajax({
             type: "POST",
-            url: $("form", $this.popup).prop("action"),
+            url: $("form", $this.dialog).prop("action"),
             data: submitData.serialize(),
             success: function(data, status, xhr) {
                 let json = $this.isJson(data);
                 if (json) {
-                    $this.instance.close();
+                    $this.dialog.close();
                     if ($this.options.onJson instanceof Function) {
                         $this.options.onJson(data, $this);
                     }
                 } else {
                     // it's html
-                    $("p", $this.popup).html(data);
+                    $("p", $this.dialog).html(data);
 
                     // evaluate javascript blocks if any
-                    let script = $("p > script", $this.popup);
+                    let script = $("p > script", $this.dialog);
                     if (script) {
                         script.each(function() { eval($(this).text()) });
                     }
 
                     if ($this.options.processSubmit) {
-                        $("form", $this.popup).submit($this.popupFormSubmit);
+                        $("form", $this.dialog).submit($this.popupFormSubmit);
                     }
 
                     if ($this.options.onHtml instanceof Function) {
                         $this.options.onHtml(data, $this);
                     }
-                    // update text fields for label placement
-                    //M.updateTextFields();
                 }
             }
         });
@@ -148,34 +132,34 @@ jQuery.fn.modalPopup = function(p_options) {
         return false;
     };
 
+    this.onClose = function(e) {
+	    console.log($this.dialog.returnValue);
+
+        if ($this.options.onClose instanceof Function) {
+            $this.options.onClose($this.dialog, $this);
+        }
+
+        $("p", $this.dialog).html("");
+        $("#modal-title", $this.dialog).html("");
+    }
+
 
     // initialization
     $this.options = jQuery().extend(true, {}, default_options, p_options);
 
-    $this.popup = $("div.modal");
-    if (!$this.popup.length) {
-        $this.popup = $(template.join("\n")).appendTo(document.body);
+    $this.dialog = $("dialog").get(0);
+    if (!$this.dialog) {
+        $this.dialog = $(template.join("\n")).appendTo(document.body).get(0);
     }
 
-    $(".modal-close", $this.popup).on("click", function(e) {
-        $this.instance.close();
+    // Close button handler
+    $(".modal-close", $this.dialog).on("click", function(e) {
+        $this.dialog.close();
         e.preventDefault();
         return false;
     });
 
-    $(window).on("resize", function(e) {
-        $this.checkResize(e);
-    });
-
-    $this.instance = M.Modal.init($this.popup.get(0), {
-        dismissible: true,
-        onCloseEnd: function() {
-            $(".modal-container", $this.popup).html("");
-            if ($this.options.onClose instanceof Function) {
-                $this.options.onClose($this.popup);
-            }
-        }
-    });
+    $this.dialog.addEventListener("close", $this.onClose);
 
     $(this).on("click", $this.onClick);
 }

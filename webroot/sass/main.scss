@@ -43,20 +43,19 @@
 @forward "vendor/Materialize/components/pagination";
 
 
-$default-background-color: #f0f0f0 !default;
-/*
-//@import "components/calendarday";
-@forward "components/timepanel";
-@forward "components/duration-input";
+@forward "components/calendarday";
+//@forward "components/timepanel";
+//@forward "components/duration-input";
 //@forward "components/userspicker-input";
-//@forward "components/monthpicker-input";*/
-//@forward "components/view-panel";
-//@forward "components/search-panel";
+//@forward "components/monthpicker-input";
+@forward "components/view-panel";
+@forward "components/search-panel";
 @forward "components/sidenav";
 @forward "components/paginator";
 //@forward "components/upload-area";*/
 @forward "components/dashboard-panel";
 @forward "components/dashboard-notes";
+@forward "components/dialog";
 
 //@forward "../../plugins/projects/webroot/sass/crm";
 
