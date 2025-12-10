@@ -120,7 +120,7 @@ if (!empty($job)) {
         'panels' => [
             'logo' => sprintf(
                 '<div id="contact-logo">%1$s</div>',
-                $this->Html->image('/crm/img/paperclip.png')
+                $this->Html->image('/crm/img/paperclip.png'),
             ),
             'descript' => empty($contact->descript) ? null : [
                 'params' => ['id' => 'contact-view-descript'],
@@ -284,7 +284,6 @@ if (!empty($job)) {
             ],
         ];
 
-        $total = 0;
         foreach ($employees as $employee) {
             $employees_table['body']['rows'][]['columns'] = [
                 'title' => $this->Html->link($employee->title, [
@@ -294,7 +293,7 @@ if (!empty($job)) {
                 'email' => !empty($employee->primary_email) ?
                     $this->Html->link(
                         $employee->primary_email->email,
-                        'mailto:' . $employee->primary_email->email
+                        'mailto:' . $employee->primary_email->email,
                     ) : '',
                 'phone' => !empty($employee->primary_phone) ? h($employee->primary_phone->no) : '',
             ];
@@ -341,8 +340,6 @@ if (!empty($job)) {
         ]);
         $this->Lil->jsReady('$.get("' . $url . '", function(data) { $("#tab-content-logs").html(data); });');
     }
-
-    
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     echo $this->Lil->panels($contact_view, 'Crm.Contacts.view');

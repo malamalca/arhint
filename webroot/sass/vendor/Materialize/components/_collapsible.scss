@@ -1,26 +1,28 @@
+@use './variables' as *;
+@use './colors.module.scss' as *;
+@use './global' as *;
+
 .collapsible {
   padding-left: 0;
   list-style-type: none;
-
-  border-top: 1px solid $collapsible-border-color;
-  border-right: 1px solid $collapsible-border-color;
-  border-left: 1px solid $collapsible-border-color;
+  border-top: 1px solid var(--md-sys-color-outline-variant);
+  border-right: 1px solid var(--md-sys-color-outline-variant);
+  border-left: 1px solid var(--md-sys-color-outline-variant);
   margin: $element-top-margin 0 $element-bottom-margin 0;
   @extend .z-depth-1;
 }
 
 .collapsible-header {
-  &:focus {
-    outline: 0
-  }
-
   display: flex;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
   line-height: 1.5;
   padding: 1rem;
-  border-bottom: 1px solid $collapsible-border-color;
-  background-color: $collapsible-bg-color;
+  border-bottom: 1px solid var(--md-sys-color-outline-variant);
+
+  &:focus {
+    outline: 0
+  }
 
   i {
     width: 2rem;
@@ -32,27 +34,32 @@
 }
 
 .collapsible-header::after {
-  content: '▾';
-  text-align: right;
-  margin-right: 0.25rem;
-  width: 100%;
-}
-.active .collapsible-header::after {
-  content: "▴";
+  content: '\e5cf';
+  margin-left: .5rem;
+  font-family: 'Material Symbols Outlined', 'Material Symbols Rounded', 'Material Symbols Sharp', 'Material Icons';
+  font-size: 25px;
+  line-height: .9;
+  -webkit-font-smoothing: antialiased;
 }
 
+.active .collapsible-header::after {
+  content: '\e5ce';
+}
 
 .keyboard-focused .collapsible-header:focus {
-  background-color: $surface-focus-color-opaque;
+  background-color: rgba(0, 0, 0, 0.12);
+}
+
+.collapsible-header-content {
+  flex-grow: 1;
 }
 
 .collapsible-body {
   max-height: 0;
-  border-bottom: 1px solid $collapsible-border-color;
+  border-bottom: 1px solid var(--md-sys-color-outline-variant);
   box-sizing: border-box;
   padding: 0 2rem;
   overflow: hidden;
-  background-color: $collapsible-bg-color;
 }
 
 // Popout Collapsible

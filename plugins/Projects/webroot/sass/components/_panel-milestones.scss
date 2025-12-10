@@ -1,3 +1,5 @@
+@use '../../../../../webroot/sass/vendor/Materialize/components/grid' as *;
+
 #projects-milestones {
     padding: 0;
     max-width: 750px;
@@ -23,7 +25,7 @@
         }
 
         div.milestone-info {
-            @extend .col, .s6;
+            @extend .s6;
 
             color: #666;
             font-size: 0.8rem;
@@ -57,7 +59,7 @@
         }
 
         div.milestone-progress {
-            @extend .col, .s6;
+            @extend .s6;
             padding-top: 0.2rem;
 
             div.total {

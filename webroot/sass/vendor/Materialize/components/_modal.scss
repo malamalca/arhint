@@ -1,96 +1,75 @@
+@use './variables' as *;
+@use './global' as *;
+
+// use with dialog html element
 .modal {
-  &:focus {
-    outline: none;
-  }
+  --modal-footer-divider-height: 1px;
+  --modal-border-radius: 28px;
+  --modal-padding: 24px;
+  --modal-padding-bottom: 16px;
+  --modal-background-color: color-mix(in srgb, var(--md-sys-color-surface), var(--md-sys-color-surface-tint) 17%);
 
   @extend .z-depth-5;
-
-  display: none;
-  position: fixed;
-  left: 0;
-  right: 0;
-  background-color: $modal-background-color;
+  border: none;
+  outline: none;
   padding: 0;
   max-height: 70%;
   width: 55%;
-  margin: auto;
-  overflow-y: auto;
-
-  border-radius: 2px;
+  border-radius: var(--modal-border-radius);
   will-change: top, opacity;
+  background-color: var(--modal-background-color);
+
+  // Dialog open
+  &[open] {
+    display: flex;
+    flex-direction: column;
+  }
 
   @media #{$medium-and-down} {
     width: 80%;
   }
 
-  h1,h2,h3,h4 {
-    margin-top: 0;
+  // custom backdrop blur
+  &::backdrop {
+    backdrop-filter: blur(1px);
   }
 
+  .modal-header {
+    padding: var(--modal-padding);
+    padding-bottom: var(--modal-padding-bottom);
+    flex-shrink: 0;
+    position: sticky;
+    top: 0;
+    background-color: var(--modal-background-color);
+  }
   .modal-content {
-    padding: 24px;
-    overflow-y: hidden;
+    padding: 0 var(--modal-padding);
+  }
+  .modal-footer {
+    border-radius: 0 0 var(--modal-border-radius) var(--modal-border-radius);
+    padding: var(--modal-padding);
+    text-align: right;
+    flex-shrink: 0;
+    position: sticky;
+    bottom: 0;
+    background-color: var(--modal-background-color);
   }
 
   .modal-close {
     cursor: pointer;
   }
 
-  .modal-footer {
-    border-radius: 0 0 2px 2px;
-    background-color: $modal-background-color;
-    padding: 4px 6px;
-    height: 56px;
-    width: 100%;
-    text-align: right;
-
-    .btn, .btn-flat {
-      margin: 6px 0;
-    }
-  }
-}
-
-.modal-overlay {
-  position: fixed;
-  z-index: 999;
-  top: -25%;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  height: 125%;
-  width: 100%;
-  background: #000;
-  display: none;
-  will-change: opacity;
-}
-
-// Modal with fixed action footer
-.modal.modal-fixed-footer {
-  padding: 0;
-  height: 70%;
-
-  .modal-content {
-    position: absolute;
-    height: calc(100% - 56px);
-    max-height: 100%;
-    width: 100%;
-    overflow-y: auto;
-  }
-
-  .modal-footer {
-    border-top: 1px solid $divider-color;
-    position: absolute;
-    bottom: 0;
+  // todo: remove maybe
+  h1,h2,h3,h4,h5,h6 {
+    margin: 0;
   }
 }
 
 // Modal Bottom Sheet Style
 .modal.bottom-sheet {
-  top: auto;
-  bottom: -100%;
-  margin: 0;
-  width: 100%;
+  margin-bottom: 0;
   max-height: 45%;
-  border-radius: 0;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
   will-change: bottom, opacity;
 }

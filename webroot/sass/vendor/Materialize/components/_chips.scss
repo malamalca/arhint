@@ -1,34 +1,30 @@
+@use './colors.module.scss' as *;
+
 .chip {
   --font-size: 14px;
   --font-size-icon: 18px;
   --padding: 8px;
 
-  background-color: $chip-bg-color;
-
+  color: var(--md-sys-color-on-surface-variant);
+  background-color: rgba(0, 0, 0, 0.09);
   display: inline-flex;
   white-space: nowrap;
   gap: 8px;
-
   margin: 0;
   height: 32px;
-
   padding-left: var(--padding);
-  padding-right: var(--padding);
-  
+  padding-right: var(--padding);  
   font-size: var(--font-size);
-  font-weight: 500;  
-  color: $chip-font-color;
-  
+  font-weight: 500;    
   border-radius: 8px;
-
   align-items: center;
   user-select: none;
   vertical-align: top;
 
   &:focus {
     outline: none;
-    background-color: $chip-selected-color;
-    color: $chip-selected-font-color;
+    background-color: var(--md-sys-color-primary);
+    color:  var(--md-sys-color-on-primary);
   }
 }
 
@@ -73,44 +69,43 @@
   display: flex;
   gap: 4px;
   flex-wrap: wrap;
-
   border: none;
-  border-bottom: 1px solid $chip-border-color;
   box-shadow: none;
-  margin: $input-margin;
-
+  margin: 0 0 8px 0;
   padding: 4px;
   // min-height: 45px;
-
   outline: none;
   transition: all .3s;
 
   &.focus {
-    border-bottom: 1px solid $chip-selected-color;
-    box-shadow: 0 1px 0 0 $chip-selected-color;
+    border-bottom: 1px solid var(--md-sys-color-primary);
+    box-shadow: 0 1px 0 0 var(--md-sys-color-primary);
   }
 
-  &:hover {
-    cursor: text;
+  &.input-field {
+    border-bottom: 1px solid var(--md-sys-color-on-surface-variant);
+
+    &:hover {
+      cursor: text;
+    }
   }
 
   input:not([type]):not(.browser-default).input {
     background: none;
     border: 0;
-    color: $input-color;
+    color: var(--md-sys-color-on-background);
     display: inline-block;
-    font-size: $input-font-size;
-
+    font-size: 16px;
     // height: 32px;
-    // height: $input-height;
     // line-height: 32px;
     height: 32px;
-
     outline: 0;
     margin: 0;
     padding: 0;
     width: 120px;
-
+    width: fit-content;
+    min-width: 100px;
+    max-width: 200px;
 
     &:focus {
       border: 0;
@@ -131,12 +126,14 @@
   width: 92%;
   width: calc(100% - 3rem);
 }
+
 // Form suffix
 .suffix ~ .chips {
   margin-right: 3rem;
   width: 92%;
   width: calc(100% - 3rem);
 }
+
 .chips:empty ~ label  {
   font-size: 0.8rem;
   transform: translateY(-140%);

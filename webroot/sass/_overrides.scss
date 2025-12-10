@@ -1,16 +1,79 @@
+@use './vendor/Materialize/components/variables' as *;
+@use './vendor/Materialize/components/colors.module.scss' as *;
+@use './vendor/Materialize/components/global' as *;
+
 html, body {
     height: 100%;
 }
-.nopad {
-    padding: 0 !important;
+
+main, footer {
+    padding-left: 300px !important;
 }
 
+@media #{$large-and-up} {
+    main {
+        & > div.container {
+            width: calc(100% - 80px);
+        }
+    }
+}
+
+@media only print, screen and (max-width : 992px) {
+    main, footer {
+        padding-left: 0 !important;
+    }
+}
+
+nav {
+    /** Adjust nav for sidebar. There is no FIXED side nav on small screens. **/
+    padding-left: 300px;
+    @media only print, screen and (max-width : 992px) {
+        padding-left: 0 !important;
+    }
+
+    div.nav-wrapper {
+        overflow: hidden !important;
+    }
+
+    /** Hide the logo in navigation on small screens **/
+    .brand-logo {
+        @extend .hide-on-large-only;
+    }
+
+    /* Upper navbar links are white by default which is hard to read */
+    ul {
+        li {
+            a {
+                color: var(--md-sys-color-primary) !important;
+            }
+        }
+    }
+}
+
+
+h2 {
+    font-size: 2.5rem;
+
+    .small {
+        font-size: 60% !important;
+        margin-bottom: -0.8rem;
+    }
+}
+
+h3 {
+    font-size: 2rem;
+
+    .small {
+        font-size: 60% !important;
+        margin-bottom: -0.8rem;
+    }
+}
+
+
+
+/*
 .nowrap {
     white-space: nowrap;
-}
-
-.strikethrough {
-    text-decoration: line-through !important;
 }
 
 .small {
@@ -21,65 +84,11 @@ html, body {
     font-size: 120% !important;
 }
 
-h2 {
-    font-size: 36px;
-
-    .small {
-        font-size: 60% !important;
-        margin-bottom: -0.8rem;
-    }
-}
-h3 {
-    font-size: 30px;
-}
-
-main, footer, nav {
-    padding-left: 300px !important;
-}
-
 .btn-small {
     padding: 0;
     padding-left: 4px;
     padding-right: 4px;
     margin: 0;
-}
-
-@media #{$large-and-up} {
-    main {
-        & > div.container {
-            width: calc(100% - 80px);
-        }
-    }
-
-    nav {
-        & > div.nav-wrapper {
-            width: calc(100% - 80px);
-        }
-    }
-}
-
-@media only print, screen and (max-width : 992px) {
-    main, footer, nav {
-        padding-left: 0 !important;
-    }
-
-    .hide-on-med-and-down {
-        display: none !important;
-    }
-
-}
-@media only print {
-    .sidenav-trigger {
-        display: none;
-    }
-}
-
-.brand-logo {
-    @extend .hide-on-large-only !optional;
-}
-
-ul.main-menu {
-    width: auto !important;
 }
 
 div.helper-text {
@@ -88,31 +97,12 @@ div.helper-text {
     margin-left: 15px;
 }
 
-/* This is a fix for nested collapsibles */
-.collapsible-body {
-    height: 0px;
-    max-height:max-content;
-}
 
-/* Upper navbar links are white by default which is hard to read */
-.nav-wrapper {
-    ul {
-        padding-left: 0;
-    }
-    li {
-        a {
-            color: $primary-color !important;
-        }
-    }
-}
-
-/* Form error message is black by default */
 div.error-message {
     color: #d32f2f;
     font-size: 90% !important;
 }
 
-/* Additional spacing for submit button so it does not stick to the fieldset box */
 button.btn {
     &[type="submit"] {
         margin-top: 20px;
@@ -125,138 +115,4 @@ table {
     }
 }
 
-table#AttachmentsList {
-    td, th {
-        padding: 4px 4px !important;
-    }
-}
-
-/*
-.modal {
-    .modal-header {
-        border-radius: 0 0 2px 2px;
-        background-color: $primary-color;
-        padding: 4px 6px;
-        height: 56px;
-        width: 100%;
-        text-align: center;
-
-        h4 {
-            color: #ffffff;
-        }
-
-        .btn, .btn-flat {
-            margin: 6px 0;
-        }
-    }
-}
-
-fieldset {
-    border: none;
-    margin: 0px;
-    background-color: #fafafa;
-    border-top: solid 1px #c0c0c0;
-
-    legend {
-        font-size: 26px;
-        padding-left: 10px;
-        padding-right: 10px;
-
-        p {
-            margin: 0 !important;
-        }
-
-        div.select-wrapper {
-            input {
-                font-size: 26px !important;
-            }
-        }
-    }
-}
-
-.autocomplete-content, .dropdown-content {
-    width: auto !important;
-}
-
-select.browser-default {
-    width: auto !important;
-    height: auto !important;
-}
-
-input {
-    background-color: #ffffff !important;
-    height: auto !important;
-}
-
-.input-field {
-    &.row {
-        margin-top: 0px;
-        margin-bottom: 0px;
-    }
-
-    &.error {
-        input {
-            border-bottom-color: #ff0000 !important;
-        }
-        span {
-            color: #ff0000 !important;
-        }
-    }
-
-    input {
-        height: 37px !important;
-        line-height: 32px !important;
-    }
-}
-
-#dropdown-users {
-    width: 250px !important;
-    min-height: 150px;
-    max-height: 600px;
-
-    #searchbox {
-        display: block;
-        width: 88%;
-        padding-left: 6%;
-        padding-right: 6%;
-
-        position: absolute;
-        top: 0;
-        background-color: #ffffff !important;
-    }
-
-    a.department {
-        color: #000000 !important;
-        font-weight: bold;
-        background-color: #e0e0e0;
-        cursor: auto;
-
-        :hover {
-            background-color: #e0e0e0;
-        }
-    }
-}
-
-div.error-message {
-    color: #d32f2f;
-    font-size: 90% !important;
-}
-
-input.form-error {
-    background-color: #ffebee !important;
-    color: #d32f2f !important;
-}
-
-div.input-field.date input,
-div.input-field.datetime input {
-    width: auto !important;
-}
-
-.input-field {
-    &.file {
-        input {
-            line-height: 25px !important;
-        }
-    }
-}
-    */
+*/
