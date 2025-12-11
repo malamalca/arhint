@@ -79,7 +79,10 @@ $tableIndex = [
                 'plugin' => 'Projects',
                 'controller' => 'ProjectsWorkhours',
                 'action' => 'edit',
-                '?' => ['project' => $filter['project'] ?: null],
+                '?' => [
+                    'project' => $filter['project'] ?: null,
+                    'redirect' => Router::url(null, true),
+                ],
             ],
             'params' => ['id' => 'add-workhour'],
         ],
