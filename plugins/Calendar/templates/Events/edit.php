@@ -19,19 +19,6 @@ if (!$event->isNew() && $event->date_end) {
 $eventEdit = [
     'title_for_layout' =>
         $event->id ? __d('calendar', 'Edit Event') : __d('calendar', 'Add Event'),
-    'menu' => [
-        'delete' => $event->isNew() ? null : [
-            'title' => __d('calendar', 'Delete'),
-            'visible' => true,
-            'url' => [
-                'action'     => 'delete',
-                $event->id
-            ],
-            'params' => [
-                'confirm' => __d('calendar', 'Are you sure you want to delete this folder?')
-            ]
-        ],
-    ],
     'form' => [
         'defaultHelper' => $this->Form,
         'pre' => '<div class="form">',
@@ -51,7 +38,7 @@ $eventEdit = [
             ],
             'referer' => [
                 'method' => 'hidden',
-                'parameters' => ['referer', ['default' => Router::url($this->getRequest()->referer(), true)]],
+                'parameters' => ['referer', ['default' => ($referer = $this->request->getQuery('redirect')) ? $referer : null]],
             ],
 
             'title' => [
@@ -109,12 +96,18 @@ $eventEdit = [
                     ],
                 ],
             ],
+            'reminder-label' => [
+                'method' => 'label',
+                'parameters' => [
+                    __d('calendar', 'Alarm') . ':',
+                ],
+            ],
             'reminder' => [
                 'method' => 'control',
                 'parameters' => [
                     'field' => 'reminder', [
                         'type' => 'select',
-                        'label' =>  __d('calendar', 'Alert') . ':',
+                        'label' =>  false,
                         'class' => 'browser-default',
                         'empty' => __d('calendar', 'None'),
                         'options' => [
@@ -128,7 +121,7 @@ $eventEdit = [
                             24*60 => __d('calendar', '1 day before'),
                             48*60 => __d('calendar', '2 days before'),
                             7*24*60 => __d('calendar', '1 week before'),
-                        ]
+                        ],
                     ],
                 ],
             ],

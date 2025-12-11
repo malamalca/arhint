@@ -31,6 +31,7 @@ $eventsIndex = [
             'visible' => true,
             'url' => [
                 'action' => 'edit',
+                '?' => ['redirect' => Router::url(null, true)],
             ],
             'params' => [
                 'id' => 'menuitem-add',
@@ -159,7 +160,7 @@ for ($weekNo = 1; $weekNo <= $weeksInMonth; $weekNo++) {
                     implode(' ', $eventClasses),
                     $eventTitle,
                     $event->id,
-                    Router::url(['action' => 'edit', $event->id])
+                    Router::url(['action' => 'edit', $event->id, '?' => ['redirect' => Router::url(null, true)]])
                 );
 
                 if (($eventIndex < $maxDisplayedEvents) || ($maxDisplayedEvents == $eventCount)) {
@@ -202,7 +203,7 @@ for ($weekNo = 1; $weekNo <= $weeksInMonth; $weekNo++) {
 echo $this->Lil->panels($eventsIndex, 'Calendar.Events.index');
 ?>
 <script type="text/javascript">
-    var addEventUrl = "<?= Router::url(['action' => 'edit', '?' => ['date' => '__date__']]) ?>";
+    var addEventUrl = "<?= Router::url(['action' => 'edit', '?' => ['date' => '__date__', 'redirect' => Router::url(null, true)]]) ?>";
     var popupTriggerElement = null;
 
     $(document).ready(function() {

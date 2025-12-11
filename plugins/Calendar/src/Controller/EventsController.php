@@ -94,9 +94,9 @@ class EventsController extends AppController
             if ($this->Events->save($event)) {
                 $this->Flash->success(__d('calendar', 'The event has been saved.'));
 
-                $referer = $this->getRequest()->getData('referer');
+                $referer = $this->getRequest()->getData('referer', ['action' => 'index']);
 
-                return $this->redirect($referer ?? ['action' => 'index']);
+                return $this->redirect($referer);
             }
             $this->Flash->error(__d('calendar', 'The event could not be saved. Please, try again.'));
         }
@@ -115,7 +115,7 @@ class EventsController extends AppController
      */
     public function delete(?string $id = null): ?Response
     {
-        $this->request->allowMethod(['post', 'delete', 'get']);
+        $this->request->allowMethod(['post']);
         $event = $this->Events->get($id);
         $this->Authorization->authorize($event);
 
@@ -125,6 +125,8 @@ class EventsController extends AppController
             $this->Flash->error(__d('calendar', 'The event could not be deleted. Please, try again.'));
         }
 
-        return $this->redirect(['action' => 'index']);
+        $referer = $this->getRequest()->getData('referer', ['action' => 'index']);
+
+        return $this->redirect($referer);
     }
 }
