@@ -166,8 +166,8 @@ echo $this->Lil->form($editAddressForm, 'Crm.AdremasContacts.edit');
                 onAutocomplete: (entries) => {
                     if (entries.length == 1) {
                         let item = entries[0];
-                        $('#contacts-contact_id').val(item.client.id);
-                        $("#contacts-title").val(item.client.title);
+                        $("#contacts-contact_id").val(item.client.id);
+                        //$("#contacts-title").val(item.client.title);
 
                         $('#contacts-address_id').find("option").remove();
                         $('#contacts-email_id').find("option").remove();

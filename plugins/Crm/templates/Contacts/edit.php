@@ -500,8 +500,10 @@ echo $this->Lil->form($editForm, 'Crm.Contacts.edit');
                 },
                 onAutocomplete: () => {
                     let ZipFieldValue = $("#contact-address-zip").val();
-                    $("#contact-address-zip").val(ZipFieldValue.substring(0, ZipFieldValue.indexOf(" ")));
-                    $("#contact-address-city").val(ZipFieldValue.substring(ZipFieldValue.indexOf(" ")+ 1));
+                    if (ZipFieldValue.indexOf(" ") > 0) {
+                        $("#contact-address-zip").val(ZipFieldValue.substring(0, ZipFieldValue.indexOf(" ")));
+                        $("#contact-address-city").val(ZipFieldValue.substring(ZipFieldValue.indexOf(" ")+ 1));
+                    }
                 }
             }
         );
@@ -516,9 +518,10 @@ echo $this->Lil->form($editForm, 'Crm.Contacts.edit');
                 },
                 onAutocomplete: () => {
                     let ZipFieldValue = $("#contact-address-city").val();
-                    $("#contact-address-zip").val(ZipFieldValue.substring(0, ZipFieldValue.indexOf(" ")));
-                    $("#contact-address-city").val(ZipFieldValue.substring(ZipFieldValue.indexOf(" ")+ 1));
-                    $("#contact-company-title").parent("div").append("<div class='suffix'><i class='material-icons'>link</i></div>");
+                    if (ZipFieldValue.indexOf(" ") > 0) {
+                        $("#contact-address-zip").val(ZipFieldValue.substring(0, ZipFieldValue.indexOf(" ")));
+                        $("#contact-address-city").val(ZipFieldValue.substring(ZipFieldValue.indexOf(" ")+ 1));
+                    }
                 }
             }
         );

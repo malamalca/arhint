@@ -22,7 +22,7 @@ use Cake\Routing\Router;
     <?= $this->fetch('css') ?>
 
     <?= $this->Html->script('/js/jquery/jquery-3.6.0.min.js') ?>
-    <?= $this->Html->script('/js/vendor/Materialize/materialize.min.js') ?>
+    <?= $this->Html->script('/js/vendor/Materialize/materialize.js') ?>
     <?= $this->Html->script('/lil/js/lil_float.js') ?>
     <?= $this->Html->script('modalPopup.js') ?>
 

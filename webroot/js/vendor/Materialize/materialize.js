@@ -954,6 +954,7 @@ var M = (function (exports) {
             this.oldVal = '';
             this.selectedValues = this.selectedValues || this.options.selected.map((value) => ({ id: value })) || [];
             this.menuItems = this.options.data || [];
+            this.data = this.options.data || [];
             this.$active = null;
             this._mousedown = false;
             this._setupDropdown();
@@ -1297,10 +1298,14 @@ var M = (function (exports) {
          * @param menuItems Items to be available.
          * @param selected Selected item ids
          * @param open Option to conditionally open dropdown
+         * @param initial Condition to set initial data
          */
-        setMenuItems(menuItems, selected = null, open = true) {
+        setMenuItems(menuItems, selected = null, open = true, initial = false) {
             this.menuItems = menuItems;
             this.options.data = menuItems;
+            if (initial) {
+                this.data = menuItems;
+            }
             if (selected) {
                 this.selectedValues = this.menuItems.filter((item) => !(selected.indexOf(item.id) === -1));
             }
