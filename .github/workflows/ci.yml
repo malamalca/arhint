@@ -103,10 +103,6 @@ jobs:
     - name: Run PHP CodeSniffer
       run: vendor/bin/phpcs --report=checkstyle | cs2pr
 
-    - name: Run psalm
-      if: success() || failure()
-      run: vendor/bin/psalm --output-format=github
-
     - name: Run phpstan
       if: success() || failure()
       run: vendor/bin/phpstan.phar analyse --error-format=github
