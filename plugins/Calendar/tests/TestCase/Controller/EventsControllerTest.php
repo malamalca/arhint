@@ -122,7 +122,10 @@ class EventsControllerTest extends TestCase
         // Set session data
         $this->login(USER_ADMIN);
 
-        $this->get('/calendar/events/delete/185383a4-38c8-4194-9516-52c9069bc3bf');
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+
+        $this->post('/calendar/events/delete/185383a4-38c8-4194-9516-52c9069bc3bf');
         $this->assertRedirect();
     }
 }
