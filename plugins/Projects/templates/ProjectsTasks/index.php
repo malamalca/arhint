@@ -219,7 +219,7 @@ if (count($errors)) {
     $this->Lil->insertIntoArray($tableIndex['panels'], $errorsPanel, ['after' => 'search']);
 }
 
-if ($projectsTasks->isEmpty()) {
+if ($projectsTasks->items()->isEmpty()) {
     $tableIndex['panels']['tasks']['lines'][] =
         '<div id="no-tasks-found">' .
         '<h4>' . __d('projects', 'No tasks found.') . '</h4>' .

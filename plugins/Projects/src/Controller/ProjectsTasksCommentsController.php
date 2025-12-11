@@ -34,7 +34,7 @@ class ProjectsTasksCommentsController extends AppController
             if ($this->ProjectsTasksComments->save($taskComment)) {
                 $this->Flash->success(__d('projects', 'The projects tasks comment has been saved.'));
 
-                $redirectUrl = $this->request->getData('redirect', [
+                $redirectUrl = $this->request->getData('referer', [
                     'controller' => 'ProjectsTasks',
                     'action' => 'view',
                     $taskComment->task_id,

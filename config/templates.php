@@ -27,8 +27,6 @@
         'tablebodyrow' => '<tr class="{{class}}"{{attrs}}>',
         'tablefootrow' => '<tr class="{{class}}"{{attrs}}>',
 
-        'usersPicker' => '<div class="input-field userspicker">{{content}}</div>',
-
         'button' => '<button class="btn filled"{{attrs}}>{{text}}</button>',
 
         'linkedit' => '<a href="{{url}}" class="btn-small filled {{class}}" role="button"><i class="material-icons">edit</i></a>',

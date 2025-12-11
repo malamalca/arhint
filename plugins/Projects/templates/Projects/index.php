@@ -79,17 +79,6 @@ $index = [
 
 foreach ($projects as $project) {
     $projectStatus = $project->status_id ? $projectsStatuses[$project->status_id] ?? '' : '';
-
-    $lastLogDescript = '';
-    if (!empty($project->last_log)) {
-        $lastLogDescript = sprintf(
-            '<span class="small">%2$s, %3$s</span><div class="truncate">%1$s</div>',
-            $project->last_log->descript,
-            $project->last_log->created,
-            h((string)($lastLogUsers[$project->last_log->user_id] ?? 'N/A')),
-        );
-    }
-
     $index['table']['body']['rows'][]['columns'] = [
         'image' => [
             'params' => ['class' => 'center hide-on-small-only'],
@@ -113,7 +102,8 @@ foreach ($projects as $project) {
         ),
         'log' => [
             'params' => ['class' => 'last-log'],
-            'html' => $lastLogDescript,
+            'html' => $project->last_log ?
+                $this->element('Projects.projects_log', ['projectsLog' => $project->last_log, 'user' => $lastLogUsers[$project->last_log->user_id] ?? null]) : '',
         ],
     ];
 }
@@ -161,7 +151,7 @@ echo $this->Lil->index($index, 'Projects.Projects.index');
                     var textArea = document.createElement("textarea");
                     textArea.innerHTML = data;
                     $("td.last-log", popupElement.closest("tr")).html(textArea.value);
-                    popup.instance.close();
+                    popup.dialog.close();
                 },
                 onBeforeSubmit: function(data, popup) {
                     $("#projects-logs-descript", $(data)).html(tinyMCE.get('projects-logs-descript').getContent());

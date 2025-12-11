@@ -65,7 +65,7 @@ foreach ($invoices_taxes as $k => $invoices_tax) {
                 'label' => false,
                 'value' => $invoices_tax->vat_id,
                 'options' => $vatLevels,
-                'class' => 'invoices-tax-vat_id',
+                'class' => 'invoices-tax-vat_id browser-default',
                 'id' => 'invoice-invoices-taxes-' . $k . '-vat-id',
             ],
         ],

@@ -46,19 +46,17 @@
 @forward "components/local-tokens";
 @forward "components/calendarday";
 @forward "components/timepanel";
-//@forward "components/duration-input";
-//@forward "components/userspicker-input";
-//@forward "components/monthpicker-input";
+@forward "components/duration-input";
 @forward "components/view-panel";
 @forward "components/search-panel";
 @forward "components/sidenav";
 @forward "components/paginator";
-//@forward "components/upload-area";*/
+@forward "components/upload-area";
 @forward "components/dashboard-panel";
 @forward "components/dashboard-notes";
 @forward "components/dialog";
 
-//@forward "../../plugins/projects/webroot/sass/crm";
+@forward "../../plugins/projects/webroot/sass/crm";
 
 @forward "material-icons";
 @forward "overrides";

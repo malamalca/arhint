@@ -214,12 +214,9 @@ class ProjectsController extends AppController
 
             if ($this->Projects->save($project)) {
                 $this->Flash->success(__d('projects', 'The project has been saved.'));
-                $redirect = $this->getRequest()->getData('redirect', null);
-                if (!empty($redirect)) {
-                    return $this->redirect(base64_decode($redirect));
-                }
+                $redirect = $this->getRequest()->getData('referer', ['action' => 'view', $project->id]);
 
-                return $this->redirect(['action' => 'view', $project->id]);
+                return $this->redirect($redirect);
             }
             $this->Flash->error(__d('projects', 'The project could not be saved. Please, try again.'));
         }

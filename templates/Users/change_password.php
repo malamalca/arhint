@@ -1,5 +1,6 @@
-
 <?php
+use Cake\Routing\Router;
+
 $changePassword = [
     'title_for_layout' => __('Set new password for {0}', h($user->name)),
     'form' => [
@@ -15,7 +16,8 @@ $changePassword = [
             'referer' => [
                 'method' => 'hidden',
                 'parameters' => ['referer', [
-                    'default' => base64_encode($this->getRequest()->referer() ?? ''),
+                    'default' => ($redirect = $this->getRequest()->getQuery('redirect')) ?
+                        Router::url($redirect, true) : null,
                 ]],
             ],
 

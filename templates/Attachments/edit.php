@@ -15,11 +15,12 @@ $form = [
                 'method' => 'hidden',
                 'parameters' => ['id']
             ],
-            'redirect' => [
+            'referer' => [
                 'method' => 'hidden',
-                'parameters' => ['redirect', [
-                    'default' => $this->getRequest()->getQuery('redirect', ''),
-                ]]
+                'parameters' => ['referer', [
+                    'default' => ($redirect = $this->getRequest()->getQuery('redirect')) ?
+                        Router::url($redirect, true) : null,
+                ]],
             ],
 
             'name' => [

@@ -22,8 +22,9 @@ $noteForm = [
             'referer' => [
                 'method' => 'hidden',
                 'parameters' => ['referer', [
-                    'default' => $this->getRequest()->referer()
-                ]]
+                    'default' => ($redirect = $this->getRequest()->getQuery('redirect')) ?
+                        Router::url($redirect, true) : null,
+                ]],
             ],
 
             'note' => [

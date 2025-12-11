@@ -1,4 +1,5 @@
 @use '../../../../../webroot/sass/vendor/Materialize/components/buttons' as *;
+@use '../../../../../webroot/sass/vendor/Materialize/components/grid' as *;
 
 div#tasks-index {
     div#no-tasks-found {
@@ -266,7 +267,7 @@ div#tasks-index {
                     border-radius: 4px;
                 }
                 a {
-                    @extend .btn, .btn-small, .text;
+                    @extend .btn-small, .text;
                     color: #333 !important;
                     width: 100%;
                     padding-left: 0.5rem !important;

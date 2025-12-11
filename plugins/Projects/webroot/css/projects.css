@@ -57,6 +57,13 @@ textarea#projects-logs-descript {
     margin-bottom: 5px;
 }
 
+td.description {
+    font-size: 120%;
+}
+td.description div.small{
+    font-size: 10px;
+    color: #808080;
+}
 td.last-log {
     max-width: 180px;
 }
@@ -103,10 +110,6 @@ div#ProjectDescriptPanel td, div#ProjectDescriptPanel th {
     padding: 0.2em;
     border-bottom: solid 1px #A8A8A8;
     border-right: solid 1px #A8A8A8;
-}
-
-ul#dropdown-projects {
-    width: auto !important;
 }
 
 textarea#project-descript {

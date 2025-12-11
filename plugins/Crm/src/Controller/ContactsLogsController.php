@@ -83,17 +83,17 @@ class ContactsLogsController extends AppController
 
                 $this->Flash->success(__d('crm', 'The contact log has been saved.'));
 
-                $redirect = $this->getRequest()->getData('redirect');
-                if (!empty($redirect)) {
-                    return $this->redirect(base64_decode($redirect));
-                }
+                $redirect = $this->getRequest()->getData(
+                    'referer',
+                    [
+                        'controller' => 'Contacts',
+                        'action' => 'view',
+                        $contactsLog->contact_id,
+                        '?' => ['tab' => 'logs'],
+                    ],
+                );
 
-                return $this->redirect([
-                    'controller' => 'Contacts',
-                    'action' => 'view',
-                    $contactsLog->contact_id,
-                    '?' => ['tab' => 'logs'],
-                ]);
+                return $this->redirect($redirect);
             }
             $this->Flash->error(__d('crm', 'The contacts log could not be saved. Please, try again.'));
         }

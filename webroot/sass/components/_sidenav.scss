@@ -33,6 +33,13 @@
 
             cursor: pointer;
         }
+
+        ul#user-settings {
+            margin-left: 0.8rem !important;
+            margin-right: 0.8rem !important;
+            margin-top: 0;
+            border-radius: var(--md-sys-shape-corner-medium);
+        }
     }
 
     .collapsible-header {

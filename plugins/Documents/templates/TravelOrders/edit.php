@@ -55,7 +55,8 @@ $documentEdit = [
                 'method' => 'control',
                 'parameters' => ['referer', [
                     'type' => 'hidden',
-                    'default' => $this->getRequest()->getQuery('redirect'),
+                    'default' => ($redirect = $this->getRequest()->getQuery('redirect')) ?
+                        Router::url($redirect, true) : null,
                 ]],
             ],
             'id' => [

@@ -23,6 +23,7 @@ use Cake\Routing\Router;
 
     <?= $this->Html->script('/js/jquery/jquery-3.6.0.min.js') ?>
     <?= $this->Html->script('/js/vendor/Materialize/materialize.min.js') ?>
+    <?= $this->Html->script('/lil/js/lil_float.js') ?>
     <?= $this->Html->script('modalPopup.js') ?>
 
     <?= $this->fetch('script') ?>
@@ -111,6 +112,14 @@ use Cake\Routing\Router;
     <footer>
     </footer>
     <script type="text/javascript">
+        <?php
+            //lilFloat settings should be made before $(document).ready();
+            $formatter = $this->Number->formatter();
+        ?>
+
+        lilFloatSetup.decimalSeparator = "<?= $formatter->getSymbol(\NumberFormatter::DECIMAL_SEPARATOR_SYMBOL); ?>";
+        lilFloatSetup.thousandsSeparator = "<?= $formatter->getSymbol(\NumberFormatter::GROUPING_SEPARATOR_SYMBOL); ?>";
+        
         $(document).ready(function() {
             <?= $this->Lil->jsReadyOut(); ?>
 

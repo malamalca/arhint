@@ -238,8 +238,6 @@ class UtilsController extends AppController
         $imageData = ob_get_contents();
         ob_end_clean();
 
-        imagedestroy($newImage);
-
         if (empty($data)) {
             header('Content-type:image/png');
             echo $imageData;

@@ -21,6 +21,22 @@ $popupUnfinished = ['items' => [[
 ]];
 $popupUnfinished = $this->Lil->popup('unfinished', $popupUnfinished, true);
 
+$popupAction = [
+    'items' => [
+        [
+            'title' => __d('expenses', 'Link with Existing Payment'),
+            'params' => ['id' => 'popupItem-LinkPayment', 'class' => 'nowrap'],
+        ], [
+            'title' => __d('expenses', 'Pay an Existing Expense'),
+            'params' => ['id' => 'popupItem-PayExpense', 'class' => 'nowrap'],
+        ], [
+            'title' => __d('expenses', 'Create a New Expense'),
+            'params' => ['id' => 'popupItem-AddExpense', 'class' => 'nowrap'],
+        ],
+    ],
+];
+$popupAction = $this->Lil->popup('action', $popupAction, true);
+
 $title = __d('expenses', 'IMPORT: SepaXML - Step2 - {0}', [$linkUnfinished]);
 
 $report = [
@@ -32,7 +48,7 @@ $report = [
             'url' => ['?' => ['clearcache' => 1]],
         ],
     ],
-    'actions' => ['lines' => [$popupUnfinished]],
+    'pre' => $popupUnfinished . $popupAction,
     'panels' => [
         'payments' => ['table' => [
             'parameters' => ['class' => 'striped', 'id' => 'import-sepa-step2'],
@@ -76,21 +92,6 @@ $report = [
     ],
 ];
 
-$popupAction = [
-    'items' => [
-        [
-            'title' => __d('expenses', 'Link with Existing Payment'),
-            'params' => ['id' => 'popupItem-LinkPayment', 'class' => 'nowrap'],
-        ], [
-            'title' => __d('expenses', 'Pay an Existing Expense'),
-            'params' => ['id' => 'popupItem-PayExpense', 'class' => 'nowrap'],
-        ], [
-            'title' => __d('expenses', 'Create a New Expense'),
-            'params' => ['id' => 'popupItem-AddExpense', 'class' => 'nowrap'],
-        ],
-    ],
-];
-echo $this->Lil->popup('action', $popupAction, true);
 
 $jsPaymentData = '';
 $total_positive = 0;

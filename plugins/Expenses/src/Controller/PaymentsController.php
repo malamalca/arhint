@@ -85,7 +85,7 @@ class PaymentsController extends AppController
 
                 $this->Flash->success(__d('expenses', 'The payment has been saved.'));
 
-                return $this->redirect($this->getRequest()->getData('referer') ?? ['action' => 'index']);
+                return $this->redirect($this->getRequest()->getData('referer', ['action' => 'index']));
             } else {
                 $this->Flash->error(__d('expenses', 'The payment could not be saved. Please, try again.'));
             }
@@ -116,7 +116,7 @@ class PaymentsController extends AppController
             $this->Flash->error(__d('expenses', 'The payment could not be deleted. Please, try again.'));
         }
 
-        return $this->redirect($this->getRequest()->referer() ?? ['action' => 'index']);
+        return $this->redirect($this->getRequest()->getQuery('redirect', ['action' => 'index']));
     }
 
     /**

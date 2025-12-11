@@ -49,7 +49,7 @@ $addCommentForm = [
             'kind' => ['method' => 'hidden', 'parameters' => ['kind']],
             'task_id' => ['method' => 'hidden', 'parameters' => ['task_id']],
             'user_id' => ['method' => 'hidden', 'parameters' => ['user_id']],
-            'redirect' => ['method' => 'hidden', 'parameters' => ['redirect', ['value' => Router::url(null, true)]],
+            'referer' => ['method' => 'hidden', 'parameters' => ['referer', ['value' => Router::url(null, true)]],
             ],
             'descript' => [
                 'method' => 'control',

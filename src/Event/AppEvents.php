@@ -54,6 +54,10 @@ class AppEvents implements EventListenerInterface
         /** @var \App\Model\Entity\User $user */
         $user = $controller->getCurrentUser();
 
+        if (extension_loaded('imap') === false) {
+            return;
+        }
+
         $imap = $user->getProperty('imap');
         if ($imap && $imap->url && $imap->username && $imap->password) {
             $panels['panels']['email'] = [

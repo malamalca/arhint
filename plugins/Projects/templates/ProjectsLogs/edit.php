@@ -1,4 +1,5 @@
 <?php
+use Cake\Routing\Router;
 /**
  * This is admin_edit template file.
  */
@@ -20,9 +21,9 @@ $editForm = [
                 'method' => 'hidden',
                 'parameters' => ['id'],
             ],
-            'redirect' => [
+            'referer' => [
                 'method' => 'hidden',
-                'parameters' => ['redirect', ['default' => base64_encode($this->getRequest()->referer() ?? '')]],
+                'parameters' => ['redirect', ['default' => Router::url($this->getRequest()->referer(), true)]],
             ],
             'project_id' => [
                 'method' => 'hidden',
@@ -42,7 +43,6 @@ $editForm = [
                     ],
                 ],
             ],
-            'spacer' => '<div>&nbsp;</div>',
             'submit' => [
                 'method' => 'button',
                 'parameters' => [
@@ -56,17 +56,15 @@ $editForm = [
         ],
     ],
 ];
-//$this->Lil->jsReady('$("#projects-logs-descript").focus();');
 echo $this->Lil->form($editForm, 'Projects.ProjectsLogs.edit');
 echo $this->Html->script('/Documents/js/tinymce/tinymce.min.js');
 ?>
 <script type="text/javascript">
     $(document).ready(function() {
         // HTML Wysiwyg Javascript Code
-        //$('textarea#document-descript').textareaAutoSize();
         tinymce.init({
             selector:'#projects-logs-descript',
-            menubar:false,
+            menubar: false,
             statusbar: false,
             toolbar: "undo redo | styleselect | bold italic underline subscript superscript | bullist numlist | indent outdent | pagebreak | pasteword table image",
             plugins: "autoresize table paste pagebreak image",
@@ -75,7 +73,5 @@ echo $this->Html->script('/Documents/js/tinymce/tinymce.min.js');
             autoresize_max_height: 350,
             width: "700px"
         });
-        //tinymce.execCommand('mceFocus',false,'projects-logs-descript');
-
     })
 </script>

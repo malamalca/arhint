@@ -4,7 +4,7 @@ if (!empty($sidebar)) {
     foreach ($sidebar as $mainItem) {
         if (!empty($mainItem['visible'])) {
             ?>
-        <li class="bold<?= !empty($mainItem['active']) ? ' active' : '' ?>">
+        <li class="<?= !empty($mainItem['active']) ? ' active' : '' ?>">
             <?php
             if (!empty($mainItem['title'])) {
                 ?>

@@ -1,3 +1,4 @@
+@use "sass:map" as map;
 // Google Color Palette defined: http://www.google.com/design/spec/style/color.html
 
 $materialize-red: (
@@ -358,10 +359,10 @@ $colors: (
 // usage: colorFunc("name_of_color", "type_of_color")
 // to avoid to repeating map-get($colors, ...)
 @function colorFunc($color, $type) {
-  @if map-has-key($colors, $color) {
-    $curr_color: map-get($colors, $color);
-    @if map-has-key($curr_color, $type) {
-      @return map-get($curr_color, $type);
+  @if map.has-key($colors, $color) {
+    $curr_color: map.get($colors, $color);
+    @if map.has-key($curr_color, $type) {
+      @return map.get($curr_color, $type);
     }
   }
   @warn "Unknown `#{$color}` - `#{$type}` in $colors.";

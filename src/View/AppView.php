@@ -65,6 +65,8 @@ class AppView extends View
             'templates' => 'templates',
         ]);
 
+        $this->loadHelper('Number');
+
         $this->loadHelper('Form', [
             'templates' => 'templates',
                 'widgets' => [

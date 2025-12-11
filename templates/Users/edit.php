@@ -18,7 +18,7 @@ $userForm = [
             'referer' => [
                 'method' => 'hidden',
                 'parameters' => ['referer', [
-                    'default' => base64_encode($this->getRequest()->referer() ?? '')
+                    'default' => Router::url($this->getRequest()->referer(), true),
                 ]]
             ],
 

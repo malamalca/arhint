@@ -70,7 +70,6 @@ class AttachmentsController extends AppController
             if ($mimeType) {
                 $response = $response->withType($mimeType);
             }
-            finfo_close($finfoType);
         }
 
         return $response;
@@ -109,7 +108,7 @@ class AttachmentsController extends AppController
             if ($this->Attachments->save($attachment, ['uploadedFilename' => $tmpNames])) {
                 $this->Flash->success(__('The attachment has been saved.'));
 
-                $redirect = $this->getRequest()->getData('redirect', ['action' => 'index']);
+                $redirect = $this->getRequest()->getData('referer', ['action' => 'index']);
 
                 return $this->redirect($redirect);
             }

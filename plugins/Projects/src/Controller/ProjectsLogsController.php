@@ -46,17 +46,17 @@ class ProjectsLogsController extends AppController
 
                 $this->Flash->success(__d('projects', 'The projects log has been saved.'));
 
-                $redirect = $this->getRequest()->getData('redirect');
-                if (!empty($redirect)) {
-                    return $this->redirect(base64_decode($redirect));
-                }
+                $redirect = $this->getRequest()->getData(
+                    'referer',
+                    [
+                        'controller' => 'Projects',
+                        'action' => 'view',
+                        $projectsLog->project_id,
+                        '?' => ['tab' => 'logs'],
+                    ],
+                );
 
-                return $this->redirect([
-                    'controller' => 'Projects',
-                    'action' => 'view',
-                    $projectsLog->project_id,
-                    '?' => ['tab' => 'logs'],
-                ]);
+                return $this->redirect($redirect);
             }
             $this->Flash->error(__d('projects', 'The projects log could not be saved. Please, try again.'));
         }

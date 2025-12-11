@@ -27,9 +27,9 @@ $editForm = [
                 'method' => 'hidden',
                 'parameters' => ['owner_id'],
             ],
-            'redirect' => [
+            'referer' => [
                 'method' => 'hidden',
-                'parameters' => ['redirect', ['default' => base64_encode($this->getRequest()->referer() ?? '')]],
+                'parameters' => ['referer', ['default' => Router::url($this->getRequest()->referer(), true)]],
             ],
 
             'no' => [

@@ -20,7 +20,10 @@ $editForm = [
             ],
             'referer' => [
                 'method' => 'hidden',
-                'parameters' => ['referer', ['id' => 'referer', 'default' => Router::url($this->getRequest()->referer(), true)]],
+                'parameters' => ['referer', [
+                    'default' => ($redirect = $this->getRequest()->getQuery('redirect')) ?
+                        Router::url($redirect, true) : null,
+                ]],
             ],
             'user_id' => $this->getCurrentUser()->hasRole('admin') ? null :[
                 'method' => 'hidden',

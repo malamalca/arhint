@@ -1,9 +1,13 @@
+@use './../vendor/Materialize/components/grid' as *;
+
 .dashboard-panel {
+    @extend .s12;
     h5 {
         margin-left: 1rem;
     }
 
     margin-top: 1rem;
+    padding-bottom: 0 !important;
     border: solid 1px var(--md-sys-color-outline-variant);
     border-radius: var(--md-sys-shape-corner-medium);
 }
