@@ -38,9 +38,17 @@ class ContactsEmailsController extends AppController
                 $this->ContactsEmails->Contacts->touch($contact);
                 $this->ContactsEmails->Contacts->save($contact);
 
-                $this->Flash->success(__d('crm', 'The contacts email has been saved.'));
+                if ($this->getRequest()->is('ajax')) {
+                    $response = $this->getResponse()
+                        ->withType('application/json')
+                        ->withStringBody((string)json_encode(['email' => $email]));
 
-                return $this->redirect(['controller' => 'Contacts', 'action' => 'view', $email->contact_id]);
+                    return $response;
+                } else {
+                    $this->Flash->success(__d('crm', 'The contacts email has been saved.'));
+
+                    return $this->redirect(['controller' => 'Contacts', 'action' => 'view', $email->contact_id]);
+                }
             } else {
                 $this->Flash->error(__d('crm', 'The contacts email could not be saved. Please, try again.'));
             }

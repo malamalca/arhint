@@ -316,6 +316,8 @@ if (!empty($job)) {
     ]];
 
     $activeTab = $this->getRequest()->getQuery('tab', 'logs');
+    $this->set('tab', $activeTab);
+
     if ($activeTab == 'logs') {
         $contact_view['panels']['logs'] = '<div id="tab-content-logs"></div>';
 
@@ -357,9 +359,6 @@ if (!empty($job)) {
         ');');
     $this->Lil->jsReady('$(".edit-element").hide();');
     $this->Lil->jsReady('$(".delete-element").hide();');
-
-    // needed for bug - must have active tab
-    //$this->Lil->jsReady('if(!$("ul#ContactTabs>li>a").hasClass("active")) { $("ul#ContactTabs>li>a").first().addClass("active"); }');
 
     $this->Lil->jsReady(sprintf('$(".AddAddressLink").modalPopup({title:"%s"});', __d('crm', 'Add new Address')));
     $this->Lil->jsReady(sprintf('$(".AddAccountLink").modalPopup({title:"%s"});', __d('crm', 'Add new Account')));

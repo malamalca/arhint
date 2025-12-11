@@ -917,7 +917,7 @@ var M = (function (exports) {
         isMultiSelect: false,
         onSearch: (text, autocomplete) => {
             const normSearch = text.toLocaleLowerCase();
-            autocomplete.setMenuItems(autocomplete.options.data.filter((option) => option.id.toString().toLocaleLowerCase().includes(normSearch)
+            autocomplete.setMenuItems(autocomplete.data.filter((option) => option.id.toString().toLocaleLowerCase().includes(normSearch)
                 || option.text?.toLocaleLowerCase().includes(normSearch)));
         },
         maxDropDownHeight: '300px',
@@ -940,6 +940,7 @@ var M = (function (exports) {
         static _keydown;
         selectedValues;
         menuItems;
+        data;
         constructor(el, options) {
             super(el, options, Autocomplete);
             this.el['M_Autocomplete'] = this;
@@ -1305,9 +1306,6 @@ var M = (function (exports) {
             }
             if (this.options.isMultiSelect) {
                 this._renderDropdown();
-            }
-            else {
-                this._refreshInputText();
             }
             if (open)
                 this.open();

@@ -50,7 +50,6 @@ if ($address->id) {
                     ],
                 ],
 
-                //'fs_address_start' => sprintf('<fieldset><legend>%s</legend>', __d('crm', 'Address')),
                 'address_street' => [
                     'method' => 'control',
                     'parameters' => [
@@ -88,7 +87,6 @@ if ($address->id) {
                         ],
                     ],
                 ],
-                //'fs_address_end' => '</fieldset>',
                 'primary' => [
                     'method' => 'control',
                     'parameters' => [
@@ -119,7 +117,7 @@ if ($address->id) {
     var AutocompleteZipCityUrl = "<?php echo Router::url([
         'plugin' => 'Crm',
         'controller' => 'ContactsAddresses',
-        'action' => 'autocomplete-zip-city'
+        'action' => 'autocomplete-zip-city',
     ], true); ?>";
 
     $(document).ready(function() {
@@ -133,8 +131,10 @@ if ($address->id) {
                 },
                 onAutocomplete: () => {
                     let ZipFieldValue = $('#contact-address-zip').val();
-                    $('#contact-address-zip').val(ZipFieldValue.substring(0, ZipFieldValue.indexOf(" ")));
-                    $('#contact-address-city').val(ZipFieldValue.substring(ZipFieldValue.indexOf(" ")+ 1));
+                    if (ZipFieldValue.indexOf(" ") > 0) {
+                        $('#contact-address-zip').val(ZipFieldValue.substring(0, ZipFieldValue.indexOf(" ")));
+                        $('#contact-address-city').val(ZipFieldValue.substring(ZipFieldValue.indexOf(" ") + 1));
+                    }
                 }
             }
         );
@@ -149,8 +149,10 @@ if ($address->id) {
                 },
                 onAutocomplete: () => {
                     let ZipFieldValue = $('#contact-address-city').val();
-                    $('#contact-address-zip').val(ZipFieldValue.substring(0, ZipFieldValue.indexOf(" ")));
-                    $('#contact-address-city').val(ZipFieldValue.substring(ZipFieldValue.indexOf(" ")+ 1));
+                    if (ZipFieldValue.indexOf(" ") > 0) {
+                        $('#contact-address-zip').val(ZipFieldValue.substring(0, ZipFieldValue.indexOf(" ")));
+                        $('#contact-address-city').val(ZipFieldValue.substring(ZipFieldValue.indexOf(" ")+ 1));
+                    }
                 }
             }
         );

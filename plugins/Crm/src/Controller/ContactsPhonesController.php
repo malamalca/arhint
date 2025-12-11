@@ -37,9 +37,17 @@ class ContactsPhonesController extends AppController
                 $this->ContactsPhones->Contacts->touch($contact);
                 $this->ContactsPhones->Contacts->save($contact);
 
-                $this->Flash->success(__d('crm', 'The contacts phone has been saved.'));
+                if ($this->getRequest()->is('ajax')) {
+                    $response = $this->getResponse()
+                        ->withType('application/json')
+                        ->withStringBody((string)json_encode(['phone' => $phone]));
 
-                return $this->redirect(['controller' => 'Contacts', 'action' => 'view', $phone->contact_id]);
+                    return $response;
+                } else {
+                    $this->Flash->success(__d('crm', 'The contacts phone has been saved.'));
+
+                    return $this->redirect(['controller' => 'Contacts', 'action' => 'view', $phone->contact_id]);
+                }
             } else {
                 $this->Flash->error(__d('crm', 'The contacts phone could not be saved. Please, try again.'));
             }

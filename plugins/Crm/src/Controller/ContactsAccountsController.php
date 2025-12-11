@@ -38,9 +38,17 @@ class ContactsAccountsController extends AppController
                 $this->ContactsAccounts->Contacts->touch($contact);
                 $this->ContactsAccounts->Contacts->save($contact);
 
-                $this->Flash->success(__d('crm', 'The contacts\' account has been saved.'));
+                if ($this->getRequest()->is('ajax')) {
+                    $response = $this->getResponse()
+                        ->withType('application/json')
+                        ->withStringBody((string)json_encode(['account' => $account]));
 
-                return $this->redirect(['controller' => 'Contacts', 'action' => 'view', $account->contact_id]);
+                    return $response;
+                } else {
+                    $this->Flash->success(__d('crm', 'The contacts\' account has been saved.'));
+
+                    return $this->redirect(['controller' => 'Contacts', 'action' => 'view', $account->contact_id]);
+                }
             } else {
                 $this->Flash->error(__d('crm', 'The contacts\' account could not be saved. Please, try again.'));
             }

@@ -15,7 +15,7 @@ $invoiceView = [
         h($document->no),
         h($document->documents_counter->title),
         h($document->counter),
-        h($document->tpl_title)
+        h($document->tpl_title),
     ),
     'menu' => [
         'edit' => [
@@ -129,7 +129,7 @@ $invoiceView = [
                         $document->id,
                         Text::slug(
                             mb_strtoupper($docTypes[$document->documents_counter->doc_type] ?? __d('documents', 'Unknown Type')) . ' - ' .
-                            $document->title
+                            $document->title,
                         ) . '.pdf',
                         '?' => ['download' => 1],
                     ],
@@ -142,7 +142,7 @@ $invoiceView = [
                         $document->id,
                         Text::slug(
                             mb_strtoupper($docTypes[$document->documents_counter->doc_type] ?? __d('documents', 'Unknown Type')) . ' - ' .
-                            $document->title
+                            $document->title,
                         ) . '.sepa.xml',
                         '?' => ['download' => 1],
                     ],
@@ -155,7 +155,7 @@ $invoiceView = [
                         $document->id,
                         Text::slug(
                             mb_strtoupper($docTypes[$document->documents_counter->doc_type] ?? __d('documents', 'Unknown Type')) . ' - ' .
-                            $document->title
+                            $document->title,
                         ) . '.eslog.xml',
                         '?' => ['download' => 1],
                     ],
@@ -168,7 +168,7 @@ $invoiceView = [
                         $document->id,
                         Text::slug(
                             mb_strtoupper($docTypes[$document->documents_counter->doc_type] ?? __d('documents', 'Unknown Type')) . ' - ' .
-                            $document->title
+                            $document->title,
                         ) . '.eslog20.xml',
                         '?' => ['download' => 1],
                     ],
@@ -254,7 +254,7 @@ $invoiceView = [
                                     'action' => 'view',
                                     $document->client->contact_id,
                                 ],
-                                ['escape' => false]
+                                ['escape' => false],
                             )
                         ),
                 ],
@@ -522,14 +522,13 @@ if ($document->documents_counter->direction == 'received') {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 // ATTACHMENTS
-
 if (!empty($document->attachments)) {
     $invoiceView['panels']['attachments_title'] = sprintf('<h3>%s</h3>', __d('documents', 'Attachments'));
     $invoiceView['panels']['attachments'] = $this->Arhint->attachmentsTable(
         $document->attachments,
         'Invoice',
         $document->id,
-        ['redirectUrl' => Router::url(null, true), 'showAddButton' => false]
+        ['redirectUrl' => Router::url(null, true), 'showAddButton' => false],
     );
 }
 
@@ -537,7 +536,6 @@ if (!empty($document->attachments)) {
 // LINKS
 if (!empty($links)) {
     $invoiceView['panels']['links_title'] = sprintf('<h3>%s</h3>', __d('documents', 'Linked Documents'));
-    $i = 0;
     foreach ($links as $link) {
         $invoiceView['panels']['links_' . $link->id] = sprintf(
             '<div>%1$s %2$s</div>',
@@ -546,7 +544,7 @@ if (!empty($links)) {
                 [
                     'action' => 'view',
                     $link->invoice->id,
-                ]
+                ],
             ),
             $this->Html->link(
                 $this->Html->image('/documents/img/remove.gif'),
@@ -559,8 +557,8 @@ if (!empty($links)) {
                 [
                     'escape' => false,
                     'confirm' => __d('documents', 'Are you sure you want to delete this link?'),
-                ]
-            )
+                ],
+            ),
         );
     }
 }
@@ -586,14 +584,13 @@ if (isset($logs) && $logs->count() > 0) {
         'body' => ['rows' => []],
     ];
 
-    $i = 0;
     foreach ($logs as $log) {
         $invoiceView['panels']['logs_table']['table']['body']['rows'][] = [
             'columns' => [
                 (string)$log->created,
                 h($log->kind),
-                h($log->descript)
-            ]
+                h($log->descript),
+            ],
         ];
     }
 }
