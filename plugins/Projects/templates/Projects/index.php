@@ -101,7 +101,7 @@ foreach ($projects as $project) {
         ],
         'title' =>
         $this->Html->link($project->no, ['action' => 'view', $project->id], ['class' => 'small']) . '<br />' .
-            $this->Html->link($project->title, ['action' => 'view', $project->id], ['class' => 'big']),
+            $this->Html->link($project->title, ['action' => 'view', $project->id]),
         'status' => [
             'params' => ['class' => 'center hide-on-small-only'],
             'html' => $projectStatus ? ('<div class="chip z-depth-1">' . h($projectStatus) . '</div>') : '',
@@ -109,7 +109,7 @@ foreach ($projects as $project) {
         'actions' => $this->Html->link(
             '<i class="material-icons chevron">chat_bubble_outline</i>',
             ['controller' => 'ProjectsLogs', 'action' => 'edit', '?' => ['project' => $project->id]],
-            ['escape' => false, 'class' => 'btn btn-small add-projects-log'],
+            ['escape' => false, 'class' => 'btn-small filled add-projects-log'],
         ),
         'log' => [
             'params' => ['class' => 'last-log'],

@@ -84,7 +84,7 @@
                                 '?' => ['adrema' => $adrema->id],
                             ],
                             [
-                                'class' => 'btn-small',
+                                'class' => 'btn-small filled',
                             ]
                         )
                     ) .

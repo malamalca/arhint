@@ -65,21 +65,7 @@ h3 {
     }
 }
 
-
-
-/*
-.nowrap {
-    white-space: nowrap;
-}
-
-.small {
-    font-size: 75% !important;
-
-}
-.big {
-    font-size: 120% !important;
-}
-
+// Default small button has large padding, reduce it
 .btn-small {
     padding: 0;
     padding-left: 4px;
@@ -87,26 +73,36 @@ h3 {
     margin: 0;
 }
 
-div.helper-text {
-    color: #606060;
-    font-size: 80%;
-    margin-left: 15px;
-}
-
-
-div.error-message {
-    color: #d32f2f;
-    font-size: 90% !important;
-}
-
+// Add margin to submit buttons
 button.btn {
     &[type="submit"] {
         margin-top: 20px;
     }
-}*/
+}
+
+.nowrap {
+    white-space: nowrap;
+}
+
+div.helper-text {
+    color: var(--md-sys-color-secondary);
+    font-size: 80%;
+    margin-left: 1rem;
+}
+
+div.input-field {
+    &.error {
+        background-color: transparent !important;
+    }
+}
+div.error-message {
+    color: var(--md-sys-color-error);
+    padding-left: 1rem;
+    font-size: 90% !important;
+}
 
 table {
     th {
-        background-color: var(--md-sys-color-secondary-container);
+        background-color: var(--md-sys-color-surface-container-high);
     }
 }

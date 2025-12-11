@@ -2,11 +2,11 @@
 $md_sys_typescale_body-large_size: 16px;
 
 @use "sass:math";
-@use "./_color-variables";
+@use "./_color-variables" as colorVars;
 
 // Colors
-$success-color: colorFunc("green", "base") !default;
-$link-color: colorFunc("light-blue", "darken-1") !default;
+$success-color: colorVars.colorFunc("green", "base") !default;
+$link-color: colorVars.colorFunc("light-blue", "darken-1") !default;
 
 // Floating buttons
 $button-floating-background: var(--md-sys-color-secondary) !default;

@@ -48,12 +48,12 @@ jQuery.fn.InvoiceEditClient = function (options) {
 
         if ($("#invoice-location", $this).val().trim() == "") {
             if (options.mode == "received" && target == "issuer") {
-                $("#invoice-location", $this).val(client.primary_address.city);
+                if (client.primary_address) {
+                    $("#invoice-location", $this).val(client.primary_address.city);
+                }
             } else {
             }
         }
-
-        //M.updateTextFields()
     }
 
     this.collectClientData = function (target) {
@@ -112,8 +112,6 @@ jQuery.fn.InvoiceEditClient = function (options) {
                     $.get(options.clientAutoCompleteUrl + "&term=" + text).done(function(data) {
                         if (data.length > 1 || (data.length == 1 && text != data[0].value)) {
                             autocomplete.setMenuItems(data);
-                            //$("#ImageContactCheck").hide();
-                            //$("#contact-company-id").val("");
                             var title = $("#invoice-" + target + "-title", $this).val();
                             $("input[id^='invoice-" + target + "-'").val("");
                             $("#invoice-" + target + "-title", $this).val(title);
@@ -123,7 +121,6 @@ jQuery.fn.InvoiceEditClient = function (options) {
                 },
                 onAutocomplete: (entries) => {
                     if (entries.length == 1) {
-                        //$("#ImageContactCheck").show();
                         $this.selectClient(target, entries[0].client);
                     }
                 }

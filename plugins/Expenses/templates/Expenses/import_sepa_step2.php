@@ -103,7 +103,7 @@ foreach ($importedPayments as $p) {
             $total_positive += $p['amount'];
         }
 
-        $pAction = '<button class="sepa-import-action btn-small dropdown-trigger" type="button" ' .
+        $pAction = '<button class="btn-small filled sepa-import-action dropdown-trigger" type="button" ' .
             'data-target="dropdown-action" data-payment="p%s">▼</button>';
 
         if (!empty($p['payment_id'])) {

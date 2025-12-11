@@ -96,14 +96,14 @@ $payment_edit = [
                 'parameters' => ['expense_descript', ['type' => 'text', 'id' => 'expense-descript']],
             ],
             'add_expense_cancel' => sprintf(
-                ' <a href="javascript:void(0);" onclick="toggleAddExpense();" class="btn-small">%s</a>',
+                ' <a href="javascript:void(0);" onclick="toggleAddExpense();" class="btn-small filled">%s</a>',
                 __d('expenses', 'Cancel')
             ),
             'add_expense_end' => '</div>',
 
             'add_expense_link' => sprintf(
                 '<div id="add-expense-link">' .
-                '<a href="javascript:void(0);" id="add-expense-link" onclick="toggleAddExpense();" class="btn-small">%s</a>' .
+                '<a href="javascript:void(0);" id="add-expense-link" onclick="toggleAddExpense();" class="btn-small filled">%s</a>' .
                 '</div>',
                 __d('expenses', 'Add Expense')
             ),

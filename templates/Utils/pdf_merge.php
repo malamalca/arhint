@@ -1,7 +1,7 @@
 <?php
     use Cake\Routing\Router;
 
-    $preloader = '<div id="spinner" class="preloader-wrapper small" style="display: none; width: 20px; height: 20px;">' .
+    $preloader = '<div id="spinner" class="preloader-wrapper" style="display: none; width: 20px; height: 20px;">' .
         '<div class="spinner-layer spinner-red-only">' .
         '<div class="circle-clipper left">' .
         '<div class="circle"></div>' .
@@ -93,7 +93,7 @@
                         'id' => 'submit',
                     ]],
                 ],*/
-                '<a id="submit" class="btn"><span id="submit-caption">' . __('Submit') . '</span>' . $preloader . '</a>',
+                '<a id="submit" class="btn filled"><span id="submit-caption">' . __('Submit') . '</span>' . $preloader . '</a>',
             ],
         ],
     ];
@@ -276,7 +276,7 @@
         $("#thumbnail_" + i).append('<span class="name col s7 truncate">' + name + '<span>');
         $("#thumbnail_" + i).append('<span class="size col s1 truncate">' + size + '<span>');
         $("#thumbnail_" + i).append('<span class="size col s3 truncate">' + date + '<span>');
-        $("#thumbnail_" + i).append('<span class="remove col s1"><button class="remove-item waves-effect waves-light btn-small"><i class="material-icons">delete</i></button><span>');
+        $("#thumbnail_" + i).append('<span class="remove col s1"><button class="btn-small filled remove-item"><i class="material-icons">delete</i></button><span>');
         $("#thumbnail_" + i).data("file", f);
 
         $("#thumbnail_" + i + " button.remove-item").on("click", function(e) {

@@ -91,9 +91,9 @@ foreach ($contacts as $contact) {
         if (!empty($contact->job)) {
             $job .= h($contact->job);
         } else {
-            $job .= '<span class="light">' . __d('crm', 'employed') . '</span>';
+            $job .= '<span class="contact-employer-text">' . __d('crm', 'employed') . '</span>';
         }
-        $job .= ' <span class="light">' . __d('crm', 'at') . '</span> ';
+        $job .= ' <span class="contact-employer-text">' . __d('crm', 'at') . '</span> ';
         $job .= $this->Html->link(
             $contact->company->title,
             [
@@ -101,7 +101,7 @@ foreach ($contacts as $contact) {
                 $contact->company->id,
                 'kind' => 'C',
             ],
-            ['title' => h($contact->company->title)]
+            ['title' => h($contact->company->title)],
         );
         $job .= '</div>';
     } elseif (!empty($contact['Contact']['job'])) {
@@ -110,7 +110,7 @@ foreach ($contacts as $contact) {
 
     $address = '';
     if (!empty($contact->primary_address)) {
-        $address = sprintf('<div class="light small">%s</div>', implode(', ', array_filter([
+        $address = sprintf('<div class="primary-address-text">%s</div>', implode(', ', array_filter([
             $contact->primary_address->street,
             implode(' ', array_filter([
                 $contact->primary_address->zip,
@@ -161,7 +161,7 @@ foreach ($contacts as $contact) {
                 $this->Html->link(
                     empty($contact->title) ? 'N/A' : $contact->title,
                     ['action' => 'view', $contact->id],
-                    ['class' => 'big contact-name', 'title' => $contact->title]
+                    ['class' => 'contact-name', 'title' => $contact->title],
                 ) . $job . $address . $descript,
             ],
             'emails' => [

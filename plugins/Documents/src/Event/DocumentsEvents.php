@@ -71,11 +71,11 @@ class DocumentsEvents implements EventListenerInterface
 
             foreach ($newDocuments as $document) {
                 $panels['panels']['documents']['lines'][] = sprintf(
-                    '<div><a href="%4$s">%2$s :: <span class="title big">%1$s</span></a>%3$s</div>',
+                    '<div><a href="%4$s">%2$s :: <span class="title">%1$s</span></a>%3$s</div>',
                     h($document->title),
                     h($document->no),
                     $document->project ?
-                        sprintf(' <span class="project small light">[%s]</span>', h($document->project->title)) :
+                        sprintf(' <span class="project">[%s]</span>', h($document->project->title)) :
                         '',
                     Router::url([
                         'plugin' => 'Documents',
@@ -131,8 +131,8 @@ class DocumentsEvents implements EventListenerInterface
                 $panels['panels']['documents']['lines'][] = sprintf(
                     '<div style="clear: both; height: 46px; margin-bottom: 10px; overflow: hidden;">' .
                         '<span style="display: block; width: 80px; float: left;">%5$s</span> ' .
-                        '<div class="project small light">%3$s</div>' .
-                        '<a href="%4$s"><span class="title big">%1$s</span></a> %2$s</div>',
+                        '<div class="project">%3$s</div>' .
+                        '<a href="%4$s"><span class="title">%1$s</span></a> %2$s</div>',
                     h($document->title),
                     h($document->no),
                     $document->project ? h($document->project->title) : '-',

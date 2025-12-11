@@ -20,7 +20,7 @@ jQuery.fn.modalPopup = function(p_options) {
     var template = [
         '<dialog>',
         '   <div class="dialog-header">',
-        '   <a href="#" class="modal-close"><i class="material-icons">close</i></a>',
+        '   <a href="#" class="btn-small filled modal-close"><i class="material-icons">close</i></a>',
         '   <h3 id="modal-title">Modal Header</h3>',
         '   </div>',
         '   <p class="dialog-content"></p>',
@@ -54,8 +54,16 @@ jQuery.fn.modalPopup = function(p_options) {
                         $("form", $this.dialog).attr("method", "dialog");
                     }
 
-                    var selectInputs = $this.dialog.querySelectorAll("select");
-                    var instances = M.FormSelect.init(selectInputs);
+                    var selectInputs = $("select", $this.dialog);
+                    selectInputs.each(function() {
+                        M.FormSelect.init($(this).get(0));
+                    });
+                    
+                    // evaluate javascript blocks if any
+                    let script = $("p > script", $this.dialog);
+                    if (script) {
+                        script.each(function() { eval($(this).text()) });
+                    }
                 }
 
                 $this.dialog.showModal();
@@ -94,6 +102,11 @@ jQuery.fn.modalPopup = function(p_options) {
                 } else {
                     // it's html
                     $("p", $this.dialog).html(data);
+
+                    var selectInputs = $("select", $this.dialog);
+                    selectInputs.each(function() {
+                        M.FormSelect.init($(this).get(0));
+                    });
 
                     // evaluate javascript blocks if any
                     let script = $("p > script", $this.dialog);

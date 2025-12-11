@@ -113,7 +113,7 @@ $editForm = [
                     ],
                 ],
             ],
-            'picker' => '<button id="MapPicker" class="btn">' . __d('projects', 'Pick on Map') . '</button>',
+            'picker' => '<button id="MapPicker" class="btn filled">' . __d('projects', 'Pick on Map') . '</button>',
 
             'ico' => [
                 'method' => 'control',
@@ -169,7 +169,7 @@ echo $this->Lil->form($editForm, 'Projects.Projects.edit');
 <div id="modalMapPopup" class="modal">
 <div class="modal-content right-align">
 <div id="map" style="min-height: 300px;"></div>
-<button class="modal-close waves-effect btn" id="closeModalMapPopup"><?= __d('projects', 'OK') ?></button>
+<button class="modal-close btn filled" id="closeModalMapPopup"><?= __d('projects', 'OK') ?></button>
 </div>
 </div>
 <script>

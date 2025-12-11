@@ -1,4 +1,6 @@
 @use "../vendor/Materialize/components/global" as *;
+@use "local-tokens" as *;
+
 .sidenav {
     @media print {
         display: none;
@@ -36,10 +38,10 @@
     .collapsible-header {
         white-space: nowrap;
         text-transform: uppercase;
-        border: solid 1px #c0c0c0;
-        border-bottom: solid 1px #666 !important;
-        border-radius: 4px;
-        background-color: #e0e0e0 !important;
+        border: solid 1px var(--md-sys-color-outline);
+        border-bottom: solid 1px var(--md-sys-color-outline) !important;
+        border-radius: var(--md-sys-shape-corner-medium);
+        background-color: var(--md-sys-color-surface-container-highest) !important;
     }
 
     .sidenav-submenu-body {
@@ -50,7 +52,7 @@
         }
 
         a {
-            border-radius: 4px;
+            border-radius: var(--md-sys-shape-corner-medium);
         }
     }
 

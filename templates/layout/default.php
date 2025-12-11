@@ -23,8 +23,6 @@ use Cake\Routing\Router;
 
     <?= $this->Html->script('/js/jquery/jquery-3.6.0.min.js') ?>
     <?= $this->Html->script('/js/vendor/Materialize/materialize.min.js') ?>
-    <?= $this->Html->script('/lil/js/lil_float.js') ?>
-    <?= $this->Html->script('/lil/js/lil_date.js') ?>
     <?= $this->Html->script('modalPopup.js') ?>
 
     <?= $this->fetch('script') ?>
@@ -82,7 +80,6 @@ use Cake\Routing\Router;
                     }
                     ?>
                 </li>
-                <!--<li class="sidenav-header"><?= $this->Html->link(Configure::read('Lil.appTitle'), '/') ?></a></li>-->
                 <li class="sidenav-menu no-padding hide-on-large-only">
                     <?= $this->element('mainmenu', ['prefix' => 'side']) ?>
                 </li>

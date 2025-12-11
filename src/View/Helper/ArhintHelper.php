@@ -409,7 +409,7 @@ class ArhintHelper extends Helper
                                     $attachment->id,
                                     '?' => ['redirect' => $_options['redirectUrl']],
                                 ],
-                                ['escape' => false, 'class' => 'btn btn-small'],
+                                ['escape' => false, 'class' => 'btn-small filled'],
                             ) . ' ' .
                             $this->Html->link(
                                 '<i class="material-icons">file_download</i>',
@@ -421,7 +421,7 @@ class ArhintHelper extends Helper
                                     $attachment->id,
                                     '?' => ['redirect' => $_options['redirectUrl']],
                                 ],
-                                ['escape' => false, 'class' => 'btn btn-small'],
+                                ['escape' => false, 'class' => 'btn-small filled'],
                             ) . ' ' .
                             $this->Lil->deleteLink([
                                 'prefix' => false,
@@ -445,7 +445,7 @@ class ArhintHelper extends Helper
                         'action' => 'edit',
                         '?' => ['model' => $model, 'foreign_id' => $foreignId, 'redirect' => $_options['redirectUrl']],
                     ],
-                    ['class' => 'btn btn-small'],
+                    ['class' => 'btn-small filled'],
                 ),
             );
 

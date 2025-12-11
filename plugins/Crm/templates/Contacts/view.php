@@ -22,7 +22,7 @@ if (!empty($contact->company->title)) {
         ]);
 }
 if (!empty($job)) {
-    $title .= sprintf('<span class="light">%s</span>', $job);
+    $title .= sprintf('<span class="small">%s</span>', $job);
 }
 
     $contact_view = [
@@ -277,8 +277,8 @@ if (!empty($job)) {
             'foot' => [
                 'rows' => [0 => ['columns' => [
                     'empty' => [
-                        'parameters' => ['class' => 'right', 'colspan' => 3],
-                        'html' => '&nbsp;',
+                        'parameters' => ['colspan' => 3],
+                        'html' => '',
                     ],
                 ]]],
             ],
@@ -286,7 +286,7 @@ if (!empty($job)) {
 
         foreach ($employees as $employee) {
             $employees_table['body']['rows'][]['columns'] = [
-                'title' => $this->Html->link($employee->title, [
+                'title' => $this->Html->link($employee->title ?? __d('crm', 'Unknown'), [
                     'action' => 'view',
                     $employee->id,
                 ]),
@@ -345,7 +345,7 @@ if (!empty($job)) {
     echo $this->Lil->panels($contact_view, 'Crm.Contacts.view');
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    $js_c = '$("%1$s").each(function() { $(this).modalPopup({title:"%2$s"}); });';
+    $js_c = '$("%1$s").each(function() { $(this).modalPopup({title:"%2$s", processSubmit: true, onJson: function(data, dialog) { window.location.reload(); }}); });';
     $this->Lil->jsReady(sprintf($js_c, '.edit-address', __d('crm', 'Edit Address'), '"auto"'));
     $this->Lil->jsReady(sprintf($js_c, '.edit-email', __d('crm', 'Edit Email'), '"auto"'));
     $this->Lil->jsReady(sprintf($js_c, '.edit-phone', __d('crm', 'Edit Phone'), '"auto"'));

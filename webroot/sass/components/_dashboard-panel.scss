@@ -4,6 +4,6 @@
     }
 
     margin-top: 1rem;
-    border: solid 1px #808080;
-    border-radius: 4px;
+    border: solid 1px var(--md-sys-color-outline-variant);
+    border-radius: var(--md-sys-shape-corner-medium);
 }
