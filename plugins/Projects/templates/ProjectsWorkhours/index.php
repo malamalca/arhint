@@ -81,6 +81,7 @@ $tableIndex = [
                 'action' => 'edit',
                 '?' => ['project' => $filter['project'] ?: null],
             ],
+            'params' => ['id' => 'add-workhour'],
         ],
     ],
     'table' => [
@@ -158,9 +159,12 @@ foreach ($projectsWorkhours as $workhour) {
         ],
         'actions' => [
             'parameters' => ['class' => 'right-align'],
-            'html' => !$canEdit ? '' : $this->Lil->editLink([$workhour->id, '?' => ['redirect' => Router::url(null, true)]]) . ' ' . $this->Lil->deleteLink($workhour->id),
+            'html' => !$canEdit ? '' : $this->Lil->editLink([$workhour->id, '?' => ['redirect' => Router::url(null, true)]], ['class' => 'btn-edit']) . ' ' . $this->Lil->deleteLink($workhour->id),
         ],
     ];
 }
 
 echo $this->Lil->index($tableIndex, 'Projects.ProjectsWorkhours.index');
+
+$this->Lil->jsReady(sprintf('$("#add-workhour").modalPopup({title:"%s"});', __d('projects', 'Add Workhour')));
+$this->Lil->jsReady(sprintf('$(".btn-edit").each(function() { $(this).modalPopup({title:"%s"}); });', __d('projects', 'Edit Workhour')));
