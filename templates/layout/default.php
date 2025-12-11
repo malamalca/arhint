@@ -22,29 +22,27 @@ use Cake\Routing\Router;
     <?= $this->fetch('css') ?>
 
     <?= $this->Html->script('/js/jquery/jquery-3.6.0.min.js') ?>
-    <?= $this->Html->script('/js/vendor/Materialize/bin/materialize.js') ?>
+    <?= $this->Html->script('/js/vendor/Materialize/materialize.min.js') ?>
     <?= $this->Html->script('/lil/js/lil_float.js') ?>
-    <?= $this->Html->script('/lil/js/lil_date.js') ?>
     <?= $this->Html->script('modalPopup.js') ?>
 
     <?= $this->fetch('script') ?>
 </head>
 <body>
     <header>
-        <div class="navbar-fixed">
-            <nav role="navigation">
-                <div class="nav-wrapper container">
-                    <a id="logo-container" href="#" class="brand-logo">
-                        <div class="logo center-block"><?= Configure::read('Lil.appTitle') ?></div>
-                    </a>
-                    <div class="hide-on-med-and-down">
-                        <?= $this->element('mainmenu', ['prefix' => 'top']) ?>
-                    </div>
-                    <!-- Sidebar button for mobile devices -->
-                    <a href="#" data-target="slide-out" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+        <nav class="nav navbar" role="navigation">
+            <div class="nav-wrapper">
+                <a id="logo-container" href="#" class="brand-logo">
+                    <div class="logo center-block"><?= Configure::read('Lil.appTitle') ?></div>
+                </a>
+                <div class="hide-on-med-and-down">
+                    <?= $this->element('mainmenu', ['prefix' => 'top']) ?>
                 </div>
-            </nav>
+                <!-- Sidebar button for mobile devices -->
+                <a href="#" data-target="slide-out" class="sidenav-trigger"><i class="material-icons">menu</i></a>
             </div>
+        </nav>
+        
             <ul id="slide-out" class="sidenav sidenav-fixed">
                 <!-- Sidebar -->
                 <li class="sidenav-user">
@@ -83,7 +81,6 @@ use Cake\Routing\Router;
                     }
                     ?>
                 </li>
-                <!--<li class="sidenav-header"><?= $this->Html->link(Configure::read('Lil.appTitle'), '/') ?></a></li>-->
                 <li class="sidenav-menu no-padding hide-on-large-only">
                     <?= $this->element('mainmenu', ['prefix' => 'side']) ?>
                 </li>
@@ -91,7 +88,6 @@ use Cake\Routing\Router;
                     <?= $this->element('sidenav') ?>
                 </li>
             </ul>
-
     </header>
 
     <!-- Contents -->
@@ -116,13 +112,45 @@ use Cake\Routing\Router;
     <footer>
     </footer>
     <script type="text/javascript">
+        <?php
+            //lilFloat settings should be made before $(document).ready();
+            $formatter = $this->Number->formatter();
+        ?>
+
+        lilFloatSetup.decimalSeparator = "<?= $formatter->getSymbol(\NumberFormatter::DECIMAL_SEPARATOR_SYMBOL); ?>";
+        lilFloatSetup.thousandsSeparator = "<?= $formatter->getSymbol(\NumberFormatter::GROUPING_SEPARATOR_SYMBOL); ?>";
+        
         $(document).ready(function() {
             <?= $this->Lil->jsReadyOut(); ?>
 
-            M.AutoInit();
+            M.AutoInit(document.body,{
+                Collapsible: {
+                    inDuration: 0,
+                    outDuration: 0,
+                    onOpenEnd: function(el) {
+                        var parentBody = $(el).closest(".collapsible-body");
+                        $(parentBody).get(0).style.maxHeight = parentBody.prop("scrollHeight") + "px";
+                    }
+                },
+                Dropdown: {
+                    constrainWidth: false,
+                    coverTrigger: false
+                }
+            });
 
-            document.querySelectorAll('.materialize-textarea').forEach(function(element){
-                M.Forms.InitTextarea(element);
+            // Materializeweb wont expand the parent collapsible bodies when nested collapsibles have active items
+            $(".collapsible-body").each(function() {
+                var parentBody = $(this).closest(".collapsible-body");
+                if ($(this).find(".active").length > 0) {
+                    $(parentBody).get(0).style.maxHeight = parentBody.prop("scrollHeight") + "px";
+                }
+            });
+
+            // Prevent collapsible header click when having a link so open collapsible does not happen
+            $(".sidenav-menu > ul.collapsible > li > a").on("click", function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                window.location.href = $(this).attr("href");
             });
 
             $(".sidenav-user-title").on("click", function(e) {

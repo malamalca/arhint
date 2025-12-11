@@ -1,3 +1,6 @@
+@use '../../../../../webroot/sass/vendor/Materialize/components/buttons' as *;
+@use '../../../../../webroot/sass/vendor/Materialize/components/grid' as *;
+
 div#tasks-index {
     div#no-tasks-found {
         padding: 0.5rem 0;
@@ -12,7 +15,7 @@ div#tasks-index {
         height: 2rem;
 
         form {
-            @extend .col, .s11;
+            @extend .s11;
             display: flex;
             width: 100%;
             padding-right: 1rem;
@@ -37,7 +40,7 @@ div#tasks-index {
         }
 
         #btn-add {
-            @extend .col, .s1;
+            @extend .s1;
             width: 100%;
             padding-left: 1rem;
             padding-right: 1rem;
@@ -264,7 +267,7 @@ div#tasks-index {
                     border-radius: 4px;
                 }
                 a {
-                    @extend .btn, .btn-small, .text;
+                    @extend .btn-small, .text;
                     color: #333 !important;
                     width: 100%;
                     padding-left: 0.5rem !important;

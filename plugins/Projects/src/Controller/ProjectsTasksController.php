@@ -87,7 +87,7 @@ class ProjectsTasksController extends AppController
             if ($this->ProjectsTasks->save($projectsTask, ['auditUserId' => $this->getCurrentUser()->get('id')])) {
                 $this->Flash->success(__d('projects', 'The projects task has been saved.'));
 
-                return $this->redirect($this->getRequest()->getData('redirect', [
+                return $this->redirect($this->getRequest()->getData('referer', [
                     'controller' => 'Projects',
                     'action' => 'view',
                     $projectsTask->project_id,

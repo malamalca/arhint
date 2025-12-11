@@ -1,4 +1,6 @@
 <?php
+use Cake\Routing\Router;
+
 /**
  * This is admin_edit template file.
  */
@@ -20,9 +22,9 @@ $editForm = [
                 'method' => 'hidden',
                 'parameters' => ['id'],
             ],
-            'redirect' => [
+            'referer' => [
                 'method' => 'hidden',
-                'parameters' => ['redirect', ['default' => base64_encode($this->getRequest()->referer() ?? '')]],
+                'parameters' => ['referer', ['default' => Router::url($this->getRequest()->referer(), true)]],
             ],
             'contact_id' => [
                 'method' => 'hidden',

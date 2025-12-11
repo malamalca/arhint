@@ -8,6 +8,7 @@
 /uploads/*
 /webroot/.well-known/*
 schema-dump-default.lock
+arhint4.code-workspace
 
 !/uploads/Documents/.gitkeep
 !/uploads/Invoices/.gitkeep

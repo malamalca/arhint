@@ -1,3 +1,5 @@
+@use './../vendor/Materialize/components/forms/select' as *;
+
 div#DashboardNotes {
     padding-left: 15px;
     padding-right: 15px;
@@ -35,6 +37,6 @@ div#DashboardNotes {
 
     table {
         width: auto;
-        border: solid 1px #cacaca;
+        border: solid 1px var(--md-sys-color-outline-variant);
     }
 }

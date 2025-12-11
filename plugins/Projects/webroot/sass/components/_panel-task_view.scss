@@ -1,3 +1,5 @@
+@use '../../../../../webroot/sass/vendor/Materialize/components/buttons' as *;
+
 /* Color variables for consistency and easy theme changes */
 $primary-bg: #fff;
 $secondary-bg: #f9f9f9;
@@ -132,7 +134,7 @@ $hover-bg: #ccc;
                     float: right;
 
                     a.dropdown-task, a.dropdown-comment {
-                        @extend  .btn, .btn-small, .text;
+                        @extend  .btn-small, .text;
                         color: #333;
                         padding: 0;
                         height: auto;

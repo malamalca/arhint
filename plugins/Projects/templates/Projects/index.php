@@ -15,7 +15,7 @@ $popupActive = ['items' => [
 $popupActive = $this->Lil->popup('active', $popupActive, true);
 
 // FILTER by status
-$activeStatus = $this->getRequest()->getQuery('status');
+$activeStatus = $this->getRequest()->getQuery('status', '');
 $statusLink = $this->Html->link(
     $projectsStatuses[$activeStatus] ?? __d('projects', 'All Statuses'),
     ['action' => 'filter'],
@@ -78,18 +78,7 @@ $index = [
 ];
 
 foreach ($projects as $project) {
-    $projectStatus = $projectsStatuses[$project->status_id] ?? '';
-
-    $lastLogDescript = '';
-    if (!empty($project->last_log)) {
-        $lastLogDescript = sprintf(
-            '<span class="small">%2$s, %3$s</span><div class="truncate">%1$s</div>',
-            $project->last_log->descript,
-            $project->last_log->created,
-            h((string)($lastLogUsers[$project->last_log->user_id] ?? 'N/A')),
-        );
-    }
-
+    $projectStatus = $project->status_id ? $projectsStatuses[$project->status_id] ?? '' : '';
     $index['table']['body']['rows'][]['columns'] = [
         'image' => [
             'params' => ['class' => 'center hide-on-small-only'],
@@ -101,7 +90,7 @@ foreach ($projects as $project) {
         ],
         'title' =>
         $this->Html->link($project->no, ['action' => 'view', $project->id], ['class' => 'small']) . '<br />' .
-            $this->Html->link($project->title, ['action' => 'view', $project->id], ['class' => 'big']),
+            $this->Html->link($project->title, ['action' => 'view', $project->id]),
         'status' => [
             'params' => ['class' => 'center hide-on-small-only'],
             'html' => $projectStatus ? ('<div class="chip z-depth-1">' . h($projectStatus) . '</div>') : '',
@@ -109,11 +98,12 @@ foreach ($projects as $project) {
         'actions' => $this->Html->link(
             '<i class="material-icons chevron">chat_bubble_outline</i>',
             ['controller' => 'ProjectsLogs', 'action' => 'edit', '?' => ['project' => $project->id]],
-            ['escape' => false, 'class' => 'btn btn-small add-projects-log'],
+            ['escape' => false, 'class' => 'btn-small filled add-projects-log'],
         ),
         'log' => [
             'params' => ['class' => 'last-log'],
-            'html' => $lastLogDescript,
+            'html' => $project->last_log ?
+                $this->element('Projects.projects_log', ['projectsLog' => $project->last_log, 'user' => $lastLogUsers[$project->last_log->user_id] ?? null]) : '',
         ],
     ];
 }
@@ -161,7 +151,7 @@ echo $this->Lil->index($index, 'Projects.Projects.index');
                     var textArea = document.createElement("textarea");
                     textArea.innerHTML = data;
                     $("td.last-log", popupElement.closest("tr")).html(textArea.value);
-                    popup.instance.close();
+                    popup.dialog.close();
                 },
                 onBeforeSubmit: function(data, popup) {
                     $("#projects-logs-descript", $(data)).html(tinyMCE.get('projects-logs-descript').getContent());

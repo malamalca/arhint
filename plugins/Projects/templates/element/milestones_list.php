@@ -62,7 +62,7 @@ foreach ($milestones as $milestone) :
                                 'redirect' => Router::url(),
                             ],
                         ],
-                        ['class' => 'btn btn-small text btn-add-task', 'onclick' => 'popup(); return false;'],
+                        ['class' => 'btn-small text btn-add-task', 'onclick' => 'popup(); return false;'],
                     );
                     echo $this->Html->link(
                         __d('projects', 'Edit'),
@@ -72,7 +72,7 @@ foreach ($milestones as $milestone) :
                             $milestone->id,
                             '?' => ['redirect' => Router::url()],
                         ],
-                        ['class' => 'btn btn-small text btn-edit-milestone'],
+                        ['class' => 'btn-small text btn-edit-milestone'],
                     );
                     echo $this->Html->link(
                         __d('projects', 'Close'),
@@ -81,7 +81,7 @@ foreach ($milestones as $milestone) :
                             'action' => 'close',
                             $milestone->id,
                         ],
-                        ['class' => 'btn btn-small text', 'confirm' => __d('projects', 'Are you sure?')],
+                        ['class' => 'btn-small text', 'confirm' => __d('projects', 'Are you sure?')],
                     );
                 }
                 ?>

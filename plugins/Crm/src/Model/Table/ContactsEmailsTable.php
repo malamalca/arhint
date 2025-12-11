@@ -51,10 +51,11 @@ class ContactsEmailsTable extends Table
             ->allowEmptyString('id', 'create')
             ->allowEmptyString('contact_id')
             ->add('primary', 'valid', ['rule' => 'boolean'])
-            //->requirePresence('primary', 'create')
             ->notEmptyString('primary')
+
             ->add('email', 'valid', ['rule' => 'email'])
-            ->allowEmptyString('email')
+            ->notEmptyString('email')
+
             ->allowEmptyString('kind');
 
         return $validator;

@@ -1,7 +1,7 @@
 <?php
     printf(
-        '<span class="small">%2$s, %3$s</span><div>%1$s</div>',
-        h($projectsLog->descript),
+        '<span class="small">%2$s, %3$s</span><div class="truncate">%1$s</div>',
+        $projectsLog->descript,
         $projectsLog->created,
-        $user->name
+        h((string)$user)
     );

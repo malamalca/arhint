@@ -123,10 +123,10 @@ class Installer
      */
     public static function postUpdate(?Event $event): void
     {
-        $io = null;
+        /*$io = null;
         if ($event) {
             $io = $event->getIO();
-        }
+        }*/
         $rootDir = dirname(dirname(__DIR__));
 
         if (file_exists($rootDir . '/config/app_local.php')) {
@@ -139,7 +139,7 @@ class Installer
 
             ConnectionManager::setConfig('default', Configure::read('Datasources.default'));
 
-            static::executeMigrations($rootDir, $io, 'default');
+            //static::executeMigrations($rootDir, $io, 'default');
         }
     }
 

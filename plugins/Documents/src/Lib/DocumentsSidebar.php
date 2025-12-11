@@ -138,7 +138,8 @@ class DocumentsSidebar
                             'controller' => 'Invoices',
                             'action' => 'export_eracuni',
                         ],
-                        'active' => $request->getParam('controller') == 'Invoices',
+                        'active' => $request->getParam('controller') == 'Invoices' &&
+                            $request->getParam('action') == 'exportEracuni',
                     ],
                 ],
             ];

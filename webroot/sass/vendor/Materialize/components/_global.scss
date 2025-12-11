@@ -1,9 +1,16 @@
+@use './_variables' as *;
+
 html {
   box-sizing: border-box;
 }
 
 *, *:before, *:after {
   box-sizing: inherit;
+}
+
+body {
+  background-color: var(--md-sys-color-background);
+  color: var(--md-sys-color-on-background);
 }
 
 button,
@@ -17,20 +24,13 @@ textarea {
 a {
   color: $link-color;
   text-decoration: none;
-  // Gets rid of tap active state
-  -webkit-tap-highlight-color: transparent;
+  -webkit-tap-highlight-color: transparent; // Gets rid of tap active state
 }
 
 // Positioning
-.valign-wrapper {
-  display: flex;
-  align-items: center;
-}
+.valign-wrapper { display: flex; align-items: center; }
 
-// classic clearfix
-.clearfix {
-  clear: both;
-}
+.clearfix { clear: both; }
 
 // Z-levels
 .z-depth-0 {
@@ -87,15 +87,11 @@ a {
 .divider {
   height: 1px;
   overflow: hidden;
-  background-color: $divider-color;
+  background-color: var(--md-sys-color-outline-variant);
 }
 
 //  Blockquote
-blockquote {
-  margin: 20px 0;
-  padding-left: 1.5rem;
-  border-left: 5px solid $primary-color;
-}
+blockquote { margin: 20px 0; padding-left: 1.5rem; border-left: 5px solid var(--md-sys-color-primary); }
 
 // Icon Styles
 i {
@@ -123,114 +119,18 @@ i {
   }
 }
 
+// Modal
+html.noscroll {
+  position: fixed;
+  overflow-y: scroll;
+  width: 100%;
+}
+
 // Images
 img.responsive-img,
 video.responsive-video {
   max-width: 100%;
   height: auto;
-}
-
-// Pagination
-.pagination {
-
-  li {
-    display: inline-block;
-    border-radius: 2px;
-    text-align: center;
-    vertical-align: top;
-    height: 30px;
-
-    a {
-      color: $font-color-medium;
-      display: inline-block;
-      font-size: 1.2rem;
-      padding: 0 10px;
-      line-height: 30px;
-    }
-
-    &:hover:not(.disabled) {
-      background-color: $primary-color-hover-opaque;
-    }
-
-    &.active a {
-      color: $font-on-primary-color-main;
-    }
-
-    &.active,
-    &.active:hover {
-      background-color: $primary-color;
-    }
-
-    &.disabled a {
-      cursor: default;
-      color: $font-color-disabled;
-    }
-
-    i {
-      font-size: 2rem;
-    }
-  }
-
-
-  li.pages ul li {
-    display: inline-block;
-    float: none;
-  }
-}
-
-@media #{$medium-and-down} {
-  .pagination {
-    width: 100%;
-
-    li.prev,
-    li.next {
-      width: 10%;
-    }
-
-    li.pages {
-      width: 80%;
-      overflow: hidden;
-      white-space: nowrap;
-    }
-  }
-}
-
-// Breadcrumbs
-.breadcrumb {
-  display: inline-block;
-  font-size: 18px;
-  color: $font-on-primary-color-medium;
-
-  i,
-  [class^="mdi-"], [class*="mdi-"],
-  i.material-icons, i.material-symbols-outlined,
-  i.material-symbols-rounded, i.material-symbols-sharp {
-    display: block;
-    float: left;
-    font-size: 24px;
-  }
-
-  &:before {
-    content: '\E5CC';
-    color: $font-on-primary-color-medium;
-    vertical-align: top;
-    display: inline-block;
-    font-family: 'Material Symbols Outlined', 'Material Symbols Rounded', 'Material Symbols Sharp', 'Material Icons';
-    font-weight: normal;
-    font-style: normal;
-    font-size: 25px;
-    margin: 0 10px 0 8px;
-    -webkit-font-smoothing: antialiased;
-    float: left;
-  }
-
-  &:first-child:before {
-    display: none;
-  }
-
-  &:last-child {
-    color: $font-on-primary-color-main;
-  }
 }
 
 // Parallax
@@ -273,35 +173,22 @@ video.responsive-video {
   Transition Classes
 **********************/
 
-ul.staggered-list li {
-  opacity: 0;
-}
-
-.fade-in {
-  opacity: 0;
-  transform-origin: 0 50%;
-}
-
+ul.staggered-list li { opacity: 0; }
+.fade-in { opacity: 0; transform-origin: 0 50%; }
 
 /*********************
   Media Query Classes
 **********************/
 .hide-on-small-only, .hide-on-small-and-down {
-  @media #{$small-and-down} {
-    display: none !important;
-  }
+  @media #{$small-and-down} { display: none !important; }
 }
 
 .hide-on-med-and-down {
-  @media #{$medium-and-down} {
-    display: none !important;
-  }
+  @media #{$medium-and-down} { display: none !important; }
 }
 
 .hide-on-med-and-up {
-  @media #{$medium-and-up} {
-    display: none !important;
-  }
+  @media #{$medium-and-up} { display: none !important; }
 }
 
 .hide-on-med-only {
@@ -311,27 +198,19 @@ ul.staggered-list li {
 }
 
 .hide-on-large-only {
-  @media #{$large-and-up} {
-    display: none !important;
-  }
+  @media #{$large-and-up} { display: none !important; }
 }
 
 .hide-on-extra-large-only {
-  @media #{$extra-large-and-up} {
-    display: none !important;
-  }
+  @media #{$extra-large-and-up} { display: none !important; }
 }
 
 .show-on-extra-large {
-  @media #{$extra-large-and-up} {
-    display: block !important;
-  }
+  @media #{$extra-large-and-up} { display: block !important; }
 }
 
 .show-on-large {
-  @media #{$large-and-up} {
-    display: block !important;
-  }
+  @media #{$large-and-up} { display: block !important; }
 }
 
 .show-on-medium {
@@ -341,41 +220,34 @@ ul.staggered-list li {
 }
 
 .show-on-small {
-  @media #{$small-and-down} {
-    display: block !important;
-  }
+  @media #{$small-and-down} { display: block !important; }
 }
 
 .show-on-medium-and-up {
-  @media #{$medium-and-up} {
-    display: block !important;
-  }
+  @media #{$medium-and-up} { display: block !important; }
 }
 
 .show-on-medium-and-down {
-  @media #{$medium-and-down} {
-    display: block !important;
-  }
+  @media #{$medium-and-down} { display: block !important; }
 }
 
 
 // Center text on mobile
 .center-on-small-only {
-  @media #{$small-and-down} {
-    text-align: center;
-  }
+  @media #{$small-and-down} { text-align: center; }
 }
 
 // Footer
 .page-footer {
-  padding-top: 20px;
-  color: $footer-font-color;
-  background-color: $footer-bg-color;
-
-  a {
-    color: $footer-font-color;
+  margin-top: 5rem;
+  padding-top: 3rem;
+  border-top: 1px dashed var(--md-sys-color-outline-variant);
+  p {
+    color: var(--md-sys-color-outline-light);
   }
-
+  a {
+    color: var(--md-sys-color-primary);
+  }
   .footer-copyright,
   .footer-copyright a {
     overflow: hidden;
@@ -384,8 +256,6 @@ ul.staggered-list li {
     align-items: center;
     justify-content: space-between;
     padding: 10px 0px;
-    color: $footer-copyright-font-color;
-    background-color: $footer-copyright-bg-color;
   }
 }
 
@@ -410,7 +280,7 @@ table {
       border-bottom: none;
     }
     tbody > tr:nth-child(odd) {
-      background-color: $table-striped-color;
+      background-color: rgba(0, 0, 0, 0.08);
     }
   }
 
@@ -418,12 +288,12 @@ table {
     transition: background-color .25s ease;
 
     &:hover {
-      background-color: $surface-hover-color-opaque;
+      background-color: rgba(0, 0, 0, 0.04);
     }
   }
 
   thead {
-    color: $font-color-medium;
+    color: var(--md-sys-color-on-surface-variant);
   }
 
   &.centered {
@@ -434,7 +304,7 @@ table {
 }
 
 tr {
-  border-bottom: 1px solid $table-border-color;
+  border-bottom: 1px solid var(--md-sys-color-outline-variant);
 }
 
 td, th {
@@ -458,17 +328,14 @@ td, th {
     td:empty:before {
       content: '\00a0';
     }
-
     th,
     td {
       margin: 0;
       vertical-align: top;
     }
-
     th {
       text-align: left;
     }
-
     thead {
       display: block;
       float: left;
@@ -482,7 +349,6 @@ td, th {
         }
       }
     }
-
     tbody {
       display: block;
       width: auto;
@@ -495,27 +361,23 @@ td, th {
         vertical-align: top;
       }
     }
-
     th {
       display: block;
       text-align: right;
     }
-
     td {
       display: block;
       min-height: 1.25em;
       text-align: left;
     }
-
     tr {
       border-bottom: none;
       padding: 0 10px;
     }
-
     /* sort out borders */
     thead {
       border: 0;
-      border-right: 1px solid $table-border-color;
+      border-right: 1px solid var(--md-sys-color-outline-variant);
     }
   }
 }
@@ -540,49 +402,23 @@ td, th {
   Utility Classes
 *******************/
 
-.hide {
-  display: none !important;
-}
+.hide { display: none !important; }
+
 // Text Align
-.left-align {
-  text-align: left;
-}
-.right-align {
-  text-align: right
-}
-.center, .center-align {
-  text-align: center;
-}
+.left-align { text-align: left; }
+.right-align { text-align: right }
+.center, .center-align { text-align: center; }
 
 // TODO: Remove this
-.left {
-  float: left !important;
-}
-.right {
-  float: right !important;
-}
+.left { float: left !important; }
+.right { float: right !important; }
 
 // No Text Select
-.no-select {
-  user-select: none;
-}
-.circle {
-  border-radius: 50%;
-}
-.center-block {
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-}
-.truncate {
-  display: block;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.no-padding {
-  padding: 0 !important;
-}
+.no-select { user-select: none; }
+.circle { border-radius: 50%; }
+.center-block { display: block; margin-left: auto; margin-right: auto; }
+.truncate { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.no-padding { padding: 0 !important; }
 
 /**************************
   Utility Spacing Classes
@@ -592,23 +428,20 @@ $spacing-shortcuts: ("margin": "m", "padding": "p") !default;
 $spacing-directions: ("top": "t", "right": "r", "bottom": "b", "left": "l") !default;
 $spacing-horizontal: "x" !default;
 $spacing-vertical: "y" !default;
-$spacing-values: ("0": 0, "1": 0.25rem, "2": 0.5rem, "3": 0.75rem, "4": 1rem, "5": 1.5rem, "6": 3rem, "auto": auto) !default; 
+$spacing-values: ("0": 0, "1": 0.25rem, "2": 0.5rem, "3": 0.75rem, "4": 1rem, "5": 1.5rem, "6": 3rem, "auto": auto) !default;
 
 @each $property, $shortcut in $spacing-shortcuts{
   @each $name, $value in $spacing-values{
     // All direction spacing
-
     .#{$shortcut}-#{$name}{
       #{$property}: $value !important;
     }
-
     // (t, b, r, l) spacing
     @each $direction, $suffix in $spacing-directions{
       .#{$shortcut}#{$suffix}-#{$name}{
-        #{$property}-#{$direction}: $value !important 
+        #{$property}-#{$direction}: $value !important
       }
     }
-
     // x spacing
     @if $spacing-horizontal != null{
        .#{$shortcut}#{$spacing-horizontal}-#{$name}{
@@ -616,15 +449,21 @@ $spacing-values: ("0": 0, "1": 0.25rem, "2": 0.5rem, "3": 0.75rem, "4": 1rem, "5
          #{$property}-right: $value !important;
        }
     }
-
     // y spacing
     @if $spacing-vertical != null{
       .#{$shortcut}#{$spacing-vertical}-#{$name}{
         #{$property}-top: $value !important;
         #{$property}-bottom: $value !important;
       }
-        
     }
-      
   }
-} 
+}
+
+// Docked display
+.display-docked {
+  position: absolute;
+  opacity: 0;
+  z-index: 9999;
+  visibility: hidden;
+}
+

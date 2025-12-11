@@ -181,13 +181,13 @@ class PagesController extends AppController
                     'lines' => [
                         '<h5>' . __('Dashboard Note') . '<span class="actions" style="display: block; float: right">' .
                             sprintf(
-                                '<a href="%2$s" class="btn-small"%3$s>%1$s</a>',
+                                '<a href="%2$s" class="btn-small filled"%3$s>%1$s</a>',
                                 __('Prev'),
                                 Router::url(['?' => ['offset' => $prevNoteOffset]]),
                                 $prevNoteOffset == $noteOffset ? ' disabled' : '',
                             ) . ' ' .
                             sprintf(
-                                '<a href="%2$s" class="btn-small"%3$s>%1$s</a>',
+                                '<a href="%2$s" class="btn-small filled"%3$s>%1$s</a>',
                                 __('Next'),
                                 Router::url(['?' => ['offset' => $nextNoteOffset]]),
                                 $nextNoteOffset == $noteOffset ? ' disabled' : '',

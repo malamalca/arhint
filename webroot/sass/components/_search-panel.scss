@@ -1,8 +1,9 @@
+@use "../vendor/Materialize/components/color-variables" as *;
 div.search-panel {
     padding: 5px;
     padding-bottom: 0;
-    background-color: $default-background-color;
-    border-bottom: solid 1px $table-border-color;
+    background-color: var(--md-sys-color-surface-container-highest);
+    border-bottom: solid 1px var(--md-sys-color-outline-variant);
 
     input {
         border: none !important;

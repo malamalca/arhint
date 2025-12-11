@@ -1,69 +1,62 @@
 @charset "UTF-8";
-@import "vendor/Materialize/components/tokens.module";
-@import "vendor/Materialize/components/colors.module";
-@import "vendor/Materialize/components/typography.module";
-@import "vendor/Materialize/components/theme.light.module";
-@import "vendor/Materialize/components/theme.dark.module";
-@import "vendor/Materialize/components/_theme_variables";
 
-// Color
-@import "vendor/Materialize/components/color-variables";
-@import "vendor/Materialize/components/color-classes";
-// Variables;
-@import "vendor/Materialize/components/variables";
-// Reset
-@import "vendor/Materialize/components/normalize";
+@forward "vendor/Materialize/components/tokens.module";
+@forward "vendor/Materialize/components/theme.module";
+//@forward "components/_theme_variables";
+@forward "vendor/Materialize/components/colors.module";
+@forward "vendor/Materialize/components/typography.module";
+@forward "vendor/Materialize/components/mixins.module";
+@forward "vendor/Materialize/components/color-variables";
+@forward "vendor/Materialize/components/variables";
+@forward "vendor/Materialize/components/normalize";
+
 // components
-@import "vendor/Materialize/components/global";
-@import "vendor/Materialize/components/collection";
-@import "vendor/Materialize/components/badges";
-@import "vendor/Materialize/components/icons-material-design";
-@import "vendor/Materialize/components/grid";
-@import "vendor/Materialize/components/navbar";
-@import "vendor/Materialize/components/typography";
-@import "vendor/Materialize/components/transitions";
-@import "vendor/Materialize/components/cards";
-@import "vendor/Materialize/components/toast";
-@import "vendor/Materialize/components/tabs";
-@import "vendor/Materialize/components/tooltip";
-@import "vendor/Materialize/components/buttons";
-@import "vendor/Materialize/components/dropdown";
-@import "vendor/Materialize/components/modal";
-@import "vendor/Materialize/components/collapsible";
-@import "vendor/Materialize/components/chips";
-@import "vendor/Materialize/components/materialbox";
-@import "vendor/Materialize/components/forms/forms";
-@import "vendor/Materialize/components/table_of_contents";
-@import "vendor/Materialize/components/sidenav";
-@import "vendor/Materialize/components/preloader";
-@import "vendor/Materialize/components/slider";
-@import "vendor/Materialize/components/carousel";
-@import "vendor/Materialize/components/tapTarget";
-@import "vendor/Materialize/components/pulse";
-@import "vendor/Materialize/components/datepicker";
-@import "vendor/Materialize/components/timepicker";
+@forward "vendor/Materialize/components/global";
+@forward "vendor/Materialize/components/typography";
+@forward "vendor/Materialize/components/buttons";
+@forward "vendor/Materialize/components/collection";
+@forward "vendor/Materialize/components/badges";
+@forward "vendor/Materialize/components/icons-material-design";
+@forward "vendor/Materialize/components/grid";
+@forward "vendor/Materialize/components/navbar";
+@forward "vendor/Materialize/components/transitions";
+@forward "vendor/Materialize/components/cards";
+@forward "vendor/Materialize/components/toast";
+@forward "vendor/Materialize/components/tabs";
+@forward "vendor/Materialize/components/tooltip";
+@forward "vendor/Materialize/components/dropdown";
+@forward "vendor/Materialize/components/modal";
+@forward "vendor/Materialize/components/collapsible";
+@forward "vendor/Materialize/components/chips";
+@forward "vendor/Materialize/components/materialbox";
+@forward "vendor/Materialize/components/forms/forms";
+@forward "vendor/Materialize/components/table_of_contents";
+@forward "vendor/Materialize/components/sidenav";
+@forward "vendor/Materialize/components/preloader";
+@forward "vendor/Materialize/components/slider";
+@forward "vendor/Materialize/components/carousel";
+@forward "vendor/Materialize/components/tapTarget";
+@forward "vendor/Materialize/components/pulse";
+@forward "vendor/Materialize/components/datepicker";
+@forward "vendor/Materialize/components/timepicker";
+@forward "vendor/Materialize/components/breadcrumb";
+@forward "vendor/Materialize/components/pagination";
 
+// custom components
+@forward "components/local-tokens";
+@forward "components/calendarday";
+@forward "components/timepanel";
+@forward "components/duration-input";
+@forward "components/view-panel";
+@forward "components/search-panel";
+@forward "components/sidenav";
+@forward "components/paginator";
+@forward "components/upload-area";
+@forward "components/dashboard-panel";
+@forward "components/dashboard-notes";
+@forward "components/dialog";
 
+@forward "../../plugins/projects/webroot/sass/crm";
 
-$default-background-color: #f0f0f0 !default;
-
-//@import "components/monthpicker";
-@import "components/calendarday";
-@import "components/timepanel";
-@import "components/duration-input";
-@import "components/userspicker-input";
-@import "components/monthpicker-input";
-@import "components/view-panel";
-@import "components/search-panel";
-@import "components/sidenav";
-@import "components/paginator";
-@import "components/upload-area";
-@import "components/dashboard-panel";
-@import "components/dashboard-notes";
-
-@import "../../plugins/projects/webroot/sass/crm";
-
-@import "material-icons";
-
-
-@import "overrides";
+@forward "material-icons";
+@forward "overrides";

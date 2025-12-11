@@ -144,11 +144,12 @@ class ProjectsWorkhoursController extends AppController
             if ($this->ProjectsWorkhours->save($projectsWorkhour)) {
                 $this->Flash->success(__d('projects', 'The projects workhour has been saved.'));
 
-                $referer = $this->getRequest()->getData('referer');
-
-                return $this->redirect(
-                    $referer ?? ['action' => 'index', '?' => ['project' => $projectsWorkhour->project_id]],
+                $redirect = $this->getRequest()->getData(
+                    'referer',
+                    ['action' => 'index', '?' => ['project' => $projectsWorkhour->project_id]],
                 );
+
+                return $this->redirect($redirect);
             }
             $this->Flash->error(__d('projects', 'The projects workhour could not be saved. Please, try again.'));
         }

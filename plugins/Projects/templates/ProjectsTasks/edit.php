@@ -25,9 +25,12 @@ $editForm = [
                 'method' => 'hidden',
                 'parameters' => ['milestone_id'],
             ],
-            'redirect' => [
+            'referer' => [
                 'method' => 'hidden',
-                'parameters' => ['field' => 'redirect', ['value' => $this->request->getQuery('redirect')]],
+                'parameters' => ['referer', [
+                    'default' => ($redirect = $this->getRequest()->getQuery('redirect')) ?
+                        Router::url($redirect, true) : null,
+                ]],
             ],
 
             'status' => [

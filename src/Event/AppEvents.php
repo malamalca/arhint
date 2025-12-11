@@ -54,6 +54,10 @@ class AppEvents implements EventListenerInterface
         /** @var \App\Model\Entity\User $user */
         $user = $controller->getCurrentUser();
 
+        if (extension_loaded('imap') === false) {
+            return;
+        }
+
         $imap = $user->getProperty('imap');
         if ($imap && $imap->url && $imap->username && $imap->password) {
             $panels['panels']['email'] = [
@@ -153,8 +157,8 @@ class AppEvents implements EventListenerInterface
                         'style="clear: both; height: 46px; ' .
                         'padding-top: 5px; margin-bottom: 4px; overflow: hidden;%6$s">' .
                         '<span style="display: block; width: 80px; float: left;">%5$s</span> ' .
-                        '<div class="project small light">%3$s</div>' .
-                        '<a href="%4$s" target="_blank"><span class="title big">%1$s</span></a></div>',
+                        '<div class="project">%3$s</div>' .
+                        '<a href="%4$s" target="_blank"><span class="title">%1$s</span></a></div>',
                     $overview->seen ?
                         h(iconv_mime_decode($overview->subject ?? '')) :
                         '<b>' . h(iconv_mime_decode($overview->subject ?? '')) . '</b>',

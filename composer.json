@@ -37,7 +37,7 @@
         "josegonzalez/dotenv": "^4.0",
         "phpstan/phpstan": "^1.0",
         "phpunit/phpunit": "^10.5.5 || ^11.1.3 || ^12.1",
-        "vimeo/psalm": "^5.15"
+        "vimeo/psalm": "^6.14.0"
     },
     "repositories": [
         {

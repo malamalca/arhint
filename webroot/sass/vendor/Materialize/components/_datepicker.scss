@@ -1,15 +1,18 @@
 /* Modal */
-.datepicker-modal {
+// @removed since v2.2.1
+/*.datepicker-modal {
   max-width: 325px;
+  // @removed since v2.2.1-dev regarding Material M3 standards
   min-width: 300px;
   max-height: none;
-}
+}*/
 
-.datepicker-container.modal-content {
+.datepicker-container {
   display: flex;
   flex-direction: column;
+  max-width: 325px;
   padding: 0;
-  background-color: $surface-color;
+  background-color: var(--md-sys-color-surface);
 }
 
 .datepicker-controls {
@@ -24,18 +27,35 @@
 
   .select-wrapper {
     input {
+      height: 49px;
+      margin: 4px 0 0 0;
+      border-bottom: none;
+      border-radius: 4px;
+      text-align: center;
+
       &:focus {
         border-bottom: none;
+        background-color: var(--md-sys-color-primary-container);
       }
 
-      border-bottom: none;
-      text-align: center;
-      margin: 0;
+      &::selection {
+        background-color: transparent;
+      }
     }
 
     .caret {
       display: none;
     }
+  }
+
+  .select-dropdown {
+    padding: 0;
+    vertical-align: middle;
+  }
+
+  .select-year input,
+  .select-month input {
+    background-color: transparent;
   }
 
   .select-year input {
@@ -54,11 +74,12 @@
 
   .month-prev > svg,
   .month-next > svg {
-    fill: $button-flat-color;
+    fill: var(--md-sys-color-on-surface-variant);
   }
 }
 
 .month-prev, .month-next {
+  height: 49px;
   margin-top: 4px;
   cursor: pointer;
   background-color: transparent;
@@ -69,16 +90,18 @@
 /* Date Display */
 .datepicker-date-display {
   flex: 1 auto;
-  background-color: $primary-color;
-  color: $font-on-primary-color-main;
+  // @removed since v2.2.1-dev regarding Material M3 standards
+  // background-color: var(--md-sys-color-primary);
+  // color:  var(--md-sys-color-on-primary);
   padding: 20px 22px;
+  border-bottom: 1px solid var(--md-sys-color-surface-variant-light);
   font-weight: 500;
 
   .year-text {
     display: block;
     font-size: 1.5rem;
     line-height: 25px;
-    color: $datepicker-year;
+    color:  var(--md-sys-color-on-primary);
   }
 
   .date-text {
@@ -86,6 +109,12 @@
     font-size: 2.8rem;
     line-height: 47px;
     font-weight: 500;
+  }
+
+  .daterange & {
+    .date-text {
+      font-size: 1.8rem;
+    }
   }
 }
 
@@ -115,52 +144,101 @@
 
   abbr {
     text-decoration: none;
-    color: $datepicker-calendar-header-color;
+    color: var(--md-sys-color-on-surface-variant);
   }
 
-  td {
-    color: $datepicker-day-font-color;
+  .datepicker-day {
+    padding: 0;
+    color: var(--md-sys-color-on-background);
+    // border-radius: 50%;
 
     &.is-today {
-      color: $primary-color;
+      color: var(--md-sys-color-primary);
     }
 
-    &.is-selected {
-      background-color: $primary-color;
-      color: $font-on-primary-color-main;
-    }
-
-    &.is-outside-current-month,
-    &.is-disabled {
-      color: $datepicker-day-font-color-disabled;
-      pointer-events: none;
-    }
-
-    border-radius: 50%;
-    padding: 0;
+    /*&.is-selected button {
+      background-color: var(--md-sys-color-primary);
+      color:  var(--md-sys-color-on-primary);
+    }*/
   }
+}
+
+// @todo
+.datepicker-day.has-event {}
+// @todo
+.datepicker-day.is-inrange {}
+// @todo
+.datepicker-day.is-startrange {}
+// @todo
+.datepicker-day.is-endrange {}
+
+.datepicker-day.is-daterange-start,
+.datepicker-day.is-daterange-end,
+.datepicker-day.is-daterange {
+  position: relative;
+
+  &:before {
+    position: absolute;
+    top: 5px;
+    width: 100%;
+    height: 34px;
+    content: '';
+    background-color: var(--md-sys-color-primary-container);
+    z-index: 0;
+  }
+}
+
+.datepicker-day.is-daterange-start:before,
+.datepicker-day.is-daterange-end:before {
+  width: 50%;
+}
+
+.datepicker-day.is-daterange-start:before {
+  left: 50%;
+}
+
+.datepicker-day.is-daterange .datepicker-day-button:before {
+  background-color: var(--md-sys-color-primary-container);
 }
 
 .datepicker-day-button {
   background-color: transparent;
   border: none;
-  line-height: 38px;
+  line-height: 34px;
   display: block;
-  width: 100%;
+  width: 34px;
   border-radius: 50%;
+  margin: 5px;
   padding: 0 5px;
   cursor: pointer;
   color: inherit;
+  position: relative;
+  z-index: 1;
 
   &:hover {
-    background-color: $datepicker-day-hover;
+    background-color: rgba(var(--md-sys-color-primary-numeric), 0.06);
   }
 
   &:focus {
-    background-color: $datepicker-day-focus;
+    border-color: var(--md-sys-color-primary);
+  }
+
+  .is-selected & {
+    background-color: var(--md-sys-color-primary);
+    color: var(--md-sys-color-on-primary);
+
+    &:focus {
+      background-color: var(--md-sys-color-surface-variant);
+      color: var(--md-sys-color-primary);
+    }
+  }
+
+  &.is-outside-current-month button,
+  &.is-disabled button {
+    color: var(--md-sys-color-on-surface);
+    pointer-events: none;
   }
 }
-
 
 /* Footer */
 .datepicker-footer {
@@ -175,36 +253,11 @@
 .datepicker-clear,
 .datepicker-today,
 .datepicker-done {
-  color: $primary-color;
+  color: var(--md-sys-color-primary);
   padding: 0 1rem;
 }
 
 .datepicker-clear {
-  color: $error-color;
+  color: var(--md-sys-color-error);
 }
 
-
-/* Media Queries */
-@media #{$medium-and-up} {
-  .datepicker-modal {
-    max-width: 625px;
-  }
-
-  .datepicker-container.modal-content {
-    flex-direction: row;
-  }
-
-  .datepicker-date-display {
-    flex: 0 1 270px;
-  }
-
-  .datepicker-controls,
-  .datepicker-table,
-  .datepicker-footer {
-    width: 320px;
-  }
-
-  .datepicker-day-button {
-    line-height: 44px;
-  }
-}

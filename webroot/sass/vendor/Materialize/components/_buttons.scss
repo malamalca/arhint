@@ -1,171 +1,113 @@
+@use './mixins.module.scss' as *;
+@use './variables' as *;
+
+:root {
+  --btn-height: 40px;
+  --btn-font-size-icon: 16px;
+  --btn-padding: 24px;
+  --btn-padding-icon: 16px;
+  --btn-gap-icon: 8px;
+  --btn-border-radius: 4px;
+  --btn-font-size: 14px;
+}
+
 .btn, .btn-floating, .btn-large, .btn-small, .btn-flat {
-  --font-size-icon: 16px;
-  --padding: 24px;
-  --padding-icon: 16px;
-  --gap-icon: 8px;
-  
-  height: $button-height;
-  
-  // line-height: $button-height;
-  border: $button-border;
-  border-radius: $button-radius;  
-  
-  // padding: $button-padding;
-  padding-left: var(--padding);
-  padding-right: var(--padding);
-  
-  color: $button-raised-color;
-  font-size: $button-font-size;
-  font-weight: 500;
-  text-decoration: none;
-  
-  display: inline-flex;
-  align-items: center;
-  
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent; // Gets rid of tap active state
-  white-space: nowrap;
-  outline: 0;
-  user-select: none;
-  
-  transition: background-color .2s ease-out;
+  @include btn(
+    var(--btn-height),
+    var(--btn-border-radius),
+    var(--btn-padding),
+    var(--btn-padding),
+    var(--btn-font-size)
+  );
 }
 
 // Icon
 .btn.icon-left, .btn.icon-right {
   position: relative;
 }
+
 .btn.icon-left {
-  padding-left: calc(var(--padding-icon) + var(--font-size-icon) + var(--gap-icon));
+  padding-left: calc(var(--btn-padding-icon) + var(--btn-font-size-icon) + var(--btn-gap-icon));
 }
+
 .btn.icon-right {
-  padding-right: calc(var(--padding-icon) + var(--font-size-icon) + var(--gap-icon)); 
+  padding-right: calc(var(--btn-padding-icon) + var(--btn-font-size-icon) + var(--btn-gap-icon));
 }
+
 .btn.icon-left i, .btn.icon-right i {
   position: absolute;
-  font-size: var(--font-size-icon);
+  font-size: var(--btn-font-size-icon);
 }
+
 .btn.icon-left i {
-  left: var(--padding-icon);
+  left: var(--btn-padding-icon);
 }
+
 .btn.icon-right i {
-  right: var(--padding-icon);
+  right: var(--btn-padding-icon);
 }
 
+//------------------ Enabled
 
-// Disabled shared style
-.btn.disabled,
-.btn-floating.disabled,
-.btn-large.disabled,
-.btn-small.disabled,
-.btn-flat.disabled,
-.btn:disabled,
-.btn-floating:disabled,
-.btn-large:disabled,
-.btn-small:disabled,
-.btn-flat:disabled,
-.btn[disabled],
-.btn-floating[disabled],
-.btn-large[disabled],
-.btn-small[disabled],
-.btn-flat[disabled] {
-  pointer-events: none;
-  background-color: $button-disabled-background !important;
-  box-shadow: none;
-  color: $button-disabled-color !important;
-  cursor: default;
-  &:hover {
-    background-color: $button-disabled-background !important;
-    color: $button-disabled-color !important;
-  }
-}
-
-//--- Filled Button
 .btn.filled {
-  background-color: var(--md-sys-color-primary);
+  @include btn-filled;
 }
-//--- Filled Tonal
+
 .btn.tonal {
-  background-color: var(--md-sys-color-secondary-container);
-  color: var(--md-sys-color-on-secondary-container);
+  @include btn-tonal;
 }
-//--- Text-Button (Flat)
-.btn.text, .btn-flat {
-  box-shadow: none;
-  background-color: transparent;
-  color: var(--md-sys-color-primary);
-  cursor: pointer;
-  transition: background-color .2s;
-  &:focus,
-  &:hover {
-    box-shadow: none;
-    background-color: $button-flat-hover-background-color;
-  }
-  &:focus {
-    background-color: $button-flat-focus-background-color;
-  }
-  &.disabled,
-  &.btn.text[disabled], &.btn-flat[disabled] {
-    background-color: transparent !important;
-    color: $button-flat-disabled-color !important;
-    cursor: default;
-  }
-}
-//--- Outlined-Button
-.btn.outlined {
-  background-color: transparent;
-  color: $button-raised-background;
-  border: 1px solid $button-raised-background;
-}
-//--- Elevated
+
 .btn.elevated {
-  @extend .tonal;
-  @extend .z-depth-1;
+  @include btn-elevated;
 }
 
-
-//======================== States (Hover, Focused, ...)
-
-.btn {
-  @extend .filled;
-
-  &:hover {
-    background-color: $button-raised-background-hover;
-    @extend .z-depth-1-half;
-  }
-
-  &:focus {
-    background-color: $button-raised-background-focus;
-    @extend .z-depth-1-half;
-  }  
+.btn.outlined {
+  @include btn-outlined;
 }
 
+.btn.text, .btn-flat {
+  @include btn-flat;
+}
 
+//------------------ Disabled
 
-//----------
-// .btn-floating {
-//   border-radius: 16px;
-//   width: unset;
-//   display: grid;
-//   grid-auto-flow: column;
-//   align-items: center;
-//   padding: 16px !important;
-//   padding-right: 24px !important; /* only with icon */
-//   gap: 8px;
-// }
-// .btn-floating.btn-large {
-//   width: unset;
-// }
-// .btn-large {
-//   font-size: 14px;
-// }
-//-----
+.btn.disabled, .btn-floating.disabled, .btn-large.disabled, .btn-small.disabled, .btn-flat.disabled,
+.btn:disabled, .btn-floating:disabled, .btn-large:disabled, .btn-small:disabled, .btn-flat:disabled,
+.btn[disabled], .btn-floating[disabled], .btn-large[disabled], .btn-small[disabled], .btn-flat[disabled] {
+  @include btn-disabled();
+}
+
+//------------------ Hover
+
+//------------------ Focus
+
 // Floating button
 .btn-floating {
+  // FIXES
+  // width: unset;
+  // padding: 16px !important;
+  // padding-right: 24px !important; /* only with icon */
+  // gap: 8px;
+  width: $button-floating-size;
+  height: $button-floating-size;
+  color: var(--md-sys-color-on-primary-container);
+  background-color: var(--md-sys-color-primary-container);
+  border-radius: $button-floating-radius;
+  padding: 0;
+  display: grid;
+  grid-auto-flow: column;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+  @extend .z-depth-1;
+  transition: background-color .3s;
+  cursor: pointer;
+  vertical-align: middle;
 
   &:hover {
-    background-color: $button-floating-background-hover;
     @extend .z-depth-1-half;
+    background-color: color-mix(in srgb, var(--md-sys-color-primary-container), var(--md-sys-color-on-primary-container) 16%);
   }
 
   &:focus {
@@ -178,87 +120,70 @@
   }
 
   &.btn-large {
-    &.halfway-fab {
-      bottom: -$button-floating-large-size * 0.5;
-    }
-    width: $button-floating-large-size;
-    height: $button-floating-large-size;
+    width: 56px;
+    height: 56px;
     padding: 0;
-    // font-size: 
+    &.halfway-fab {
+      bottom: -56px * 0.5;
+    }
+    // font-size:
     // i {
-    //   // line-height: $button-floating-large-size;
+    //   // line-height: 56px;
     // }
   }
 
   &.btn-small {
+    --btn-small-height: calc(0.75 * var(--btn-height));
+    width: var(--btn-small-height);
+    height: var(--btn-small-height);
+
     &.halfway-fab {
-      bottom: -$button-floating-small-size * 0.5;
+      bottom: calc(var(--btn-small-height) * -0.5);
     }
-    width: $button-floating-small-size;
-    height: $button-floating-small-size;
     // i {
     //   line-height: $button-floating-small-size;
     // }
   }
 
   &.halfway-fab {
+    position: absolute;
+    right: 24px;
+    bottom: -$button-floating-size * 0.5;
+
     &.left {
       right: auto;
       left: 24px;
     }
-    position: absolute;
-    right: 24px;
-    bottom: -$button-floating-size * 0.5;
   }
-
-  // FIXES
-  // width: unset;  
-  // padding: 16px !important;
-  // padding-right: 24px !important; /* only with icon */
-  // gap: 8px;
-
-  color: $button-floating-color;
-  
-  width: $button-floating-size;
-  height: $button-floating-size;
-  // line-height: $button-floating-size;
-
-  background-color: $button-floating-background;
-  border-radius: $button-floating-radius;
-  padding: 0;
-
-  display: grid;
-  grid-auto-flow: column;
-  align-items: center;
-
-  position: relative;
-  overflow: hidden;
-  z-index: 1;
-  @extend .z-depth-1;
-  transition: background-color .3s;
-  cursor: pointer;
-  vertical-align: middle;
 
   i {
     color: $button-floating-color;
-    font-size: $button-large-icon-font-size;
-    // line-height: $button-floating-size;
+    font-size: 1.6rem;
     width: inherit;
     display: inline-block;
     text-align: center;
   }
 }
+
 // button fix
 button.btn-floating {
-  border: $button-border;
+  border: none;
 }
+
 // Fixed Action Button
 .fixed-action-btn {
+  position: fixed;
+  right: 23px;
+  bottom: 23px;
+  padding-top: 15px;
+  margin-bottom: 0;
+  z-index: 997;
+
   &.active {
     ul {
       visibility: visible;
       padding-left: 0;
-      list-style-type: none;    
+      list-style-type: none;
     }
   }
 
@@ -266,6 +191,7 @@ button.btn-floating {
   &.direction-left,
   &.direction-right {
     padding: 0 0 0 15px;
+
     ul {
       text-align: right;
       right: 64px;
@@ -275,55 +201,67 @@ button.btn-floating {
       left: auto;
       /*width 100% only goes to width of button container */
       width: 500px;
+
       li {
         display: inline-block;
         margin: 7.5px 15px 0 0;
       }
     }
   }
+
   &.direction-right {
     padding: 0 15px 0 0;
+
     ul {
       text-align: left;
       direction: rtl;
       left: 64px;
       right: auto;
+
       li {
         margin: 7.5px 0 0 15px;
       }
     }
   }
+
   &.direction-bottom {
     padding: 0 0 15px 0;
+
     ul {
       top: 64px;
       bottom: auto;
       display: flex;
       flex-direction: column-reverse;
+
       li {
         margin: 15px 0 0 0;
       }
     }
   }
+
   &.toolbar {
+    padding: 0;
+    height: 56px;
+
     &.active {
-      &>a i {
+      & > a i {
         opacity: 0;
       }
     }
-    padding: 0;
-    height: $button-floating-large-size;
+
     ul {
       display: flex;
       top: 0;
       bottom: 0;
       z-index: 1;
+
       li {
         flex: 1;
         display: inline-block;
         margin: 0;
         height: 100%;
         transition: none;
+
         a {
           display: block;
           overflow: hidden;
@@ -333,7 +271,7 @@ button.btn-floating {
           background-color: transparent;
           box-shadow: none;
           color: $button-floating-color;
-          line-height: $button-floating-large-size;
+          line-height: 56px;
           z-index: 1;
 
           i {
@@ -343,12 +281,7 @@ button.btn-floating {
       }
     }
   }
-  position: fixed;
-  right: 23px;
-  bottom: 23px;
-  padding-top: 15px;
-  margin-bottom: 0;
-  z-index: 997;
+
   ul {
     left: 0;
     right: 0;
@@ -357,13 +290,16 @@ button.btn-floating {
     bottom: 64px;
     margin: 0;
     visibility: hidden;
+
     li {
       margin-bottom: 15px;
     }
+
     a.btn-floating {
       opacity: 0;
     }
   }
+
   .fab-backdrop {
     position: absolute;
     top: 0;
@@ -382,23 +318,23 @@ button.btn-floating {
 // Large button
 .btn-large {
   @extend .btn;
-  height: $button-large-height;
-  // line-height: $button-large-height;
-  font-size: $button-large-font-size;
+  height: calc(1.5 * var(--btn-height));
+  font-size: 18px;
   padding: 0 28px;
+
   i {
-    font-size: $button-large-icon-font-size;
+    font-size: 1.6rem;
   }
 }
 
 // Small button
 .btn-small {
   @extend .btn;
-  height: $button-small-height;
-  line-height: $button-small-height;
-  font-size: $button-small-font-size;
+  height: calc(0.75 * var(--btn-height));
+  font-size: 13px;
+
   i {
-    font-size: $button-small-icon-font-size;
+    font-size: 1.2rem;
   }
 }
 

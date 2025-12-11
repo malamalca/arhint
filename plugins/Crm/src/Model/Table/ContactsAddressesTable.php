@@ -60,6 +60,7 @@ class ContactsAddressesTable extends Table
             ->notEmptyString('primary')
             ->notEmptyString('kind')
             ->notEmptyString('street')
+            // debug: ->add('street', 'maxLength', ['rule' => ['maxLength', 10]] )
 
             ->allowEmptyString('zip')
             ->allowEmptyString('city')

@@ -1,0 +1,11 @@
+@use "../vendor/Materialize/components/tokens.module" as *;
+
+:root {
+    --md-sys-shape-corner-small: 4px;
+    --md-sys-shape-corner-medium: 6px;
+    --md-sys-shape-corner-large: 8px;
+
+    --md-sys-color-surface-container: color-mix(in srgb, var(--md-sys-color-surface), var(--md-sys-color-on-surface) 6%);
+    --md-sys-color-surface-container-high: color-mix(in srgb, var(--md-sys-color-surface), var(--md-sys-color-on-surface) 10%);
+    --md-sys-color-surface-container-highest: color-mix(in srgb, var(--md-sys-color-surface), var(--md-sys-color-on-surface) 17%);
+}

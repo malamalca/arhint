@@ -1,23 +1,3 @@
-/*#dat-happened, #amount {
-    width:200px;
-}
-
-#account-id, #descript {
-    width: 400px;
-}
-
-#add-expense-link {
-    margin-top: 10px;
-}
-#add-expense-link a {
-    font-family: Arial, helvetica, sans-serif;
-    font-size: 11px;
-    text-decoration: none;
-}
-#add-expense-link a:hover {
-    text-decoration: underline;
-}*/
-
 .negative {
     color: #ff0000;
 }
@@ -54,12 +34,6 @@
     width: 100px;
     clear: right;
 }
-
-#dropdown-unfinished,
-#dropdown-action {
-    width: auto !important;
-}
-
 
 /* AUTOCOMPLETE EXPENSE */
 .ac-expense-icon {

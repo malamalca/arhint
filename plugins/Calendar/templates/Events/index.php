@@ -12,9 +12,9 @@ $title = $firstDayOfMonth->i18nFormat('MMMM YYYY');
 
 // buttons
 $buttons = sprintf(
-    '<div class="col s4"><a href="%1$s" id="go-prev" class="btn waves-effect waves-light"><</a>' .
-    '<a href="%2$s" id="go-next" class="btn waves-effect waves-light">></a> ' .
-    '<a href="%4$s" id="go-today" class="btn waves-effect waves-light">%3$s</a>' .
+    '<div class="col s4"><a href="%1$s" id="go-prev" class="btn filled"><</a>' .
+    '<a href="%2$s" id="go-next" class="btn filled">></a> ' .
+    '<a href="%4$s" id="go-today" class="btn filled">%3$s</a>' .
     '</div>',
     Router::url(['?' => array_merge($filter, ['month' => $firstDayOfMonth->addMonths(-1)->format('Y-m')])]),
     Router::url(['?' => array_merge($filter, ['month' => $firstDayOfMonth->addMonths(+1)->format('Y-m')])]),

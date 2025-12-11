@@ -12,27 +12,27 @@ div.timepanel {
     span {
         display: inline-block;
         width: 12px;
-        border-top: solid 1px #e4e4e4;
-        border-bottom: solid 1px #e4e4e4;
-        border-left: solid 1px #e4e4e4;
+        border-top: solid 1px var(--md-sys-color-outline-variant);
+        border-bottom: solid 1px var(--md-sys-color-outline-variant);
+        border-left: solid 1px var(--md-sys-color-outline-variant);
 
         padding-right: 2px;
         padding-left: 1px;
 
         font-family: 'digital';
-        font-size: 14px;
+        font-size: 16px;
         font-weight: bold;
         text-align: right;
 
-        color: #111111;
-        background-color: #f0f0f0;
+        color: var(--md-sys-color-on-surface);
+        background-color: var(--md-sys-color-surface-container);
 
         &.separator {
             text-align: center;
         }
     }
     span:last-child {
-        border-right: solid 1px #e4e4e4;
+        border-right: solid 1px var(--md-sys-color-outline-variant);
     }
 
 }

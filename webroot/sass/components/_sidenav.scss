@@ -1,14 +1,13 @@
+@use "../vendor/Materialize/components/global" as *;
+@use "local-tokens" as *;
+
 .sidenav {
     @media print {
         display: none;
     }
 
-    .collapsible-header {
-        white-space: nowrap;
-    }
-
     .sidenav-user {
-        @extend .center-align !optional;
+        @extend .center-align;
 
         a.sidenav-avatar {
             display: inline;
@@ -24,29 +23,51 @@
             margin-top: 12px;
         }
 
-        div {
+        div.sidenav-user-title {
             display: block;
-            line-height: 20px;
-            height: 20px;
-            padding: 0px;
-            margin-top: 0px;
-            margin-bottom: 12px;
-        }
+            line-height: 1.5rem;
+            height: 1.5rem;
+            padding: 0;
+            margin-top: 0;
+            margin-bottom: 1rem;
 
-        .sidenav-user-title {
             cursor: pointer;
         }
+
+        ul#user-settings {
+            margin-left: 0.8rem !important;
+            margin-right: 0.8rem !important;
+            margin-top: 0;
+            border-radius: var(--md-sys-shape-corner-medium);
+        }
     }
 
-    .sidenav-header {
+    .collapsible-header {
+        white-space: nowrap;
         text-transform: uppercase;
-        border-bottom: solid 1px #c0c0c0;
-        background-color: #e0e0e0 !important;
+        border: solid 1px var(--md-sys-color-outline);
+        border-bottom: solid 1px var(--md-sys-color-outline) !important;
+        border-radius: var(--md-sys-shape-corner-medium);
+        background-color: var(--md-sys-color-surface-container-highest) !important;
     }
 
-    .sidenav-submenu {
+    .sidenav-submenu-body {
+        .collapsible-header {
+            text-transform: none;
+            background-color: transparent !important;
+            border: none !important;
+        }
+
         a {
-            font-weight: normal;
+            border-radius: var(--md-sys-shape-corner-medium);
+        }
+    }
+
+    ul.sidenav-submenu {
+        li {
+            a {
+                font-weight: normal !important;
+            }
         }
     }
 

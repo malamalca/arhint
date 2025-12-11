@@ -1,4 +1,5 @@
 <?php
+use Cake\Routing\Router;
 
 $pageTitle = __d('projects', 'Workhours');
 if (!empty($filter['project'])) {
@@ -17,7 +18,7 @@ if (!empty($filter['project'])) {
 // FILTER by project
 $activeProject =  $filter['project'] ?? null;
 $projectLink = $this->Html->link(
-    $projects[$activeProject] ?? __d('projects', 'All Projects'),
+    $projects[$activeProject ?? ''] ?? __d('projects', 'All Projects'),
     ['action' => 'filter'],
     ['class' => 'dropdown-trigger', 'id' => 'filter-projects', 'data-target' => 'dropdown-projects']
 );
@@ -40,7 +41,7 @@ $popupProjects = $this->Lil->popup('projects', $popupProjects, true);
 $activeUser =  $filter['user'] ?? null;
 if ($this->getCurrentUser()->hasRole('admin')) {
     $usersLink = $this->Html->link(
-        $users[$activeUser] ?? __d('projects', 'All Users'),
+        $users[$activeUser ?? ''] ?? __d('projects', 'All Users'),
         ['action' => 'filter'],
         ['class' => 'dropdown-trigger', 'id' => 'filter-users', 'data-target' => 'dropdown-users']
     );
@@ -135,7 +136,10 @@ foreach ($projectsWorkhours as $workhour) {
     $descript = '<div class="small">' . implode(' :: ', $descriptData) . '</div>';
     $descript .= h($workhour->descript);
     $tableIndex['table']['body']['rows'][]['columns'] = [
-        'user' => $descript,
+        'user' => [
+            'params' => ['class' => 'description'],
+            'html' => $descript,
+        ],
         'date' => [
             'params' => ['class' => 'center-align'],
             'html' => $this->Arhint->calendarDay($workhour->started),
@@ -154,7 +158,7 @@ foreach ($projectsWorkhours as $workhour) {
         ],
         'actions' => [
             'parameters' => ['class' => 'right-align'],
-            'html' => !$canEdit ? '' : $this->Lil->editLink($workhour->id) . ' ' . $this->Lil->deleteLink($workhour->id),
+            'html' => !$canEdit ? '' : $this->Lil->editLink([$workhour->id, '?' => ['redirect' => Router::url(null, true)]]) . ' ' . $this->Lil->deleteLink($workhour->id),
         ],
     ];
 }

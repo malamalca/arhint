@@ -93,7 +93,6 @@ class ProjectsFuncs
 
             imagefilledrectangle($newImage, 0, 0, $thumbSize, $thumbSize, $transparent);
             imagecopyresampled($newImage, $im, 0, 0, $cropX, $cropY, $newWidth, $newHeight, $width, $height);
-            imagedestroy($im);
 
             if (!empty($project->colorize)) {
                 imagefilter(
@@ -112,7 +111,6 @@ class ProjectsFuncs
         imagepng($im);
         $imageData = ob_get_contents();
         ob_end_clean();
-        imagedestroy($im);
 
         return $imageData;
     }

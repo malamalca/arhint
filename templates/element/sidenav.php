@@ -4,11 +4,11 @@ if (!empty($sidebar)) {
     foreach ($sidebar as $mainItem) {
         if (!empty($mainItem['visible'])) {
             ?>
-        <li class="bold<?= !empty($mainItem['active']) ? ' active' : '' ?>">
+        <li class="<?= !empty($mainItem['active']) ? ' active' : '' ?>">
             <?php
             if (!empty($mainItem['title'])) {
                 ?>
-                <a class="sidenav-header"<?= !empty($mainItem['url']) ? sprintf('href="%s"', $this->Url->build($mainItem['url'])) : '' ?>>
+                <a class="collapsible-header"<?= !empty($mainItem['url']) ? sprintf('href="%s"', $this->Url->build($mainItem['url'])) : '' ?>>
                 <?= h($mainItem['title']) ?>
                 </a>
                 <?php
@@ -17,13 +17,13 @@ if (!empty($sidebar)) {
             <?php
             if (!empty($mainItem['items'])) {
                 ?>
-            <div class="collapsible-body">
+            <div class="collapsible-body sidenav-submenu-body">
                 <ul>
                 <?php
                 foreach ($mainItem['items'] as $item) {
                     if (!empty($item['visible'])) {
                         ?>
-                    <li class="<?= !empty($item['active']) && empty($item['submenu']) ? 'active' : '' ?>">
+                    <li class="<?= !empty($item['active']) && empty($item['submenu']) ? 'active' : '#!' ?>">
                             <?php
                             if (empty($item['submenu'])) {
                                 ?>
@@ -33,7 +33,7 @@ if (!empty($sidebar)) {
                                 ?>
                         <ul class="collapsible collapsible-accordion">
                             <li class="<?= !empty($item['active']) ? ' active' : '' ?>">
-                                <a class="collapsible-header"<?= !empty($item['url']) ? sprintf('href="%s"', $this->Url->build($item['url'])) : '' ?>>
+                                <a class="collapsible-header"<?= !empty($item['url']) ? sprintf('href="%s"', $this->Url->build($item['url'])) : '#!' ?>>
                                     <?= h($item['title']) ?>
                                 </a>
                                 <div class="collapsible-body">

@@ -21,9 +21,12 @@ $editForm = [
                 'method' => 'hidden',
                 'parameters' => ['task_id'],
             ],
-            'redirect' => [
+            'referer' => [
                 'method' => 'hidden',
-                'parameters' => ['field' => 'redirect', ['value' => $this->request->getQuery('redirect')]],
+                'parameters' => ['referer', [
+                    'default' => ($redirect = $this->getRequest()->getQuery('redirect')) ?
+                        Router::url($redirect, true) : null,
+                ]],
             ],
             'user' => !$this->getCurrentUser()->hasRole('admin') ? null : [
                 'method' => 'control',

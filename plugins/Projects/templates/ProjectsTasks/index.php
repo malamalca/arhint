@@ -139,10 +139,10 @@ $tableIndex = [
         'search' => '<div id="tasks-search">' .
             sprintf('<form method="get" action="%s">', Router::url()) .
             sprintf('<input name="q" id="query" value="%s" />', htmlspecialchars($this->request->getQuery('q'))) .
-            '<button type="submit" class="btn btn-small tonal" id="btn-search"><i class="material-icons">search</i></button>' .
+            '<button type="submit" class="btn-small tonal" id="btn-search"><i class="material-icons">search</i></button>' .
             '</form>' .
             sprintf(
-                '<a href="%2$s" class="btn btn-small" id="btn-add"><i class="material-icons">add</i>%1$s</a>',
+                '<a href="%2$s" class="btn-small filled" id="btn-add"><i class="material-icons">add</i>%1$s</a>',
                 __d('projects', 'New Task'),
                 $this->Url->build([
                     'plugin' => 'Projects',
@@ -219,7 +219,7 @@ if (count($errors)) {
     $this->Lil->insertIntoArray($tableIndex['panels'], $errorsPanel, ['after' => 'search']);
 }
 
-if ($projectsTasks->isEmpty()) {
+if ($projectsTasks->items()->isEmpty()) {
     $tableIndex['panels']['tasks']['lines'][] =
         '<div id="no-tasks-found">' .
         '<h4>' . __d('projects', 'No tasks found.') . '</h4>' .

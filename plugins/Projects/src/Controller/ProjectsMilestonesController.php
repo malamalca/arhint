@@ -38,17 +38,17 @@ class ProjectsMilestonesController extends AppController
             if ($this->ProjectsMilestones->save($projectsMilestone)) {
                 $this->Flash->success(__d('projects', 'The projects milestone has been saved.'));
 
-                $redirect = $this->getRequest()->getData('redirect');
-                if (!empty($redirect)) {
-                    return $this->redirect(base64_decode($redirect));
-                }
+                $redirect = $this->getRequest()->getData(
+                    'referer',
+                    [
+                        'controller' => 'Projects',
+                        'action' => 'view',
+                        $projectsMilestone->project_id,
+                        '?' => ['tab' => 'logs'],
+                    ],
+                );
 
-                return $this->redirect([
-                    'controller' => 'Projects',
-                    'action' => 'view',
-                    $projectsMilestone->project_id,
-                    '?' => ['tab' => 'logs'],
-                ]);
+                return $this->redirect($redirect);
             }
             $this->Flash->error(__d('projects', 'The projects milestone could not be saved. Please, try again.'));
         }

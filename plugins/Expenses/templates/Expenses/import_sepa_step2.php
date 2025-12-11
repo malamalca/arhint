@@ -21,6 +21,22 @@ $popupUnfinished = ['items' => [[
 ]];
 $popupUnfinished = $this->Lil->popup('unfinished', $popupUnfinished, true);
 
+$popupAction = [
+    'items' => [
+        [
+            'title' => __d('expenses', 'Link with Existing Payment'),
+            'params' => ['id' => 'popupItem-LinkPayment', 'class' => 'nowrap'],
+        ], [
+            'title' => __d('expenses', 'Pay an Existing Expense'),
+            'params' => ['id' => 'popupItem-PayExpense', 'class' => 'nowrap'],
+        ], [
+            'title' => __d('expenses', 'Create a New Expense'),
+            'params' => ['id' => 'popupItem-AddExpense', 'class' => 'nowrap'],
+        ],
+    ],
+];
+$popupAction = $this->Lil->popup('action', $popupAction, true);
+
 $title = __d('expenses', 'IMPORT: SepaXML - Step2 - {0}', [$linkUnfinished]);
 
 $report = [
@@ -32,7 +48,7 @@ $report = [
             'url' => ['?' => ['clearcache' => 1]],
         ],
     ],
-    'actions' => ['lines' => [$popupUnfinished]],
+    'pre' => $popupUnfinished . $popupAction,
     'panels' => [
         'payments' => ['table' => [
             'parameters' => ['class' => 'striped', 'id' => 'import-sepa-step2'],
@@ -76,21 +92,6 @@ $report = [
     ],
 ];
 
-$popupAction = [
-    'items' => [
-        [
-            'title' => __d('expenses', 'Link with Existing Payment'),
-            'params' => ['id' => 'popupItem-LinkPayment', 'class' => 'nowrap'],
-        ], [
-            'title' => __d('expenses', 'Pay an Existing Expense'),
-            'params' => ['id' => 'popupItem-PayExpense', 'class' => 'nowrap'],
-        ], [
-            'title' => __d('expenses', 'Create a New Expense'),
-            'params' => ['id' => 'popupItem-AddExpense', 'class' => 'nowrap'],
-        ],
-    ],
-];
-echo $this->Lil->popup('action', $popupAction, true);
 
 $jsPaymentData = '';
 $total_positive = 0;
@@ -103,7 +104,7 @@ foreach ($importedPayments as $p) {
             $total_positive += $p['amount'];
         }
 
-        $pAction = '<button class="sepa-import-action btn-small dropdown-trigger" type="button" ' .
+        $pAction = '<button class="btn-small filled sepa-import-action dropdown-trigger" type="button" ' .
             'data-target="dropdown-action" data-payment="p%s">▼</button>';
 
         if (!empty($p['payment_id'])) {

@@ -41,9 +41,17 @@ class ContactsAddressesController extends AppController
                 $this->ContactsAddresses->Contacts->touch($contact);
                 $this->ContactsAddresses->Contacts->save($contact);
 
-                $this->Flash->success(__d('crm', 'The contacts\' address has been saved.'));
+                if ($this->getRequest()->is('ajax')) {
+                    $response = $this->getResponse()
+                        ->withType('application/json')
+                        ->withStringBody((string)json_encode(['address' => $address]));
 
-                return $this->redirect(['controller' => 'Contacts', 'action' => 'view', $address->contact_id]);
+                    return $response;
+                } else {
+                    $this->Flash->success(__d('crm', 'The contacts\' address has been saved.'));
+
+                    return $this->redirect(['controller' => 'Contacts', 'action' => 'view', $address->contact_id]);
+                }
             } else {
                 $this->Flash->error(__d('crm', 'The contacts\' address could not be saved. Please, try again.'));
             }

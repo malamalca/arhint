@@ -1,4 +1,6 @@
 <?php
+use Cake\Routing\Router;
+
 if ($expense) {
     $paymentsTable = [
         'pre' => '<div style="padding-left: 0; padding-right: 0; width: 100%; max-width: 700px;">',
@@ -26,8 +28,11 @@ if ($expense) {
                 'parameters' => ['class' => 'left-align'],
                 'html' => $this->Html->link(
                     __d('expenses', 'Add Payment'),
-                    ['plugin' => 'Expenses', 'controller' => 'Payments', 'action' => 'edit',
-                     '?' => ['expense' => $expense->id, 'amount' => $expense->total],
+                    [
+                        'plugin' => 'Expenses',
+                        'controller' => 'Payments',
+                        'action' => 'edit',
+                        '?' => ['expense' => $expense->id, 'amount' => $expense->total, 'redirect' => Router::url(null, true)],
                     ],
                     ['id' => 'add-payment']
                 ),
@@ -66,12 +71,12 @@ if ($expense) {
                 'parameters' => ['class' => 'center-align'],
                 'html' =>
                 $this->Lil->editLink(
-                    ['plugin' => 'Expenses', 'controller' => 'Payments', 'action' => 'edit', $p->id],
+                    ['plugin' => 'Expenses', 'controller' => 'Payments', 'action' => 'edit', $p->id, '?' => ['redirect' => Router::url(null, true)]],
                     ['class' => 'edit-payment']
                 ) .
                 ' ' .
                 $this->Lil->deleteLink(
-                    ['plugin' => 'Expenses', 'controller' => 'Payments', 'action' => 'delete', $p->id],
+                    ['plugin' => 'Expenses', 'controller' => 'Payments', 'action' => 'delete', $p->id, '?' => ['redirect' => Router::url(null, true)]],
                     ['confirm' => __d('expenses', 'Are you sure you want to delete this payment?')]
                 ),
             ],

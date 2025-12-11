@@ -81,7 +81,7 @@ if ($contact->kind != 'T') {
         ],
     ],
     'tax_no_label' => '<label for="contact-tax-no">' . __d('crm', 'Tax no.') . ':</label>',
-    'tax_no_magic' => ' ' . $this->Html->image('Crm.wand.png', ['id' => 'magic-tax-lookup', 'class' => 'btn-small']),
+    'tax_no_magic' => ' ' . $this->Html->image('Crm.wand.png', ['id' => 'magic-tax-lookup', 'class' => 'btn-small filled']),
     'tax_no_error' => [
         'method' => 'error',
         'parameters' => ['tax_no', __d('crm', 'Invalid or existing tax no.')],

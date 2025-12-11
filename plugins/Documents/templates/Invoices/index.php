@@ -146,8 +146,6 @@ $total = 0;
 $net_total = 0;
 $link_template = '<a href="' . Router::url(['action' => 'view', '__id__']) . '">__title__</a>';
 foreach ($data as $invoice) {
-    $project = $projects[$invoice->project_id] ?? null;
-
     $invoicesIndex['table']['body']['rows'][]['columns'] = [
         'no' => [
             'parameters' => ['class' => 'nowrap'],

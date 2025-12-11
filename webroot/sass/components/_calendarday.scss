@@ -2,17 +2,17 @@ span.calendar-day {
     display: block;
     width: 40px;
     padding: 0;
-    border-bottom: solid 1px #c0c0c0;
+    border-bottom: solid 1px var(--md-sys-color-outline-variant);
     margin-left: auto;
     margin-right: auto;
 
     &.today {
         span.day, span.month {
-            background-color: #fffbce;
+            background-color: var(--md-sys-color-tertiary-container);
         }
         span.day-name, span.year-name {
-            background-color: #ffea00;
-            color: #000;
+            background-color: var(--md-sys-color-tertiary);
+            color: var(--md-sys-color-on-tertiary);
         }
     }
 
@@ -23,23 +23,25 @@ span.calendar-day {
     }
 
     span.day-name, span.year-name {
-        color: #ffffff;
-        background-color: $secondary-color;
+        color: var(--md-sys-color-on-primary);
+        background-color: var(--md-sys-color-primary);
+        
         font-size: 0.60rem;
-        border-right: solid 1px #c0c0c0;
+        border-right: solid 1px var(--md-sys-color-outline-variant);
 
         &.weekend {
-            background-color: $primary-color;
+            background-color: var(--md-sys-color-primary);
         }
     }
 
     span.day, span.month {
         padding: 0px;
-        background-color: $secondary-color;
-        background-color: #f0f0f0;
         font-size: 1.0rem;
         font-weight: bold;
-        border-right: solid 1px #c0c0c0;
+
+        color: var(--md-sys-color-on-surface);
+        background-color: var(--md-sys-color-surface-container);
+        border-right: solid 1px var(--md-sys-color-outline-variant);
     }
 
     span.month {

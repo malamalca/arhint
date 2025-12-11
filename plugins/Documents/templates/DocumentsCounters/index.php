@@ -90,7 +90,7 @@ foreach ($counters as $counter) {
                 $this->Html->link(
                     '<i class="material-icons chevron">list</i>',
                     ['controller' => $counter->kind, 'action' => 'index', '?' => ['counter' => $counter->id]],
-                    ['escape' => false, 'class' => 'btn btn-small waves-effect waves-light waves-circle']
+                    ['escape' => false, 'class' => 'btn-small filled']
                 ) . ' ' .
                 (!$this->getCurrentUser()->hasRole('editor') ? '' : (
                     $this->Lil->editLink($counter->id) . ' ' . $this->Lil->deleteLink($counter->id)
