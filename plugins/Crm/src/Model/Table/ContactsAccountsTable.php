@@ -49,16 +49,32 @@ class ContactsAccountsTable extends Table
     public function validationDefault(Validator $validator): Validator
     {
         $validator
-            //->add('id', 'valid', ['rule' => 'uuid'])
             ->allowEmptyString('id', 'create')
             ->add('contact_id', 'valid', ['rule' => 'uuid'])
             ->allowEmptyString('contact_id')
             ->add('primary', 'valid', ['rule' => 'boolean'])
-            //->requirePresence('primary', 'create')
             ->notEmptyString('primary')
             ->allowEmptyString('kind')
-            ->allowEmptyString('iban')
+            ->add('kind', 'inList', ['rule' => [
+                'inList',
+                array_keys(Configure::read('Crm.accountTypes')),
+            ]])
+            ->notEmptyString('iban')
             ->allowEmptyString('bic');
+
+        return $validator;
+    }
+
+    /**
+     * Validation rules for contact form.
+     *
+     * @param \Cake\Validation\Validator $validator Validator instance.
+     * @return \Cake\Validation\Validator
+     */
+    public function validationContact(Validator $validator): Validator
+    {
+        $validator = $this->validationDefault($validator)
+            ->allowEmptyString('iban');
 
         return $validator;
     }

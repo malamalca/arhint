@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Crm\Model\Table;
 
 use ArrayObject;
+use Cake\Core\Configure;
 use Cake\Event\Event;
 use Cake\ORM\Entity;
 use Cake\ORM\RulesChecker;
@@ -47,14 +48,30 @@ class ContactsPhonesTable extends Table
     public function validationDefault(Validator $validator): Validator
     {
         $validator
-            //->add('id', 'valid', ['rule' => 'uuid'])
             ->allowEmptyString('id', 'create')
             ->allowEmptyString('contact_id')
-            ->allowEmptyString('no')
-            ->allowEmptyString('kind')
+            ->notEmptyString('no')
+            ->notEmptyString('kind')
+            ->add('kind', 'inList', ['rule' => [
+                'inList',
+                array_keys(Configure::read('Crm.phoneTypes')),
+            ]])
             ->add('primary', 'valid', ['rule' => 'boolean'])
-            //->requirePresence('primary', 'create')
             ->notEmptyString('primary');
+
+        return $validator;
+    }
+
+    /**
+     * Validation rules for contact form.
+     *
+     * @param \Cake\Validation\Validator $validator Validator instance.
+     * @return \Cake\Validation\Validator
+     */
+    public function validationContact(Validator $validator): Validator
+    {
+        $validator = $this->validationDefault($validator)
+            ->allowEmptyString('no');
 
         return $validator;
     }

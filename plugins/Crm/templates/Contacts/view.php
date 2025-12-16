@@ -144,113 +144,153 @@ if (!empty($job)) {
     ];
 
     if (!empty($contact->contacts_addresses)) {
-        $countries = Configure::read('Crm.countries');
-        $addressTypes = Configure::read('Crm.addressTypes');
+        $addresses_table = [
+            'parameters' => ['class' => 'contact-details-table'],
+        ];
         foreach ($contact->contacts_addresses as $address) {
-            $contact_view['panels']['addresses']['lines'][] = [
-                'label' => __d('crm', 'Address') .
-                    ' / ' .
-                    h(ucfirst($addressTypes[$address->kind] ?? __d('crm', 'other'))) .
-                    ':',
-                'text' => implode(' ', [
+            $addresses_table['body']['rows'][]['columns'] = [
+                'primary' => [
+                    'parameters' => ['class' => 'starred'],
+                    'html' => $address->primary ? '<i class="material-icons tiny">star</i>' : '',
+                ],
+                'address' => implode(' ', [
                     implode(', ', array_filter([
                         $address->street,
                         trim(implode(' ', [$address->zip, $address->city])),
                         h($countries[$address->country_code] ?? $address->country_code),
                     ])),
-                    $this->Lil->editLink([
-                        'controller' => 'ContactsAddresses',
-                        'action' => 'edit',
-                        $address->id,
-                    ], ['class' => 'edit-element edit-address']),
-                    $this->Lil->deleteLink([
-                        'controller' => 'ContactsAddresses',
-                        'action' => 'delete',
-                        $address['id'],
-                    ], ['class' => 'delete-element']),
                 ]),
+                'actions' => [
+                    'parameters' => ['class' => 'actions'],
+                    'html' =>
+                        implode(' ', [
+                        $this->Lil->editLink([
+                            'controller' => 'ContactsAddresses',
+                            'action' => 'edit',
+                            $address->id,
+                        ], ['class' => 'edit-element edit-email tiny']),
+                        $this->Lil->deleteLink([
+                            'controller' => 'ContactsAddresses',
+                            'action' => 'delete',
+                            $address->id,
+                        ], ['class' => 'delete-element tiny']),
+                    ]),
+                ],
             ];
         }
+        $contact_view['panels']['addresses']['lines'][0] = [
+            'label' => __d('crm', 'Addresses') . ':',
+            'text' => $this->Lil->table($addresses_table),
+        ];
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     if (!empty($contact->contacts_emails)) {
+        $emails_table = [
+            'parameters' => ['class' => 'contact-details-table'],
+        ];
         foreach ($contact->contacts_emails as $email) {
-            $label = __d('crm', 'Email') .
-                ($email->primary ? '*' : '') .
-                ' / ' .
-                ucfirst(Configure::read('Crm.emailTypes.' . $email->kind)) . ':';
-            $contact_view['panels']['emails']['lines'][] = [
-                'label' => $label,
-                'text' => implode(' ', [
-                    $email->email ?? __d('crm', 'N/A'),
-                    $this->Lil->editLink([
-                        'controller' => 'ContactsEmails',
-                        'action' => 'edit',
-                        $email->id,
-                    ], ['class' => 'edit-element edit-email']),
-                    $this->Lil->deleteLink([
-                        'controller' => 'ContactsEmails',
-                        'action' => 'delete',
-                        $email->id,
-                    ], ['class' => 'delete-element']),
-                ]),
+            $emails_table['body']['rows'][]['columns'] = [
+                'primary' => [
+                    'parameters' => ['class' => 'starred'],
+                    'html' => $email->primary ? '<i class="material-icons tiny">star</i>' : '',
+                ],
+                'email' => h($email->email ?? __d('crm', 'N/A')),
+                'actions' => [
+                    'parameters' => ['class' => 'actions'],
+                    'html' =>
+                        implode(' ', [
+                        $this->Lil->editLink([
+                            'controller' => 'ContactsEmails',
+                            'action' => 'edit',
+                            $email->id,
+                        ], ['class' => 'edit-element edit-email tiny']),
+                        $this->Lil->deleteLink([
+                            'controller' => 'ContactsEmails',
+                            'action' => 'delete',
+                            $email->id,
+                        ], ['class' => 'delete-element tiny']),
+                    ]),
+                ],
             ];
         }
+        $contact_view['panels']['emails']['lines'][0] = [
+            'label' => __d('crm', 'Emails') . ':',
+            'text' => $this->Lil->table($emails_table),
+        ];
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     if (!empty($contact->contacts_phones)) {
         $phoneTypes = Configure::read('Crm.phoneTypes');
+        $phones_table = [
+            'parameters' => ['class' => 'contact-details-table'],
+        ];
         foreach ($contact->contacts_phones as $phone) {
-            $contact_view['panels']['phones']['lines'][] = [
-                'label' => __d('crm', 'Phone') .
-                    ' / ' .
-                    h(ucfirst($phoneTypes[$phone->kind] ?? __d('crm', 'other'))) .
-                    ':',
-                'text' => implode(' ', [
-                    $phone->no,
-                    $this->Lil->editLink([
-                        'controller' => 'ContactsPhones',
-                        'action' => 'edit',
-                        $phone->id,
-                    ], ['class' => 'edit-element edit-phone']),
-                    $this->Lil->deleteLink([
-                        'controller' => 'ContactsPhones',
-                        'action' => 'delete',
-                        $phone->id,
-                    ], ['class' => 'delete-element']),
-                ]),
+            $phones_table['body']['rows'][]['columns'] = [
+                'primary' => [
+                    'parameters' => ['class' => 'starred'],
+                    'html' => $phone->primary ? '<i class="material-icons tiny">star</i>' : '',
+                ],
+                'phone' => h($phone->no ?? __d('crm', 'N/A')),
+                'actions' => [
+                    'parameters' => ['class' => 'actions'],
+                    'html' =>
+                        implode(' ', [
+                        $this->Lil->editLink([
+                            'controller' => 'ContactsPhones',
+                            'action' => 'edit',
+                            $phone->id,
+                        ], ['class' => 'edit-element edit-phone tiny']),
+                        $this->Lil->deleteLink([
+                            'controller' => 'ContactsPhones',
+                            'action' => 'delete',
+                            $phone->id,
+                        ], ['class' => 'delete-element tiny']),
+                    ]),
+                ],
             ];
         }
+        $contact_view['panels']['phones']['lines'][0] = [
+            'label' => __d('crm', 'Phones') . ':',
+            'text' => $this->Lil->table($phones_table),
+        ];
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     if (!empty($contact->contacts_accounts)) {
+        $accounts_table = [
+            'parameters' => ['class' => 'contact-details-table'],
+        ];
         foreach ($contact->contacts_accounts as $account) {
-            $acc_title = __d('crm', 'Unknown');
-            $acc_types = Configure::read('Crm.accountTypes');
-            if (!empty($acc_types[$account->kind])) {
-                $acc_title = ucfirst($acc_types[$account->kind]);
-            }
-
-            $contact_view['panels']['accounts']['lines'][] = [
-                'label' => __d('crm', 'Account') . ' / ' . $acc_title . ':',
-                'text' => implode(' ', [
-                    implode(' ', str_split($account->iban ?? '', 4)),
-                    $this->Lil->editLink([
-                        'controller' => 'ContactsAccounts',
-                        'action' => 'edit',
-                        $account->id,
-                    ], ['class' => 'edit-element edit-account']),
-                    $this->Lil->deleteLink([
-                        'controller' => 'ContactsAccounts',
-                        'action' => 'delete',
-                        $account->id,
-                    ], ['class' => 'delete-element']),
-                ]),
+            $accounts_table['body']['rows'][]['columns'] = [
+                'primary' => [
+                    'parameters' => ['class' => 'starred'],
+                    'html' => $account->primary ? '<i class="material-icons tiny">star</i>' : '',
+                ],
+                'account' => h($account->iban ?? __d('crm', 'N/A')),
+                'actions' => [
+                    'parameters' => ['class' => 'actions'],
+                    'html' =>
+                        implode(' ', [
+                        $this->Lil->editLink([
+                            'controller' => 'ContactsAccounts',
+                            'action' => 'edit',
+                            $account->id,
+                        ], ['class' => 'edit-element edit-account tiny']),
+                        $this->Lil->deleteLink([
+                            'controller' => 'ContactsAccounts',
+                            'action' => 'delete',
+                            $account->id,
+                        ], ['class' => 'delete-element tiny']),
+                    ]),
+                ],
             ];
         }
+        $contact_view['panels']['accounts']['lines'][0] = [
+            'label' => __d('crm', 'Accounts') . ':',
+            'text' => $this->Lil->table($accounts_table),
+        ];
     }
 
     $contact_view['panels']['modified'] = [

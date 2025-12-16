@@ -120,10 +120,10 @@ class ContactsController extends AppController
         if ($this->getRequest()->is(['post', 'put'])) {
             $this->Contacts->patchEntity($contact, $this->getRequest()->getData(), [
                 'associated' => [
-                    'PrimaryAddresses' => ['validate' => false],
-                    'PrimaryAccounts' => ['validate' => false],
-                    'PrimaryEmails' => ['validate' => false],
-                    'PrimaryPhones' => ['validate' => false],
+                    'PrimaryAddresses' => ['validate' => 'contact'],
+                    'PrimaryAccounts' => ['validate' => 'contact'],
+                    'PrimaryEmails' => ['validate' => 'contact'],
+                    'PrimaryPhones' => ['validate' => 'contact'],
                 ],
             ]);
 

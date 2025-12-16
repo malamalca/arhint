@@ -23,6 +23,12 @@ $editForm = [
                 'parameters' => [$contact, [
                     'id' => 'contact-form',
                     'idPrefix' => 'contact',
+                    'context' => ['validator' => [
+                        'PrimaryEmails' => 'contact',
+                        'PrimaryPhones' => 'contact',
+                        'PrimaryAddresses' => 'contact',
+                        'PrimaryAccounts' => 'contact',
+                    ]],
                 ]],
             ],
             'id' => [

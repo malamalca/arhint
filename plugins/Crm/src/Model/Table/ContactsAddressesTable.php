@@ -52,19 +52,34 @@ class ContactsAddressesTable extends Table
     public function validationDefault(Validator $validator): Validator
     {
         $validator
-            //->add('id', 'valid', ['rule' => 'uuid'])
             ->allowEmptyString('id', 'create')
             ->allowEmptyString('contact_id')
             ->add('primary', 'valid', ['rule' => 'boolean'])
-            //->requirePresence('primary', 'create')
             ->notEmptyString('primary')
             ->notEmptyString('kind')
+            ->add('kind', 'inList', ['rule' => [
+                'inList',
+                array_keys(Configure::read('Crm.addressTypes')),
+            ]])
             ->notEmptyString('street')
-            // debug: ->add('street', 'maxLength', ['rule' => ['maxLength', 10]] )
 
             ->allowEmptyString('zip')
             ->allowEmptyString('city')
             ->allowEmptyString('country');
+
+        return $validator;
+    }
+
+    /**
+     * Validation rules for contact form.
+     *
+     * @param \Cake\Validation\Validator $validator Validator instance.
+     * @return \Cake\Validation\Validator
+     */
+    public function validationContact(Validator $validator): Validator
+    {
+        $validator = $this->validationDefault($validator)
+            ->allowEmptyString('street');
 
         return $validator;
     }

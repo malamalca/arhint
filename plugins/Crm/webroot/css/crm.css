@@ -22,6 +22,29 @@ div#contact-logo {
     margin-top: -63px;
 }
 
+table.contact-details-table {
+    width: 500px;
+    border-collapse: collapse;
+    margin-left: -20px;
+}
+table.contact-details-table tr {
+    border-bottom: none;
+}
+table.contact-details-table td {
+    padding: 0;
+    height: 22px;
+}
+table.contact-details-table td.actions {
+    width: 80px;
+}
+table.contact-details-table td.starred {
+    width: 20px;
+    color: #FFA500;
+}
+table.contact-details-table .btn-small {
+    height: 18px;
+}
+
 
 div#contact-view-modified * {
     font-size: 10px;
