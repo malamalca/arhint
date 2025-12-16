@@ -166,12 +166,13 @@ echo $this->Lil->form($editForm, 'Projects.Projects.edit');
      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
      crossorigin=""></script>
 
-<div id="modalMapPopup" class="modal">
-<div class="modal-content right-align">
-<div id="map" style="min-height: 300px;"></div>
-<button class="modal-close btn filled" id="closeModalMapPopup"><?= __d('projects', 'OK') ?></button>
-</div>
-</div>
+<dialog id="modalMapPopup">
+    <div class="dialog-header">
+       <a href="#" class="btn-small filled modal-close" id="closeModalMapPopup"><i class="material-icons">close</i></a>
+       <h3 id="modal-title"><?= __d('projects', 'Pick on Map') ?></h3>
+    </div>
+    <div id="map" style="min-height: 300px;"></div>
+</dialog>
 <script>
     var latValue = $("#project-lat").val();
     var lonValue = $("#project-lon").val();
@@ -190,16 +191,13 @@ echo $this->Lil->form($editForm, 'Projects.Projects.edit');
             marker = L.marker([latValue, lonValue]).addTo(map);
         };
 
-        map.invalidateSize();
-
         map.on("click", addMarker);
-
-        var modalEl = M.Modal.init(document.getElementById("modalMapPopup"), {
-            "onOpenEnd": function () { map.invalidateSize(); }
-        });
+        
+        var modalEl = document.getElementById("modalMapPopup");
 
         $("#MapPicker").on("click", function(e) {
-            modalEl.open();
+            modalEl.showModal();
+            map.invalidateSize();
             e.preventDefault();
             return false;
         });

@@ -452,7 +452,7 @@ class ArhintHelper extends Helper
             $this->Lil->jsReady(sprintf(
                 '$(".AttacmhmentPreviewLink").each(function(){ $(this).modalPopup({' .
                     'title: "%s", ' .
-                    'onOpen: function(popup) { ' .
+                    'onOpen: function(popup, e) { ' .
                         '$(popup).height(window.innerHeight); ' .
                         '$("#attachment-view", popup).height($(popup).innerHeight() - 100); ' .
                     '}, ' .

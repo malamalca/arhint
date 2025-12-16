@@ -283,18 +283,5 @@ echo $this->Lil->panels($invoiceView, 'Documents.Documents.view');
 
         $("#EditIssuer").modalPopup({title: "<?= __d('documents', 'Edit Issuer') ?>"});
         $("#EditReceiver").modalPopup({title: "<?= __d('documents', 'Edit Receiver') ?>"});
-
-        $(".AttachmentPreview").each(function() {
-            $(this).modalPopup({
-                title: "<?= __d('documents', 'Attachment Preview') ?>",
-                onOpen: function(popup) {
-                    $(popup).height(window.innerHeight);
-                    $("#attachment-view", popup).height($(popup).innerHeight() - 125);
-                },
-                onResize: function(popup) {
-                    $("#attachment-view", popup).height($(popup).innerHeight() - 125);
-                }
-            });
-        });
     });
 </script>

@@ -69,7 +69,7 @@ jQuery.fn.modalPopup = function(p_options) {
                 $this.dialog.showModal();
 
                 if ($this.options.onOpen instanceof Function) {
-                    $this.options.onOpen($this.popup, $this);
+                    $this.options.onOpen($this.dialog, $this);
                 }
             })
             .fail(function() {
@@ -146,8 +146,6 @@ jQuery.fn.modalPopup = function(p_options) {
     };
 
     this.onClose = function(e) {
-	    console.log($this.dialog.returnValue);
-
         if ($this.options.onClose instanceof Function) {
             $this.options.onClose($this.dialog, $this);
         }
