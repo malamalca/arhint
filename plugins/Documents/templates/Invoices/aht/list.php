@@ -1,58 +1,90 @@
 <?php
-// UPDATE `documents_clients` SET contact_id = (SELECT id FROM contacts WHERE contacts.title = documents_clients.title);
-if ($data->count() > 0) {
-    $this->Paginator->options([
-        'url' => $sourceRequest
-    ]);
+use Cake\Utility\Hash;
 
-    $invoicesTable = [
-        'parameters' => [
-            'width' => '100%', 'cellspacing' => 0, 'cellpadding' => 0, 'id' => 'InvoicesList', 'width' => '700',
-        ],
-        'head' => ['rows' => [['columns' => [
-            'no' => [
-                'parameters' => ['class' => 'left-align'],
-                'html' => __d('documents', 'Invoices'),
-            ],
-            'date' => [
-                'parameters' => ['class' => 'center-align'],
-                'html' => $this->Paginator->sort(
-                    'dat_issue',
-                    __d('documents', 'Date'),
-                ),
-            ],
-            'total' => [
-                'parameters' => ['class' => 'right-align'],
-                'html' => $this->Paginator->sort(
-                    'total',
-                    __d('documents', 'Total'),
-                ),
-            ],
-        ]]]],
-        'foot' => ['rows' => [['columns' => [
-            'actions' => [
-                'parameters' => ['class' => 'left-align'],
-                'html' => '<ul class="paginator">' .
-                    $this->Paginator->numbers([
-                        'first' => 1,
-                        'last' => 1,
-                        'modulus' => 3,
-                    ]) .
-                    '</ul>',
-            ],
-            'caption' => [
-                'parameters' => ['class' => 'right-align'],
-                'html' => __d('documents', 'Total') . ':',
-            ],
-            'total' => [
-                'parameters' => ['class' => 'right-align'],
-                'html' => '',
-            ],
-         ]]]],
+$this->Paginator->options([
+    'url' => $sourceRequest,
+]);
+
+/** COUNTERS POPUP */
+$activeCounterId = $sourceRequest['?']['counter'] ?? null;
+$popupCounters = ['items' => [[
+    'title' => __d('documents', 'All Counters'),
+    'url' => Hash::merge($sourceRequest, ['?' => ['counter' => null]]),
+    'params' => ['class' => 'nowrap'],
+]]];
+foreach ($counters as $counter) {
+    $popupCounters['items'][] = [
+        'title' => (string)$counter,
+        'url' => Hash::merge($sourceRequest, ['?' => ['counter' => $counter->id]]),
+        'active' => ($activeCounterId == $counter->id),
+        'params' => ['class' => 'nowrap'],
     ];
+}
+$popupCounters = $this->Lil->popup('counters', $popupCounters, true);
 
-    $total = 0;
+/** COUNTERS FILTER LINK */
+$countersFilter = sprintf('<button class="btn-small elevated" id="filter-counters" data-target="dropdown-counters">%1$s &#x25BC;</button>',
+    $activeCounterId ? (string)$counters[$activeCounterId] : __d('documents', 'All Counters'),
+);
 
+$invoicesTable = [
+    'parameters' => [
+        'width' => '100%', 'cellspacing' => 0, 'cellpadding' => 0, 'id' => 'InvoicesList', 'width' => '700',
+    ],
+    'head' => ['rows' => [['columns' => [
+        'no' => [
+            'parameters' => ['class' => 'left-align'],
+            'html' => $countersFilter,
+        ],
+        'date' => [
+            'parameters' => ['class' => 'center-align'],
+            'html' => $this->Paginator->sort(
+                'dat_issue',
+                __d('documents', 'Date'),
+            ),
+        ],
+        'total' => [
+            'parameters' => ['class' => 'right-align'],
+            'html' => $this->Paginator->sort(
+                'total',
+                __d('documents', 'Total'),
+            ),
+        ],
+    ]]]],
+    'foot' => ['rows' => [['columns' => [
+        'actions' => [
+            'parameters' => ['class' => 'left-align'],
+            'html' => '<ul class="paginator">' .
+                $this->Paginator->numbers([
+                    'first' => 1,
+                    'last' => 1,
+                    'modulus' => 3,
+                ]) .
+                '</ul>',
+        ],
+        'caption' => [
+            'parameters' => ['class' => 'right-align'],
+            'html' => __d('documents', 'Total') . ':',
+        ],
+        'total' => [
+            'parameters' => ['class' => 'right-align'],
+            'html' => '',
+        ],
+        ]]]],
+];
+
+if (count($data) === 0) {
+    $invoicesTable['body'] = [
+        'rows' => [[
+            'columns' => [
+                'no-data' => [
+                    'parameters' => ['class' => 'center-align', 'colspan' => 2],
+                    'html' => __d('documents', 'No invoices found.'),
+                ],
+            ],
+        ]],
+    ];
+} else {
     foreach ($data as $invoice) {
         $invoicesTable['body']['rows'][]['columns'] = [
             'no' => [
@@ -66,7 +98,7 @@ if ($data->count() > 0) {
                         'controller' => 'Invoices',
                         'action' => 'view',
                         $invoice->id,
-                    ]
+                    ],
                 ),
             ],
             'date' => [
@@ -78,13 +110,12 @@ if ($data->count() > 0) {
                 'html' => $this->Number->currency($invoice->total ?? 0),
             ],
         ];
-        $total += $invoice->total;
     }
-
-    $invoicesTable['foot']['rows'][0]['columns']['total']['html'] =
-        $this->Number->currency($invoicesTotals['sumTotal'] ?? 0);
-
-    echo $this->Lil->table($invoicesTable, 'Documents.Invoices.Aht.index');
-} else {
-    echo '<div class="hint">' . __d('documents', 'No invoices for this Contact found.') . '</div>';
 }
+
+$invoicesTable['foot']['rows'][0]['columns']['total']['html'] =
+    $this->Number->currency($invoicesTotals['sumTotal'] ?? 0);
+
+echo $popupCounters;
+echo $this->Lil->table($invoicesTable, 'Documents.Invoices.Aht.index');
+echo '<script type="text/javascript">M.Dropdown.init(document.querySelectorAll("#filter-counters"), {coverTrigger: false, constrainWidth: false});</script>';

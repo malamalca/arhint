@@ -1,20 +1,17 @@
 <?php
 declare(strict_types=1);
 
-namespace Calendar;
+namespace Crm;
 
-use Cake\Console\CommandCollection;
 use Cake\Core\BasePlugin;
+use Cake\Core\Configure;
 use Cake\Core\PluginApplicationInterface;
-use Cake\Event\EventManager;
-use Cake\Http\MiddlewareQueue;
+use Cake\Event\EventManagerInterface;
 use Cake\Routing\RouteBuilder;
-use Calendar\Event\CalendarEvents;
+use Cake\Utility\Hash;
+use Crm\Event\CrmEvents;
 
-/**
- * Plugin for Calendar
- */
-class Plugin extends BasePlugin
+class CrmPlugin extends BasePlugin
 {
     /**
      * Load all the plugin configuration and bootstrap logic.
@@ -27,8 +24,15 @@ class Plugin extends BasePlugin
      */
     public function bootstrap(PluginApplicationInterface $app): void
     {
-        $CalendarEvents = new CalendarEvents();
-        EventManager::instance()->on($CalendarEvents);
+        Configure::load('Crm.config');
+
+        $defaults = require CONFIG . 'app_local.php';
+        if (isset($defaults['Crm'])) {
+            Configure::write(
+                'Crm',
+                Hash::merge((array)Configure::read('Crm'), (array)$defaults['Crm']),
+            );
+        }
     }
 
     /**
@@ -43,9 +47,10 @@ class Plugin extends BasePlugin
     public function routes(RouteBuilder $routes): void
     {
         $routes->plugin(
-            'Calendar',
-            ['path' => '/calendar'],
+            'Crm',
+            ['path' => '/crm'],
             function (RouteBuilder $builder): void {
+                // Add custom routes here
                 $builder->fallbacks();
             },
         );
@@ -53,30 +58,16 @@ class Plugin extends BasePlugin
     }
 
     /**
-     * Add middleware for the plugin.
+     * Register custom event listeners here
      *
-     * @param \Cake\Http\MiddlewareQueue $middlewareQueue The middleware queue to update.
-     * @return \Cake\Http\MiddlewareQueue
+     * @param \Cake\Event\EventManagerInterface $eventManager
+     * @return \Cake\Event\EventManagerInterface
+     * @link https://book.cakephp.org/5/en/core-libraries/events.html#registering-listeners
      */
-    public function middleware(MiddlewareQueue $middlewareQueue): MiddlewareQueue
+    public function events(EventManagerInterface $eventManager): EventManagerInterface
     {
-        // Add your middlewares here
+        $eventManager->on(new CrmEvents());
 
-        return $middlewareQueue;
-    }
-
-    /**
-     * Add commands for the plugin.
-     *
-     * @param \Cake\Console\CommandCollection $commands The command collection to update.
-     * @return \Cake\Console\CommandCollection
-     */
-    public function console(CommandCollection $commands): CommandCollection
-    {
-        // Add your commands here
-
-        $commands = parent::console($commands);
-
-        return $commands;
+        return $eventManager;
     }
 }

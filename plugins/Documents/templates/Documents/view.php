@@ -220,7 +220,7 @@ if (!empty($document->attachments)) {
         $document->attachments,
         'Document',
         $document->id,
-        ['redirectUrl' => Router::url(null, true), 'showAddButton' => false]
+        ['redirectUrl' => Router::url(null, true), 'showAddButton' => false],
     );
 }
 

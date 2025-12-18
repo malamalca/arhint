@@ -6,13 +6,12 @@ namespace Projects;
 use Cake\Core\BasePlugin;
 use Cake\Core\Configure;
 use Cake\Core\PluginApplicationInterface;
-use Cake\Event\EventManager;
-use Cake\Http\MiddlewareQueue;
+use Cake\Event\EventManagerInterface;
 use Cake\Routing\RouteBuilder;
 use Cake\Utility\Hash;
 use Projects\Event\ProjectsEvents;
 
-class Plugin extends BasePlugin
+class ProjectsPlugin extends BasePlugin
 {
     /**
      * Load all the plugin configuration and bootstrap logic.
@@ -34,9 +33,6 @@ class Plugin extends BasePlugin
                 Hash::merge((array)Configure::read('Projects'), (array)$defaults['Projects']),
             );
         }
-
-        $ProjectsEvents = new ProjectsEvents();
-        EventManager::instance()->on($ProjectsEvents);
     }
 
     /**
@@ -62,14 +58,16 @@ class Plugin extends BasePlugin
     }
 
     /**
-     * Add middleware for the plugin.
+     * Register custom event listeners here
      *
-     * @param \Cake\Http\MiddlewareQueue $middlewareQueue The middleware queue to update.
-     * @return \Cake\Http\MiddlewareQueue
+     * @param \Cake\Event\EventManagerInterface $eventManager
+     * @return \Cake\Event\EventManagerInterface
+     * @link https://book.cakephp.org/5/en/core-libraries/events.html#registering-listeners
      */
-    public function middleware(MiddlewareQueue $middlewareQueue): MiddlewareQueue
+    public function events(EventManagerInterface $eventManager): EventManagerInterface
     {
-        // Add your middlewares here
-        return $middlewareQueue;
+        $eventManager->on(new ProjectsEvents());
+
+        return $eventManager;
     }
 }

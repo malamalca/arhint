@@ -1,20 +1,6 @@
 <?php
 declare(strict_types=1);
 
-/**
- * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
- * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
- *
- * Licensed under The MIT License
- * For full copyright and license information, please see the LICENSE.txt
- * Redistributions of files must retain the above copyright notice.
- *
- * @copyright     Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
- * @link          https://cakephp.org CakePHP(tm) Project
- * @since         0.10.8
- * @license       https://opensource.org/licenses/mit-license.php MIT License
- */
-
 /*
  * Configure paths required to find CakePHP + general filepath constants
  */
@@ -31,20 +17,19 @@ require __DIR__ . DIRECTORY_SEPARATOR . 'paths.php';
  */
 require CORE_PATH . 'config' . DS . 'bootstrap.php';
 
-use App\Event\AppEvents;
 use Cake\Cache\Cache;
 use Cake\Core\Configure;
 use Cake\Core\Configure\Engine\PhpConfig;
 use Cake\Datasource\ConnectionManager;
 use Cake\Error\ErrorTrap;
 use Cake\Error\ExceptionTrap;
-use Cake\Event\EventManager;
 use Cake\Http\ServerRequest;
 use Cake\Log\Log;
 use Cake\Mailer\Mailer;
 use Cake\Mailer\TransportFactory;
 use Cake\Routing\Router;
 use Cake\Utility\Security;
+use Detection\MobileDetect;
 
 /**
  * Load global functions.
@@ -62,7 +47,7 @@ require CAKE . 'functions.php';
 try {
     Configure::config('default', new PhpConfig());
     Configure::load('app', 'default', false);
-} catch (\Exception $e) {
+} catch (Exception $e) {
     exit($e->getMessage() . "\n");
 }
 
@@ -112,14 +97,61 @@ ini_set('intl.default_locale', Configure::read('App.defaultLocale'));
  * Include the CLI bootstrap overrides.
  */
 if (PHP_SAPI === 'cli') {
-    require CONFIG . 'bootstrap_cli.php';
+    // Set the fullBaseUrl to allow URLs to be generated in commands.
+    // This is useful when sending email from commands.
+    // Configure::write('App.fullBaseUrl', php_uname('n'));
+
+    // Set logs to different files so they don't have permission conflicts.
+    if (Configure::check('Log.debug')) {
+        Configure::write('Log.debug.file', 'cli-debug');
+    }
+    if (Configure::check('Log.error')) {
+        Configure::write('Log.error.file', 'cli-error');
+    }
 }
 
 /*
- * Set the full base URL.
+ * SECURITY: Validate and set the full base URL.
  * This URL is used as the base of all absolute links.
+ *
+ * IMPORTANT: In production, App.fullBaseUrl MUST be explicitly configured to prevent
+ * Host Header Injection attacks. Relying on the HTTP_HOST header can allow attackers
+ * to hijack password reset tokens and other security-critical operations.
+ *
+ * Set APP_FULL_BASE_URL in your environment variables or configure App.fullBaseUrl
+ * in config/app.php or config/app_local.php
+ *
+ * Example: APP_FULL_BASE_URL=https://yourdomain.com
  */
 $fullBaseUrl = Configure::read('App.fullBaseUrl');
+if (!$fullBaseUrl) {
+    $httpHost = env('HTTP_HOST');
+
+    /*
+     * Only enforce fullBaseUrl requirement when we're in a web request context.
+     * This allows CLI tools (like PHPStan) to load the bootstrap without throwing.
+     */
+    if (!Configure::read('debug') && $httpHost) {
+        throw new CakeException(
+            'SECURITY: App.fullBaseUrl is not configured. ' .
+            'This is required in production to prevent Host Header Injection attacks. ' .
+            'Set APP_FULL_BASE_URL environment variable or configure App.fullBaseUrl in config/app.php',
+        );
+    }
+
+    /*
+     * Development mode fallback: Use HTTP_HOST for convenience.
+     * WARNING: This is ONLY safe in development. Never use this pattern in production!
+     */
+    if ($httpHost) {
+        $s = null;
+        if (env('HTTPS')) {
+            $s = 's';
+        }
+        $fullBaseUrl = 'http' . $s . '://' . $httpHost;
+    }
+    unset($httpHost, $s);
+}
 if ($fullBaseUrl) {
     Router::fullBaseUrl($fullBaseUrl);
 }
@@ -138,12 +170,12 @@ Security::setSalt(Configure::consume('Security.salt'));
  * and the mobiledetect package from composer.json.
  */
 ServerRequest::addDetector('mobile', function ($request) {
-    $detector = new \Detection\MobileDetect();
+    $detector = new MobileDetect();
 
     return $detector->isMobile();
 });
 ServerRequest::addDetector('tablet', function ($request) {
-    $detector = new \Detection\MobileDetect();
+    $detector = new MobileDetect();
 
     return $detector->isTablet();
 });
@@ -155,6 +187,3 @@ ServerRequest::addDetector('lilScan', function ($request) {
 ServerRequest::addDetector('pdf', ['param' => '_ext', 'options' => ['pdf']]);
 ServerRequest::addDetector('aht', ['param' => '_ext', 'options' => ['aht']]);
 ServerRequest::addDetector('txt', ['param' => '_ext', 'options' => ['txt']]);
-
-$appEvents = new AppEvents();
-EventManager::instance()->on($appEvents);

@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App;
 
 use App\Command\HeartBeatCommand;
+use App\Event\AppEvents;
 use Authentication\AuthenticationService;
 use Authentication\AuthenticationServiceInterface;
 use Authentication\AuthenticationServiceProviderInterface;
@@ -19,6 +20,7 @@ use Cake\Console\CommandCollection;
 use Cake\Core\Configure;
 use Cake\Datasource\FactoryLocator;
 use Cake\Error\Middleware\ErrorHandlerMiddleware;
+use Cake\Event\EventManagerInterface;
 use Cake\Http\BaseApplication;
 use Cake\Http\Middleware\EncryptedCookieMiddleware;
 use Cake\Http\Middleware\SessionCsrfProtectionMiddleware;
@@ -30,13 +32,7 @@ use Cake\Routing\Middleware\RoutingMiddleware;
 use Cake\Routing\Route\DashedRoute;
 use Cake\Routing\RouteBuilder;
 use Cake\Routing\Router;
-use Crm\Plugin as CrmPlugin;
-use Documents\DocumentsPlugin;
-use Expenses\Plugin as ExpensesPlugin;
-use Lil\Plugin as LilPlugin;
-use Projects\Plugin as ProjectsPlugin;
 use Psr\Http\Message\ServerRequestInterface;
-use Tasks\Plugin as TasksPlugin;
 
 /**
  * Application setup class.
@@ -62,31 +58,10 @@ class Application extends BaseApplication implements
         // Call parent to load bootstrap from files.
         parent::bootstrap();
 
-        if (PHP_SAPI === 'cli') {
-            $this->bootstrapCli();
-        } else {
-            FactoryLocator::add(
-                'Table',
-                (new TableLocator())->allowFallbackClass(false),
-            );
+        if (PHP_SAPI !== 'cli') {
+            // The bake plugin requires fallback table classes to work properly
+            FactoryLocator::add('Table', (new TableLocator())->allowFallbackClass(false));
         }
-
-        /*
-         * Only try to load DebugKit in development mode
-         * Debug Kit should not be installed on a production system
-         */
-        if (Configure::read('debug')) {
-            $this->addPlugin('DebugKit');
-        }
-
-        // Load more plugins here
-        $this->addPlugin(LilPlugin::class, ['bootstrap' => true, 'routes' => false]);
-        $this->addPlugin(CrmPlugin::class, ['bootstrap' => true, 'routes' => true]);
-        $this->addPlugin(ExpensesPlugin::class, ['bootstrap' => true, 'routes' => true]);
-        $this->addPlugin(DocumentsPlugin::class, ['bootstrap' => true, 'routes' => true]);
-        $this->addPlugin(ProjectsPlugin::class, ['bootstrap' => true, 'routes' => true]);
-        $this->addPlugin(TasksPlugin::class, ['bootstrap' => true, 'routes' => true]);
-        $this->addPlugin('Calendar', ['bootstrap' => true, 'routes' => true]);
     }
 
     /**
@@ -163,17 +138,17 @@ class Application extends BaseApplication implements
     }
 
     /**
-     * Bootrapping for CLI application.
+     * Register custom event listeners here
      *
-     * That is when running commands.
-     *
-     * @return void
+     * @param \Cake\Event\EventManagerInterface $eventManager
+     * @return \Cake\Event\EventManagerInterface
+     * @link https://book.cakephp.org/5/en/core-libraries/events.html#registering-listeners
      */
-    protected function bootstrapCli(): void
+    public function events(EventManagerInterface $eventManager): EventManagerInterface
     {
-        $this->addOptionalPlugin('Bake');
+        $eventManager->on(new AppEvents());
 
-        $this->addPlugin('Migrations');
+        return $eventManager;
     }
 
     /**

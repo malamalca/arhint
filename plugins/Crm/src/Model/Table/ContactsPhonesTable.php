@@ -51,11 +51,8 @@ class ContactsPhonesTable extends Table
             ->allowEmptyString('id', 'create')
             ->allowEmptyString('contact_id')
             ->notEmptyString('no')
-            ->notEmptyString('kind')
-            ->add('kind', 'inList', ['rule' => [
-                'inList',
-                array_keys(Configure::read('Crm.phoneTypes')),
-            ]])
+            ->allowEmptyString('kind')
+            ->add('kind', 'inList', ['rule' => ['inList', array_keys(Configure::read('Crm.phoneTypes'))]])
             ->add('primary', 'valid', ['rule' => 'boolean'])
             ->notEmptyString('primary');
 
@@ -88,7 +85,7 @@ class ContactsPhonesTable extends Table
         $rules->add($rules->existsIn(['contact_id'], 'Contacts'));
 
         // check that only one entry for specified kind
-        $rules->add(function ($entity, $options) {
+        /*$rules->add(function ($entity, $options) {
             $conditions = [
                 'contact_id' => $entity->contact_id,
                 'kind' => $entity->kind,
@@ -98,7 +95,7 @@ class ContactsPhonesTable extends Table
             }
 
             return !$this->exists($conditions);
-        }, ['errorField' => 'kind', 'message' => 'kindOccupied']);
+        }, ['errorField' => 'kind', 'message' => 'kindOccupied']);*/
 
         return $rules;
     }

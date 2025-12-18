@@ -28,4 +28,8 @@ return ['Documents' => [
     'banks' => $banks,
     'sepaTypes' => $sepaTypes,
     'documentTypes' => $documentTypes,
+    'pdfEngine' => 'WKHTML2PDF',
+    'WKHTML2PDF' => [
+        'binary' => 'C:\bin\wkhtmltopdf\bin\wkhtmltopdf.exe',
+    ],
 ]];

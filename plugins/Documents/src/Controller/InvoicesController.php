@@ -147,9 +147,13 @@ class InvoicesController extends BaseDocumentsController
                 $filter['contact_id'] = $sourceRequest['pass'][0] ?? null;
                 break;
         }
+        if (isset($sourceRequest['?']['counter'])) {
+            $filter['counter'] = $sourceRequest['?']['counter'];
+        }
 
         $sourceRequest = array_merge($sourceRequest, $sourceRequest['pass']);
         unset($sourceRequest['_matchedRoute']);
+        unset($sourceRequest['_route']);
         unset($sourceRequest['pass']);
 
         $params = $this->Invoices->filter($filter);
@@ -172,7 +176,21 @@ class InvoicesController extends BaseDocumentsController
             ->disableHydration()
             ->first();
 
-        $this->set(compact('data', 'invoicesTotals', 'sourceRequest'));
+        $subQueryCounters = $this->Authorization->applyScope($this->Invoices->find(), 'index')
+            ->select(['counter_id'])
+            ->distinct(['counter_id'])
+            ->where($params['conditions']);
+
+        /** @var \Documents\Model\Table\DocumentsCountersTable $DocumentsCountersTable */
+        $DocumentsCountersTable = $this->fetchTable('Documents.DocumentsCounters');
+        $counters = $DocumentsCountersTable->find()
+            ->where(['id IN' => $subQueryCounters])
+            ->orderBy(['title' => 'ASC'])
+            ->all()
+            ->combine('id', fn($entity) => $entity)
+            ->toArray();
+
+        $this->set(compact('data', 'invoicesTotals', 'sourceRequest', 'counters'));
 
         return null;
     }

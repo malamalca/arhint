@@ -19,7 +19,7 @@ $activeStatus = $this->getRequest()->getQuery('status', '');
 $statusLink = $this->Html->link(
     $projectsStatuses[$activeStatus] ?? __d('projects', 'All Statuses'),
     ['action' => 'filter'],
-    ['class' => 'dropdown-trigger', 'id' => 'filter-status', 'data-target' => 'dropdown-status']
+    ['class' => 'dropdown-trigger', 'id' => 'filter-status', 'data-target' => 'dropdown-status'],
 );
 $popupStatus = ['items' => [[
     'title' => __d('projects', 'All Statuses'),

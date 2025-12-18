@@ -1,16 +1,15 @@
 <?php
 declare(strict_types=1);
 
-namespace Tasks;
+namespace Expenses;
 
 use Cake\Core\BasePlugin;
 use Cake\Core\PluginApplicationInterface;
-use Cake\Event\EventManager;
-use Cake\Http\MiddlewareQueue;
+use Cake\Event\EventManagerInterface;
 use Cake\Routing\RouteBuilder;
-use Tasks\Event\TasksEvents;
+use Expenses\Event\ExpensesEvents;
 
-class Plugin extends BasePlugin
+class ExpensesPlugin extends BasePlugin
 {
     /**
      * Load all the plugin configuration and bootstrap logic.
@@ -23,10 +22,13 @@ class Plugin extends BasePlugin
      */
     public function bootstrap(PluginApplicationInterface $app): void
     {
-        //Configure::load('Tasks.config');
+        if (!defined('EXPENSES_COUNTER_INCOME')) {
+            define('EXPENSES_COUNTER_INCOME', 0);
+        }
 
-        $TasksEvents = new TasksEvents();
-        EventManager::instance()->on($TasksEvents);
+        if (!defined('EXPENSES_COUNTER_EXPENSE')) {
+            define('EXPENSES_COUNTER_EXPENSE', 1);
+        }
     }
 
     /**
@@ -41,8 +43,8 @@ class Plugin extends BasePlugin
     public function routes(RouteBuilder $routes): void
     {
         $routes->plugin(
-            'Tasks',
-            ['path' => '/tasks'],
+            'Expenses',
+            ['path' => '/expenses'],
             function (RouteBuilder $builder): void {
                 // Add custom routes here
                 $builder->fallbacks();
@@ -52,14 +54,16 @@ class Plugin extends BasePlugin
     }
 
     /**
-     * Add middleware for the plugin.
+     * Register custom event listeners here
      *
-     * @param \Cake\Http\MiddlewareQueue $middlewareQueue The middleware queue to update.
-     * @return \Cake\Http\MiddlewareQueue
+     * @param \Cake\Event\EventManagerInterface $eventManager
+     * @return \Cake\Event\EventManagerInterface
+     * @link https://book.cakephp.org/5/en/core-libraries/events.html#registering-listeners
      */
-    public function middleware(MiddlewareQueue $middlewareQueue): MiddlewareQueue
+    public function events(EventManagerInterface $eventManager): EventManagerInterface
     {
-        // Add your middlewares here
-        return $middlewareQueue;
+        $eventManager->on(new ExpensesEvents());
+
+        return $eventManager;
     }
 }

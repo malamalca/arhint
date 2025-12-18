@@ -53,7 +53,7 @@ class ContactsEmailsControllerTest extends TestCase
             'contact_id' => COMPANY_FIRST,
             'primary' => 0,
             'email' => 'info@arhim2.si',
-            'kind' => 'O',
+            'kind' => 'P',
         ];
 
         $this->post('/crm/ContactsEmails/edit?contact=' . COMPANY_FIRST, $data);

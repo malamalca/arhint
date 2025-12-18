@@ -31,6 +31,7 @@ class ContactsPhonesController extends AppController
 
         if ($this->getRequest()->is(['patch', 'post', 'put'])) {
             $this->ContactsPhones->patchEntity($phone, $this->getRequest()->getData());
+
             if (!$phone->getErrors() && $this->ContactsPhones->save($phone)) {
                 /** @var \Crm\Model\Entity\Contact $contact */
                 $contact = $this->ContactsPhones->Contacts->get($phone->contact_id);

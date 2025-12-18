@@ -110,9 +110,13 @@ class DocumentsController extends BaseDocumentsController
                 $filter['contact_id'] = $sourceRequest['pass'][0] ?? null;
                 break;
         }
+        if (isset($sourceRequest['?']['counter'])) {
+            $filter['counter'] = $sourceRequest['?']['counter'];
+        }
 
         $sourceRequest = array_merge($sourceRequest, $sourceRequest['pass']);
         unset($sourceRequest['_matchedRoute']);
+        unset($sourceRequest['_route']);
         unset($sourceRequest['pass']);
 
         $params = $this->Documents->filter($filter);
@@ -125,7 +129,21 @@ class DocumentsController extends BaseDocumentsController
 
         $data = $this->paginate($query, ['limit' => 5]);
 
-        $this->set(compact('data', 'sourceRequest'));
+        $subQueryCounters = $this->Authorization->applyScope($this->Documents->find(), 'index')
+            ->select(['counter_id'])
+            ->distinct(['counter_id'])
+            ->where($params['conditions']);
+
+        /** @var \Documents\Model\Table\DocumentsCountersTable $DocumentsCountersTable */
+        $DocumentsCountersTable = $this->fetchTable('Documents.DocumentsCounters');
+        $counters = $DocumentsCountersTable->find()
+            ->where(['id IN' => $subQueryCounters])
+            ->orderBy(['title' => 'ASC'])
+            ->all()
+            ->combine('id', fn($entity) => $entity)
+            ->toArray();
+
+        $this->set(compact('data', 'sourceRequest', 'counters'));
 
         return null;
     }

@@ -52,7 +52,7 @@ class ContactsPhonesControllerTest extends TestCase
             'id' => '',
             'contact_id' => COMPANY_FIRST,
             'no' => '041 891 825',
-            'kind' => 'O',
+            'kind' => 'W',
             'primary' => 0,
         ];
 

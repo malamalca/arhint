@@ -1,40 +1,15 @@
 <?php
 declare(strict_types=1);
 
-namespace Documents;
+namespace Tasks;
 
 use Cake\Core\BasePlugin;
-use Cake\Core\Configure;
-use Cake\Core\PluginApplicationInterface;
 use Cake\Event\EventManagerInterface;
 use Cake\Routing\RouteBuilder;
-use Cake\Utility\Hash;
-use Documents\Event\DocumentsEvents;
+use Tasks\Event\TasksEvents;
 
-class DocumentsPlugin extends BasePlugin
+class TasksPlugin extends BasePlugin
 {
-    /**
-     * Load all the plugin configuration and bootstrap logic.
-     *
-     * The host application is provided as an argument. This allows you to load
-     * additional plugin dependencies, or attach events.
-     *
-     * @param \Cake\Core\PluginApplicationInterface $app The host application
-     * @return void
-     */
-    public function bootstrap(PluginApplicationInterface $app): void
-    {
-        Configure::load('Documents.config', 'default', true);
-
-        $defaults = require CONFIG . 'app_local.php';
-        if (isset($defaults['Documents'])) {
-            Configure::write(
-                'Documents',
-                Hash::merge((array)Configure::read('Documents'), (array)$defaults['Documents']),
-            );
-        }
-    }
-
     /**
      * Add routes for the plugin.
      *
@@ -47,8 +22,8 @@ class DocumentsPlugin extends BasePlugin
     public function routes(RouteBuilder $routes): void
     {
         $routes->plugin(
-            'Documents',
-            ['path' => '/documents'],
+            'Tasks',
+            ['path' => '/tasks'],
             function (RouteBuilder $builder): void {
                 // Add custom routes here
                 $builder->fallbacks();
@@ -66,7 +41,7 @@ class DocumentsPlugin extends BasePlugin
      */
     public function events(EventManagerInterface $eventManager): EventManagerInterface
     {
-        $eventManager->on(new DocumentsEvents());
+        $eventManager->on(new TasksEvents());
 
         return $eventManager;
     }
