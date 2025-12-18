@@ -193,37 +193,29 @@ echo $this->Lil->form($clientEdit, 'Documents.DocumentsClients.edit');
 ?>
 <script type="text/javascript">
     $(document).ready(function() {
-        $("#client-address-zip").autocomplete({
-            autoFocus: true,
-            source: "<?php echo Router::url([
-                'plugin' => 'Crm',
-                'controller' => 'ContactsAddresses',
-                'action' => 'autocomplete-zip-city',
-                'zip',
-            ], true); ?>",
-            select: function(event, ui) {
-                if (ui.item) {
-                    $("#client-address-zip").val(ui.item.value);
-                    $("#client-address-city").val(ui.item.label);
+        var AutocompleteZipCityUrl = "<?php echo Router::url([
+            'plugin' => 'Crm',
+            'controller' => 'ContactsAddresses',
+            'action' => 'autocomplete-zip-city',
+        ], true); ?>";
+        
+        M.Autocomplete.init(
+            $("#client-address-zip").get(0),
+            {
+                onSearch: (text, autocomplete) => {
+                    $.get(AutocompleteZipCityUrl + "/zip?term=" + $("#client-address-zip").val()).done(function(data) {
+                        autocomplete.setMenuItems(data.map((item) => ({id: item.id, text: item.value + " " + item.label})));
+                    });
+                },
+                onAutocomplete: () => {
+                    let ZipFieldValue = $("#client-address-zip").val();
+                    if (ZipFieldValue.indexOf(" ") > 0) {
+                        $("#client-address-zip").val(ZipFieldValue.substring(0, ZipFieldValue.indexOf(" ")));
+                        $("#client-address-city").val(ZipFieldValue.substring(ZipFieldValue.indexOf(" ")+ 1));
+                    }
                 }
             }
-        });
-
-        $('#client-address-city').autocomplete({
-            autoFocus: true,
-            source: "<?php echo Router::url([
-                'plugin' => 'Crm',
-                'controller' => 'ContactsAddresses',
-                'action' => 'autocomplete-zip-city',
-                'city',
-            ], true); ?>",
-            select: function(event, ui) {
-                if (ui.item) {
-                    $("#client-address-zip").val(ui.item.id);
-                    $("#client-address-city").val(ui.item.label);
-                }
-            }
-        });
+        );
 
         $("select#country-code").on("change", function(e) {
             $("input#client-address-country").val($("select#country-code option:selected").text());

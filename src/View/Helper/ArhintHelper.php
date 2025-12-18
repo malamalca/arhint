@@ -458,6 +458,9 @@ class ArhintHelper extends Helper
                     '}, ' .
                     'onResize: function(popup) { ' .
                         '$("#attachment-view", popup).height($(popup).innerHeight() - 100); ' .
+                    '}, ' .
+                    'onClose: function(popup, e) { ' .
+                        '$(popup).css("height", "fit-content"); ' .
                     '} ' .
                 '})});',
                 __('Attachment Preview'),

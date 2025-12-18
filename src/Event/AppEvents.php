@@ -16,6 +16,7 @@ use Cake\View\View;
 use Documents\Model\Table\DocumentsTable;
 use Documents\Model\Table\InvoicesTable;
 use Exception;
+use Laminas\Diactoros\UploadedFile;
 
 class AppEvents implements EventListenerInterface
 {
@@ -198,6 +199,15 @@ class AppEvents implements EventListenerInterface
             // set modifed so the dirty attribute is set and beforeSave is triggered
             $data['modified'] = (new DateTime())->setTimezone('UTC')->toDateTimeString();
             if (isset($data['documents_attachments'])) {
+                foreach ((array)$data['documents_attachments'] as $key => $attch) {
+                    if (
+                        !isset($attch['filename']) ||
+                        !($attch['filename'] instanceof UploadedFile) ||
+                        $attch['filename']->getError() !== UPLOAD_ERR_OK
+                    ) {
+                        unset($data['documents_attachments'][$key]);
+                    }
+                }
                 $this->attachments = $data['documents_attachments'];
             }
         }
@@ -218,7 +228,10 @@ class AppEvents implements EventListenerInterface
                 $AttachmentsTable = TableRegistry::getTableLocator()->get('Attachments');
 
                 foreach ($this->attachments as $attch) {
-                    if (isset($attch['filename']) && is_a($attch['filename'], '\Laminas\Diactoros\UploadedFile')) {
+                    if (isset($attch['filename']) && 
+                        ($attch['filename'] instanceof UploadedFile) &&
+                        $attch['filename']->getError() === UPLOAD_ERR_OK
+                    ) {
                         $attachment = $AttachmentsTable->newEntity(
                             array_merge($attch, ['foreign_id' => $entity->get('id')]),
                         );

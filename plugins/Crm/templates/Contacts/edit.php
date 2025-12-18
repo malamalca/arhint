@@ -514,24 +514,6 @@ echo $this->Lil->form($editForm, 'Crm.Contacts.edit');
             }
         );
 
-        M.Autocomplete.init(
-            $("#contact-address-city").get(0),
-            {
-                onSearch: (text, autocomplete) => {
-                    $.get(AutocompleteZipCityUrl + "/city?term=" + $("#contact-address-city").val()).done(function(data) {
-                        autocomplete.setMenuItems(data.map((item) => ({id: item.id, text: item.id + " " + item.label})));
-                    });
-                },
-                onAutocomplete: () => {
-                    let ZipFieldValue = $("#contact-address-city").val();
-                    if (ZipFieldValue.indexOf(" ") > 0) {
-                        $("#contact-address-zip").val(ZipFieldValue.substring(0, ZipFieldValue.indexOf(" ")));
-                        $("#contact-address-city").val(ZipFieldValue.substring(ZipFieldValue.indexOf(" ")+ 1));
-                    }
-                }
-            }
-        );
-
         $("#magic-tax-lookup").click(function() {
             let inetisUrl = "<?php echo Router::url([
                 'plugin' => 'Crm',
