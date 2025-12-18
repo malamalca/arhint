@@ -131,9 +131,10 @@ class ProjectsTasksController extends AppController
         $comment->user_id = $this->getCurrentUser()->id;
         $comment->kind = $TasksCommentsTable::KIND_TASK_COMMENT;
 
-        /** @var \Projects\Model\Table\ProjectsTable  $ProjectsTable */
+        /** @var \Projects\Model\Table\ProjectsTable $ProjectsTable */
         $ProjectsTable = TableRegistry::getTableLocator()->get('Projects.Projects');
-        $projects = $ProjectsTable->findForOwner($this->getCurrentUser()->get('company_id'));
+        $projectsQuery = $this->getCurrentUser()->applyScope('index', $ProjectsTable->find());
+        $projects = $ProjectsTable->findForOwner($this->getCurrentUser()->company_id, $projectsQuery);
 
         $users = $this->ProjectsTasks->Users->fetchForCompany($this->getCurrentUser()->get('company_id'));
 

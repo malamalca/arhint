@@ -228,7 +228,8 @@ class AppEvents implements EventListenerInterface
                 $AttachmentsTable = TableRegistry::getTableLocator()->get('Attachments');
 
                 foreach ($this->attachments as $attch) {
-                    if (isset($attch['filename']) && 
+                    if (
+                        isset($attch['filename']) &&
                         ($attch['filename'] instanceof UploadedFile) &&
                         $attch['filename']->getError() === UPLOAD_ERR_OK
                     ) {

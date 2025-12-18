@@ -222,7 +222,8 @@ class ProjectsTable extends Table
     public function findForOwner(?string $ownerId, ?SelectQuery $query = null): array
     {
         if (empty($query)) {
-            $query = $this->find();
+            $query = $this->find()
+                ->where(['owner_id' => $ownerId]);
         }
 
         if (empty($ownerId)) {
