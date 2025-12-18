@@ -34,8 +34,10 @@ class AppEvents implements EventListenerInterface
         return [
             'App.dashboard' => 'dashboardPanels',
             'Lil.Sidebar.beforeRender' => 'modifySidebar',
-            'Model.beforeMarshal' => 'marshalDuration',
+            'Model.beforeMarshal' => 'marshalDurationAndAttachments',
             'Model.afterSave' => 'updateModelAttachments',
+            'Lil.Form.Documents.Invoices.edit' => 'addAttachmentFormLines',
+            'Lil.Form.Documents.Documents.edit' => 'addAttachmentFormLines',
         ];
     }
 
@@ -185,15 +187,19 @@ class AppEvents implements EventListenerInterface
      * @param \ArrayObject $options Additional options from controller.
      * @return void
      */
-    public function marshalDuration(Event $event, ArrayObject $data, ArrayObject $options): void
+    public function marshalDurationAndAttachments(Event $event, ArrayObject $data, ArrayObject $options): void
     {
         foreach ($data as $fieldName => $fieldValue) {
             if (is_array($fieldValue) && !empty($fieldValue['duration'])) {
                 $data[$fieldName] = (int)$data[$fieldName]['hours'] * 3600 + (int)$data[$fieldName]['minutes'] * 60;
             }
         }
-        if (isset($data['documents_attachments'])) {
-            $this->attachments = $data['documents_attachments'];
+        if (in_array(get_class($event->getSubject()), [DocumentsTable::class, InvoicesTable::class])) {
+            // set modifed so the dirty attribute is set and beforeSave is triggered
+            $data['modified'] = (new DateTime())->setTimezone('UTC')->toDateTimeString();
+            if (isset($data['documents_attachments'])) {
+                $this->attachments = $data['documents_attachments'];
+            }
         }
     }
 
@@ -243,5 +249,55 @@ class AppEvents implements EventListenerInterface
         unset($sidebar['welcome']);
 
         $event->setResult($sidebar);
+    }
+
+    /**
+     * Add attachment form lines to documents and invoices edit forms.
+     *
+     * @param \Cake\Event\Event $event Event.
+     * @param mixed $formLines Form lines.
+     * @return void
+     */
+    public function addAttachmentFormLines(Event $event, mixed $formLines): void
+    {
+        /** @var \App\View\AppView $view */
+        $view = $event->getSubject();
+
+        $attachmentLines = [
+            'fs_attachments_start' => '<fieldset>',
+            'fs_attachments_legend' => sprintf('<legend>%s</legend>', __d('documents', 'Archive')),
+            'file.name.0' => [
+                'method' => 'control',
+                'parameters' => [
+                    'field' => 'documents_attachments.0.filename',
+                    'options' => [
+                        'type' => 'file',
+                        'label' => false,
+                    ],
+                ],
+            ],
+            'file.document_id.0' => [
+                'method' => 'control',
+                'parameters' => [
+                    'field' => 'documents_attachments.0.document_id',
+                    'options' => [
+                        'type' => 'hidden',
+                    ],
+                ],
+            ],
+            'file.model.0' => [
+                'method' => 'control',
+                'parameters' => [
+                    'field' => 'documents_attachments.0.model',
+                    'options' => [
+                        'type' => 'hidden',
+                        'value' => 'Document',
+                    ],
+                ],
+            ],
+            'fs_attachments_end' => '</fieldset>',
+        ];
+
+        $view->Lil->insertIntoArray($formLines->form['lines'], $attachmentLines, ['before' => 'submit']);
     }
 }

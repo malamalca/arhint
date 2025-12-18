@@ -172,7 +172,6 @@ $documentEdit = [
                 'method' => 'error',
                 'parameters' => [$client . '.kind', __d('documents', 'Please choose a client')],
             ],
-            
             'no' => [
                 'method' => 'control',
                 'parameters' => [
