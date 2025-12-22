@@ -31,6 +31,9 @@ class ArhintAttachmentBehavior extends Behavior
 
         $processFiles = [];
         if ($config['field'] === '*') {
+            if (empty($options['uploadedFiles'])) {
+                return;
+            }
             foreach ($options['uploadedFiles'] as $fieldName => $field) {
                 if ($field instanceof UploadedFile) {
                     $processFiles[$fieldName] = $field;
@@ -55,7 +58,7 @@ class ArhintAttachmentBehavior extends Behavior
         foreach ($processFiles as $fileData) {
             if ($fileData->getError() === UPLOAD_ERR_OK) {
                 $attachment = $AttachmentsTable->newEmptyEntity();
-                $attachment->model = $reflect->getShortName();
+                $attachment->model = $options['uploaderModel'] ?? $reflect->getShortName();
                 $attachment->foreign_id = $entity->get('id');
 
                 $attachment->filename = $fileData->getClientFilename();
@@ -63,12 +66,14 @@ class ArhintAttachmentBehavior extends Behavior
                 $attachment->filesize = $fileData->getSize();
 
                 if (is_string($attachment->filename)) {
-                    $AttachmentsTable->save(
+                    $result = $AttachmentsTable->save(
                         $attachment,
-                        ['uploadedFilename' => [
-                            $attachment->filename => $fileData->getStream()->getMetadata('uri'),
-                        ]],
+                        ['uploadedFilename' => [$attachment->filename => $fileData]],
                     );
+                    if ($result) {
+                        $event = new Event('App.Attachments.afterUpload', $this, [$attachment]);
+                        $AttachmentsTable->getEventManager()->dispatch($event);
+                    }
                 }
             }
         }

@@ -3,7 +3,10 @@ declare(strict_types=1);
 
 namespace Crm\Controller;
 
+use Cake\Core\Configure;
+use Cake\Mailer\MailerAwareTrait;
 use Cake\ORM\TableRegistry;
+use Cake\Utility\Inflector;
 
 /**
  * Adremas Controller
@@ -12,6 +15,8 @@ use Cake\ORM\TableRegistry;
  */
 class AdremasController extends AppController
 {
+    use MailerAwareTrait;
+
     /**
      * Index method
      *
@@ -64,9 +69,35 @@ class AdremasController extends AppController
                 }
                 $this->Flash->success(__d('crm', 'The adrema has been saved.'));
 
-                return $this->redirect(['action' => 'view', $adrema->id]);
+                return $this->redirect(['action' => 'adremaFields', $adrema->id]);
             } else {
                 $this->Flash->error(__d('crm', 'The adrema could not be saved. Please, try again.'));
+            }
+        }
+
+        $this->set(compact('adrema'));
+    }
+
+    /**
+     * adremaFields method
+     *
+     * @param string $id Adrema id.
+     * @return mixed Redirects on successful edit, renders view otherwise.
+     * @throws \Cake\Http\Exception\NotFoundException When record not found.
+     */
+    public function adremaFields(string $id)
+    {
+        $adrema = $this->Adremas->get($id);
+        $this->Authorization->authorize($adrema, 'edit');
+
+        if ($this->getRequest()->is(['patch', 'post', 'put'])) {
+            $adrema = $this->Adremas->patchEntity($adrema, $this->getRequest()->getData());
+            if ($this->Adremas->save($adrema)) {
+                $this->Flash->success(__d('crm', 'Adrema\'s fields have been saved.'));
+
+                return $this->redirect(['action' => 'view', $adrema->id]);
+            } else {
+                $this->Flash->error(__d('crm', 'The adrema\'s fields could not be saved. Please, try again.'));
             }
         }
 
@@ -82,7 +113,7 @@ class AdremasController extends AppController
      */
     public function view(?string $id = null)
     {
-        $adrema = $this->Adremas->get($id);
+        $adrema = $this->Adremas->get($id, contain: ['Attachments', 'FormAttachments']);
         $this->Authorization->authorize($adrema);
 
         $addresses = TableRegistry::getTableLocator()->get('Crm.AdremasContacts')
@@ -91,12 +122,7 @@ class AdremasController extends AppController
             ->contain(['Contacts', 'ContactsAddresses', 'ContactsEmails'])
             ->all();
 
-        $attachments = TableRegistry::getTableLocator()->get('Attachments')
-            ->find('forModel', model: 'Adrema', foreignId: $adrema->id)
-            ->select()
-            ->all();
-
-        $this->set(compact('addresses', 'adrema', 'attachments'));
+        $this->set(compact('addresses', 'adrema'));
     }
 
     /**
@@ -118,5 +144,75 @@ class AdremasController extends AppController
         }
 
         return $this->redirect(['action' => 'index']);
+    }
+
+    /**
+     * Send email adrema
+     *
+     * @param string $adremaId Adrema id.
+     * @return void
+     */
+    public function email(string $adremaId)
+    {
+        $adrema = $this->Adremas->get($adremaId, contain: ['Attachments', 'FormAttachments']);
+        $this->Authorization->authorize($adrema, 'view');
+
+        /** @var \Crm\Model\Table\AdremasContactsTable $AdremasContactsTable */
+        $AdremasContactsTable = TableRegistry::getTableLocator()->get('Crm.AdremasContacts');
+        $addresses = $AdremasContactsTable
+            ->find()
+            ->where(['adrema_id' => $adrema->id])
+            ->contain(['Contacts', 'ContactsAddresses', 'ContactsEmails', 'Attachments'])
+            ->all();
+
+        //$this->viewBuilder()->setTemplate('Labels' . DS . 'email' . DS . $adrema->kind_type);
+        //$this->set(compact('adrema', 'addresses'));
+
+        $errors = $this->Adremas->getValidator('email')->validate($adrema->toArray(), false);
+        if (empty($errors)) {
+            $sendErrors = [];
+            foreach ($addresses as $address) {
+                $this->getMailer('Crm.Crm')
+                    ->send(Inflector::variable($adrema->kind_type), [$this->getCurrentUser(), $address, $adrema]);
+            }
+
+            $this->set(compact('adrema', 'addresses', 'sendErrors'));
+        }
+    }
+
+    /**
+     * Export label
+     *
+     * @param string $adremaId Adrema id.
+     * @return void
+     */
+    public function labels(string $adremaId)
+    {
+        /** @var \Crm\Model\Entity\Adrema $adrema */
+        $adrema = $this->Adremas->get($adremaId);
+        $this->Authorization->authorize($adrema, 'view');
+
+        $settings = Configure::read('Crm.label.' . $adrema->kind_type);
+        unset($settings['form']);
+        unset($settings['address']);
+
+        // must be tcpdf because of the way the labels are constructed
+        Configure::write('Lil.pdfEngine', 'TCPDF');
+
+        $this->viewBuilder()->setClassName('Lil.Pdf');
+        $this->viewBuilder()->setOptions($settings);
+        $this->viewBuilder()->setTemplate($adrema->kind_type);
+
+        /** @var \Crm\Model\Table\AdremasContactsTable $AdremasContactsTable */
+        $AdremasContactsTable = TableRegistry::getTableLocator()->get('Crm.AdremasContacts');
+        $addresses = $AdremasContactsTable
+            ->find()
+            ->where(['adrema_id' => $adrema->id])
+            ->contain(['Contacts', 'ContactsAddresses', 'ContactsEmails', 'Attachments'])
+            ->all();
+
+        $this->set(compact('addresses', 'adrema'));
+
+        $this->setResponse($this->getResponse()->withType('pdf'));
     }
 }

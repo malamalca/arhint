@@ -65,12 +65,47 @@ $config = [
         'slo_mnenja' => 'Mnenja',
     ],
 
-    'Crm.email.slo_pogoji' => [
+    'Crm.email.dopis' => [
         'form' => [
-            'zip' => [
+            'subject' => [
                 'method' => 'control',
                 'parameters' => [
-                    'field' => 'xls',
+                    'field' => 'data.subject',
+                    'options' => [
+                        'type' => 'text',
+                        'label' => 'Subject' . ':',
+                    ],
+                ],
+            ],
+            'body' => [
+                'method' => 'control',
+                'parameters' => [
+                    'field' => 'data.body',
+                    'options' => [
+                        'type' => 'text',
+                        'label' => 'Body' . ':',
+                    ],
+                ],
+            ],
+            'atch' => [
+                'method' => 'control',
+                'parameters' => [
+                    'field' => 'data.atch',
+                    'options' => [
+                        'type' => 'file',
+                        'label' => 'Attachment' . ':',
+                    ],
+                ],
+            ],
+        ],
+    ],
+
+    'Crm.email.slo_pogoji' => [
+        'form' => [
+            'xls' => [
+                'method' => 'control',
+                'parameters' => [
+                    'field' => 'data.xls',
                     'options' => [
                         'type' => 'file',
                         'label' => 'Priloga 8A [xlsx]' . ':',
@@ -82,7 +117,7 @@ $config = [
             'descript' => [
                 'method' => 'control',
                 'parameters' => [
-                    'field' => 'descript',
+                    'field' => 'data.opis',
                     'options' => [
                         'type' => 'text',
                         'label' => 'Opis' . ':',
@@ -93,10 +128,10 @@ $config = [
     ],
     'Crm.email.slo_mnenja' => [
         'form' => [
-            'zip' => [
+            'xls' => [
                 'method' => 'control',
                 'parameters' => [
-                    'field' => 'xls',
+                    'field' => 'data.xls',
                     'options' => [
                         'type' => 'file',
                         'label' => 'Priloga 9A [xlsx]' . ':',
@@ -105,13 +140,43 @@ $config = [
             ],
         ],
         'address' => [
-            'descript' => [
+            'opis' => [
                 'method' => 'control',
                 'parameters' => [
-                    'field' => 'descript',
+                    'field' => 'data.opis',
                     'options' => [
                         'type' => 'text',
                         'label' => 'Opis' . ':',
+                    ],
+                ],
+            ],
+            'stPogojev' => [
+                'method' => 'control',
+                'parameters' => [
+                    'field' => 'data.stPogojev',
+                    'options' => [
+                        'type' => 'text',
+                        'label' => 'Opis' . ':',
+                    ],
+                ],
+            ],
+            'datumPogojev' => [
+                'method' => 'control',
+                'parameters' => [
+                    'field' => 'data.datumPogojev',
+                    'options' => [
+                        'type' => 'date',
+                        'label' => 'Opis' . ':',
+                    ],
+                ],
+            ],
+            'atch' => [
+                'method' => 'control',
+                'parameters' => [
+                    'field' => 'data.atch',
+                    'options' => [
+                        'type' => 'file',
+                        'label' => 'Attachment' . ':',
                     ],
                 ],
             ],

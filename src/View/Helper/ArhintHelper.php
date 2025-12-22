@@ -434,20 +434,6 @@ class ArhintHelper extends Helper
                     ],
                 ]];
             }
-            $attachmentsTable['table']['post'] = !$_options['showAddButton'] ? null : sprintf(
-                '<p>%s</p>',
-                $this->Html->link(
-                    __('Add New Attachment'),
-                    [
-                        'prefix' => false,
-                        'plugin' => false,
-                        'controller' => 'Attachments',
-                        'action' => 'edit',
-                        '?' => ['model' => $model, 'foreign_id' => $foreignId, 'redirect' => $_options['redirectUrl']],
-                    ],
-                    ['class' => 'btn-small filled'],
-                ),
-            );
 
             $this->Lil->jsReady(sprintf(
                 '$(".AttacmhmentPreviewLink").each(function(){ $(this).modalPopup({' .
@@ -466,15 +452,34 @@ class ArhintHelper extends Helper
                 __('Attachment Preview'),
             ));
         } else {
-            $attachmentsTable['lines'][] =
-                __('No attachments found.') . ' ' .
-                $this->Html->link(__('Add New Attachment'), [
+            $attachmentsTable['lines'][] = __('No attachments found.');
+        }
+
+        if ($_options['showAddButton']) {
+            $addButton = $this->Html->link(
+                __('Add New Attachment'),
+                [
                     'prefix' => false,
                     'plugin' => false,
                     'controller' => 'Attachments',
                     'action' => 'edit',
                     '?' => ['model' => $model, 'foreign_id' => $foreignId, 'redirect' => $_options['redirectUrl']],
-                ]);
+                ],
+                ['class' => 'btn-small filled', 'id' => 'AddAttachmentButton'],
+            );
+
+            if ($attachments->count() > 0) {
+                $attachmentsTable['table']['post'] = sprintf('<p>%s</p>', $addButton);
+            } else {
+                $attachmentsTable['lines'][] = sprintf('<p>%s</p>', $addButton);
+            }
+
+            $this->Lil->jsReady(
+                '$("#AddAttachmentButton").modalPopup({' .
+                    'title: "' . __('Add New Attachment') . '", ' .
+                    'onOpen: function(popup) { $("#filename", popup).focus().click(); }' .
+                '});',
+            );
         }
 
         return $attachmentsTable;

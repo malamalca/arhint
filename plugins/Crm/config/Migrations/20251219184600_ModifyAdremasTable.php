@@ -1,11 +1,10 @@
 <?php
 declare(strict_types=1);
 
-use Cake\Core\Configure;
 use Migrations\AbstractMigration;
 use Phinx\Db\Adapter\MysqlAdapter;
 
-class AddProjectAndEmailsToAdremas extends AbstractMigration
+class ModifyAdremasTable extends AbstractMigration
 {
     /**
      * Change Method.
@@ -17,20 +16,24 @@ class AddProjectAndEmailsToAdremas extends AbstractMigration
     public function change(): void
     {
         $this->table('adremas')
-            ->addColumn('project_id', 'uuid', [
-                'default' => null,
-                'limit' => null,
-                'null' => true,
-                'after' => 'owner_id',
+            ->removeColumn('additional_fields')
+            ->addColumn('kind', 'string', [
+                'default' => 'email',
+                'limit' => 20,
+                'null' => false,
+                'after' => 'project_id',
             ])
-            ->save();
-
-        $this->table('adremas_contacts')
-            ->addColumn('email', 'string', [
+            ->addColumn('kind_type', 'string', [
                 'default' => null,
-                'limit' => 200,
+                'limit' => 50,
                 'null' => true,
-                'after' => 'country',
+                'after' => 'kind',
+            ])
+            ->addColumn('user_values', 'text', [
+                'default' => null,
+                'limit' => MysqlAdapter::TEXT_MEDIUM,
+                'null' => true,
+                'after' => 'title',
             ])
             ->save();
     }

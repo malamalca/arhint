@@ -1,9 +1,7 @@
 <?php
 declare(strict_types=1);
 
-use Cake\Core\Configure;
 use Migrations\AbstractMigration;
-use Phinx\Db\Adapter\MysqlAdapter;
 
 class AddAccessToUsers extends AbstractMigration
 {

@@ -9,8 +9,8 @@ foreach ($addresses as $address) {
 
     $topX = 10;
 
-    $this->Text(7, $topX, $data['sprejemna_posta'] ?? '');
-    $this->Text(62, $topX, $data['datum'] ?? '');
+    $this->Text(7, $topX, $adrema->user_data['sprejemna_posta'] ?? '');
+    $this->Text(62, $topX, $adrema->user_data['datum'] ?? '');
 
     $this->Text(123, $topX * 6, 'ARHIM d.o.o.');
     $this->Text(123, $topX * 6 + 9, 'Slakova ulica 36');
@@ -22,7 +22,7 @@ foreach ($addresses as $address) {
 
     $fs = $this->getFontSizePt();
     $this->SetFontSize(7);
-    $this->Text(123, $topX * 6 + 4, $data['podnaslov'] ?? '');
+    $this->Text(123, $topX * 6 + 4, $adrema->user_data['podnaslov'] ?? '');
 
     $this->SetFontSize($fs);
 }

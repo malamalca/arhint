@@ -13,6 +13,7 @@ use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
 use Cake\Validation\Validator;
+use Laminas\Diactoros\UploadedFile;
 
 /**
  * Attachments Model
@@ -129,9 +130,9 @@ class AttachmentsTable extends Table
         if (
             !empty($options['uploadedFilename']) &&
             !empty($entity->filename) &&
-            file_exists($options['uploadedFilename'][$entity->filename])
+            $options['uploadedFilename'][$entity->filename] instanceof UploadedFile
         ) {
-            $folderDest = Configure::read('App.uploadFolder') . DS . $entity->model . DS;
+            $folderDest = Configure::read('App.uploadFolder') . $entity->model . DS;
             if (!file_exists($folderDest)) {
                 mkdir($folderDest, 0777);
             }
@@ -164,8 +165,7 @@ class AttachmentsTable extends Table
                 $this->updateAll(['filename' => $newFilename], ['id' => $entity->id]);
             }
 
-            copy($options['uploadedFilename'][$existingFileName], $fileDest);
-            unlink($options['uploadedFilename'][$existingFileName]);
+            $options['uploadedFilename'][$existingFileName]->moveTo($fileDest);
         }
     }
 

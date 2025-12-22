@@ -21,7 +21,7 @@ class AddAdditionalFieldsToAdremas extends AbstractMigration
                 'default' => null,
                 'limit' => null,
                 'null' => true,
-                'after' => 'title'
+                'after' => 'title',
             ])
             ->save();
     }

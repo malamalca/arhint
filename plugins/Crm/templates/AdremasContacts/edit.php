@@ -102,42 +102,16 @@ $editAddressForm = [
 ];
 
 /** Show costum fields form selected label */
-$fields = array_filter(explode(PHP_EOL, $adrema->additional_fields));
-if (count($fields) > 0) {
-    $additionalFields = [];
-    $additionalData = $address->descript ? json_decode($address->descript, true) : [];
-    foreach ($fields as $field) {
-        $fieldParts = explode(':', $field);
-        $additionalFields[$fieldParts[0]] = [
-            'method' => 'control',
-            'parameters' => [
-                'field' => 'data.' . $fieldParts[0],
-                [
-                    'type' => trim($fieldParts[1]),
-                    'value' => $additionalData[$fieldParts[0]] ?? '',
-                ],
-            ],
-        ];
+$additionalFields = Configure::read(implode('.', ['Crm', $adrema->kind, $adrema->kind_type, 'address']));
+foreach ($additionalFields as $fieldName => $fieldConfig) {
+    if (isset($address->user_data[$fieldName])) {
+        $additionalFields[$fieldName]['parameters']['options']['default'] = $address->user_data[$fieldName];
     }
-    if (!empty($address->attachments)) {
-        foreach ($address->attachments as $k => $attachment) {
-            $additionalFields['attachment_'.$k] =
-                '<p>' .
-                $this->Html->link(
-                    $attachment->filename,
-                    ['plugin' => false, 'controller' => 'Attachments', 'action' => 'download', $attachment->id, '?' => ['redirect' => Router::url(null, true)]]
-                ) .
-                ' ' .
-                $this->Html->link(
-                    __d('crm', 'remove'),
-                    ['plugin' => false, 'controller' => 'Attachments', 'action' => 'delete', $attachment->id, '?' => ['redirect' => Router::url(null, true)]]
-                ) .
-                '</p>';
-        }
-    }
-    $this->Lil->insertIntoArray($editAddressForm['form']['lines'], $additionalFields, ['before' => 'submit']);
 }
 
+if (!empty($additionalFields)) {
+    $this->Lil->insertIntoArray($editAddressForm['form']['lines'], $additionalFields, ['after' => 'email_id']);
+}
 
 echo $this->Lil->form($editAddressForm, 'Crm.AdremasContacts.edit');
 

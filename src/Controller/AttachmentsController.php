@@ -98,14 +98,14 @@ class AttachmentsController extends AppController
         $this->Authorization->authorize($attachment);
 
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $tmpNames = [];
+            $uploadedFiles = [];
             $uploadedFile = $this->getRequest()->getData('filename');
             if (!empty($uploadedFile) && !$uploadedFile->getError()) {
-                $tmpNames[$uploadedFile->getClientFilename()] = $uploadedFile->getStream()->getMetadata('uri');
+                $uploadedFiles[$uploadedFile->getClientFilename()] = $uploadedFile;
             }
 
             $attachment = $this->Attachments->patchEntity($attachment, $this->request->getData());
-            if ($this->Attachments->save($attachment, ['uploadedFilename' => $tmpNames])) {
+            if ($this->Attachments->save($attachment, ['uploadedFilename' => $uploadedFiles])) {
                 $this->Flash->success(__('The attachment has been saved.'));
 
                 $redirect = $this->getRequest()->getData('referer', ['action' => 'index']);

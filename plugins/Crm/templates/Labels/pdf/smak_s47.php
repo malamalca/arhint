@@ -6,13 +6,13 @@
     $line_spacing = 5;
 
     $row = 1;
-if (!empty($data['start_row'])) {
-    $row = $data['start_row'];
+if (!empty($adrema->user_data['start_row'])) {
+    $row = $adrema->user_data['start_row'];
 }
 
     $col = 1;
-if (!empty($data['start_col'])) {
-    $col = $data['start_col'];
+if (!empty($adrema->user_data['start_col'])) {
+    $col = $adrema->user_data['start_col'];
 }
 
     $start_no = ($row - 1) * 3 + $col;

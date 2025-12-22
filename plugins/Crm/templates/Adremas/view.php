@@ -1,5 +1,7 @@
 <?php
 
+use Cake\Collection\Collection;
+use Cake\Core\Configure;
 use Cake\Routing\Router;
 
 $viewAdremaPanels = [
@@ -10,6 +12,14 @@ $viewAdremaPanels = [
             'visible' => true,
             'url' => [
                 'action' => 'edit',
+                $adrema->id,
+            ],
+        ],
+        'values' => [
+            'title' => __d('crm', 'Additional'),
+            'visible' => true,
+            'url' => [
+                'action' => 'adremaFields',
                 $adrema->id,
             ],
         ],
@@ -24,13 +34,28 @@ $viewAdremaPanels = [
                 'confirm' => __d('crm', 'Are you sure you want to delete the adrema?'),
             ],
         ],
-        'email' => [
+        'email' => $adrema->kind != 'email' ? null : [
             'title' => __d('crm', 'Email'),
             'visible' => true,
             'url' => [
-                'controller' => 'Labels',
-                'action' => 'label',
-                '?' => ['adrema' => $adrema->id, 'process' => 'email'],
+                'controller' => 'Adremas',
+                'action' => 'email',
+                $adrema->id,
+            ],
+            'params' => [
+                'confirm' => __d('crm', 'Are you sure you want to send this adrema via email?'),
+            ],
+        ],
+        'labels' => $adrema->kind != 'labels' ? null : [
+            'title' => __d('crm', 'Labels'),
+            'visible' => true,
+            'url' => [
+                'controller' => 'Adremas',
+                'action' => 'labels',
+                $adrema->id,
+            ],
+            'params' => [
+                'confirm' => __d('crm', 'Are you sure you want to print labels?'),
             ],
         ],
     ],
@@ -66,6 +91,45 @@ $viewAdremaPanels = [
     ],
 ];
 
+/** DISPLAY ADDITIONAL FIELDS */
+
+$additionalFields = Configure::read(implode('.', ['Crm', $adrema->kind, $adrema->kind_type, 'form']));
+if ($additionalFields && count($additionalFields) != 0) {
+    $additionalFieldsPanel = ['lines' => []];
+    foreach ($additionalFields as $fieldName => $fieldConfig) {
+        $additionalFieldsPanel['lines'][$fieldName] = [
+            'label' => h($fieldConfig['parameters']['options']['label'] ?? $fieldName),
+            'html' => h($adrema->user_data[$fieldName] ?? ''),
+        ];
+        if ($fieldConfig['parameters']['options']['type'] === 'file' && !empty($adrema->user_data[$fieldName])) {
+            $attachment = (new Collection($adrema->form_attachments))->firstMatch(['id' => $adrema->user_data[$fieldName]]);
+            if ($attachment) {
+                $additionalFieldsPanel['lines'][$fieldName]['html'] = $this->Html->link(
+                    (string)$attachment->filename,
+                    [
+                        'prefix' => false,
+                        'plugin' => false,
+                        'controller' => 'Attachments',
+                        'action' => 'preview',
+                        $attachment->id,
+                        '?' => ['redirect' => Router::url(null, true)],
+                    ],
+                    ['class' => 'AttacmhmentPreviewLink'],
+                );
+            }
+        }
+    }
+    if (!empty($additionalFieldsPanel['lines'])) {
+        $this->Lil->insertIntoArray(
+            $viewAdremaPanels['panels'],
+            [
+                'title_additional_fields' => ['lines' => [sprintf('<h3>%s</h3>', __d('crm', 'Additional Fields'))]],
+                'additional_fields' => $additionalFieldsPanel],
+            ['before' => 'title_addresses'],
+        );
+    }
+}
+
 foreach ($addresses as $address) {
     $viewAdremaPanels['panels']['addresses']['table']['body']['rows'][] = ['columns' => [
         'checked' => '&nbsp;',
@@ -80,7 +144,7 @@ foreach ($addresses as $address) {
 }
 
 $viewAdremaPanels['panels']['attachments'] = $this->Arhint->attachmentsTable(
-    $attachments,
+    $adrema->attachments ?? [],
     'Adrema',
     $adrema->id,
     ['redirectUrl' => Router::url(null, true)],

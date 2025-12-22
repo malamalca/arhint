@@ -4,10 +4,13 @@ declare(strict_types=1);
 namespace Crm\Model\Table;
 
 use ArrayObject;
-use Cake\Event\Event;
+use Cake\Datasource\EntityInterface;
+use Cake\Event\EventInterface;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
+use Cake\ORM\TableRegistry;
 use Cake\Validation\Validator;
+use Laminas\Diactoros\UploadedFile;
 
 /**
  * AdremasContacts Model
@@ -31,7 +34,6 @@ class AdremasContactsTable extends Table
         $this->setTable('adremas_contacts');
         $this->setPrimaryKey('id');
         $this->addBehavior('Timestamp');
-        $this->addBehavior('ArhintAttachment', ['field' => '*']);
         $this->belongsTo('Adremas', [
             'foreignKey' => 'adrema_id',
             'className' => 'Crm.Adremas',
@@ -95,22 +97,6 @@ class AdremasContactsTable extends Table
     }
 
     /**
-     * beforeMarshal method
-     *
-     * @param \Cake\Event\Event $event Event object.
-     * @param \ArrayObject $data Post data.
-     * @param \ArrayObject $options Array object.
-     * @return void
-     */
-    public function beforeMarshal(Event $event, ArrayObject $data, ArrayObject $options): void
-    {
-        if (!empty($data['data'])) {
-            $data['descript'] = json_encode($data['data']);
-            $event->setResult($data);
-        }
-    }
-
-    /**
      * Checks if entity belongs to user.
      *
      * @param string $entityId Entity Id.
@@ -123,5 +109,71 @@ class AdremasContactsTable extends Table
         $entity = $this->get($entityId, ['fields' => 'adrema_id']);
 
         return $this->Adremas->isOwnedBy($entity->adrema_id, $ownerId);
+    }
+
+    /**
+     * beforeSave method
+     *
+     * @param \Cake\Event\EventInterface $event The beforeSave event.
+     * @param \Cake\Datasource\EntityInterface $entity The entity being saved.
+     * @param \ArrayObject<string, mixed> $options The options passed to the save method.
+     * @return bool
+     */
+    public function beforeSave(EventInterface $event, EntityInterface $entity, ArrayObject $options): bool
+    {
+        /** @var \Crm\Model\Entity\AdremasContact $entity */
+        if (isset($entity->data) && is_array($entity->data)) {
+            $entity->descript = json_encode($entity->data, JSON_THROW_ON_ERROR);
+        }
+
+        return true;
+    }
+
+    /**
+     * afterSave method
+     *
+     * @param \Cake\Event\EventInterface $event The afterSave event.
+     * @param \Cake\Datasource\EntityInterface $entity The entity being saved.
+     * @param \ArrayObject<string, mixed> $options The options passed to the save method.
+     * @return void
+     */
+    public function afterSave(EventInterface $event, EntityInterface $entity, ArrayObject $options): void
+    {
+        /** @var \Crm\Model\Entity\AdremasContact $entity */
+        if (isset($entity->data) && is_array($entity->data)) {
+            /** @var \App\Model\Table\AttachmentsTable $AttachmentsTable */
+            $AttachmentsTable = TableRegistry::getTableLocator()->get('App.Attachments');
+
+            foreach ($entity->data as $fieldName => $fileData) {
+                if ($fileData instanceof UploadedFile && $fileData->getError() === UPLOAD_ERR_OK) {
+                    $existingAttachment = $AttachmentsTable->find()
+                        ->where(['model' => 'AdremasContact','foreign_id' => $entity->get('id')])
+                        ->first();
+                    if ($existingAttachment) {
+                        $AttachmentsTable->delete($existingAttachment);
+                    }
+
+                    $attachment = $AttachmentsTable->newEmptyEntity();
+                    $attachment->foreign_id = $entity->get('id');
+                    $attachment->model = 'AdremasContact';
+                    $attachment->filename = $fileData->getClientFilename();
+                    $attachment->mimetype = $fileData->getClientMediaType();
+                    $attachment->filesize = $fileData->getSize();
+
+                    $result = $AttachmentsTable->save(
+                        $attachment,
+                        ['uploadedFilename' => [(string)$fileData->getClientFilename() => $fileData]],
+                    );
+                    if ($result) {
+                        $data = $entity->data;
+                        $data[$fieldName] = $attachment->id;
+                        $this->updateAll(
+                            ['descript' => json_encode($data, JSON_THROW_ON_ERROR)],
+                            ['id' => $entity->id],
+                        );
+                    }
+                }
+            }
+        }
     }
 }

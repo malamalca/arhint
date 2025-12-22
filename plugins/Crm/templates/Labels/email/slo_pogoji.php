@@ -1,63 +1,73 @@
 <?php
-    use Cake\Core\Plugin;
-    use App\Mailer\ArhintMailer;
-    use PhpOffice\PhpSpreadsheet\IOFactory;
+use App\Mailer\ArhintMailer;
+use Cake\Collection\Collection;
+use Cake\Core\Configure;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 
-    $xlsFile = $this->request->getData('xls');
-    if ($xlsFile->getError() !== UPLOAD_ERR_OK) {
-        throw new \Exception('Napaka pri prenosu datoteke');
-    }
+$xlsFileName = $adrema->user_data['xls'] ?? null;
 
-    $spreadsheet = IOFactory::load($xlsFile->getStream()->getMetadata('uri'));
+if (!$xlsFileName) {
+    throw new Exception('Datoteka XLS ni naložena');
+}
 
-    if (!$spreadsheet) {
-        throw new \Exception('Napaka pri nalaganju XLS');
-    }
+$attachment = (new Collection($adrema->form_attachments))->firstMatch(['id' => $adrema->user_data['xls']]);
 
-    foreach ($addresses as $address) {
-        if (!empty($address->contacts_email->email)) {
-            $mailer = new ArhintMailer($this->getCurrentUser());
-            $mailer
-                ->setFrom($this->getCurrentUser()->email)
-                ->setTo($address->contacts_email->email)
-                //->setTo('miha.nahtigal@arhim.si')
-                ->setSubject('Vloga za projektne pogoje za gradnjo')
-                ->setViewVars(['user' => $this->getCurrentUser(), 'address' => $address, 'data' => $this->getRequest()->getData()])
-                ->setEmailFormat('both')
-                ->viewBuilder()
-                    ->setTemplate('Crm.slo_pogoji')
-                    ->addHelper('Html');
+if (!$attachment) {
+    throw new Exception('Priponka v bazi ne obstaja');
+}
 
-            $atts = [];
+$xlsFile = $attachment->getFilePath();
+if (!file_exists($xlsFile)) {
+    throw new Exception('Datoteka XLS ne obstaja na disku');
+}
 
-            // excel attachment
-            //change it
-            $sheet = $spreadsheet->getActiveSheet();
-            $sheet->setCellValue('C32', $address->contact->title);
-            $sheet->setCellValue('C33', (string)$address->contacts_address);
+$spreadsheet = IOFactory::load($xlsFile);
 
-            //write it again to Filesystem with the same name (=replace)
-            //$writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Tcpdf');
-            $writer = IOFactory::createWriter($spreadsheet, "Xlsx");
-            ob_start();
-            $writer->save('php://output');
-            $excelOutput = ob_get_clean();
+if (!$spreadsheet) {
+    throw new Exception('Napaka pri nalaganju XLS');
+}
 
-            $atts[$xlsFile->getClientFilename()] = ['data' => $excelOutput];
+foreach ($addresses as $address) {
+    if (!empty($address->contacts_email->email)) {
+        $mailer = new ArhintMailer($this->getCurrentUser());
+        $mailer
+            ->setFrom($this->getCurrentUser()->email)
+            ->setTo(Configure::read('debug') ? 'miha.nahtigal@arhim.si' : $address->contacts_email->email)
+            ->setSubject('Vloga za projektne pogoje za gradnjo')
+            ->setViewVars(['user' => $this->getCurrentUser(), 'address' => $address, 'data' => $adrema->user_data])
+            ->setEmailFormat('both')
+            ->viewBuilder()
+                ->setTemplate('Crm.slo_pogoji')
+                ->addHelper('Html');
 
-            // other attachemts
-            foreach ($attachments as $attachment) {
-                $atts[$attachment->filename] = $attachment->getFilePath();
-            }
+        $atts = [];
 
-            $mailer->setAttachments($atts);
+        // excel attachment
+        //change it
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setCellValue('C32', $address->contact->title);
+        $sheet->setCellValue('C33', (string)$address->contacts_address);
 
-            $result = $mailer->deliver();
+        //write it again to Filesystem with the same name (=replace)
+        //$writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Tcpdf');
+        $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
+        ob_start();
+        $writer->save('php://output');
+        $excelOutput = ob_get_clean();
 
-            if ($result) {
-?>
-            <p><?= __d('crm', 'Email successfully sent to "{0}"', $address->contacts_email->email) ?>
-<?php
-            }
+        $atts[$attachment->filename] = ['data' => $excelOutput];
+
+        // other attachemts
+        foreach ($adrema->attachments as $attachment) {
+            $atts[$attachment->filename] = $attachment->getFilePath();
+        }
+
+        $mailer->setAttachments($atts);
+
+        $result = $mailer->deliver();
+
+        if ($result) {
+            printf('<p>' . __d('crm', 'Email successfully sent to "{0}"', $address->contacts_email->email) . '</p>');
         }
     }
+}

@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Crm\Model\Entity;
 
 use Cake\ORM\Entity;
+use JsonException;
 
 /**
  * AdremasContact Entity.
@@ -15,6 +16,8 @@ use Cake\ORM\Entity;
  * @property string|null $contacts_address_id
  * @property string|null $contacts_email_id
  * @property string|null $descript
+ * @property array|null $user_data
+ * @property array|null $data
  * @property \Cake\I18n\DateTime|null $created
  * @property \Cake\I18n\DateTime|null $modified
  * @property \Crm\Model\Entity\ContactsAddress|null $address
@@ -31,4 +34,21 @@ class AdremasContact extends Entity
         '*' => true,
         'id' => false,
     ];
+
+    /**
+     * Decode user values JSON
+     *
+     * @return array<string, mixed>|null Decoded values or empty string on failure
+     */
+    protected function _getUserData(): ?array
+    {
+        if (empty($this->descript)) {
+            return null;
+        }
+        try {
+            return json_decode($this->descript, true, 512, JSON_THROW_ON_ERROR);
+        } catch (JsonException $e) {
+            return null;
+        }
+    }
 }

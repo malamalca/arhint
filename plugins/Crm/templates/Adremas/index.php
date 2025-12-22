@@ -7,13 +7,15 @@ $popupProjects = ['items' => [[
     'url' => ['?' => ['project' => null]],
     'params' => ['class' => 'nowrap'],
 ]]];
-foreach ($projects as $project) {
-    $popupProjects['items'][] = [
-        'title' => (string)$project,
-        'url' => ['?' => ['project' => $project->id]],
-        'active' => ($activeProjectId == $project->id),
-        'params' => ['class' => 'nowrap'],
-    ];
+if (isset($projects) && count($projects)) {
+    foreach ($projects as $project) {
+        $popupProjects['items'][] = [
+            'title' => (string)$project,
+            'url' => ['?' => ['project' => $project->id]],
+            'active' => ($activeProjectId == $project->id),
+            'params' => ['class' => 'nowrap'],
+        ];
+    }
 }
 $popupProjects = $this->Lil->popup('projects', $popupProjects, true);
 

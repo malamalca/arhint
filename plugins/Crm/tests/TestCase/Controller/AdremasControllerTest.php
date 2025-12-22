@@ -67,7 +67,7 @@ class AdremasControllerTest extends TestCase
         $this->enableSecurityToken();
 
         $this->post(['plugin' => 'Crm', 'controller' => 'Adremas', 'action' => 'edit'], $data);
-        $this->assertRedirectContains('/crm/adremas/view/');
+        $this->assertRedirectContains('/crm/adremas/adrema-fields/');
     }
 
     /**
@@ -95,7 +95,7 @@ class AdremasControllerTest extends TestCase
         $this->enableSecurityToken();
 
         $this->post(['plugin' => 'Crm', 'controller' => 'Adremas', 'action' => 'edit', '49a90cfe-fda4-49ca-b7ec-ca5534465431'], $data);
-        $this->assertRedirectContains('/crm/adremas/view/');
+        $this->assertRedirectContains('/crm/adremas/adrema-fields/');
     }
 
     /**
