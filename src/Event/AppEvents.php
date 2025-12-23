@@ -239,8 +239,7 @@ class AppEvents implements EventListenerInterface
                         $AttachmentsTable->save(
                             $attachment,
                             ['uploadedFilename' => [
-                                (string)$attch['filename']->getClientFilename() =>
-                                    $attch['filename']->getStream()->getMetadata('uri'),
+                                (string)$attch['filename']->getClientFilename() => $attch['filename'],
                             ]],
                         );
                     }

@@ -35,7 +35,7 @@ class DocumentsEvents implements EventListenerInterface
             'Lil.Sidebar.beforeRender' => 'modifySidebar',
             'Lil.Panels.Crm.Contacts.view' => 'showDocumentsTable',
             'Lil.Panels.Projects.Projects.view' => 'showDocumentsTable',
-            'Model.afterSaveCommit' => 'updateAttachmentsCounter',
+            'Model.afterSave' => 'updateAttachmentsCounter',
             'Model.afterDelete' => 'updateAttachmentsCounter',
         ];
     }
