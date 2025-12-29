@@ -13,6 +13,7 @@ use Cake\Event\EventListenerInterface;
 use Cake\I18n\DateTime;
 use Cake\ORM\TableRegistry;
 use Cake\Routing\Router;
+use Cake\Utility\Inflector;
 use Cake\View\View;
 use Documents\Model\Table\DocumentsTable;
 use Documents\Model\Table\InvoicesTable;
@@ -259,6 +260,15 @@ class AppEvents implements EventListenerInterface
         /** @var \App\View\AppView $view */
         $view = $event->getSubject();
 
+        $eventName = $event->getName();
+        $eventParts = explode('.', $eventName);
+        $modelName = $eventParts[3] ?? '';
+        if (!in_array($modelName, ['Documents', 'Invoices'], true)) {
+            return;
+        }
+
+        $modelName = Inflector::singularize($modelName);
+
         $attachmentLines = [
             'fs_attachments_start' => '<fieldset>',
             'fs_attachments_legend' => sprintf('<legend>%s</legend>', __('Archive')),
@@ -287,7 +297,7 @@ class AppEvents implements EventListenerInterface
                     'field' => 'documents_attachments.0.model',
                     'options' => [
                         'type' => 'hidden',
-                        'value' => 'Document',
+                        'value' => $modelName,
                     ],
                 ],
             ],

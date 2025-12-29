@@ -148,12 +148,12 @@ foreach ($data as $document) {
                 sprintf(
                     '<div class="hide-on-med-and-up">%1$s<br />%2$s</div>',
                     (string)$document->dat_issue,
-                    h($document->Client['title'] ?? '')
+                    h($document->Client['title'] ?? ''),
                 ) . '</div>',
         ],
         'date' => [
             'parameters' => ['class' => 'center-align nowrap hide-on-small-only'],
-            'html' => $this->Arhint->calendarDay($document->dat_issue),
+            'html' => $document->dat_issue ? $this->Arhint->calendarDay($document->dat_issue) : '',
         ],
         'title' => [
             'parameters' => ['class' => 'documents-title left-align'],

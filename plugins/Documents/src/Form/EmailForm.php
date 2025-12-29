@@ -11,6 +11,7 @@ use Cake\Http\ServerRequest;
 use Cake\ORM\Query\SelectQuery;
 use Cake\ORM\TableRegistry;
 use Cake\Validation\Validator;
+use Documents\Model\Entity\Document;
 use Documents\Model\Entity\Invoice;
 use Documents\Model\Entity\TravelOrder;
 
@@ -133,18 +134,10 @@ class EmailForm extends Form
 
                         $atchs = [];
                         foreach ($documents as $doc) {
-                            switch (get_class($doc)) {
-                                case Invoice::class:
-                                    $modelName = 'Invoice';
-                                    break;
-                                case TravelOrder::class:
-                                    $modelName = 'TravelOrder';
-                                    break;
-                                default:
-                                    $modelName = 'Document';
-                            }
-
-                            $atchs[] = $query->newExpr()->and(['model' => $modelName, 'foreign_id' => $doc->id]);
+                            $atchs[] = $query->newExpr()->and([
+                                'model' => $this->getDocumentModelName($doc),
+                                'foreign_id' => $doc->id,
+                            ]);
                         }
 
                         return $exp->or($atchs);
@@ -161,10 +154,46 @@ class EmailForm extends Form
 
                 $result = $email->deliver((string)$this->request->getData('body'));
 
+                if ($result) {
+                    /** @var \App\Model\Table\LogsTable $LogsTable */
+                    $LogsTable = TableRegistry::getTableLocator()->get('App.Logs');
+                    foreach ($documents as $doc) {
+                        $LogsTable::log(
+                            model: $this->getDocumentModelName($doc),
+                            foreignId: $doc->id,
+                            userId: $currentUser->id,
+                            action: 'DocumentEmail',
+                            details: json_encode([
+                                'to' => $this->request->getData('to'),
+                                'cc' => $this->request->getData('cc'),
+                                'subject' => $this->request->getData('subject'),
+                            ], JSON_THROW_ON_ERROR),
+                        );
+                    }
+                }
+
                 return (bool)$result;
             }
         }
 
         return false;
+    }
+
+    /**
+     * Get document model name
+     *
+     * @param \Documents\Model\Entity\Document|\Documents\Model\Entity\Invoice|\Documents\Model\Entity\TravelOrder $document Document entity
+     * @return string
+     */
+    private function getDocumentModelName(Invoice|Document|TravelOrder $document): string
+    {
+        switch (get_class($document)) {
+            case Invoice::class:
+                return 'Invoice';
+            case TravelOrder::class:
+                return 'TravelOrder';
+            default:
+                return 'Document';
+        }
     }
 }

@@ -142,7 +142,7 @@ class DocumentsEvents implements EventListenerInterface
                         'action' => 'view',
                         $document->id,
                     ], true),
-                    $ArhintHelper->calendarDay($document->dat_issue),
+                    $document->dat_issue ? $ArhintHelper->calendarDay($document->dat_issue) : '',
                 );
             }
         }
