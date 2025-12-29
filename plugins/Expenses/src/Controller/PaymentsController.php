@@ -37,10 +37,9 @@ class PaymentsController extends AppController
 
         $query = $this->Authorization->applyScope($this->Payments->find())
             ->select(['id', 'account_id', 'dat_happened', 'sepa_id', 'amount', 'descript'])
-            ->where($params['conditions'])
-            ->orderBy($params['order']);
+            ->where($params['conditions']);
 
-        $payments = $this->paginate($query);
+        $payments = $this->paginate($query, ['order' => ['Payments.dat_happened' => 'desc']]);
 
         $minYear = $this->Payments->minYear($ownerId);
         $accounts = $this->Payments->PaymentsAccounts->listForOwner($ownerId, true);
