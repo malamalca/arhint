@@ -35,6 +35,7 @@ class Expense extends Entity
      */
     protected array $_accessible = [
         '*' => true,
+        'id' => false,
         'payments' => true,
     ];
 }
