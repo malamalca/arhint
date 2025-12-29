@@ -22,7 +22,7 @@ class TasksEvents implements EventListenerInterface
         return [
             'App.dashboard' => 'dashboardPanels',
             'View.beforeRender' => 'addScripts',
-            'Lil.Sidebar.beforeRender' => 'modifySidebar',
+            'App.Sidebar.beforeRender' => 'modifySidebar',
         ];
     }
 

@@ -12,6 +12,7 @@ use Cake\ORM\Entity;
  * @property string|null $model
  * @property string|null $foreign_id
  * @property string|null $user_id
+ * @property string|null $action
  * @property string|null $descript
  * @property \Cake\I18n\DateTime|null $created
  * @property \Cake\I18n\DateTime|null $modified
@@ -32,6 +33,7 @@ class Log extends Entity
         'model' => true,
         'foreign_id' => true,
         'user_id' => true,
+        'action' => true,
         'descript' => true,
         'created' => true,
         'modified' => true,

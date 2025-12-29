@@ -1,8 +1,6 @@
 <?php
 use Cake\Utility\Xml;
 
-$Lil = $this->loadHelper('Lil.Lil');
-
 $transformed = ['IzdaniDokumenti' => []];
 
 $i = 0;
@@ -25,9 +23,21 @@ foreach ($documents as $document) {
         if ($client) {
             $clientData = [
                 'NazivNaslovPodjetja' => [
-                    'VrstaPartnerja' => $client->kind,                                              // II - izdajatelj, BY - kupec, IV - prejemnik
-                    'NazivPartnerja' => $this->Lil->mbWordWrap($client->title, ['maxlines' => 4, 'width' => 35, 'result' => 'array', 'startwith' => 1, 'prefix' => 'NazivPartnerja']),
-                    'Ulica' => $this->Lil->mbWordWrap($client->street, ['maxlines' => 4, 'width' => 35, 'result' => 'array', 'startwith' => 1, 'prefix' => 'Ulica']),
+                    'VrstaPartnerja' => $client->kind, // II - izdajatelj, BY - kupec, IV - prejemnik
+                    'NazivPartnerja' => $this->Lil->mbWordWrap($client->title ?? '', [
+                        'maxlines' => 4,
+                        'width' => 35,
+                        'result' => 'array',
+                        'startwith' => 1,
+                        'prefix' => 'NazivPartnerja',
+                    ]),
+                    'Ulica' => $this->Lil->mbWordWrap($client->street ?? '', [
+                        'maxlines' => 4,
+                        'width' => 35,
+                        'result' => 'array',
+                        'startwith' => 1,
+                        'prefix' => 'Ulica',
+                    ]),
                     'Kraj' => h($client->city),
                     'NazivDrzave' => empty($client->country) ? 'Slovenija' : h($client->country),
                     'PostnaStevilka' => h($client->zip),

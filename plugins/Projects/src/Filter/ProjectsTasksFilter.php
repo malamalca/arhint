@@ -30,7 +30,7 @@ class ProjectsTasksFilter extends Filter
             ->allowEmptyString('status')
             ->add('status', 'inList', [
                 'rule' => ['inList', ['open', 'closed']],
-                'message' => 'Status can only be "open" or "closed".',
+                'message' => __d('projects', 'Status can only be "open" or "closed".'),
             ]);
 
         return $validator;

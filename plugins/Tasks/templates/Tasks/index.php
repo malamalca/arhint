@@ -26,10 +26,7 @@ $tasksIndex = [
                 ),
             ],
             'params' => [
-                'onclick' => $this->getRequest()->is('mobile') ? null : sprintf(
-                    'popup("%1$s", $(this).attr("href"), "auto"); return false;',
-                    __d('tasks', 'Add Task')
-                ),
+                'id' => 'AddTaskPopup',
             ],
         ],
         'add_folder' => [
@@ -41,10 +38,7 @@ $tasksIndex = [
                 'action' => 'edit',
             ],
             'params' => [
-                'onclick' => $this->getRequest()->is('mobile') ? null : sprintf(
-                    'popup("%1$s", $(this).attr("href"), "auto"); return false;',
-                    __d('tasks', 'Add Folder')
-                ),
+                'id' => 'AddTaskFolderPopup',
             ],
         ],
     ],
@@ -104,11 +98,6 @@ echo $this->Lil->panels($tasksIndex, 'Tasks.Tasks.index');
         <?php
         if ($this->getRequest()->is('mobile')) {
             ?>
-        $("a.lil-task-swipe-edit, a.lil-task-edit").on("click", function() {
-            //popup("<?php echo __d('tasks', 'Edit'); ?>", $(this).attr("href"), "auto");
-            //return false;
-        });
-
 
         $("div.lil-task-item, div.lil-tasks-folder").swipe({
             swipeLeft: function(event, direction, distance, duration, fingerCount) {
@@ -131,6 +120,12 @@ echo $this->Lil->panels($tasksIndex, 'Tasks.Tasks.index');
             },
             threshold: 30
         });
+            <?php
+        } else {
+            ?>
+
+        $("#AddTaskPopup").modalPopup({title: "<?php echo __d('tasks', 'Add Task'); ?>"});
+        $("#AddTaskFolderPopup").modalPopup({title: "<?php echo __d('tasks', 'Add Task Folder'); ?>"});
             <?php
         }
         ?>

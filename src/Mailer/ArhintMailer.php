@@ -6,6 +6,7 @@ namespace App\Mailer;
 use App\Model\Entity\User;
 use Cake\Mailer\Mailer;
 use Cake\ORM\TableRegistry;
+use InvalidArgumentException;
 
 /**
  * @psalm-suppress UnusedClass
@@ -19,10 +20,17 @@ class ArhintMailer extends Mailer
      *
      * @param array<string, mixed>|string|null $config Array of configs, or string to load configs from app.php
      */
-    public function __construct(User $currentUser, array|string|null $config = null)
+    public function __construct(array|string|null $config = null)
     {
         parent::__construct($config);
-        $this->currentUser = $currentUser;
+
+        if (isset($config['user']) && $config['user'] instanceof User) {
+            $this->currentUser = $config['user'];
+        } else {
+            throw new InvalidArgumentException('User entity must be provided in Mailer config under "user" key.');
+        }
+
+        $this->setTransport('default');
     }
 
     /**

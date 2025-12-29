@@ -4,8 +4,11 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Model\Entity\User;
+use ArrayObject;
 use Cake\Controller\Controller;
+use Cake\Event\Event;
 use Cake\Event\EventInterface;
+use Cake\Event\EventManager;
 use Exception;
 
 /**
@@ -42,8 +45,37 @@ class AppController extends Controller
         $this->loadComponent('Authentication.Authentication');
         $this->loadComponent('Authorization.Authorization');
         $this->loadComponent('FormProtection');
+    }
+
+    /**
+     * beforeFilter Callback
+     *
+     * @param \Cake\Event\EventInterface $event Event object
+     * @return void
+     */
+    public function beforeFilter(EventInterface $event)
+    {
+        /** @var \App\Model\Entity\User $user */
+        $user = $this->Authentication->getIdentity();
+        if ($user) {
+            $this->currentUser = $user->getOriginalData();
+        }
 
         $this->response->setTypeMap('aht', ['text/html']);
+        $this->response->setTypeMap('txt', ['text/plain']);
+    }
+
+    /**
+     * beforeRender hook method.
+     *
+     * @param \Cake\Event\EventInterface $event Event object.
+     * @return void
+     */
+    public function beforeRender(EventInterface $event): void
+    {
+        if ($this->request->is('ajax')) {
+            $this->viewBuilder()->setClassName('Ajax');
+        }
 
         if ($this->request->is('aht')) {
             $this->viewBuilder()->setClassName('Aht');
@@ -53,11 +85,15 @@ class AppController extends Controller
             $this->viewBuilder()->setClassName('Json');
         }
 
-        $this->response->setTypeMap('txt', ['text/plain']);
-
         if ($this->request->is('txt')) {
             $this->viewBuilder()->setClassName('Txt');
         }
+
+        $adminSidebar = new ArrayObject();
+        $event = new Event('App.Sidebar.beforeRender', $this, ['sidebar' => $adminSidebar]);
+        EventManager::instance()->dispatch($event);
+
+        $this->set('sidebar', (array)$adminSidebar);
     }
 
     /**
@@ -82,20 +118,5 @@ class AppController extends Controller
         }
 
         return $this->currentUser;
-    }
-
-    /**
-     * beforeFilterCallback
-     *
-     * @param \Cake\Event\EventInterface $event Event object
-     * @return void
-     */
-    public function beforeFilter(EventInterface $event)
-    {
-        /** @var \App\Model\Entity\User $user */
-        $user = $this->Authentication->getIdentity();
-        if ($user) {
-            $this->currentUser = $user->getOriginalData();
-        }
     }
 }

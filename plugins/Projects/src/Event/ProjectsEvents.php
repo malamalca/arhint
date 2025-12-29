@@ -21,11 +21,11 @@ class ProjectsEvents implements EventListenerInterface
     {
         return [
             'View.beforeRender' => 'addScripts',
-            'Lil.Sidebar.beforeRender' => 'modifySidebar',
+            'App.Sidebar.beforeRender' => 'modifySidebar',
             'Documents.Dashboard.queryDocuments' => 'filterDashboardDocuments',
             'Documents.Documents.indexQuery' => 'filterDashboardDocuments',
-            'Lil.Form.Crm.Adremas.edit' => 'addProjectToAdremas',
-            'Lil.Index.Crm.Adremas.index' => 'addProjectToAdremas',
+            'App.Form.Crm.Adremas.edit' => 'addProjectToAdremas',
+            'App.Index.Crm.Adremas.index' => 'addProjectToAdremas',
         ];
     }
 
@@ -79,7 +79,7 @@ class ProjectsEvents implements EventListenerInterface
         $ProjectsTable = TableRegistry::getTableLocator()->get('Projects.Projects');
         $projectsQuery = $view->getCurrentUser()->applyScope('index', $ProjectsTable->find());
 
-        if ($event->getName() == 'Lil.Form.Crm.Adremas.edit') {
+        if ($event->getName() == 'App.Form.Crm.Adremas.edit') {
             $projects = $ProjectsTable->findForOwner($view->getCurrentUser()->company_id, $projectsQuery);
 
             $projectField = [
@@ -99,7 +99,7 @@ class ProjectsEvents implements EventListenerInterface
             $view->Lil->insertIntoArray($data->form['lines'], ['project' => $projectField], ['before' => 'submit']);
         }
 
-        if ($event->getName() == 'Lil.Index.Crm.Adremas.index') {
+        if ($event->getName() == 'App.Index.Crm.Adremas.index') {
             $projects = [];
 
             // extract unqiue project ids from adremas

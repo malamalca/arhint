@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Documents\Lib;
 
+use App\Lib\LilPdfFactory;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
 use Cake\Event\Event;
@@ -14,7 +15,6 @@ use Cake\View\View;
 use Cake\View\XmlView;
 use Documents\Model\Entity\Invoice;
 use DOMDocument;
-use Lil\Lib\LilPdfFactory;
 use XSLTProcessor;
 
 class InvoicesExport
@@ -41,7 +41,7 @@ class InvoicesExport
         $this->view = new $viewClass(null, null, EventManager::instance(), []);
         $this->view->setTemplatePath('Invoices');
         $this->view->setPlugin('Documents');
-        $this->view->loadHelper('Lil.Lil');
+        $this->view->loadHelper('Lil');
     }
 
     /**
@@ -105,8 +105,8 @@ class InvoicesExport
                 $pdf = null;
 
                 if ($ext == 'pdf') {
-                    $pdfEngine = Configure::read('Lil.pdfEngine');
-                    $pdfOptions = Configure::read('Lil.' . $pdfEngine);
+                    $pdfEngine = Configure::read('Pdf.pdfEngine');
+                    $pdfOptions = Configure::read('Pdf.' . $pdfEngine);
                     $pdf = LilPdfFactory::create($pdfEngine, (array)$pdfOptions);
                 }
 

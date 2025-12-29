@@ -14,6 +14,7 @@ declare(strict_types=1);
  */
 namespace App\View\Widget;
 
+use ArrayObject;
 use Cake\View\Form\ContextInterface;
 use Cake\View\StringTemplate;
 use Cake\View\View;
@@ -165,5 +166,20 @@ class DurationWidget implements WidgetInterface
     {
         // fdsfd
         return [$data['name'] . '.hours', $data['name'] . '.minutes', $data['name'] . '.duration'];
+    }
+
+    /**
+     * Marshall duration data from array to integer seconds.
+     *
+     * @param \ArrayObject<string, mixed> $data Data to be marshalled.
+     * @return void
+     */
+    public static function marshalDurationFields(ArrayObject $data): void
+    {
+        foreach ($data as $fieldName => $fieldValue) {
+            if (is_array($fieldValue) && !empty($fieldValue['duration'])) {
+                $data[$fieldName] = (int)$data[$fieldName]['hours'] * 3600 + (int)$data[$fieldName]['minutes'] * 60;
+            }
+        }
     }
 }

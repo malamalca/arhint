@@ -3,7 +3,6 @@
 use Cake\Cache\Engine\FileEngine;
 use Cake\Database\Connection;
 use Cake\Database\Driver\Mysql;
-use Cake\Error\ExceptionRenderer;
 use Cake\Log\Engine\FileLog;
 use Cake\Mailer\Transport\MailTransport;
 
@@ -436,10 +435,14 @@ return [
         'defaults' => 'php',
     ],
 
-    'Lil' => [
-        'layout' => 'default',
-        'appTitle' => 'ARHINT',
+    'Pdf' => [
         'pdfEngine' => 'WKHTML2PDF',
+        'pdfOptions' => [
+            'pagePre' => '',
+            'pagePost' => '',
+            'footerHtml' => '',
+            'headerHtml' => '',
+        ],
         'TCPDF' => [
             'user-style-sheet' => dirname(dirname(__FILE__)) . DS . 'webroot' . DS . 'css' . DS . 'pdf.css',
         ],
@@ -454,7 +457,7 @@ return [
             'margin-left' => 0,
             'encoding' => 'utf-8',
             'page-size' => 'A4',
-    
+
             // Default page options
             'disable-smart-shrinking',
             'user-style-sheet' => dirname(dirname(__FILE__)) . DS . 'webroot' . DS . 'css' . DS . 'pdf.css',
@@ -477,6 +480,6 @@ return [
     ],
 
     'Ghostscript' => [
-        'executable' => 'D:\bin\Ghostscript\gswin64c.exe'
+        'executable' => 'D:\bin\Ghostscript\gswin64c.exe',
     ],
 ];

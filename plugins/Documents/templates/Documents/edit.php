@@ -11,14 +11,14 @@ if ($document->isNew()) {
         'documents',
         'Add an Document #{0} <span class="light">({1})</span>',
         $counter->counter + 1,
-        h($counter->title)
+        h($counter->title),
     );
 } else {
     $layoutTitle = __d(
         'documents',
         'Edit an Document #{0} <span class="light">({1})</span>',
         $document->counter,
-        h($counter->title)
+        h($counter->title),
     );
 }
 
@@ -157,8 +157,8 @@ $documentEdit = [
                                 'tabIndex' => -1,
                             ],
                         ],
-                    ]
-                )
+                    ],
+                ),
             ),
             'client_error' => [
                 'method' => 'error',

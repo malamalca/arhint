@@ -23,7 +23,7 @@ use Cake\Routing\Router;
 
     <?= $this->Html->script('/js/jquery/jquery-3.6.0.min.js') ?>
     <?= $this->Html->script('/js/vendor/Materialize/materialize.js') ?>
-    <?= $this->Html->script('/lil/js/lil_float.js') ?>
+    <?= $this->Html->script('lilFloat.js') ?>
     <?= $this->Html->script('modalPopup.js') ?>
 
     <?= $this->fetch('script') ?>
@@ -33,7 +33,7 @@ use Cake\Routing\Router;
         <nav class="nav navbar" role="navigation">
             <div class="nav-wrapper">
                 <a id="logo-container" href="#" class="brand-logo">
-                    <div class="logo center-block"><?= Configure::read('Lil.appTitle') ?></div>
+                    <div class="logo center-block"><?= Configure::read('App.title') ?></div>
                 </a>
                 <div class="hide-on-med-and-down">
                     <?= $this->element('mainmenu', ['prefix' => 'top']) ?>
@@ -62,11 +62,11 @@ use Cake\Routing\Router;
                     ) ?>
                     </a>
                     <?php
-                        if ($this->hasCurrentUser() && $this->getCurrentUser()->get('id')) {
-                            $isUserProperties = $this->getRequest()->getParam('controller') == 'Users' &&
-                                $this->getRequest()->getParam('action') == 'properties';
-                            $isUtils = $this->getRequest()->getParam('controller') == 'Utils';
-                    ?>
+                    if ($this->hasCurrentUser() && $this->getCurrentUser()->get('id')) {
+                        $isUserProperties = $this->getRequest()->getParam('controller') == 'Users' &&
+                            $this->getRequest()->getParam('action') == 'properties';
+                        $isUtils = $this->getRequest()->getParam('controller') == 'Utils';
+                        ?>
                     <div class="sidenav-user-title"><?= h($this->getCurrentUser()->get('name')) ?></div>
                     <ul class="collection" id="user-settings" style="display: <?= $isUserProperties || $isUtils ? 'default' : 'none' ?>">
                         <li class="<?= $isUserProperties ? 'active' : '' ?>">

@@ -3,9 +3,12 @@ declare(strict_types=1);
 
 namespace Projects\Model\Table;
 
+use App\Model\Entity\User;
+use Cake\Database\Query\SelectQuery;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
+use Projects\Filter\ProjectsWorkhoursFilter;
 
 /**
  * ProjectsWorkhours Model
@@ -144,5 +147,37 @@ class ProjectsWorkhoursTable extends Table
         }
 
         return $ret;
+    }
+
+    /**
+     * Find workhours count
+     *
+     * @param \Cake\Database\Query\SelectQuery<mixed> $query Query object.
+     * @param string $projectId Project id.
+     * @param \App\Model\Entity\User $currentUser Current user.
+     * @param \Projects\Filter\ProjectsWorkhoursFilter $filter Filter object.
+     * @return \Cake\Database\Query\SelectQuery<mixed>
+     */
+    public function findWorkhoursCount(
+        SelectQuery $query,
+        User $currentUser,
+        ProjectsWorkhoursFilter $filter,
+    ): SelectQuery {
+        $filter->delete('status');
+
+        return $query
+            ->select([
+                'open' => $query->func()->count(
+                    $query->newExpr()->case()
+                        ->when(['dat_confirmed IS' => null])
+                        ->then(1),
+                ),
+                'closed' => $query->func()->count(
+                    $query->newExpr()->case()
+                        ->when(['dat_confirmed IS NOT' => null])
+                        ->then(1),
+                ),
+            ])
+            ->where($filter->getParams($currentUser)['conditions']);
     }
 }

@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\View\Helper\LilHelper;
 use ArrayObject;
 use Cake\Core\Configure;
 use Cake\Event\Event;
@@ -15,7 +16,6 @@ use Cake\Routing\Router;
 use Cake\View\Exception\MissingTemplateException;
 use Cake\View\View;
 use League\CommonMark\GithubFlavoredMarkdownConverter;
-use Lil\View\Helper\LilHelper;
 
 /**
  * Static content controller

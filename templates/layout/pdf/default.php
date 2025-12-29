@@ -5,7 +5,7 @@
 <body>
     <div id="print-area">
 <?php
-	echo $this->fetch('content');
+    echo $this->fetch('content');
 ?>
     </div>
 </body>

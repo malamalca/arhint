@@ -60,6 +60,9 @@ class AdremasController extends AppController
         if ($this->getRequest()->is(['patch', 'post', 'put'])) {
             /** @var \Crm\Model\Entity\Adrema $adrema */
             $adrema = $this->Adremas->patchEntity($adrema, $this->getRequest()->getData());
+            if ($adrema->kind === 'labels') {
+                $adrema->kind_type = $this->request->getData('kind_type_label');
+            }
 
             if ($this->Adremas->save($adrema)) {
                 // copy contacts to duplicated adrema
@@ -116,13 +119,24 @@ class AdremasController extends AppController
         $adrema = $this->Adremas->get($id, contain: ['Attachments', 'FormAttachments']);
         $this->Authorization->authorize($adrema);
 
-        $addresses = TableRegistry::getTableLocator()->get('Crm.AdremasContacts')
-            ->find()
-            ->where(['adrema_id' => $adrema->id])
-            ->contain(['Contacts', 'ContactsAddresses', 'ContactsEmails'])
-            ->all();
+        if ($this->request->getQuery('tab', 'addresses') === 'addresses') {
+            $this->set('addresses', TableRegistry::getTableLocator()->get('Crm.AdremasContacts')
+                ->find()
+                ->where(['adrema_id' => $adrema->id])
+                ->contain(['Contacts', 'ContactsAddresses', 'ContactsEmails'])
+                ->all());
+        }
+        if ($this->request->getQuery('tab') === 'logs') {
+            $this->set('logs', $this->paginate(
+                TableRegistry::getTableLocator()->get('App.logs')->find()->where([
+                    'model' => 'Adremas',
+                    'foreign_id' => $adrema->id,
+                ])->contain(['Users']),
+                ['limit' => 20, 'order' => ['Logs.created' => 'DESC']],
+            ));
+        }
 
-        $this->set(compact('addresses', 'adrema'));
+        $this->set(compact('adrema'));
     }
 
     /**
@@ -165,15 +179,15 @@ class AdremasController extends AppController
             ->contain(['Contacts', 'ContactsAddresses', 'ContactsEmails', 'Attachments'])
             ->all();
 
-        //$this->viewBuilder()->setTemplate('Labels' . DS . 'email' . DS . $adrema->kind_type);
-        //$this->set(compact('adrema', 'addresses'));
-
         $errors = $this->Adremas->getValidator('email')->validate($adrema->toArray(), false);
         if (empty($errors)) {
             $sendErrors = [];
             foreach ($addresses as $address) {
-                $this->getMailer('Crm.Crm')
-                    ->send(Inflector::variable($adrema->kind_type), [$this->getCurrentUser(), $address, $adrema]);
+                $this->getMailer('Crm.Crm', ['user' => $this->getCurrentUser()])
+                    ->send(
+                        Inflector::variable((string)$adrema->kind_type),
+                        [$this->getCurrentUser(), $address, $adrema],
+                    );
             }
 
             $this->set(compact('adrema', 'addresses', 'sendErrors'));
@@ -192,14 +206,14 @@ class AdremasController extends AppController
         $adrema = $this->Adremas->get($adremaId);
         $this->Authorization->authorize($adrema, 'view');
 
-        $settings = Configure::read('Crm.label.' . $adrema->kind_type);
+        $settings = Configure::read('Crm.labels.' . $adrema->kind_type);
         unset($settings['form']);
         unset($settings['address']);
 
         // must be tcpdf because of the way the labels are constructed
-        Configure::write('Lil.pdfEngine', 'TCPDF');
+        Configure::write('Pdf.pdfEngine', 'TCPDF');
 
-        $this->viewBuilder()->setClassName('Lil.Pdf');
+        $this->viewBuilder()->setClassName('Pdf');
         $this->viewBuilder()->setOptions($settings);
         $this->viewBuilder()->setTemplate($adrema->kind_type);
 

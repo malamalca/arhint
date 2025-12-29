@@ -4,66 +4,127 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2023-08-23 13:00+0000\n"
+"Project-Id-Version: ARHINT\n"
+"POT-Creation-Date: 2025-12-27 17:24+0000\n"
 "PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
-"Last-Translator: NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
+"Last-Translator: Miha Nahtigal <miha.nahtigal@arhim.si>\n"
+"Language-Team: Miha Nahtigal <miha.nahtigal@arhim.si>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+"Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n%100==4 ? 3 : 0);\n"
 
-#: ./src/Command/HeartBeatCommand.php:31
+#: ./src/Command/HeartBeatCommand.php:32
 msgid "Intranet Notification"
 msgstr ""
 
-#: ./src/Command/HeartBeatCommand.php:47
+#: ./src/Command/HeartBeatCommand.php:52
 msgid "Intranet Report"
 msgstr ""
 
-#: ./src/Controller/PagesController.php:139
+#: ./src/Controller/AttachmentsController.php:94
+msgid "Invalid attachment model or foreign ID."
+msgstr ""
+
+#: ./src/Controller/AttachmentsController.php:109
+msgid "The attachment has been saved."
+msgstr ""
+
+#: ./src/Controller/AttachmentsController.php:115
+msgid "The attachment could not be saved. Please, try again."
+msgstr ""
+
+#: ./src/Controller/AttachmentsController.php:135
+msgid "The attachment has been deleted."
+msgstr ""
+
+#: ./src/Controller/AttachmentsController.php:137
+msgid "The attachment could not be deleted. Please, try again."
+msgstr ""
+
+#: ./src/Controller/AttachmentsController.php:170
+msgid "OCR processing failed. Please, try again."
+msgstr ""
+
+#: ./src/Controller/DashboardNotesController.php:36
+msgid "The note has been saved."
+msgstr ""
+
+#: ./src/Controller/DashboardNotesController.php:42
+msgid "The note could not be saved. Please, try again."
+msgstr ""
+
+#: ./src/Controller/PagesController.php:142
 #: ./templates/Utils/pdf_merge.php:20
 #: ./templates/Utils/pdf_sign.php:8
 #: ./templates/Utils/pdf_splice.php:8
 msgid "PDF Sign"
 msgstr ""
 
-#: ./src/Controller/PagesController.php:148
+#: ./src/Controller/PagesController.php:151
 #: ./templates/Utils/pdf_merge.php:28
 #: ./templates/Utils/pdf_sign.php:16
 #: ./templates/Utils/pdf_splice.php:16
 msgid "PDF Merge"
 msgstr ""
 
-#: ./src/Controller/PagesController.php:157
+#: ./src/Controller/PagesController.php:160
 #: ./templates/Utils/pdf_merge.php:36
 #: ./templates/Utils/pdf_sign.php:24
 #: ./templates/Utils/pdf_splice.php:24
 msgid "PDF Splice"
 msgstr ""
 
-#: ./src/Controller/UsersController.php:107
+#: ./src/Controller/PagesController.php:169
+#: ./templates/DashboardNotes/edit.php:6
+msgid "Add Note"
+msgstr ""
+
+#: ./src/Controller/PagesController.php:182
+msgid "Dashboard Note"
+msgstr ""
+
+#: ./src/Controller/PagesController.php:185
+msgid "Prev"
+msgstr ""
+
+#: ./src/Controller/PagesController.php:191
+msgid "Next"
+msgstr ""
+
+#: ./src/Controller/PagesController.php:216
+msgid "Created {0}"
+msgstr ""
+
+#: ./src/Controller/PagesController.php:218
+msgid "edit"
+msgstr ""
+
+#: ./src/Controller/PagesController.php:232
+msgid "No notes found. [$1Add] your first note."
+msgstr ""
+
+#: ./src/Controller/UsersController.php:100
 msgid "An email with password reset instructions has been sent."
 msgstr ""
 
-#: ./src/Controller/UsersController.php:110
+#: ./src/Controller/UsersController.php:103
 msgid "No user with specified email has been found."
 msgstr ""
 
-#: ./src/Controller/UsersController.php:128
+#: ./src/Controller/UsersController.php:121
 msgid "Reset key does not exist."
 msgstr ""
 
-#: ./src/Controller/UsersController.php:138
+#: ./src/Controller/UsersController.php:131
 msgid "User does not exist."
 msgstr ""
 
-#: ./src/Controller/UsersController.php:146
+#: ./src/Controller/UsersController.php:139
 msgid "Password has been changed."
 msgstr ""
 
-#: ./src/Controller/UsersController.php:149
+#: ./src/Controller/UsersController.php:142
 msgid "Please verify that the information is correct."
 msgstr ""
 
@@ -75,89 +136,170 @@ msgstr ""
 msgid "The user could not be saved. Please, try again."
 msgstr ""
 
-#: ./src/Controller/UsersController.php:277
+#: ./src/Controller/UsersController.php:278
 msgid "Properties have been saved."
 msgstr ""
 
-#: ./src/Controller/UsersController.php:281
+#: ./src/Controller/UsersController.php:282
 msgid "Properties could not be saved. Please, try again."
 msgstr ""
 
-#: ./src/Controller/UsersController.php:303
+#: ./src/Controller/UsersController.php:304
 msgid "The user has been deleted."
 msgstr ""
 
-#: ./src/Controller/UsersController.php:305
+#: ./src/Controller/UsersController.php:306
 msgid "The user could not be deleted. Please, try again."
 msgstr ""
 
-#: ./src/Model/Table/UsersTable.php:234
-#: ./templates/Users/reset.php:5
+#: ./src/Event/AppEvents.php:69
+msgid "INBOX Emails"
+msgstr ""
+
+#: ./src/Event/AppEvents.php:264
+msgid "Archive"
+msgstr ""
+
+#: ./src/Model/Table/UsersTable.php:239
+#: ./templates/Users/reset.php:3
 msgid "Password Reset"
 msgstr ""
 
-#: ./src/View/Helper/ArhintHelper.php:333
+#: ./src/View/Helper/ArhintHelper.php:370
 msgid "Search"
 msgstr ""
 
-#: ./src/View/Helper/ArhintHelper.php:180
-#: ./src/View/Helper/ArhintHelper.php:189
+#: ./src/View/Helper/ArhintHelper.php:407
+#: ./templates/Attachments/edit.php:30
+#: ./templates/Utils/pdf_merge.php:60
+msgid "Filename"
+msgstr ""
+
+#: ./src/View/Helper/ArhintHelper.php:408
+msgid "Size"
+msgstr ""
+
+#: ./src/View/Helper/ArhintHelper.php:481
+#: ./templates/Attachments/preview.php:11
+msgid "Attachment Preview"
+msgstr ""
+
+#: ./src/View/Helper/ArhintHelper.php:484
+msgid "No attachments found."
+msgstr ""
+
+#: ./src/View/Helper/ArhintHelper.php:489
+#: ./src/View/Helper/ArhintHelper.php:508
+msgid "Add New Attachment"
+msgstr ""
+
+#: ./src/View/Helper/ArhintHelper.php:57
+msgid "hour"
+msgid_plural "hours"
+msgstr[0] ""
+msgstr[1] ""
+
+#: ./src/View/Helper/ArhintHelper.php:63
+#: ./src/View/Helper/ArhintHelper.php:67
+msgid "minute"
+msgid_plural "minutes"
+msgstr[0] ""
+msgstr[1] ""
+
 #: ./src/View/Helper/ArhintHelper.php:216
+#: ./src/View/Helper/ArhintHelper.php:225
+#: ./src/View/Helper/ArhintHelper.php:252
 msgid "hr"
 msgid_plural "hrs"
 msgstr[0] ""
 msgstr[1] ""
 
-#: ./src/View/Helper/ArhintHelper.php:183
-#: ./src/View/Helper/ArhintHelper.php:201
-#: ./src/View/Helper/ArhintHelper.php:210
+#: ./src/View/Helper/ArhintHelper.php:219
+#: ./src/View/Helper/ArhintHelper.php:237
+#: ./src/View/Helper/ArhintHelper.php:246
 msgid "min"
 msgid_plural "mins"
 msgstr[0] ""
 msgstr[1] ""
 
-#: ./src/View/Widget/DurationWidget.php:94
+#: ./src/View/Helper/LilHelper.php:295
+msgid "Are you sure you want to delete this item?"
+msgstr ""
+
+#: ./src/View/Helper/LilHelper.php:970
+msgid "No records found."
+msgstr ""
+
+#: ./src/View/Widget/DurationWidget.php:97
 msgid "Hours"
 msgstr ""
 
-#: ./src/View/Widget/DurationWidget.php:108
+#: ./src/View/Widget/DurationWidget.php:111
 msgid "Minutes"
 msgstr ""
 
+#: ./templates/Attachments/edit.php:6
+msgid "Add Attachment for \"{0}\""
+msgstr ""
+
+#: ./templates/Attachments/edit.php:37
+msgid "Upload"
+msgstr ""
+
+#: ./templates/Attachments/preview.php:14
+#: ./templates/Attachments/view.php:15
 #: ./templates/Pages/report.php:7
 #: ./templates/layout/error.php:40
 msgid "Back"
+msgstr ""
+
+#: ./templates/Attachments/view.php:12
+msgid "Attachment"
+msgstr ""
+
+#: ./templates/DashboardNotes/edit.php:6
+msgid "Edit Note"
+msgstr ""
+
+#: ./templates/DashboardNotes/edit.php:34
+msgid "Note"
+msgstr ""
+
+#: ./templates/DashboardNotes/edit.php:41
+#: ./templates/Users/edit.php:112
+#: ./templates/Users/properties.php:117
+msgid "Save"
 msgstr ""
 
 #: ./templates/Pages/report.php:12
 msgid "Download"
 msgstr ""
 
-#: ./templates/Users/change_password.php:4
+#: ./templates/Users/change_password.php:5
 msgid "Set new password for {0}"
 msgstr ""
 
-#: ./templates/Users/change_password.php:10
+#: ./templates/Users/change_password.php:30
 msgid "New Password"
 msgstr ""
 
-#: ./templates/Users/change_password.php:10
+#: ./templates/Users/change_password.php:31
 msgid "Password is required, format must be valid."
 msgstr ""
 
-#: ./templates/Users/change_password.php:11
-#: ./templates/Users/edit.php:95
-#: ./templates/Users/properties.php:103
+#: ./templates/Users/change_password.php:42
+#: ./templates/Users/edit.php:103
+#: ./templates/Users/properties.php:104
 msgid "Repeat Password"
 msgstr ""
 
-#: ./templates/Users/change_password.php:11
-#: ./templates/Users/properties.php:87
-#: ./templates/Users/properties.php:107
+#: ./templates/Users/change_password.php:43
+#: ./templates/Users/properties.php:88
+#: ./templates/Users/properties.php:108
 msgid "Passwords do not match."
 msgstr ""
 
-#: ./templates/Users/change_password.php:14
+#: ./templates/Users/change_password.php:52
 msgid "Change"
 msgstr ""
 
@@ -179,7 +321,7 @@ msgstr ""
 
 #: ./templates/Users/edit.php:39
 #: ./templates/Users/properties.php:40
-#: ./templates/Users/reset.php:24
+#: ./templates/Users/reset.php:22
 #: ./templates/Users/view.php:29
 msgid "Email"
 msgstr ""
@@ -193,7 +335,7 @@ msgid "Hidden User"
 msgstr ""
 
 #: ./templates/Users/edit.php:59
-#: ./templates/Users/login.php:5
+#: ./templates/Users/login.php:3
 msgid "Login"
 msgstr ""
 
@@ -218,21 +360,20 @@ msgid "Reader"
 msgstr ""
 
 #: ./templates/Users/edit.php:79
-#: ./templates/Users/login.php:19
+msgid "Plugin Access"
+msgstr ""
+
+#: ./templates/Users/edit.php:87
+#: ./templates/Users/login.php:17
 #: ./templates/Users/view.php:28
 msgid "Username"
 msgstr ""
 
-#: ./templates/Users/edit.php:87
-#: ./templates/Users/login.php:29
-#: ./templates/Users/properties.php:95
+#: ./templates/Users/edit.php:95
+#: ./templates/Users/login.php:27
+#: ./templates/Users/properties.php:96
 #: ./templates/Utils/pdf_sign.php:65
 msgid "Password"
-msgstr ""
-
-#: ./templates/Users/edit.php:104
-#: ./templates/Users/properties.php:116
-msgid "Save"
 msgstr ""
 
 #: ./templates/Users/index.php:3
@@ -258,15 +399,15 @@ msgstr ""
 msgid "Add"
 msgstr ""
 
-#: ./templates/Users/login.php:40
+#: ./templates/Users/login.php:38
 msgid "Remember me on this computer"
 msgstr ""
 
-#: ./templates/Users/login.php:46
+#: ./templates/Users/login.php:44
 msgid "OK"
 msgstr ""
 
-#: ./templates/Users/login.php:53
+#: ./templates/Users/login.php:51
 #: ./templates/email/text/reset.php:13
 msgid "Forgot your password?"
 msgstr ""
@@ -279,36 +420,40 @@ msgstr ""
 msgid "Login Redirect"
 msgstr ""
 
-#: ./templates/Users/properties.php:57
+#: ./templates/Users/properties.php:58
 msgid "Avatar"
 msgstr ""
 
-#: ./templates/Users/properties.php:66
+#: ./templates/Users/properties.php:61
+msgid "Only png images smaller than 30kB allowed."
+msgstr ""
+
+#: ./templates/Users/properties.php:68
 msgid "Email Notifications"
 msgstr ""
 
-#: ./templates/Users/properties.php:71
+#: ./templates/Users/properties.php:73
 msgid "Receive Notifications Email"
 msgstr ""
 
-#: ./templates/Users/properties.php:78
+#: ./templates/Users/properties.php:79
 msgid "Change Password"
 msgstr ""
 
-#: ./templates/Users/properties.php:83
+#: ./templates/Users/properties.php:84
 msgid "Current Password"
 msgstr ""
 
-#: ./templates/Users/properties.php:86
-#: ./templates/Users/properties.php:106
+#: ./templates/Users/properties.php:87
+#: ./templates/Users/properties.php:107
 msgid "Must not be empty."
 msgstr ""
 
-#: ./templates/Users/reset.php:25
+#: ./templates/Users/reset.php:23
 msgid "Email is required, format must be valid."
 msgstr ""
 
-#: ./templates/Users/reset.php:33
+#: ./templates/Users/reset.php:31
 msgid "Request new Password"
 msgstr ""
 
@@ -329,45 +474,65 @@ msgid "Are you sure you want to delete this user?"
 msgstr ""
 
 #: ./templates/Utils/pdf_merge.php:55
-#: ./templates/Utils/pdf_merge.php:93
+#: ./templates/Utils/pdf_merge.php:109
 msgid "Drag and Drop file here<br/>Or<br/>Click to select file"
 msgstr ""
 
-#: ./templates/Utils/pdf_merge.php:60
-msgid "Filename"
+#: ./templates/Utils/pdf_merge.php:70
+msgid "Compression"
 msgstr ""
 
-#: ./templates/Utils/pdf_merge.php:69
+#: ./templates/Utils/pdf_merge.php:73
+msgid "Default"
+msgstr ""
+
+#: ./templates/Utils/pdf_merge.php:74
+msgid "Printer (300 dpi)"
+msgstr ""
+
+#: ./templates/Utils/pdf_merge.php:75
+msgid "Prepress (300 dpi)"
+msgstr ""
+
+#: ./templates/Utils/pdf_merge.php:76
+msgid "Ebook (150 dpi)"
+msgstr ""
+
+#: ./templates/Utils/pdf_merge.php:77
+msgid "Screen (72 dpi)"
+msgstr ""
+
+#: ./templates/Utils/pdf_merge.php:85
 msgid "Encode to PDF/A"
 msgstr ""
 
-#: ./templates/Utils/pdf_merge.php:80
+#: ./templates/Utils/pdf_merge.php:96
 #: ./templates/Utils/pdf_sign.php:113
-#: ./templates/Utils/pdf_splice.php:74
+#: ./templates/Utils/pdf_splice.php:81
 msgid "Submit"
 msgstr ""
 
-#: ./templates/Utils/pdf_merge.php:91
+#: ./templates/Utils/pdf_merge.php:107
 msgid "Drag Here"
 msgstr ""
 
-#: ./templates/Utils/pdf_merge.php:92
+#: ./templates/Utils/pdf_merge.php:108
 msgid "Drop"
 msgstr ""
 
-#: ./templates/Utils/pdf_merge.php:163
+#: ./templates/Utils/pdf_merge.php:179
 msgid "Upload a file first!"
 msgstr ""
 
-#: ./templates/Utils/pdf_merge.php:168
+#: ./templates/Utils/pdf_merge.php:184
 msgid "Please enter target file name!"
 msgstr ""
 
-#: ./templates/Utils/pdf_merge.php:173
+#: ./templates/Utils/pdf_merge.php:189
 msgid "Target filename should be PDF!"
 msgstr ""
 
-#: ./templates/Utils/pdf_merge.php:243
+#: ./templates/Utils/pdf_merge.php:260
 msgid "Only pdf files are allowed"
 msgstr ""
 
@@ -402,6 +567,30 @@ msgstr ""
 
 #: ./templates/Utils/pdf_splice.php:66
 msgid "Last Page"
+msgstr ""
+
+#: ./templates/Utils/pdf_splice.php:76
+msgid "Split into multiple pages"
+msgstr ""
+
+#: ./templates/element/logs.php:4
+msgid "Date"
+msgstr ""
+
+#: ./templates/element/logs.php:5
+msgid "User"
+msgstr ""
+
+#: ./templates/element/logs.php:6
+msgid "Action"
+msgstr ""
+
+#: ./templates/element/logs.php:7
+msgid "Details"
+msgstr ""
+
+#: ./templates/element/logs.php:22
+msgid "System"
 msgstr ""
 
 #: ./templates/email/text/reset.php:15

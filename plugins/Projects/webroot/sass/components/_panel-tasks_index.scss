@@ -242,6 +242,9 @@ div#tasks-index {
                     vertical-align: middle;
                     margin-right: 0;
                     margin-bottom: 0.3rem;
+                    color: #888;
+
+                    filter: brightness(0) saturate(100%) invert(62%) sepia(0%) saturate(2641%) hue-rotate(333deg) brightness(86%) contrast(96%);
                 }
             }
         }

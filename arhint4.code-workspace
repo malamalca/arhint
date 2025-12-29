@@ -10,7 +10,7 @@
             {
                 "match": ".*\\.scss$",
                 "notMatch": "[\\\\\\/]t[^\\\\\\/]*\\.2scss$",
-                "command": "C:\\bin\\dart-sass\\sass.bat --style=compressed ${workspaceFolder}\\webroot\\sass\\main.scss ${workspaceFolder}\\webroot\\css\\main.css",
+                "command": "D:\\bin\\dart-sass\\sass.bat --style=compressed ${workspaceFolder}\\webroot\\sass\\main.scss ${workspaceFolder}\\webroot\\css\\main.css",
                 "runIn": "terminal",
                 "runningStatusMessage": "Compiling CSS",
                 "finishStatusMessage": "CSS compiled"
@@ -19,6 +19,8 @@
 
         "phpcs.executablePath": "vendor\\bin\\phpcs.bat",
         "phpcs.standard": "vendor\\cakephp\\cakephp-codesniffer\\CakePHP",
+        "phpcbf.executablePath": "vendor\\bin\\phpcbf.bat",
+        "phpcbf.standard": "vendor\\cakephp\\cakephp-codesniffer\\CakePHP",
 
         "phpunit.php": "C:\\bin\\php\\php.exe",
         "phpunit.phpunit": "vendor\\phpunit\\phpunit\\phpunit",

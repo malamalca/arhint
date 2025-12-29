@@ -19,7 +19,7 @@ class CalendarEvents implements EventListenerInterface
     {
         return [
             'View.beforeRender' => 'addScripts',
-            'Lil.Sidebar.beforeRender' => 'modifySidebar',
+            'App.Sidebar.beforeRender' => 'modifySidebar',
         ];
     }
 

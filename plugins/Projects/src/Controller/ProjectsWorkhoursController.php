@@ -3,12 +3,14 @@ declare(strict_types=1);
 
 namespace Projects\Controller;
 
+use App\Controller\AppController;
 use Cake\Event\EventInterface;
 use Cake\Http\Response;
 use Cake\Http\ServerRequest;
 use Cake\I18n\DateTime;
 use Cake\ORM\TableRegistry;
 use Cake\Routing\Router;
+use Projects\Filter\ProjectsWorkhoursFilter;
 
 /**
  * ProjectsWorkhours Controller
@@ -40,35 +42,28 @@ class ProjectsWorkhoursController extends AppController
      */
     public function index()
     {
-        $filter = (array)$this->getRequest()->getQuery();
-        if (!$this->getCurrentUser()->hasRole('admin')) {
-            $filter['user'] = $this->getRequest()->getQuery('user');
-        }
+        $filter = new ProjectsWorkhoursFilter($this->getRequest()->getQuery('q', ''));
+        $params = $filter->getParams($this->getCurrentUser());
 
-        $params = $this->ProjectsWorkhours->filter($filter);
         $query = $this->Authorization->applyScope($this->ProjectsWorkhours->find(), 'index')
+            ->select($this->ProjectsWorkhours)
+            ->select(['Users.id', 'Users.name']) // User can be inactive so it wont be included in users dropdown
+            ->select(['Projects.id', 'Projects.no', 'Projects.title'])
+            ->contain(['Users', 'Projects'])
             ->where($params['conditions']);
 
-        $sumQuery = clone $query;
-        $totalDuration = $sumQuery
-            ->select([
-                'sumDurations' => $sumQuery->func()->sum('duration'),
-            ])
-            ->disableHydration()
-            ->first();
-        $totalDuration = $totalDuration['sumDurations'];
+        $projectsWorkhours = $this->paginate($query, [
+            'order' => $params['order'] ?? ['ProjectsWorkhours.created DESC'],
+            'limit' => 20,
+        ]);
 
-        $query->contain(['Projects', 'Users']);
+        $workhourCount = $this->ProjectsWorkhours->find('workhoursCount', $this->getCurrentUser(), clone $filter)
+            ->first()
+            ->toArray();
 
-        $projectsWorkhours = $this->paginate($query, ['order' => ['started' => 'DESC']]);
-
-        if ($this->getCurrentUser()->hasRole('admin')) {
-            /** @var \App\Model\Table\UsersTable $UsersTable */
-            $UsersTable = TableRegistry::getTableLocator()->get('App.Users');
-            $users = $UsersTable->fetchForCompany($this->getCurrentUser()->get('company_id'));
-        } else {
-            $users[$this->getCurrentUser()->get('id')] = $this->getCurrentUser()->getOriginalData();
-        }
+        /** @var \App\Model\Table\UsersTable $UsersTable */
+        $UsersTable = TableRegistry::getTableLocator()->get('App.Users');
+        $users = $UsersTable->fetchForCompany($this->getCurrentUser()->get('company_id'));
 
         $projects = $this->Authorization->applyScope($this->ProjectsWorkhours->Projects->find(), 'index')
             ->where(['active' => true])
@@ -79,7 +74,7 @@ class ProjectsWorkhoursController extends AppController
             })
             ->toArray();
 
-        $this->set(compact('projectsWorkhours', 'filter', 'users', 'projects', 'totalDuration'));
+        $this->set(compact('projectsWorkhours', 'filter', 'users', 'projects', 'workhourCount'));
     }
 
     /**

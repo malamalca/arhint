@@ -4,8 +4,10 @@ use Cake\Collection\Collection;
 use Cake\Core\Configure;
 use Cake\Routing\Router;
 
+$this->set('title', h($adrema->title));
+
 $viewAdremaPanels = [
-    'title_for_layout' => h($adrema->title),
+    'title_for_layout' => h($adrema->title) . ' :: ' . __d('crm', 'Adrema'),
     'menu' => [
         'edit' => [
             'title' => __d('crm', 'Edit'),
@@ -60,39 +62,33 @@ $viewAdremaPanels = [
         ],
     ],
     'panels' => [
-        'title_addresses' => ['lines' => [sprintf('<h3>%s</h3>', __d('crm', 'Addresses'))]],
-        'addresses' => [
-            'table' => [
-                'parameters' => ['id' => 'AddressesList'],
-                'head' => ['rows' => [0 => ['columns' => [
-                    'checked' => '<input type="checkbox" />',
-                    'title' => __d('crm', 'Title'),
-                    'address' => __d('crm', 'Address'),
-                    'email' => __d('crm', 'Email'),
-                    'actions' => '&nbsp;',
-                ]]]],
-                ],
-        ],
-        'add_address' => ['lines' => [
-            $this->Html->link(
-                __d('crm', 'Add new address'),
-                [
-                    'controller' => 'AdremasContacts',
-                    'action' => 'edit',
-                    '?' => ['adrema' => $adrema->id],
-                ],
-                [
-                    'class' => 'btn-small filled',
-                ],
+        'tabs' => ['lines' => [
+            'pre' => '<div class="row view-panel"><div class="col s12"><ul class="tabs">',
+            'addresses' => sprintf(
+                '<li class="tab col"><a href="%1$s" target="_self"%3$s>%2$s</a></li>',
+                $this->Url->build([$adrema->id, '?' => ['tab' => 'addresses']]),
+                __d('crm', 'Addresses'),
+                $this->getRequest()->getQuery('tab', 'addresses') == 'addresses' ? ' class="active"' : '',
             ),
+            'attachments' => sprintf(
+                '<li class="tab col"><a href="%1$s" target="_self"%3$s>%2$s</a></li>',
+                $this->Url->build([$adrema->id, '?' => ['tab' => 'attachments']]),
+                __d('crm', 'Attachments'),
+                $this->getRequest()->getQuery('tab') == 'attachments' ? ' class="active"' : '',
+            ),
+            'logs' => sprintf(
+                '<li class="tab col"><a href="%1$s" target="_self"%3$s>%2$s</a></li>',
+                $this->Url->build([$adrema->id, '?' => ['tab' => 'logs']]),
+                __d('crm', 'Logs'),
+                $this->getRequest()->getQuery('tab') == 'logs' ? ' class="active"' : '',
+            ),
+            'post' => '</ul></div>',
         ]],
-        'title_attachments' => ['lines' => [sprintf('<h3>%s</h3>', __d('crm', 'Attachments'))]],
-        'attachments' => '',
+        'tabs_end' => '</div>',
     ],
 ];
 
 /** DISPLAY ADDITIONAL FIELDS */
-
 $additionalFields = Configure::read(implode('.', ['Crm', $adrema->kind, $adrema->kind_type, 'form']));
 if ($additionalFields && count($additionalFields) != 0) {
     $additionalFieldsPanel = ['lines' => []];
@@ -101,8 +97,12 @@ if ($additionalFields && count($additionalFields) != 0) {
             'label' => h($fieldConfig['parameters']['options']['label'] ?? $fieldName),
             'html' => h($adrema->user_data[$fieldName] ?? ''),
         ];
-        if ($fieldConfig['parameters']['options']['type'] === 'file' && !empty($adrema->user_data[$fieldName])) {
-            $attachment = (new Collection($adrema->form_attachments))->firstMatch(['id' => $adrema->user_data[$fieldName]]);
+        if (
+            isset($fieldConfig['parameters']['options']['type']) &&
+            $fieldConfig['parameters']['options']['type'] === 'file' && !empty($adrema->user_data[$fieldName])
+        ) {
+            $attachment = (new Collection($adrema->form_attachments))
+                ->firstMatch(['id' => $adrema->user_data[$fieldName]]);
             if ($attachment) {
                 $additionalFieldsPanel['lines'][$fieldName]['html'] = $this->Html->link(
                     (string)$attachment->filename,
@@ -125,30 +125,75 @@ if ($additionalFields && count($additionalFields) != 0) {
             [
                 'title_additional_fields' => ['lines' => [sprintf('<h3>%s</h3>', __d('crm', 'Additional Fields'))]],
                 'additional_fields' => $additionalFieldsPanel],
-            ['before' => 'title_addresses'],
+            ['before' => 'tabs'],
         );
     }
 }
 
-foreach ($addresses as $address) {
-    $viewAdremaPanels['panels']['addresses']['table']['body']['rows'][] = ['columns' => [
-        'checked' => '&nbsp;',
-        'title' => h($address->contact->title ?? 'N/A'),
-        'address' => h($address->contacts_address ?? ''),
-        'email' => h($address->contacts_email->email ?? ''),
-        'actions' => ['params' => ['class' => 'nowrap'], 'html' =>
-            $this->Lil->editLink(['controller' => 'AdremasContacts', 'action' => 'edit', $address->id]) . ' ' .
-            $this->Lil->deleteLink(['controller' => 'AdremasContacts', 'action' => 'delete', $address->id]),
-        ],
-    ]];
-}
+$activeTab = $this->getRequest()->getQuery('tab', 'addresses');
+$this->set('tab', $activeTab);
 
-$viewAdremaPanels['panels']['attachments'] = $this->Arhint->attachmentsTable(
-    $adrema->attachments ?? [],
-    'Adrema',
-    $adrema->id,
-    ['redirectUrl' => Router::url(null, true)],
-);
+switch ($activeTab) {
+    case 'addresses':
+        $addressesTable = [
+            'parameters' => ['id' => 'AddressesList'],
+            'post' => '<p>' . $this->Html->link(
+                __d('crm', 'Add new address'),
+                ['controller' => 'AdremasContacts', 'action' => 'edit', '?' => ['adrema' => $adrema->id]],
+                ['class' => 'btn-small filled'],
+            ) . '</p>',
+            'head' => ['rows' => [0 => ['columns' => [
+                'checked' => '<input type="checkbox" />',
+                'title' => __d('crm', 'Title'),
+                'address' => __d('crm', 'Address'),
+                'email' => __d('crm', 'Email'),
+                'actions' => '&nbsp;',
+            ]]]],
+        ];
+
+        foreach ($addresses as $address) {
+            $addressesTable['body']['rows'][] = ['columns' => [
+                'checked' => '&nbsp;',
+                'title' => h($address->contact->title ?? 'N/A'),
+                'address' => h($address->contacts_address ?? ''),
+                'email' => h($address->contacts_email->email ?? ''),
+                'actions' => ['params' => ['class' => 'nowrap'], 'html' =>
+                    $this->Lil->editLink(['controller' => 'AdremasContacts', 'action' => 'edit', $address->id]) . ' ' .
+                    $this->Lil->deleteLink(['controller' => 'AdremasContacts', 'action' => 'delete', $address->id]),
+                ],
+            ]];
+        }
+
+        $addressesPanel['addresses'] = [
+            'params' => ['class' => 'adrema-panel'],
+            'html' => $this->Lil->table($addressesTable),
+        ];
+
+        $this->Lil->insertIntoArray($viewAdremaPanels['panels'], $addressesPanel);
+
+        break;
+    case 'attachments':
+        $attachmentsPanel['attachments'] = [
+            'params' => ['class' => 'adrema-panel'],
+            'html' => $this->Lil->table($this->Arhint->attachmentsTable(
+                $adrema->attachments ?? [],
+                'Adrema',
+                $adrema->id,
+                ['redirectUrl' => Router::url(null, true)],
+            )['table']),
+        ];
+
+        $this->Lil->insertIntoArray($viewAdremaPanels['panels'], $attachmentsPanel);
+
+        break;
+    case 'logs':
+        $logsPanel['logs'] = [
+            'params' => ['class' => 'adrema-panel'],
+            'html' => $this->element('logs', ['logs' => $logs]),
+        ];
+        $this->Lil->insertIntoArray($viewAdremaPanels['panels'], $logsPanel);
+        break;
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 echo $this->Lil->panels($viewAdremaPanels, 'Crm.Adremas.view');

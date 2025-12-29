@@ -5,10 +5,10 @@ namespace Documents\Lib;
 
 use App\AppPluginsEnum;
 use App\Controller\AppController;
+use App\Lib\Lil;
 use ArrayObject;
 use Cake\ORM\TableRegistry;
 use Documents\Model\Entity\DocumentsCounter;
-use Lil\Lib\Lil;
 
 class DocumentsSidebar
 {

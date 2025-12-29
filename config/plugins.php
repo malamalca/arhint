@@ -11,7 +11,6 @@ return [
     'DebugKit' => ['onlyDebug' => true],
     'Bake' => ['onlyCli' => true, 'optional' => true],
     'Migrations' => ['onlyCli' => true],
-    'Lil',
     'Crm',
     'Expenses',
     'Documents',

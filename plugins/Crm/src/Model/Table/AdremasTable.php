@@ -130,16 +130,14 @@ class AdremasTable extends Table
      * @param \Cake\Event\EventInterface $event The beforeSave event.
      * @param \Cake\Datasource\EntityInterface $entity The entity being saved.
      * @param \ArrayObject<string, mixed> $options The options passed to the save method.
-     * @return bool
+     * @return void
      */
-    public function beforeSave(EventInterface $event, EntityInterface $entity, ArrayObject $options): bool
+    public function beforeSave(EventInterface $event, EntityInterface $entity, ArrayObject $options): void
     {
         /** @var \Crm\Model\Entity\Adrema $entity */
         if (isset($entity->data) && is_array($entity->data)) {
             $entity->user_values = json_encode($entity->data, JSON_THROW_ON_ERROR);
         }
-
-        return true;
     }
 
     /**

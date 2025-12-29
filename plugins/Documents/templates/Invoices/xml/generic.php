@@ -2,7 +2,7 @@
     use Cake\Core\Configure;
         use Cake\Utility\Xml;
 
-    $Lil = $this->loadHelper('Lil.Lil');
+    $Lil = $this->loadHelper('Lil');
 
     $transformed = ['IzdaniDokumenti' => []];
 
@@ -29,7 +29,7 @@ foreach ($invoices as $invoice) {
         if ($client) {
             $clientData = [
                 'NazivNaslovPodjetja' => [
-                    'VrstaPartnerja' => $client->kind,                                              // II - izdajatelj, BY - kupec, IV - prejemnik
+                    'VrstaPartnerja' => $client->kind, // II - izdajatelj, BY - kupec, IV - prejemnik
                     'NazivPartnerja' => $this->Lil->mbWordWrap($client->title, ['maxlines' => 4, 'width' => 35, 'result' => 'array', 'startwith' => 1, 'prefix' => 'NazivPartnerja']),
                     'Ulica' => $this->Lil->mbWordWrap($client->street, ['maxlines' => 4, 'width' => 35, 'result' => 'array', 'startwith' => 1, 'prefix' => 'Ulica']),
                     'Kraj' => h($client->city),

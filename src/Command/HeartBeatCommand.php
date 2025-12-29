@@ -53,7 +53,7 @@ class HeartBeatCommand extends Command
                     ->setViewVars(['user' => $user, 'panels' => $emailPanels])
                     ->viewBuilder()
                         ->setTemplate('hourly')
-                        ->addHelpers(['Lil.Lil']);
+                        ->addHelpers(['App.Lil']);
 
                 $email->deliver();
             }

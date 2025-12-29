@@ -33,7 +33,7 @@ $invoiceView = [
             'submenu' => [
                 'attachment' => [
                     'title' => __d('documents', 'File'),
-                    'visible' => $this->Lil->userLevel('admin'),
+                    'visible' => $this->getCurrentUser()->hasRole('admin'),
                     'url' => [
                         'plugin' => false,
                         'controller' => 'Attachments',
@@ -50,7 +50,7 @@ $invoiceView = [
                 ],
                 'scan' => [
                     'title' => __d('documents', 'Scan'),
-                    'visible' => $this->Lil->userLevel('admin'),
+                    'visible' => $this->getCurrentUser()->hasRole('admin'),
                     'url' => [
                         'plugin' => false,
                         'controller' => 'Attachments',

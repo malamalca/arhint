@@ -32,9 +32,9 @@ class DocumentsEvents implements EventListenerInterface
             'App.HeartBeat.hourlyEmail' => 'hourlyEmail',
             'App.dashboard' => 'dashboardPanels',
             'View.beforeRender' => 'addScripts',
-            'Lil.Sidebar.beforeRender' => 'modifySidebar',
-            'Lil.Panels.Crm.Contacts.view' => 'showDocumentsTable',
-            'Lil.Panels.Projects.Projects.view' => 'showDocumentsTable',
+            'App.Sidebar.beforeRender' => 'modifySidebar',
+            'App.Panels.Crm.Contacts.view' => 'showDocumentsTable',
+            'App.Panels.Projects.Projects.view' => 'showDocumentsTable',
             'Model.afterSave' => 'updateAttachmentsCounter',
             'Model.afterDelete' => 'updateAttachmentsCounter',
         ];

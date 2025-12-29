@@ -12,7 +12,7 @@ use Cake\View\Helper;
 /**
  * @property \Cake\View\Helper\HtmlHelper $Html
  * @property \Cake\View\Helper\NumberHelper $Number
- * @property \Lil\View\Helper\LilHelper $Lil
+ * @property \App\View\Helper\LilHelper $Lil
  */
 class ArhintHelper extends Helper
 {
@@ -23,7 +23,7 @@ class ArhintHelper extends Helper
     /**
      * @var array<string> $helpers
      */
-    protected array $helpers = ['Html', 'Number', 'Lil.Lil'];
+    protected array $helpers = ['Html', 'Number', 'Lil'];
 
     /**
      * Returns duration in form HH:MM
@@ -39,6 +39,35 @@ class ArhintHelper extends Helper
         $minutes = str_pad((string)(floor(abs($seconds) / 60) % 60), 2, '0', STR_PAD_LEFT);
 
         return $sign . $hours . ':' . $minutes;
+    }
+
+    /**
+     * Returns duration in nice format
+     *
+     * @param int $seconds Duration in seconds
+     * @return string
+     */
+    public function durationNice(int $seconds): string
+    {
+        $hours = (int)floor(abs($seconds) / 3600);
+        $minutes = (int)(floor(abs($seconds) / 60) % 60);
+
+        $ret = '';
+        if ($hours > 0) {
+            $ret .= $hours . ' ' . __n('hour', 'hours', $hours);
+        }
+        if ($minutes > 0) {
+            if (!empty($ret)) {
+                $ret .= ', ';
+            }
+            $ret .= $minutes . ' ' . __n('minute', 'minutes', $minutes);
+        }
+
+        if (empty($ret)) {
+            $ret = '0 ' . __n('minute', 'minutes', 0);
+        }
+
+        return $ret;
     }
 
     /**

@@ -103,13 +103,13 @@ $editAddressForm = [
 
 /** Show costum fields form selected label */
 $additionalFields = Configure::read(implode('.', ['Crm', $adrema->kind, $adrema->kind_type, 'address']));
-foreach ($additionalFields as $fieldName => $fieldConfig) {
-    if (isset($address->user_data[$fieldName])) {
-        $additionalFields[$fieldName]['parameters']['options']['default'] = $address->user_data[$fieldName];
-    }
-}
-
 if (!empty($additionalFields)) {
+    foreach ($additionalFields as $fieldName => $fieldConfig) {
+        if (isset($address->user_data[$fieldName])) {
+            $additionalFields[$fieldName]['parameters']['options']['default'] = $address->user_data[$fieldName];
+        }
+    }
+
     $this->Lil->insertIntoArray($editAddressForm['form']['lines'], $additionalFields, ['after' => 'email_id']);
 }
 

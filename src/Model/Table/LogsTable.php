@@ -5,6 +5,7 @@ namespace App\Model\Table;
 
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
+use Cake\ORM\TableRegistry;
 use Cake\Validation\Validator;
 
 /**
@@ -82,5 +83,33 @@ class LogsTable extends Table
         $rules->add($rules->existsIn(['user_id'], 'Users'), ['errorField' => 'user_id']);
 
         return $rules;
+    }
+
+    /**
+     * Log an action
+     *
+     * @param string $model Model name
+     * @param string|null $foreignId Foreign ID
+     * @param string|null $userId User ID
+     * @param string $action Action performed
+     * @param string|null $details Additional details
+     * @return void
+     */
+    public static function log(
+        string $model,
+        ?string $foreignId,
+        ?string $userId,
+        string $action,
+        ?string $details = null,
+    ): void {
+        $logsTable = TableRegistry::getTableLocator()->get('App.Logs');
+        $log = $logsTable->newEntity([
+            'model' => $model,
+            'foreign_id' => $foreignId,
+            'user_id' => $userId,
+            'action' => $action,
+            'descript' => $details,
+        ]);
+        $logsTable->save($log);
     }
 }

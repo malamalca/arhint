@@ -18,7 +18,7 @@ class TxtView extends AppView
     public string $layout = 'txt';
 
     /**
-     * AHT views are located in the 'xml' sub directory for controllers' views.
+     * Txt views are located in the 'txt' sub directory for controllers' views.
      *
      * @var string
      */

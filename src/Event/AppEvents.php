@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Event;
 
 use App\View\Helper\ArhintHelper;
+use App\View\Widget\DurationWidget;
 use ArrayObject;
 use Cake\Cache\Cache;
 use Cake\Datasource\EntityInterface;
@@ -34,11 +35,10 @@ class AppEvents implements EventListenerInterface
     {
         return [
             'App.dashboard' => 'dashboardPanels',
-            'Lil.Sidebar.beforeRender' => 'modifySidebar',
             'Model.beforeMarshal' => 'marshalDurationAndAttachments',
             'Model.afterSave' => 'updateModelAttachments',
-            'Lil.Form.Documents.Invoices.edit' => 'addAttachmentFormLines',
-            'Lil.Form.Documents.Documents.edit' => 'addAttachmentFormLines',
+            'App.Form.Documents.Invoices.edit' => 'addAttachmentFormLines',
+            'App.Form.Documents.Documents.edit' => 'addAttachmentFormLines',
         ];
     }
 
@@ -66,7 +66,7 @@ class AppEvents implements EventListenerInterface
             $panels['panels']['email'] = [
                 'params' => ['class' => 'dashboard-panel'],
                 'lines' => [
-                    '<h5>' . __d('documents', 'INBOX Emails') . '</h5>',
+                    '<h5>' . __('INBOX Emails') . '</h5>',
                 ],
             ];
 
@@ -190,11 +190,8 @@ class AppEvents implements EventListenerInterface
      */
     public function marshalDurationAndAttachments(Event $event, ArrayObject $data, ArrayObject $options): void
     {
-        foreach ($data as $fieldName => $fieldValue) {
-            if (is_array($fieldValue) && !empty($fieldValue['duration'])) {
-                $data[$fieldName] = (int)$data[$fieldName]['hours'] * 3600 + (int)$data[$fieldName]['minutes'] * 60;
-            }
-        }
+        DurationWidget::marshalDurationFields($data);
+
         if (in_array(get_class($event->getSubject()), [DocumentsTable::class, InvoicesTable::class])) {
             // set modifed so the dirty attribute is set and beforeSave is triggered
             $data['modified'] = (new DateTime())->setTimezone('UTC')->toDateTimeString();
@@ -251,20 +248,6 @@ class AppEvents implements EventListenerInterface
     }
 
     /**
-     * Remove welcome from Lil sidebar.
-     *
-     * @param \Cake\Event\Event $event Event.
-     * @param \ArrayObject $sidebar Sidebar.
-     * @return void
-     */
-    public function modifySidebar(Event $event, ArrayObject $sidebar): void
-    {
-        unset($sidebar['welcome']);
-
-        $event->setResult($sidebar);
-    }
-
-    /**
      * Add attachment form lines to documents and invoices edit forms.
      *
      * @param \Cake\Event\Event $event Event.
@@ -278,7 +261,7 @@ class AppEvents implements EventListenerInterface
 
         $attachmentLines = [
             'fs_attachments_start' => '<fieldset>',
-            'fs_attachments_legend' => sprintf('<legend>%s</legend>', __d('documents', 'Archive')),
+            'fs_attachments_legend' => sprintf('<legend>%s</legend>', __('Archive')),
             'file.name.0' => [
                 'method' => 'control',
                 'parameters' => [

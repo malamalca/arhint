@@ -20,6 +20,8 @@ use JsonException;
  * @property array|null $data
  * @property \Cake\I18n\DateTime|null $created
  * @property \Cake\I18n\DateTime|null $modified
+ * @property array $attachments
+ * @property array $form_attachments
  */
 class Adrema extends Entity
 {

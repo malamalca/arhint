@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Expenses\Event;
 
+use App\Lib\LilForm;
 use ArrayObject;
 use Cake\Datasource\EntityInterface;
 use Cake\Event\Event;
@@ -11,7 +12,6 @@ use Cake\ORM\TableRegistry;
 use Documents\Model\Table\InvoicesTable;
 use Documents\Model\Table\TravelOrdersTable;
 use Expenses\Lib\ExpensesSidebar;
-use Lil\Lib\LilForm;
 
 class ExpensesEvents implements EventListenerInterface
 {
@@ -25,9 +25,9 @@ class ExpensesEvents implements EventListenerInterface
     {
         return [
             'View.beforeRender' => 'addScripts',
-            'Lil.Sidebar.beforeRender' => 'modifySidebar',
-            'Lil.Form.Documents.DocumentsCounters.edit' => 'modifyCountersForm',
-            'Lil.Panels.Documents.Invoices.view' => 'modifyDocumentsView',
+            'App.Sidebar.beforeRender' => 'modifySidebar',
+            'App.Form.Documents.DocumentsCounters.edit' => 'modifyCountersForm',
+            'App.Panels.Documents.Invoices.view' => 'modifyDocumentsView',
             'Model.afterSave' => 'createExpenseOnSave',
         ];
     }
@@ -75,8 +75,8 @@ class ExpensesEvents implements EventListenerInterface
      * Adds income/expense field to documents counters form.
      *
      * @param \Cake\Event\Event $event Event object
-     * @param \Lil\Lib\LilForm $form Form array
-     * @return \Lil\Lib\LilForm
+     * @param \App\Lib\LilForm $form Form array
+     * @return \App\Lib\LilForm
      */
     public function modifyCountersForm(Event $event, LilForm $form): LilForm
     {

@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Crm\Event;
 
+use App\Lib\LilForm;
 use ArrayObject;
 use Cake\Core\Configure;
 use Cake\Event\Event;
@@ -11,7 +12,6 @@ use Cake\ORM\TableRegistry;
 use Cake\Routing\Router;
 use Crm\Lib\CrmSidebar;
 use Exception;
-use Lil\Lib\LilForm;
 
 class CrmEvents implements EventListenerInterface
 {
@@ -25,8 +25,8 @@ class CrmEvents implements EventListenerInterface
         return [
             'App.HeartBeat.hourly' => 'hourly',
             'View.beforeRender' => 'addScripts',
-            'Lil.Sidebar.beforeRender' => 'modifySidebar',
-            'Lil.Form.Documents.Documents.email' => 'addAutocompleteToEmail',
+            'App.Sidebar.beforeRender' => 'modifySidebar',
+            'App.Form.Documents.Documents.email' => 'addAutocompleteToEmail',
         ];
     }
 
@@ -119,7 +119,7 @@ class CrmEvents implements EventListenerInterface
      * Add autocomplete func to email field
      *
      * @param \Cake\Event\Event $event Event.
-     * @param \Lil\Lib\LilForm $form Form array
+     * @param \App\Lib\LilForm $form Form array
      * @return void
      */
     public function addAutocompleteToEmail(Event $event, LilForm $form): void

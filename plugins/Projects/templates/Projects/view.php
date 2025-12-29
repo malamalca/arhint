@@ -10,12 +10,10 @@ $converter = new GithubFlavoredMarkdownConverter([
 ]);
 
 $projectView = [
-    'title_for_layout' =>
-        $this->Html->image(
-            'data:image/png;base64, ' . base64_encode(ProjectsFuncs::thumb($project, 80)),
-            ['style' => 'float: left; margin-right: 20px;', 'class' => 'project-avatar', 'quote' => false]
-        ) .
-        '<div><div class="small">' . $project->no . ' </div>' . $project->title . '</div>',
+    'title_for_layout' => $this->Html->image(
+        'data:image/png;base64, ' . base64_encode(ProjectsFuncs::thumb($project, 80)),
+        ['style' => 'float: left; margin-right: 20px;', 'class' => 'project-avatar', 'quote' => false],
+    ) . '<div><div class="small">' . $project->no . ' </div>' . $project->title . '</div>',
     'menu' => [
         'edit' => [
             'title' => __d('projects', 'Edit'),

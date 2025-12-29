@@ -16,7 +16,7 @@ use Exception;
  * Your application's default view class
  *
  * @link https://book.cakephp.org/4/en/views.html#the-app-view
- * @property \Lil\View\Helper\LilHelper $Lil
+ * @property \App\View\Helper\LilHelper $Lil
  */
 class AppView extends View
 {
@@ -51,20 +51,12 @@ class AppView extends View
     /**
      * Initialization hook method.
      *
-     * Use this method to add common initialization code like loading helpers.
-     *
-     * e.g. `$this->loadHelper('Html');`
-     *
      * @return void
      */
     public function initialize(): void
     {
         $this->loadHelper('Arhint');
-
-        $this->loadHelper('Lil.Lil', [
-            'templates' => 'templates',
-        ]);
-
+        $this->loadHelper('Lil', ['templates' => 'templates']);
         $this->loadHelper('Number');
 
         $this->loadHelper('Form', [

@@ -24,7 +24,8 @@ foreach ($counters as $counter) {
 $popupCounters = $this->Lil->popup('counters', $popupCounters, true);
 
 /** COUNTERS FILTER LINK */
-$countersFilter = sprintf('<button class="btn-small elevated" id="filter-counters" data-target="dropdown-counters">%1$s &#x25BC;</button>',
+$countersFilter = sprintf(
+    '<button class="btn-small elevated" id="filter-counters" data-target="dropdown-counters">%1$s &#x25BC;</button>',
     $activeCounterId ? (string)$counters[$activeCounterId] : __d('documents', 'All Counters'),
 );
 
@@ -96,4 +97,6 @@ if (count($data) === 0) {
 
 echo $popupCounters;
 echo $this->Lil->table($invoicesTable, 'Documents.Documents.Aht.index');
-echo '<script type="text/javascript">M.Dropdown.init(document.querySelectorAll("#filter-counters"), {coverTrigger: false, constrainWidth: false});</script>';
+echo '<script type="text/javascript">' .
+    'M.Dropdown.init(document.querySelectorAll("#filter-counters"), {coverTrigger: false, constrainWidth: false});' .
+    '</script>';

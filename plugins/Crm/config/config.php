@@ -183,7 +183,7 @@ $config = [
         ],
     ],
 
-    'Crm.label.slo_priporoceno' => [
+    'Crm.labels.slo_priporoceno' => [
         'header' => false,
         'footer' => false,
         'orientation' => 'L',
@@ -191,35 +191,35 @@ $config = [
         'margin' => ['left' => 0, 'top' => 0, 'right' => 0],
     ],
 
-    'Crm.label.slo_povratnica' => [
+    'Crm.labels.slo_povratnica' => [
         'header' => ['margin' => 0, 'lines' => false],
         'footer' => ['margin' => 0, 'lines' => false],
         'orientation' => 'L',
         'format' => [210, 100],
         'margin' => ['left' => 0, 'top' => 0, 'right' => 0],
         'form' => [
-            'zip' => [
+            'sprejemna_posta' => [
                 'method' => 'control',
                 'parameters' => [
-                    'field' => 'sprejemna_posta',
+                    'field' => 'data.sprejemna_posta',
                     'options' => [
                         'label' => 'Sprejemna pošta' . ':',
                     ],
                 ],
             ],
-            'date' => [
+            'datum' => [
                 'method' => 'control',
                 'parameters' => [
-                    'field' => 'datum',
+                    'field' => 'data.datum',
                     'options' => [
                         'label' => 'Datum' . ':',
                     ],
                 ],
             ],
-            'address2' => [
+            'podnaslov' => [
                 'method' => 'control',
                 'parameters' => [
-                    'field' => 'podnaslov',
+                    'field' => 'data.podnaslov',
                     'options' => [
                         'label' => 'Podnaslov' . ':',
                     ],
@@ -228,7 +228,7 @@ $config = [
         ],
     ],
 
-    'Crm.label.smak_s47' => [
+    'Crm.labels.smak_s47' => [
         'header' => ['margin' => 0, 'lines' => false],
         'footer' => ['margin' => 0, 'lines' => false],
         'orientation' => 'P',
@@ -238,7 +238,7 @@ $config = [
             'start_row' => [
                 'method' => 'control',
                 'parameters' => [
-                    'field' => 'start_row',
+                    'field' => 'data.start_row',
                     'options' => [
                         'label' => 'Začni pri vrstici' . ':',
                         'default' => 1,
@@ -248,7 +248,7 @@ $config = [
             'start_col' => [
                 'method' => 'control',
                 'parameters' => [
-                    'field' => 'start_col',
+                    'field' => 'data.start_col',
                     'options' => [
                         'label' => 'Začni pri stolpcu' . ':',
                         'default' => 1,

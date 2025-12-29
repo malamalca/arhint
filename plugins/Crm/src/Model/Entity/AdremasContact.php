@@ -20,8 +20,9 @@ use JsonException;
  * @property array|null $data
  * @property \Cake\I18n\DateTime|null $created
  * @property \Cake\I18n\DateTime|null $modified
- * @property \Crm\Model\Entity\ContactsAddress|null $address
- * @property \Crm\Model\Entity\ContactsEmail|null $email
+ * @property \Crm\Model\Entity\Contact|null $contact
+ * @property \Crm\Model\Entity\ContactsAddress|null $contacts_address
+ * @property \Crm\Model\Entity\ContactsEmail|null $contacts_email
  */
 class AdremasContact extends Entity
 {

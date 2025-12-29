@@ -29,6 +29,11 @@ class CreateTableLogs extends AbstractMigration
                 'limit' => null,
                 'null' => true,
             ])
+            ->addColumn('action', 'string', [
+                'default' => null,
+                'limit' => 200,
+                'null' => true,
+            ])
             ->addColumn('descript', 'text', [
                 'default' => null,
                 'limit' => MysqlAdapter::TEXT_MEDIUM,

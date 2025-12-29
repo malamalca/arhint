@@ -142,7 +142,7 @@ img#magic-tax-lookup {
 
 
 /* Adrema */
-table#AddressesList, table#AttachmentsList {
+div.adrema-panel {
     width: 700px;
 }
 .td-adrema-title {

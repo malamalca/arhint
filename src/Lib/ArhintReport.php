@@ -10,7 +10,6 @@ use Cake\Http\Response;
 use Cake\Utility\Hash;
 use Cake\View\View;
 use DirectoryIterator;
-use Lil\Lib\LilPdfFactory;
 
 class ArhintReport
 {
@@ -57,7 +56,7 @@ class ArhintReport
         $this->view->setTemplate($templateName);
         $this->view->setLayout('pdf');
 
-        $this->view->loadHelper('Lil.Lil');
+        $this->view->loadHelper('Lil');
     }
 
     /**
@@ -91,8 +90,8 @@ class ArhintReport
      */
     public function export(): string
     {
-        $pdfEngine = Configure::read('Lil.pdfEngine');
-        $pdfOptions = Configure::read('Lil.' . $pdfEngine);
+        $pdfEngine = Configure::read('Pdf.pdfEngine');
+        $pdfOptions = Configure::read('Pdf.' . $pdfEngine);
 
         $pdf = LilPdfFactory::create($pdfEngine, Hash::merge((array)$pdfOptions, $this->pdfOptions));
 
