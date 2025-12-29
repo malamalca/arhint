@@ -54,7 +54,7 @@ class ArhintReport
             $templateName = $plugin . '.' . $templateName;
         }
         $this->view->setTemplate($templateName);
-        $this->view->setLayout('pdf');
+        $this->view->setLayout('pdf/default');
 
         $this->view->loadHelper('Lil');
     }

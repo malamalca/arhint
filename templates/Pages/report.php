@@ -23,7 +23,7 @@
 
         function resizeIframe()
         {
-            let iFrameHeight = $(window).height() - $(".navbar-fixed").height() - 32;
+            let iFrameHeight = $(window).height() - $("nav.navbar").height() - 32;
             let iFrameWidth = $(window).width() - $(".sidenav-fixed").width() - 4;
 
             $("iframe")
