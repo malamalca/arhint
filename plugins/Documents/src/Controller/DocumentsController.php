@@ -157,7 +157,8 @@ class DocumentsController extends BaseDocumentsController
      */
     public function view(?string $id = null)
     {
-        $containTables = ['DocumentsCounters', 'Attachments', 'DocumentsLinks', 'Issuers', 'Receivers'];
+        $containTables = ['DocumentsCounters', 'Attachments', 'Logs' => ['Users'],
+            'DocumentsLinks', 'Issuers', 'Receivers'];
         if (Plugin::isLoaded('Projects')) {
             $containTables[] = 'Projects';
         }

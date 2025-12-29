@@ -39,4 +39,21 @@ class Log extends Entity
         'modified' => true,
         'user' => true,
     ];
+
+    /**
+     * Decode user values JSON
+     *
+     * @return array<string, mixed>|null Decoded values or empty string on failure
+     */
+    protected function _getData(): ?array
+    {
+        if (empty($this->descript)) {
+            return null;
+        }
+        try {
+            return json_decode($this->descript, true, 512, JSON_THROW_ON_ERROR);
+        } catch (JsonException $e) {
+            return null;
+        }
+    }
 }

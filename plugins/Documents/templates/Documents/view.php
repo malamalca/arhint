@@ -213,7 +213,6 @@ foreach ($counters as $cntr) {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 // ATTACHMENTS
-
 if (!empty($document->attachments)) {
     $invoiceView['panels']['attachments_title'] = sprintf('<h3>%s</h3>', __d('documents', 'Attachments'));
     $invoiceView['panels']['attachments'] = $this->Arhint->attachmentsTable(
@@ -222,6 +221,16 @@ if (!empty($document->attachments)) {
         $document->id,
         ['redirectUrl' => Router::url(null, true), 'showAddButton' => false],
     );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+// LOGS
+if (!empty($document->logs)) {
+    $invoiceView['panels']['logs_title'] = sprintf('<h3>%s</h3>', __d('documents', 'Logs'));
+    $invoiceView['panels']['logs'] = $this->element('logs', [
+        'logs' => $document->logs,
+        'redirectUrl' => Router::url(null, true),
+    ]);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////

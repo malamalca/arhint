@@ -82,7 +82,11 @@ class InvoicesTable extends Table
             'conditions' => ['Attachments.model' => 'Invoice'],
             'dependant' => true,
         ]);
-
+        $this->hasMany('App.Logs', [
+            'foreignKey' => 'foreign_id',
+            'conditions' => ['Logs.model' => 'Invoice'],
+            'dependant' => true,
+        ]);
         $this->belongsTo('TplHeaders', [
             'foreignKey' => 'tpl_header_id',
             'className' => 'Documents\Model\Table\DocumentsTemplatesTable',

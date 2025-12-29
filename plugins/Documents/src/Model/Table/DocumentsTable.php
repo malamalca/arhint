@@ -75,6 +75,11 @@ class DocumentsTable extends Table
             'conditions' => ['Attachments.model' => 'Document'],
             'dependant' => true,
         ]);
+        $this->hasMany('App.Logs', [
+            'foreignKey' => 'foreign_id',
+            'conditions' => ['Logs.model' => 'Document'],
+            'dependant' => true,
+        ]);
 
         $this->belongsTo('TplHeaders', [
             'foreignKey' => 'tpl_header_id',

@@ -1,9 +1,7 @@
-<table class="index">
+<table class="index LogsTable">
     <thead>
         <tr>
             <th><?php echo __('Date'); ?></th>
-            <th><?php echo __('User'); ?></th>
-            <th><?php echo __('Action'); ?></th>
             <th><?php echo __('Details'); ?></th>
         </tr>
     </thead>
@@ -12,19 +10,21 @@
         <tr>
             <td><?php echo h($log->created->i18nFormat()); ?></td>
             <td>
-                <?php
-                if ($log->has('user')) {
-                    echo $this->Html->link(
-                        h($log->user->name),
-                        ['controller' => 'Users', 'action' => 'view', $log->user->id],
-                    );
-                } else {
-                    echo __('System');
-                }
-                ?>
+            <?php
+            switch ($log->action) {
+                case 'DocumentEmail':
+                    echo '<div class="small" style="font-size: smaller;">' . __(
+                        '{0} emailed this document to {1} with subject {2}.',
+                        '<b>' . ($log->has('user') ? h($log->user->name) : __('System')) . '</b>',
+                        '<b>' . h($log->data['to'] ?? '') . '</b>',
+                        '<b>"' . h($log->data['subject'] ?? '') . '"</b>',
+                    ) . '</div>';
+                    break;
+                default:
+                    echo __('Action: {0}', h($log->action));
+            }
+            ?>
             </td>
-            <td><?php echo h($log->action); ?></td>
-            <td><?php echo h($log->details); ?></td>
         </tr>
         <?php endforeach; ?>
     </tbody>
