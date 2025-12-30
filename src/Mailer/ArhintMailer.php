@@ -5,6 +5,7 @@ namespace App\Mailer;
 
 use App\Model\Entity\User;
 use Cake\Mailer\Mailer;
+use Cake\Mailer\Message;
 use Cake\ORM\TableRegistry;
 use InvalidArgumentException;
 
@@ -51,7 +52,7 @@ class ArhintMailer extends Mailer
 
         // user defined template exists
         if ($layout) {
-            $this->setEmailFormat('html');
+            $this->setEmailFormat(Message::MESSAGE_HTML);
             $uniqueFile = TMP . uniqid() . '.php';
             file_put_contents($uniqueFile, $layout->body);
 
@@ -64,6 +65,7 @@ class ArhintMailer extends Mailer
 
             $this->viewBuilder()
                 ->setClassName('Tmp')
+                ->setTemplate('default')
                 ->setLayout(basename($uniqueFile, '.php'));
         }
 
