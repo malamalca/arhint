@@ -265,7 +265,7 @@ class BaseDocumentsController extends AppController
                 if ($this->getRequest()->is('ajax')) {
                     return $this->response->withType('application/json')->withStringBody((string)json_encode([
                         'digest' => $digest,
-                    ]));
+                    ], JSON_UNESCAPED_SLASHES));
                 }
             } else {
                 $signer->setSignature($signature);
@@ -610,16 +610,13 @@ class BaseDocumentsController extends AppController
                 // Load signed XML and extract stored digest
                 $signedDoc = new DOMDocument();
                 $signedDoc->preserveWhiteSpace = false;
-                libxml_use_internal_errors(true);
                 $loaded = $signedDoc->loadXML($invoice->signed);
-                libxml_clear_errors();
-                libxml_use_internal_errors(false);
                 if (!$loaded) {
                     throw new RuntimeException(DocumentsSigner::validationErrorMessage('signed_xml_parse_failed'));
                 }
 
-                // Use getElementsByTagName which works with namespace prefixes even without declarations
-                $digestValues = $signedDoc->getElementsByTagName('ds:DigestValue');
+                // Use getElementsByTagNameNS for namespace-aware element retrieval
+                $digestValues = $signedDoc->getElementsByTagNameNS('http://www.w3.org/2000/09/xmldsig#', 'DigestValue');
 
                 // Find the one belonging to the #data reference
                 $signedDataDigest = null;
@@ -645,7 +642,10 @@ class BaseDocumentsController extends AppController
                     ]);
                 } else {
                     // Validate that dat_sign matches SigningTime in signed XML
-                    $signingTimeNodes = $signedDoc->getElementsByTagName('xds:SigningTime');
+                    $signingTimeNodes = $signedDoc->getElementsByTagNameNS(
+                        'http://uri.etsi.org/01903/v1.1.1#',
+                        'SigningTime',
+                    );
                     if ($signingTimeNodes->length > 0) {
                         $signingTimeXml = trim($signingTimeNodes->item(0)->nodeValue);
                         $datSignDb = $invoice->dat_sign ? $invoice->dat_sign->format('c') : null;

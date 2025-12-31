@@ -41,12 +41,12 @@ class DocumentsSignerTest extends TestCase
         curl_close($ch);
 
         if ($httpCode !== 200) {
-            $this->markTestSkipped('Signer service is not running on port 8082. Start the service at D:\Dev\arhint-signer\webservice');
+            //$this->markTestSkipped('Signer service is not running on port 8082. Start the service at D:\Dev\arhint-signer\webservice');
         }
 
         $certResponse = json_decode($response, true);
         if (!isset($certResponse['result']) || empty($certResponse['result'])) {
-            $this->markTestSkipped('No certificates available from signer service');
+            //$this->markTestSkipped('No certificates available from signer service');
         }
 
         $certificates = $certResponse['result'];
@@ -106,7 +106,7 @@ class DocumentsSignerTest extends TestCase
         curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode([
             'hash' => $digest,
             'thumbprint' => $firstCert['thumbprint'],
-        ]));
+        ], JSON_UNESCAPED_SLASHES));
         curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
         curl_setopt($ch, CURLOPT_TIMEOUT, 10);
 
@@ -115,7 +115,7 @@ class DocumentsSignerTest extends TestCase
         curl_close($ch);
 
         if ($httpCode !== 200) {
-            $this->markTestSkipped('Signer service returned error: ' . $response);
+            //$this->markTestSkipped('Signer service returned error: ' . $response);
         }
 
         $responseData = json_decode($response, true);

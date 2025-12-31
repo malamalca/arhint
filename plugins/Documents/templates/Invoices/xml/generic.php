@@ -1,13 +1,11 @@
 <?php
-    use Cake\Core\Configure;
-        use Cake\Utility\Xml;
+    use Cake\Utility\Xml;
 
-    $Lil = $this->loadHelper('Lil');
-
-    $transformed = ['IzdaniDokumenti' => []];
-
-    // find bank name for current users' company
-    $banks = Configure::read('Documents.banks');
+    $transformed = ['IzdaniDokumenti' => [
+        'xmlns:ds' => 'http://www.w3.org/2000/09/xmldsig#',
+        'xmlns:xds' => 'http://uri.etsi.org/01903/v1.1.1#',
+        'xmlns:xsi' => 'http://www.w3.org/2001/XMLSchema-instance',
+    ]];
 
     $i = 0;
 foreach ($invoices as $invoice) {

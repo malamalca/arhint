@@ -1,7 +1,11 @@
 <?php
 use Cake\Utility\Xml;
 
-$transformed = ['IzdaniDokumenti' => []];
+    $transformed = ['IzdaniDokumenti' => [
+        'xmlns:ds' => 'http://www.w3.org/2000/09/xmldsig#',
+        'xmlns:xds' => 'http://uri.etsi.org/01903/v1.1.1#',
+        'xmlns:xsi' => 'http://www.w3.org/2001/XMLSchema-instance',
+    ]];
 
 $i = 0;
 foreach ($documents as $document) {

@@ -13,6 +13,16 @@ use ReflectionClass;
 class DocumentsSigner
 {
     /**
+     * XML Digital Signature namespace URI
+     */
+    private const DS_NS = 'http://www.w3.org/2000/09/xmldsig#';
+
+    /**
+     * XAdES namespace URI
+     */
+    private const XDS_NS = 'http://uri.etsi.org/01903/v1.1.1#';
+
+    /**
      * @var \DOMDocument $doc
      */
     private DOMDocument $doc;
@@ -61,7 +71,7 @@ class DocumentsSigner
         $loaded = $instance->doc->loadXML($xmlString);
         libxml_clear_errors();
         libxml_use_internal_errors(false);
-        
+
         if (!$loaded) {
             throw new InvalidArgumentException('Invalid XML provided');
         }
@@ -82,7 +92,7 @@ class DocumentsSigner
             $this->xadesAdded = $this->addXadesReference();
         }
 
-        $signedInfo = $this->doc->getElementsByTagName('ds:SignedInfo')->item(0);
+        $signedInfo = $this->doc->getElementsByTagNameNS(self::DS_NS, 'SignedInfo')->item(0);
         if ($signedInfo instanceof DOMElement) {
             $data = $signedInfo->C14N(false, false);
             $digest = base64_encode(hash('sha256', $data, true));
@@ -101,7 +111,7 @@ class DocumentsSigner
      */
     public function setSignatureDatetime(DateTime $time): bool
     {
-        $signingTime = $this->doc->getElementsByTagName('xds:SigningTime')->item(0);
+        $signingTime = $this->doc->getElementsByTagNameNS(self::XDS_NS, 'SigningTime')->item(0);
         if ($signingTime instanceof DOMElement) {
             $signingTime->nodeValue = $time->toIso8601String();
 
@@ -123,7 +133,7 @@ class DocumentsSigner
             $this->xadesAdded = $this->addXadesReference();
         }
 
-        $signatureValue = $this->doc->getElementsByTagName('ds:SignatureValue')->item(0);
+        $signatureValue = $this->doc->getElementsByTagNameNS(self::DS_NS, 'SignatureValue')->item(0);
         if ($signatureValue instanceof DOMElement) {
             $signatureValue->nodeValue = $signature;
 
@@ -161,39 +171,32 @@ class DocumentsSigner
             $digest = base64_encode(hash('sha1', base64_decode($X509Cert), true));
 
             // add certificate
-            $X509Certificate = $this->doc->getElementsByTagName('ds:X509Certificate')->item(0);
+            $X509Certificate = $this->doc->getElementsByTagNameNS(self::DS_NS, 'X509Certificate')->item(0);
             if ($X509Certificate instanceof DOMElement) {
                 $X509Certificate->nodeValue = $X509Cert;
             }
 
             // add nodes
-            $signingCertificate = $this->doc->getElementsByTagName('xds:SigningCertificate')->item(0);
+            $signingCertificate = $this->doc->getElementsByTagNameNS(self::XDS_NS, 'SigningCertificate')->item(0);
 
             if ($signingCertificate instanceof DOMElement) {
-                $certNode = $this->doc->createElement('xds:Cert');
+                $certNode = $this->doc->createElementNS(self::XDS_NS, 'xds:Cert');
 
-                $certDigest = $this->doc->createElement('xds:CertDigest');
+                $certDigest = $this->doc->createElementNS(self::XDS_NS, 'xds:CertDigest');
 
-                $digestMethod = $this->doc->createElement('xds:DigestMethod');
+                $digestMethod = $this->doc->createElementNS(self::XDS_NS, 'xds:DigestMethod');
                 $digestMethodAlgorithm = $this->doc->createAttribute('Algorithm');
                 $digestMethodAlgorithm->value = 'http://www.w3.org/2000/09/xmldsig#sha1';
                 $digestMethod->appendChild($digestMethodAlgorithm);
 
-                $digestValue = $this->doc->createElement('xds:DigestValue', $digest);
+                $digestValue = $this->doc->createElementNS(self::XDS_NS, 'xds:DigestValue', $digest);
 
                 $certDigest->appendChild($digestMethod);
                 $certDigest->appendChild($digestValue);
 
-                $issuerSerial = $this->doc->createElement('xds:IssuerSerial');
-                $X509IssuerName = $this->doc->createElement('X509IssuerName', $issuerName);
-                $x509IssuerNameXmlns = $this->doc->createAttribute('xmlns');
-                $x509IssuerNameXmlns->value = 'http://www.w3.org/2000/09/xmldsig#';
-                $X509IssuerName->appendChild($x509IssuerNameXmlns);
-
-                $X509SerialNumber = $this->doc->createElement('X509SerialNumber', $certData['serialNumber']);
-                $x509SerialNumberXmlns = $this->doc->createAttribute('xmlns');
-                $x509SerialNumberXmlns->value = 'http://www.w3.org/2000/09/xmldsig#';
-                $X509SerialNumber->appendChild($x509SerialNumberXmlns);
+                $issuerSerial = $this->doc->createElementNS(self::XDS_NS, 'xds:IssuerSerial');
+                $X509IssuerName = $this->doc->createElementNS(self::DS_NS, 'ds:X509IssuerName', $issuerName);
+                $X509SerialNumber = $this->doc->createElementNS(self::DS_NS, 'ds:X509SerialNumber', $certData['serialNumber']);
 
                 $issuerSerial->appendChild($X509IssuerName);
                 $issuerSerial->appendChild($X509SerialNumber);
@@ -239,9 +242,9 @@ class DocumentsSigner
             $data = $node->C14N();
             $digest = base64_encode(hash('sha1', $data, true));
 
-            $signedInfo = $this->doc->getElementsByTagName('ds:SignedInfo')->item(0);
+            $signedInfo = $this->doc->getElementsByTagNameNS(self::DS_NS, 'SignedInfo')->item(0);
             if ($signedInfo instanceof DOMElement) {
-                $referenceNode = $this->doc->createElement('ds:Reference');
+                $referenceNode = $this->doc->createElementNS(self::DS_NS, 'ds:Reference');
                 $referenceURI = $this->doc->createAttribute('URI');
                 $referenceURI->value = $uri;
                 $referenceType = $this->doc->createAttribute('Type');
@@ -249,12 +252,12 @@ class DocumentsSigner
                 $referenceNode->appendChild($referenceURI);
                 $referenceNode->appendChild($referenceType);
 
-                $digestMethod = $this->doc->createElement('ds:DigestMethod');
+                $digestMethod = $this->doc->createElementNS(self::DS_NS, 'ds:DigestMethod');
                 $digestMethodAlgorithm = $this->doc->createAttribute('Algorithm');
                 $digestMethodAlgorithm->value = 'http://www.w3.org/2000/09/xmldsig#sha1';
                 $digestMethod->appendChild($digestMethodAlgorithm);
 
-                $digestValue = $this->doc->createElement('ds:DigestValue', $digest);
+                $digestValue = $this->doc->createElementNS(self::DS_NS, 'ds:DigestValue', $digest);
 
                 $referenceNode->appendChild($digestMethod);
                 $referenceNode->appendChild($digestValue);
@@ -275,22 +278,22 @@ class DocumentsSigner
      */
     private function addSignature(): void
     {
-        $signature = $this->doc->createElement('ds:Signature');
+        $signature = $this->doc->createElementNS(self::DS_NS, 'ds:Signature');
         $signatureId = $this->doc->createAttribute('Id');
         $signatureId->value = 'SignatureId';
         $signature->appendChild($signatureId);
         $this->doc->documentElement?->appendChild($signature);
 
-        $signedInfo = $this->doc->createElement('ds:SignedInfo');
+        $signedInfo = $this->doc->createElementNS(self::DS_NS, 'ds:SignedInfo');
         $signature->appendChild($signedInfo);
 
-        $c14nMethod = $this->doc->createElement('ds:CanonicalizationMethod');
+        $c14nMethod = $this->doc->createElementNS(self::DS_NS, 'ds:CanonicalizationMethod');
         $c14nAlgorithm = $this->doc->createAttribute('Algorithm');
         $c14nAlgorithm->value = 'http://www.w3.org/TR/2001/REC-xml-c14n-20010315';
         $c14nMethod->appendChild($c14nAlgorithm);
         $signedInfo->appendChild($c14nMethod);
 
-        $signatureMethod = $this->doc->createElement('ds:SignatureMethod');
+        $signatureMethod = $this->doc->createElementNS(self::DS_NS, 'ds:SignatureMethod');
         $signatureMethodAlgorithm = $this->doc->createAttribute('Algorithm');
 
         //$signatureMethodAlgorithm->value = 'http://www.w3.org/2000/09/xmldsig#rsa-sha1';
@@ -299,34 +302,34 @@ class DocumentsSigner
         $signatureMethod->appendChild($signatureMethodAlgorithm);
         $signedInfo->appendChild($signatureMethod);
 
-        $signatureValue = $this->doc->createElement('ds:SignatureValue');
+        $signatureValue = $this->doc->createElementNS(self::DS_NS, 'ds:SignatureValue');
         $signature->appendChild($signatureValue);
 
-        $keyInfo = $this->doc->createElement('ds:KeyInfo');
-        $X509Data = $this->doc->createElement('ds:X509Data');
-        $X509Certificate = $this->doc->createElement('ds:X509Certificate');
+        $keyInfo = $this->doc->createElementNS(self::DS_NS, 'ds:KeyInfo');
+        $X509Data = $this->doc->createElementNS(self::DS_NS, 'ds:X509Data');
+        $X509Certificate = $this->doc->createElementNS(self::DS_NS, 'ds:X509Certificate');
         $X509Data->appendChild($X509Certificate);
         $keyInfo->appendChild($X509Data);
         $signature->appendChild($keyInfo);
 
-        $objectNode = $this->doc->createElement('ds:Object');
+        $objectNode = $this->doc->createElementNS(self::DS_NS, 'ds:Object');
 
-        $qualifyingProperties = $this->doc->createElement('xds:QualifyingProperties');
+        $qualifyingProperties = $this->doc->createElementNS(self::XDS_NS, 'xds:QualifyingProperties');
         $qualifyingPropertiesId = $this->doc->createAttribute('Target');
         $qualifyingPropertiesId->value = '#SignatureId';
         $qualifyingProperties->appendChild($qualifyingPropertiesId);
 
-        $signedProperties = $this->doc->createElement('xds:SignedProperties');
+        $signedProperties = $this->doc->createElementNS(self::XDS_NS, 'xds:SignedProperties');
         $signedPropertiesId = $this->doc->createAttribute('Id');
         $signedPropertiesId->value = 'SignedPropertiesId';
         $signedProperties->appendChild($signedPropertiesId);
 
-        $signedSignatureProperties = $this->doc->createElement('xds:SignedSignatureProperties');
+        $signedSignatureProperties = $this->doc->createElementNS(self::XDS_NS, 'xds:SignedSignatureProperties');
 
-        $signingTime = $this->doc->createElement('xds:SigningTime');
-        $signingCertificate = $this->doc->createElement('xds:SigningCertificate');
-        $signaturePolicyIdentifier = $this->doc->createElement('xds:SignaturePolicyIdentifier');
-        $signaturePolicyImplied = $this->doc->createElement('xds:SignaturePolicyImplied');
+        $signingTime = $this->doc->createElementNS(self::XDS_NS, 'xds:SigningTime');
+        $signingCertificate = $this->doc->createElementNS(self::XDS_NS, 'xds:SigningCertificate');
+        $signaturePolicyIdentifier = $this->doc->createElementNS(self::XDS_NS, 'xds:SignaturePolicyIdentifier');
+        $signaturePolicyImplied = $this->doc->createElementNS(self::XDS_NS, 'xds:SignaturePolicyImplied');
 
         $signaturePolicyIdentifier->appendChild($signaturePolicyImplied);
 
@@ -399,7 +402,7 @@ class DocumentsSigner
         $errorCode = 'valid';
 
         // Get signature node
-        $signature = $this->doc->getElementsByTagName('ds:Signature')->item(0);
+        $signature = $this->doc->getElementsByTagNameNS(self::DS_NS, 'Signature')->item(0);
         if (!($signature instanceof DOMElement)) {
             return [
                 'valid' => false,
@@ -409,7 +412,7 @@ class DocumentsSigner
         }
 
         // Validate digest values for all references
-        $signedInfo = $this->doc->getElementsByTagName('ds:SignedInfo')->item(0);
+        $signedInfo = $this->doc->getElementsByTagNameNS(self::DS_NS, 'SignedInfo')->item(0);
         if (!($signedInfo instanceof DOMElement)) {
             return [
                 'valid' => false,
@@ -418,7 +421,7 @@ class DocumentsSigner
             ];
         }
 
-        $references = $signedInfo->getElementsByTagName('ds:Reference');
+        $references = $signedInfo->getElementsByTagNameNS(self::DS_NS, 'Reference');
         for ($i = 0; $i < $references->length; $i++) {
             $reference = $references->item($i);
             if ($reference instanceof DOMElement) {
@@ -429,8 +432,8 @@ class DocumentsSigner
                     continue;
                 }
 
-                $digestValueNode = $reference->getElementsByTagName('ds:DigestValue')->item(0);
-                $digestMethodNode = $reference->getElementsByTagName('ds:DigestMethod')->item(0);
+                $digestValueNode = $reference->getElementsByTagNameNS(self::DS_NS, 'DigestValue')->item(0);
+                $digestMethodNode = $reference->getElementsByTagNameNS(self::DS_NS, 'DigestMethod')->item(0);
 
                 if (!($digestValueNode instanceof DOMElement) || !($digestMethodNode instanceof DOMElement)) {
                     $errors[] = self::validationErrorMessage('digest_missing', ['uri' => $uri]);
@@ -483,7 +486,7 @@ class DocumentsSigner
         }
 
         // Validate signature value
-        $signatureValueNode = $this->doc->getElementsByTagName('ds:SignatureValue')->item(0);
+        $signatureValueNode = $this->doc->getElementsByTagNameNS(self::DS_NS, 'SignatureValue')->item(0);
         if (!($signatureValueNode instanceof DOMElement)) {
             return [
                 'valid' => false,
@@ -502,7 +505,7 @@ class DocumentsSigner
         }
 
         // Get certificate
-        $X509CertificateNode = $this->doc->getElementsByTagName('ds:X509Certificate')->item(0);
+        $X509CertificateNode = $this->doc->getElementsByTagNameNS(self::DS_NS, 'X509Certificate')->item(0);
         if (!($X509CertificateNode instanceof DOMElement)) {
             return [
                 'valid' => false,
@@ -533,7 +536,7 @@ class DocumentsSigner
         }
 
         // Get signature method algorithm
-        $signatureMethodNode = $signedInfo->getElementsByTagName('ds:SignatureMethod')->item(0);
+        $signatureMethodNode = $signedInfo->getElementsByTagNameNS(self::DS_NS, 'SignatureMethod')->item(0);
         if (!($signatureMethodNode instanceof DOMElement)) {
             return [
                 'valid' => false,
