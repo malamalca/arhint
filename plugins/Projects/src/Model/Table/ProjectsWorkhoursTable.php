@@ -153,7 +153,6 @@ class ProjectsWorkhoursTable extends Table
      * Find workhours count
      *
      * @param \Cake\Database\Query\SelectQuery<mixed> $query Query object.
-     * @param string $projectId Project id.
      * @param \App\Model\Entity\User $currentUser Current user.
      * @param \Projects\Filter\ProjectsWorkhoursFilter $filter Filter object.
      * @return \Cake\Database\Query\SelectQuery<mixed>

@@ -31,7 +31,6 @@ class ProjectsWorkhoursFilter extends Filter
     /**
      * Get query parameters
      *
-     * @param string $projectId Project ID
      * @param \App\Model\Entity\User $currentUser Current user
      * @return array<string,mixed>
      */

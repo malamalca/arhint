@@ -13,7 +13,6 @@ use Cake\ORM\TableRegistry;
 use Cake\Utility\Inflector;
 use Cake\Utility\Text;
 use Documents\Form\EmailForm;
-use Documents\Lib\DocumentsExport;
 use Documents\Lib\DocumentsSigner;
 use DOMDocument;
 use DOMXPath;
@@ -249,11 +248,11 @@ class BaseDocumentsController extends AppController
             $signTimestamp = new DateTime($this->getRequest()->getData('dat_sign'));
             $cert = $this->getRequest()->getData('sign_cert');
 
-            if (empty($cert) || empty($signTimestamp)) {
+            if (empty($cert)) {
                 throw new InvalidArgumentException('Invalid Request Arguments');
             }
 
-            $signer = new DocumentsSigner($id);
+            $signer = new DocumentsSigner($id, $this->documentsScope);
             $signer->setSignatureDatetime($signTimestamp);
             $signer->setCertificate($cert);
 
@@ -313,7 +312,9 @@ class BaseDocumentsController extends AppController
 
         $this->Authorization->authorize($document, 'view');
 
-        $Exporter = new DocumentsExport();
+        $ExporterClass = '\\Documents\\Lib\\' . $this->documentsScope . 'Export';
+        /** @var \Documents\Lib\InvoicesExport|\Documents\Lib\DocumentsExport $Exporter */
+        $Exporter = new $ExporterClass();
         $data = $Exporter->export('pdf', [$document]);
 
         if (!empty($data)) {
@@ -591,7 +592,9 @@ class BaseDocumentsController extends AppController
         } else {
             try {
                 // Generate fresh XML from current invoice data
-                $Exporter = new DocumentsExport();
+                $ExporterClass = '\\Documents\\Lib\\' . $this->documentsScope . 'Export';
+                /** @var \Documents\Lib\InvoicesExport|\Documents\Lib\DocumentsExport $Exporter */
+                $Exporter = new $ExporterClass();
                 $currentXml = $Exporter->export('xml', [$invoice]);
 
                 // Load current XML and calculate digest

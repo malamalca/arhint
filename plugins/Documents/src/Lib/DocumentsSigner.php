@@ -35,11 +35,15 @@ class DocumentsSigner
      * Constructor
      *
      * @param string $documentId Document id.
+     * @param string $documentType Document type.
      * @return void
      */
-    public function __construct(string $documentId)
+    public function __construct(string $documentId, $documentType = 'Invoices')
     {
-        $Exporter = new DocumentsExport();
+        $ExporterClass = '\\Documents\\Lib\\' . $documentType . 'Export';
+        /** @var \Documents\Lib\InvoicesExport|\Documents\Lib\DocumentsExport $Exporter */
+        $Exporter = new $ExporterClass();
+
         $documents = $Exporter->find(['id' => $documentId], 'Invoices');
         $document = $documents->first();
 
@@ -393,7 +397,7 @@ class DocumentsSigner
      * Validates signature and digest values in the XML document
      *
      * @param bool $skipDataValidation Skip validating the data element digest (used when already validated externally)
-     * @return array Returns array with 'valid' boolean, 'errorCode' string, and 'errors' array
+     * @return array<string, mixed> Returns array with 'valid' boolean, 'errorCode' string, and 'errors' array
      */
     public function validateSignature(bool $skipDataValidation = false): array
     {
