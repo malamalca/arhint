@@ -55,6 +55,28 @@ $document_preview = [
                         'method' => 'unlockField',
                         'parameters' => ['sign_cert'],
                     ],
+                    'sign_cert_select_label' => [
+                        'method' => 'label',
+                        'parameters' => [
+                            'field' => 'sign_select_cert',
+                            'text' => __d('documents', 'Select Certificate') . ':',
+                        ],
+                    ],
+                    'sign_select_cert' => [
+                        'method' => 'control',
+                        'parameters' => [
+                            'field' => 'sign_select_cert',
+                            'options' => [
+                                'type' => 'select',
+                                'label' => false,
+                                'class' => 'browser-default',
+                            ],
+                        ],
+                    ],
+                    'sign_select_cert_unlock' => [
+                        'method' => 'unlockField',
+                        'parameters' => ['sign_select_cert'],
+                    ],
                     'sign_signature' => [
                         'method' => 'hidden',
                         'parameters' => ['field' => 'sign_signature', ['id' => 'signature']],
@@ -81,7 +103,8 @@ $document_preview = [
                     'form_end' => [
                         'method' => 'button',
                         'parameters' => [
-                            'Sign Document',
+                            __d('documents', 'Sign Document'),
+                            ['type' => 'submit'],
                         ],
                     ],
                 ],
@@ -100,6 +123,96 @@ $this->Html->script('/Documents/js/hex2base.js', ['block' => 'script']);
 if (!$this->getRequest()->is('ajax')) {
     ?>
 <script type="text/javascript">
+    const SERVICE_URL = 'http://localhost:8082';
+
+    let certificates = [];
+
+    async function fetchCertificates() {
+        // Fetch certificates from web service
+        const response = await fetch(`${SERVICE_URL}/listCerts`, {
+            method: 'GET',
+            mode: 'cors',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        
+        if (data.error) {
+            showOutput('Error: ' + data.error, 'error');
+            return;
+        }
+
+        if (data.result) {
+            certificates = data.result;
+
+            // Populate the select dropdown
+            certificates.forEach((cert, index) => {
+                $("#sign-select-cert").append($("<option>", {
+                    value: index,
+                    text: cert.label
+                }));
+            });
+
+            // Set the first certificate as default
+            $("#cert").val(certificates[0].cert);
+
+            // Handle certificate selection change
+            $("#sign-select-cert").on("change", function() {
+                const selectedIndex = $(this).val();
+                $("#cert").val(certificates[selectedIndex].cert);
+            });
+        }
+    }
+
+    function showOutput(message, type) {
+        // Simple output function, can be enhanced to show messages in the UI
+        alert(`${type.toUpperCase()}: ${message}`);
+    }
+
+    async function sign(hash) {
+        try {
+            // Send sign request to web service
+            const response = await fetch(`${SERVICE_URL}/sign`, {
+                method: 'POST',
+                mode: 'cors',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    hash: hash,
+                    thumbprint: certificates[$("#sign-select-cert").val()].thumbprint
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const data = await response.json();
+
+            if (data.error) {
+                showOutput('Signing Error: ' + data.error, 'error');
+                return;
+            }
+
+            if (data.result) {
+                let formElement = $("#DocumentSign");
+                $("#signature", formElement).val(data.result);
+                formElement.off("submit");
+                formElement.submit();
+            }
+        } catch (error) {
+            showOutput('Error: ' + error.message, 'error');
+        }
+    }
+
+    fetchCertificates();
 
     $(document).ready(function() {
         $("#invoice-view").height(window.innerHeight - $("#invoice-view").offset().top - 30);
@@ -107,42 +220,23 @@ if (!$this->getRequest()->is('ajax')) {
         var signature = $("#signature").val();
         if (signature == "") {
             $("form#DocumentSign").on("submit", function(e) {
-                e.preventDefault();
-
-                if (!window.hwcrypto.use("auto")) {
-                    alert("Selecting backend failed.");
+                if (!confirm('<?= __d('documents', 'Are you sure you want to sign this document?'); ?>'))  {
+                    return false;
                 }
 
-                var formElement = this;
+                let formElement = $("#DocumentSign");
+                e.preventDefault();
 
-                window.hwcrypto.getCertificate({lang: "en"}).then(
-                    function(response) {
-                        var cert = response;
-                        $("#cert", formElement).val(hexToPem(response.hex));
-
-                        $.post(
-                            $(formElement).prop("action"),
-                            $(formElement).serialize(),
-                            function(html) {
-                                $("div#SignPanel").replaceWith(html);
-
-                                formElement = $("form#DocumentSign");
-                                var digest = $("#digest", formElement).val();
-
-                                window.hwcrypto.sign(cert, {type: "SHA-1", hex: digest}, {lang: "en"}).then(
-                                    function(response) {
-                                        $("#signature", formElement).val(hexToBase64(response.hex));
-                                        $(formElement).submit();
-                                    },
-                                    function(err) {
-                                        alert("sign() failed: " + err);
-                                    }
-                                );
-                            }
-                        );
-                    },
-                    function(err) {
-                        alert("getCertificate() failed: " + err);
+                // First, get the digest from the server using public certificate
+                $.post(
+                    $(formElement).prop("action"),
+                    $(formElement).serialize(),
+                    function(data) {
+                        if (data.error) {
+                            showOutput('Error: ' + data.error, 'error');
+                            return;
+                        }
+                        sign(data.digest);
                     }
                 );
 

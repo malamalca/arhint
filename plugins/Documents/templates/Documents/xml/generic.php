@@ -69,7 +69,7 @@ foreach ($documents as $document) {
     }
 
     // besedilo
-    $transformed['IzdaniDokumenti']['Dokument'][$i]['Besedilo'] = $document->descript;
+    $transformed['IzdaniDokumenti']['Dokument'][$i]['Besedilo'] = $document->descript ?? '';
 }
 
 $XmlObject = Xml::fromArray($transformed, ['format' => 'tags', 'return' => 'domdocument', 'pretty' => true]);

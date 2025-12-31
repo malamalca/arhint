@@ -326,6 +326,13 @@ $invoiceView = [
                 'text' => $this->Number->currency($document->total),
             ]],
         ],
+        'signature' => [
+            'id' => 'invoice-signature',
+            'lines' => [[
+                'label' => __d('documents', 'Signature Status') . ':',
+                'text' => sprintf('<span class="signature-status">%1$s</span>', __d('documents', 'Loading...')),
+            ]],
+        ],
     ],
 ];
 
@@ -637,6 +644,22 @@ echo $this->Lil->panels($invoiceView, 'Documents.Invoices.view');
                     $("#attachment-view", popup).height($(popup).innerHeight() - 125);
                 }
             });
+        });
+
+        $.get("<?= Router::url(['action' => 'checkSignature', $document->id]); ?>", function(data) {
+            $("#invoice-signature .signature-status").html(data.status == "valid" ?
+                "<?= __d('documents', 'Valid Signature') ?>" : (
+                    data.status == "nosignature" ? "<?= __d('documents', 'No Signature') ?>" :
+                    "<?= __d('documents', 'Invalid Signature') ?>"));
+
+            if (data.errors && data.errors.length > 0 && data.status != "nosignature") {
+                var errorHtml = ' (';
+                data.errors.forEach(function(error) {
+                    errorHtml += error + ', ';
+                });
+                errorHtml = errorHtml.slice(0, -2) + ')';
+                $("#invoice-signature .signature-status").append(errorHtml);
+            }
         });
     });
 </script>

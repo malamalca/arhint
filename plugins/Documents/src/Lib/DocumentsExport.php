@@ -46,17 +46,15 @@ class DocumentsExport
      * Find documents for expodrt
      *
      * @param array<string, mixed> $filter Array of options
+     * @param string $model Model name
      * @return \Cake\ORM\Query\SelectQuery
      */
-    public function find(array $filter): SelectQuery
+    public function find(array $filter, string $model = 'Documents'): SelectQuery
     {
         $conditions = [];
-        //if (!empty($filter['id'])) {
-        //    $conditions['Documents.id IN'] = (array)$filter['id'];
-        //}
 
         /** @var \Documents\Model\Table\DocumentsTable $DocumentsTable */
-        $DocumentsTable = TableRegistry::getTableLocator()->get('Documents.Documents');
+        $DocumentsTable = TableRegistry::getTableLocator()->get('Documents.' . $model);
         $params = $DocumentsTable->filter($filter);
 
         $defaultParams = [
@@ -69,7 +67,7 @@ class DocumentsExport
                 'DocumentsLinks' => ['Invoices'],
                 'TplHeaders', 'TplBodies', 'TplFooters',
             ],
-            'order' => ['Documents.counter'],
+            'order' => [$model . '.counter'],
         ];
 
         $params = array_merge_recursive($defaultParams, $params);

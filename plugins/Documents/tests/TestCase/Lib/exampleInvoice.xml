@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<IzdaniDokumenti>
+  <Dokument Id="data">
+    <NazivLokacije>Ljubljana</NazivLokacije>
+    <Datum>2025-08-20T00:00:00+00:00</Datum>
+    <Naslov>OŠ Šmarješke</Naslov>
+    <Tip/>
+    <Izdajatelj>Miha Nahtigal</Izdajatelj>
+    <Stevilka>2025-35</Stevilka>
+    <PodatkiPodjetja>
+      <NazivNaslovPodjetja>
+        <VrstaPartnerja>II</VrstaPartnerja>
+        <NazivPartnerja>
+          <NazivPartnerja0>ARHIM d.o.o.</NazivPartnerja0>
+        </NazivPartnerja>
+        <Ulica>
+          <Ulica0>Ukmarjeva ulica 4</Ulica0>
+        </Ulica>
+        <Kraj>Ljubljana</Kraj>
+        <NazivDrzave>Slovenija</NazivDrzave>
+        <PostnaStevilka>1000</PostnaStevilka>
+        <KodaDrzave>SI</KodaDrzave>
+      </NazivNaslovPodjetja>
+      <FinancniPodatkiPodjetja>
+        <BancniRacun>
+          <StevilkaBancnegaRacuna>SI56242039010691883</StevilkaBancnegaRacuna>
+          <NazivBanke1/>
+        </BancniRacun>
+      </FinancniPodatkiPodjetja>
+      <ReferencniPodatkiPodjetja>
+        <VrstaPodatkaPodjetja>VA</VrstaPodatkaPodjetja>
+        <PodatekPodjetja>SI55736645</PodatekPodjetja>
+      </ReferencniPodatkiPodjetja>
+      <ReferencniPodatkiPodjetja>
+        <VrstaPodatkaPodjetja>GN</VrstaPodatkaPodjetja>
+        <PodatekPodjetja/>
+      </ReferencniPodatkiPodjetja>
+    </PodatkiPodjetja>
+    <PodatkiPodjetja>
+      <NazivNaslovPodjetja>
+        <VrstaPartnerja>IV</VrstaPartnerja>
+        <NazivPartnerja>
+          <NazivPartnerja0>OBČINA ŠMARJEŠKE TOPLICE</NazivPartnerja0>
+        </NazivPartnerja>
+        <Ulica>
+          <Ulica0>ŠMARJETA 66</Ulica0>
+        </Ulica>
+        <Kraj> ŠMARJEŠKE TOPLICE</Kraj>
+        <NazivDrzave>Slovenija</NazivDrzave>
+        <PostnaStevilka>8220</PostnaStevilka>
+        <KodaDrzave>SI</KodaDrzave>
+      </NazivNaslovPodjetja>
+      <FinancniPodatkiPodjetja>
+        <BancniRacun>
+          <StevilkaBancnegaRacuna>SI56011000100020613</StevilkaBancnegaRacuna>
+          <NazivBanke1/>
+        </BancniRacun>
+      </FinancniPodatkiPodjetja>
+      <ReferencniPodatkiPodjetja>
+        <VrstaPodatkaPodjetja>VA</VrstaPodatkaPodjetja>
+        <PodatekPodjetja>SI80990258</PodatekPodjetja>
+      </ReferencniPodatkiPodjetja>
+      <ReferencniPodatkiPodjetja>
+        <VrstaPodatkaPodjetja>GN</VrstaPodatkaPodjetja>
+        <PodatekPodjetja>2241161000</PodatekPodjetja>
+      </ReferencniPodatkiPodjetja>
+    </PodatkiPodjetja>
+    <Besedilo><![CDATA[<p>Račun je plačljiv v zgoraj navedenem roku. Po preteku roka si pridržujemo pravico zaračunati zakonite zamudne obresti.</p>]]></Besedilo>
+  </Dokument>
+</IzdaniDokumenti>
