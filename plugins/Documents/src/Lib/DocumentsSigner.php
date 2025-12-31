@@ -57,7 +57,12 @@ class DocumentsSigner
         $instance->doc->preserveWhiteSpace = true;
         $instance->doc->formatOutput = false;
 
-        if (!@$instance->doc->loadXML($xmlString)) {
+        libxml_use_internal_errors(true);
+        $loaded = $instance->doc->loadXML($xmlString);
+        libxml_clear_errors();
+        libxml_use_internal_errors(false);
+        
+        if (!$loaded) {
             throw new InvalidArgumentException('Invalid XML provided');
         }
 
@@ -136,7 +141,9 @@ class DocumentsSigner
      */
     public function setCertificate(string $X509Cert): bool
     {
-        $certData = openssl_x509_parse("-----BEGIN CERTIFICATE-----\n" . chunk_split($X509Cert, 64, "\n") . "-----END CERTIFICATE-----\n");
+        $certData = openssl_x509_parse(
+            "-----BEGIN CERTIFICATE-----\n" . chunk_split($X509Cert, 64, "\n") . "-----END CERTIFICATE-----\n",
+        );
         if (!$certData) {
             dd(openssl_error_string());
         }
@@ -394,13 +401,21 @@ class DocumentsSigner
         // Get signature node
         $signature = $this->doc->getElementsByTagName('ds:Signature')->item(0);
         if (!($signature instanceof DOMElement)) {
-            return ['valid' => false, 'errorCode' => 'invalid', 'errors' => [self::validationErrorMessage('signature_not_found')]];
+            return [
+                'valid' => false,
+                'errorCode' => 'invalid',
+                'errors' => [self::validationErrorMessage('signature_not_found')],
+            ];
         }
 
         // Validate digest values for all references
         $signedInfo = $this->doc->getElementsByTagName('ds:SignedInfo')->item(0);
         if (!($signedInfo instanceof DOMElement)) {
-            return ['valid' => false, 'errorCode' => 'invalid', 'errors' => [self::validationErrorMessage('signedinfo_not_found')]];
+            return [
+                'valid' => false,
+                'errorCode' => 'invalid',
+                'errors' => [self::validationErrorMessage('signedinfo_not_found')],
+            ];
         }
 
         $references = $signedInfo->getElementsByTagName('ds:Reference');
@@ -470,23 +485,39 @@ class DocumentsSigner
         // Validate signature value
         $signatureValueNode = $this->doc->getElementsByTagName('ds:SignatureValue')->item(0);
         if (!($signatureValueNode instanceof DOMElement)) {
-            return ['valid' => false, 'errorCode' => 'invalid', 'errors' => array_merge($errors, [self::validationErrorMessage('signaturevalue_not_found')])];
+            return [
+                'valid' => false,
+                'errorCode' => 'invalid',
+                'errors' => array_merge($errors, [self::validationErrorMessage('signaturevalue_not_found')]),
+            ];
         }
 
         $signatureValue = $signatureValueNode->nodeValue;
         if (empty($signatureValue)) {
-            return ['valid' => false, 'errorCode' => 'invalid', 'errors' => array_merge($errors, [self::validationErrorMessage('signaturevalue_empty')])];
+            return [
+                'valid' => false,
+                'errorCode' => 'invalid',
+                'errors' => array_merge($errors, [self::validationErrorMessage('signaturevalue_empty')]),
+            ];
         }
 
         // Get certificate
         $X509CertificateNode = $this->doc->getElementsByTagName('ds:X509Certificate')->item(0);
         if (!($X509CertificateNode instanceof DOMElement)) {
-            return ['valid' => false, 'errorCode' => 'invalidcertificate', 'errors' => array_merge($errors, [self::validationErrorMessage('certificate_not_found')])];
+            return [
+                'valid' => false,
+                'errorCode' => 'invalidcertificate',
+                'errors' => array_merge($errors, [self::validationErrorMessage('certificate_not_found')]),
+            ];
         }
 
         $certData = $X509CertificateNode->nodeValue;
         if (empty($certData)) {
-            return ['valid' => false, 'errorCode' => 'invalidcertificate', 'errors' => array_merge($errors, [self::validationErrorMessage('certificate_empty')])];
+            return [
+                'valid' => false,
+                'errorCode' => 'invalidcertificate',
+                'errors' => array_merge($errors, [self::validationErrorMessage('certificate_empty')]),
+            ];
         }
 
         // Extract public key from certificate
@@ -494,13 +525,21 @@ class DocumentsSigner
         $publicKey = openssl_pkey_get_public($cert);
 
         if (!$publicKey) {
-            return ['valid' => false, 'errorCode' => 'invalidcertificate', 'errors' => array_merge($errors, [self::validationErrorMessage('certificate_key_failed')])];
+            return [
+                'valid' => false,
+                'errorCode' => 'invalidcertificate',
+                'errors' => array_merge($errors, [self::validationErrorMessage('certificate_key_failed')]),
+            ];
         }
 
         // Get signature method algorithm
         $signatureMethodNode = $signedInfo->getElementsByTagName('ds:SignatureMethod')->item(0);
         if (!($signatureMethodNode instanceof DOMElement)) {
-            return ['valid' => false, 'errorCode' => 'invalid', 'errors' => array_merge($errors, [self::validationErrorMessage('signaturemethod_not_found')])];
+            return [
+                'valid' => false,
+                'errorCode' => 'invalid',
+                'errors' => array_merge($errors, [self::validationErrorMessage('signaturemethod_not_found')]),
+            ];
         }
 
         $signatureAlgorithm = $signatureMethodNode->getAttribute('Algorithm');

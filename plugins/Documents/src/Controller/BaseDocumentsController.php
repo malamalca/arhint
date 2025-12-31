@@ -610,7 +610,11 @@ class BaseDocumentsController extends AppController
                 // Load signed XML and extract stored digest
                 $signedDoc = new DOMDocument();
                 $signedDoc->preserveWhiteSpace = false;
-                if ($signedDoc->loadXML($invoice->signed)) {
+                libxml_use_internal_errors(true);
+                $loaded = $signedDoc->loadXML($invoice->signed);
+                libxml_clear_errors();
+                libxml_use_internal_errors(false);
+                if (!$loaded) {
                     throw new RuntimeException(DocumentsSigner::validationErrorMessage('signed_xml_parse_failed'));
                 }
 
