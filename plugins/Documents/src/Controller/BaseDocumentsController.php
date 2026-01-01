@@ -15,6 +15,7 @@ use Cake\Utility\Text;
 use Documents\Form\EmailForm;
 use Documents\Lib\DocumentsSigner;
 use DOMDocument;
+use DOMElement;
 use DOMXPath;
 use Exception;
 use InvalidArgumentException;
@@ -583,6 +584,7 @@ class BaseDocumentsController extends AppController
         $invoice = $this->{$this->documentsScope}->get($id, contain: $containTables);
         $this->Authorization->authorize($invoice, 'view');
 
+        /** @var \Documents\Model\Entity\Document|\Documents\Model\Entity\Invoice $invoice */
         $checkStatus = 'unknown';
         $errors = [];
 
@@ -602,9 +604,13 @@ class BaseDocumentsController extends AppController
                 $currentDoc->loadXML($currentXml);
 
                 $xpath = new DOMXPath($currentDoc);
-                $dataNode = $xpath->query('//*[@Id="data"]')->item(0);
+                $queryResult = $xpath->query('//*[@Id="data"]');
+                if ($queryResult === false) {
+                    throw new RuntimeException(DocumentsSigner::validationErrorMessage('data_element_not_found'));
+                }
+                $dataNode = $queryResult->item(0);
 
-                if (!$dataNode) {
+                if (!($dataNode instanceof DOMElement)) {
                     throw new RuntimeException(DocumentsSigner::validationErrorMessage('data_element_not_found'));
                 }
 
@@ -625,9 +631,16 @@ class BaseDocumentsController extends AppController
                 $signedDataDigest = null;
                 for ($i = 0; $i < $digestValues->length; $i++) {
                     $digestNode = $digestValues->item($i);
+                    if (!($digestNode instanceof DOMElement)) {
+                        continue;
+                    }
                     $refNode = $digestNode->parentNode; // Should be ds:Reference
-                    if ($refNode && $refNode->hasAttribute('URI') && $refNode->getAttribute('URI') === '#data') {
-                        $signedDataDigest = trim($digestNode->nodeValue);
+                    if (
+                        $refNode instanceof DOMElement &&
+                        $refNode->hasAttribute('URI') &&
+                        $refNode->getAttribute('URI') === '#data'
+                    ) {
+                        $signedDataDigest = trim($digestNode->nodeValue ?? '');
                         break;
                     }
                 }
@@ -650,8 +663,11 @@ class BaseDocumentsController extends AppController
                         'SigningTime',
                     );
                     if ($signingTimeNodes->length > 0) {
-                        $signingTimeXml = trim($signingTimeNodes->item(0)->nodeValue);
-                        $datSignDb = $invoice->dat_sign ? $invoice->dat_sign->format('c') : null;
+                        $signingTimeNode = $signingTimeNodes->item(0);
+                        $signingTimeXml = $signingTimeNode instanceof DOMElement ?
+                            trim($signingTimeNode->nodeValue ?? '') : '';
+                        $datSignDb = isset($invoice->dat_sign) && $invoice->dat_sign ?
+                            $invoice->dat_sign->format('c') : null;
 
                         if ($datSignDb !== $signingTimeXml) {
                             if ($checkStatus === 'unknown') {

@@ -200,7 +200,11 @@ class DocumentsSigner
 
                 $issuerSerial = $this->doc->createElementNS(self::XDS_NS, 'xds:IssuerSerial');
                 $X509IssuerName = $this->doc->createElementNS(self::DS_NS, 'ds:X509IssuerName', $issuerName);
-                $X509SerialNumber = $this->doc->createElementNS(self::DS_NS, 'ds:X509SerialNumber', $certData['serialNumber']);
+                $X509SerialNumber = $this->doc->createElementNS(
+                    self::DS_NS,
+                    'ds:X509SerialNumber',
+                    $certData['serialNumber'],
+                );
 
                 $issuerSerial->appendChild($X509IssuerName);
                 $issuerSerial->appendChild($X509SerialNumber);
@@ -372,8 +376,10 @@ class DocumentsSigner
         return match ($code) {
             'signature_not_found' => __d('documents', 'Signature element not found'),
             'signedinfo_not_found' => __d('documents', 'SignedInfo element not found'),
-            'digest_missing' => __d('documents', 'Missing DigestValue or DigestMethod for reference {0}', $params['uri'] ?? 'unknown'),
-            'element_not_found' => __d('documents', 'Referenced element not found for URI: {0}', $params['uri'] ?? 'unknown'),
+            'digest_missing' => __d('documents', 'Missing DigestValue or DigestMethod for reference {0}',
+                $params['uri'] ?? 'unknown'),
+            'element_not_found' => __d('documents', 'Referenced element not found for URI: {0}',
+                $params['uri'] ?? 'unknown'),
             'digest_mismatch' => __d('documents', 'Digest mismatch for reference {0}', $params['uri'] ?? 'unknown'),
             'signaturevalue_not_found' => __d('documents', 'SignatureValue element not found'),
             'signaturevalue_empty' => __d('documents', 'SignatureValue is empty'),
