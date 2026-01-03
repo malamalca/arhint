@@ -187,3 +187,4 @@ ServerRequest::addDetector('lilScan', function ($request) {
 ServerRequest::addDetector('pdf', ['param' => '_ext', 'options' => ['pdf']]);
 ServerRequest::addDetector('aht', ['param' => '_ext', 'options' => ['aht']]);
 ServerRequest::addDetector('txt', ['param' => '_ext', 'options' => ['txt']]);
+ServerRequest::addDetector('json', ['param' => '_ext', 'options' => ['json']]);

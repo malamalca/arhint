@@ -95,6 +95,7 @@ class Application extends BaseApplication implements
         $csrf->skipCheckCallback(function ($request) {
             return $this->checkParams($request->getAttribute('params'), [
                 ['controller' => 'ProjectsWorkhours', 'action' => 'import'],
+                ['controller' => 'Projects', 'action' => 'linkEmail'],
                 ['controller' => ['Invoices', 'Documents'], 'action' => 'edit', $request->hasHeader('Lil-Scan')],
             ]);
         });
@@ -187,7 +188,8 @@ class Application extends BaseApplication implements
 
         if (
             $this->checkParams($request->getAttribute('params'), [
-            ['controller' => 'Projects', 'action' => 'index', '_ext' => 'txt'],
+            ['controller' => 'Projects', 'action' => 'index', '_ext' => ['txt', 'json', 'xml']],
+            ['controller' => 'Projects', 'action' => 'linkEmail', '_ext' => 'json'],
             ['controller' => 'Projects', 'action' => 'view', '_ext' => 'txt'],
             ['controller' => 'Projects', 'action' => 'view', '_ext' => 'xml'],
             ['controller' => 'Calendars', 'action' => 'view'],

@@ -33,6 +33,13 @@ class JsonView extends AppView
     public string $layout = 'json';
 
     /**
+     * Json views are located in the 'json' sub directory for controllers' views.
+     *
+     * @var string
+     */
+    protected string $subDir = 'json';
+
+    /**
      * Initialization hook method.
      *
      * @return void
