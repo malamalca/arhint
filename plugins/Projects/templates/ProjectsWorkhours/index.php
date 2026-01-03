@@ -109,7 +109,7 @@ $tableIndex = [
     'panels' => [
         'search' => '<div id="tasks-search">' .
             sprintf('<form method="get" action="%s">', Router::url()) .
-            sprintf('<input name="q" id="query" value="%s" />', htmlspecialchars($this->request->getQuery('q'))) .
+            sprintf('<input name="q" id="query" value="%s" />', htmlspecialchars($this->request->getQuery('q', ''))) .
             '<button type="submit" class="btn-small tonal" id="btn-search"><i class="material-icons">search</i></button>' .
             '</form>' .
             sprintf(

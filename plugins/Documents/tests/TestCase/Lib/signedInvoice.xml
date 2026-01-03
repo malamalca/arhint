@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<IzdaniDokumenti xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:xds="http://uri.etsi.org/01903/v1.1.1#" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Dokument Id="data">
+    <NazivLokacije>Ljubljana</NazivLokacije>
+    <Datum>2025-08-20T00:00:00+00:00</Datum>
+    <Naslov>OŠ Šmarješke</Naslov>
+    <Tip/>
+    <Izdajatelj>Miha Nahtigal</Izdajatelj>
+    <Stevilka>2025-35</Stevilka>
+    <PodatkiPodjetja>
+      <NazivNaslovPodjetja>
+        <VrstaPartnerja>II</VrstaPartnerja>
+        <NazivPartnerja>
+          <NazivPartnerja0>ARHIM d.o.o.</NazivPartnerja0>
+        </NazivPartnerja>
+        <Ulica>
+          <Ulica0>Ukmarjeva ulica 4</Ulica0>
+        </Ulica>
+        <Kraj>Ljubljana</Kraj>
+        <NazivDrzave>Slovenija</NazivDrzave>
+        <PostnaStevilka>1000</PostnaStevilka>
+        <KodaDrzave>SI</KodaDrzave>
+      </NazivNaslovPodjetja>
+      <FinancniPodatkiPodjetja>
+        <BancniRacun>
+          <StevilkaBancnegaRacuna>SI56242039010691883</StevilkaBancnegaRacuna>
+          <NazivBanke1/>
+        </BancniRacun>
+      </FinancniPodatkiPodjetja>
+      <ReferencniPodatkiPodjetja>
+        <VrstaPodatkaPodjetja>VA</VrstaPodatkaPodjetja>
+        <PodatekPodjetja>SI55736645</PodatekPodjetja>
+      </ReferencniPodatkiPodjetja>
+      <ReferencniPodatkiPodjetja>
+        <VrstaPodatkaPodjetja>GN</VrstaPodatkaPodjetja>
+        <PodatekPodjetja/>
+      </ReferencniPodatkiPodjetja>
+    </PodatkiPodjetja>
+    <PodatkiPodjetja>
+      <NazivNaslovPodjetja>
+        <VrstaPartnerja>IV</VrstaPartnerja>
+        <NazivPartnerja>
+          <NazivPartnerja0>OBČINA ŠMARJEŠKE TOPLICE</NazivPartnerja0>
+        </NazivPartnerja>
+        <Ulica>
+          <Ulica0>ŠMARJETA 66</Ulica0>
+        </Ulica>
+        <Kraj> ŠMARJEŠKE TOPLICE</Kraj>
+        <NazivDrzave>Slovenija</NazivDrzave>
+        <PostnaStevilka>8220</PostnaStevilka>
+        <KodaDrzave>SI</KodaDrzave>
+      </NazivNaslovPodjetja>
+      <FinancniPodatkiPodjetja>
+        <BancniRacun>
+          <StevilkaBancnegaRacuna>SI56011000100020613</StevilkaBancnegaRacuna>
+          <NazivBanke1/>
+        </BancniRacun>
+      </FinancniPodatkiPodjetja>
+      <ReferencniPodatkiPodjetja>
+        <VrstaPodatkaPodjetja>VA</VrstaPodatkaPodjetja>
+        <PodatekPodjetja>SI80990258</PodatekPodjetja>
+      </ReferencniPodatkiPodjetja>
+      <ReferencniPodatkiPodjetja>
+        <VrstaPodatkaPodjetja>GN</VrstaPodatkaPodjetja>
+        <PodatekPodjetja>2241161000</PodatekPodjetja>
+      </ReferencniPodatkiPodjetja>
+    </PodatkiPodjetja>
+    <Besedilo><![CDATA[<p>Račun je plačljiv v zgoraj navedenem roku. Po preteku roka si pridržujemo pravico zaračunati zakonite zamudne obresti.</p>]]></Besedilo>
+  </Dokument>
+<ds:Signature Id="SignatureId"><ds:SignedInfo><ds:CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/><ds:SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha256"/><ds:Reference URI="#data" Type="http://www.gzs.si/shemas/eslog/racun/1.6#Racun"><ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><ds:DigestValue>vbQECwSPhfFXznxy9KA3slR/s/o=</ds:DigestValue></ds:Reference><ds:Reference URI="#SignedPropertiesId" Type="http://uri.etsi.org/01903#SignedProperties"><ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><ds:DigestValue>bgUEIBWRUWnSpTl5eLA/FhvdwYk=</ds:DigestValue></ds:Reference></ds:SignedInfo><ds:SignatureValue>ZEfLblVdjXMQIgjY/h4niOXhYAoz8w7qp6uw8fGtvZDVURWsqqpP2XSi7M8feDM9MLlPmBfU/Ck3yPoCMVh/PcRf4qTQtvFLNTslF9C8BwoEGfFd2H8YPUUbOsWJAVgra7Lq9PZVyBE3fLziSttheq1ig3OFzt665Rka5j4SXDV1gnclfo877Af7GAW4CagAMW9D7MHs4UoivFldxYL5APbfdEi7HW/K67XGIpT9ep7a0sHP4Jl2IGcK4MZX3asxzqpcY/pPXgS68TQxQXSgOHbGDlqrUIXkbsKx7Y4eDLT3p/C6ELjFXYNctAv+7JDEnJkf7onudS1c76iTxQ9UKw==</ds:SignatureValue><ds:KeyInfo><ds:X509Data><ds:X509Certificate>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</ds:X509Certificate></ds:X509Data></ds:KeyInfo><ds:Object><xds:QualifyingProperties xmlns:xds="http://uri.etsi.org/01903/v1.1.1#" Target="#SignatureId"><xds:SignedProperties Id="SignedPropertiesId"><xds:SignedSignatureProperties><xds:SigningTime>2025-12-31T12:00:00+00:00</xds:SigningTime><xds:SigningCertificate><xds:Cert><xds:CertDigest><xds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><xds:DigestValue>t4cOKP0PtQ327wMH3ToEwyC9Seg=</xds:DigestValue></xds:CertDigest><xds:IssuerSerial xmlns:ds="http://www.w3.org/2000/09/xmldsig#"><ds:X509IssuerName xmlns:ds="http://www.w3.org/2000/09/xmldsig#">CN=SIGEN-CA G2, organizationIdentifier=VATSI-17659957, O=Republika Slovenija, C=SI</ds:X509IssuerName><ds:X509SerialNumber xmlns:ds="http://www.w3.org/2000/09/xmldsig#">61529096964516457918365485682</ds:X509SerialNumber></xds:IssuerSerial></xds:Cert></xds:SigningCertificate><xds:SignaturePolicyIdentifier><xds:SignaturePolicyImplied/></xds:SignaturePolicyIdentifier></xds:SignedSignatureProperties></xds:SignedProperties></xds:QualifyingProperties></ds:Object></ds:Signature></IzdaniDokumenti>

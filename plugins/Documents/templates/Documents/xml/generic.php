@@ -1,7 +1,11 @@
 <?php
 use Cake\Utility\Xml;
 
-$transformed = ['IzdaniDokumenti' => []];
+    $transformed = ['IzdaniDokumenti' => [
+        'xmlns:ds' => 'http://www.w3.org/2000/09/xmldsig#',
+        'xmlns:xds' => 'http://uri.etsi.org/01903/v1.1.1#',
+        'xmlns:xsi' => 'http://www.w3.org/2001/XMLSchema-instance',
+    ]];
 
 $i = 0;
 foreach ($documents as $document) {
@@ -69,7 +73,7 @@ foreach ($documents as $document) {
     }
 
     // besedilo
-    $transformed['IzdaniDokumenti']['Dokument'][$i]['Besedilo'] = $document->descript;
+    $transformed['IzdaniDokumenti']['Dokument'][$i]['Besedilo'] = $document->descript ?? '';
 }
 
 $XmlObject = Xml::fromArray($transformed, ['format' => 'tags', 'return' => 'domdocument', 'pretty' => true]);
