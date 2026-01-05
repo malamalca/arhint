@@ -44,6 +44,11 @@ class ActiveSyncContacts implements Syncroton_Data_IData
      */
     protected DateTime $_timeStamp;
 
+    private ?Syncroton_Model_IDevice $_device;
+    private ?string $_ownerId;
+    private \Zend_Db_Adapter_Pdo_Mysql $_db;
+    private string $_tablePrefix;
+
     /**
      * the constructor
      *
