@@ -386,7 +386,7 @@ class ProjectsController extends AppController
             $data = $this->getRequest()->getData();
         }
 
-        $this->log('Parsed data: ' . (string)json_encode($data), 'debug');
+        //$this->log('Parsed data: ' . (string)json_encode($data), 'debug');
 
         // Validate required fields
         if (empty($data['project_id'])) {
