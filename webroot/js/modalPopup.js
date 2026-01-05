@@ -62,7 +62,7 @@ jQuery.fn.modalPopup = function(p_options) {
                     // evaluate javascript blocks if any
                     let script = $("p > script", $this.dialog);
                     if (script) {
-                        script.each(function() { eval($(this).text()) });
+                        //script.each(function() { eval($(this).text()) });
                     }
                 }
 

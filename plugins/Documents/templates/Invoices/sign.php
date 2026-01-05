@@ -110,22 +110,15 @@ $document_preview = [
                 ],
             ],
         ],
-        'preview' => $this->getRequest()->is('ajax') ? null : sprintf('<br /><iframe id="invoice-view" src="%s"></iframe>', $action),
     ],
 ];
 
 echo $this->Lil->panels($document_preview, 'Documents.Invoices.sign');
 
-$this->Html->script('/Documents/js/hwcrypto-legacy.js', ['block' => 'script']);
-$this->Html->script('/Documents/js/hwcrypto.js', ['block' => 'script']);
-$this->Html->script('/Documents/js/hex2base.js', ['block' => 'script']);
-
-if (!$this->getRequest()->is('ajax')) {
-    ?>
+?>
 <script type="text/javascript">
-    const SERVICE_URL = 'http://localhost:8082';
-
-    let certificates = [];
+    var SERVICE_URL = 'http://localhost:8082';
+    var certificates = [];
 
     async function fetchCertificates() {
         // Fetch certificates from web service
@@ -215,8 +208,6 @@ if (!$this->getRequest()->is('ajax')) {
     fetchCertificates();
 
     $(document).ready(function() {
-        $("#invoice-view").height(window.innerHeight - $("#invoice-view").offset().top - 30);
-
         var signature = $("#signature").val();
         if (signature == "") {
             $("form#DocumentSign").on("submit", function(e) {
@@ -245,6 +236,3 @@ if (!$this->getRequest()->is('ajax')) {
         }
     });
 </script>
-    <?php
-}
-?>

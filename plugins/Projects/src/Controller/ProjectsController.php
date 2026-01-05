@@ -3,10 +3,11 @@ declare(strict_types=1);
 
 namespace Projects\Controller;
 
-use Cake\Http\Response;
 use Cake\Event\EventInterface;
+use Cake\Http\Response;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Hash;
+use Exception;
 use Projects\Lib\ProjectsFuncs;
 
 /**
@@ -375,58 +376,58 @@ class ProjectsController extends AppController
     {
         $this->getRequest()->allowMethod(['post']);
         $this->Authorization->skipAuthorization();
-        
+
         // Get JSON data from request body
         $rawInput = (string)$this->getRequest()->getBody();
         $data = json_decode($rawInput, true);
-        
+
         if ($data === null && json_last_error() !== JSON_ERROR_NONE) {
             // Fall back to getData() for form-encoded data
             $data = $this->getRequest()->getData();
         }
 
-        $this->log('Parsed data: ' . json_encode($data), 'debug');
-        
+        $this->log('Parsed data: ' . (string)json_encode($data), 'debug');
+
         // Validate required fields
         if (empty($data['project_id'])) {
             return $this->response
                 ->withType('application/json')
                 ->withStatus(400)
-                ->withStringBody(json_encode([
+                ->withStringBody((string)json_encode([
                     'success' => false,
                     'message' => 'Missing required fields: project_id and email',
                 ]));
         }
-        
+
         // Get and authorize project
         try {
             $project = $this->Projects->get($data['project_id']);
             $this->Authorization->authorize($project, 'edit');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return $this->response
                 ->withType('application/json')
                 ->withStatus(404)
-                ->withStringBody(json_encode([
+                ->withStringBody((string)json_encode([
                     'success' => false,
                     'message' => 'Project not found or access denied',
                 ]));
         }
-        
+
         // Create attachment for the email
         /** @var \App\Model\Table\AttachmentsTable $AttachmentsTable */
         $AttachmentsTable = TableRegistry::getTableLocator()->get('Attachments');
-        
+
         $attachment = $AttachmentsTable->newEmptyEntity();
         $attachment->model = 'Projects.Projects';
         $attachment->foreign_id = $project->id;
         $attachment->filename = $data['email']['subject'] ?? 'Email';
         $attachment->description = 'Linked email from: ' . ($data['email']['from'] ?? 'Unknown');
-        $attachment->content = json_encode($data['email']);
-        
+        //$attachment->content = (string)json_encode($data['email']);
+
         /*if ($AttachmentsTable->save($attachment)) {*/
             return $this->response
                 ->withType('application/json')
-                ->withStringBody(json_encode([
+                ->withStringBody((string)json_encode([
                     'success' => true,
                     'message' => 'Email linked successfully',
                     'attachment_id' => 'OK', // $attachment->id,
