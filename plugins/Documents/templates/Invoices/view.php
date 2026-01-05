@@ -117,6 +117,17 @@ $invoiceView = [
                 'id' => 'EmailDocument',
             ],
         ],
+        'sign' => [
+            'title' => __d('documents', 'Sign'),
+            'visible' => $document->documents_counter->active && $this->getCurrentUser()->hasRole('editor'),
+            'url' => [
+                'action' => 'sign',
+                $document->id,
+            ],
+            'params' => [
+                'id' => 'SignDocument',
+            ],
+        ],
         'export' => [
             'title' => __d('documents', 'Export'),
             'visible' => true,
@@ -632,6 +643,7 @@ echo $this->Lil->panels($invoiceView, 'Documents.Invoices.view');
         $("#EditIssuer").modalPopup({title: "<?= __d('documents', 'Edit Issuer') ?>"});
         $("#EditReceiver").modalPopup({title: "<?= __d('documents', 'Edit Receiver') ?>"});
         $("#EditBuyer").modalPopup({title: "<?= __d('documents', 'Edit Buyer') ?>"});
+        $("#SignDocument").modalPopup({title: "<?= __d('documents', 'Sign Document') ?>"});
 
         $(".AttachmentPreview").each(function() {
             $(this).modalPopup({
@@ -647,10 +659,7 @@ echo $this->Lil->panels($invoiceView, 'Documents.Invoices.view');
         });
 
         $.get("<?= Router::url(['action' => 'checkSignature', $document->id]); ?>", function(data) {
-            $("#invoice-signature .signature-status").html(data.status == "valid" ?
-                "<?= __d('documents', 'Valid Signature') ?>" : (
-                    data.status == "nosignature" ? "<?= __d('documents', 'No Signature') ?>" :
-                    "<?= __d('documents', 'Invalid Signature') ?>"));
+            $("#invoice-signature .signature-status").html(data.message);
 
             if (data.errors && data.errors.length > 0 && data.status != "nosignature") {
                 var errorHtml = ' (';

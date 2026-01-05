@@ -13,13 +13,10 @@ use Cake\ORM\TableRegistry;
 use Cake\Utility\Inflector;
 use Cake\Utility\Text;
 use Documents\Form\EmailForm;
+use Documents\Lib\DocumentsSignatureInfo;
 use Documents\Lib\DocumentsSigner;
-use DOMDocument;
-use DOMElement;
-use DOMXPath;
 use Exception;
 use InvalidArgumentException;
-use RuntimeException;
 
 /**
  * BaseDocuments Controller
@@ -587,10 +584,11 @@ class BaseDocumentsController extends AppController
         /** @var \Documents\Model\Entity\Document|\Documents\Model\Entity\Invoice $invoice */
         $checkStatus = 'unknown';
         $errors = [];
+        $signatureInfo = null;
 
         if (empty($invoice->signed)) {
             $checkStatus = 'nosignature';
-            $errors[] = DocumentsSigner::validationErrorMessage('nosignature');
+            $errors[] = DocumentsSignatureInfo::validationErrorMessage('nosignature');
         } else {
             try {
                 // Generate fresh XML from current invoice data
@@ -599,108 +597,39 @@ class BaseDocumentsController extends AppController
                 $Exporter = new $ExporterClass();
                 $currentXml = $Exporter->export('xml', [$invoice]);
 
-                // Load current XML and calculate digest
-                $currentDoc = new DOMDocument();
-                $currentDoc->loadXML($currentXml);
+                // Create signature info instance and compare with current data
+                $signatureInfo = new DocumentsSignatureInfo($invoice->signed);
+                $validationResult = $signatureInfo->compareWithCurrent(
+                    $currentXml,
+                    $invoice->dat_sign ?? null,
+                );
 
-                $xpath = new DOMXPath($currentDoc);
-                $queryResult = $xpath->query('//*[@Id="data"]');
-                if ($queryResult === false) {
-                    throw new RuntimeException(DocumentsSigner::validationErrorMessage('data_element_not_found'));
-                }
-                $dataNode = $queryResult->item(0);
-
-                if (!($dataNode instanceof DOMElement)) {
-                    throw new RuntimeException(DocumentsSigner::validationErrorMessage('data_element_not_found'));
-                }
-
-                $currentDataDigest = base64_encode(hash('sha1', $dataNode->C14N(), true));
-
-                // Load signed XML and extract stored digest
-                $signedDoc = new DOMDocument();
-                $signedDoc->preserveWhiteSpace = false;
-                $loaded = $signedDoc->loadXML($invoice->signed);
-                if (!$loaded) {
-                    throw new RuntimeException(DocumentsSigner::validationErrorMessage('signed_xml_parse_failed'));
-                }
-
-                // Use getElementsByTagNameNS for namespace-aware element retrieval
-                $digestValues = $signedDoc->getElementsByTagNameNS('http://www.w3.org/2000/09/xmldsig#', 'DigestValue');
-
-                // Find the one belonging to the #data reference
-                $signedDataDigest = null;
-                for ($i = 0; $i < $digestValues->length; $i++) {
-                    $digestNode = $digestValues->item($i);
-                    if (!($digestNode instanceof DOMElement)) {
-                        continue;
-                    }
-                    $refNode = $digestNode->parentNode; // Should be ds:Reference
-                    if (
-                        $refNode instanceof DOMElement &&
-                        $refNode->hasAttribute('URI') &&
-                        $refNode->getAttribute('URI') === '#data'
-                    ) {
-                        $signedDataDigest = trim($digestNode->nodeValue ?? '');
-                        break;
-                    }
-                }
-
-                if ($signedDataDigest === null) {
-                    throw new RuntimeException(DocumentsSigner::validationErrorMessage('signed_digest_not_found'));
-                }
-
-                // Compare digests - if different, invoice data was modified after signing
-                if ($currentDataDigest !== $signedDataDigest) {
-                    $checkStatus = 'invaliddigest';
-                    $errors[] = DocumentsSigner::validationErrorMessage('data_modified', [
-                        'current' => $currentDataDigest,
-                        'signed' => $signedDataDigest,
-                    ]);
-                } else {
-                    // Validate that dat_sign matches SigningTime in signed XML
-                    $signingTimeNodes = $signedDoc->getElementsByTagNameNS(
-                        'http://uri.etsi.org/01903/v1.1.1#',
-                        'SigningTime',
-                    );
-                    if ($signingTimeNodes->length > 0) {
-                        $signingTimeNode = $signingTimeNodes->item(0);
-                        $signingTimeXml = $signingTimeNode instanceof DOMElement ?
-                            trim($signingTimeNode->nodeValue ?? '') : '';
-                        $datSignDb = isset($invoice->dat_sign) && $invoice->dat_sign ?
-                            $invoice->dat_sign->format('c') : null;
-
-                        if ($datSignDb !== $signingTimeXml) {
-                            if ($checkStatus === 'unknown') {
-                                $checkStatus = 'invalidmetadata';
-                            }
-                            $errors[] = DocumentsSigner::validationErrorMessage('signing_time_mismatch', [
-                                'database' => $datSignDb ?? 'null',
-                                'xml' => $signingTimeXml,
-                            ]);
-                        }
-                    }
-
-                    // Data matches, now validate the signature itself
-                    $signer = DocumentsSigner::fromXml($invoice->signed);
-                    // Skip data validation since we already validated it above
-                    $validationResult = $signer->validateSignature(skipDataValidation: true);
-                    if ($checkStatus === 'unknown') {
-                        $checkStatus = $validationResult['errorCode'];
-                    }
-                    $errors = array_merge($errors, $validationResult['errors']);
-                }
+                $checkStatus = $validationResult['errorCode'];
+                $errors = $validationResult['errors'];
             } catch (Exception $e) {
                 $checkStatus = 'error';
                 $errors = [$e->getMessage()];
             }
         }
 
+        $result = [
+            'status' => $checkStatus,
+            'errors' => $errors,
+        ];
+
+        // Add signature info if validation was successful
+        if ($checkStatus === 'valid' && $signatureInfo !== null) {
+            $result['signatureInfo'] = [
+                'signatureDate' => $signatureInfo->getSignatureDate(),
+                'certificate' => $signatureInfo->getCertificateInfo(),
+            ];
+        }
+
+        $result['message'] = DocumentsSignatureInfo::signatureStatusMessage($result);
+
         $response = $this->getResponse()
             ->withType('application/json')
-            ->withStringBody((string)json_encode([
-                'status' => $checkStatus,
-                'errors' => $errors,
-            ]));
+            ->withStringBody((string)json_encode($result));
 
         return $response;
     }

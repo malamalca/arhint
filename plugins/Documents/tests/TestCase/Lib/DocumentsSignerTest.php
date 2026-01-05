@@ -5,6 +5,7 @@ namespace Documents\Test\TestCase\Lib;
 
 use Cake\I18n\DateTime;
 use Cake\TestSuite\TestCase;
+use Documents\Lib\DocumentsSignatureInfo;
 use Documents\Lib\DocumentsSigner;
 use DOMDocument;
 use InvalidArgumentException;
@@ -142,7 +143,8 @@ class DocumentsSignerTest extends TestCase
         $this->assertStringContainsString($signature, $signedXml, 'Signed XML should contain the signature');
 
         // Validate the signature immediately (before saving/reloading)
-        $validationResult = $signer->validateSignature();
+        $signatureInfo = new DocumentsSignatureInfo($signedXml);
+        $validationResult = $signatureInfo->validateSignature();
         $this->assertIsArray($validationResult, 'Validation result should be an array');
         $this->assertArrayHasKey('valid', $validationResult, 'Validation result should have "valid" key');
 
@@ -184,8 +186,9 @@ class DocumentsSignerTest extends TestCase
         $this->assertNotEmpty($xml, 'Should be able to get XML from instance');
         $this->assertStringContainsString('<ds:Signature', $xml, 'XML should contain signature');
 
-        // Test that validation works
-        $validationResult = $signer->validateSignature();
+        // Test that validation works using DocumentsSignatureInfo
+        $signatureInfo = new DocumentsSignatureInfo($xml);
+        $validationResult = $signatureInfo->validateSignature();
         $this->assertIsArray($validationResult, 'Validation result should be an array');
         $this->assertArrayHasKey('valid', $validationResult, 'Should have valid key');
         $this->assertArrayHasKey('errors', $validationResult, 'Should have errors key');
