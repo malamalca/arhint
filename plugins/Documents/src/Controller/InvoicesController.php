@@ -205,7 +205,7 @@ class InvoicesController extends BaseDocumentsController
     public function view(?string $id = null)
     {
         $containTables = [
-            'Issuers', 'Buyers', 'Receivers', 'Logs' => ['Users'], 
+            'Issuers', 'Buyers', 'Receivers', 'Logs' => ['Users'],
             'DocumentsCounters', 'InvoicesItems', 'InvoicesTaxes', 'Attachments',
         ];
         if (Plugin::isLoaded('Projects')) {
