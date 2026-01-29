@@ -265,7 +265,12 @@ if (!empty($links)) {
 }
 
 if (!empty($document->descript)) {
-    $invoiceView['panels']['text_data'] = sprintf('<div id="invoice-descript-preview">%s</div>', $document->descript);
+    $descriptContent = $document->descript;
+    // Extract body content if full HTML document
+    if (preg_match('/<body[^>]*>(.*?)<\/body>/is', $descriptContent, $matches)) {
+        $descriptContent = $matches[1];
+    }
+    $invoiceView['panels']['text_data'] = sprintf('<div id="invoice-descript-preview">%s</div>', $descriptContent);
 }
 
 echo $this->Lil->panels($invoiceView, 'Documents.Documents.view');

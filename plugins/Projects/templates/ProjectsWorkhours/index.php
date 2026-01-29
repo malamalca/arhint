@@ -123,12 +123,15 @@ $tableIndex = [
                 ]),
             ) .
             '</div>',
-        'filter' => '<div id="tasks-filter"><ul>' .
+        'form_start' => $this->Form->create(null, ['type' => 'post', 'url' => ['action' => 'bulk']]),
+        'from_redirect' => $this->Form->hidden('redirect', ['value' => Router::url(null, true)]),
+        'filter' => '<div id="tasks-filter">' .
+            '<div class="checkbox"><input type="checkbox" id="select-all-tasks" /></div>' .
+            '<ul id="tasks-filters">' .
             sprintf('<li><a href="#" class="btn text dropdown-trigger-costum" data-target="dropdown-users">%s &#128899;</a></li>', __d('projects', 'User')) .
             sprintf('<li><a href="#" class="btn text dropdown-trigger-costum" data-target="dropdown-projects">%s &#128899;</a></li>', __d('projects', 'Project')) .
             sprintf('<li><a href="#" class="btn text dropdown-trigger-costum" data-target="dropdown-sort"><i class="material-icons">sort</i>%s &#128899;</a></li>', h(__d('projects', 'Newest'))) .
             '</ul>' .
-            '<div class="checkbox"><input type="checkbox" id="select-all-tasks" /></div>' .
             '<div id="tasks-counters">' .
                 $this->Html->link(
                     h(__d('projects', 'Open')) . sprintf('<span class="badge">%d</span></a>', $workhourCount['open']),
@@ -141,11 +144,26 @@ $tableIndex = [
                     ['class' => 'btn text' . ($filter->check('status', 'closed') ? ' active' : ''), 'escape' => false],
                 ) .
             '</div>' .
+            '<div id="tasks-actions" style="display:none;">' .
+                $this->Form->button(__d('projects', 'Delete Selected'), [
+                    'type' => 'submit',
+                    'name' => 'action',
+                    'value' => 'delete',
+                    'confirm' => __d('projects', 'Are you sure you want to delete the selected workhours? This action cannot be undone.'),
+                ]) .
+                $this->Form->button(__d('projects', 'Approve Selected'), [
+                    'type' => 'submit',
+                    'name' => 'action',
+                    'value' => 'approve',
+                    'confirm' => __d('projects', 'Are you sure you want to approve all selected workhours?'),
+                ]) .
+            '</div>' .
             '</div>',
         'tasks' => [
             'params' => ['id' => 'tasks-list'],
             'lines' => [],
         ],
+        'form_end' => $this->Form->end(),
         'footer' => [
             'params' => ['id' => 'tasks-footer'],
             'lines' => [
@@ -214,15 +232,38 @@ echo $this->Lil->panels($tableIndex, 'Projects.ProjectsWorkhours.index');
             }
         });
 
+        function updateTasksActionsVisibility() {
+            var anyChecked = false;
+            var allChecked = true;
+            $("div.task-row div.checkbox input").each(function() {
+                anyChecked = anyChecked || $(this).prop("checked");
+                allChecked = allChecked && $(this).prop("checked");
+            });
+            
+            $("#select-all-tasks").prop("checked", allChecked);
+            if (!allChecked && anyChecked) {
+                $("#select-all-tasks").addClass("somechecked");
+            } else {
+                $("#select-all-tasks").removeClass("somechecked");
+            }
+
+            if (anyChecked) {
+                $("#tasks-actions").show();
+                $("#tasks-filters").hide();
+                $("#tasks-counters").hide();
+            } else {
+                $("#tasks-actions").hide();
+                $("#tasks-filters").show();
+                $("#tasks-counters").show();
+            }
+        }
+
         $("#select-all-tasks").on("change", function(e) {
             $("div.task-row div.checkbox input").prop("checked", $(this).prop("checked"));
-            allTasksChecked = true;
+            updateTasksActionsVisibility();
         });
         $("div.task-row div.checkbox input").on("change", function(e) {
-            if (allTasksChecked) {
-                $("#select-all-tasks").prop("checked", false);
-            }
-            allTasksChecked = false;
+            updateTasksActionsVisibility();
         });
     });
 </script>

@@ -79,9 +79,12 @@ div#tasks-index {
     }
 
     div#tasks-filter {
+        position: relative;
         background-color: #f0f0f0;
         margin-top: 1rem;
         border: solid 1px #ccc;
+
+        height: 4rem;
         
         border-top-left-radius: 4px;
         border-top-right-radius: 4px;
@@ -134,6 +137,28 @@ div#tasks-index {
                 pointer-events: unset;
                 width: 16px;
                 height: 16px;
+                &.somechecked  {
+                    &:before {
+                        content: '\2013';
+                        display: inline-block;
+                        font-weight: bolder;
+                        color: #4441ff;
+                        margin-left: 5px;
+                    }
+                }
+            }
+        }
+
+        div#tasks-actions {
+            position: absolute;
+            top: -0.5rem;
+            right: 0;
+            margin-right: 1rem;
+            button {
+                @extend .btn-small;
+                padding-left: 0.5rem !important;
+                padding-right: 0.5rem !important;
+                margin-left: 0.5rem;
             }
         }
 
@@ -172,6 +197,7 @@ div#tasks-index {
                 width: 2rem;
                 text-align: center;
                 padding-top: 0.3rem;
+
                 input {
                     opacity: unset;
                     position: unset;
@@ -188,8 +214,12 @@ div#tasks-index {
                 padding-top: 0.2rem;
                 text-align: center;
 
+                i {
+                    font-size: 1.5rem;
+                }
+
                 img {
-                    width: 20px;
+                    width: 16px;
                     &.opened {
                         filter: brightness(0) saturate(100%) invert(20%) sepia(92%) saturate(4191%) hue-rotate(143deg) brightness(90%) contrast(80%);
                     }

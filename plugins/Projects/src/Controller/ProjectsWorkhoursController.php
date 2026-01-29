@@ -33,6 +33,8 @@ class ProjectsWorkhoursController extends AppController
         if ($this->getRequest()->getParam('action') == 'import') {
             $this->FormProtection->setConfig('validate', false);
         }
+
+        $this->FormProtection->setConfig('unlockedActions', ['bulk']);
     }
 
     /**
@@ -265,5 +267,62 @@ class ProjectsWorkhoursController extends AppController
         }
 
         return $this->getResponse();
+    }
+
+    /**
+     * Bulk action method
+     *
+     * @return \Cake\Http\Response|null
+     */
+    public function bulk(): ?Response
+    {
+        $this->getRequest()->allowMethod(['post']);
+
+        $action = $this->getRequest()->getData('action');
+        $ids = (array)$this->getRequest()->getData('ids');
+
+        if (!in_array($action, ['delete', 'approve']) || empty($ids)) {
+            $this->Authrorization->skipAuthorization();
+            $this->Flash->error(__d('projects', 'Invalid bulk action or no idsselected.'));
+
+            return $this->redirect($this->getRequest()->getData('redirect') ?? ['action' => 'index']);
+        }
+
+        $bulkCount = 0;
+        switch ($action) {
+            case 'delete':
+                $workhours = $this->ProjectsWorkhours->find()
+                    ->where(['id IN' => $ids])
+                    ->all();
+
+                foreach ($workhours as $workhour) {
+                    $this->Authorization->authorize($workhour, 'delete');
+                    if ($this->ProjectsWorkhours->delete($workhour)) {
+                        $bulkCount++;
+                    }
+                }
+                break;
+            case 'approve':
+                $workhours = $this->ProjectsWorkhours->find()
+                    ->where(['id IN' => $ids, 'dat_confirmed IS' => null])
+                    ->all();
+
+                foreach ($workhours as $workhour) {
+                    $this->Authorization->authorize($workhour, 'edit');
+                    $workhour->dat_confirmed = DateTime::now();
+                    if ($this->ProjectsWorkhours->save($workhour)) {
+                        $bulkCount++;
+                    }
+                }
+                break;
+        }
+
+        if ($bulkCount > 0) {
+            $this->Flash->success(__d('projects', '{0} workhours have been modified or deleted.', $bulkCount));
+        } else {
+            $this->Flash->error(__d('projects', 'No workhours have been updated. Please, try again.'));
+        }
+
+        return $this->redirect($this->getRequest()->getData('redirect') ?? ['action' => 'index']);
     }
 }

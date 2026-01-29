@@ -7,8 +7,8 @@ use Projects\Lib\ProjectsFuncs;
 ?>
 
 <div class="task-row">
-    <div class="checkbox"><input type="checkbox" /></div>
-    <div class="status"><?= empty($workhour->dat_confirmed) ? '&nbsp;' : '<i class="material-icons small red-text text-lighten-2">beenhere</i>' ?></div>
+    <div class="checkbox"><?= $this->Form->checkbox('ids[]', ['value' => $workhour->id, 'hiddenField' => false]); ?></div>
+    <div class="status"><?= empty($workhour->dat_confirmed) ? '&nbsp;' : '<i class="material-icons red-text text-lighten-2">beenhere</i>' ?></div>
     <div class="title"><?= h($workhour->descript) ?></div>
     <div class="details">
     <?php
