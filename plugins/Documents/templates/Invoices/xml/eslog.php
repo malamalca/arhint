@@ -132,7 +132,6 @@
             ];
         }
 
-        $clientIndex = 1;
         foreach ([$invoice->buyer, $invoice->issuer, $invoice->receiver] as $client) {
             if ($client) {
                 $clientData = [
@@ -167,8 +166,7 @@
                 ],
                 ];
 
-                $transformed['IzdaniRacunEnostavni']['Racun'][$i]['PodatkiPodjetja'][$clientIndex] = $clientData;
-                $clientIndex++;
+                $transformed['IzdaniRacunEnostavni']['Racun'][$i]['PodatkiPodjetja'][] = $clientData;
             }
         }
 

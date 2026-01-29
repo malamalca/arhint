@@ -282,8 +282,8 @@ class ProjectsWorkhoursController extends AppController
         $ids = (array)$this->getRequest()->getData('ids');
 
         if (!in_array($action, ['delete', 'approve']) || empty($ids)) {
-            $this->Authrorization->skipAuthorization();
-            $this->Flash->error(__d('projects', 'Invalid bulk action or no idsselected.'));
+            $this->Authorization->skipAuthorization();
+            $this->Flash->error(__d('projects', 'Invalid bulk action or no ids selected.'));
 
             return $this->redirect($this->getRequest()->getData('redirect') ?? ['action' => 'index']);
         }
