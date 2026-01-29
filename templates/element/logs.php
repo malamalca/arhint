@@ -15,9 +15,9 @@
                 case 'DocumentEmail':
                     echo '<div class="small" style="font-size: smaller;">' . __(
                         '{0} emailed this document to {1} with subject {2}.',
-                        '<b>' . ($log->has('user') ? h($log->user->name) : __('System')) . '</b>',
-                        '<b>' . h($log->data['to'] ?? '') . '</b>',
-                        '<b>"' . h($log->data['subject'] ?? '') . '"</b>',
+                        '<b class="nowrap">' . ($log->has('user') ? h($log->user->name) : __('System')) . '</b>',
+                        '<b class="nowrap">' . h($log->data['to'] ?? '') . '</b>',
+                        '<b class="nowrap">"' . h($log->data['subject'] ?? '') . '"</b>',
                     ) . '</div>';
                     break;
                 default:

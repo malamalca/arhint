@@ -551,6 +551,16 @@ if (!empty($document->attachments)) {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
+// LOGS
+if (!empty($document->logs)) {
+    $invoiceView['panels']['logs_title'] = sprintf('<h3>%s</h3>', __d('documents', 'Logs'));
+    $invoiceView['panels']['logs'] = $this->element('logs', [
+        'logs' => $document->logs,
+        'redirectUrl' => Router::url(null, true),
+    ]);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////
 // LINKS
 if (!empty($links)) {
     $invoiceView['panels']['links_title'] = sprintf('<h3>%s</h3>', __d('documents', 'Linked Documents'));

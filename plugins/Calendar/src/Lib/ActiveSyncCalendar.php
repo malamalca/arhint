@@ -411,7 +411,7 @@ class ActiveSyncCalendar implements Syncroton_Data_IData
 
         $ids = array_keys($query->toArray());
 
-        Log::write('debug', 'Get changed entries: ' . print_r($ids, true));
+        //Log::write('debug', 'Get changed entries: ' . print_r($ids, true));
 
         return $ids;
     }

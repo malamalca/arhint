@@ -514,7 +514,7 @@ class LilHelper extends Helper
             $maxlines = $width['maxlines'] ?? $maxlines;
             $result = $width['result'] ?? $result;
             $prefix = $width['prefix'] ?? $prefix;
-            $startWith = $width['startWith'] ?? $startWith;
+            $startWith = $width['startwith'] ?? $startWith;
             $break = $width['break'] ?? $break;
             $cut = $width['cut'] ?? $cut;
             $width = $width['width'] ?? $width;

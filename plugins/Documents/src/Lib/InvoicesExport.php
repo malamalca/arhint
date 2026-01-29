@@ -285,6 +285,7 @@ class InvoicesExport
         if (!empty($eventResult)) {
             $result = $eventResult;
         }
+        file_put_contents(TMP . 'export_debug.html', $result);
 
         return $result;
     }

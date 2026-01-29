@@ -273,7 +273,7 @@ echo $this->Html->script('/Documents/js/invoiceEditClient');
 echo $this->Html->script('/Documents/js/tinymce/tinymce.min.js');
 echo $this->Html->css('/Crm/css/crm');
 
-echo $this->Lil->form($documentEdit, 'Documents.Invoices.edit');
+echo $this->Lil->form($documentEdit, 'Documents.Documents.edit');
 ?>
 
 
