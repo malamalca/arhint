@@ -5,11 +5,9 @@ namespace Documents\Lib;
 
 use Cake\ORM\TableRegistry;
 use KrivArt\QrCode\Ecl;
-use KrivArt\QrCode\Output\Png;
+use KrivArt\QrCode\Output\Gif;
 use KrivArt\QrCode\QrCode;
 use KrivArt\QrCode\QrSegment;
-//use chillerlan\QRCode\QRCode;
-//use chillerlan\QRCode\QROptions;
 
 class DocumentsUpnQr
 {
@@ -85,7 +83,7 @@ class DocumentsUpnQr
             false, // boost ecc
         );
 
-        $qrPng = new Png($finalQr); // default 512x512
+        $qrPng = new Gif($finalQr, 77, 77, 0); // default 512x512
 
         ob_start();
         $qrPng->output();

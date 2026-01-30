@@ -1,6 +1,7 @@
 <?php
     use Cake\Core\Configure;
     use Cake\Utility\Xml;
+    use Documents\Lib\DocumentsUpnQr;
 
     $transformed = ['IzdaniRacunEnostavni' => [
         'xmlns:ds' => 'http://www.w3.org/2000/09/xmldsig#',
@@ -9,8 +10,6 @@
         '@xsi:noNamespaceSchemaLocation' => 'http://www.gzs.si/e-poslovanje/sheme/eSLOG_1-6_EnostavniRacun.xsd',
     ]];
 
-    // find bank name for current users' company
-    $banks = Configure::read('Documents.banks');
     $docTypes = Configure::read('Documents.documentTypes');
 
     $i = 0;
@@ -461,6 +460,16 @@
 
             $transformed['IzdaniRacunEnostavni']['Racun'][$i]['PoljubnoBesedilo'][$dodatniTextIndex]['Besedilo']['Tekst' . $ln_cnt] = $d_line . ' ';
             $ln_cnt++;
+        }
+
+        // upnqr
+        $imageData = DocumentsUpnQr::generateUpnQr($invoice->id);
+        if ($imageData) {
+            $transformed['IzdaniRacunEnostavni']['Racun'][$i]['PoljubnoBesediloRazsirjeno'][] = [
+                'VrstaBesedila' => 'AAI',
+                'ImeBesedila' => 'UPNQR',
+                'VrednostBesedila' => 'data:image/gif;base64,' . base64_encode($imageData),
+            ];
         }
     }
 

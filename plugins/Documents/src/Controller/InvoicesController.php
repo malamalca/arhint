@@ -282,7 +282,7 @@ class InvoicesController extends BaseDocumentsController
 
         $response = $this->response;
         $response = $response->withStringBody($imageData);
-        $response = $response->withType('png');
+        $response = $response->withType('gif');
 
         return $response;
     }
