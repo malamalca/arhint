@@ -9,7 +9,6 @@ use Cake\Http\Response;
 use Cake\Http\ServerRequest;
 use Cake\ORM\TableRegistry;
 use Cake\Routing\Router;
-use Documents\Lib\DocumentsUpnQr;
 use Documents\Lib\InvoicesExport;
 use Documents\Lib\InvoicesExportEracuni;
 use DOMDocument;
@@ -267,28 +266,7 @@ class InvoicesController extends BaseDocumentsController
     }
 
     /**
-     * Upnqr method
-     *
-     * @param string $id Document id.
-     * @return \Cake\Http\Response|null
-     * @throws \Cake\Http\Exception\NotFoundException When record not found.
-     */
-    public function upnqr(string $id)
-    {
-        $invoice = $this->Invoices->get($id);
-        $this->Authorization->authorize($invoice, 'view');
-
-        $imageData = DocumentsUpnQr::generateUpnQr($id);
-
-        $response = $this->response;
-        $response = $response->withStringBody($imageData);
-        $response = $response->withType('gif');
-
-        return $response;
-    }
-
-    /**
-     * Upnqr method
+     * Validate method
      *
      * @param string|null $id Document id.
      * @param string $kind XML kind as of eslog20, eslog, sepa,..

@@ -465,10 +465,13 @@
         // upnqr
         $imageData = DocumentsUpnQr::generateUpnQr($invoice->id);
         if ($imageData) {
+            $base64String = 'data:image/gif;base64,' . base64_encode($imageData);
             $transformed['IzdaniRacunEnostavni']['Racun'][$i]['PoljubnoBesediloRazsirjeno'][] = [
                 'VrstaBesedila' => 'AAI',
                 'ImeBesedila' => 'UPNQR',
-                'VrednostBesedila' => 'data:image/gif;base64,' . base64_encode($imageData),
+                'VrednostBesedila' => [
+                    'Tekst' => str_split($base64String, 70),
+                ],
             ];
         }
     }

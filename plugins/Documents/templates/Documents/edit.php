@@ -339,7 +339,7 @@ echo $this->Lil->form($documentEdit, 'Documents.Documents.edit');
             menubar:false,
             statusbar: false,
             convert_urls: false,
-            toolbar: 'undo redo | styleselect | bold italic underline subscript superscript | bullist numlist | indent outdent | pagebreak | pasteword table image | code',
+            toolbar: 'undo redo | styleselect | bold italic underline subscript superscript | bullist numlist | indent outdent | pagebreak | pasteword table image',
             plugins: "autoresize table paste pagebreak image",
             table_toolbar: "tablecellprops | tableprops tabledelete | tableinsertrowbefore tableinsertrowafter tabledeleterow | tableinsertcolbefore tableinsertcolafter tabledeletecol",
             paste_auto_cleanup_on_paste : true,

@@ -82,7 +82,7 @@ jQuery.fn.InvoiceEditClient = function (options) {
 
     this.toggleSameBuyerIssuer = function () {
         $("#buyer-wrapper", $this).toggle();
-        if ($("#buyer-wrapper").is(":hidden")) {
+        if ($("#buyer-wrapper", $this).is(":hidden")) {
             var receiver = $this.collectClientData("receiver");
             $this.fillClientData("buyer", receiver);
         }
@@ -159,6 +159,9 @@ jQuery.fn.InvoiceEditClient = function (options) {
             processSubmit: true,
             onJson: function(client) {
                 $this.fillClientData(target, client);
+                if ($("#buyer-wrapper", $this).is(":hidden")) {
+                    $this.fillClientData("buyer", client);
+                }
                 $('#image-' + target + '-checked', $this).show();
             }
         });
@@ -168,6 +171,9 @@ jQuery.fn.InvoiceEditClient = function (options) {
             processSubmit: true,
             onJson: function(client) {
                 $this.fillClientData(target, client);
+                if ($("#buyer-wrapper", $this).is(":hidden")) {
+                    $this.fillClientData("buyer", client);
+                }
                 $('#image-' + target + '-checked', $this).show();
             }
         });
