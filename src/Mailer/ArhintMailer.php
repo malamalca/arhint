@@ -65,8 +65,11 @@ class ArhintMailer extends Mailer
 
             $this->viewBuilder()
                 ->setClassName('Tmp')
-                ->setTemplate('default')
                 ->setLayout(basename($uniqueFile, '.php'));
+            
+            if (!$this->viewBuilder()->getTemplate()) {
+                $this->viewBuilder()->setTemplate('default');
+            }
         }
 
         $companyLogoFilePath = dirname(APP) . DS . 'uploads' . DS . 'Contacts' . DS;

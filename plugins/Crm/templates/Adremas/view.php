@@ -179,7 +179,7 @@ switch ($activeTab) {
                 $adrema->attachments ?? [],
                 'Adrema',
                 $adrema->id,
-                ['redirectUrl' => Router::url(null, true)],
+                ['redirectUrl' => Router::url(null, true), 'showAddButton' => true],
             )['table']),
         ];
 

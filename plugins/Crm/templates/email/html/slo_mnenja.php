@@ -1,7 +1,6 @@
 Spoštovani,
 
 prosim za izdajo mnenja za gradnjo objekta po dokumentaciji v priponki.<br />
-<br />
 <?php
     if ($address->descript) {
         $data = json_decode($address->descript, true);
@@ -12,6 +11,5 @@ prosim za izdajo mnenja za gradnjo objekta po dokumentaciji v priponki.<br />
 ?>
 <br />
 S spoštovanjem,<br />
-<br />
 <br />
 <?= $user->name ?><br />

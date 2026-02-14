@@ -1,6 +1,7 @@
 <?php
 use Cake\Core\Configure;
 use Cake\Routing\Router;
+use Cake\Utility\Inflector;
 
 $editAddressForm = [
     'title_for_layout' => $address->id ? __d('crm', 'Edit Address') : __d('crm', 'Add Address'),
@@ -105,6 +106,7 @@ $editAddressForm = [
 $additionalFields = Configure::read(implode('.', ['Crm', $adrema->kind, $adrema->kind_type, 'address']));
 if (!empty($additionalFields)) {
     foreach ($additionalFields as $fieldName => $fieldConfig) {
+        $additionalFields[$fieldName]['parameters']['options']['label'] = Inflector::humanize($fieldName) . ':';
         if (isset($address->user_data[$fieldName])) {
             $additionalFields[$fieldName]['parameters']['options']['default'] = $address->user_data[$fieldName];
         }

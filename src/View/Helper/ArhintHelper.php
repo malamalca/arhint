@@ -481,7 +481,18 @@ class ArhintHelper extends Helper
                 __('Attachment Preview'),
             ));
         } else {
-            $attachmentsTable['lines'][] = __('No attachments found.');
+            $attachmentsTable = ['table' => [
+                'parameters' => ['id' => 'AttachmentsList'],
+                'head' => ['rows' => [['columns' => [
+                    __('Filename'),
+                    __('Size'),
+                    '&nbsp;',
+                ]]]],
+                'body' => ['rows' => [['columns' => [0 => [
+                    'params' => ['colspan' => 3, 'class' => 'centered'],
+                    'html' => __('No attachments found.'),
+                ]]]]],
+            ]];
         }
 
         if ($_options['showAddButton']) {
@@ -497,11 +508,7 @@ class ArhintHelper extends Helper
                 ['class' => 'btn-small filled', 'id' => 'AddAttachmentButton'],
             );
 
-            if ($attachments->count() > 0) {
-                $attachmentsTable['table']['post'] = sprintf('<p>%s</p>', $addButton);
-            } else {
-                $attachmentsTable['lines'][] = sprintf('<p>%s</p>', $addButton);
-            }
+            $attachmentsTable['table']['post'] = sprintf('<p>%s</p>', $addButton);
 
             $this->Lil->jsReady(
                 '$("#AddAttachmentButton").modalPopup({' .
