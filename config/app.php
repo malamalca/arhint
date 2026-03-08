@@ -217,7 +217,9 @@ return [
         'skipLog' => [],
         'log' => true,
         'trace' => true,
-        'ignoredDeprecationPaths' => [],
+        'ignoredDeprecationPaths' => [
+            'vendor/cakephp/migrations/src/Shim/MigrationAdapter.php',
+        ],
     ],
 
     /*
