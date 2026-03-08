@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Lib\LilPdfProcessor;
 use Cake\Core\Configure;
 use Cake\Event\EventInterface;
 use Cake\Http\Exception\BadRequestException;
@@ -11,9 +12,6 @@ use Cake\I18n\Date;
 use Cake\I18n\DateTime;
 use ddn\sapp\PDFDoc;
 use Exception;
-use RecursiveDirectoryIterator;
-use RecursiveIteratorIterator;
-use RegexIterator;
 use ZipArchive;
 
 /**
@@ -45,47 +43,26 @@ class UtilsController extends AppController
 
         if ($this->getRequest()->is(['patch', 'post', 'put'])) {
             $compression = $this->getRequest()->getData('compression', 'default');
-            $gsProgram = Configure::read('Ghostscript.executable');
-            $gsParams = '-dBATCH -dNOPAUSE -sDEVICE=pdfwrite -dPDFSETTINGS=/' . $compression . ' ' .
-                '-sOutputFile=%2$s %1$s';
+            $pdfa = (bool)$this->getRequest()->getData('pdfa', false);
+            $outputPdfFilename = $this->getRequest()->getData('filename', 'merged.pdf');
 
-            if ($this->getRequest()->getData('pdfa')) {
-                // slightly different parameters
-                $gsParams = '-dPDFA -dNOPAUSE -sDEVICE=pdfwrite -dPDFSETTINGS=/' . $compression . ' ' .
-                    '-sColorConversionStrategy=UseDeviceIndependentColor -dPDFACompatibilityPolicy=2 ' .
-                    '-sOutputFile=%2$s %1$s';
-            }
-
-            $files = $this->getRequest()->getData('file');
-
-            $sourcePDF = [];
-            foreach ($files as $file) {
+            $pdfProcessor = new LilPdfProcessor();
+            foreach ($this->getRequest()->getData('file') as $file) {
                 if (!empty($file) && empty($file->getError())) {
-                    $sourcePDF[] = escapeshellarg($file->getStream()->getMetadata('uri'));
+                    $pdfProcessor->addFile($file->getStream()->getMetadata('uri'));
                 }
             }
 
-            $outputPDF = $this->getRequest()->getData('filename');
-
-            $command = escapeshellarg($gsProgram) . ' ' . $gsParams;
-            $command = sprintf($command, implode(' ', $sourcePDF), escapeshellarg(TMP . $outputPDF));
-
-            exec($command);
-
-            $encodedPdf = json_encode(['filename' => $outputPDF]);
-            if (!$encodedPdf) {
-                throw new BadRequestException('Error processing pdf files.');
-            }
-
-            //if ($ret) {
+            try {
+                $outputFilePath = $pdfProcessor->mergeFiles($outputPdfFilename, $compression, $pdfa);
                 $response = $this->getResponse()
                     ->withType('application/json')
-                    ->withStringBody($encodedPdf);
+                    ->withStringBody((string)json_encode(['filename' => basename($outputFilePath)]));
 
-                    return $response;
-            //} else {
-            //    throw new BadRequestException('Error processing pdf files.');
-            //}
+                return $response;
+            } catch (Exception $e) {
+                throw new BadRequestException('Error processing pdf files: ' . $e->getMessage());
+            }
         }
 
         return null;
@@ -101,59 +78,47 @@ class UtilsController extends AppController
         $this->Authorization->skipAuthorization();
 
         if ($this->getRequest()->is(['patch', 'post', 'put'])) {
-            $gsProgram = Configure::read('Ghostscript.executable');
-            $gsParams = '-dBATCH -dNOPAUSE -sDEVICE=pdfwrite -dFirstPage=%3$s -dLastPage=%4$s -sOutputFile=%2$s %1$s';
-
             $file = $this->getRequest()->getData('file');
             if (!empty($file) && !$file->getError()) {
-                $outputPDF = $file->getClientFilename();
-
+                $clientBasename = substr($file->getClientFilename(), 0, -4);
                 $doMultiPage = (bool)$this->getRequest()->getData('multiPage');
 
-                if ($doMultiPage) {
-                    $outputPDF = substr($outputPDF, 0, -4) . '_%03d' . substr($outputPDF, -4);
-                }
-
-                $command = escapeshellarg($gsProgram) . ' ' . $gsParams;
-                $command = sprintf(
-                    $command,
-                    escapeshellarg($file->getStream()->getMetadata('uri')),
-                    escapeshellarg(TMP . $outputPDF),
-                    $this->getRequest()->getData('firstPage'),
-                    $this->getRequest()->getData('lastPage'),
+                $pdfProcessor = new LilPdfProcessor();
+                $pdfProcessor->addFile($file->getStream()->getMetadata('uri'));
+                $extractedFiles = $pdfProcessor->extractPages(
+                    (int)$this->getRequest()->getData('firstPage'),
+                    (int)$this->getRequest()->getData('lastPage'),
+                    $doMultiPage,
+                    $clientBasename,
                 );
 
-                exec($command);
+                if ($extractedFiles === false || empty($extractedFiles)) {
+                    throw new Exception('Error extracting pages from PDF.');
+                }
 
-                $downloadFile = $outputPDF;
                 if ($doMultiPage) {
-                    $downloadFile = substr($file->getClientFilename(), 0, -4) . '.zip';
+                    $downloadFile = $clientBasename . '.zip';
 
                     $zip = new ZipArchive();
-                    $res = $zip->open(TMP . $downloadFile, ZIPARCHIVE::CREATE | ZipArchive::OVERWRITE);
+                    $res = $zip->open(TMP . $downloadFile, ZipArchive::CREATE | ZipArchive::OVERWRITE);
 
                     if ($res) {
-                        $preg = '/' . preg_quote(substr($file->getClientFilename(), 0, -4)) .
-                            '_[0-9]{3}' .
-                            preg_quote(substr($file->getClientFilename(), -4)) . '/';
-
-                        $directoryIterator = new RecursiveDirectoryIterator(TMP);
-                        $iteratorIterator = new RecursiveIteratorIterator($directoryIterator);
-                        $fileList = new RegexIterator($iteratorIterator, $preg);
-                        foreach ($fileList as $pdfFilePart) {
-                            $zip->addFile($pdfFilePart->getPathname(), $pdfFilePart->getBasename());
+                        foreach ($extractedFiles as $extractedFile) {
+                            $zip->addFile($extractedFile, basename($extractedFile));
                         }
 
                         if ($zip->count() == 0) {
                             throw new Exception('No files in archive.');
                         }
                         $zip->close();
-                        foreach ($fileList as $pdfFilePart) {
-                            unlink($pdfFilePart->getPathname());
+                        foreach ($extractedFiles as $extractedFile) {
+                            unlink($extractedFile);
                         }
                     } else {
                         $downloadFile = false;
                     }
+                } else {
+                    $downloadFile = basename($extractedFiles[0]);
                 }
 
                 if (!$downloadFile || !file_exists(TMP . $downloadFile)) {
@@ -244,6 +209,22 @@ class UtilsController extends AppController
             die;
         } else {
             return (string)$imageData;
+        }
+    }
+
+    /**
+     * pdfSignClient method
+     *
+     * @param string $filename Filename to sign
+     * @return void
+     */
+    public function pdfSignClient(string $filename)
+    {
+        $this->Authorization->skipAuthorization();
+
+        $filePath = TMP . 'sign' . DS . $filename . '.pdf';
+        if (!file_exists($filePath)) {
+            throw new BadRequestException('File does not exist.');
         }
     }
 

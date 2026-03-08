@@ -50,6 +50,7 @@
                         'type' => 'file',
                         'id' => 'upload-file',
                         'accept' => 'application/pdf',
+                        'multiple' => true,
                     ]],
                 ],
                 'area' => sprintf('<div class="upload-area" id="uploadfile"><h1>%s</h1></div>', __('Drag and Drop file here<br/>Or<br/>Click to select file')),
@@ -59,7 +60,7 @@
                     'params' => ['filename', [
                         'label' => __('Filename') . ':',
                         'id' => 'filename',
-                        'default' => 'download.pdf'
+                        'default' => 'download.pdf',
                     ]],
                 ],
                 'compression' => [
@@ -154,8 +155,11 @@
             }
         });
 
-        // Open file selector on div click
-        $("#uploadfile").click(function(){
+        // Open file selector on div click (only when clicking the area itself, not thumbnails)
+        $("#uploadfile").click(function(e){
+            if ($(e.target).closest('.upload-thumbnail').length) {
+                return;
+            }
             $("#upload-file").click();
         });
 
@@ -255,6 +259,8 @@
         });
     }
 
+    var thumbnailCounter = 0;
+
     function appendItem(f) {
         if (f.name.split(".").pop().toLowerCase() != "pdf") {
             alert("<?= __('Only pdf files are allowed') ?>");
@@ -263,7 +269,8 @@
         
         $("#uploadfile h1").remove(); 
 
-        let i = $("#uploadfile div.upload-thumbnail").length + 1;
+        thumbnailCounter++;
+        let i = thumbnailCounter;
 
         let name = f.name;
         let size = convertSize(f.size);
@@ -278,6 +285,10 @@
         $("#thumbnail_" + i).append('<span class="size col s3 truncate">' + date + '<span>');
         $("#thumbnail_" + i).append('<span class="remove col s1"><button class="btn-small filled remove-item"><i class="material-icons">delete</i></button><span>');
         $("#thumbnail_" + i).data("file", f);
+
+        $("#thumbnail_" + i).on("click", function(e) {
+            e.stopPropagation();
+        });
 
         $("#thumbnail_" + i + " button.remove-item").on("click", function(e) {
             e.stopPropagation();

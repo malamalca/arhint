@@ -1,5 +1,5 @@
 <?php
-$uploadForm = [
+$signForm = [
     'title' => 'PDF Sign',
     'menu' => [
         'sign' => [
@@ -33,37 +33,6 @@ $uploadForm = [
             'form_start' => [
                 'method' => 'create',
                 'parameters' => [null, ['type' => 'file']],
-            ],
-            'file' => [
-                'method' => 'control',
-                'parameters' => ['file', [
-                    'type' => 'file',
-                    'accept' => 'application/pdf',
-                    'label' => [
-                        'text' => __('PDF') . ':',
-                        'class' => 'active',
-                    ],
-                ]],
-            ],
-            'cert' => [
-                'method' => 'control',
-                'parameters' => ['cert', [
-                    'type' => 'file',
-                    'label' => [
-                        'text' => __('Certificate') . ':',
-                        'class' => 'active',
-                    ],
-                ]],
-            ],
-            'pass' => [
-                'method' => 'control',
-                'parameters' => ['pass', [
-                    'type' => 'text',
-                    'label' => [
-                        'text' => __('Password') . ':',
-                        'class' => 'active',
-                    ],
-                ]],
             ],
             'signature' => [
                 'method' => 'control',
@@ -121,4 +90,4 @@ $uploadForm = [
     ],
 ];
 
-echo $this->Lil->form($uploadForm, 'App.Utils.PdfSign');
+echo $this->Lil->form($signForm, 'App.Utils.PdfSignClient');
