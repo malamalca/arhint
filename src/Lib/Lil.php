@@ -79,7 +79,7 @@ class Lil
                 }
             }
 
-            if ($panels[$i] == $options['before']) {
+            if (isset($panels[$i]) && $panels[$i] == $options['before']) {
                 if (isset($options['preserve']) && $options['preserve'] === false) {
                     $part1 = array_slice($dest, 0, $i, true);
 
