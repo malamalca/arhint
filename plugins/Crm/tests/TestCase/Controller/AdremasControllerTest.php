@@ -44,6 +44,22 @@ class AdremasControllerTest extends TestCase
     }
 
     /**
+     * Test index method
+     *
+     * @return void
+     */
+    public function testIndex()
+    {
+        $this->get('/crm/adremas');
+        $this->assertRedirect(); // unauthenticated → login
+
+        $this->login(USER_ADMIN);
+
+        $this->get('/crm/adremas');
+        $this->assertResponseOk();
+    }
+
+    /**
      * Test add method
      *
      * @return void
@@ -99,7 +115,33 @@ class AdremasControllerTest extends TestCase
     }
 
     /**
-     * Test adrema method
+     * Test adremaFields method
+     *
+     * @return void
+     */
+    public function testAdremaFields()
+    {
+        $this->get('/crm/adremas/adrema-fields/49a90cfe-fda4-49ca-b7ec-ca5534465431');
+        $this->assertRedirect(); // unauthenticated → login
+
+        $this->login(USER_ADMIN);
+
+        $this->get('/crm/adremas/adrema-fields/49a90cfe-fda4-49ca-b7ec-ca5534465431');
+        $this->assertResponseOk();
+
+        $this->enableCsrfToken();
+        $this->enableSecurityToken();
+
+        $data = ['title' => 'Updated Title'];
+        $this->post(
+            ['plugin' => 'Crm', 'controller' => 'Adremas', 'action' => 'adremaFields', '49a90cfe-fda4-49ca-b7ec-ca5534465431'],
+            $data,
+        );
+        $this->assertRedirectContains('/crm/adremas/view/');
+    }
+
+    /**
+     * Test view method
      *
      * @return void
      */

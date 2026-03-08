@@ -122,4 +122,55 @@ class ContactsAddressesControllerTest extends TestCase
         $this->get('/crm/ContactsAddresses/delete/49a90cfe-fda4-49ca-b7ed-ca50783b5a41');
         $this->assertRedirectContains('/crm/contacts/view/' . COMPANY_FIRST); // no trailing slash = no trailing adrema id!!!
     }
+
+    /**
+     * Test autocomplete method
+     *
+     * @return void
+     */
+    public function testAutocomplete()
+    {
+        $this->configRequest(['headers' => ['X-Requested-With' => 'XMLHttpRequest']]);
+        $this->login(USER_ADMIN);
+
+        $this->get('/crm/ContactsAddresses/autocomplete?term=Slakova');
+        $this->assertResponseOk();
+        $this->assertContentType('application/json');
+        $body = (string)$this->_response->getBody();
+        $data = json_decode($body, true);
+        $this->assertIsArray($data);
+        $this->assertNotEmpty($data);
+        $this->assertArrayHasKey('street', $data[0]);
+    }
+
+    /**
+     * Test autocompleteZipCity method
+     *
+     * @return void
+     */
+    public function testAutocompleteZipCity()
+    {
+        $this->login(USER_ADMIN);
+
+        $this->configRequest(['headers' => ['X-Requested-With' => 'XMLHttpRequest']]);
+        $this->get('/crm/ContactsAddresses/autocomplete-zip-city/zip?term=8210');
+        $this->assertResponseOk();
+        $this->assertContentType('application/json');
+        $body = (string)$this->_response->getBody();
+        $data = json_decode($body, true);
+        $this->assertIsArray($data);
+        foreach ($data as $item) {
+            $this->assertStringStartsWith('8210', (string)$item['id']);
+        }
+
+        $this->configRequest(['headers' => ['X-Requested-With' => 'XMLHttpRequest']]);
+        $this->get('/crm/ContactsAddresses/autocomplete-zip-city/city?term=Tr');
+        $this->assertResponseOk();
+        $body = (string)$this->_response->getBody();
+        $data = json_decode($body, true);
+        $this->assertIsArray($data);
+        foreach ($data as $item) {
+            $this->assertEqualsIgnoringCase('Tr', mb_substr((string)$item['label'], 0, 2));
+        }
+    }
 }
