@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Test\TestCase\Controller;
 
+use Cake\Core\Configure;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\IntegrationTestTrait;
 use Cake\TestSuite\TestCase;
@@ -56,6 +57,19 @@ class UtilsControllerTest extends TestCase
     }
 
     /**
+     * Skip the current test if Ghostscript is not installed.
+     *
+     * @return void
+     */
+    private function skipWithoutGhostscript(): void
+    {
+        $gsPath = Configure::read('Ghostscript.executable', '/usr/bin/gs');
+        if (!file_exists($gsPath)) {
+            $this->markTestSkipped('Ghostscript not available at: ' . $gsPath);
+        }
+    }
+
+    /**
      * Build a Laminas UploadedFile from a local file path.
      *
      * @param string $path Absolute path to the file
@@ -101,6 +115,7 @@ class UtilsControllerTest extends TestCase
      */
     public function testPdfMergePostNoFiles(): void
     {
+        $this->skipWithoutGhostscript();
         $this->login(USER_ADMIN);
         $this->post('/utils/pdf-merge', ['file' => []]);
         $this->assertResponseCode(400);
@@ -114,6 +129,7 @@ class UtilsControllerTest extends TestCase
      */
     public function testPdfMergePostSingleFile(): void
     {
+        $this->skipWithoutGhostscript();
         $this->login(USER_ADMIN);
         $file = $this->makeUploadedFile($this->resourcesPath . 'sample.pdf', 'sample.pdf', 'application/pdf');
 
@@ -143,6 +159,7 @@ class UtilsControllerTest extends TestCase
      */
     public function testPdfMergePostMultipleFiles(): void
     {
+        $this->skipWithoutGhostscript();
         $this->login(USER_ADMIN);
         $file1 = $this->makeUploadedFile($this->resourcesPath . 'sample.pdf', 'sample.pdf', 'application/pdf');
         $file2 = $this->makeUploadedFile($this->resourcesPath . 'sample.pdf', 'sample.pdf', 'application/pdf');
@@ -171,6 +188,7 @@ class UtilsControllerTest extends TestCase
      */
     public function testPdfMergePostInvalidCompression(): void
     {
+        $this->skipWithoutGhostscript();
         $this->login(USER_ADMIN);
         $file = $this->makeUploadedFile($this->resourcesPath . 'sample.pdf', 'sample.pdf', 'application/pdf');
 
@@ -220,6 +238,7 @@ class UtilsControllerTest extends TestCase
      */
     public function testPdfSplicePostSinglePage(): void
     {
+        $this->skipWithoutGhostscript();
         $this->login(USER_ADMIN);
         $file = $this->makeUploadedFile($this->resourcesPath . 'sample.pdf', 'sample.pdf', 'application/pdf');
 
@@ -248,6 +267,7 @@ class UtilsControllerTest extends TestCase
      */
     public function testPdfSplicePostMultiPage(): void
     {
+        $this->skipWithoutGhostscript();
         $this->login(USER_ADMIN);
         $file = $this->makeUploadedFile($this->resourcesPath . 'sample2p.pdf', 'sample2p.pdf', 'application/pdf');
 

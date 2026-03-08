@@ -480,6 +480,6 @@ return [
     ],
 
     'Ghostscript' => [
-        'executable' => 'D:\bin\Ghostscript\gswin64c.exe',
+        'executable' => env('GHOSTSCRIPT_EXECUTABLE', '/usr/bin/gs'),
     ],
 ];

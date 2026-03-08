@@ -52,6 +52,9 @@ jobs:
     - name: Composer Install
       run: composer update
 
+    - name: Install Ghostscript
+      run: sudo apt-get install -y ghostscript
+
     - name: Execute post install cmd
       run: composer run-script post-install-cmd --no-interaction
 

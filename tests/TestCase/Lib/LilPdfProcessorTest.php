@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Test\TestCase\Lib;
 
 use App\Lib\LilPdfProcessor;
+use Cake\Core\Configure;
 use Cake\TestSuite\TestCase;
 use finfo;
 use InvalidArgumentException;
@@ -28,6 +29,10 @@ class LilPdfProcessorTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+        $gsPath = Configure::read('Ghostscript.executable', '/usr/bin/gs');
+        if (!file_exists($gsPath)) {
+            $this->markTestSkipped('Ghostscript not available at: ' . $gsPath);
+        }
         $this->LilPdfProcessor = new LilPdfProcessor();
     }
 
