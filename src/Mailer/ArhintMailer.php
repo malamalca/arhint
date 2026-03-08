@@ -66,7 +66,7 @@ class ArhintMailer extends Mailer
             $this->viewBuilder()
                 ->setClassName('Tmp')
                 ->setLayout(basename($uniqueFile, '.php'));
-            
+
             if (!$this->viewBuilder()->getTemplate()) {
                 $this->viewBuilder()->setTemplate('default');
             }
