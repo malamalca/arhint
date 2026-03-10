@@ -131,6 +131,11 @@ class CreateTravelOrders extends AbstractMigration
                 'limit' => 200,
                 'null' => true,
             ])
+            ->addColumn('vehicle_title', 'string', [
+                'default' => null,
+                'limit' => 200,
+                'null' => true,
+            ])
             ->addColumn('advance', 'decimal', [
                 'default' => null,
                 'null' => true,

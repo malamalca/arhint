@@ -15,6 +15,13 @@ use Cake\ORM\TableRegistry;
  * @property string|null $employee_id
  * @property string|null $vehicle_id
  * @property string $counter_id
+ * @property string $status
+ * @property string|null $entered_by_id
+ * @property \Cake\I18n\DateTime|null $entered_at
+ * @property string|null $approved_by_id
+ * @property \Cake\I18n\DateTime|null $approved_at
+ * @property string|null $processed_by_id
+ * @property \Cake\I18n\DateTime|null $processed_at
  * @property string|null $doc_type
  * @property string|null $tpl_header_id
  * @property string|null $tpl_body_id
@@ -41,9 +48,41 @@ use Cake\ORM\TableRegistry;
  *
  * @property \Documents\Model\Entity\DocumentsCounter $documents_counter
  * @property \Documents\Model\Entity\DocumentsClient $payer
+ * @property \App\Model\Entity\User|null $entered_by
+ * @property \App\Model\Entity\User|null $approved_by
+ * @property \App\Model\Entity\User|null $processed_by
+ * @property \Documents\Model\Entity\TravelOrdersMileage[] $travel_orders_mileages
+ * @property \Documents\Model\Entity\TravelOrdersExpense[] $travel_orders_expenses
  */
 class TravelOrder extends Entity
 {
+    /**
+     * Status constants
+     */
+    public const STATUS_DRAFT = 'draft';
+    public const STATUS_WAITING_APPROVAL = 'waiting_approval';
+    public const STATUS_DECLINED = 'declined';
+    public const STATUS_APPROVED = 'approved';
+    public const STATUS_WAITING_PROCESSING = 'waiting_processing';
+    public const STATUS_COMPLETED = 'completed';
+
+    /**
+     * Returns human-readable status labels.
+     *
+     * @return array<string, string>
+     */
+    public static function statusLabels(): array
+    {
+        return [
+            self::STATUS_DRAFT => __d('documents', 'Draft'),
+            self::STATUS_WAITING_APPROVAL => __d('documents', 'Waiting Approval'),
+            self::STATUS_DECLINED => __d('documents', 'Declined'),
+            self::STATUS_APPROVED => __d('documents', 'Approved'),
+            self::STATUS_WAITING_PROCESSING => __d('documents', 'Waiting Processing'),
+            self::STATUS_COMPLETED => __d('documents', 'Completed'),
+        ];
+    }
+
     /**
      * Fields that can be mass assigned using newEntity() or patchEntity().
      *
@@ -76,10 +115,18 @@ class TravelOrder extends Entity
         'arrival' => true,
         'vehicle_registration' => true,
         'vehicle_owner' => true,
+        'vehicle_title' => true,
         'advance' => true,
         'dat_advance' => true,
         'net_total' => true,
         'total' => true,
+        'status' => true,
+        'entered_by_id' => true,
+        'entered_at' => true,
+        'approved_by_id' => true,
+        'approved_at' => true,
+        'processed_by_id' => true,
+        'processed_at' => true,
         'created' => true,
         'modified' => true,
         'owner' => true,
@@ -89,6 +136,8 @@ class TravelOrder extends Entity
         'tpl_header' => true,
         'tpl_body' => true,
         'tpl_footer' => true,
+        'travel_orders_mileages' => true,
+        'travel_orders_expenses' => true,
     ];
 
     /**

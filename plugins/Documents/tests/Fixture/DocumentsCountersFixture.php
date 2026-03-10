@@ -65,5 +65,22 @@ class DocumentsCountersFixture extends TestFixture
             'modified' => '2015-02-08 07:49:21',
             'created' => '2015-02-08 07:49:21',
         ],
+        [
+            'id' => '1d53bc5b-de2d-4e85-b13b-81b39a97fc91',
+            'owner_id' => '8155426d-2302-4fa5-97de-e33cefb9d704',
+            'kind' => 'travelorders',
+            'direction' => 'issued',
+            'doc_type' => null,
+            'expense' => 0,
+            'counter' => 1,
+            'title' => 'Travel Orders 2015',
+            'mask' => 'TO-[[no.2]]',
+            'layout' => null,
+            'layout_title' => 'Travel Order [[no]]',
+            'template_descript' => null,
+            'active' => 1,
+            'modified' => '2015-02-08 07:49:21',
+            'created' => '2015-02-08 07:49:21',
+        ],
     ];
 }

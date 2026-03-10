@@ -75,6 +75,54 @@ class TravelOrdersTable extends Table
                 'className' => 'Projects\Model\Table\ProjectsTable',
             ]);
         }
+
+        $this->hasMany('TravelOrdersMileages', [
+            'foreignKey' => 'travel_order_id',
+            'className' => 'Documents\Model\Table\TravelOrdersMileagesTable',
+            'dependent' => true,
+        ]);
+
+        $this->hasMany('TravelOrdersExpenses', [
+            'foreignKey' => 'travel_order_id',
+            'className' => 'Documents\Model\Table\TravelOrdersExpensesTable',
+            'dependent' => true,
+        ]);
+
+        $this->hasMany('App.Attachments', [
+            'foreignKey' => 'foreign_id',
+            'conditions' => ['Attachments.model' => 'TravelOrder'],
+            'dependent' => true,
+        ]);
+
+        $this->belongsTo('EnteredBy', [
+            'className' => 'App\Model\Table\UsersTable',
+            'foreignKey' => 'entered_by_id',
+        ]);
+
+        $this->belongsTo('ApprovedBy', [
+            'className' => 'App\Model\Table\UsersTable',
+            'foreignKey' => 'approved_by_id',
+        ]);
+
+        $this->belongsTo('ProcessedBy', [
+            'className' => 'App\Model\Table\UsersTable',
+            'foreignKey' => 'processed_by_id',
+        ]);
+
+        $this->belongsTo('TplHeaders', [
+            'foreignKey' => 'tpl_header_id',
+            'className' => 'Documents\Model\Table\DocumentsTemplatesTable',
+        ]);
+
+        $this->belongsTo('TplBodies', [
+            'foreignKey' => 'tpl_body_id',
+            'className' => 'Documents\Model\Table\DocumentsTemplatesTable',
+        ]);
+
+        $this->belongsTo('TplFooters', [
+            'foreignKey' => 'tpl_footer_id',
+            'className' => 'Documents\Model\Table\DocumentsTemplatesTable',
+        ]);
     }
 
     /**
@@ -159,6 +207,11 @@ class TravelOrdersTable extends Table
         $validator
             ->decimal('total')
             ->allowEmptyString('total');
+
+        $validator
+            ->scalar('status')
+            ->maxLength('status', 30)
+            ->notEmptyString('status');
 
         return $validator;
     }
@@ -248,20 +301,73 @@ class TravelOrdersTable extends Table
                 $ret['conditions'][] = ['OR' => [
                     'TravelOrders.no LIKE' => '%' . $filter['search'] . '%',
                     'TravelOrders.location LIKE' => '%' . $filter['search'] . '%',
-                    //'Client.title LIKE' => '%' . $filter['search'] . '%',
+                    'TravelOrders.title LIKE' => '%' . $filter['search'] . '%',
+                    'TravelOrders.descript LIKE' => '%' . $filter['search'] . '%',
+                    'TravelOrders.taskee LIKE' => '%' . $filter['search'] . '%',
                 ]];
             }
         }
 
+        // status filter – supports individual statuses or virtual 'open'/'closed'
+        if (!empty($filter['status'])) {
+            $closedStatuses = [TravelOrder::STATUS_COMPLETED, TravelOrder::STATUS_DECLINED];
+            if ($filter['status'] === 'open') {
+                $ret['conditions']['TravelOrders.status NOT IN'] = $closedStatuses;
+            } elseif ($filter['status'] === 'closed') {
+                $ret['conditions']['TravelOrders.status IN'] = $closedStatuses;
+            } else {
+                $ret['conditions']['TravelOrders.status'] = $filter['status'];
+            }
+        }
+
+        // employee filter (name LIKE)
+        if (!empty($filter['employee'])) {
+            $UsersTable = TableRegistry::getTableLocator()->get('App.Users');
+            $matchingUsers = $UsersTable->find()
+                ->select(['id'])
+                ->where(['name LIKE' => '%' . $filter['employee'] . '%']);
+            $ret['conditions']['TravelOrders.employee_id IN'] = $matchingUsers;
+        }
+
         $ret['contain'] = [];
 
-        if (isset($filter['sort'])) {
-            $ret['order'] = [];
+        if (!empty($filter['sort'])) {
+            $ret['order'] = match ($filter['sort']) {
+                'oldest' => ['TravelOrders.counter ASC'],
+                'date-desc' => ['TravelOrders.dat_task DESC'],
+                'date-asc' => ['TravelOrders.dat_task ASC'],
+                'employee' => ['Employees.name ASC'],
+                default => ['TravelOrders.counter DESC'],
+            };
         } else {
             $ret['order'] = $filter['order'] ?? [];
         }
 
         return $ret;
+    }
+
+    /**
+     * Returns count of travel orders per status for the given base conditions.
+     *
+     * @param array<string, mixed> $baseConditions ORM where conditions (counter + date range).
+     * @return array<string, int>
+     */
+    public function statusCounts(array $baseConditions): array
+    {
+        $rows = $this->find()
+            ->select(['status', 'cnt' => $this->find()->func()->count('*')])
+            ->where($baseConditions)
+            ->groupBy('status')
+            ->disableHydration()
+            ->all()
+            ->toArray();
+
+        $counts = [];
+        foreach ($rows as $row) {
+            $counts[$row['status']] = (int)$row['cnt'];
+        }
+
+        return $counts;
     }
 
     /**
@@ -333,6 +439,7 @@ class TravelOrdersTable extends Table
 
                 $document->owner_id = $request->getAttribute('identity')->get('company_id');
                 //$document->payer = $DocumentsClients->newEntity(['kind' => 'IV']);
+                $document->status = TravelOrder::STATUS_DRAFT;
 
                 $counterId = $request->getQuery('counter');
             }

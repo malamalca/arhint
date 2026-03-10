@@ -1,25 +1,11 @@
 <?php
 use Cake\Routing\Router;
-
-$start_span = empty($filter['start']) ? $dateSpan['start'] : $filter['start'];
-$end_span = empty($filter['end']) ? $dateSpan['end'] : $filter['end'];
-
-$startLink = $this->Html->link(
-    (string)$start_span,
-    ['action' => 'filter'],
-    ['id' => 'lil-documents-link-date-start', 'class' => 'nowrap']
-);
-$endLink = $this->Html->link(
-    (string)$end_span,
-    ['action' => 'filter'],
-    ['id' => 'lil-documents-link-date-end'],
-    ['class' => 'dropdown-trigger no-autoinit nowrap', 'data-target' => 'lil-documents-input-date-end']
-);
+use Documents\Model\Entity\TravelOrder;
 
 $counterLink = $this->Html->link(
     $counter->title,
     ['action' => 'filter'],
-    ['class' => 'dropdown-trigger', 'id' => 'filter-counters', 'data-target' => 'dropdown-counters']
+    ['class' => 'dropdown-trigger', 'id' => 'filter-counters', 'data-target' => 'dropdown-counters'],
 );
 $popupCounters = [];
 foreach ($counters as $cntr) {
@@ -32,22 +18,119 @@ foreach ($counters as $cntr) {
 }
 $popupCounters = $this->Lil->popup('counters', $popupCounters, true);
 
-$title = __d(
-    'documents',
-    '"{2}" from {0} to {1}',
-    $startLink,
-    $endLink,
-    $counterLink
-);
+// EMPLOYEE FILTER DROPDOWN
+$popupEmployees = ['items' => [[
+    'title' => __d('documents', 'All Employees'),
+    'active' => $docFilter->get('employee') === null,
+    'url' => ['?' => array_merge($this->getRequest()->getQuery(), [
+        'q' => $docFilter->buildQuery('employee', null),
+    ])],
+    'params' => ['class' => 'nowrap'],
+]]];
+foreach ($employees as $emp) {
+    $popupEmployees['items'][] = [
+        'title' => h($emp->name),
+        'active' => $docFilter->check('employee', $emp->name),
+        'url' => ['?' => array_merge($this->getRequest()->getQuery(), [
+            'q' => $docFilter->buildQuery(
+                'employee',
+                $docFilter->check('employee', $emp->name) ? null : $emp->name,
+            ),
+        ])],
+        'params' => ['class' => 'nowrap'],
+    ];
+}
+$popupEmployees = $this->Lil->popup('employees', $popupEmployees, true);
 
-$documents_index = [
+// STATUS FILTER DROPDOWN
+$statusLabels = TravelOrder::statusLabels();
+$currentStatus = $docFilter->get('status');
+$statusFilterLabel = is_string($currentStatus) && isset($statusLabels[$currentStatus])
+    ? $statusLabels[$currentStatus]
+    : __d('documents', 'Status');
+$popupStatuses = ['items' => [[
+    'title' => __d('documents', 'All Statuses'),
+    'active' => $currentStatus === null || in_array($currentStatus, ['open', 'closed'], true),
+    'url' => ['?' => array_merge($this->getRequest()->getQuery(), [
+        'q' => $docFilter->buildQuery('status', null),
+    ])],
+    'params' => ['class' => 'nowrap'],
+]]];
+foreach ($statusLabels as $statusKey => $statusTitle) {
+    $popupStatuses['items'][] = [
+        'title' => h($statusTitle),
+        'active' => $docFilter->check('status', $statusKey),
+        'url' => ['?' => array_merge($this->getRequest()->getQuery(), [
+            'q' => $docFilter->buildQuery(
+                'status',
+                $docFilter->check('status', $statusKey) ? null : $statusKey,
+            ),
+        ])],
+        'params' => ['class' => 'nowrap'],
+    ];
+}
+$popupStatuses = $this->Lil->popup('statuses', $popupStatuses, true);
+
+// SORT DROPDOWN
+$sortLabel = match ($docFilter->get('sort')) {
+    'oldest' => __d('documents', 'Oldest'),
+    'date-desc' => __d('documents', 'Newest by Date'),
+    'date-asc' => __d('documents', 'Oldest by Date'),
+    'employee' => __d('documents', 'By Employee'),
+    default => __d('documents', 'Newest'),
+};
+$popupSort = ['items' => [
+    [
+        'title' => __d('documents', 'Newest'),
+        'active' => $docFilter->get('sort') === null || $docFilter->check('sort', 'newest'),
+        'url' => ['?' => array_merge($this->getRequest()->getQuery(), [
+            'q' => $docFilter->buildQuery('sort', null),
+        ])],
+        'params' => ['class' => 'nowrap'],
+    ],
+    [
+        'title' => __d('documents', 'Oldest'),
+        'active' => $docFilter->check('sort', 'oldest'),
+        'url' => ['?' => array_merge($this->getRequest()->getQuery(), [
+            'q' => $docFilter->buildQuery('sort', 'oldest'),
+        ])],
+        'params' => ['class' => 'nowrap'],
+    ],
+    '-',
+    [
+        'title' => __d('documents', 'Newest by Date'),
+        'active' => $docFilter->check('sort', 'date-desc'),
+        'url' => ['?' => array_merge($this->getRequest()->getQuery(), [
+            'q' => $docFilter->buildQuery('sort', 'date-desc'),
+        ])],
+        'params' => ['class' => 'nowrap'],
+    ],
+    [
+        'title' => __d('documents', 'Oldest by Date'),
+        'active' => $docFilter->check('sort', 'date-asc'),
+        'url' => ['?' => array_merge($this->getRequest()->getQuery(), [
+            'q' => $docFilter->buildQuery('sort', 'date-asc'),
+        ])],
+        'params' => ['class' => 'nowrap'],
+    ],
+    '-',
+    [
+        'title' => __d('documents', 'By Employee'),
+        'active' => $docFilter->check('sort', 'employee'),
+        'url' => ['?' => array_merge($this->getRequest()->getQuery(), [
+            'q' => $docFilter->buildQuery('sort', 'employee'),
+        ])],
+        'params' => ['class' => 'nowrap'],
+    ],
+]];
+$popupSort = $this->Lil->popup('sort', $popupSort, true);
+
+$title = $counterLink;
+
+$tableIndex = [
     'title_for_layout' => $title,
     'actions' => [
-        'pre' => '<div>',
-        'post' => '',
         'lines' => [
-            sprintf('<input type="hidden" value="%s" id="lil-documents-input-date-start" />', $start_span->toDateString()),
-            sprintf('<input type="hidden" value="%s" id="lil-documents-input-date-end" />', $end_span->toDateString()),
             $popupCounters,
         ],
     ],
@@ -74,229 +157,155 @@ $documents_index = [
             'params' => ['id' => 'MenuItemPrint'],
         ],
     ],
-    'table' => [
-        'pre' => $this->Arhint->searchPanel($this->getRequest()->getQuery('search', '')),
-        'parameters' => [
-            'width' => '100%', 'cellspacing' => 0, 'cellpadding' => 0, 'id' => 'AdminDocumentsIndex',
+    'pre' => '<div id="panel-index">',
+    'post' => '</div>',
+    'panels' => [
+        'search' => '<div id="panel-search">' .
+            sprintf('<form method="get" action="%s">', Router::url()) .
+            sprintf(
+                '<input name="q" id="query" value="%s" />',
+                htmlspecialchars((string)$this->getRequest()->getQuery('q', '')),
+            ) .
+            '<button type="submit" class="btn-small tonal" id="btn-search">' .
+            '<i class="material-icons">search</i></button>' .
+            '</form>' .
+            ($counter->active && $this->getCurrentUser()->hasRole('editor') ?
+                sprintf(
+                    '<a href="%2$s" class="btn-small filled" id="btn-add"><i class="material-icons">add</i>%1$s</a>',
+                    __d('documents', 'New'),
+                    $this->Url->build([
+                        'plugin' => 'Documents',
+                        'controller' => 'TravelOrders',
+                        'action' => 'edit',
+                        '?' => ['counter' => $counter->id],
+                    ]),
+                ) : '') .
+            '</div>',
+        'filter' => '<div id="panel-filter">' .
+            '<div class="checkbox"><input type="checkbox" id="select-all-orders" /></div>' .
+            '<div id="panel-counters">' .
+                $this->Html->link(
+                    h(__d('documents', 'Open')) .
+                        sprintf('<span class="badge">%d</span>', $openCount),
+                    ['?' => array_merge($this->getRequest()->getQuery(), [
+                        'q' => $docFilter->buildQuery('status', $docFilter->check('status', 'open') ? null : 'open'),
+                    ])],
+                    [
+                        'class' => 'btn text' . ($docFilter->check('status', 'open') ? ' active' : ''),
+                        'escape' => false,
+                    ],
+                ) .
+                $this->Html->link(
+                    h(__d('documents', 'Closed')) .
+                        sprintf('<span class="badge">%d</span>', $closedCount),
+                    ['?' => array_merge($this->getRequest()->getQuery(), [
+                        'q' => $docFilter->buildQuery(
+                            'status',
+                            $docFilter->check('status', 'closed') ? null : 'closed',
+                        ),
+                    ])],
+                    [
+                        'class' => 'btn text' . ($docFilter->check('status', 'closed') ? ' active' : ''),
+                        'escape' => false,
+                    ],
+                ) .
+            '</div>' .
+            '<ul>' .
+            sprintf(
+                '<li><a href="#" class="btn text dropdown-trigger-costum"'
+                . ' data-target="dropdown-employees">%s &#128899;</a></li>',
+                __d('documents', 'Employee'),
+            ) .
+            sprintf(
+                '<li><a href="#" class="btn text dropdown-trigger-costum%s"'
+                . ' data-target="dropdown-statuses">%s &#128899;</a></li>',
+                is_string($currentStatus) && !in_array($currentStatus, ['open', 'closed', null], true) ? ' active' : '',
+                h($statusFilterLabel),
+            ) .
+            sprintf(
+                '<li><a href="#" class="btn text dropdown-trigger-costum" data-target="dropdown-sort">'
+                . '<i class="material-icons">sort</i>%s &#128899;</a></li>',
+                h($sortLabel),
+            ) .
+            '</ul>' .
+            $popupEmployees .
+            $popupStatuses .
+            $popupSort .
+            '</div>',
+        'rows' => [
+            'params' => ['id' => 'panel-list'],
+            'lines' => [],
         ],
-        'head' => ['rows' => [
-            1 => ['columns' => [
-                'no' => [
-                    'html' => $this->Paginator->sort('no', __d('documents', 'No')),
-                ],
-                'date' => [
-                    'parameters' => ['class' => 'center-align hide-on-small-only'],
-                    'html' => $this->Paginator->sort('dat_task', __d('documents', 'Date')),
-                ],
-                'task' => [
-                    'parameters' => ['class' => 'left-align hide-on-small-only'],
-                    'html' => $this->Paginator->sort('title', __d('documents', 'Task')),
-                ],
-                'employee' => [
-                    'parameters' => ['class' => 'left-align hide-on-small-only'],
-                    'html' => __d('documents', 'Employee'),
-                ],
-                'total' => [
-                    'parameters' => ['class' => 'right-align'],
-                    'html' => $this->Paginator->sort('total', __d('documents', 'Total')),
-                ],
-            ]],
-        ]],
-        'foot' => ['rows' => [0 => ['columns' => [
-            'no' => [
-                'parameters' => ['class' => 'left-align '],
-                'html' => '<ul class="paginator">' . $this->Paginator->numbers([
-                    'first' => '<<',
-                    'last' => '>>',
-                    'modulus' => 3]) . '</ul>',
+        'footer' => [
+            'params' => ['id' => 'panel-footer'],
+            'lines' => [
+                '<ul class="paginator">' .
+                $this->Paginator->numbers(['first' => 1, 'last' => 1, 'modulus' => 3]) .
+                '</ul>',
             ],
-            'date' => [
-                'parameters' => ['class' => 'right-align hide-on-small-only'],
-                'html' => '',
-            ],
-            'descript' => [
-                'parameters' => ['class' => 'documents-title right-align hide-on-small-only'],
-                'html' => '',
-            ],
-            'client' => [
-                'parameters' => ['class' => 'documents-client right-align hide-on-small-only'],
-                'html' => __d('documents', 'Total Sum') . ': ',
-            ],
-            'total' => [
-                'parameters' => ['class' => 'right-align nowrap'],
-                'html' => '&nbsp;',
-            ],
-        ]]]],
+        ],
     ],
 ];
 
-$total = 0;
-$link_template = '<a href="' . Router::url(['action' => 'view', '__id__']) . '">__title__</a>';
-foreach ($data as $travelOrder) {
-    $documents_index['table']['body']['rows'][]['columns'] = [
-        'no' => [
-            'parameters' => ['class' => 'nowrap'],
-            'html' => '<div class="documents-no">' .
-                strtr(
-                    $link_template,
-                    [
-                        '__title__' => empty($travelOrder->no) ? __d('documents', 'n/a') : $travelOrder->no,
-                        '__id__' => $travelOrder->id,
-                    ]
-                ) .
-                sprintf(
-                    '<div class="hide-on-med-and-up">%1$s<br />%2$s</div>',
-                    (string)$travelOrder->dat_task,
-                    h($document->client['title'] ?? '')
-                ) . '</div>',
-        ],
-        'date' => [
-            'parameters' => ['class' => 'center-align nowrap hide-on-small-only'],
-            'html' => $this->Arhint->calendarDay($travelOrder->dat_task),
-        ],
-        'task' => [
-            'parameters' => ['class' => 'documents-title left-align hide-on-small-only'],
-            'html' => h($travelOrder->title) . '<div class="small">' . h($travelOrder->descript) . '</div>' .
-                '<div class="small">' . h($travelOrder->departure) . '</div>' .
-                // attachment
-                ($travelOrder->attachments_count == 0 ? '' :
-                    ' ' . $this->Html->image('/documents/img/attachment.png')),
-        ],
-        'client' => [
-            'parameters' => ['class' => 'documents-client left-align hide-on-small-only'],
-            'html' => '<div class="truncate">' . h($travelOrder->employee->name ?? '') . '</div>',
-        ],
-        'project' => empty($project) ? null : [
-            'parameters' => ['class' => 'documents-project left-align'],
-            'html' => '<div style="height: 20px; overflow: hidden; scroll: none;">' .
-                ($project ? $this->Html->link(
-                    $project,
-                    [
-                        'plugin' => 'Projects',
-                        'controller' => 'projects',
-                        'action' => 'view',
-                        $project->id,
-                    ]
-                ) : '') .
-                '</div>',
-        ],
-        'net_total' => [
-            'parameters' => ['class' => 'documents-net_total right-align nowrap hide-on-small-only'],
-            'html' => $this->Number->currency($travelOrder->net_total ?? 0),
-        ],
-        'total' => [
-            'parameters' => ['class' => 'documents-total right-align nowrap'],
-            'html' => $this->Number->currency($travelOrder->total ?? 0),
-        ],
-    ];
-    $total += $travelOrder->total;
+if ($data->items()->isEmpty()) {
+    $tableIndex['panels']['rows']['lines'][] =
+        '<div id="no-rows-found">' .
+        '<h4>' . __d('documents', 'No travel orders found.') . '</h4>' .
+        '<p>' . __d('documents', 'Try adjusting your search filters.') . '</p>' .
+        '</div>';
+} else {
+    foreach ($data as $travelOrder) {
+        $tableIndex['panels']['rows']['lines'][] = $this->element('Documents.travel_order_row', [
+            'travelOrder' => $travelOrder,
+            'docFilter' => $docFilter,
+        ]);
+    }
 }
 
-//$documents_index['table']['foot']['rows'][0]['columns']['total']['html'] = $this->Number->currency($documentsTotals['sumTotal']);
-
-echo $this->Lil->index($documents_index, 'Documents.TravelOrders.index');
+echo $this->Lil->panels($tableIndex, 'Documents.TravelOrders.index');
 ?>
 <script type="text/javascript">
-    var startEndUrl = "<?php echo Router::url([
-        'plugin' => 'Documents',
-        'controller' => 'TravelOrders',
-        'action' => 'index',
-        '?' => array_merge($this->request->getQuery(), ['start' => '__start__', 'end' => '__end__']),
-    ]); ?>";
+    var allOrdersChecked = false;
 
-    var searchUrl = "<?php echo Router::url([
-        'plugin' => 'Documents',
-        'controller' => 'TravelOrders',
-        'action' => 'index',
-        '?' => array_merge($this->request->getQuery(), ['search' => '__term__']),
-    ]); ?>";
-
-    var searchTimer = null;
-
-    function filterByDate(dateText, startOrEnd) {
-        var rx_start = new RegExp("__start__", "i");
-        var rx_end = new RegExp("__end__", "i");
-        if (startOrEnd == 'start') {
-            rpl_start = dateText;
-            rpl_end = $('#lil-documents-input-date-end').val();
-        } else {
-            rpl_start = $('#lil-documents-input-date-start').val();
-            rpl_end = dateText;
-        }
-
-        var targetUrl = startEndUrl.replace(rx_start, rpl_start).replace(rx_end, rpl_end)
-        document.location.href = targetUrl;
-    }
-
-    function searchDocuments()
-    {
-        var rx_term = new RegExp("__term__", "i");
-        $.get(searchUrl.replace(rx_term, encodeURIComponent($(".search-panel input").val())), function(response) {
-            let tBody = response
-                .substring(response.indexOf("<table class=\"index"), response.indexOf("</table>")+8);
-            $("#AdminDocumentsIndex").html(tBody);
+    document.addEventListener("DOMContentLoaded", function() {
+        // dropdown triggers
+        const elems = document.querySelectorAll(".dropdown-trigger-costum");
+        elems.forEach((dropdown) => {
+            M.Dropdown.init(dropdown, {
+                constrainWidth: false,
+                coverTrigger: false,
+            });
         });
-    }
 
-    $(document).ready(function() {
-        ////////////////////////////////////////////////////////////////////////////////////////////
-        // Filter for documents
-        $(".search-panel input").on("input", function(e) {
-            if ($(this).val().length > 1) {
-                if (searchTimer) {
-                    window.clearTimeout(searchTimer);
-                    searchTimer = null;
-                }
-                searchTimer = window.setTimeout(searchDocuments, 500);
+        <?php if ($counter->active && $this->getCurrentUser()->hasRole('editor')) : ?>
+        $("#btn-add").modalPopup({
+            title: "<?= __d('documents', 'New Travel Order') ?>",
+            onOpen: function(popup) {
+                $("#title", popup).focus();
+            },
+        });
+        <?php endif; ?>
+
+        // select-all checkbox
+        $("#select-all-orders").on("change", function(e) {
+            $("div.panel-row div.checkbox input").prop("checked", $(this).prop("checked"));
+            allOrdersChecked = true;
+        });
+        $("div.panel-row div.checkbox input").on("change", function(e) {
+            if (allOrdersChecked) {
+                $("#select-all-orders").prop("checked", false);
             }
-        }).focus();
-
-
-        ////////////////////////////////////////////////////////////////////////////////////////////
-        // Start-End date in title
-        M.Datepicker.init($("#lil-documents-input-date-start").get(0), {
-            format: "yyyy-mm-dd",
-            setDefaultDate: true,
-            onSelect: function(date, inst) {
-                let dateString = new Date(date.getTime() - (date.getTimezoneOffset() * 60000 ))
-                    .toISOString()
-                    .substring(0,10);
-                filterByDate(dateString, "start");
-            }
-        });
-        $("#lil-documents-link-date-start").click(function() {
-            let datePicker = M.Datepicker.getInstance($("#lil-documents-input-date-start").get(0));
-            datePicker.open();
-            return false;
+            allOrdersChecked = false;
         });
 
-        M.Datepicker.init($("#lil-documents-input-date-end").get(0), {
-            format: "yyyy-mm-dd",
-            setDefaultDate: true,
-            onSelect: function(date) {
-                let dateString = new Date(date.getTime() - (date.getTimezoneOffset() * 60000 ))
-                    .toISOString()
-                    .substring(0,10);
-                filterByDate(dateString, "end");
-            }
-        });
-        $("#lil-documents-link-date-end").click(function() {
-            let datePicker = M.Datepicker.getInstance($("#lil-documents-input-date-end").get(0));
-            datePicker.open();
-            return false;
-        });
-
-        ////////////////////////////////////////////////////////////////////////////////////////////
-        $('#MenuItemExportSepaXml, #MenuItemExportPdf, #MenuItemEmail, #MenuItemPrint').click(function(e) {
+        // print/export
+        $('#MenuItemPrint').click(function(e) {
             let rx_term = new RegExp("__term__", "i");
-            let searchTerm = $(".search-panel input").val();
+            let searchTerm = $("#query").val();
             let url = $(this).prop("href").replace(rx_term, encodeURIComponent(searchTerm));
-
             document.location.href = url;
-
             e.preventDefault();
             return false;
         });
-
     });
 </script>

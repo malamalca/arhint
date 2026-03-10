@@ -1,5 +1,6 @@
 <?php
 use Cake\I18n\Date;
+use Cake\Routing\Router;
 
 $counter = $document->documents_counter;
 
@@ -15,7 +16,7 @@ if ($document->isNew()) {
         'documents',
         'Edit a Travel Order #{0} <span class="light">({1})</span>',
         $document->counter,
-        h($counter->title)
+        h($counter->title),
     );
 }
 
@@ -82,15 +83,6 @@ $documentEdit = [
                     ],
                 ],
             ],
-            'status' => [
-                'method' => 'control',
-                'parameters' => [
-                    'status', [
-                        'type' => 'hidden',
-                        'value' => 'new',
-                    ],
-                ],
-            ],
             'duplicate' => [
                 'method' => 'control',
                 'parameters' => ['duplicate', ['type' => 'hidden']],
@@ -115,8 +107,7 @@ $documentEdit = [
                 'method' => 'control',
                 'parameters' => [
                     'field' => 'no', [
-                        'label' => __d('documents', 'Document no') . ':',
-                        'disabled' => !empty($counter->mask),
+                        'type' => 'hidden',
                     ],
                 ],
             ],
@@ -126,6 +117,7 @@ $documentEdit = [
                     'location',
                     [
                         'label' => __d('documents', 'Location') . ':',
+                        'default' => $this->getCurrentUser()->get('Company.location'),
                         'error' => [
                             'empty' => __d('documents', 'Please enter location.'),
                         ],
@@ -210,7 +202,7 @@ $documentEdit = [
             ],
             'description_hint' => sprintf(
                 '<div class="helper-text">%s</div>',
-                __d('documents', 'Enter travel route (eg. New York - Jersey - New York)')
+                __d('documents', 'Enter travel route (eg. New York - Jersey - New York)'),
             ),
             'departure' => [
                 'method' => 'control',

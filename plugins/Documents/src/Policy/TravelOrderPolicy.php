@@ -70,4 +70,52 @@ class TravelOrderPolicy
     {
         return $entity->owner_id == $user->company_id && $user->hasRole('editor');
     }
+
+    /**
+     * Authorize approve action (admin only)
+     *
+     * @param \App\Model\Entity\User $user User
+     * @param \Documents\Model\Entity\TravelOrder $entity Entity
+     * @return bool
+     */
+    public function canApprove(User $user, TravelOrder $entity): bool
+    {
+        return $entity->owner_id == $user->company_id && $user->hasRole('admin');
+    }
+
+    /**
+     * Authorize submit action - user sends approved order for processing
+     *
+     * @param \App\Model\Entity\User $user User
+     * @param \Documents\Model\Entity\TravelOrder $entity Entity
+     * @return bool
+     */
+    public function canSubmit(User $user, TravelOrder $entity): bool
+    {
+        return $entity->owner_id == $user->company_id && $user->hasRole('editor');
+    }
+
+    /**
+     * Authorize process action (admin only)
+     *
+     * @param \App\Model\Entity\User $user User
+     * @param \Documents\Model\Entity\TravelOrder $entity Entity
+     * @return bool
+     */
+    public function canProcess(User $user, TravelOrder $entity): bool
+    {
+        return $entity->owner_id == $user->company_id && $user->hasRole('admin');
+    }
+
+    /**
+     * Authorize decline action (admin only)
+     *
+     * @param \App\Model\Entity\User $user User
+     * @param \Documents\Model\Entity\TravelOrder $entity Entity
+     * @return bool
+     */
+    public function canDecline(User $user, TravelOrder $entity): bool
+    {
+        return $entity->owner_id == $user->company_id && $user->hasRole('admin');
+    }
 }

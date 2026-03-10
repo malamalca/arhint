@@ -228,3 +228,12 @@ iframe#attachment-view {
 #client-address-city {
     width: 170px;
 }
+
+/* TRAVEL ORDER */
+div.workflow-actions {
+    margin-top: 20px;
+}
+#travel-order-mileages-table,
+#travel-order-expenses-table {
+    max-width: 700px;
+}
