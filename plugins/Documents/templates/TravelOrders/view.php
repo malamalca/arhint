@@ -7,6 +7,10 @@ use Documents\Model\Entity\TravelOrder;
 $statusLabels = TravelOrder::statusLabels();
 $statusLabel = $statusLabels[$document->status ?? ''] ?? h($document->status ?? '');
 
+$isAdmin = $this->getCurrentUser()->hasRole('admin');
+$isAuthor = $document->entered_by_id !== null && $document->entered_by_id === $this->getCurrentUser()->get('id');
+$isEditable = in_array($document->status, [TravelOrder::STATUS_DRAFT, TravelOrder::STATUS_DECLINED], true);
+
 $invoiceView = [
     'title_for_layout' => __d(
         'documents',
@@ -19,7 +23,8 @@ $invoiceView = [
     'menu' => [
         'edit' => [
             'title' => __d('documents', 'Edit'),
-            'visible' => $document->documents_counter->active && $this->getCurrentUser()->hasRole('editor'),
+            'visible' => $document->documents_counter->active
+                && ($isAdmin || ($isAuthor && $isEditable)),
             'url' => [
                 'action' => 'edit',
                 $document->id,
@@ -35,11 +40,11 @@ $invoiceView = [
         ],
         'attach' => [
             'title' => __d('documents', 'Attach'),
-            'visible' => $this->getCurrentUser()->hasRole('editor'),
+            'visible' => $isAdmin || $isAuthor,
             'submenu' => [
                 'attachment' => [
                     'title' => __d('documents', 'File'),
-                    'visible' => $this->getCurrentUser()->hasRole('admin'),
+                    'visible' => $isAdmin || $isAuthor,
                     'url' => [
                         'plugin' => false,
                         'controller' => 'Attachments',
@@ -72,7 +77,8 @@ $invoiceView = [
         ],
         'delete' => [
             'title' => __d('documents', 'Delete'),
-            'visible' => $document->documents_counter->active && $this->getCurrentUser()->hasRole('editor'),
+            'visible' => $document->documents_counter->active
+                && ($isAdmin || ($isAuthor && $document->status === TravelOrder::STATUS_DRAFT)),
             'url' => [
                 'action' => 'delete',
                 $document->id,
@@ -266,7 +272,7 @@ if (!empty($document->descript)) {
 ////////////////////////////////////////////////////////////////////////////////////////////////
 // WORKFLOW ACTION BUTTONS
 $workflowButtons = '';
-if (($document->status === TravelOrder::STATUS_DRAFT) && $this->getCurrentUser()->hasRole('editor')) {
+if (($document->status === TravelOrder::STATUS_DRAFT) && ($isAdmin || $isAuthor)) {
     $workflowButtons .= $this->Html->link(
         __d('documents', 'Sign'),
         ['action' => 'sign', $document->id],
@@ -288,7 +294,7 @@ if (($document->status === TravelOrder::STATUS_WAITING_APPROVAL) && $this->getCu
         ],
     );
 }
-if (($document->status === TravelOrder::STATUS_APPROVED) && $this->getCurrentUser()->hasRole('editor')) {
+if (($document->status === TravelOrder::STATUS_APPROVED) && ($isAdmin || $isAuthor)) {
     $workflowButtons .= $this->Html->link(
         __d('documents', 'Submit for Processing'),
         ['action' => 'submit', $document->id],
@@ -321,7 +327,12 @@ if (!empty($document->attachments)) {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 // MILEAGES
-$canEditRows = ($document->status === TravelOrder::STATUS_WAITING_PROCESSING) && $this->getCurrentUser()->hasRole('admin');
+$canEditRows =
+    ($isAdmin && in_array($document->status, [
+        TravelOrder::STATUS_APPROVED,
+        TravelOrder::STATUS_WAITING_PROCESSING,
+    ], true))
+    || ($isAuthor && $document->status === TravelOrder::STATUS_APPROVED);
 
 if (!empty($document->travel_orders_mileages) || $canEditRows) {
     $mileagesBody = [];

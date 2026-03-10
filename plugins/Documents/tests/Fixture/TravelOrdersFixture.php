@@ -30,7 +30,7 @@ class TravelOrdersFixture extends TestFixture
             'attachment_count' => 0,
             'counter' => 1,
             'no' => 'TO-01',
-            'status' => 'completed',
+            'status' => 'waiting_processing',
             'dat_issue' => '2015-02-08',
             'location' => 'Ljubljana',
             'descript' => 'Test travel order description',

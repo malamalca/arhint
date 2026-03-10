@@ -223,7 +223,9 @@ class TravelOrdersExportTest extends TestCase
         $this->assertStringNotContainsString('<Mileages>', $xml);
         $this->assertStringNotContainsString('<Expenses>', $xml);
         $this->assertStringNotContainsString('<ProcessedBy>', $xml);
-        $this->assertStringNotContainsString('<NetTotal>', $xml);
+        // NetTotal/Total are always emitted (empty for non-completed) so PDF popups can display them
+        $this->assertStringContainsString('<NetTotal></NetTotal>', $xml);
+        $this->assertStringContainsString('<Total></Total>', $xml);
         // ApprovedBy is always included (shown on approved-stage PDF)
         $this->assertStringContainsString('<ApprovedBy>', $xml);
     }

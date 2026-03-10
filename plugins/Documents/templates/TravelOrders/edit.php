@@ -262,6 +262,11 @@ $documentEdit = [
                     ],
                 ],
             ],
+            'vehicle_select_btn' => sprintf(
+                '<p><a href="%s" id="SelectVehicle" class="btn btn-small filled">%s</a></p>',
+                $this->Url->build(['plugin' => 'Documents', 'controller' => 'Vehicles', 'action' => 'select']),
+                __d('documents', 'Select from list'),
+            ),
             'tror_vehicle_end' => '</fieldset>',
 
             ////////////////////////////////////////////////////////////////////////////////////
@@ -334,3 +339,19 @@ $documentEdit = [
 ];
 
 echo $this->Lil->form($documentEdit, 'Documents.TravelOrders.edit');
+
+$selectTitle = json_encode(__d('documents', 'Select Vehicle'));
+$this->Lil->jsReady(<<<JS
+    $("#SelectVehicle").modalPopup({
+        title: {$selectTitle},
+        onOpen: function(popup) {
+            $(".vehicle-select-row", popup).on("click", function(e) {
+                e.stopPropagation();
+                $("#travel_order-vehicle-title").val($(this).data("title"));
+                $("#travel_order-vehicle-registration").val($(this).data("registration"));
+                $("#travel_order-vehicle-owner").val($(this).data("owner"));
+                $(".modal-close", popup).trigger("click");
+            });
+        },
+    });
+JS);

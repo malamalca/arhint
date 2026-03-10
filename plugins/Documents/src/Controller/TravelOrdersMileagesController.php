@@ -22,7 +22,8 @@ class TravelOrdersMileagesController extends AppController
     {
         if (empty($id)) {
             $mileage = $this->TravelOrdersMileages->newEmptyEntity();
-            $mileage->travel_order_id = $this->getRequest()->getQuery('travel_order_id');
+            $mileage->travel_order_id = $this->getRequest()->getQuery('travel_order_id')
+                ?? $this->getRequest()->getData('travel_order_id');
         } else {
             $mileage = $this->TravelOrdersMileages->get($id);
         }

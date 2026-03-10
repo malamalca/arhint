@@ -26,6 +26,20 @@ class VehiclesController extends AppController
     }
 
     /**
+     * Select method - vehicle picker for use in modal popups.
+     *
+     * @return void
+     */
+    public function select(): void
+    {
+        $this->set('head_for_layout', false);
+        $vehicles = $this->Authorization->applyScope($this->Vehicles->find(), 'index')
+            ->orderBy('Vehicles.title')
+            ->all();
+        $this->set(compact('vehicles'));
+    }
+
+    /**
      * Edit method
      *
      * @param string|null $id Vehicle id.

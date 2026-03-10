@@ -36,7 +36,7 @@ class TravelOrdersControllerTest extends TestCase
     private const COUNTER_ID = '1d53bc5b-de2d-4e85-b13b-81b39a97fc91';
 
     /**
-     * TravelOrder UUID used in fixtures (status: completed)
+     * TravelOrder UUID used in fixtures (status: waiting_processing)
      */
     private const TRAVEL_ORDER_ID = 'a1b23456-7890-4bcd-8f12-345678901234';
 

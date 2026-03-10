@@ -103,10 +103,13 @@ class TravelOrdersController extends BaseDocumentsController
             }
         }
 
-        // employees on this counter for the dropdown
-        /** @var \App\Model\Table\UsersTable $UsersTable */
-        $UsersTable = TableRegistry::getTableLocator()->get('App.Users');
-        $employees = $UsersTable->fetchForCompany($this->getCurrentUser()->get('company_id'));
+        // employees on this counter for the dropdown (admin only)
+        $employees = [];
+        if ($this->getCurrentUser()->hasRole('admin')) {
+            /** @var \App\Model\Table\UsersTable $UsersTable */
+            $UsersTable = TableRegistry::getTableLocator()->get('App.Users');
+            $employees = $UsersTable->fetchForCompany($this->getCurrentUser()->get('company_id'));
+        }
 
         $this->set(compact('data', 'dateSpan', 'docFilter', 'statusCounts', 'openCount', 'closedCount', 'employees'));
     }

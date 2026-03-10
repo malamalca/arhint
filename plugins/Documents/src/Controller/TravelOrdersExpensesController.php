@@ -22,7 +22,8 @@ class TravelOrdersExpensesController extends AppController
     {
         if (empty($id)) {
             $expense = $this->TravelOrdersExpenses->newEmptyEntity();
-            $expense->travel_order_id = $this->getRequest()->getQuery('travel_order_id');
+            $expense->travel_order_id = $this->getRequest()->getQuery('travel_order_id')
+                ?? $this->getRequest()->getData('travel_order_id');
         } else {
             $expense = $this->TravelOrdersExpenses->get($id);
         }

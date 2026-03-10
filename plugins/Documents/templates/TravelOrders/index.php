@@ -19,28 +19,31 @@ foreach ($counters as $cntr) {
 $popupCounters = $this->Lil->popup('counters', $popupCounters, true);
 
 // EMPLOYEE FILTER DROPDOWN
-$popupEmployees = ['items' => [[
-    'title' => __d('documents', 'All Employees'),
-    'active' => $docFilter->get('employee') === null,
-    'url' => ['?' => array_merge($this->getRequest()->getQuery(), [
-        'q' => $docFilter->buildQuery('employee', null),
-    ])],
-    'params' => ['class' => 'nowrap'],
-]]];
-foreach ($employees as $emp) {
-    $popupEmployees['items'][] = [
-        'title' => h($emp->name),
-        'active' => $docFilter->check('employee', $emp->name),
+$popupEmployees = '';
+if ($this->getCurrentUser()->hasRole('admin')) {
+    $employeePopupItems = ['items' => [[
+        'title' => __d('documents', 'All Employees'),
+        'active' => $docFilter->get('employee') === null,
         'url' => ['?' => array_merge($this->getRequest()->getQuery(), [
-            'q' => $docFilter->buildQuery(
-                'employee',
-                $docFilter->check('employee', $emp->name) ? null : $emp->name,
-            ),
+            'q' => $docFilter->buildQuery('employee', null),
         ])],
         'params' => ['class' => 'nowrap'],
-    ];
+    ]]];
+    foreach ($employees as $emp) {
+        $employeePopupItems['items'][] = [
+            'title' => h($emp->name),
+            'active' => $docFilter->check('employee', $emp->name),
+            'url' => ['?' => array_merge($this->getRequest()->getQuery(), [
+                'q' => $docFilter->buildQuery(
+                    'employee',
+                    $docFilter->check('employee', $emp->name) ? null : $emp->name,
+                ),
+            ])],
+            'params' => ['class' => 'nowrap'],
+        ];
+    }
+    $popupEmployees = $this->Lil->popup('employees', $employeePopupItems, true);
 }
-$popupEmployees = $this->Lil->popup('employees', $popupEmployees, true);
 
 // STATUS FILTER DROPDOWN
 $statusLabels = TravelOrder::statusLabels();
@@ -211,11 +214,11 @@ $tableIndex = [
                 ) .
             '</div>' .
             '<ul>' .
-            sprintf(
+            ($this->getCurrentUser()->hasRole('admin') ? sprintf(
                 '<li><a href="#" class="btn text dropdown-trigger-costum"'
                 . ' data-target="dropdown-employees">%s &#128899;</a></li>',
                 __d('documents', 'Employee'),
-            ) .
+            ) : '') .
             sprintf(
                 '<li><a href="#" class="btn text dropdown-trigger-costum%s"'
                 . ' data-target="dropdown-statuses">%s &#128899;</a></li>',
