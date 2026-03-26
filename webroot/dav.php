@@ -2,6 +2,7 @@
 
 use App\Lib\DAV\ArhintBasicAuth;
 use App\Lib\DAV\ArhintPrincipalBackend;
+use Calendar\Lib\SabreDAVSyncCalendars;
 use Cake\Core\Configure;
 use Crm\Lib\SabreDAVSyncContacts;
 use Sabre\DAV;
@@ -22,14 +23,14 @@ require dirname(__DIR__) . '/config/bootstrap.php';
 $authBackend = new ArhintBasicAuth();
 $principalBackend = new ArhintPrincipalBackend();
 $addressBookRoot = new SabreDAVSyncContacts();
-//$calendarBackend = new CalDAV\Backend\PDO($pdo);
+$calendarBackend = new SabreDAVSyncCalendars();
 
 // Directory tree
 $tree = [
     new DAVACL\PrincipalCollection($principalBackend),
-    new Sabre\CardDAV\AddressBookRoot($principalBackend, $addressBookRoot)
-//    new CalDAV\CalendarRoot($principalBackend, $calendarBackend)
-];  
+    new Sabre\CardDAV\AddressBookRoot($principalBackend, $addressBookRoot),
+    new CalDAV\CalendarRoot($principalBackend, $calendarBackend),
+];
 
 
 // The object tree needs in turn to be passed to the server class
@@ -45,8 +46,12 @@ $authPlugin = new DAV\Auth\Plugin($authBackend, 'ArhintDAV');
 $server->addPlugin($authPlugin);
 
 // CalDAV plugin
-//$caldavPlugin = new CalDAV\Plugin();
-//$server->addPlugin($caldavPlugin);
+$caldavPlugin = new CalDAV\Plugin();
+$server->addPlugin($caldavPlugin);
+
+// http://arhint.localhost/dav/calendars/miha.nahtigal/default?export
+$icsPlugin = new \Sabre\CalDAV\ICSExportPlugin();
+$server->addPlugin($icsPlugin);
 
 // CardDAV plugin
 $carddavPlugin = new \Sabre\CardDAV\Plugin();
