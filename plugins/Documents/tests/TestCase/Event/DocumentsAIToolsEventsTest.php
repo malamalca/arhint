@@ -79,15 +79,16 @@ class DocumentsAIToolsEventsTest extends TestCase
     // aiAssistantTools — tool registration
     // -------------------------------------------------------------------------
 
-    public function testAiAssistantToolsRegisters16Tools(): void
+    public function testAiAssistantToolsRegisters17Tools(): void
     {
         $event = new Event('App.AIAssistant.tools');
         $toolsList = new ArrayObject();
         $this->listener->aiAssistantTools($event, $toolsList);
 
-        $this->assertCount(16, $toolsList);
+        $this->assertCount(17, $toolsList);
 
         $names = array_map(fn($t) => $t->name, iterator_to_array($toolsList));
+        $this->assertContains('Documents.navigate_to_document', $names);
         $this->assertContains('Documents.get_document_counters', $names);
         $this->assertContains('Documents.search_invoices', $names);
         $this->assertContains('Documents.get_invoice', $names);

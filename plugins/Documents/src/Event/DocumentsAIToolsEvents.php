@@ -13,6 +13,7 @@ use Cake\I18n\Date;
 use Cake\I18n\DateTime;
 use Cake\ORM\Query\SelectQuery;
 use Cake\ORM\TableRegistry;
+use Cake\Routing\Router;
 use Documents\Lib\DocumentsExport;
 use Documents\Lib\InvoicesExport;
 use Documents\Lib\TravelOrdersExport;
@@ -42,6 +43,20 @@ class DocumentsAIToolsEvents implements EventListenerInterface
      */
     public function aiAssistantTools(Event $event, ArrayObject $toolsList): void
     {
+        $toolsList->append(new AITool(
+            name: 'Documents.navigate_to_document',
+            arguments: [
+                'id' => ['type' => 'string', 'description' => 'UUID of the document to navigate to. Required.'],
+                'kind' => [
+                    'type' => 'string',
+                    'description' => 'Document type: "invoice", "document", or "travel_order". Required.',
+                ],
+            ],
+            description: 'Opens a specific document in its detail view by ID. '
+                . 'Returns a redirect_url to the document view page. '
+                . 'Use when the user asks to open or go to a specific document, invoice, or travel order.',
+        ));
+
         $toolsList->append(new AITool(
             name: 'Documents.get_document_counters',
             arguments: [
@@ -85,7 +100,9 @@ class DocumentsAIToolsEvents implements EventListenerInterface
                 ],
             ],
             description: 'Lists invoices filtered by counter, date range, free-text search, or overdue status. '
-                . 'Returns id, no, title, dat_issue, dat_expire, net_total, total, and buyer name.',
+                . 'Returns id, no, title, dat_issue, dat_expire, net_total, total, and buyer name. '
+                . 'Each result includes a view_url; '
+                . 'always render no as a markdown link: [no](view_url).',
         ));
 
         $toolsList->append(new AITool(
@@ -94,7 +111,8 @@ class DocumentsAIToolsEvents implements EventListenerInterface
                 'id' => ['type' => 'string', 'description' => 'UUID of the invoice to retrieve.'],
             ],
             description: 'Fetches full details of a single invoice including issuer, buyer, receiver parties, '
-                . 'all line items with quantities/prices/VAT, tax aggregation, payment details, and totals.',
+                . 'all line items with quantities/prices/VAT, tax aggregation, payment details, and totals. '
+                . 'Includes a view_url field; always render the no field as a markdown link: [no](view_url).',
         ));
 
         $toolsList->append(new AITool(
@@ -243,7 +261,9 @@ class DocumentsAIToolsEvents implements EventListenerInterface
                 ],
             ],
             description: 'Lists generic documents filtered by counter, date range, free-text, or contact. '
-                . 'Returns id, no, title, dat_issue, and party names.',
+                . 'Returns id, no, title, dat_issue, and party names. '
+                . 'Each result includes a view_url; '
+                . 'always render no as a markdown link: [no](view_url).',
         ));
 
         $toolsList->append(new AITool(
@@ -252,7 +272,8 @@ class DocumentsAIToolsEvents implements EventListenerInterface
                 'id' => ['type' => 'string', 'description' => 'UUID of the document to retrieve.'],
             ],
             description: 'Fetches full details of a single generic document including issuer and receiver '
-                . 'party data, linked documents, and attachments count.',
+                . 'party data, linked documents, and attachments count. '
+                . 'Includes a view_url field; always render the no field as a markdown link: [no](view_url).',
         ));
 
         $toolsList->append(new AITool(
@@ -285,7 +306,8 @@ class DocumentsAIToolsEvents implements EventListenerInterface
                 ],
             ],
             description: 'Lists travel orders filtered by counter, status, employee, date range, or text. '
-                . 'Returns id, no, title, status, employee name, dat_task, and total.',
+                . 'Returns id, no, title, status, employee name, dat_task, and total. '
+                . 'Each result includes a view_url; always render no as a markdown link: [no](view_url).',
         ));
 
         $toolsList->append(new AITool(
@@ -294,7 +316,8 @@ class DocumentsAIToolsEvents implements EventListenerInterface
                 'id' => ['type' => 'string', 'description' => 'UUID of the travel order to retrieve.'],
             ],
             description: 'Fetches full details of a single travel order including employee, payer, '
-                . 'mileage entries, expense entries, approval chain, and computed totals.',
+                . 'mileage entries, expense entries, approval chain, and computed totals. '
+                . 'Includes a view_url field; always render the no field as a markdown link: [no](view_url).',
         ));
 
         $toolsList->append(new AITool(
@@ -407,6 +430,11 @@ class DocumentsAIToolsEvents implements EventListenerInterface
         $currentUser = $event->getData()[2] ?? null;
 
         match ($tool) {
+            'Documents.navigate_to_document' => $this->executeNavigateToDocument(
+                $event,
+                $arguments,
+                $currentUser,
+            ),
             'Documents.get_document_counters' => $this->executeGetDocumentCounters(
                 $event,
                 $arguments,
@@ -445,6 +473,64 @@ class DocumentsAIToolsEvents implements EventListenerInterface
             ),
             default => null,
         };
+    }
+
+    /**
+     * Execute Documents.navigate_to_document tool.
+     *
+     * @param \Cake\Event\Event $event Event object.
+     * @param array<mixed> $arguments Tool arguments.
+     * @param mixed $currentUser Current user.
+     * @return void
+     */
+    private function executeNavigateToDocument(Event $event, array $arguments, mixed $currentUser): void
+    {
+        $id = trim($arguments['id'] ?? '');
+        $kind = strtolower(trim($arguments['kind'] ?? ''));
+
+        if ($id === '') {
+            $event->setResult(['error' => 'id argument is required.']);
+
+            return;
+        }
+
+        $controllerMap = [
+            'invoice' => ['table' => 'Documents.Invoices', 'controller' => 'Invoices'],
+            'document' => ['table' => 'Documents.Documents', 'controller' => 'Documents'],
+            'travel_order' => ['table' => 'Documents.TravelOrders', 'controller' => 'TravelOrders'],
+        ];
+
+        if (!isset($controllerMap[$kind])) {
+            $event->setResult(['error' => 'kind must be "invoice", "document", or "travel_order".']);
+
+            return;
+        }
+
+        $tableAlias = $controllerMap[$kind]['table'];
+        $controller = $controllerMap[$kind]['controller'];
+
+        $table = TableRegistry::getTableLocator()->get($tableAlias);
+        $entity = $currentUser->applyScope('index', $table->find())
+            ->where([$controller . '.id' => $id])
+            ->first();
+
+        if (!$entity) {
+            $event->setResult(['error' => 'Document not found or access denied.']);
+
+            return;
+        }
+
+        $url = Router::url([
+            'plugin' => 'Documents',
+            'controller' => $controller,
+            'action' => 'view',
+            $entity->id,
+        ], true);
+
+        $event->setResult([
+            'redirect_url' => $url,
+            'id' => $entity->id,
+        ]);
     }
 
     /**
@@ -509,6 +595,12 @@ class DocumentsAIToolsEvents implements EventListenerInterface
             ->all()
             ->toArray();
 
+        foreach ($invoices as $invoice) {
+            $invoice->view_url = Router::url([
+                'plugin' => 'Documents', 'controller' => 'Invoices', 'action' => 'view', $invoice->id,
+            ], true);
+        }
+
         $event->setResult($invoices);
     }
 
@@ -540,6 +632,10 @@ class DocumentsAIToolsEvents implements EventListenerInterface
 
             return;
         }
+
+        $invoice->view_url = Router::url([
+            'plugin' => 'Documents', 'controller' => 'Invoices', 'action' => 'view', $invoice->id,
+        ], true);
 
         $event->setResult($invoice);
     }
@@ -804,6 +900,12 @@ class DocumentsAIToolsEvents implements EventListenerInterface
             ->all()
             ->toArray();
 
+        foreach ($documents as $document) {
+            $document->view_url = Router::url([
+                'plugin' => 'Documents', 'controller' => 'Documents', 'action' => 'view', $document->id,
+            ], true);
+        }
+
         $event->setResult($documents);
     }
 
@@ -835,6 +937,10 @@ class DocumentsAIToolsEvents implements EventListenerInterface
 
             return;
         }
+
+        $document->view_url = Router::url([
+            'plugin' => 'Documents', 'controller' => 'Documents', 'action' => 'view', $document->id,
+        ], true);
 
         $event->setResult($document);
     }
@@ -878,6 +984,12 @@ class DocumentsAIToolsEvents implements EventListenerInterface
             ->all()
             ->toArray();
 
+        foreach ($travelOrders as $travelOrder) {
+            $travelOrder->view_url = Router::url([
+                'plugin' => 'Documents', 'controller' => 'TravelOrders', 'action' => 'view', $travelOrder->id,
+            ], true);
+        }
+
         $event->setResult($travelOrders);
     }
 
@@ -910,6 +1022,10 @@ class DocumentsAIToolsEvents implements EventListenerInterface
 
             return;
         }
+
+        $travelOrder->view_url = Router::url([
+            'plugin' => 'Documents', 'controller' => 'TravelOrders', 'action' => 'view', $travelOrder->id,
+        ], true);
 
         $event->setResult($travelOrder);
     }
