@@ -418,7 +418,7 @@ class CrmAIToolsEventsTest extends TestCase
 
     public function testEditContactAccount(): void
     {
-        $args = ['id' => '1', 'bic' => 'UPDATED22'];
+        $args = ['id' => '1', 'bic' => 'UPDTSI22'];
         $event = $this->makeEvent('Crm.edit_contact_account', $args);
         $this->listener->aiAssistantExecuteTool($event, 'Crm.edit_contact_account', $args);
 

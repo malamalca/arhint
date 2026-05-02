@@ -950,7 +950,8 @@ class DocumentsAIToolsEvents implements EventListenerInterface
         }
 
         if (empty($travelOrder->counter_id)) {
-            $event->setResult(['error' => 'counter_id is required. Use Documents.get_document_counters to find a valid value.']);
+            $event->setResult(['error' => 'counter_id is required. ' .
+                'Use Documents.get_document_counters to find a valid value.']);
 
             return;
         }

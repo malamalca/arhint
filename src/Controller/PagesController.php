@@ -158,7 +158,7 @@ class PagesController extends AppController
             $formAi =
                 '<div class="ai-assistant-warning">' .
                 '<p>' . __('AI assistant is not configured for your account.') . '</p>' .
-                '<p>' . __('To enable it, add an <code>ai_assistant</code> property to your user profile with the following fields:') . '</p>' .
+                '<p>' . __('To enable it, add an <code>ai_assistant</code> to your user profile:') . '</p>' .
                 '<pre>{"provider": "openai", "api_key": "sk-...", "model": "gpt-4o"}</pre>' .
                 '<p>' . __('For a local/custom provider, use:') . '</p>' .
                 '<pre>{"provider": "local", "url": "http://...", "model": "model-name"}</pre>' .
