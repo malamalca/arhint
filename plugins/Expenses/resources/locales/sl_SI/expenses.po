@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Expenses\n"
-"POT-Creation-Date: 2023-04-18 09:25+0000\n"
-"PO-Revision-Date: 2023-04-18 11:27+0200\n"
+"POT-Creation-Date: 2026-03-14 13:52+0000\n"
+"PO-Revision-Date: 2026-03-14 15:08+0100\n"
 "Last-Translator: Malamalca <info@malamalca.com>\n"
 "Language-Team: \n"
 "Language: sl\n"
@@ -17,80 +17,176 @@ msgstr ""
 "X-Generator: Poedit 3.0.1\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
-#: plugins/Expenses/src/Controller/ExpensesController.php:78
-#: plugins/Expenses/src/Controller/PaymentsController.php:162
+#: plugins/Expenses/src/Controller/AccountsController.php:75
+msgid "— None (root) —"
+msgstr "— Glavni konto —"
+
+#: plugins/Expenses/src/Controller/AccountsController.php:84
+msgid "The account has been saved."
+msgstr "Konto je shranjen."
+
+#: plugins/Expenses/src/Controller/AccountsController.php:88
+msgid "The account could not be saved. Please, try again."
+msgstr "Konta ni mogoče shraniti. Preverite vpisana polja."
+
+#: plugins/Expenses/src/Controller/AccountsController.php:111
+msgid "Cannot delete an account that has child accounts."
+msgstr "Konta z obstoječimi podkonti ni mogoče izbrisati."
+
+#: plugins/Expenses/src/Controller/AccountsController.php:117
+msgid "The account has been deleted."
+msgstr "Konto je izbrisan."
+
+#: plugins/Expenses/src/Controller/AccountsController.php:119
+msgid "The account could not be deleted. Please, try again."
+msgstr "Konta ni mogoče izbrisati. Poizkusite ponovno."
+
+#: plugins/Expenses/src/Controller/AccountsController.php:153
+#: plugins/Expenses/src/Controller/BookingOrderEntriesController.php:190
+#: plugins/Expenses/src/Controller/ExpensesController.php:86
+#: plugins/Expenses/src/Controller/PartnersController.php:134
+#: plugins/Expenses/src/Controller/PaymentsController.php:145
 msgid "Invalid ajax call."
 msgstr "Napaka pri povezavi ajax."
 
-#: plugins/Expenses/src/Controller/ExpensesController.php:150
-#: plugins/Expenses/src/Controller/ExpensesController.php:388
+#: plugins/Expenses/src/Controller/AppController.php:27
+msgid "No Access"
+msgstr "Ni dostopa"
+
+#: plugins/Expenses/src/Controller/BookingOrderEntriesController.php:82
+msgid "The entry has been saved."
+msgstr "Postavka je shranjena."
+
+#: plugins/Expenses/src/Controller/BookingOrderEntriesController.php:96
+msgid "The entry could not be saved. Please, try again."
+msgstr "Postavke ni mogoče shraniti. Preverite vpisana polja."
+
+#: plugins/Expenses/src/Controller/BookingOrderEntriesController.php:212
+msgid "The entry has been deleted."
+msgstr "Postavka je izbrisana."
+
+#: plugins/Expenses/src/Controller/BookingOrderEntriesController.php:214
+msgid "The entry could not be deleted. Please, try again."
+msgstr "Postavke ni mogoče izbrisati. Poizkusite ponovno."
+
+#: plugins/Expenses/src/Controller/BookingOrdersController.php:103
+msgid "The booking order has been saved."
+msgstr "Temeljnica je shranjena."
+
+#: plugins/Expenses/src/Controller/BookingOrdersController.php:107
+msgid "The booking order could not be saved. Please, try again."
+msgstr ""
+"Temeljnice ni bilo mogoče shraniti. Preverite polja in poizkusite ponovno."
+
+#: plugins/Expenses/src/Controller/BookingOrdersController.php:129
+msgid "The booking order has been deleted."
+msgstr "Temeljnica je bil izbrisana."
+
+#: plugins/Expenses/src/Controller/BookingOrdersController.php:131
+msgid "The booking order could not be deleted. Please, try again."
+msgstr "Temeljnice ni bilo mogoče izbrisati."
+
+#: plugins/Expenses/src/Controller/BookingOrdersController.php:152
+msgid "The booking order has been posted."
+msgstr "Temeljnica je zaključena."
+
+#: plugins/Expenses/src/Controller/BookingOrdersController.php:154
+msgid "The booking order could not be posted."
+msgstr "Temeljnice ni mogoče zaključiti."
+
+#: plugins/Expenses/src/Controller/BookingOrdersController.php:175
+msgid "The booking order has been locked."
+msgstr "Temeljnica je zakljenjena."
+
+#: plugins/Expenses/src/Controller/BookingOrdersController.php:177
+msgid "The booking order could not be locked."
+msgstr "Temeljnice ni mogoče zakleniti."
+
+#: plugins/Expenses/src/Controller/ExpensesController.php:155
+#: plugins/Expenses/src/Controller/ExpensesController.php:390
 msgid "The expense could not be saved. Please, try again."
 msgstr ""
 "Prihodka/odhodka ni bilo mogoče shraniti. Preverite polja in poizkusite "
 "ponovno."
 
-#: plugins/Expenses/src/Controller/ExpensesController.php:175
+#: plugins/Expenses/src/Controller/ExpensesController.php:178
 msgid "The expense has been deleted."
 msgstr "Prihodek/odhodek je bil izbrisan."
 
-#: plugins/Expenses/src/Controller/ExpensesController.php:177
+#: plugins/Expenses/src/Controller/ExpensesController.php:180
 msgid "The expense could not be deleted. Please, try again."
 msgstr "Prihodka/odhodka ni bilo mogoče izbrisati."
 
-#: plugins/Expenses/src/Controller/ExpensesController.php:248
+#: plugins/Expenses/src/Controller/ExpensesController.php:251
 msgid "Unpaid Expenses"
 msgstr "Neplačani prihodki/odhodki"
 
-#: plugins/Expenses/src/Controller/ExpensesController.php:384
-#: plugins/Expenses/src/Controller/PaymentsController.php:106
+#: plugins/Expenses/src/Controller/ExpensesController.php:386
+#: plugins/Expenses/src/Controller/PaymentsController.php:85
 msgid "The payment has been saved."
 msgstr "Plačilo je shranjeno."
 
-#: plugins/Expenses/src/Controller/PaymentsAccountsController.php:72
+#: plugins/Expenses/src/Controller/PartnersController.php:98
+msgid "The partner has been saved."
+msgstr "Kupec/dobavitelj je shranjen."
+
+#: plugins/Expenses/src/Controller/PartnersController.php:102
+msgid "The partner could not be saved. Please, try again."
+msgstr "Kupca/dobavitelja ni mogoče shraniti. Preverite vpisana polja."
+
+#: plugins/Expenses/src/Controller/PartnersController.php:151
+msgid "The partner has been deleted."
+msgstr "Kupec/dobavitelj je izbrisan."
+
+#: plugins/Expenses/src/Controller/PartnersController.php:153
+msgid "The partner could not be deleted. Please, try again."
+msgstr "Kupca/dobavitelja ni mogoče izbrisati. Poizkusite ponovno."
+
+#: plugins/Expenses/src/Controller/PaymentsAccountsController.php:59
 msgid "The payments account has been saved."
 msgstr "Računa ni mogoče shraniti."
 
-#: plugins/Expenses/src/Controller/PaymentsAccountsController.php:76
+#: plugins/Expenses/src/Controller/PaymentsAccountsController.php:63
 msgid "The payments account could not be saved. Please, try again."
 msgstr "Računa ni mogoče shraniti. Preverite vpisana polja."
 
-#: plugins/Expenses/src/Controller/PaymentsAccountsController.php:97
+#: plugins/Expenses/src/Controller/PaymentsAccountsController.php:84
 msgid "The payments account has been deleted."
 msgstr "Račun je bil izbrisan."
 
-#: plugins/Expenses/src/Controller/PaymentsAccountsController.php:99
+#: plugins/Expenses/src/Controller/PaymentsAccountsController.php:86
 msgid "The payments account could not be deleted. Please, try again."
 msgstr "Računa ni mogoče izbrisati. Poizkusite ponovno."
 
-#: plugins/Expenses/src/Controller/PaymentsController.php:110
+#: plugins/Expenses/src/Controller/PaymentsController.php:89
 msgid "The payment could not be saved. Please, try again."
 msgstr "Plačila ni mogoče shraniti. Preverite vpisana polja."
 
-#: plugins/Expenses/src/Controller/PaymentsController.php:134
+#: plugins/Expenses/src/Controller/PaymentsController.php:113
 msgid "The payment has been deleted."
 msgstr "Plačilo je izbrisano."
 
-#: plugins/Expenses/src/Controller/PaymentsController.php:136
+#: plugins/Expenses/src/Controller/PaymentsController.php:115
 msgid "The payment could not be deleted. Please, try again."
 msgstr "Plačila ni mogoče izbrisati. Poizkusite ponovno."
 
-#: plugins/Expenses/src/Event/ExpensesEvents.php:46
+#: plugins/Expenses/src/Event/ExpensesEvents.php:53
 #: plugins/Expenses/templates/Expenses/graph_yearly.php:9
 #: plugins/Expenses/templates/Expenses/index.php:10
 #: plugins/Expenses/templates/Expenses/index.php:15
 msgid "Income and Expenses"
 msgstr "Prihodki in odhodki"
 
-#: plugins/Expenses/src/Event/ExpensesEvents.php:78
-#: plugins/Expenses/src/Lib/ExpensesSidebar.php:28
+#: plugins/Expenses/src/Event/ExpensesEvents.php:89
+#: plugins/Expenses/src/Lib/ExpensesSidebar.php:38
 msgid "Accounting"
 msgstr "Prihodki in odhodki"
 
-#: plugins/Expenses/src/Event/ExpensesEvents.php:83
+#: plugins/Expenses/src/Event/ExpensesEvents.php:93
 msgid "Income/Expense"
 msgstr "Prihodki/Odhodki"
 
-#: plugins/Expenses/src/Event/ExpensesEvents.php:88
+#: plugins/Expenses/src/Event/ExpensesEvents.php:96
 #: plugins/Expenses/templates/Expenses/graph_expenses.php:63
 #: plugins/Expenses/templates/Expenses/graph_yearly.php:6
 #: plugins/Expenses/templates/Expenses/graph_yearly.php:15
@@ -99,25 +195,29 @@ msgstr "Prihodki/Odhodki"
 msgid "Income"
 msgstr "Prihodek"
 
-#: plugins/Expenses/src/Event/ExpensesEvents.php:89
+#: plugins/Expenses/src/Event/ExpensesEvents.php:97
 msgid "Expense"
 msgstr "Odhodek"
 
-#: plugins/Expenses/src/Event/ExpensesEvents.php:91
+#: plugins/Expenses/src/Event/ExpensesEvents.php:99
 msgid "Neither expense nor income"
 msgstr "Ni ne prihodek, ne odhodek"
 
-#: plugins/Expenses/src/Event/ExpensesEvents.php:131
-#: plugins/Expenses/src/Lib/ExpensesSidebar.php:38
+#: plugins/Expenses/src/Event/ExpensesEvents.php:128
+msgid "Partners"
+msgstr "Kupec/dobavitelj"
+
+#: plugins/Expenses/src/Event/ExpensesEvents.php:183
+#: plugins/Expenses/src/Lib/ExpensesSidebar.php:48
 #: plugins/Expenses/templates/Expenses/view.php:54
 msgid "Payments"
 msgstr "Plačila"
 
-#: plugins/Expenses/src/Event/ExpensesEvents.php:141
+#: plugins/Expenses/src/Event/ExpensesEvents.php:193
 msgid "WARNING: There are multiple expenses for this document!"
 msgstr "POZOR! Za dokument obstaja več kot en prihodek/odhodek!"
 
-#: plugins/Expenses/src/Lib/ExpensesSidebar.php:48
+#: plugins/Expenses/src/Lib/ExpensesSidebar.php:58
 #: plugins/Expenses/templates/Expenses/graph_expenses.php:56
 #: plugins/Expenses/templates/Expenses/graph_yearly.php:6
 #: plugins/Expenses/templates/Expenses/graph_yearly.php:20
@@ -126,88 +226,380 @@ msgstr "POZOR! Za dokument obstaja več kot en prihodek/odhodek!"
 msgid "Expenses"
 msgstr "Odhodki"
 
-#: plugins/Expenses/src/Lib/ExpensesSidebar.php:60
+#: plugins/Expenses/src/Lib/ExpensesSidebar.php:70
 msgid "Reports"
 msgstr "Izpisi"
 
-#: plugins/Expenses/src/Lib/ExpensesSidebar.php:71
+#: plugins/Expenses/src/Lib/ExpensesSidebar.php:81
 msgid "Unpaid Invoices"
 msgstr "Odprte postavke"
 
-#: plugins/Expenses/src/Lib/ExpensesSidebar.php:83
+#: plugins/Expenses/src/Lib/ExpensesSidebar.php:93
 msgid "Expenses Graph"
 msgstr "Graf - prihodki/odhodki"
 
-#: plugins/Expenses/src/Lib/ExpensesSidebar.php:95
+#: plugins/Expenses/src/Lib/ExpensesSidebar.php:105
 msgid "Yearly Graph"
 msgstr "Graf - letni promet"
 
-#: plugins/Expenses/src/Lib/ExpensesSidebar.php:109
+#: plugins/Expenses/src/Lib/ExpensesSidebar.php:119
 #: plugins/Expenses/templates/Expenses/import_sepa_step1.php:27
 msgid "Import"
 msgstr "Uvoz"
 
-#: plugins/Expenses/src/Lib/ExpensesSidebar.php:120
+#: plugins/Expenses/src/Lib/ExpensesSidebar.php:130
 msgid "Sepa XML"
 msgstr "Sepa XML"
 
-#: plugins/Expenses/src/Lib/ExpensesSidebar.php:134
+#: plugins/Expenses/src/Lib/ExpensesSidebar.php:144
 msgid "Lookups"
 msgstr "Šifranti"
 
-#: plugins/Expenses/src/Lib/ExpensesSidebar.php:142
-msgid "Accounts"
-msgstr "Računi"
+#: plugins/Expenses/src/Lib/ExpensesSidebar.php:152
+msgid "Payment Accounts"
+msgstr "TRR računi"
 
-#: plugins/Expenses/src/View/Helper/LilExpenseHelper.php:55
-#: plugins/Expenses/src/View/Helper/LilExpenseHelper.php:81
-#: plugins/Expenses/src/View/Helper/LilExpenseHelper.php:110
-#: plugins/Expenses/src/View/Helper/LilExpenseHelper.php:148
-#: plugins/Expenses/templates/Payments/index.php:198
-#: plugins/Expenses/templates/Payments/index.php:203
-#: plugins/Expenses/templates/element/payments_list.php:59
+#: plugins/Expenses/src/Lib/ExpensesSidebar.php:163
+#: plugins/Expenses/templates/Accounts/index.php:48
+msgid "Chart of Accounts"
+msgstr "Kontni načrt"
+
+#: plugins/Expenses/src/Model/Table/BookingOrdersTable.php:120
+msgid "Draft"
+msgstr "Osnutek"
+
+#: plugins/Expenses/src/Model/Table/BookingOrdersTable.php:121
+msgid "Posted"
+msgstr "Zaključena"
+
+#: plugins/Expenses/src/Model/Table/BookingOrdersTable.php:122
+msgid "Locked"
+msgstr "Zaklenjena"
+
+#: plugins/Expenses/src/Model/Table/PartnersTable.php:104
+msgid "Buyer"
+msgstr "Kupec"
+
+#: plugins/Expenses/src/Model/Table/PartnersTable.php:105
+msgid "Seller"
+msgstr "Dobavitelj"
+
+#: plugins/Expenses/src/View/Helper/LilExpenseHelper.php:69
+#: plugins/Expenses/src/View/Helper/LilExpenseHelper.php:95
+#: plugins/Expenses/src/View/Helper/LilExpenseHelper.php:124
+#: plugins/Expenses/src/View/Helper/LilExpenseHelper.php:162
+#: plugins/Expenses/templates/Payments/index.php:201
+#: plugins/Expenses/templates/Payments/index.php:206
+#: plugins/Expenses/templates/element/payments_list.php:64
 msgid "N/A"
 msgstr "N/A"
 
-#: plugins/Expenses/templates/Expenses/edit.php:6
-msgid "Edit Expense"
-msgstr "Uredi prihodek/odhodek"
+#: plugins/Expenses/templates/Accounts/edit.php:11
+#: plugins/Expenses/templates/PaymentsAccounts/edit.php:4
+msgid "Edit Account"
+msgstr "Urejanje konta"
 
-#: plugins/Expenses/templates/Expenses/edit.php:6
-#: plugins/Expenses/templates/Payments/edit.php:111
-msgid "Add Expense"
-msgstr "Dodaj prihodek/odhodek"
+#: plugins/Expenses/templates/Accounts/edit.php:12
+#: plugins/Expenses/templates/PaymentsAccounts/edit.php:4
+msgid "Add Account"
+msgstr "Vpis konta"
 
+#: plugins/Expenses/templates/Accounts/edit.php:28
+#: plugins/Expenses/templates/BookingOrderEntries/edit.php:53
+#: plugins/Expenses/templates/BookingOrders/view.php:140
+#: plugins/Expenses/templates/Payments/index.php:149
+#: plugins/Expenses/templates/element/payments_list.php:18
+msgid "Account"
+msgstr "Konto"
+
+#: plugins/Expenses/templates/Accounts/edit.php:35
+msgid "Parent Account"
+msgstr "Nadrejen konto"
+
+#: plugins/Expenses/templates/Accounts/edit.php:47
+#: plugins/Expenses/templates/Accounts/index.php:66
+#: plugins/Expenses/templates/Accounts/pick.php:17
+msgid "Code"
+msgstr "Šifra"
+
+#: plugins/Expenses/templates/Accounts/edit.php:57
+#: plugins/Expenses/templates/Accounts/index.php:67
+#: plugins/Expenses/templates/Accounts/pick.php:18
+msgid "Name"
+msgstr "Naziv"
+
+#: plugins/Expenses/templates/Accounts/edit.php:67
+#: plugins/Expenses/templates/BookingOrderEntries/edit.php:182
+#: plugins/Expenses/templates/BookingOrders/edit.php:78
+#: plugins/Expenses/templates/Expenses/edit.php:107
+#: plugins/Expenses/templates/Expenses/import_sepa_link.php:42
+#: plugins/Expenses/templates/Partners/edit.php:61
+#: plugins/Expenses/templates/PaymentsAccounts/edit.php:58
+#: plugins/Expenses/templates/Payments/edit.php:116
+msgid "Save"
+msgstr "Shrani"
+
+#: plugins/Expenses/templates/Accounts/index.php:29
+msgid "Search code or name…"
+msgstr "Išči po šifri ali nazivu..."
+
+#: plugins/Expenses/templates/Accounts/index.php:30
+#: plugins/Expenses/templates/BookingOrders/index.php:39
+msgid "Search"
+msgstr "Išči"
+
+#: plugins/Expenses/templates/Accounts/index.php:33
+#: plugins/Expenses/templates/BookingOrders/index.php:41
+msgid "Clear"
+msgstr "Počisti"
+
+#: plugins/Expenses/templates/Accounts/index.php:41
+msgid "Expand all"
+msgstr "Razširi vse"
+
+#: plugins/Expenses/templates/Accounts/index.php:42
+msgid "Collapse all"
+msgstr "Zapri vse"
+
+#: plugins/Expenses/templates/Accounts/index.php:51
+#: plugins/Expenses/templates/BookingOrders/index.php:49
+#: plugins/Expenses/templates/Expenses/index.php:111
+#: plugins/Expenses/templates/PaymentsAccounts/index.php:6
+#: plugins/Expenses/templates/Payments/index.php:133
+msgid "Add"
+msgstr "Dodaj"
+
+#: plugins/Expenses/templates/Accounts/pick.php:10
+msgid "Filter…"
+msgstr "Filter..."
+
+#: plugins/Expenses/templates/BookingOrderEntries/edit.php:11
+#: plugins/Expenses/templates/BookingOrders/view.php:194
+msgid "Edit Entry"
+msgstr "Uredi postavko"
+
+#: plugins/Expenses/templates/BookingOrderEntries/edit.php:12
+#: plugins/Expenses/templates/BookingOrders/view.php:188
+msgid "Add Entry"
+msgstr "Dodaj postavko"
+
+#: plugins/Expenses/templates/BookingOrderEntries/edit.php:15
+#: plugins/Expenses/templates/BookingOrders/edit.php:14
+#: plugins/Expenses/templates/BookingOrders/view.php:99
 #: plugins/Expenses/templates/Expenses/edit.php:9
 #: plugins/Expenses/templates/Expenses/view.php:14
 #: plugins/Expenses/templates/Payments/edit.php:9
 msgid "Delete"
 msgstr "Briši"
 
+#: plugins/Expenses/templates/BookingOrderEntries/edit.php:24
+#: plugins/Expenses/templates/BookingOrders/view.php:71
+msgid "Are you sure you want to delete this entry?"
+msgstr "Ste prepričani, da želite izbrisati postavko?"
+
+#: plugins/Expenses/templates/BookingOrderEntries/edit.php:47
+msgid "Entry"
+msgstr "Postavka"
+
+#: plugins/Expenses/templates/BookingOrderEntries/edit.php:54
+#: plugins/Expenses/templates/BookingOrderEntries/edit.php:96
+#: plugins/Expenses/templates/BookingOrderEntries/edit.php:136
+msgid "Type to search…"
+msgstr "Iskalni niz..."
+
+#: plugins/Expenses/templates/BookingOrderEntries/edit.php:67
+msgid "Type to search or [$1browse all accounts]."
+msgstr "Vpišite iskalni niz ali [$1prebrskajte kontni načrt]."
+
+#: plugins/Expenses/templates/BookingOrderEntries/edit.php:95
+#: plugins/Expenses/templates/BookingOrders/view.php:141
+#: plugins/Expenses/templates/Partners/edit.php:31
+msgid "Partner"
+msgstr "Kupec/dobavitelj"
+
+#: plugins/Expenses/templates/BookingOrderEntries/edit.php:120
+msgid "— None —"
+msgstr "— brez —"
+
+#: plugins/Expenses/templates/BookingOrderEntries/edit.php:122
+msgid "Invoices"
+msgstr "Računi"
+
+#: plugins/Expenses/templates/BookingOrderEntries/edit.php:123
+msgid "Documents"
+msgstr "Dokumenti"
+
+#: plugins/Expenses/templates/BookingOrderEntries/edit.php:124
+msgid "Travel Orders"
+msgstr "Potni nalogi"
+
+#: plugins/Expenses/templates/BookingOrderEntries/edit.php:125
+msgid "Bank Statements"
+msgstr "Bančni izpiski"
+
+#: plugins/Expenses/templates/BookingOrderEntries/edit.php:127
+msgid "Model"
+msgstr "Model"
+
+#: plugins/Expenses/templates/BookingOrderEntries/edit.php:135
+msgid "Document"
+msgstr "Dokument"
+
+#: plugins/Expenses/templates/BookingOrderEntries/edit.php:158
+#: plugins/Expenses/templates/BookingOrders/view.php:142
+#: plugins/Expenses/templates/Expenses/edit.php:46
+#: plugins/Expenses/templates/Expenses/import_sepa_link.php:35
+#: plugins/Expenses/templates/Payments/edit.php:82
+#: plugins/Expenses/templates/Payments/index.php:156
+msgid "Description"
+msgstr "Opis"
+
+#: plugins/Expenses/templates/BookingOrderEntries/edit.php:166
+#: plugins/Expenses/templates/BookingOrders/view.php:143
+msgid "Debit"
+msgstr "Breme"
+
+#: plugins/Expenses/templates/BookingOrderEntries/edit.php:174
+#: plugins/Expenses/templates/BookingOrders/view.php:146
+msgid "Credit"
+msgstr "Dobro"
+
+#: plugins/Expenses/templates/BookingOrderEntries/edit.php:226
+msgid "Select Account"
+msgstr "Konto"
+
+#: plugins/Expenses/templates/BookingOrders/edit.php:10
+msgid "Edit Booking Order"
+msgstr "Urejanje temeljnice"
+
+#: plugins/Expenses/templates/BookingOrders/edit.php:11
+msgid "Add Booking Order"
+msgstr "Nova temeljnica"
+
+#: plugins/Expenses/templates/BookingOrders/edit.php:23
+#: plugins/Expenses/templates/BookingOrders/index.php:103
+#: plugins/Expenses/templates/BookingOrders/view.php:102
+msgid "Are you sure you want to delete this booking order?"
+msgstr "Ste prepričani, da želite izbrisati temeljnico?"
+
+#: plugins/Expenses/templates/BookingOrders/edit.php:42
+msgid "Booking Order"
+msgstr "Temeljnica"
+
+#: plugins/Expenses/templates/BookingOrders/edit.php:48
+#: plugins/Expenses/templates/BookingOrders/index.php:58
+#: plugins/Expenses/templates/BookingOrders/view.php:108
+#: plugins/Expenses/templates/report/Expenses/unpaid.php:58
+msgid "No"
+msgstr "Št."
+
+#: plugins/Expenses/templates/BookingOrders/edit.php:55
+#: plugins/Expenses/templates/BookingOrders/index.php:59
+#: plugins/Expenses/templates/BookingOrders/view.php:109
+#: plugins/Expenses/templates/PaymentsAccounts/edit.php:30
+#: plugins/Expenses/templates/PaymentsAccounts/index.php:20
+#: plugins/Expenses/templates/report/Expenses/unpaid.php:66
+msgid "Title"
+msgstr "Naziv"
+
+#: plugins/Expenses/templates/BookingOrders/edit.php:62
+#: plugins/Expenses/templates/BookingOrders/index.php:60
+#: plugins/Expenses/templates/BookingOrders/view.php:110
+#: plugins/Expenses/templates/Expenses/edit.php:54
+#: plugins/Expenses/templates/Expenses/import_sepa_step2.php:58
+#: plugins/Expenses/templates/Expenses/index.php:132
+#: plugins/Expenses/templates/Expenses/view.php:26
+#: plugins/Expenses/templates/Payments/edit.php:55
+#: plugins/Expenses/templates/Payments/index.php:153
+#: plugins/Expenses/templates/element/payments_list.php:14
+msgid "Date"
+msgstr "Datum"
+
+#: plugins/Expenses/templates/BookingOrders/edit.php:69
+#: plugins/Expenses/templates/BookingOrders/index.php:61
+#: plugins/Expenses/templates/BookingOrders/view.php:112
+msgid "Status"
+msgstr "Status"
+
+#: plugins/Expenses/templates/BookingOrders/index.php:27
+msgid "Search no or title…"
+msgstr "Iskanje po številki ali nazivu"
+
+#: plugins/Expenses/templates/BookingOrders/index.php:32
+msgid "— All statuses —"
+msgstr "— Vsi statusi —"
+
+#: plugins/Expenses/templates/BookingOrders/index.php:46
+msgid "Booking Orders"
+msgstr "Temeljnice"
+
+#: plugins/Expenses/templates/BookingOrders/index.php:62
+msgid "Debit / Credit"
+msgstr "Breme / Dobro"
+
+#: plugins/Expenses/templates/BookingOrders/view.php:21
+msgid "Add entry"
+msgstr "Vpis postavke"
+
+#: plugins/Expenses/templates/BookingOrders/view.php:79
+msgid "Booking Order #{0}"
+msgstr "Temeljnica #{0}"
+
+#: plugins/Expenses/templates/BookingOrders/view.php:82
+#: plugins/Expenses/templates/Expenses/view.php:9
+msgid "Edit"
+msgstr "Uredi"
+
+#: plugins/Expenses/templates/BookingOrders/view.php:87
+msgid "Post"
+msgstr "Zaključi"
+
+#: plugins/Expenses/templates/BookingOrders/view.php:90
+msgid "Post this booking order?"
+msgstr "Ste prepričani, da želite zaključiti temeljnico?"
+
+#: plugins/Expenses/templates/BookingOrders/view.php:93
+msgid "Lock"
+msgstr "Zakleni"
+
+#: plugins/Expenses/templates/BookingOrders/view.php:96
+msgid "Lock this booking order?"
+msgstr "Ste prepričani, da želite zakleniti temeljnico?"
+
+#: plugins/Expenses/templates/BookingOrders/view.php:120
+msgid "Opened by"
+msgstr "Ustvaril"
+
+#: plugins/Expenses/templates/BookingOrders/view.php:131
+msgid "Entries"
+msgstr "Postavke"
+
+#: plugins/Expenses/templates/BookingOrders/view.php:163
+#: plugins/Expenses/templates/Expenses/edit.php:80
+#: plugins/Expenses/templates/Expenses/index.php:140
+#: plugins/Expenses/templates/Expenses/view.php:42
+#: plugins/Expenses/templates/element/payments_list.php:42
+#: plugins/Expenses/templates/report/Expenses/unpaid.php:74
+#: plugins/Expenses/templates/report/Expenses/unpaid.php:101
+msgid "Total"
+msgstr "Skupaj"
+
+#: plugins/Expenses/templates/Expenses/edit.php:6
+msgid "Edit Expense"
+msgstr "Uredi prihodek/odhodek"
+
+#: plugins/Expenses/templates/Expenses/edit.php:6
+#: plugins/Expenses/templates/Payments/edit.php:109
+msgid "Add Expense"
+msgstr "Dodaj prihodek/odhodek"
+
 #: plugins/Expenses/templates/Expenses/edit.php:18
 #: plugins/Expenses/templates/Expenses/view.php:18
 msgid "Are you sure you want to delete this expense?"
 msgstr "Ste prepričani, da želite izbrisati prihodek/odhodek?"
 
-#: plugins/Expenses/templates/Expenses/edit.php:46
-#: plugins/Expenses/templates/Expenses/import_sepa_link.php:35
-#: plugins/Expenses/templates/Payments/edit.php:84
-#: plugins/Expenses/templates/Payments/index.php:156
-msgid "Description"
-msgstr "Opis"
-
-#: plugins/Expenses/templates/Expenses/edit.php:54
-#: plugins/Expenses/templates/Expenses/import_sepa_step2.php:42
-#: plugins/Expenses/templates/Expenses/index.php:132
-#: plugins/Expenses/templates/Expenses/view.php:26
-#: plugins/Expenses/templates/Payments/edit.php:54
-#: plugins/Expenses/templates/Payments/index.php:153
-#: plugins/Expenses/templates/element/payments_list.php:12
-msgid "Date"
-msgstr "Datum"
-
 #: plugins/Expenses/templates/Expenses/edit.php:55
-#: plugins/Expenses/templates/Payments/edit.php:55
+#: plugins/Expenses/templates/Payments/edit.php:56
 msgid "Date is required."
 msgstr "Vpišite datum."
 
@@ -221,30 +613,14 @@ msgstr "Mesec"
 msgid "Net Total"
 msgstr "Neto"
 
-#: plugins/Expenses/templates/Expenses/edit.php:80
-#: plugins/Expenses/templates/Expenses/index.php:140
-#: plugins/Expenses/templates/Expenses/view.php:42
-#: plugins/Expenses/templates/element/payments_list.php:37
-#: plugins/Expenses/templates/report/Expenses/unpaid.php:74
-#: plugins/Expenses/templates/report/Expenses/unpaid.php:101
-msgid "Total"
-msgstr "Skupaj"
-
-#: plugins/Expenses/templates/Expenses/edit.php:90
-#: plugins/Expenses/templates/Payments/index.php:160
+#: plugins/Expenses/templates/Expenses/edit.php:89
+#: plugins/Expenses/templates/Payments/index.php:163
 msgid "Payment"
 msgstr "Plačilo"
 
-#: plugins/Expenses/templates/Expenses/edit.php:93
+#: plugins/Expenses/templates/Expenses/edit.php:90
 msgid "do not create payment"
 msgstr "ni še plačano"
-
-#: plugins/Expenses/templates/Expenses/edit.php:111
-#: plugins/Expenses/templates/Expenses/import_sepa_link.php:42
-#: plugins/Expenses/templates/PaymentsAccounts/edit.php:58
-#: plugins/Expenses/templates/Payments/edit.php:118
-msgid "Save"
-msgstr "Shrani"
 
 #: plugins/Expenses/templates/Expenses/graph_expenses.php:24
 msgid "GRAPH: Income and Expenses for {0}"
@@ -279,58 +655,58 @@ msgstr "Vsa plačila"
 msgid "Unfinished Payments"
 msgstr "Nezaprta plačila"
 
-#: plugins/Expenses/templates/Expenses/import_sepa_step2.php:24
+#: plugins/Expenses/templates/Expenses/import_sepa_step2.php:27
+msgid "Link with Existing Payment"
+msgstr "Poveži z obstoječim plačilom"
+
+#: plugins/Expenses/templates/Expenses/import_sepa_step2.php:30
+msgid "Pay an Existing Expense"
+msgstr "Plačilo obstoječega prihodka/odhodka"
+
+#: plugins/Expenses/templates/Expenses/import_sepa_step2.php:33
+msgid "Create a New Expense"
+msgstr "Vpis novega prihodka/odhodka"
+
+#: plugins/Expenses/templates/Expenses/import_sepa_step2.php:40
 msgid "IMPORT: SepaXML - Step2 - {0}"
 msgstr "UVOZ: Sepa XML - 2. korak - {0}"
 
-#: plugins/Expenses/templates/Expenses/import_sepa_step2.php:30
+#: plugins/Expenses/templates/Expenses/import_sepa_step2.php:46
 msgid "Upload file"
 msgstr "Prenos datoteke"
 
-#: plugins/Expenses/templates/Expenses/import_sepa_step2.php:46
-#: plugins/Expenses/templates/Payments/edit.php:64
-#: plugins/Expenses/templates/element/payments_list.php:20
+#: plugins/Expenses/templates/Expenses/import_sepa_step2.php:62
+#: plugins/Expenses/templates/Payments/edit.php:65
+#: plugins/Expenses/templates/element/payments_list.php:22
 msgid "Amount"
 msgstr "Količina"
 
-#: plugins/Expenses/templates/Expenses/import_sepa_step2.php:51
+#: plugins/Expenses/templates/Expenses/import_sepa_step2.php:67
 msgid "Descript"
 msgstr "Opis"
 
-#: plugins/Expenses/templates/Expenses/import_sepa_step2.php:56
+#: plugins/Expenses/templates/Expenses/import_sepa_step2.php:72
 #: plugins/Expenses/templates/report/Expenses/unpaid.php:70
 msgid "Client"
 msgstr "Klient"
 
-#: plugins/Expenses/templates/Expenses/import_sepa_step2.php:61
+#: plugins/Expenses/templates/Expenses/import_sepa_step2.php:77
 msgid "Ref"
 msgstr "Ref."
 
-#: plugins/Expenses/templates/Expenses/import_sepa_step2.php:66
+#: plugins/Expenses/templates/Expenses/import_sepa_step2.php:82
 msgid "Action"
 msgstr "Akcija"
 
-#: plugins/Expenses/templates/Expenses/import_sepa_step2.php:82
-msgid "Link with Existing Payment"
-msgstr "Poveži z obstoječim plačilom"
-
-#: plugins/Expenses/templates/Expenses/import_sepa_step2.php:85
-msgid "Pay an Existing Expense"
-msgstr "Plačilo obstoječega prihodka/odhodka"
-
-#: plugins/Expenses/templates/Expenses/import_sepa_step2.php:88
-msgid "Create a New Expense"
-msgstr "Vpis novega prihodka/odhodka"
-
-#: plugins/Expenses/templates/Expenses/import_sepa_step2.php:196
+#: plugins/Expenses/templates/Expenses/import_sepa_step2.php:197
 msgid "Link with existing Payment"
 msgstr "Poveži z obstoječim plačilom"
 
-#: plugins/Expenses/templates/Expenses/import_sepa_step2.php:207
+#: plugins/Expenses/templates/Expenses/import_sepa_step2.php:210
 msgid "Add Payment to Existing Expense"
 msgstr "Plačilo obstoječega prihodka/odhodka"
 
-#: plugins/Expenses/templates/Expenses/import_sepa_step2.php:218
+#: plugins/Expenses/templates/Expenses/import_sepa_step2.php:223
 msgid "Add new Expense"
 msgstr "Dodaj prihodek/odhodek"
 
@@ -353,12 +729,6 @@ msgstr "celo leto"
 msgid "{0} for {1} {2}"
 msgstr "{0} za {1} {2}"
 
-#: plugins/Expenses/templates/Expenses/index.php:111
-#: plugins/Expenses/templates/PaymentsAccounts/index.php:6
-#: plugins/Expenses/templates/Payments/index.php:133
-msgid "Add"
-msgstr "Dodaj"
-
 #: plugins/Expenses/templates/Expenses/index.php:124
 msgid "Kind"
 msgstr "Tip"
@@ -368,7 +738,7 @@ msgid "Decription"
 msgstr "Opis"
 
 #: plugins/Expenses/templates/Expenses/index.php:146
-#: plugins/Expenses/templates/Payments/index.php:175
+#: plugins/Expenses/templates/Payments/index.php:178
 msgid "Recapitulation"
 msgstr "Rekapitulacija"
 
@@ -400,28 +770,44 @@ msgstr "Samo zapadli neplačani dokumenti"
 msgid "Print"
 msgstr "Izpis"
 
-#: plugins/Expenses/templates/Expenses/view.php:9
-msgid "Edit"
-msgstr "Uredi"
+#: plugins/Expenses/templates/Partners/aht/index.php:35
+#: plugins/Expenses/templates/Partners/edit.php:37
+msgid "Role"
+msgstr "Vloga"
 
-#: plugins/Expenses/templates/PaymentsAccounts/edit.php:4
-msgid "Edit Account"
-msgstr "Urejanje računa"
+#: plugins/Expenses/templates/Partners/aht/index.php:36
+#: plugins/Expenses/templates/Partners/edit.php:46
+msgid "Date from"
+msgstr "Datum od"
 
-#: plugins/Expenses/templates/PaymentsAccounts/edit.php:4
-msgid "Add Account"
-msgstr "Vpis računa"
+#: plugins/Expenses/templates/Partners/aht/index.php:37
+#: plugins/Expenses/templates/Partners/edit.php:53
+msgid "Date to"
+msgstr "Datum do"
+
+#: plugins/Expenses/templates/Partners/aht/index.php:53
+msgid "Are you sure you want to delete this partner record?"
+msgstr "Ste prepričani, da želite izbrisati kupca/dobavitelja?"
+
+#: plugins/Expenses/templates/Partners/aht/index.php:63
+msgid "No partner records for this contact."
+msgstr "Kontakt ni vpisan kot dobavitelj ali kupec"
+
+#: plugins/Expenses/templates/Partners/aht/index.php:67
+#: plugins/Expenses/templates/Partners/aht/index.php:81
+#: plugins/Expenses/templates/Partners/edit.php:11
+msgid "Add Partner"
+msgstr "Vpis kupca/dobavitelja"
+
+#: plugins/Expenses/templates/Partners/aht/index.php:88
+#: plugins/Expenses/templates/Partners/edit.php:10
+msgid "Edit Partner"
+msgstr "Urejanje kupca/dobavitelja"
 
 #: plugins/Expenses/templates/PaymentsAccounts/edit.php:23
-#: plugins/Expenses/templates/Payments/edit.php:48
+#: plugins/Expenses/templates/Payments/edit.php:49
 msgid "Basics"
 msgstr "Osnovni podatki"
-
-#: plugins/Expenses/templates/PaymentsAccounts/edit.php:30
-#: plugins/Expenses/templates/PaymentsAccounts/index.php:20
-#: plugins/Expenses/templates/report/Expenses/unpaid.php:66
-msgid "Title"
-msgstr "Naziv"
 
 #: plugins/Expenses/templates/PaymentsAccounts/edit.php:39
 msgid "Primary Account"
@@ -440,34 +826,34 @@ msgid "Active"
 msgstr "Aktiven"
 
 #: plugins/Expenses/templates/Payments/edit.php:6
-#: plugins/Expenses/templates/element/payments_list.php:98
+#: plugins/Expenses/templates/element/payments_list.php:103
 msgid "Edit Payment"
 msgstr "Urejanje plačila"
 
 #: plugins/Expenses/templates/Payments/edit.php:6
-#: plugins/Expenses/templates/element/payments_list.php:28
-#: plugins/Expenses/templates/element/payments_list.php:104
+#: plugins/Expenses/templates/element/payments_list.php:30
+#: plugins/Expenses/templates/element/payments_list.php:109
 msgid "Add Payment"
 msgstr "Vpis plačila"
 
 #: plugins/Expenses/templates/Payments/edit.php:18
-#: plugins/Expenses/templates/element/payments_list.php:75
+#: plugins/Expenses/templates/element/payments_list.php:80
 msgid "Are you sure you want to delete this payment?"
 msgstr "Ste prepričani, da želite izbrisati plačilo?"
 
-#: plugins/Expenses/templates/Payments/edit.php:73
+#: plugins/Expenses/templates/Payments/edit.php:74
 msgid "From/To Account"
 msgstr "Iz/na račun"
 
-#: plugins/Expenses/templates/Payments/edit.php:92
+#: plugins/Expenses/templates/Payments/edit.php:90
 msgid "Links to Expenses"
 msgstr "Povezave s prihodki/odhodki"
 
-#: plugins/Expenses/templates/Payments/edit.php:103
+#: plugins/Expenses/templates/Payments/edit.php:101
 msgid "Cancel"
 msgstr "Prekliči"
 
-#: plugins/Expenses/templates/Payments/edit.php:187
+#: plugins/Expenses/templates/Payments/edit.php:185
 msgid "Expense already exists."
 msgstr "Prihodek ali odhodek pri plačilu je podvojen."
 
@@ -509,12 +895,11 @@ msgstr "Plačila  {0} {1} od {2} do {3}"
 msgid "Payments {0} {1} for {2} {3}"
 msgstr "Plačila {0} {1} za {2} {3}"
 
-#: plugins/Expenses/templates/Payments/index.php:149
-#: plugins/Expenses/templates/element/payments_list.php:16
-msgid "Account"
-msgstr "Račun"
+#: plugins/Expenses/templates/Payments/index.php:159
+msgid "Sepa ID"
+msgstr "Sepa ID"
 
-#: plugins/Expenses/templates/element/payments_list.php:92
+#: plugins/Expenses/templates/element/payments_list.php:97
 msgid "No expense for this item found."
 msgstr "Plačilo nima prihodka/odhodka."
 
@@ -547,10 +932,6 @@ msgstr "Odprte postavke"
 msgid "Cnt"
 msgstr "Z.št."
 
-#: plugins/Expenses/templates/report/Expenses/unpaid.php:58
-msgid "No"
-msgstr "Št."
-
 #: plugins/Expenses/templates/report/Expenses/unpaid.php:62
 msgid "Issued"
 msgstr "Izdan"
@@ -563,14 +944,8 @@ msgstr "Razlika"
 msgid "No documents found"
 msgstr "Ni vpisanih dokumentov."
 
-#~ msgid "The expense has been saved."
-#~ msgstr "Prihodek/odhodek je shranjen."
-
 #~ msgid "GRAPH: Yearly Income/Expenses"
 #~ msgstr "Graf: Letni Prihodki/Odhodki"
-
-#~ msgid "Search"
-#~ msgstr "Išči"
 
 #~ msgid "from %1$s to %2$s"
 #~ msgstr "Od %1$s do %2$s"
@@ -605,12 +980,6 @@ msgstr "Ni vpisanih dokumentov."
 
 #~ msgid "This counter creates income/expense"
 #~ msgstr "Števec ustvari prihodke/odhodke"
-
-#~ msgid "Account has been saved."
-#~ msgstr "Račun je shranjen."
-
-#~ msgid "Account has been deleted."
-#~ msgstr "Račun je izbrisan."
 
 #~ msgid "Payment has been saved."
 #~ msgstr "Plačilo je shranjeno."

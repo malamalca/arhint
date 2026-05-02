@@ -14,6 +14,7 @@ use Cake\Http\Response;
 use Cake\ORM\TableRegistry;
 use Cake\Routing\Router;
 use Cake\View\Exception\MissingTemplateException;
+use Cake\View\Helper\FormHelper;
 use Cake\View\View;
 use League\CommonMark\GithubFlavoredMarkdownConverter;
 
@@ -135,6 +136,35 @@ class PagesController extends AppController
         $nextNoteOffset = $noteOffset > 1 ? $noteOffset - 1 : 1;
         $prevNoteOffset = ($noteOffset == $noteCount ? $noteCount : $noteOffset + 1);
 
+        $FormHelper = new FormHelper(new View());
+        $aiConfig = $this->hasCurrentUser() ? $this->getCurrentUser()->getProperty('ai_assistant') : null;
+        if ($aiConfig && !empty($aiConfig->provider)) {
+            $formAi =
+                '<div id="AIAssistantMessages" class="ai-assistant-messages"></div>' .
+                $FormHelper->create(
+                    null,
+                    ['url' => ['controller' => 'Ai', 'action' => 'chat'], 'id' => 'AIAssistantForm'],
+                ) .
+                $FormHelper->textarea(
+                    'message',
+                    ['id' => 'AIAssistantInput', 'placeholder' => __('Ask your AI assistant...'), 'rows' => 2],
+                ) .
+                '<div class="ai-assistant-actions">' .
+                $FormHelper->button(__('Send'), ['id' => 'AIAssistantSend']) .
+                ' <a href="#" id="AIAssistantClear" class="btn-small">' . __('Clear') . '</a>' .
+                '</div>' .
+                $FormHelper->end();
+        } else {
+            $formAi =
+                '<div class="ai-assistant-warning">' .
+                '<p>' . __('AI assistant is not configured for your account.') . '</p>' .
+                '<p>' . __('To enable it, add an <code>ai_assistant</code> property to your user profile with the following fields:') . '</p>' .
+                '<pre>{"provider": "openai", "api_key": "sk-...", "model": "gpt-4o"}</pre>' .
+                '<p>' . __('For a local/custom provider, use:') . '</p>' .
+                '<pre>{"provider": "local", "url": "http://...", "model": "model-name"}</pre>' .
+                '</div>';
+        }
+
         $dashboardPanels = [
             'title' => '&nbsp;',
             'menu' => [
@@ -176,6 +206,19 @@ class PagesController extends AppController
                 ],
             ],
             'panels' => [
+                'ai-assistant' => [
+                    'params' => [
+                        'class' => 'dashboard-panel',
+                        'id' => 'DashboardAIAssistant',
+                        'data-chat-url' => Router::url(['controller' => 'Ai', 'action' => 'chat']),
+                        'data-clear-url' => Router::url(['controller' => 'Ai', 'action' => 'clearHistory']),
+                    ],
+                    'lines' => [
+                        '<h5>' . __('AI Assistant') . '</h5>',
+                        '<p>' . __('Ask your AI assistant to help you with various tasks.') . '</p>',
+                        '<p>' . $formAi . '</p>',
+                    ],
+                ],
                 'notes' => !$this->hasCurrentUser() || !$this->getCurrentUser()->hasRole('editor') ? null : [
                     'params' => ['class' => 'dashboard-panel', 'id' => 'DashboardNotes'],
                     'lines' => [

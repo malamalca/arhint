@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace Tasks\Lib;
 
 use App\View\AppView;
-use Cake\I18n\DateTime;
 use Cake\ORM\TableRegistry;
 use Tasks\Model\Entity\Task;
 
@@ -42,7 +41,7 @@ class TasksUtils
 
             if ($view->Time->isToday($task->deadline)) {
                 $dueSpanClass = 'lil-task-duetoday';
-                if ($task->deadline->notEquals(new DateTime('today')) && $view->Time->isPast($task->deadline)) {
+                if (!$task->deadline->isToday() && $view->Time->isPast($task->deadline)) {
                     $dueSpanClass = 'lil-task-overdue';
                 } else {
                     // time equals 00:00:00

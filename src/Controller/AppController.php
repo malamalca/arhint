@@ -4,11 +4,13 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Model\Entity\User;
+use App\View\TxtView;
 use ArrayObject;
 use Cake\Controller\Controller;
 use Cake\Event\Event;
 use Cake\Event\EventInterface;
 use Cake\Event\EventManager;
+use Cake\View\JsonView;
 use Exception;
 
 /**
@@ -45,6 +47,8 @@ class AppController extends Controller
         $this->loadComponent('Authentication.Authentication');
         $this->loadComponent('Authorization.Authorization');
         $this->loadComponent('FormProtection');
+
+        $this->addViewClasses([JsonView::class, TxtView::class]);
     }
 
     /**
@@ -76,17 +80,8 @@ class AppController extends Controller
         if ($this->request->is('ajax')) {
             $this->viewBuilder()->setClassName('Ajax');
         }
-
         if ($this->request->is('aht')) {
             $this->viewBuilder()->setClassName('Aht');
-        }
-
-        if ($this->request->is('json')) {
-            $this->viewBuilder()->setClassName('Json');
-        }
-
-        if ($this->request->is('txt')) {
-            $this->viewBuilder()->setClassName('Txt');
         }
 
         $adminSidebar = new ArrayObject();

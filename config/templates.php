@@ -29,6 +29,7 @@
 
         'button' => '<button class="btn filled"{{attrs}}>{{text}}</button>',
 
+        'linkview' => '<a href="{{url}}" class="btn-small filled {{class}}" role="button"><i class="material-icons">visibility</i></a>',
         'linkedit' => '<a href="{{url}}" class="btn-small filled {{class}}" role="button"><i class="material-icons">edit</i></a>',
         'linkdelete' => '<a href="{{url}}" class="btn-small filled {{class}}" role="button" onclick="return confirm(\'{{confirmation}}\');"><i class="material-icons">delete</i></a>',
         'linkpopup' => '<a href="{{url}}" id="dropdown-{{name}}" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"{{attrs}}>{{content}}</a>'

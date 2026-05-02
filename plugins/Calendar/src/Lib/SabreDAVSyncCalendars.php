@@ -28,7 +28,7 @@ class SabreDAVSyncCalendars extends AbstractBackend implements SyncSupport
      * Returns the list of calendars for a specific user.
      *
      * @param string $principalUri Principal uri (e.g. principals/username)
-     * @return array
+     * @return array<mixed>
      */
     public function getCalendarsForUser($principalUri): array
     {
@@ -73,7 +73,7 @@ class SabreDAVSyncCalendars extends AbstractBackend implements SyncSupport
      *
      * @param string $principalUri
      * @param string $calendarUri
-     * @param array $properties
+     * @param array<mixed> $properties
      * @return mixed
      */
     public function createCalendar($principalUri, $calendarUri, array $properties): mixed
@@ -94,7 +94,7 @@ class SabreDAVSyncCalendars extends AbstractBackend implements SyncSupport
      * Returns all calendar objects within a calendar.
      *
      * @param mixed $calendarId User id used as calendar identifier.
-     * @return array
+     * @return array<mixed>
      */
     public function getCalendarObjects($calendarId): array
     {
@@ -110,8 +110,8 @@ class SabreDAVSyncCalendars extends AbstractBackend implements SyncSupport
             $results[] = [
                 'id' => $event->id,
                 'uri' => $event->id . '.ics',
-                'lastmodified' => (int)$event->modified->setTimezone('UTC')->toUnixString(),
-                'etag' => '"' . md5($event->id . $event->modified->setTimezone('UTC')->toUnixString()) . '"',
+                'lastmodified' => (int)($event->modified?->setTimezone('UTC')?->toUnixString() ?? 0),
+                'etag' => '"' . md5($event->id . ($event->modified?->setTimezone('UTC')?->toUnixString() ?? '')) . '"',
                 'size' => strlen($icalData),
                 'component' => 'vevent',
             ];
@@ -125,7 +125,7 @@ class SabreDAVSyncCalendars extends AbstractBackend implements SyncSupport
      *
      * @param mixed $calendarId
      * @param string $objectUri
-     * @return array|null
+     * @return array<mixed>|null
      */
     public function getCalendarObject($calendarId, $objectUri): ?array
     {
@@ -146,8 +146,8 @@ class SabreDAVSyncCalendars extends AbstractBackend implements SyncSupport
         return [
             'id' => $event->id,
             'uri' => $event->id . '.ics',
-            'lastmodified' => (int)$event->modified->setTimezone('UTC')->toUnixString(),
-            'etag' => '"' . md5($event->id . $event->modified->setTimezone('UTC')->toUnixString()) . '"',
+            'lastmodified' => (int)($event->modified?->setTimezone('UTC')?->toUnixString() ?? 0),
+            'etag' => '"' . md5($event->id . ($event->modified?->setTimezone('UTC')?->toUnixString() ?? '')) . '"',
             'size' => strlen($icalData),
             'calendardata' => $icalData,
             'component' => 'vevent',
@@ -158,8 +158,8 @@ class SabreDAVSyncCalendars extends AbstractBackend implements SyncSupport
      * Returns a list of calendar objects by URI.
      *
      * @param mixed $calendarId
-     * @param array $uris
-     * @return array
+     * @param array<mixed> $uris
+     * @return array<mixed>
      */
     public function getMultipleCalendarObjects($calendarId, array $uris): array
     {
@@ -177,8 +177,8 @@ class SabreDAVSyncCalendars extends AbstractBackend implements SyncSupport
             $results[] = [
                 'id' => $event->id,
                 'uri' => $event->id . '.ics',
-                'lastmodified' => (int)$event->modified->setTimezone('UTC')->toUnixString(),
-                'etag' => '"' . md5($event->id . $event->modified->setTimezone('UTC')->toUnixString()) . '"',
+                'lastmodified' => (int)($event->modified?->setTimezone('UTC')?->toUnixString() ?? 0),
+                'etag' => '"' . md5($event->id . ($event->modified?->setTimezone('UTC')?->toUnixString() ?? '')) . '"',
                 'size' => strlen($icalData),
                 'calendardata' => $icalData,
                 'component' => 'vevent',
@@ -205,12 +205,12 @@ class SabreDAVSyncCalendars extends AbstractBackend implements SyncSupport
         $event = $EventsTable->newEmptyEntity();
         $event->id = $this->uriToId($objectUri);
         $event->calendar_id = $calendarId;
-        $event->user_id = $calendarId;
 
+        // @phpstan-ignore-next-line
         $this->applyVEventToEntity($vCalendar->VEVENT, $event);
 
         if ($EventsTable->save($event)) {
-            return '"' . md5($event->id . $event->modified->setTimezone('UTC')->toUnixString()) . '"';
+            return '"' . md5($event->id . ($event->modified?->setTimezone('UTC')?->toUnixString() ?? '')) . '"';
         }
 
         return null;
@@ -240,10 +240,11 @@ class SabreDAVSyncCalendars extends AbstractBackend implements SyncSupport
             return null;
         }
 
+        // @phpstan-ignore-next-line
         $this->applyVEventToEntity($vCalendar->VEVENT, $event);
 
         if ($EventsTable->save($event)) {
-            return '"' . md5($event->id . $event->modified->setTimezone('UTC')->toUnixString()) . '"';
+            return '"' . md5($event->id . ($event->modified?->setTimezone('UTC')?->toUnixString() ?? '')) . '"';
         }
 
         return null;
@@ -277,7 +278,7 @@ class SabreDAVSyncCalendars extends AbstractBackend implements SyncSupport
      * @param string|null $syncToken
      * @param int $syncLevel
      * @param int|null $limit
-     * @return array|null
+     * @return array<mixed>|null
      */
     public function getChangesForCalendar($calendarId, $syncToken, $syncLevel, $limit = null): ?array
     {
@@ -292,7 +293,7 @@ class SabreDAVSyncCalendars extends AbstractBackend implements SyncSupport
      */
     private function uriToId(string $uri): string
     {
-        return preg_replace('/\.ics$/i', '', $uri);
+        return (string)preg_replace('/\.ics$/i', '', $uri);
     }
 
     /**
@@ -306,28 +307,39 @@ class SabreDAVSyncCalendars extends AbstractBackend implements SyncSupport
         $vCalendar = new VObject\Component\VCalendar();
         $vEvent = $vCalendar->createComponent('VEVENT');
 
+        // @phpstan-ignore-next-line
         $vEvent->UID = $event->id;
+        // @phpstan-ignore-next-line
         $vEvent->SUMMARY = $event->title ?? '';
+        // @phpstan-ignore-next-line
         $vEvent->DTSTAMP = new DateTimeImmutable('now', new DateTimeZone('UTC'));
 
         if (!empty($event->location)) {
+            // @phpstan-ignore-next-line
             $vEvent->LOCATION = $event->location;
         }
 
         if (!empty($event->body)) {
+            // @phpstan-ignore-next-line
             $vEvent->DESCRIPTION = $event->body;
         }
 
         if ($event->all_day) {
+            assert($event->dat_start !== null);
+            assert($event->dat_end !== null);
             $startStr = $event->dat_start->format('Ymd');
             // DTEND for all-day events is exclusive (the day after the last event day)
             $endStr = $event->dat_end->toNative()->modify('+1 day')->format('Ymd');
             $vEvent->add('DTSTART', $startStr, ['VALUE' => 'DATE']);
             $vEvent->add('DTEND', $endStr, ['VALUE' => 'DATE']);
         } else {
+            assert($event->dat_start !== null);
+            assert($event->dat_end !== null);
             $dtStart = $event->dat_start->toNative()->setTimezone(new DateTimeZone('UTC'));
             $dtEnd = $event->dat_end->toNative()->setTimezone(new DateTimeZone('UTC'));
+            // @phpstan-ignore-next-line
             $vEvent->DTSTART = $dtStart;
+            // @phpstan-ignore-next-line
             $vEvent->DTEND = $dtEnd;
         }
 

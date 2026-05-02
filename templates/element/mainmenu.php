@@ -27,7 +27,7 @@ if (!empty($main_menu)) {
 <?php
 if (!empty($main_menu)) {
     foreach ($main_menu as $itemKey => $item) {
-        if (!empty($item) && $item['visible']) {
+        if (!empty($item) && !empty($item['visible'])) {
             ?>
         <li>
             <?php

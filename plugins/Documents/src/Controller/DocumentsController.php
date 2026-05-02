@@ -76,6 +76,8 @@ class DocumentsController extends BaseDocumentsController
                     'Client.kind' => $counter->direction == 'received' ? 'II' : 'IV',
                 ],
             ])
+            ->leftJoinWith('Issuers')
+            ->leftJoinWith('Receivers')
             ->where($params['conditions'])
             ->orderBy($params['order']);
 

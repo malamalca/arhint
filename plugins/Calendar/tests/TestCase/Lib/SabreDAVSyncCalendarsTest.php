@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace Calendar\Test\TestCase\Lib;
 
-use Calendar\Lib\SabreDAVSyncCalendars;
 use Cake\TestSuite\TestCase;
+use Calendar\Lib\SabreDAVSyncCalendars;
 
 /**
  * Calendar\Lib\SabreDAVSyncCalendars Test Case

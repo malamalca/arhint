@@ -146,7 +146,7 @@ $admin_index = [
                 'columns' => [
                     'account' => [
                         'parameters' => ['class' => 'left-align'],
-                        'html' => __d('expenses', 'Account'),
+                        'html' => __d('expenses', 'Bank Account'),
                     ],
                     'date' => [
                         'parameters' => ['class' => 'center-align'],

@@ -55,6 +55,7 @@ class User extends Entity implements AuthorizationIdentity, AuthenticationIdenti
         'active' => true,
         'avatar' => true,
         'login_redirect' => true,
+        'properties' => true,
         'created' => true,
         'modified' => true,
         'company' => true,

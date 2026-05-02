@@ -60,7 +60,7 @@ class ContactsEmailsTable extends Table
             ->notEmptyString('kind')
             ->add('kind', 'inList', ['rule' => [
                 'inList',
-                array_keys(Configure::read('Crm.emailTypes')),
+                array_keys(Configure::read('Crm.emailTypes', [])),
             ]]);
 
         return $validator;

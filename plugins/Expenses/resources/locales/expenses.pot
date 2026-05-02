@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2023-04-18 09:25+0000\n"
+"POT-Creation-Date: 2026-03-14 13:52+0000\n"
 "PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
 "Last-Translator: NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
@@ -14,78 +14,173 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: ./plugins/Expenses/src/Controller/ExpensesController.php:78
-#: ./plugins/Expenses/src/Controller/PaymentsController.php:162
+#: ./plugins/Expenses/src/Controller/AccountsController.php:75
+msgid "— None (root) —"
+msgstr ""
+
+#: ./plugins/Expenses/src/Controller/AccountsController.php:84
+msgid "The account has been saved."
+msgstr ""
+
+#: ./plugins/Expenses/src/Controller/AccountsController.php:88
+msgid "The account could not be saved. Please, try again."
+msgstr ""
+
+#: ./plugins/Expenses/src/Controller/AccountsController.php:111
+msgid "Cannot delete an account that has child accounts."
+msgstr ""
+
+#: ./plugins/Expenses/src/Controller/AccountsController.php:117
+msgid "The account has been deleted."
+msgstr ""
+
+#: ./plugins/Expenses/src/Controller/AccountsController.php:119
+msgid "The account could not be deleted. Please, try again."
+msgstr ""
+
+#: ./plugins/Expenses/src/Controller/AccountsController.php:153
+#: ./plugins/Expenses/src/Controller/BookingOrderEntriesController.php:190
+#: ./plugins/Expenses/src/Controller/ExpensesController.php:86
+#: ./plugins/Expenses/src/Controller/PartnersController.php:134
+#: ./plugins/Expenses/src/Controller/PaymentsController.php:145
 msgid "Invalid ajax call."
 msgstr ""
 
-#: ./plugins/Expenses/src/Controller/ExpensesController.php:150
-#: ./plugins/Expenses/src/Controller/ExpensesController.php:388
+#: ./plugins/Expenses/src/Controller/AppController.php:27
+msgid "No Access"
+msgstr ""
+
+#: ./plugins/Expenses/src/Controller/BookingOrderEntriesController.php:82
+msgid "The entry has been saved."
+msgstr ""
+
+#: ./plugins/Expenses/src/Controller/BookingOrderEntriesController.php:96
+msgid "The entry could not be saved. Please, try again."
+msgstr ""
+
+#: ./plugins/Expenses/src/Controller/BookingOrderEntriesController.php:212
+msgid "The entry has been deleted."
+msgstr ""
+
+#: ./plugins/Expenses/src/Controller/BookingOrderEntriesController.php:214
+msgid "The entry could not be deleted. Please, try again."
+msgstr ""
+
+#: ./plugins/Expenses/src/Controller/BookingOrdersController.php:103
+msgid "The booking order has been saved."
+msgstr ""
+
+#: ./plugins/Expenses/src/Controller/BookingOrdersController.php:107
+msgid "The booking order could not be saved. Please, try again."
+msgstr ""
+
+#: ./plugins/Expenses/src/Controller/BookingOrdersController.php:129
+msgid "The booking order has been deleted."
+msgstr ""
+
+#: ./plugins/Expenses/src/Controller/BookingOrdersController.php:131
+msgid "The booking order could not be deleted. Please, try again."
+msgstr ""
+
+#: ./plugins/Expenses/src/Controller/BookingOrdersController.php:152
+msgid "The booking order has been posted."
+msgstr ""
+
+#: ./plugins/Expenses/src/Controller/BookingOrdersController.php:154
+msgid "The booking order could not be posted."
+msgstr ""
+
+#: ./plugins/Expenses/src/Controller/BookingOrdersController.php:175
+msgid "The booking order has been locked."
+msgstr ""
+
+#: ./plugins/Expenses/src/Controller/BookingOrdersController.php:177
+msgid "The booking order could not be locked."
+msgstr ""
+
+#: ./plugins/Expenses/src/Controller/ExpensesController.php:155
+#: ./plugins/Expenses/src/Controller/ExpensesController.php:390
 msgid "The expense could not be saved. Please, try again."
 msgstr ""
 
-#: ./plugins/Expenses/src/Controller/ExpensesController.php:175
+#: ./plugins/Expenses/src/Controller/ExpensesController.php:178
 msgid "The expense has been deleted."
 msgstr ""
 
-#: ./plugins/Expenses/src/Controller/ExpensesController.php:177
+#: ./plugins/Expenses/src/Controller/ExpensesController.php:180
 msgid "The expense could not be deleted. Please, try again."
 msgstr ""
 
-#: ./plugins/Expenses/src/Controller/ExpensesController.php:248
+#: ./plugins/Expenses/src/Controller/ExpensesController.php:251
 msgid "Unpaid Expenses"
 msgstr ""
 
-#: ./plugins/Expenses/src/Controller/ExpensesController.php:384
-#: ./plugins/Expenses/src/Controller/PaymentsController.php:106
+#: ./plugins/Expenses/src/Controller/ExpensesController.php:386
+#: ./plugins/Expenses/src/Controller/PaymentsController.php:85
 msgid "The payment has been saved."
 msgstr ""
 
-#: ./plugins/Expenses/src/Controller/PaymentsAccountsController.php:72
+#: ./plugins/Expenses/src/Controller/PartnersController.php:98
+msgid "The partner has been saved."
+msgstr ""
+
+#: ./plugins/Expenses/src/Controller/PartnersController.php:102
+msgid "The partner could not be saved. Please, try again."
+msgstr ""
+
+#: ./plugins/Expenses/src/Controller/PartnersController.php:151
+msgid "The partner has been deleted."
+msgstr ""
+
+#: ./plugins/Expenses/src/Controller/PartnersController.php:153
+msgid "The partner could not be deleted. Please, try again."
+msgstr ""
+
+#: ./plugins/Expenses/src/Controller/PaymentsAccountsController.php:59
 msgid "The payments account has been saved."
 msgstr ""
 
-#: ./plugins/Expenses/src/Controller/PaymentsAccountsController.php:76
+#: ./plugins/Expenses/src/Controller/PaymentsAccountsController.php:63
 msgid "The payments account could not be saved. Please, try again."
 msgstr ""
 
-#: ./plugins/Expenses/src/Controller/PaymentsAccountsController.php:97
+#: ./plugins/Expenses/src/Controller/PaymentsAccountsController.php:84
 msgid "The payments account has been deleted."
 msgstr ""
 
-#: ./plugins/Expenses/src/Controller/PaymentsAccountsController.php:99
+#: ./plugins/Expenses/src/Controller/PaymentsAccountsController.php:86
 msgid "The payments account could not be deleted. Please, try again."
 msgstr ""
 
-#: ./plugins/Expenses/src/Controller/PaymentsController.php:110
+#: ./plugins/Expenses/src/Controller/PaymentsController.php:89
 msgid "The payment could not be saved. Please, try again."
 msgstr ""
 
-#: ./plugins/Expenses/src/Controller/PaymentsController.php:134
+#: ./plugins/Expenses/src/Controller/PaymentsController.php:113
 msgid "The payment has been deleted."
 msgstr ""
 
-#: ./plugins/Expenses/src/Controller/PaymentsController.php:136
+#: ./plugins/Expenses/src/Controller/PaymentsController.php:115
 msgid "The payment could not be deleted. Please, try again."
 msgstr ""
 
-#: ./plugins/Expenses/src/Event/ExpensesEvents.php:46
+#: ./plugins/Expenses/src/Event/ExpensesEvents.php:53
 #: ./plugins/Expenses/templates/Expenses/graph_yearly.php:9
 #: ./plugins/Expenses/templates/Expenses/index.php:10
 #: ./plugins/Expenses/templates/Expenses/index.php:15
 msgid "Income and Expenses"
 msgstr ""
 
-#: ./plugins/Expenses/src/Event/ExpensesEvents.php:78
-#: ./plugins/Expenses/src/Lib/ExpensesSidebar.php:28
+#: ./plugins/Expenses/src/Event/ExpensesEvents.php:89
+#: ./plugins/Expenses/src/Lib/ExpensesSidebar.php:38
 msgid "Accounting"
 msgstr ""
 
-#: ./plugins/Expenses/src/Event/ExpensesEvents.php:83
+#: ./plugins/Expenses/src/Event/ExpensesEvents.php:93
 msgid "Income/Expense"
 msgstr ""
 
-#: ./plugins/Expenses/src/Event/ExpensesEvents.php:88
+#: ./plugins/Expenses/src/Event/ExpensesEvents.php:96
 #: ./plugins/Expenses/templates/Expenses/graph_expenses.php:63
 #: ./plugins/Expenses/templates/Expenses/graph_yearly.php:6
 #: ./plugins/Expenses/templates/Expenses/graph_yearly.php:15
@@ -94,25 +189,29 @@ msgstr ""
 msgid "Income"
 msgstr ""
 
-#: ./plugins/Expenses/src/Event/ExpensesEvents.php:89
+#: ./plugins/Expenses/src/Event/ExpensesEvents.php:97
 msgid "Expense"
 msgstr ""
 
-#: ./plugins/Expenses/src/Event/ExpensesEvents.php:91
+#: ./plugins/Expenses/src/Event/ExpensesEvents.php:99
 msgid "Neither expense nor income"
 msgstr ""
 
-#: ./plugins/Expenses/src/Event/ExpensesEvents.php:131
-#: ./plugins/Expenses/src/Lib/ExpensesSidebar.php:38
+#: ./plugins/Expenses/src/Event/ExpensesEvents.php:128
+msgid "Partners"
+msgstr ""
+
+#: ./plugins/Expenses/src/Event/ExpensesEvents.php:183
+#: ./plugins/Expenses/src/Lib/ExpensesSidebar.php:48
 #: ./plugins/Expenses/templates/Expenses/view.php:54
 msgid "Payments"
 msgstr ""
 
-#: ./plugins/Expenses/src/Event/ExpensesEvents.php:141
+#: ./plugins/Expenses/src/Event/ExpensesEvents.php:193
 msgid "WARNING: There are multiple expenses for this document!"
 msgstr ""
 
-#: ./plugins/Expenses/src/Lib/ExpensesSidebar.php:48
+#: ./plugins/Expenses/src/Lib/ExpensesSidebar.php:58
 #: ./plugins/Expenses/templates/Expenses/graph_expenses.php:56
 #: ./plugins/Expenses/templates/Expenses/graph_yearly.php:6
 #: ./plugins/Expenses/templates/Expenses/graph_yearly.php:20
@@ -121,47 +220,362 @@ msgstr ""
 msgid "Expenses"
 msgstr ""
 
-#: ./plugins/Expenses/src/Lib/ExpensesSidebar.php:60
+#: ./plugins/Expenses/src/Lib/ExpensesSidebar.php:70
 msgid "Reports"
 msgstr ""
 
-#: ./plugins/Expenses/src/Lib/ExpensesSidebar.php:71
+#: ./plugins/Expenses/src/Lib/ExpensesSidebar.php:81
 msgid "Unpaid Invoices"
 msgstr ""
 
-#: ./plugins/Expenses/src/Lib/ExpensesSidebar.php:83
+#: ./plugins/Expenses/src/Lib/ExpensesSidebar.php:93
 msgid "Expenses Graph"
 msgstr ""
 
-#: ./plugins/Expenses/src/Lib/ExpensesSidebar.php:95
+#: ./plugins/Expenses/src/Lib/ExpensesSidebar.php:105
 msgid "Yearly Graph"
 msgstr ""
 
-#: ./plugins/Expenses/src/Lib/ExpensesSidebar.php:109
+#: ./plugins/Expenses/src/Lib/ExpensesSidebar.php:119
 #: ./plugins/Expenses/templates/Expenses/import_sepa_step1.php:27
 msgid "Import"
 msgstr ""
 
-#: ./plugins/Expenses/src/Lib/ExpensesSidebar.php:120
+#: ./plugins/Expenses/src/Lib/ExpensesSidebar.php:130
 msgid "Sepa XML"
 msgstr ""
 
-#: ./plugins/Expenses/src/Lib/ExpensesSidebar.php:134
+#: ./plugins/Expenses/src/Lib/ExpensesSidebar.php:144
 msgid "Lookups"
 msgstr ""
 
-#: ./plugins/Expenses/src/Lib/ExpensesSidebar.php:142
-msgid "Accounts"
+#: ./plugins/Expenses/src/Lib/ExpensesSidebar.php:152
+msgid "Payment Accounts"
 msgstr ""
 
-#: ./plugins/Expenses/src/View/Helper/LilExpenseHelper.php:55
-#: ./plugins/Expenses/src/View/Helper/LilExpenseHelper.php:81
-#: ./plugins/Expenses/src/View/Helper/LilExpenseHelper.php:110
-#: ./plugins/Expenses/src/View/Helper/LilExpenseHelper.php:148
-#: ./plugins/Expenses/templates/Payments/index.php:198
-#: ./plugins/Expenses/templates/Payments/index.php:203
-#: ./plugins/Expenses/templates/element/payments_list.php:59
+#: ./plugins/Expenses/src/Lib/ExpensesSidebar.php:163
+#: ./plugins/Expenses/templates/Accounts/index.php:48
+msgid "Chart of Accounts"
+msgstr ""
+
+#: ./plugins/Expenses/src/Model/Table/BookingOrdersTable.php:120
+msgid "Draft"
+msgstr ""
+
+#: ./plugins/Expenses/src/Model/Table/BookingOrdersTable.php:121
+msgid "Posted"
+msgstr ""
+
+#: ./plugins/Expenses/src/Model/Table/BookingOrdersTable.php:122
+msgid "Locked"
+msgstr ""
+
+#: ./plugins/Expenses/src/Model/Table/PartnersTable.php:104
+msgid "Buyer"
+msgstr ""
+
+#: ./plugins/Expenses/src/Model/Table/PartnersTable.php:105
+msgid "Seller"
+msgstr ""
+
+#: ./plugins/Expenses/src/View/Helper/LilExpenseHelper.php:69
+#: ./plugins/Expenses/src/View/Helper/LilExpenseHelper.php:95
+#: ./plugins/Expenses/src/View/Helper/LilExpenseHelper.php:124
+#: ./plugins/Expenses/src/View/Helper/LilExpenseHelper.php:162
+#: ./plugins/Expenses/templates/Payments/index.php:201
+#: ./plugins/Expenses/templates/Payments/index.php:206
+#: ./plugins/Expenses/templates/element/payments_list.php:64
 msgid "N/A"
+msgstr ""
+
+#: ./plugins/Expenses/templates/Accounts/edit.php:11
+#: ./plugins/Expenses/templates/PaymentsAccounts/edit.php:4
+msgid "Edit Account"
+msgstr ""
+
+#: ./plugins/Expenses/templates/Accounts/edit.php:12
+#: ./plugins/Expenses/templates/PaymentsAccounts/edit.php:4
+msgid "Add Account"
+msgstr ""
+
+#: ./plugins/Expenses/templates/Accounts/edit.php:28
+#: ./plugins/Expenses/templates/BookingOrderEntries/edit.php:53
+#: ./plugins/Expenses/templates/BookingOrders/view.php:140
+#: ./plugins/Expenses/templates/Payments/index.php:149
+#: ./plugins/Expenses/templates/element/payments_list.php:18
+msgid "Account"
+msgstr ""
+
+#: ./plugins/Expenses/templates/Accounts/edit.php:35
+msgid "Parent Account"
+msgstr ""
+
+#: ./plugins/Expenses/templates/Accounts/edit.php:47
+#: ./plugins/Expenses/templates/Accounts/index.php:66
+#: ./plugins/Expenses/templates/Accounts/pick.php:17
+msgid "Code"
+msgstr ""
+
+#: ./plugins/Expenses/templates/Accounts/edit.php:57
+#: ./plugins/Expenses/templates/Accounts/index.php:67
+#: ./plugins/Expenses/templates/Accounts/pick.php:18
+msgid "Name"
+msgstr ""
+
+#: ./plugins/Expenses/templates/Accounts/edit.php:67
+#: ./plugins/Expenses/templates/BookingOrderEntries/edit.php:182
+#: ./plugins/Expenses/templates/BookingOrders/edit.php:78
+#: ./plugins/Expenses/templates/Expenses/edit.php:107
+#: ./plugins/Expenses/templates/Expenses/import_sepa_link.php:42
+#: ./plugins/Expenses/templates/Partners/edit.php:61
+#: ./plugins/Expenses/templates/PaymentsAccounts/edit.php:58
+#: ./plugins/Expenses/templates/Payments/edit.php:116
+msgid "Save"
+msgstr ""
+
+#: ./plugins/Expenses/templates/Accounts/index.php:29
+msgid "Search code or name…"
+msgstr ""
+
+#: ./plugins/Expenses/templates/Accounts/index.php:30
+#: ./plugins/Expenses/templates/BookingOrders/index.php:39
+msgid "Search"
+msgstr ""
+
+#: ./plugins/Expenses/templates/Accounts/index.php:33
+#: ./plugins/Expenses/templates/BookingOrders/index.php:41
+msgid "Clear"
+msgstr ""
+
+#: ./plugins/Expenses/templates/Accounts/index.php:41
+msgid "Expand all"
+msgstr ""
+
+#: ./plugins/Expenses/templates/Accounts/index.php:42
+msgid "Collapse all"
+msgstr ""
+
+#: ./plugins/Expenses/templates/Accounts/index.php:51
+#: ./plugins/Expenses/templates/BookingOrders/index.php:49
+#: ./plugins/Expenses/templates/Expenses/index.php:111
+#: ./plugins/Expenses/templates/PaymentsAccounts/index.php:6
+#: ./plugins/Expenses/templates/Payments/index.php:133
+msgid "Add"
+msgstr ""
+
+#: ./plugins/Expenses/templates/Accounts/pick.php:10
+msgid "Filter…"
+msgstr ""
+
+#: ./plugins/Expenses/templates/BookingOrderEntries/edit.php:11
+#: ./plugins/Expenses/templates/BookingOrders/view.php:194
+msgid "Edit Entry"
+msgstr ""
+
+#: ./plugins/Expenses/templates/BookingOrderEntries/edit.php:12
+#: ./plugins/Expenses/templates/BookingOrders/view.php:188
+msgid "Add Entry"
+msgstr ""
+
+#: ./plugins/Expenses/templates/BookingOrderEntries/edit.php:15
+#: ./plugins/Expenses/templates/BookingOrders/edit.php:14
+#: ./plugins/Expenses/templates/BookingOrders/view.php:99
+#: ./plugins/Expenses/templates/Expenses/edit.php:9
+#: ./plugins/Expenses/templates/Expenses/view.php:14
+#: ./plugins/Expenses/templates/Payments/edit.php:9
+msgid "Delete"
+msgstr ""
+
+#: ./plugins/Expenses/templates/BookingOrderEntries/edit.php:24
+#: ./plugins/Expenses/templates/BookingOrders/view.php:71
+msgid "Are you sure you want to delete this entry?"
+msgstr ""
+
+#: ./plugins/Expenses/templates/BookingOrderEntries/edit.php:47
+msgid "Entry"
+msgstr ""
+
+#: ./plugins/Expenses/templates/BookingOrderEntries/edit.php:54
+#: ./plugins/Expenses/templates/BookingOrderEntries/edit.php:96
+#: ./plugins/Expenses/templates/BookingOrderEntries/edit.php:136
+msgid "Type to search…"
+msgstr ""
+
+#: ./plugins/Expenses/templates/BookingOrderEntries/edit.php:67
+msgid "Type to search or [$1browse all accounts]."
+msgstr ""
+
+#: ./plugins/Expenses/templates/BookingOrderEntries/edit.php:95
+#: ./plugins/Expenses/templates/BookingOrders/view.php:141
+#: ./plugins/Expenses/templates/Partners/edit.php:31
+msgid "Partner"
+msgstr ""
+
+#: ./plugins/Expenses/templates/BookingOrderEntries/edit.php:120
+msgid "— None —"
+msgstr ""
+
+#: ./plugins/Expenses/templates/BookingOrderEntries/edit.php:122
+msgid "Invoices"
+msgstr ""
+
+#: ./plugins/Expenses/templates/BookingOrderEntries/edit.php:123
+msgid "Documents"
+msgstr ""
+
+#: ./plugins/Expenses/templates/BookingOrderEntries/edit.php:124
+msgid "Travel Orders"
+msgstr ""
+
+#: ./plugins/Expenses/templates/BookingOrderEntries/edit.php:125
+msgid "Bank Statements"
+msgstr ""
+
+#: ./plugins/Expenses/templates/BookingOrderEntries/edit.php:127
+msgid "Model"
+msgstr ""
+
+#: ./plugins/Expenses/templates/BookingOrderEntries/edit.php:135
+msgid "Document"
+msgstr ""
+
+#: ./plugins/Expenses/templates/BookingOrderEntries/edit.php:158
+#: ./plugins/Expenses/templates/BookingOrders/view.php:142
+#: ./plugins/Expenses/templates/Expenses/edit.php:46
+#: ./plugins/Expenses/templates/Expenses/import_sepa_link.php:35
+#: ./plugins/Expenses/templates/Payments/edit.php:82
+#: ./plugins/Expenses/templates/Payments/index.php:156
+msgid "Description"
+msgstr ""
+
+#: ./plugins/Expenses/templates/BookingOrderEntries/edit.php:166
+#: ./plugins/Expenses/templates/BookingOrders/view.php:143
+msgid "Debit"
+msgstr ""
+
+#: ./plugins/Expenses/templates/BookingOrderEntries/edit.php:174
+#: ./plugins/Expenses/templates/BookingOrders/view.php:146
+msgid "Credit"
+msgstr ""
+
+#: ./plugins/Expenses/templates/BookingOrderEntries/edit.php:226
+msgid "Select Account"
+msgstr ""
+
+#: ./plugins/Expenses/templates/BookingOrders/edit.php:10
+msgid "Edit Booking Order"
+msgstr ""
+
+#: ./plugins/Expenses/templates/BookingOrders/edit.php:11
+msgid "Add Booking Order"
+msgstr ""
+
+#: ./plugins/Expenses/templates/BookingOrders/edit.php:23
+#: ./plugins/Expenses/templates/BookingOrders/index.php:103
+#: ./plugins/Expenses/templates/BookingOrders/view.php:102
+msgid "Are you sure you want to delete this booking order?"
+msgstr ""
+
+#: ./plugins/Expenses/templates/BookingOrders/edit.php:42
+msgid "Booking Order"
+msgstr ""
+
+#: ./plugins/Expenses/templates/BookingOrders/edit.php:48
+#: ./plugins/Expenses/templates/BookingOrders/index.php:58
+#: ./plugins/Expenses/templates/BookingOrders/view.php:108
+#: ./plugins/Expenses/templates/report/Expenses/unpaid.php:58
+msgid "No"
+msgstr ""
+
+#: ./plugins/Expenses/templates/BookingOrders/edit.php:55
+#: ./plugins/Expenses/templates/BookingOrders/index.php:59
+#: ./plugins/Expenses/templates/BookingOrders/view.php:109
+#: ./plugins/Expenses/templates/PaymentsAccounts/edit.php:30
+#: ./plugins/Expenses/templates/PaymentsAccounts/index.php:20
+#: ./plugins/Expenses/templates/report/Expenses/unpaid.php:66
+msgid "Title"
+msgstr ""
+
+#: ./plugins/Expenses/templates/BookingOrders/edit.php:62
+#: ./plugins/Expenses/templates/BookingOrders/index.php:60
+#: ./plugins/Expenses/templates/BookingOrders/view.php:110
+#: ./plugins/Expenses/templates/Expenses/edit.php:54
+#: ./plugins/Expenses/templates/Expenses/import_sepa_step2.php:58
+#: ./plugins/Expenses/templates/Expenses/index.php:132
+#: ./plugins/Expenses/templates/Expenses/view.php:26
+#: ./plugins/Expenses/templates/Payments/edit.php:55
+#: ./plugins/Expenses/templates/Payments/index.php:153
+#: ./plugins/Expenses/templates/element/payments_list.php:14
+msgid "Date"
+msgstr ""
+
+#: ./plugins/Expenses/templates/BookingOrders/edit.php:69
+#: ./plugins/Expenses/templates/BookingOrders/index.php:61
+#: ./plugins/Expenses/templates/BookingOrders/view.php:112
+msgid "Status"
+msgstr ""
+
+#: ./plugins/Expenses/templates/BookingOrders/index.php:27
+msgid "Search no or title…"
+msgstr ""
+
+#: ./plugins/Expenses/templates/BookingOrders/index.php:32
+msgid "— All statuses —"
+msgstr ""
+
+#: ./plugins/Expenses/templates/BookingOrders/index.php:46
+msgid "Booking Orders"
+msgstr ""
+
+#: ./plugins/Expenses/templates/BookingOrders/index.php:62
+msgid "Debit / Credit"
+msgstr ""
+
+#: ./plugins/Expenses/templates/BookingOrders/view.php:21
+msgid "Add entry"
+msgstr ""
+
+#: ./plugins/Expenses/templates/BookingOrders/view.php:79
+msgid "Booking Order #{0}"
+msgstr ""
+
+#: ./plugins/Expenses/templates/BookingOrders/view.php:82
+#: ./plugins/Expenses/templates/Expenses/view.php:9
+msgid "Edit"
+msgstr ""
+
+#: ./plugins/Expenses/templates/BookingOrders/view.php:87
+msgid "Post"
+msgstr ""
+
+#: ./plugins/Expenses/templates/BookingOrders/view.php:90
+msgid "Post this booking order?"
+msgstr ""
+
+#: ./plugins/Expenses/templates/BookingOrders/view.php:93
+msgid "Lock"
+msgstr ""
+
+#: ./plugins/Expenses/templates/BookingOrders/view.php:96
+msgid "Lock this booking order?"
+msgstr ""
+
+#: ./plugins/Expenses/templates/BookingOrders/view.php:120
+msgid "Opened by"
+msgstr ""
+
+#: ./plugins/Expenses/templates/BookingOrders/view.php:131
+msgid "Entries"
+msgstr ""
+
+#: ./plugins/Expenses/templates/BookingOrders/view.php:163
+#: ./plugins/Expenses/templates/Expenses/edit.php:80
+#: ./plugins/Expenses/templates/Expenses/index.php:140
+#: ./plugins/Expenses/templates/Expenses/view.php:42
+#: ./plugins/Expenses/templates/element/payments_list.php:42
+#: ./plugins/Expenses/templates/report/Expenses/unpaid.php:74
+#: ./plugins/Expenses/templates/report/Expenses/unpaid.php:101
+msgid "Total"
 msgstr ""
 
 #: ./plugins/Expenses/templates/Expenses/edit.php:6
@@ -169,14 +583,8 @@ msgid "Edit Expense"
 msgstr ""
 
 #: ./plugins/Expenses/templates/Expenses/edit.php:6
-#: ./plugins/Expenses/templates/Payments/edit.php:111
+#: ./plugins/Expenses/templates/Payments/edit.php:109
 msgid "Add Expense"
-msgstr ""
-
-#: ./plugins/Expenses/templates/Expenses/edit.php:9
-#: ./plugins/Expenses/templates/Expenses/view.php:14
-#: ./plugins/Expenses/templates/Payments/edit.php:9
-msgid "Delete"
 msgstr ""
 
 #: ./plugins/Expenses/templates/Expenses/edit.php:18
@@ -184,25 +592,8 @@ msgstr ""
 msgid "Are you sure you want to delete this expense?"
 msgstr ""
 
-#: ./plugins/Expenses/templates/Expenses/edit.php:46
-#: ./plugins/Expenses/templates/Expenses/import_sepa_link.php:35
-#: ./plugins/Expenses/templates/Payments/edit.php:84
-#: ./plugins/Expenses/templates/Payments/index.php:156
-msgid "Description"
-msgstr ""
-
-#: ./plugins/Expenses/templates/Expenses/edit.php:54
-#: ./plugins/Expenses/templates/Expenses/import_sepa_step2.php:42
-#: ./plugins/Expenses/templates/Expenses/index.php:132
-#: ./plugins/Expenses/templates/Expenses/view.php:26
-#: ./plugins/Expenses/templates/Payments/edit.php:54
-#: ./plugins/Expenses/templates/Payments/index.php:153
-#: ./plugins/Expenses/templates/element/payments_list.php:12
-msgid "Date"
-msgstr ""
-
 #: ./plugins/Expenses/templates/Expenses/edit.php:55
-#: ./plugins/Expenses/templates/Payments/edit.php:55
+#: ./plugins/Expenses/templates/Payments/edit.php:56
 msgid "Date is required."
 msgstr ""
 
@@ -216,29 +607,13 @@ msgstr ""
 msgid "Net Total"
 msgstr ""
 
-#: ./plugins/Expenses/templates/Expenses/edit.php:80
-#: ./plugins/Expenses/templates/Expenses/index.php:140
-#: ./plugins/Expenses/templates/Expenses/view.php:42
-#: ./plugins/Expenses/templates/element/payments_list.php:37
-#: ./plugins/Expenses/templates/report/Expenses/unpaid.php:74
-#: ./plugins/Expenses/templates/report/Expenses/unpaid.php:101
-msgid "Total"
-msgstr ""
-
-#: ./plugins/Expenses/templates/Expenses/edit.php:90
-#: ./plugins/Expenses/templates/Payments/index.php:160
+#: ./plugins/Expenses/templates/Expenses/edit.php:89
+#: ./plugins/Expenses/templates/Payments/index.php:163
 msgid "Payment"
 msgstr ""
 
-#: ./plugins/Expenses/templates/Expenses/edit.php:93
+#: ./plugins/Expenses/templates/Expenses/edit.php:90
 msgid "do not create payment"
-msgstr ""
-
-#: ./plugins/Expenses/templates/Expenses/edit.php:111
-#: ./plugins/Expenses/templates/Expenses/import_sepa_link.php:42
-#: ./plugins/Expenses/templates/PaymentsAccounts/edit.php:58
-#: ./plugins/Expenses/templates/Payments/edit.php:118
-msgid "Save"
 msgstr ""
 
 #: ./plugins/Expenses/templates/Expenses/graph_expenses.php:24
@@ -274,58 +649,58 @@ msgstr ""
 msgid "Unfinished Payments"
 msgstr ""
 
-#: ./plugins/Expenses/templates/Expenses/import_sepa_step2.php:24
-msgid "IMPORT: SepaXML - Step2 - {0}"
+#: ./plugins/Expenses/templates/Expenses/import_sepa_step2.php:27
+msgid "Link with Existing Payment"
 msgstr ""
 
 #: ./plugins/Expenses/templates/Expenses/import_sepa_step2.php:30
-msgid "Upload file"
+msgid "Pay an Existing Expense"
+msgstr ""
+
+#: ./plugins/Expenses/templates/Expenses/import_sepa_step2.php:33
+msgid "Create a New Expense"
+msgstr ""
+
+#: ./plugins/Expenses/templates/Expenses/import_sepa_step2.php:40
+msgid "IMPORT: SepaXML - Step2 - {0}"
 msgstr ""
 
 #: ./plugins/Expenses/templates/Expenses/import_sepa_step2.php:46
-#: ./plugins/Expenses/templates/Payments/edit.php:64
-#: ./plugins/Expenses/templates/element/payments_list.php:20
+msgid "Upload file"
+msgstr ""
+
+#: ./plugins/Expenses/templates/Expenses/import_sepa_step2.php:62
+#: ./plugins/Expenses/templates/Payments/edit.php:65
+#: ./plugins/Expenses/templates/element/payments_list.php:22
 msgid "Amount"
 msgstr ""
 
-#: ./plugins/Expenses/templates/Expenses/import_sepa_step2.php:51
+#: ./plugins/Expenses/templates/Expenses/import_sepa_step2.php:67
 msgid "Descript"
 msgstr ""
 
-#: ./plugins/Expenses/templates/Expenses/import_sepa_step2.php:56
+#: ./plugins/Expenses/templates/Expenses/import_sepa_step2.php:72
 #: ./plugins/Expenses/templates/report/Expenses/unpaid.php:70
 msgid "Client"
 msgstr ""
 
-#: ./plugins/Expenses/templates/Expenses/import_sepa_step2.php:61
+#: ./plugins/Expenses/templates/Expenses/import_sepa_step2.php:77
 msgid "Ref"
 msgstr ""
 
-#: ./plugins/Expenses/templates/Expenses/import_sepa_step2.php:66
+#: ./plugins/Expenses/templates/Expenses/import_sepa_step2.php:82
 msgid "Action"
 msgstr ""
 
-#: ./plugins/Expenses/templates/Expenses/import_sepa_step2.php:82
-msgid "Link with Existing Payment"
-msgstr ""
-
-#: ./plugins/Expenses/templates/Expenses/import_sepa_step2.php:85
-msgid "Pay an Existing Expense"
-msgstr ""
-
-#: ./plugins/Expenses/templates/Expenses/import_sepa_step2.php:88
-msgid "Create a New Expense"
-msgstr ""
-
-#: ./plugins/Expenses/templates/Expenses/import_sepa_step2.php:196
+#: ./plugins/Expenses/templates/Expenses/import_sepa_step2.php:197
 msgid "Link with existing Payment"
 msgstr ""
 
-#: ./plugins/Expenses/templates/Expenses/import_sepa_step2.php:207
+#: ./plugins/Expenses/templates/Expenses/import_sepa_step2.php:210
 msgid "Add Payment to Existing Expense"
 msgstr ""
 
-#: ./plugins/Expenses/templates/Expenses/import_sepa_step2.php:218
+#: ./plugins/Expenses/templates/Expenses/import_sepa_step2.php:223
 msgid "Add new Expense"
 msgstr ""
 
@@ -348,12 +723,6 @@ msgstr ""
 msgid "{0} for {1} {2}"
 msgstr ""
 
-#: ./plugins/Expenses/templates/Expenses/index.php:111
-#: ./plugins/Expenses/templates/PaymentsAccounts/index.php:6
-#: ./plugins/Expenses/templates/Payments/index.php:133
-msgid "Add"
-msgstr ""
-
 #: ./plugins/Expenses/templates/Expenses/index.php:124
 msgid "Kind"
 msgstr ""
@@ -363,7 +732,7 @@ msgid "Decription"
 msgstr ""
 
 #: ./plugins/Expenses/templates/Expenses/index.php:146
-#: ./plugins/Expenses/templates/Payments/index.php:175
+#: ./plugins/Expenses/templates/Payments/index.php:178
 msgid "Recapitulation"
 msgstr ""
 
@@ -395,27 +764,43 @@ msgstr ""
 msgid "Print"
 msgstr ""
 
-#: ./plugins/Expenses/templates/Expenses/view.php:9
-msgid "Edit"
+#: ./plugins/Expenses/templates/Partners/aht/index.php:35
+#: ./plugins/Expenses/templates/Partners/edit.php:37
+msgid "Role"
 msgstr ""
 
-#: ./plugins/Expenses/templates/PaymentsAccounts/edit.php:4
-msgid "Edit Account"
+#: ./plugins/Expenses/templates/Partners/aht/index.php:36
+#: ./plugins/Expenses/templates/Partners/edit.php:46
+msgid "Date from"
 msgstr ""
 
-#: ./plugins/Expenses/templates/PaymentsAccounts/edit.php:4
-msgid "Add Account"
+#: ./plugins/Expenses/templates/Partners/aht/index.php:37
+#: ./plugins/Expenses/templates/Partners/edit.php:53
+msgid "Date to"
+msgstr ""
+
+#: ./plugins/Expenses/templates/Partners/aht/index.php:53
+msgid "Are you sure you want to delete this partner record?"
+msgstr ""
+
+#: ./plugins/Expenses/templates/Partners/aht/index.php:63
+msgid "No partner records for this contact."
+msgstr ""
+
+#: ./plugins/Expenses/templates/Partners/aht/index.php:67
+#: ./plugins/Expenses/templates/Partners/aht/index.php:81
+#: ./plugins/Expenses/templates/Partners/edit.php:11
+msgid "Add Partner"
+msgstr ""
+
+#: ./plugins/Expenses/templates/Partners/aht/index.php:88
+#: ./plugins/Expenses/templates/Partners/edit.php:10
+msgid "Edit Partner"
 msgstr ""
 
 #: ./plugins/Expenses/templates/PaymentsAccounts/edit.php:23
-#: ./plugins/Expenses/templates/Payments/edit.php:48
+#: ./plugins/Expenses/templates/Payments/edit.php:49
 msgid "Basics"
-msgstr ""
-
-#: ./plugins/Expenses/templates/PaymentsAccounts/edit.php:30
-#: ./plugins/Expenses/templates/PaymentsAccounts/index.php:20
-#: ./plugins/Expenses/templates/report/Expenses/unpaid.php:66
-msgid "Title"
 msgstr ""
 
 #: ./plugins/Expenses/templates/PaymentsAccounts/edit.php:39
@@ -435,34 +820,34 @@ msgid "Active"
 msgstr ""
 
 #: ./plugins/Expenses/templates/Payments/edit.php:6
-#: ./plugins/Expenses/templates/element/payments_list.php:98
+#: ./plugins/Expenses/templates/element/payments_list.php:103
 msgid "Edit Payment"
 msgstr ""
 
 #: ./plugins/Expenses/templates/Payments/edit.php:6
-#: ./plugins/Expenses/templates/element/payments_list.php:28
-#: ./plugins/Expenses/templates/element/payments_list.php:104
+#: ./plugins/Expenses/templates/element/payments_list.php:30
+#: ./plugins/Expenses/templates/element/payments_list.php:109
 msgid "Add Payment"
 msgstr ""
 
 #: ./plugins/Expenses/templates/Payments/edit.php:18
-#: ./plugins/Expenses/templates/element/payments_list.php:75
+#: ./plugins/Expenses/templates/element/payments_list.php:80
 msgid "Are you sure you want to delete this payment?"
 msgstr ""
 
-#: ./plugins/Expenses/templates/Payments/edit.php:73
+#: ./plugins/Expenses/templates/Payments/edit.php:74
 msgid "From/To Account"
 msgstr ""
 
-#: ./plugins/Expenses/templates/Payments/edit.php:92
+#: ./plugins/Expenses/templates/Payments/edit.php:90
 msgid "Links to Expenses"
 msgstr ""
 
-#: ./plugins/Expenses/templates/Payments/edit.php:103
+#: ./plugins/Expenses/templates/Payments/edit.php:101
 msgid "Cancel"
 msgstr ""
 
-#: ./plugins/Expenses/templates/Payments/edit.php:187
+#: ./plugins/Expenses/templates/Payments/edit.php:185
 msgid "Expense already exists."
 msgstr ""
 
@@ -504,12 +889,11 @@ msgstr ""
 msgid "Payments {0} {1} for {2} {3}"
 msgstr ""
 
-#: ./plugins/Expenses/templates/Payments/index.php:149
-#: ./plugins/Expenses/templates/element/payments_list.php:16
-msgid "Account"
+#: ./plugins/Expenses/templates/Payments/index.php:159
+msgid "Sepa ID"
 msgstr ""
 
-#: ./plugins/Expenses/templates/element/payments_list.php:92
+#: ./plugins/Expenses/templates/element/payments_list.php:97
 msgid "No expense for this item found."
 msgstr ""
 
@@ -540,10 +924,6 @@ msgstr ""
 
 #: ./plugins/Expenses/templates/report/Expenses/unpaid.php:54
 msgid "Cnt"
-msgstr ""
-
-#: ./plugins/Expenses/templates/report/Expenses/unpaid.php:58
-msgid "No"
 msgstr ""
 
 #: ./plugins/Expenses/templates/report/Expenses/unpaid.php:62

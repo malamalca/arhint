@@ -16,6 +16,7 @@
         "cakephp/migrations": "^4.0.0",
         "cakephp/plugin-installer": "^2.0",
         "ddn/sapp": "dev-main",
+        "genkgo/camt": "*",
         "krivart/php-qr-code": "dev-master",
         "league/commonmark": "*",
         "mikehaertl/phpwkhtmltopdf": "^2.5",
@@ -25,6 +26,7 @@
         "phpoffice/phpword": "^0.18.2",
         "sabre/dav": "~4.6.0",
         "sabre/vobject": "4.5",
+        "symfony/http-client": "*",
         "syncroton/syncroton": "dev-master",
         "tecnickcom/tcpdf": "dev-main",
         "zendframework/zendframework1": "1.12.20pl61 as 1.12.20"
@@ -117,9 +119,10 @@
     "config": {
         "sort-packages": true,
         "allow-plugins": {
-            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "cakephp/plugin-installer": true,
             "composer/package-versions-deprecated": true,
-            "cakephp/plugin-installer": true
+            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "php-http/discovery": true
         },
         "audit": {
             "block-insecure": false

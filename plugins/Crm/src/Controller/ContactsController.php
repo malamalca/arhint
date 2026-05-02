@@ -63,6 +63,8 @@ class ContactsController extends AppController
         }
 
         $this->set(compact('contacts', 'filter'));
+
+        $this->viewBuilder()->setOption('serialize', ['contacts']);
     }
 
     /**

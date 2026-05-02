@@ -118,6 +118,21 @@ class UsersTable extends Table
             ->maxLength('url_key', 200)
             ->allowEmptyString('url_key');
 
+        $validator
+            ->scalar('properties')
+            ->allowEmptyString('properties')
+            ->add('properties', 'validJson', [
+                'rule' => function ($value) {
+                    if (empty($value)) {
+                        return true;
+                    }
+                    json_decode($value);
+
+                    return json_last_error() === JSON_ERROR_NONE;
+                },
+                'message' => __('Must be valid JSON.'),
+            ]);
+
         return $validator;
     }
 
@@ -187,6 +202,21 @@ class UsersTable extends Table
 
                     return $passwordHasher->check($value, $user->passwd ?? '');
                 },
+            ]);
+
+        $validator
+            ->scalar('properties')
+            ->allowEmptyString('properties')
+            ->add('properties', 'validJson', [
+                'rule' => function ($value) {
+                    if (empty($value)) {
+                        return true;
+                    }
+                    json_decode($value);
+
+                    return json_last_error() === JSON_ERROR_NONE;
+                },
+                'message' => __('Must be valid JSON.'),
             ]);
 
         return $validator;

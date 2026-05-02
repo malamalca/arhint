@@ -25,6 +25,16 @@ class TxtView extends AppView
     protected string $subDir = 'txt';
 
     /**
+     * Returns the content type for TXT responses.
+     *
+     * @return string
+     */
+    public static function contentType(): string
+    {
+        return 'text/plain';
+    }
+
+    /**
      * Initialization hook method.
      *
      * @return void

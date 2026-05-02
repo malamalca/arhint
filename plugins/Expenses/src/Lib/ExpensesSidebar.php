@@ -44,6 +44,26 @@ class ExpensesSidebar
             'action' => 'index',
         ];
         $accounting['items'] = [
+            'booking_orders' => [
+                'title' => __d('expenses', 'Booking Orders'),
+                'visible' => true,
+                'url' => [
+                    'plugin' => 'Expenses',
+                    'controller' => 'BookingOrders',
+                    'action' => 'index',
+                ],
+                'active' => $request->getParam('controller') == 'BookingOrders',
+            ],
+            'bank_statements' => [
+                'title' => __d('expenses', 'Bank Statements'),
+                'visible' => true,
+                'url' => [
+                    'plugin' => 'Expenses',
+                    'controller' => 'BankStatements',
+                    'action' => 'index',
+                ],
+                'active' => $request->getParam('controller') == 'BankStatements',
+            ],
             'payments' => [
                 'title' => __d('expenses', 'Payments'),
                 'visible' => true,
@@ -144,12 +164,15 @@ class ExpensesSidebar
                 'title' => __d('expenses', 'Lookups'),
                 'url' => false,
                 'expandable' => true,
-                'active' => in_array($request->getParam('controller'), ['PaymentsAccounts']),
-                'expand' => in_array($request->getParam('controller'), ['PaymentsAccounts']),
+                'active' => in_array(
+                    $request->getParam('controller'),
+                    ['PaymentsAccounts', 'Accounts', 'BookingRules', 'BookingRuleFilters', 'BookingRuleAccountEntries'],
+                ),
+                'expand' => in_array($request->getParam('controller'), ['PaymentsAccounts', 'Accounts']),
                 'submenu' => [
                     'payments_accounts' => [
                         'visible' => true,
-                        'title' => __d('expenses', 'Accounts'),
+                        'title' => __d('expenses', 'Payment Accounts'),
 
                         'url' => [
                             'plugin' => 'Expenses',
@@ -157,6 +180,31 @@ class ExpensesSidebar
                             'action' => 'index',
                         ],
                         'active' => $request->getParam('controller') == 'PaymentsAccounts',
+                    ],
+                    'accounts' => [
+                        'visible' => true,
+                        'title' => __d('expenses', 'Chart of Accounts'),
+
+                        'url' => [
+                            'plugin' => 'Expenses',
+                            'controller' => 'Accounts',
+                            'action' => 'index',
+                        ],
+                        'active' => $request->getParam('controller') == 'Accounts',
+                    ],
+                    'booking_rules' => [
+                        'visible' => true,
+                        'title' => __d('expenses', 'Booking Rules'),
+
+                        'url' => [
+                            'plugin' => 'Expenses',
+                            'controller' => 'BookingRules',
+                            'action' => 'index',
+                        ],
+                        'active' => in_array(
+                            $request->getParam('controller'),
+                            ['BookingRules', 'BookingRuleFilters', 'BookingRuleAccountEntries'],
+                        ),
                     ],
                 ],
             ],

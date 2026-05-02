@@ -70,7 +70,7 @@ return [
         'fromEmail' => [
             'from' => 'info@arhint.si',
             'name' => 'ARHINT',
-        ]
+        ],
     ],
 
     /*
@@ -374,6 +374,14 @@ return [
             'file' => 'debug',
             'url' => null,
             'scopes' => null,
+            'levels' => ['notice', 'info', 'debug'],
+        ],
+        'ai' => [
+            'className' => FileLog::class,
+            'path' => LOGS,
+            'file' => 'ai',
+            'url' => null,
+            'scopes' => ['ai'],
             'levels' => ['notice', 'info', 'debug'],
         ],
         'error' => [

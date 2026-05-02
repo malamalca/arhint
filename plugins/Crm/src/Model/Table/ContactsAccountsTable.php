@@ -57,7 +57,7 @@ class ContactsAccountsTable extends Table
             ->allowEmptyString('kind')
             ->add('kind', 'inList', ['rule' => [
                 'inList',
-                array_keys(Configure::read('Crm.accountTypes')),
+                array_keys(Configure::read('Crm.accountTypes', [])),
             ]])
             ->notEmptyString('iban')
             ->allowEmptyString('bic');

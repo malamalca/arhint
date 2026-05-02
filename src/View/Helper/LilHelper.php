@@ -330,7 +330,7 @@ class LilHelper extends Helper
         $ret = $templater->format(
             'linkedit',
             [
-                'url' => Router::url(array_merge($url_defaults, (array)$url)),
+                'url' => Router::url(Hash::merge($url_defaults, (array)$url)),
                 'class' => $params['class'] ?? [],
                 'attrs' => $templater->formatAttributes(
                     $params,

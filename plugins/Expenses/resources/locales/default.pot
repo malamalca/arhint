@@ -1,0 +1,28 @@
+# LANGUAGE translation of CakePHP Application
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"POT-Creation-Date: 2026-03-14 13:52+0000\n"
+"PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
+"Last-Translator: NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+
+#: ./plugins/Expenses/src/Model/Table/BookingOrderEntriesTable.php:144
+msgid "The foreign record does not exist."
+msgstr ""
+
+#: ./plugins/Expenses/templates/BookingOrderEntries/index.php:8
+msgid "Booking Order Entries"
+msgstr ""
+
+#: ./plugins/Expenses/templates/Partners/index.php:8
+msgid "Partners"
+msgstr ""
+

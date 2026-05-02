@@ -9,6 +9,7 @@ use Cake\Core\PluginApplicationInterface;
 use Cake\Event\EventManagerInterface;
 use Cake\Routing\RouteBuilder;
 use Cake\Utility\Hash;
+use Crm\Event\CrmAIToolsEvents;
 use Crm\Event\CrmEvents;
 
 class CrmPlugin extends BasePlugin
@@ -67,6 +68,7 @@ class CrmPlugin extends BasePlugin
     public function events(EventManagerInterface $eventManager): EventManagerInterface
     {
         $eventManager->on(new CrmEvents());
+        $eventManager->on(new CrmAIToolsEvents());
 
         return $eventManager;
     }

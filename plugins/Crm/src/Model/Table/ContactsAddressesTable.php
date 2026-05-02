@@ -59,7 +59,7 @@ class ContactsAddressesTable extends Table
             ->notEmptyString('kind')
             ->add('kind', 'inList', ['rule' => [
                 'inList',
-                array_keys(Configure::read('Crm.addressTypes')),
+                array_keys(Configure::read('Crm.addressTypes', [])),
             ]])
             ->notEmptyString('street')
 

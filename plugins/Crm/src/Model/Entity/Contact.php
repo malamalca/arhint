@@ -45,4 +45,14 @@ class Contact extends Entity
         '*' => true,
         'id' => false,
     ];
+
+    /**
+     * String representation of the contact, used in dropdowns and similar places.
+     *
+     * @return string
+     */
+    public function __toString(): string
+    {
+        return $this->title ?? '';
+    }
 }

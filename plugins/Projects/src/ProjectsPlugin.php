@@ -9,6 +9,7 @@ use Cake\Core\PluginApplicationInterface;
 use Cake\Event\EventManagerInterface;
 use Cake\Routing\RouteBuilder;
 use Cake\Utility\Hash;
+use Projects\Event\ProjectsAIToolsEvents;
 use Projects\Event\ProjectsEvents;
 
 class ProjectsPlugin extends BasePlugin
@@ -67,6 +68,7 @@ class ProjectsPlugin extends BasePlugin
     public function events(EventManagerInterface $eventManager): EventManagerInterface
     {
         $eventManager->on(new ProjectsEvents());
+        $eventManager->on(new ProjectsAIToolsEvents());
 
         return $eventManager;
     }

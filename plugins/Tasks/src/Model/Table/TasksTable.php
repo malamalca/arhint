@@ -149,6 +149,9 @@ class TasksTable extends Table
                 case 'empty':
                     $ret['conditions']['Tasks.deadline IS'] = null;
                     break;
+                default:
+                    $ret['conditions']['Tasks.deadline >='] = DateTime::createFromFormat('Y-m-d', $filter['due']);
+                    break;
             }
         }
 

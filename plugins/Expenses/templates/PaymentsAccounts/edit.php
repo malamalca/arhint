@@ -1,7 +1,7 @@
 <?php
 $accountEdit = [
     'title_for_layout' =>
-        $account->id ? __d('expenses', 'Edit Account') : __d('expenses', 'Add Account'),
+        $account->id ? __d('expenses', 'Edit Bank Account') : __d('expenses', 'Add Bank Account'),
     'form' => [
         'defaultHelper' => $this->Form,
         'pre' => '<div class="form">',

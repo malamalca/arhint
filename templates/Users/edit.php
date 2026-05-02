@@ -1,5 +1,4 @@
 <?php
-use Cake\Core\Configure;
 use Cake\Routing\Router;
 
 $userForm = [
@@ -9,17 +8,17 @@ $userForm = [
         'lines' => [
             'form_start' => [
                 'method' => 'create',
-                'parameters' => [$user]
+                'parameters' => [$user],
             ],
             'id' => [
                 'method' => 'hidden',
-                'parameters' => ['id']
+                'parameters' => ['id'],
             ],
             'referer' => [
                 'method' => 'hidden',
                 'parameters' => ['referer', [
                     'default' => Router::url($this->getRequest()->referer(), true),
-                ]]
+                ]],
             ],
 
             'fs_basics_start' => '<fieldset>',
@@ -30,28 +29,28 @@ $userForm = [
                 'parameters' => ['name', [
                     'type' => 'text',
                     'label' => __('Name') . ':',
-                ]]
+                ]],
             ],
             'email' => [
                 'method' => 'control',
                 'parameters' => ['email', [
                     'type' => 'text',
                     'label' => __('Email') . ':',
-                ]]
+                ]],
             ],
             'active' => [
                 'method' => 'control',
                 'parameters' => ['active', [
                     'type' => 'checkbox',
-                    'label' => __('Active User')
-                ]]
+                    'label' => __('Active User'),
+                ]],
             ],
             'hidden' => [
                 'method' => 'control',
                 'parameters' => ['hidden', [
                     'type' => 'checkbox',
-                    'label' => __('Hidden User')
-                ]]
+                    'label' => __('Hidden User'),
+                ]],
             ],
             'fs_basics_end' => '</fieldset>',
 
@@ -68,43 +67,60 @@ $userForm = [
                         '5' => __('Admin'),
                         '7' => __('Group Admin'),
                         '10' => __('Editor'),
-                        '15' => __('Reader')
-                    ]
-                ]]
+                        '15' => __('Reader'),
+                    ],
+                ]],
             ],
             'access' => [
                 'method' => 'control',
                 'parameters' => ['access', [
                     'type' => 'text',
                     'label' => __('Plugin Access') . ':',
-                    'enabled' => $this->getCurrentUser()->hasRole('admin')
-                ]]
+                    'enabled' => $this->getCurrentUser()->hasRole('admin'),
+                ]],
             ],
             'username' => [
                 'method' => 'control',
                 'parameters' => ['username', [
                     'type' => 'text',
                     'label' => __('Username') . ':',
-                    'enabled' => $this->getCurrentUser()->hasRole('admin')
-                ]]
+                    'enabled' => $this->getCurrentUser()->hasRole('admin'),
+                ]],
             ],
             'passwd' => [
                 'method' => 'control',
                 'parameters' => ['passwd', [
                     'type' => 'text',
                     'label' => __('Password') . ':',
-                    'value' => ''
-                ]]
+                    'value' => '',
+                ]],
             ],
             'repeat-passwd' => [
                 'method' => 'control',
                 'parameters' => ['repeat_passwd', [
                     'type' => 'text',
                     'label' => __('Repeat Password') . ':',
-                    'value' => ''
-                ]]
+                    'value' => '',
+                ]],
             ],
             'fs_login_end' => '</fieldset>',
+
+            'fs_properties_start' => '<fieldset>',
+            'lg_properties' => sprintf('<legend>%s</legend>', __('Properties')),
+
+            'properties' => [
+                'method' => 'control',
+                'parameters' => ['properties', [
+                    'type' => 'textarea',
+                    'label' => __('Properties (JSON)') . ':',
+                    'rows' => 6,
+                    'enabled' => $this->getCurrentUser()->hasRole('admin'),
+                    'error' => [
+                        'validJson' => __('Must be valid JSON.'),
+                    ],
+                ]],
+            ],
+            'fs_properties_end' => '</fieldset>',
 
             'submit' => [
                 'method' => 'button',
@@ -114,10 +130,10 @@ $userForm = [
             ],
             'form_end' => [
                 'method' => 'end',
-                'parameters' => []
+                'parameters' => [],
             ],
-        ]
-    ]
+        ],
+    ],
 ];
 
 echo $this->Lil->form($userForm, 'User.edit');

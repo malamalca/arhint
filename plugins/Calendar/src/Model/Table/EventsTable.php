@@ -48,7 +48,7 @@ class EventsTable extends Table
         $this->addBehavior('Timestamp');
 
         $this->belongsTo('Users', [
-            'foreignKey' => 'user_id',
+            'foreignKey' => 'calender_id',
             'className' => 'Users',
         ]);
     }
@@ -107,7 +107,7 @@ class EventsTable extends Table
      */
     public function buildRules(RulesChecker $rules): RulesChecker
     {
-        $rules->add($rules->existsIn('user_id', 'Users'), ['errorField' => 'user_id']);
+        //$rules->add($rules->existsIn('user_id', 'Users'), ['errorField' => 'user_id']);
 
         return $rules;
     }
@@ -122,7 +122,7 @@ class EventsTable extends Table
      */
     public function beforeMarshal(Event $event, ArrayObject $data, ArrayObject $options): void
     {
-        if ($data['all_day'] == '1') {
+        if (($data['all_day'] ?? null) == '1') {
             $data['dat_start'] .= ' 00:00:00';
             $data['dat_end'] .= ' 00:00:00';
         }

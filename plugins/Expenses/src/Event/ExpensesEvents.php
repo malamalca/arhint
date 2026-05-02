@@ -9,6 +9,7 @@ use Cake\Datasource\EntityInterface;
 use Cake\Event\Event;
 use Cake\Event\EventListenerInterface;
 use Cake\ORM\TableRegistry;
+use Cake\Routing\Router;
 use Documents\Model\Table\InvoicesTable;
 use Documents\Model\Table\TravelOrdersTable;
 use Expenses\Lib\ExpensesSidebar;
@@ -28,6 +29,7 @@ class ExpensesEvents implements EventListenerInterface
             'App.Sidebar.beforeRender' => 'modifySidebar',
             'App.Form.Documents.DocumentsCounters.edit' => 'modifyCountersForm',
             'App.Panels.Documents.Invoices.view' => 'modifyDocumentsView',
+            'App.Panels.Crm.Contacts.view' => 'showPartnersTab',
             'Model.afterSave' => 'createExpenseOnSave',
         ];
     }
@@ -104,6 +106,49 @@ class ExpensesEvents implements EventListenerInterface
         $view->Lil->insertIntoArray($form->form['lines'], $expenseFieldset, ['after' => 'fs_basics_end']);
 
         return $form;
+    }
+
+    /**
+     * Add partners tab to Crm Contact view page.
+     *
+     * @param \Cake\Event\Event $event Event object
+     * @param mixed $panels Panels object
+     * @return void
+     */
+    public function showPartnersTab(Event $event, mixed $panels): void
+    {
+        /** @var \App\View\AppView $view */
+        $view = $event->getSubject();
+
+        $contactId = $view->getRequest()->getParam('pass.0');
+
+        $partnersTab = sprintf(
+            '<li class="tab col"><a href="%1$s" target="_self"%3$s>%2$s</a></li>',
+            $view->Url->build([$contactId, '?' => ['tab' => 'partners']]),
+            __d('expenses', 'Partners'),
+            $view->getRequest()->getQuery('tab') == 'partners' ? ' class="active"' : '',
+        );
+
+        $view->Lil->insertIntoArray(
+            $panels->panels['tabs']['lines'],
+            ['partners' => $partnersTab],
+            ['before' => 'post'],
+        );
+
+        if ($view->getRequest()->getQuery('tab') == 'partners') {
+            $panels->panels['partners_table'] = '<div id="tab-content-partners"></div>';
+
+            $url = Router::url([
+                'plugin' => 'Expenses',
+                'controller' => 'Partners',
+                'action' => 'index',
+                '_ext' => 'aht',
+                '?' => ['contact_id' => $contactId],
+            ]);
+            $view->Lil->jsReady('$.get("' . $url . '", function(data) { $("#tab-content-partners").html(data); });');
+        }
+
+        $event->setResult($panels);
     }
 
     /**

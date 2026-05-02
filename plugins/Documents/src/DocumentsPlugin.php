@@ -9,6 +9,7 @@ use Cake\Core\PluginApplicationInterface;
 use Cake\Event\EventManagerInterface;
 use Cake\Routing\RouteBuilder;
 use Cake\Utility\Hash;
+use Documents\Event\DocumentsAIToolsEvents;
 use Documents\Event\DocumentsEvents;
 
 class DocumentsPlugin extends BasePlugin
@@ -67,6 +68,7 @@ class DocumentsPlugin extends BasePlugin
     public function events(EventManagerInterface $eventManager): EventManagerInterface
     {
         $eventManager->on(new DocumentsEvents());
+        $eventManager->on(new DocumentsAIToolsEvents());
 
         return $eventManager;
     }

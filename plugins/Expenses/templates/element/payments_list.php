@@ -15,7 +15,7 @@ if ($expense) {
             ],
             'account' => [
                 'parameters' => ['class' => 'left-align'],
-                'html' => __d('expenses', 'Account'),
+                'html' => __d('expenses', 'Bank Account'),
             ],
             'amount' => [
                 'parameters' => ['class' => 'right-align'],

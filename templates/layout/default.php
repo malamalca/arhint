@@ -20,6 +20,7 @@ use Cake\Routing\Router;
 
     <?= $this->fetch('meta') ?>
     <?= $this->fetch('css') ?>
+    <meta name="csrfToken" content="<?= h($this->request->getAttribute('csrfToken')) ?>">
 
     <?= $this->Html->script('/js/jquery/jquery-3.6.0.min.js') ?>
     <?= $this->Html->script('/js/vendor/Materialize/materialize.js') ?>

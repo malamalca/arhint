@@ -52,7 +52,7 @@ class ContactsPhonesTable extends Table
             ->allowEmptyString('contact_id')
             ->notEmptyString('no')
             ->allowEmptyString('kind')
-            ->add('kind', 'inList', ['rule' => ['inList', array_keys(Configure::read('Crm.phoneTypes'))]])
+            ->add('kind', 'inList', ['rule' => ['inList', array_keys(Configure::read('Crm.phoneTypes', []))]])
             ->add('primary', 'valid', ['rule' => 'boolean'])
             ->notEmptyString('primary');
 

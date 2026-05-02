@@ -75,6 +75,22 @@ $userForm = [
             ],
             'fs_emails_end' => '</fieldset>',
 
+            'fs_properties_start' => '<fieldset>',
+            'lg_properties' => sprintf('<legend>%s</legend>', __('Properties')),
+
+            'properties' => [
+                'method' => 'control',
+                'parameters' => ['properties', [
+                    'type' => 'textarea',
+                    'label' => __('Properties (JSON)') . ':',
+                    'rows' => 6,
+                    'error' => [
+                        'validJson' => __('Must be valid JSON.'),
+                    ],
+                ]],
+            ],
+            'fs_properties_end' => '</fieldset>',
+
             'fs_login_start' => '<fieldset>',
             'lg_login' => sprintf('<legend>%s</legend>', __('Change Password')),
             'old-passwd' => [
