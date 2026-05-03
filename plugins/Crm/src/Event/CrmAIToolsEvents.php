@@ -23,9 +23,22 @@ class CrmAIToolsEvents implements EventListenerInterface
     public function implementedEvents(): array
     {
         return [
+            'App.AIAssistant.registerModule' => 'aiAssistantRegisterModule',
             'App.AIAssistant.tools' => 'aiAssistantTools',
             'App.AIAssistant.executeTool' => 'aiAssistantExecuteTool',
         ];
+    }
+
+    /**
+     * Register the Crm module for AI assistant module detection.
+     *
+     * @param \Cake\Event\Event $event Event object.
+     * @param \ArrayObject $modulesList Modules list to append to.
+     * @return void
+     */
+    public function aiAssistantRegisterModule(Event $event, ArrayObject $modulesList): void
+    {
+        $modulesList['Crm'] = 'CRM tools for managing contacts, companies, and communication logs.';
     }
 
     /**

@@ -8,6 +8,8 @@ use ArrayObject;
 use Authorization\AuthorizationServiceInterface;
 use Cake\Event\Event;
 use Cake\ORM\TableRegistry;
+use Cake\Routing\Route\DashedRoute;
+use Cake\Routing\Router;
 use Cake\TestSuite\TestCase;
 use Documents\Event\DocumentsAIToolsEvents;
 
@@ -48,6 +50,10 @@ class DocumentsAIToolsEventsTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
+        Router::reload();
+        Router::createRouteBuilder('/')->scope('/documents', ['plugin' => 'Documents'], function ($routes): void {
+            $routes->fallbacks(DashedRoute::class);
+        });
         $this->listener = new DocumentsAIToolsEvents();
 
         $authService = $this->createMock(AuthorizationServiceInterface::class);
@@ -68,9 +74,11 @@ class DocumentsAIToolsEventsTest extends TestCase
     {
         $events = $this->listener->implementedEvents();
 
+        $this->assertArrayHasKey('App.AIAssistant.registerModule', $events);
         $this->assertArrayHasKey('App.AIAssistant.tools', $events);
         $this->assertArrayHasKey('App.AIAssistant.executeTool', $events);
-        $this->assertCount(2, $events);
+        $this->assertCount(3, $events);
+        $this->assertEquals('aiAssistantRegisterModule', $events['App.AIAssistant.registerModule']);
         $this->assertEquals('aiAssistantTools', $events['App.AIAssistant.tools']);
         $this->assertEquals('aiAssistantExecuteTool', $events['App.AIAssistant.executeTool']);
     }

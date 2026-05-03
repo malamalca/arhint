@@ -22,6 +22,7 @@ class CalendarEvents implements EventListenerInterface
         return [
             'View.beforeRender' => 'addScripts',
             'App.Sidebar.beforeRender' => 'modifySidebar',
+            'App.AIAssistant.registerModule' => 'aiAssistantRegisterModule',
             'App.AIAssistant.tools' => 'aiAssistantTools',
             'App.AIAssistant.executeTool' => 'aiAssistantExecuteTool',
         ];
@@ -60,6 +61,18 @@ class CalendarEvents implements EventListenerInterface
     public function modifySidebar(Event $event, ArrayObject $sidebar): void
     {
         CalendarSidebar::setAdminSidebar($event, $sidebar);
+    }
+
+    /**
+     * Register the Calendar module for AI assistant module detection.
+     *
+     * @param \Cake\Event\Event $event Event object.
+     * @param \ArrayObject $modulesList Modules list to append to.
+     * @return void
+     */
+    public function aiAssistantRegisterModule(Event $event, ArrayObject $modulesList): void
+    {
+        $modulesList['Calendar'] = 'Calendar tools for managing events and appointments.';
     }
 
     /**

@@ -64,7 +64,7 @@ jobs:
 
     - name: Run PHPUnit
       run: |
-        export CODECOVERAGE=1 && php -dpcov.enabled=1 -dpcov.directory=. vendor/bin/phpunit --coverage-clover=coverage.xml
+        export CODECOVERAGE=1 && php -dpcov.enabled=1 -dpcov.directory=. vendor/bin/phpunit --exclude-group live --coverage-clover=coverage.xml
     - name: Submit code coverage
       uses: codecov/codecov-action@v4
       with:

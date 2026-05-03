@@ -10,6 +10,8 @@ use Cake\Event\EventListenerInterface;
 use Cake\I18n\Date;
 use Cake\I18n\DateTime;
 use Cake\ORM\TableRegistry;
+use Cake\Routing\Exception\MissingRouteException;
+use Cake\Routing\Router;
 use Projects\Model\Table\ProjectsTasksCommentsTable;
 
 class ProjectsAIToolsEvents implements EventListenerInterface
@@ -22,9 +24,23 @@ class ProjectsAIToolsEvents implements EventListenerInterface
     public function implementedEvents(): array
     {
         return [
+            'App.AIAssistant.registerModule' => 'aiAssistantRegisterModule',
             'App.AIAssistant.tools' => 'aiAssistantTools',
             'App.AIAssistant.executeTool' => 'aiAssistantExecuteTool',
         ];
+    }
+
+    /**
+     * Register the Projects module for AI assistant module detection.
+     *
+     * @param \Cake\Event\Event $event Event object.
+     * @param \ArrayObject $modulesList Modules list to append to.
+     * @return void
+     */
+    public function aiAssistantRegisterModule(Event $event, ArrayObject $modulesList): void
+    {
+        $modulesList['Projects'] = 'Project management tools for searching projects, managing milestones, tasks, ' .
+            'project documents, project invoices, project users and logging work.';
     }
 
     /**
@@ -41,15 +57,17 @@ class ProjectsAIToolsEvents implements EventListenerInterface
             arguments: [
                 'search' => [
                     'type' => 'string',
-                    'description' => 'Search term to filter projects by number or title.',
+                    'description' => 'Optional search term to filter by number or title. ' .
+                        'Omit to list all accessible projects.',
                 ],
                 'inactive' => [
                     'type' => 'boolean',
                     'description' => 'Include inactive projects. Defaults to false.',
                 ],
             ],
-            description: 'Searches accessible projects by number or title. Returns id, number, title, '
-                . 'active state, milestone counts, and status.',
+            description: 'Lists or searches accessible projects. Call with no arguments to list all. '
+                . 'Returns id, no, title, active state, milestone counts, and status. '
+                . 'Each result includes view_url; always render no as a markdown link: [no](view_url).',
         ));
 
         $toolsList->append(new AITool(
@@ -58,7 +76,8 @@ class ProjectsAIToolsEvents implements EventListenerInterface
                 'id' => ['type' => 'string', 'description' => 'UUID of the project to retrieve.'],
             ],
             description: 'Fetches full details of a single project including description, status, '
-                . 'team members, and milestones with task counts.',
+                . 'team members, and milestones with task counts. Includes a view_url field; '
+                . 'always render no as a markdown link: [no](view_url).',
         ));
 
         $toolsList->append(new AITool(
@@ -183,6 +202,31 @@ class ProjectsAIToolsEvents implements EventListenerInterface
             ],
             description: 'Creates a new milestone in a project.',
         ));
+
+        $toolsList->append(new AITool(
+            name: 'Projects.get_project_logs',
+            arguments: [
+                'project_id' => ['type' => 'string', 'description' => 'UUID of the project.'],
+            ],
+            description: 'Lists activity logs for a project. Returns id, created datetime, user, and descript.',
+        ));
+
+        $toolsList->append(new AITool(
+            name: 'Projects.get_project_users',
+            arguments: [
+                'project_id' => ['type' => 'string', 'description' => 'UUID of the project.'],
+            ],
+            description: 'Lists users assigned to a project. Returns project-user relation id and user details.',
+        ));
+
+        $toolsList->append(new AITool(
+            name: 'Projects.get_project_documents',
+            arguments: [
+                'project_id' => ['type' => 'string', 'description' => 'UUID of the project.'],
+            ],
+            description: 'Lists documents linked to a project across invoices, documents, and travel orders. '
+                . 'Each item includes view_url; always render no as a markdown link: [no](view_url).',
+        ));
     }
 
     /**
@@ -208,6 +252,9 @@ class ProjectsAIToolsEvents implements EventListenerInterface
             'Projects.add_project_log' => $this->executeAddProjectLog($event, $arguments, $currentUser),
             'Projects.log_workhours' => $this->executeLogWorkhours($event, $arguments, $currentUser),
             'Projects.create_milestone' => $this->executeCreateMilestone($event, $arguments, $currentUser),
+            'Projects.get_project_logs' => $this->executeGetProjectLogs($event, $arguments, $currentUser),
+            'Projects.get_project_users' => $this->executeGetProjectUsers($event, $arguments, $currentUser),
+            'Projects.get_project_documents' => $this->executeGetProjectDocuments($event, $arguments, $currentUser),
             default => null,
         };
     }
@@ -225,14 +272,23 @@ class ProjectsAIToolsEvents implements EventListenerInterface
         /** @var \Projects\Model\Table\ProjectsTable $projectsTable */
         $projectsTable = TableRegistry::getTableLocator()->get('Projects.Projects');
 
-        $filter = [];
-        if (!empty($arguments['search'])) {
-            $filter['search'] = $arguments['search'];
+        $filter = ['inactive' => !empty($arguments['inactive'])];
+
+        $search = $this->normalizeProjectSearch($arguments['search'] ?? null);
+        if ($search !== null) {
+            $filter['search'] = $search;
         }
         if (!empty($arguments['inactive'])) {
             $filter['inactive'] = true;
         }
         $params = $projectsTable->filter($filter);
+
+        if (empty($arguments['inactive'])) {
+            $params['conditions'] = array_merge_recursive(
+                ['Projects.active IN' => [true]],
+                $params['conditions'],
+            );
+        }
 
         $projects = $currentUser->applyScope('index', $projectsTable->find())
             ->select([
@@ -249,7 +305,45 @@ class ProjectsAIToolsEvents implements EventListenerInterface
             ->all()
             ->toArray();
 
+        foreach ($projects as $project) {
+            $project->view_url = $this->projectViewUrl((string)$project->id);
+        }
+
         $event->setResult($projects);
+    }
+
+    /**
+     * Normalize prompt-style project search input into a title/number search term.
+     *
+     * @param mixed $search Search argument from the AI tool call.
+     * @return string|null
+     */
+    private function normalizeProjectSearch(mixed $search): ?string
+    {
+        if (!is_string($search)) {
+            return null;
+        }
+
+        $search = trim($search);
+        if ($search === '') {
+            return null;
+        }
+
+        $isPromptStyle = preg_match('/^\s*(list|show|find|get|search)\b/i', $search) === 1
+            || preg_match('/\ball\b/i', $search) === 1;
+        if (!$isPromptStyle) {
+            return $search;
+        }
+
+        $normalized = preg_replace(
+            '/\b(list|show|find|get|search|all|active|inactive|projects?|please|me|the)\b/i',
+            ' ',
+            $search,
+        );
+        $normalized = preg_replace('/\s+/', ' ', (string)$normalized);
+        $normalized = trim((string)$normalized);
+
+        return $normalized !== '' ? $normalized : null;
     }
 
     /**
@@ -275,7 +369,26 @@ class ProjectsAIToolsEvents implements EventListenerInterface
             return;
         }
 
+        $project->view_url = $this->projectViewUrl((string)$project->id);
+
         $event->setResult($project);
+    }
+
+    /**
+     * Build a project view URL for AI responses.
+     *
+     * @param string $projectId Project UUID.
+     * @return string
+     */
+    private function projectViewUrl(string $projectId): string
+    {
+        try {
+            return Router::url([
+                'plugin' => 'Projects', 'controller' => 'Projects', 'action' => 'view', $projectId,
+            ], true);
+        } catch (MissingRouteException) {
+            return '/projects/view/' . $projectId;
+        }
     }
 
     /**
@@ -618,18 +731,182 @@ class ProjectsAIToolsEvents implements EventListenerInterface
     }
 
     /**
+     * Execute Projects.get_project_logs tool.
+     *
+     * @param \Cake\Event\Event $event Event object.
+     * @param array<mixed> $arguments Tool arguments.
+     * @param mixed $currentUser Current user.
+     * @return void
+     */
+    private function executeGetProjectLogs(Event $event, array $arguments, mixed $currentUser): void
+    {
+        $project = $this->loadAccessibleProject($currentUser, $arguments['project_id'] ?? '');
+        if (!$project) {
+            $event->setResult(['error' => 'Project not found or access denied.']);
+
+            return;
+        }
+
+        $logs = TableRegistry::getTableLocator()->get('Projects.ProjectsLogs')
+            ->find()
+            ->select(['ProjectsLogs.id', 'ProjectsLogs.project_id', 'ProjectsLogs.user_id',
+                'ProjectsLogs.descript', 'ProjectsLogs.created'])
+            ->contain(['Users'])
+            ->where(['ProjectsLogs.project_id' => $project->id])
+            ->orderBy(['ProjectsLogs.created' => 'DESC'])
+            ->limit(50)
+            ->all()
+            ->toArray();
+
+        $event->setResult($logs);
+    }
+
+    /**
+     * Execute Projects.get_project_users tool.
+     *
+     * @param \Cake\Event\Event $event Event object.
+     * @param array<mixed> $arguments Tool arguments.
+     * @param mixed $currentUser Current user.
+     * @return void
+     */
+    private function executeGetProjectUsers(Event $event, array $arguments, mixed $currentUser): void
+    {
+        $project = $this->loadAccessibleProject($currentUser, $arguments['project_id'] ?? '');
+        if (!$project) {
+            $event->setResult(['error' => 'Project not found or access denied.']);
+
+            return;
+        }
+
+        $users = TableRegistry::getTableLocator()->get('Projects.ProjectsUsers')
+            ->find()
+            ->select(['ProjectsUsers.id', 'ProjectsUsers.project_id', 'ProjectsUsers.user_id'])
+            ->contain(['Users'])
+            ->where(['ProjectsUsers.project_id' => $project->id])
+            ->orderBy(['ProjectsUsers.user_id' => 'ASC'])
+            ->all()
+            ->toArray();
+
+        $event->setResult($users);
+    }
+
+    /**
+     * Execute Projects.get_project_documents tool.
+     *
+     * @param \Cake\Event\Event $event Event object.
+     * @param array<mixed> $arguments Tool arguments.
+     * @param mixed $currentUser Current user.
+     * @return void
+     */
+    private function executeGetProjectDocuments(Event $event, array $arguments, mixed $currentUser): void
+    {
+        $project = $this->loadAccessibleProject($currentUser, $arguments['project_id'] ?? '');
+        if (!$project) {
+            $event->setResult(['error' => 'Project not found or access denied.']);
+
+            return;
+        }
+
+        $result = [
+            'invoices' => [],
+            'documents' => [],
+            'travel_orders' => [],
+        ];
+
+        $invoices = TableRegistry::getTableLocator()->get('Documents.Invoices')
+            ->find()
+            ->select(['Invoices.id', 'Invoices.no', 'Invoices.title', 'Invoices.dat_issue'])
+            ->where(['Invoices.project_id' => $project->id])
+            ->orderBy(['Invoices.dat_issue' => 'DESC'])
+            ->limit(50)
+            ->all()
+            ->toArray();
+        foreach ($invoices as $invoice) {
+            $invoice->view_url = $this->documentsViewUrl('Invoices', (string)$invoice->id);
+        }
+        $result['invoices'] = $invoices;
+
+        $documents = TableRegistry::getTableLocator()->get('Documents.Documents')
+            ->find()
+            ->select(['Documents.id', 'Documents.no', 'Documents.title', 'Documents.dat_issue'])
+            ->where(['Documents.project_id' => $project->id])
+            ->orderBy(['Documents.dat_issue' => 'DESC'])
+            ->limit(50)
+            ->all()
+            ->toArray();
+        foreach ($documents as $document) {
+            $document->view_url = $this->documentsViewUrl('Documents', (string)$document->id);
+        }
+        $result['documents'] = $documents;
+
+        $travelOrders = TableRegistry::getTableLocator()->get('Documents.TravelOrders')
+            ->find()
+            ->select(['TravelOrders.id', 'TravelOrders.no', 'TravelOrders.title',
+                'TravelOrders.dat_task', 'TravelOrders.status', 'TravelOrders.total'])
+            ->where(['TravelOrders.project_id' => $project->id])
+            ->orderBy(['TravelOrders.dat_task' => 'DESC'])
+            ->limit(50)
+            ->all()
+            ->toArray();
+        foreach ($travelOrders as $travelOrder) {
+            $travelOrder->view_url = $this->documentsViewUrl('TravelOrders', (string)$travelOrder->id);
+        }
+        $result['travel_orders'] = $travelOrders;
+
+        $event->setResult($result);
+    }
+
+    /**
      * Load a project accessible to the current user via authorization scope.
      *
+     * Accepts a UUID or falls back to a case-insensitive title / number search
+     * so the model can pass a project name when a UUID is not available.
+     *
      * @param mixed $currentUser Current user with applyScope.
-     * @param string $projectId Project UUID.
+     * @param string $projectId Project UUID, number, or title.
      * @return \Projects\Model\Entity\Project|null
      */
     private function loadAccessibleProject(mixed $currentUser, string $projectId): mixed
     {
         $projectsTable = TableRegistry::getTableLocator()->get('Projects.Projects');
 
+        $isUuid = (bool)preg_match(
+            '/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i',
+            $projectId,
+        );
+
+        if ($isUuid) {
+            return $currentUser->applyScope('index', $projectsTable->find())
+                ->where(['Projects.id' => $projectId])
+                ->first();
+        }
+
+        // Fall back to title or project number search when the model passes a name.
         return $currentUser->applyScope('index', $projectsTable->find())
-            ->where(['Projects.id' => $projectId])
+            ->where([
+                'OR' => [
+                    ['Projects.title LIKE' => $projectId],
+                    ['Projects.no LIKE' => $projectId],
+                ],
+            ])
             ->first();
+    }
+
+    /**
+     * Build a Documents plugin view URL for AI responses.
+     *
+     * @param string $controller Controller name in Documents plugin.
+     * @param string $id Entity UUID.
+     * @return string
+     */
+    private function documentsViewUrl(string $controller, string $id): string
+    {
+        try {
+            return Router::url([
+                'plugin' => 'Documents', 'controller' => $controller, 'action' => 'view', $id,
+            ], true);
+        } catch (MissingRouteException) {
+            return '/documents/' . strtolower($controller) . '/view/' . $id;
+        }
     }
 }

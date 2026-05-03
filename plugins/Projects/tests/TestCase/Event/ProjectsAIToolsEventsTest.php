@@ -56,9 +56,11 @@ class ProjectsAIToolsEventsTest extends TestCase
     {
         $events = $this->listener->implementedEvents();
 
+        $this->assertArrayHasKey('App.AIAssistant.registerModule', $events);
         $this->assertArrayHasKey('App.AIAssistant.tools', $events);
         $this->assertArrayHasKey('App.AIAssistant.executeTool', $events);
-        $this->assertCount(2, $events);
+        $this->assertCount(3, $events);
+        $this->assertEquals('aiAssistantRegisterModule', $events['App.AIAssistant.registerModule']);
         $this->assertEquals('aiAssistantTools', $events['App.AIAssistant.tools']);
         $this->assertEquals('aiAssistantExecuteTool', $events['App.AIAssistant.executeTool']);
     }
@@ -67,13 +69,13 @@ class ProjectsAIToolsEventsTest extends TestCase
     // aiAssistantTools — tool registration
     // -------------------------------------------------------------------------
 
-    public function testAiAssistantToolsRegisters10Tools(): void
+    public function testAiAssistantToolsRegisters13Tools(): void
     {
         $event = new Event('App.AIAssistant.tools');
         $toolsList = new ArrayObject();
         $this->listener->aiAssistantTools($event, $toolsList);
 
-        $this->assertCount(10, $toolsList);
+        $this->assertCount(13, $toolsList);
 
         $names = array_map(fn($t) => $t->name, iterator_to_array($toolsList));
         $this->assertContains('Projects.search_projects', $names);
@@ -86,6 +88,9 @@ class ProjectsAIToolsEventsTest extends TestCase
         $this->assertContains('Projects.add_project_log', $names);
         $this->assertContains('Projects.log_workhours', $names);
         $this->assertContains('Projects.create_milestone', $names);
+        $this->assertContains('Projects.get_project_logs', $names);
+        $this->assertContains('Projects.get_project_users', $names);
+        $this->assertContains('Projects.get_project_documents', $names);
     }
 
     // -------------------------------------------------------------------------
@@ -110,6 +115,31 @@ class ProjectsAIToolsEventsTest extends TestCase
         $this->assertIsArray($result);
         $this->assertNotEmpty($result);
         $this->assertEquals(self::PROJECT_1, $result[0]->id);
+        $this->assertNotEmpty($result[0]->view_url);
+        $this->assertStringContainsString('/projects/view/' . self::PROJECT_1, $result[0]->view_url);
+    }
+
+    public function testSearchProjectsPromptForActiveProjectsIgnoresBoilerplate(): void
+    {
+        $projectsTable = TableRegistry::getTableLocator()->get('Projects.Projects');
+        $inactiveProject = $projectsTable->newEntity([
+            'id' => '4dd53305-9715-4be4-b169-20defe113d2c',
+            'owner_id' => COMPANY_FIRST,
+            'status_id' => null,
+            'no' => '2022-03',
+            'title' => 'Archived Project Title',
+            'active' => false,
+        ]);
+        $projectsTable->saveOrFail($inactiveProject);
+
+        $args = ['search' => 'list all active projects'];
+        $event = $this->makeEvent('Projects.search_projects', $args);
+        $this->listener->aiAssistantExecuteTool($event, 'Projects.search_projects', $args);
+
+        $result = $event->getResult();
+        $this->assertIsArray($result);
+        $this->assertCount(2, $result);
+        $this->assertSame([self::PROJECT_1, self::PROJECT_2], array_column($result, 'id'));
     }
 
     // -------------------------------------------------------------------------
@@ -127,6 +157,8 @@ class ProjectsAIToolsEventsTest extends TestCase
         $this->assertIsNotArray($result);
         $this->assertEquals(self::PROJECT_1, $result->id);
         $this->assertEquals('First Project Title', $result->title);
+        $this->assertNotEmpty($result->view_url);
+        $this->assertStringContainsString('/projects/view/' . self::PROJECT_1, $result->view_url);
     }
 
     public function testGetProjectNotFound(): void
@@ -361,6 +393,103 @@ class ProjectsAIToolsEventsTest extends TestCase
         $args = ['project_id' => '00000000-0000-0000-0000-000000000000', 'title' => 'M1'];
         $event = $this->makeEvent('Projects.create_milestone', $args);
         $this->listener->aiAssistantExecuteTool($event, 'Projects.create_milestone', $args);
+
+        $result = $event->getResult();
+        $this->assertIsArray($result);
+        $this->assertArrayHasKey('error', $result);
+    }
+
+    // -------------------------------------------------------------------------
+    // get_project_logs
+    // -------------------------------------------------------------------------
+
+    public function testGetProjectLogsReturnsArray(): void
+    {
+        $args = ['project_id' => self::PROJECT_1];
+        $event = $this->makeEvent('Projects.get_project_logs', $args);
+        $this->listener->aiAssistantExecuteTool($event, 'Projects.get_project_logs', $args);
+
+        $result = $event->getResult();
+        $this->assertIsArray($result);
+        $this->assertNotEmpty($result);
+        $this->assertSame(self::PROJECT_1, $result[0]->project_id);
+    }
+
+    public function testGetProjectLogsProjectNotFound(): void
+    {
+        $args = ['project_id' => '00000000-0000-0000-0000-000000000000'];
+        $event = $this->makeEvent('Projects.get_project_logs', $args);
+        $this->listener->aiAssistantExecuteTool($event, 'Projects.get_project_logs', $args);
+
+        $result = $event->getResult();
+        $this->assertIsArray($result);
+        $this->assertArrayHasKey('error', $result);
+    }
+
+    public function testGetProjectLogsByTitleFallback(): void
+    {
+        $args = ['project_id' => 'First Project Title'];
+        $event = $this->makeEvent('Projects.get_project_logs', $args);
+        $this->listener->aiAssistantExecuteTool($event, 'Projects.get_project_logs', $args);
+
+        $result = $event->getResult();
+        $this->assertIsArray($result);
+        $this->assertNotEmpty($result);
+        $this->assertSame(self::PROJECT_1, $result[0]->project_id);
+    }
+
+    // -------------------------------------------------------------------------
+    // get_project_users
+    // -------------------------------------------------------------------------
+
+    public function testGetProjectUsersReturnsArray(): void
+    {
+        $args = ['project_id' => self::PROJECT_2];
+        $event = $this->makeEvent('Projects.get_project_users', $args);
+        $this->listener->aiAssistantExecuteTool($event, 'Projects.get_project_users', $args);
+
+        $result = $event->getResult();
+        $this->assertIsArray($result);
+        $this->assertNotEmpty($result);
+        $this->assertSame(self::PROJECT_2, $result[0]->project_id);
+    }
+
+    public function testGetProjectUsersProjectNotFound(): void
+    {
+        $args = ['project_id' => '00000000-0000-0000-0000-000000000000'];
+        $event = $this->makeEvent('Projects.get_project_users', $args);
+        $this->listener->aiAssistantExecuteTool($event, 'Projects.get_project_users', $args);
+
+        $result = $event->getResult();
+        $this->assertIsArray($result);
+        $this->assertArrayHasKey('error', $result);
+    }
+
+    // -------------------------------------------------------------------------
+    // get_project_documents
+    // -------------------------------------------------------------------------
+
+    public function testGetProjectDocumentsReturnsGroupedArrays(): void
+    {
+        $args = ['project_id' => self::PROJECT_1];
+        $event = $this->makeEvent('Projects.get_project_documents', $args);
+        $this->listener->aiAssistantExecuteTool($event, 'Projects.get_project_documents', $args);
+
+        $result = $event->getResult();
+        $this->assertIsArray($result);
+        $this->assertArrayHasKey('invoices', $result);
+        $this->assertArrayHasKey('documents', $result);
+        $this->assertArrayHasKey('travel_orders', $result);
+        $this->assertIsArray($result['invoices']);
+        $this->assertIsArray($result['documents']);
+        $this->assertIsArray($result['travel_orders']);
+    }
+
+    public function testGetProjectDocumentsProjectNotFound(): void
+    {
+        $args = ['project_id' => '00000000-0000-0000-0000-000000000000'];
+        $event = $this->makeEvent('Projects.get_project_documents', $args);
+        $this->listener->aiAssistantExecuteTool($event, 'Projects.get_project_documents', $args);
 
         $result = $event->getResult();
         $this->assertIsArray($result);

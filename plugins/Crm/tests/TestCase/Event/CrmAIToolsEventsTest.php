@@ -51,9 +51,11 @@ class CrmAIToolsEventsTest extends TestCase
     {
         $events = $this->listener->implementedEvents();
 
+        $this->assertArrayHasKey('App.AIAssistant.registerModule', $events);
         $this->assertArrayHasKey('App.AIAssistant.tools', $events);
         $this->assertArrayHasKey('App.AIAssistant.executeTool', $events);
-        $this->assertCount(2, $events);
+        $this->assertCount(3, $events);
+        $this->assertEquals('aiAssistantRegisterModule', $events['App.AIAssistant.registerModule']);
         $this->assertEquals('aiAssistantTools', $events['App.AIAssistant.tools']);
         $this->assertEquals('aiAssistantExecuteTool', $events['App.AIAssistant.executeTool']);
     }

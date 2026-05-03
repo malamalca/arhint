@@ -24,6 +24,7 @@ class TasksEvents implements EventListenerInterface
             'App.dashboard' => 'dashboardPanels',
             'View.beforeRender' => 'addScripts',
             'App.Sidebar.beforeRender' => 'modifySidebar',
+            'App.AIAssistant.registerModule' => 'aiAssistantRegisterModule',
             'App.AIAssistant.tools' => 'aiAssistantTools',
             'App.AIAssistant.executeTool' => 'aiAssistantExecuteTool',
         ];
@@ -117,6 +118,18 @@ class TasksEvents implements EventListenerInterface
     public function modifySidebar(Event $event, ArrayObject $sidebar): void
     {
         TasksSidebar::setAdminSidebar($event, $sidebar);
+    }
+
+    /**
+     * Register the Tasks module for AI assistant module detection.
+     *
+     * @param \Cake\Event\Event $event Event object.
+     * @param \ArrayObject $modulesList Modules list to append to.
+     * @return void
+     */
+    public function aiAssistantRegisterModule(Event $event, ArrayObject $modulesList): void
+    {
+        $modulesList['Tasks'] = 'Personal task management tools for tracking to-do items and deadlines.';
     }
 
     /**
