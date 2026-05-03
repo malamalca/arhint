@@ -57,17 +57,15 @@ class ProjectsAIToolsEvents implements EventListenerInterface
             arguments: [
                 'search' => [
                     'type' => 'string',
-                    'description' => 'Optional search term to filter by number or title. ' .
-                        'Omit to list all accessible projects.',
+                    'description' => 'Search term to filter by number or title. Omit to list all projects.',
                 ],
                 'inactive' => [
                     'type' => 'boolean',
                     'description' => 'Include inactive projects. Defaults to false.',
                 ],
             ],
-            description: 'Lists or searches accessible projects. Call with no arguments to list all. '
-                . 'Returns id, no, title, active state, milestone counts, and status. '
-                . 'Each result includes view_url; always render no as a markdown link: [no](view_url).',
+            description: 'Lists or searches accessible projects. Returns id, no, title, active state, '
+                . 'milestone counts, and status. Each result includes view_url; render no as [no](view_url).',
         ));
 
         $toolsList->append(new AITool(
@@ -86,8 +84,7 @@ class ProjectsAIToolsEvents implements EventListenerInterface
                 'project_id' => ['type' => 'string', 'description' => 'UUID of the project.'],
                 'status' => [
                     'type' => 'string',
-                    'description' => 'Filter by status: "open" for unclosed tasks, "closed" for completed. '
-                        . 'Omit for all.',
+                    'description' => '"open" for unclosed tasks, "closed" for completed, or omit for all.',
                 ],
                 'milestone_id' => [
                     'type' => 'string',

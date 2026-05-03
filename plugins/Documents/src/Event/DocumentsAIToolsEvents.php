@@ -75,8 +75,7 @@ class DocumentsAIToolsEvents implements EventListenerInterface
             arguments: [
                 'kind' => [
                     'type' => 'string',
-                    'description' => 'Filter by document kind: "Documents", "Invoices", or "TravelOrders". '
-                        . 'Omit to return all.',
+                    'description' => 'Kind: "Documents", "Invoices", or "TravelOrders". Omit for all.',
                 ],
             ],
             description: 'Lists available document counters (number sequences) grouped by kind and direction. '
@@ -108,14 +107,12 @@ class DocumentsAIToolsEvents implements EventListenerInterface
                 ],
                 'expired' => [
                     'type' => 'string',
-                    'description' => 'Return invoices with dat_expire on or before this YYYY-MM-DD date '
-                        . '(overdue invoices).',
+                    'description' => 'Overdue filter: dat_expire on or before this YYYY-MM-DD date.',
                 ],
             ],
-            description: 'Lists invoices filtered by counter, date range, free-text search, or overdue status. '
-                . 'Returns id, no, title, dat_issue, dat_expire, net_total, total, and buyer name. '
-                . 'Each result includes a view_url; '
-                . 'always render no as a markdown link: [no](view_url).',
+            description: 'Lists invoices by counter, date range, search term, or overdue status. '
+                . 'Returns id, no, title, dates, net_total, total, and buyer. '
+                . 'Each result includes view_url; render no as [no](view_url).',
         ));
 
         $toolsList->append(new AITool(
@@ -123,9 +120,8 @@ class DocumentsAIToolsEvents implements EventListenerInterface
             arguments: [
                 'id' => ['type' => 'string', 'description' => 'UUID of the invoice to retrieve.'],
             ],
-            description: 'Fetches full details of a single invoice including issuer, buyer, receiver parties, '
-                . 'all line items with quantities/prices/VAT, tax aggregation, payment details, and totals. '
-                . 'Includes a view_url field; always render the no field as a markdown link: [no](view_url).',
+            description: 'Fetches full invoice details: issuer, buyer, all line items with qty/price/VAT, '
+                . 'tax totals, and payment info. Includes view_url; render no as [no](view_url).',
         ));
 
         $toolsList->append(new AITool(
@@ -133,8 +129,7 @@ class DocumentsAIToolsEvents implements EventListenerInterface
             arguments: [
                 'counter_id' => [
                     'type' => 'string',
-                    'description' => 'UUID of the counter to use. Required. '
-                        . 'Use Documents.get_document_counters to find a valid value.',
+                    'description' => 'Counter UUID. Required. Use get_document_counters for valid options.',
                 ],
                 'title' => ['type' => 'string', 'description' => 'Invoice title or subject. Required.'],
                 'dat_issue' => [
@@ -284,9 +279,8 @@ class DocumentsAIToolsEvents implements EventListenerInterface
             arguments: [
                 'id' => ['type' => 'string', 'description' => 'UUID of the document to retrieve.'],
             ],
-            description: 'Fetches full details of a single generic document including issuer and receiver '
-                . 'party data, linked documents, and attachments count. '
-                . 'Includes a view_url field; always render the no field as a markdown link: [no](view_url).',
+            description: 'Fetches full details of a generic document: issuer, receiver, linked documents, '
+                . 'and attachment count. Includes view_url; render no as [no](view_url).',
         ));
 
         $toolsList->append(new AITool(
@@ -302,8 +296,8 @@ class DocumentsAIToolsEvents implements EventListenerInterface
                 ],
                 'status' => [
                     'type' => 'string',
-                    'description' => 'Filter by status. Accepted values: draft, waiting_approval, declined, '
-                        . 'approved, waiting_processing, completed, open (all non-terminal), closed.',
+                    'description' => 'Status: draft, waiting_approval, approved, waiting_processing, completed, ' .
+                        'or open.',
                 ],
                 'employee_id' => [
                     'type' => 'string',
@@ -318,9 +312,9 @@ class DocumentsAIToolsEvents implements EventListenerInterface
                     'description' => 'End date in YYYY-MM-DD format (dat_task <=).',
                 ],
             ],
-            description: 'Lists travel orders filtered by counter, status, employee, date range, or text. '
-                . 'Returns id, no, title, status, employee name, dat_task, and total. '
-                . 'Each result includes a view_url; always render no as a markdown link: [no](view_url).',
+            description: 'Lists travel orders by counter, status, employee, date range, or text. '
+                . 'Returns id, no, title, status, employee, dat_task, total. '
+                . 'Each result includes view_url; render no as [no](view_url).',
         ));
 
         $toolsList->append(new AITool(
@@ -328,9 +322,8 @@ class DocumentsAIToolsEvents implements EventListenerInterface
             arguments: [
                 'id' => ['type' => 'string', 'description' => 'UUID of the travel order to retrieve.'],
             ],
-            description: 'Fetches full details of a single travel order including employee, payer, '
-                . 'mileage entries, expense entries, approval chain, and computed totals. '
-                . 'Includes a view_url field; always render the no field as a markdown link: [no](view_url).',
+            description: 'Fetches full travel order details: employee, payer, mileage, expenses, '
+                . 'approval chain, and totals. Includes view_url; render no as [no](view_url).',
         ));
 
         $toolsList->append(new AITool(
@@ -338,8 +331,7 @@ class DocumentsAIToolsEvents implements EventListenerInterface
             arguments: [
                 'counter_id' => [
                     'type' => 'string',
-                    'description' => 'UUID of the counter to use. Required. '
-                        . 'Use Documents.get_document_counters to find a valid value.',
+                    'description' => 'Counter UUID. Required. Use get_document_counters for valid options.',
                 ],
                 'title' => ['type' => 'string', 'description' => 'Brief title for the travel order. Required.'],
                 'employee_id' => [
@@ -418,11 +410,7 @@ class DocumentsAIToolsEvents implements EventListenerInterface
                 'id' => ['type' => 'string', 'description' => 'UUID of the travel order. Required.'],
                 'action' => [
                     'type' => 'string',
-                    'description' => 'Transition to perform. Accepted values: '
-                        . '"sign" (draft → waiting_approval), '
-                        . '"approve" (waiting_approval → approved, admin only), '
-                        . '"submit" (approved → waiting_processing), '
-                        . '"process" (waiting_processing → completed, admin only).',
+                    'description' => 'One of: sign (→waiting_approval), approve (admin), submit, or process (admin).',
                 ],
             ],
             description: 'Advances a travel order through its approval workflow. Enforces status machine '

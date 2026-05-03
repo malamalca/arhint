@@ -20,7 +20,7 @@ class AIAssistant
     private const MAX_HISTORY_SUMMARY_CHARS = 1500;
     private const MAX_MESSAGE_SNIPPET_CHARS = 180;
     private const MAX_TOOL_DESCRIPTION_CHARS = 220;
-    private const MAX_TOOL_ARGUMENT_DESCRIPTION_CHARS = 60;
+    private const MAX_TOOL_ARGUMENT_DESCRIPTION_CHARS = 80;
     private const MAX_TOOL_RESULT_ITEMS = 3;
     private const MAX_PROMPT_TOOL_RESULT_ITEMS = 20;
     private const MAX_TOOL_RESULT_CHARS = 800;

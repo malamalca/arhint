@@ -146,13 +146,11 @@ class TasksEvents implements EventListenerInterface
             arguments: [
                 'due_date' => [
                     'type' => 'string',
-                    'description' => 'The date for which to retrieve tasks. Can be "today", "tomorrow", "thisWeek", ' .
-                        'or a specific date in YYYY-MM-DD format. Optional.',
+                    'description' => '"today", "tomorrow", "thisWeek", or YYYY-MM-DD. Optional.',
                 ],
                 'status' => [
                     'type' => 'string',
-                    'description' => 'The status of tasks to retrieve. Can be "completed", "notyet", or "all". ' .
-                        'Optional, defaults to "notyet".',
+                    'description' => '"completed", "notyet", or "all". Defaults to "notyet".',
                 ],
                 'folder_id' => [
                     'type' => 'string',
@@ -201,8 +199,7 @@ class TasksEvents implements EventListenerInterface
                 ],
                 'completed' => [
                     'type' => 'string',
-                    'description' => 'Optional completion datetime in YYYY-MM-DD HH:MM:SS format. ' .
-                        'Set to mark the task as done.',
+                    'description' => 'Completion datetime (YYYY-MM-DD HH:MM:SS). Set to mark the task as done.',
                 ],
             ],
             description: 'Creates a new task or updates an existing one. ' .
