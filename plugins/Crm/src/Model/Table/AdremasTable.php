@@ -51,6 +51,10 @@ class AdremasTable extends Table
             'className' => 'Crm\Model\Table\ContactsTable',
             'dependant' => true,
         ]);
+        $this->belongsTo('Projects', [
+            'foreignKey' => 'project_id',
+            'className' => 'Projects\Model\Table\ProjectsTable',
+        ]);
     }
 
     /**

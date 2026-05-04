@@ -110,6 +110,10 @@ class ProjectsTasksTable extends Table
             ->allowEmptyString('descript');
 
         $validator
+            ->uuid('milestone_id')
+            ->notEmptyString('milestone_id');
+
+        $validator
             ->date('closed')
             ->allowEmptyDate('closed');
 
@@ -127,6 +131,7 @@ class ProjectsTasksTable extends Table
     {
         $rules->add($rules->existsIn(['project_id'], 'Projects'), ['errorField' => 'project_id']);
         $rules->add($rules->existsIn(['user_id'], 'Users'), ['errorField' => 'user_id']);
+        $rules->add($rules->existsIn(['milestone_id'], 'Milestones'), ['errorField' => 'milestone_id']);
 
         return $rules;
     }

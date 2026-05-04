@@ -24,12 +24,17 @@ class AdremasController extends AppController
      */
     public function index()
     {
-        $query = $this->Authorization->applyScope($this->Adremas->find());
+        $query = $this->Authorization->applyScope($this->Adremas->find())
+            ->contain(['Projects']);
+
         if ($this->getRequest()->getQuery('project')) {
             $query->where(['Adremas.project_id' => $this->getRequest()->getQuery('project')]);
         }
 
-        $adremas = $this->paginate($query, ['limit' => 20, 'order' => ['Adremas.created' => 'DESC']]);
+        $adremas = $this->paginate($query, [
+            'limit' => 20,
+            'order' => ['Adremas.created' => 'DESC']
+        ]);
 
         /** @var \Projects\Model\Table\ProjectsTable $ProjectsTable */
         $ProjectsTable = TableRegistry::getTableLocator()->get('Projects.Projects');

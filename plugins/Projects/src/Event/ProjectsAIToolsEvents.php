@@ -590,6 +590,7 @@ class ProjectsAIToolsEvents implements EventListenerInterface
         $commentsTable = TableRegistry::getTableLocator()->get('Projects.ProjectsTasksComments');
         $comment = $commentsTable->newEntity([
             'task_id' => $task->id,
+            'milestone_id' => $task->milestone_id,
             'user_id' => $currentUser->get('id'),
             'kind' => ProjectsTasksCommentsTable::KIND_TASK_COMMENT,
             'descript' => $arguments['descript'] ?? '',

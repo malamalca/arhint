@@ -151,7 +151,7 @@ class LilPdfProcessor
             $outputExtension = '.png';
         } else {
             $deviceParam = '-sDEVICE=pdfwrite';
-            $outputExtension = null; // resolved per-file below
+            $outputExtension = '.pdf'; // resolved per-file below
         }
 
         $gsParams = $deviceParam . ' -dBATCH -dNOPAUSE -dFirstPage=%3$s -dLastPage=%4$s -sOutputFile=%2$s %1$s';
@@ -159,6 +159,7 @@ class LilPdfProcessor
         $ret = [];
 
         foreach ($this->filesList as $file) {
+            
             $ext = $outputExtension ?? substr(basename($file), -4);
             $baseName = $outputBasename ?? substr(basename($file), 0, -4);
 

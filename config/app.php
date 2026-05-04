@@ -382,7 +382,7 @@ return [
             'file' => 'ai',
             'url' => null,
             'scopes' => ['ai'],
-            'levels' => ['notice', 'info', 'debug'],
+            'levels' => ['notice', 'info'],
         ],
         'error' => [
             'className' => FileLog::class,

@@ -426,7 +426,7 @@ class ArhintHelper extends Helper
                     ),
                     $this->Number->toReadableSize((int)$attachment->filesize),
                     'actions' => [
-                        'params' => ['class' => 'right-align'],
+                        'params' => ['class' => 'right-align nowrap'],
                         'html' =>
                             $this->Html->link(
                                 '<i class="material-icons">description</i>',

@@ -61,10 +61,12 @@ $indexTable = [
 
 foreach ($adremas as $adrema) {
     $indexTable['table']['body']['rows'][]['columns'] = [
-        'title' => $this->Html->link($adrema->title, ['action' => 'view', $adrema->id]),
+        'title' =>
+            '<div class="helper-text">' . (string)$adrema->project . '</div>' .
+            $this->Html->link($adrema->title, ['action' => 'view', $adrema->id], ['class' => 'big']),
         'created' => (string)$adrema->created,
         'actions' => !$this->getCurrentUser()->hasRole('editor') ? '' : [
-            'parameters' => ['class' => 'right-align'],
+            'parameters' => ['class' => 'right-align nowrap'],
             'html' => $this->Lil->editLink($adrema->id) . ' ' . $this->Lil->deleteLink($adrema->id),
         ],
     ];

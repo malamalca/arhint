@@ -188,9 +188,10 @@ class Application extends BaseApplication implements
 
         if (
             $this->checkParams($request->getAttribute('params'), [
+                ['controller' => 'Projects', 'action' => 'view', '_ext' => 'txt'],
             ['controller' => 'Projects', 'action' => 'index', '_ext' => ['txt', 'json', 'xml']],
             ['controller' => 'Projects', 'action' => 'linkEmail', '_ext' => 'json'],
-            ['controller' => 'Projects', 'action' => 'view', '_ext' => 'txt'],
+            
             ['controller' => 'Projects', 'action' => 'view', '_ext' => 'xml'],
             ['controller' => 'Calendars', 'action' => 'view'],
             ['controller' => 'ProjectsWorkhours', 'action' => 'import'],
@@ -245,14 +246,25 @@ class Application extends BaseApplication implements
             foreach ($conditions as $paramName => $paramValue) {
                 if (is_numeric($paramName) && !$paramValue) {
                     $result = false;
+                    break;
                 }
-                if (isset($params[$paramName]) || (isset($params[$paramName]) && is_null($params[$paramName]))) {
-                    if (is_array($paramValue) && !in_array($params[$paramName], $paramValue)) {
-                        $result = false;
-                    }
-                    if (is_string($paramValue) && $params[$paramName] !== $paramValue) {
-                        $result = false;
-                    }
+                if (is_numeric($paramName)) {
+                    continue;
+                }
+
+                if (!array_key_exists($paramName, $params)) {
+                    $result = false;
+                    break;
+                }
+
+                if (is_array($paramValue) && !in_array($params[$paramName], $paramValue, true)) {
+                    $result = false;
+                    break;
+                }
+
+                if (!is_array($paramValue) && $params[$paramName] !== $paramValue) {
+                    $result = false;
+                    break;
                 }
             }
 
