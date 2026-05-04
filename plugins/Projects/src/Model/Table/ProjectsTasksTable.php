@@ -7,13 +7,15 @@ use App\Model\Entity\User;
 use ArrayObject;
 use Cake\Database\Query\SelectQuery;
 use Cake\Event\Event;
+use Cake\I18n\Date;
+use Cake\I18n\DateTime;
 use Cake\ORM\Entity;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
-use DateTime;
 use DateTimeInterface;
 use Projects\Filter\ProjectsTasksFilter;
+use Projects\Lib\ProjectsFuncs;
 use Throwable;
 
 /**
@@ -221,6 +223,38 @@ class ProjectsTasksTable extends Table
                 ->first()
                 ->get('max_no');
             $entity->no = $maxNo + 1;
+        }
+
+        if ($entity->isDirty('status')) {
+            if ($entity->get('status') === ProjectsFuncs::STATUS_CLOSED) {
+                $entity->closed = new Date();
+                $entity->reopened = null;
+            } elseif ($entity->get('status') === ProjectsFuncs::STATUS_OPEN) {
+                $entity->closed = null;
+                $entity->reopened = null;
+            } elseif ($entity->get('status') === ProjectsFuncs::STATUS_REOPENED) {
+                $entity->closed = null;
+                $entity->reopened = new DateTime();
+            } else {
+                $entity->closed = null;
+                $entity->reopened = null;
+            }
+        }
+
+        if ($entity->isDirty('closed') && $entity->get('closed') !== null) {
+            $entity->status = ProjectsFuncs::STATUS_CLOSED;
+        } elseif ($entity->isDirty('closed') && $entity->get('closed') === null) {
+            $entity->status = ProjectsFuncs::STATUS_OPEN;
+        }
+
+        if ($entity->isDirty('reopened') && $entity->get('reopened') !== null) {
+            $entity->status = ProjectsFuncs::STATUS_REOPENED;
+        } elseif ($entity->isDirty('reopened') && $entity->get('reopened') === null) {
+            if ($entity->get('closed') !== null) {
+                $entity->status = ProjectsFuncs::STATUS_CLOSED;
+            } else {
+                $entity->status = ProjectsFuncs::STATUS_OPEN;
+            }
         }
     }
 

@@ -118,7 +118,7 @@ class ProjectsAIToolsEvents implements EventListenerInterface
                 'project_id' => ['type' => 'string', 'description' => 'UUID of the project. Required.'],
                 'title' => ['type' => 'string', 'description' => 'Task title. Required.'],
                 'descript' => ['type' => 'string', 'description' => 'Task description (HTML allowed).'],
-                'milestone_id' => ['type' => 'string', 'description' => 'UUID of the milestone to assign.'],
+                'milestone_id' => ['type' => 'string', 'description' => 'UUID of the milestone to assign. Required.'],
                 'user_id' => [
                     'type' => 'string',
                     'description' => 'UUID of the user to assign the task to. '

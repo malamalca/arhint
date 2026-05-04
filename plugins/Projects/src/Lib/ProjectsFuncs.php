@@ -16,6 +16,21 @@ class ProjectsFuncs
     public const STATUS_INVALID = 4;
 
     /**
+     * Returns an array of task statuses for use in dropdowns and similar UI elements.
+     *
+     * @return array<int, string> Associative array of status ID => status label.
+     */
+    public static function getTaskStatuses(): array
+    {
+        return [
+            self::STATUS_OPEN => __d('projects', 'Open'),
+            self::STATUS_REOPENED => __d('projects', 'Reopened'),
+            self::STATUS_CLOSED => __d('projects', 'Closed'),
+            self::STATUS_INVALID => __d('projects', 'Invalid'),
+        ];
+    }
+
+    /**
      * Return thumbnail image for specified project
      *
      * @param \Projects\Model\Entity\Project $project Project

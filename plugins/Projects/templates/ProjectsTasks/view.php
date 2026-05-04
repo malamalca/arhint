@@ -3,6 +3,7 @@
 use Cake\Routing\Router;
 use League\CommonMark\GithubFlavoredMarkdownConverter;
 use Projects\Filter\ProjectsTasksFilter;
+use Projects\Lib\ProjectsFuncs;
 
 $converter = new GithubFlavoredMarkdownConverter([
     'html_input' => 'strip',
@@ -64,6 +65,34 @@ $addCommentForm = [
 $taskView = [
     'title_for_layout' => $task->title . ' <span class="task-no">#' . $task->no . '</span>',
     'entity' => $task,
+    'menu' => [
+        'edit' => $task->isNew() ? null : [
+            'title' => __d('projects', 'Edit'),
+            'visible' => true,
+            'url' => [
+                'plugin' => 'Projects',
+                'controller' => 'ProjectsTasks',
+                'action' => 'edit',
+                $task->id,
+                '?' => [
+                    'redirect' => Router::url(null, true),
+                ],
+            ],
+        ],
+        'delete' => $task->isNew() ? null : [
+            'title' => __d('projects', 'Delete'),
+            'visible' => true,
+            'url' => [
+                'plugin' => 'Projects',
+                'controller' => 'ProjectsTasks',
+                'action' => 'delete',
+                $task->id,
+            ],
+            'params' => [
+                'confirm' => __d('projects', 'Are you sure you want to delete this task?'),
+            ],
+        ],
+    ],
     'pre' => '<div id="task-view">',
     'post' => '</div>' . $dropdownEditTaskPopup . $dropdownEditCommentPopup,
     'panels' => [
@@ -167,6 +196,13 @@ foreach ($task->comments as $comment) {
                         $field = __d('projects', 'Description');
                         $changeHtml .= '<li><strong>' . h($field) . '</strong></li>';
                         break;
+                    case 'status':
+                        $field = __d('projects', 'Status');
+                        $statuses = ProjectsFuncs::getTaskStatuses();
+                        $oldText = isset($statuses[$old]) ? h((string)$statuses[$old]) : __d('projects', 'Unknown');
+                        $newText = isset($statuses[$new]) ? h((string)$statuses[$new]) : __d('projects', 'Unknown');
+                        $changeHtml .= '<li><strong>' . h($field) . '</strong>: ' . __d('projects', 'from {0} to {1}', $oldText, $newText) . '</li>';
+                        break;
                     default:
                         $oldText = is_scalar($old) || $old === null ? h((string)$old) : h(json_encode($old));
                         $newText = is_scalar($new) || $new === null ? h((string)$new) : h(json_encode($new));
@@ -193,7 +229,7 @@ foreach ($task->comments as $comment) {
         ) .*/
         sprintf(
             '<div class="avatar"><img src="https://gravatar.com/avatar/%s?d=robohash" /></div>',
-            hash('sha256',strtolower(trim($comment->user->email))),
+            hash('sha256', strtolower(trim($comment->user->email))),
         ) .
         '<div class="task-view-description">' .
             sprintf(
