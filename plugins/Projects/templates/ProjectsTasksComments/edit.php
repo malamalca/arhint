@@ -1,4 +1,8 @@
 <?php
+declare(strict_types=1);
+
+use Cake\Routing\Router;
+
 $editForm = [
     'title_for_layout' =>
         $taskComment->id ? __d('projects', 'Edit Comment') : __d('projects', 'Add Comment'),

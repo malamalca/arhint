@@ -1,4 +1,10 @@
 <?php
+
+declare(strict_types=1);
+
+use Cake\Routing\Router;
+use Projects\Lib\ProjectsFuncs;
+
 $editForm = [
     'title_for_layout' =>
         $projectsTask->id ? __d('projects', 'Edit Task') : __d('projects', 'Add Task'),
@@ -33,7 +39,7 @@ $editForm = [
                 ]],
             ],
 
-            'status' => [
+            'status' => $this->getCurrentUser()->hasRole('admin') ? null : [
                 'method' => 'hidden',
                 'parameters' => ['field' => 'status', ['default' => 1]],
             ],
@@ -64,6 +70,7 @@ $editForm = [
                     [
                         'type' => 'select',
                         'options' => $users,
+                        'empty' => __d('projects', '-- unassigned --'),
                         'label' => __d('projects', 'Assigned User') . ':',
                     ],
                 ],
@@ -76,6 +83,17 @@ $editForm = [
                         'type' => 'select',
                         'options' => $milestones,
                         'label' => __d('projects', 'Milestone') . ':',
+                    ],
+                ],
+            ],
+            'status_select' => !$this->getCurrentUser()->hasRole('admin') ? null : [
+                'method' => 'control',
+                'parameters' => [
+                    'status',
+                    [
+                        'type' => 'select',
+                        'options' => ProjectsFuncs::getTaskStatuses(),
+                        'label' => __d('projects', 'Status') . ':',
                     ],
                 ],
             ],
