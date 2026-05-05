@@ -58,7 +58,7 @@ class AttachmentPolicy
      * Authorize delete action
      *
      * @param \App\Model\Entity\User $authUser User
-     * @param \App\Model\Entity\Attachment $attachment DashboardNote
+     * @param \App\Model\Entity\Attachment $attachment Attachment
      * @return bool
      */
     public function canDelete(User $authUser, Attachment $attachment): bool

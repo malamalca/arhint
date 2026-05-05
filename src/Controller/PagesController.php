@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\View\Helper\LilHelper;
 use ArrayObject;
 use Cake\Core\Configure;
 use Cake\Event\Event;
@@ -11,12 +10,10 @@ use Cake\Event\EventManager;
 use Cake\Http\Exception\ForbiddenException;
 use Cake\Http\Exception\NotFoundException;
 use Cake\Http\Response;
-use Cake\ORM\TableRegistry;
 use Cake\Routing\Router;
 use Cake\View\Exception\MissingTemplateException;
 use Cake\View\Helper\FormHelper;
 use Cake\View\View;
-use League\CommonMark\GithubFlavoredMarkdownConverter;
 
 /**
  * Static content controller
@@ -124,18 +121,6 @@ class PagesController extends AppController
     {
         $this->Authorization->skipAuthorization();
 
-        $noteCount = 0;
-        if ($this->hasCurrentUser()) {
-            $noteCount = TableRegistry::getTableLocator()->get('DashboardNotes')->find()
-                ->select()
-                ->where(['user_id' => $this->getCurrentUser()->id])
-                ->count();
-        }
-
-        $noteOffset = $this->request->getQuery('offset', 1);
-        $nextNoteOffset = $noteOffset > 1 ? $noteOffset - 1 : 1;
-        $prevNoteOffset = ($noteOffset == $noteCount ? $noteCount : $noteOffset + 1);
-
         $FormHelper = new FormHelper(new View());
         $aiConfig = $this->hasCurrentUser() ? $this->getCurrentUser()->getProperty('ai_assistant') : null;
         if ($aiConfig && !empty($aiConfig->provider)) {
@@ -195,15 +180,6 @@ class PagesController extends AppController
                         'action' => 'pdfSplice',
                     ],
                 ],
-                'add-note' => [
-                    'title' => __('Add Note'),
-                    'visible' => $this->getCurrentUser()->hasRole('editor'),
-                    'url' => [
-                        'plugin' => false,
-                        'controller' => 'DashboardNotes',
-                        'action' => 'edit',
-                    ],
-                ],
             ],
             'panels' => [
                 'ai-assistant' => [
@@ -219,65 +195,8 @@ class PagesController extends AppController
                         '<p>' . $formAi . '</p>',
                     ],
                 ],
-                'notes' => !$this->hasCurrentUser() || !$this->getCurrentUser()->hasRole('editor') ? null : [
-                    'params' => ['class' => 'dashboard-panel', 'id' => 'DashboardNotes'],
-                    'lines' => [
-                        '<h5>' . __('Dashboard Note') . '<span class="actions" style="display: block; float: right">' .
-                            sprintf(
-                                '<a href="%2$s" class="btn-small filled"%3$s>%1$s</a>',
-                                __('Prev'),
-                                Router::url(['?' => ['offset' => $prevNoteOffset]]),
-                                $prevNoteOffset == $noteOffset ? ' disabled' : '',
-                            ) . ' ' .
-                            sprintf(
-                                '<a href="%2$s" class="btn-small filled"%3$s>%1$s</a>',
-                                __('Next'),
-                                Router::url(['?' => ['offset' => $nextNoteOffset]]),
-                                $nextNoteOffset == $noteOffset ? ' disabled' : '',
-                            ) .
-                        '</span></h5>',
-                    ],
-                ],
             ],
         ];
-
-        if ($this->hasCurrentUser() && $this->getCurrentUser()->hasRole('editor')) {
-            $DashboardNotes = TableRegistry::getTableLocator()->get('DashboardNotes');
-            $lastNote = $DashboardNotes->find()
-                ->select()
-                ->where(['user_id' => $this->getCurrentUser()->id])
-                ->orderBy('created DESC')
-                ->limit(1)
-                ->page((int)$noteOffset)
-                ->first();
-
-            $LilHelper = new LilHelper(new View());
-
-            if ($lastNote) {
-                $dashboardPanels['panels']['notes']['lines'][] = sprintf(
-                    '<div class="details">%1$s | %2$s</div>',
-                    __('Created {0}', $lastNote->created),
-                    $LilHelper->Link(
-                        __('edit'),
-                        ['controller' => 'DashboardNotes', 'action' => 'edit', $lastNote->id],
-                        [],
-                    ),
-                );
-
-                $converter = new GithubFlavoredMarkdownConverter([
-                    'html_input' => 'strip',
-                    'allow_unsafe_links' => false,
-                ]);
-
-                $dashboardPanels['panels']['notes']['lines'][] = (string)$converter->convert($lastNote->note);
-            } else {
-                $dashboardPanels['panels']['notes']['lines'][] = '<p>' .
-                    $LilHelper->link(__('No notes found. [$1Add] your first note.'), [
-                        1 => [['controller' => 'DashboardNotes', 'action' => 'edit']],
-                    ]) .
-                    '</p>';
-            }
-        }
 
         $event = new Event('App.dashboard', $this, ['panels' => new ArrayObject($dashboardPanels)]);
         EventManager::instance()->dispatch($event);
