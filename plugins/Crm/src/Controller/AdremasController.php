@@ -33,7 +33,7 @@ class AdremasController extends AppController
 
         $adremas = $this->paginate($query, [
             'limit' => 20,
-            'order' => ['Adremas.created' => 'DESC']
+            'order' => ['Adremas.created' => 'DESC'],
         ]);
 
         /** @var \Projects\Model\Table\ProjectsTable $ProjectsTable */

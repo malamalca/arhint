@@ -191,7 +191,7 @@ class Application extends BaseApplication implements
                 ['controller' => 'Projects', 'action' => 'view', '_ext' => 'txt'],
             ['controller' => 'Projects', 'action' => 'index', '_ext' => ['txt', 'json', 'xml']],
             ['controller' => 'Projects', 'action' => 'linkEmail', '_ext' => 'json'],
-            
+
             ['controller' => 'Projects', 'action' => 'view', '_ext' => 'xml'],
             ['controller' => 'Calendars', 'action' => 'view'],
             ['controller' => 'ProjectsWorkhours', 'action' => 'import'],

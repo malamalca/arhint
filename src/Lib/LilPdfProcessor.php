@@ -146,12 +146,13 @@ class LilPdfProcessor
             $lastPage = $firstPage;
         }
 
+        $outputExtension = null;
         if ($format === self::FORMAT_PNG) {
             $deviceParam = '-sDEVICE=png16m -r600';
             $outputExtension = '.png';
         } else {
             $deviceParam = '-sDEVICE=pdfwrite';
-            $outputExtension = '.pdf'; // resolved per-file below
+            // $outputExtension resolved per-file below from the source filename
         }
 
         $gsParams = $deviceParam . ' -dBATCH -dNOPAUSE -dFirstPage=%3$s -dLastPage=%4$s -sOutputFile=%2$s %1$s';
@@ -159,7 +160,6 @@ class LilPdfProcessor
         $ret = [];
 
         foreach ($this->filesList as $file) {
-            
             $ext = $outputExtension ?? substr(basename($file), -4);
             $baseName = $outputBasename ?? substr(basename($file), 0, -4);
 

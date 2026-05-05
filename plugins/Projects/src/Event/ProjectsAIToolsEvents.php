@@ -491,13 +491,29 @@ class ProjectsAIToolsEvents implements EventListenerInterface
 
         $tasksTable = TableRegistry::getTableLocator()->get('Projects.ProjectsTasks');
 
+        $milestoneId = $arguments['milestone_id'] ?? null;
+        if (empty($milestoneId)) {
+            $milestonesTable = TableRegistry::getTableLocator()->get('Projects.ProjectsMilestones');
+            /** @var \Projects\Model\Entity\ProjectsMilestone|null $defaultMilestone */
+            $defaultMilestone = $milestonesTable->find()
+                ->where(['project_id' => $project->id])
+                ->orderBy(['created' => 'ASC'])
+                ->first();
+            if (!$defaultMilestone) {
+                $event->setResult(['error' => 'No milestones found for this project. Create a milestone first.']);
+
+                return;
+            }
+            $milestoneId = $defaultMilestone->id;
+        }
+
         /** @var \Projects\Model\Entity\ProjectsTask $task */
         $task = $tasksTable->newEntity([
             'project_id' => $project->id,
             'user_id' => $arguments['user_id'] ?? $currentUser->get('id'),
             'title' => $arguments['title'] ?? '',
             'descript' => $arguments['descript'] ?? null,
-            'milestone_id' => $arguments['milestone_id'] ?? null,
+            'milestone_id' => $milestoneId,
         ]);
 
         if (!$currentUser->can('edit', $task)) {
