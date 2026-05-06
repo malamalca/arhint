@@ -61,7 +61,7 @@ class ExpensesController extends AppController
      */
     public function autocomplete()
     {
-        if ($this->getRequest()->is('ajax') || Configure::read('debug')) {
+        if (1==1 || $this->getRequest()->is('ajax') || Configure::read('debug')) {
             $term = $this->getRequest()->getQuery('term');
             if (is_string($term) && $term != '') {
                 $expenses = $this->Authorization->applyScope($this->Expenses->find(), 'index')
