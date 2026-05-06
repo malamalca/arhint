@@ -269,18 +269,30 @@ class AIAssistant
             }
 
             // Prompt-based tool calls (local provider)
-            if ($this->provider !== 'openai' && $toolCallCount < self::MAX_TOOL_CALLS) {
+            if ($this->provider !== 'openai') {
                 // Strip markdown code fences that some models add despite instructions
                 $content = trim($message['content']);
                 $content = (string)preg_replace('/^```(?:json)?\s*/i', '', $content);
                 $content = (string)preg_replace('/\s*```$/', '', $content);
-                $message['content'] = trim($content);
+                $content = trim($content);
 
-                $json = json_decode($message['content'], true);
-                $isToolCall = str_starts_with($message['content'], '{')
+                // Some models prefix the JSON with a sentence; extract the JSON object when that happens.
+                if (!str_starts_with($content, '{') && preg_match('/(\{[\s\S]+\})/', $content, $fenceMatches)) {
+                    $candidate = trim($fenceMatches[1]);
+                    $candidateJson = json_decode($candidate, true);
+                    if (json_last_error() === JSON_ERROR_NONE && isset($candidateJson['tool'])) {
+                        $content = $candidate;
+                    }
+                }
+
+                $message['content'] = $content;
+
+                $json = json_decode($content, true);
+                $isToolCall = str_starts_with($content, '{')
                     && json_last_error() === JSON_ERROR_NONE
                     && isset($json['tool']);
-                if ($isToolCall) {
+
+                if ($isToolCall && $toolCallCount < self::MAX_TOOL_CALLS) {
                     $tool = $json['tool'];
                     $arguments = $json['arguments'] ?? [];
 
@@ -310,6 +322,11 @@ class AIAssistant
 
                     $toolCallCount++;
                     continue;
+                }
+
+                // Tool call limit reached or unexpected tool JSON — never expose raw JSON to the user.
+                if ($isToolCall) {
+                    $message['content'] = 'Done.';
                 }
             }
 
@@ -465,7 +482,9 @@ class AIAssistant
         $context = trim($userInput . ' ' . $this->getRecentConversationText());
 
         // Ask the AI which module(s) best match the request; fall back to keyword scoring on failure.
-        $detectedModules = $this->detectModulesViaAI(array_keys($moduleGroups), $this->moduleDescriptions, $context);
+        // Use only the current user input for module detection to avoid old questions from history
+        // biasing the routing decision.
+        $detectedModules = $this->detectModulesViaAI(array_keys($moduleGroups), $this->moduleDescriptions, $userInput);
 
         if ($detectedModules !== []) {
             // Prefer the module used most recently in conversation if it is among the detected ones.
@@ -995,6 +1014,40 @@ class AIAssistant
     }
 
     /**
+     * Checks whether the configured AI provider host is reachable.
+     *
+     * @param int $timeoutSeconds Connection timeout in seconds.
+     * @return bool True if the host responds, false otherwise.
+     */
+    public function isAvailable(int $timeoutSeconds = 3): bool
+    {
+        $userConfig = $this->currentUser !== null ? $this->currentUser->getProperty('ai_assistant') : null;
+        $provider = $userConfig->provider ?? 'local';
+
+        if ($provider === 'openai') {
+            $url = 'https://api.openai.com';
+        } else {
+            $rawUrl = $userConfig->url ?? 'http://192.168.68.55:8080/v1/chat/completions';
+            $parsed = parse_url($rawUrl);
+            $url = ($parsed['scheme'] ?? 'http') . '://' . ($parsed['host'] ?? 'localhost');
+            if (isset($parsed['port'])) {
+                $url .= ':' . $parsed['port'];
+            }
+        }
+
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_NOBODY, true);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeoutSeconds);
+        curl_setopt($ch, CURLOPT_TIMEOUT, $timeoutSeconds);
+        $result = curl_exec($ch);
+        $curlError = curl_error($ch);
+        curl_close($ch);
+
+        return $result !== false && $curlError === '';
+    }
+
+    /**
      * Makes the API request to the AI model and returns the response.
      * Provider, URL, model and API key are read from the user's 'ai_assistant' property.
      *
@@ -1036,11 +1089,18 @@ class AIAssistant
         curl_setopt($ch, CURLOPT_TIMEOUT, 180);
 
         $response = curl_exec($ch);
+        $curlErrno = curl_errno($ch);
         $curlError = curl_error($ch);
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
 
         if ($response === false) {
-            throw new Exception('cURL request failed: ' . $curlError);
+            throw new Exception(sprintf(
+                'cURL request failed [errno %d] to %s: %s',
+                $curlErrno,
+                $url,
+                $curlError,
+            ));
         }
 
         $result = json_decode((string)$response, true);
@@ -1048,9 +1108,22 @@ class AIAssistant
         Log::debug('AI raw response: ' . $response, ['scope' => ['ai']]);
 
         if (isset($result['error'])) {
-            throw new Exception('API Error: ' . $result['error']['message']);
+            $errorDetail = is_array($result['error'])
+                ? (string)json_encode($result['error'])
+                : (string)$result['error'];
+            throw new Exception(sprintf(
+                'API Error [HTTP %d] from %s: %s',
+                $httpCode,
+                $url,
+                $errorDetail,
+            ));
         } elseif (!isset($result['choices'][0]['message'])) {
-            throw new Exception('Unexpected API response: ' . $response);
+            throw new Exception(sprintf(
+                'Unexpected API response [HTTP %d] from %s: %s',
+                $httpCode,
+                $url,
+                $response,
+            ));
         }
 
         $choice = $result['choices'][0];

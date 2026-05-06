@@ -6,6 +6,7 @@ namespace Tasks\Model\Table;
 use ArrayObject;
 use Cake\Event\Event;
 use Cake\I18n\DateTime;
+use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 use Tasks\Model\Entity\Task;
@@ -42,6 +43,12 @@ class TasksTable extends Table
             'className' => 'Tasks.TasksFolders',
             'joinType' => 'INNER',
         ]);
+
+        $this->belongsTo('Taskers', [
+            'foreignKey' => 'tasker_id',
+            'className' => 'Users',
+            'joinType' => 'LEFT',
+        ]);
     }
 
     /**
@@ -77,7 +84,29 @@ class TasksTable extends Table
             ->add('completed', 'valid', ['rule' => 'datetime'])
             ->allowEmptyString('completed');
 
+        $validator
+            ->add('tasker_id', 'valid', ['rule' => 'uuid'])
+            ->allowEmptyString('tasker_id');
+
         return $validator;
+    }
+
+    /**
+     * Returns a rules checker object that will be used for validating
+     * application integrity.
+     *
+     * @param \Cake\ORM\RulesChecker $rules The rules object to be modified.
+     * @return \Cake\ORM\RulesChecker
+     */
+    public function buildRules(RulesChecker $rules): RulesChecker
+    {
+        $rules->add(
+            $rules->existsIn('tasker_id', 'Taskers', ['allowNullableNulls' => true]),
+            'taskerExists',
+            ['errorField' => 'tasker_id', 'message' => 'User not found.'],
+        );
+
+        return $rules;
     }
 
     /**

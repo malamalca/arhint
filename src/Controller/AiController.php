@@ -3,10 +3,10 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Lib\AIAssistant;
 use Cake\Event\EventInterface;
 use Cake\Http\Response;
-use League\CommonMark\GithubFlavoredMarkdownConverter;
+use Cake\Queue\QueueManager;
+use Cake\Utility\Text;
 
 /**
  * AI Controller
@@ -27,8 +27,8 @@ class AiController extends AppController
     }
 
     /**
-     * Chat action to handle AI assistant interactions.
-     * Accepts user input, gets a response from the AIAssistant, and returns it as JSON.
+     * Accepts a user message, pushes an AiChatJob onto the queue, and immediately
+     * returns the job ID. The client polls chatStatus() until the result is ready.
      */
     public function chat(): Response
     {
@@ -39,31 +39,103 @@ class AiController extends AppController
         if ($userInput === '') {
             return $this->response
                 ->withType('application/json')
-                ->withStringBody((string)json_encode(['error' => 'Empty message', 'response' => null]));
+                ->withStringBody((string)json_encode(['error' => 'Empty message', 'job_id' => null]));
         }
 
         $session = $this->request->getSession();
         $history = $session->read('AIAssistant.history') ?? [];
+        $userId = $this->getCurrentUser()->get('id');
 
-        $assistant = new AIAssistant($this->getCurrentUser());
-        $assistant->setHistory($history);
+        $jobId = Text::uuid();
+        $jobsDir = TMP . 'ai_jobs' . DS;
 
-        $response = $assistant->getResponse($userInput);
+        if (!is_dir($jobsDir)) {
+            mkdir($jobsDir, 0755, true);
+        }
 
-        $session->write('AIAssistant.history', $assistant->getHistory());
+        $this->cleanupOldJobs($jobsDir);
 
-        $converter = new GithubFlavoredMarkdownConverter([
-            'html_input' => 'strip',
-            'allow_unsafe_links' => false,
+        QueueManager::push('AiChat', [
+            'user_id' => $userId,
+            'message' => $userInput,
+            'history' => $history,
+            'job_id' => $jobId,
         ]);
-        $responseHtml = (string)$converter->convert($response);
+
+        return $this->response
+            ->withType('application/json')
+            ->withStringBody((string)json_encode(['job_id' => $jobId, 'status' => 'pending']));
+    }
+
+    /**
+     * Polls the result file for the given job ID and returns the AI response
+     * when ready. On success the updated history is written back to the session
+     * and the result file is removed.
+     */
+    public function chatStatus(): Response
+    {
+        $this->Authorization->skipAuthorization();
+        $this->request->allowMethod('get');
+
+        $jobId = (string)$this->request->getQuery('job_id');
+
+        // Validate UUID format to prevent path traversal.
+        if (!preg_match('/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i', $jobId)) {
+            return $this->response
+                ->withStatus(400)
+                ->withType('application/json')
+                ->withStringBody((string)json_encode(['error' => 'Invalid job ID']));
+        }
+
+        $resultFile = TMP . 'ai_jobs' . DS . $jobId . '_result.json';
+
+        if (!file_exists($resultFile)) {
+            return $this->response
+                ->withType('application/json')
+                ->withStringBody((string)json_encode(['status' => 'pending']));
+        }
+
+        $result = json_decode((string)file_get_contents($resultFile), true);
+
+        if (!is_array($result) || ($result['user_id'] ?? null) !== $this->getCurrentUser()->get('id')) {
+            return $this->response
+                ->withStatus(403)
+                ->withType('application/json')
+                ->withStringBody((string)json_encode(['error' => 'Forbidden']));
+        }
+
+        unlink($resultFile);
+
+        if (!empty($result['history'])) {
+            $this->request->getSession()->write('AIAssistant.history', $result['history']);
+        }
 
         return $this->response
             ->withType('application/json')
             ->withStringBody((string)json_encode([
-                'response' => $responseHtml,
-                'redirect' => $assistant->getRedirectUrl(),
+                'status' => $result['status'],
+                'response' => $result['response'] ?? null,
+                'redirect' => $result['redirect'] ?? null,
+                'error' => $result['error'] ?? null,
             ]));
+    }
+
+    /**
+     * Returns whether the queue worker is alive based on a heartbeat file written
+     * by AiChatJob. The worker is considered running if the file exists and was
+     * modified within the last 35 minutes.
+     */
+    public function workerStatus(): Response
+    {
+        $this->Authorization->skipAuthorization();
+        $this->request->allowMethod('get');
+
+        $heartbeat = TMP . 'ai_jobs' . DS . 'worker_heartbeat';
+        $running = file_exists($heartbeat) && (time() - (int)filemtime($heartbeat)) < 2100;
+
+        return $this->response
+            ->withType('application/json')
+            ->withStringBody((string)json_encode(['running' => $running]));
     }
 
     /**
@@ -79,5 +151,23 @@ class AiController extends AppController
         return $this->response
             ->withType('application/json')
             ->withStringBody((string)json_encode(['cleared' => true]));
+    }
+
+    /**
+     * Removes job result files older than one hour from the ai_jobs directory.
+     *
+     * @param string $jobsDir Absolute path to the jobs directory (with trailing DS).
+     * @return void
+     */
+    private function cleanupOldJobs(string $jobsDir): void
+    {
+        $cutoff = time() - 3600;
+        $files = glob($jobsDir . '*.json') ?: [];
+
+        foreach ($files as $file) {
+            if (is_file($file) && basename($file) !== 'worker_heartbeat' && filemtime($file) < $cutoff) {
+                unlink($file);
+            }
+        }
     }
 }

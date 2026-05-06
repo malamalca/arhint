@@ -2,8 +2,10 @@ $(function () {
     var $panel = $('#DashboardAIAssistant');
     if (!$panel.length) return;
 
-    var chatUrl  = $panel.data('chat-url');
-    var clearUrl = $panel.data('clear-url');
+    var chatUrl          = $panel.data('chat-url');
+    var chatStatusUrl    = $panel.data('chat-status-url');
+    var clearUrl         = $panel.data('clear-url');
+    var workerStatusUrl  = $panel.data('worker-status-url');
     var csrfToken = $('meta[name="csrfToken"]').attr('content');
 
     $.ajaxSetup({
@@ -30,10 +32,27 @@ $(function () {
         $messages.scrollTop($messages[0].scrollHeight);
     }
 
+    // Worker status banner — shown above messages after the first chat message if worker is not running.
+    var $workerWarning = $('<div>').addClass('ai-worker-warning').hide().text(
+        'Queue worker is not running. Start it with: bin/cake queue worker'
+    );
+    $panel.prepend($workerWarning);
+    var workerStatusChecked = false;
+
+    function checkWorkerStatus() {
+        if (!workerStatusUrl || workerStatusChecked) return;
+        workerStatusChecked = true;
+        $.getJSON(workerStatusUrl, function (data) {
+            if (data.running === false) {
+                $workerWarning.show();
+            }
+        });
+    }
+
     var $thinking = $('<div>').addClass('ai-message ai-message--assistant ai-message--thinking').append(
         $('<span>').addClass('ai-message__role').text('AI'),
-        $('<div>').addClass('ai-message__body ai-thinking').append(
-            $('<span>'), $('<span>'), $('<span>')
+        $('<div>').addClass('ai-message__body').append(
+            $('<div>').addClass('ai-thinking').append($('<span>'), $('<span>'), $('<span>'))
         )
     );
 
@@ -59,6 +78,47 @@ $(function () {
         }
     }
 
+    // Poll chatStatus every interval until the job is done or errors out.
+    var POLL_INTERVAL_MS = 1000;
+    var MAX_POLLS = 180; // Give up after ~3 minutes
+
+    function pollJobStatus(jobId, pollCount) {
+        if (pollCount >= MAX_POLLS) {
+            setLoading(false);
+            appendMessage('error', 'Request timed out. Please try again.');
+            return;
+        }
+
+        $.ajax({
+            url: chatStatusUrl,
+            method: 'GET',
+            dataType: 'json',
+            data: { job_id: jobId },
+            success: function (data) {
+                if (data.status === 'pending') {
+                    setTimeout(function () {
+                        pollJobStatus(jobId, pollCount + 1);
+                    }, POLL_INTERVAL_MS);
+                    return;
+                }
+
+                setLoading(false);
+
+                if (data.status === 'error') {
+                    appendMessage('error', data.error || 'An error occurred. Please try again.');
+                } else if (data.redirect) {
+                    window.location.href = data.redirect;
+                } else {
+                    appendMessage('assistant', data.response);
+                }
+            },
+            error: function () {
+                setLoading(false);
+                appendMessage('error', 'Request failed. Please try again.');
+            },
+        });
+    }
+
     $form.on('submit', function (e) {
         e.preventDefault();
 
@@ -76,19 +136,17 @@ $(function () {
             data: { message: message },
             success: function (data) {
                 if (data.error) {
+                    setLoading(false);
                     appendMessage('error', data.error);
-                } else if (data.redirect) {
-                    window.location.href = data.redirect;
                     return;
-                } else {
-                    appendMessage('assistant', data.response);
                 }
+                // Job dispatched — check worker once, then start polling.
+                checkWorkerStatus();
+                pollJobStatus(data.job_id, 0);
             },
             error: function () {
-                appendMessage('error', 'Request failed. Please try again.');
-            },
-            complete: function () {
                 setLoading(false);
+                appendMessage('error', 'Request failed. Please try again.');
             },
         });
     });

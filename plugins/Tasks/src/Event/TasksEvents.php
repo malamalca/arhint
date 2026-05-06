@@ -160,6 +160,10 @@ class TasksEvents implements EventListenerInterface
                     'type' => 'string',
                     'description' => 'The ID (UUID) of the user to filter tasks by. Optional.',
                 ],
+                'title' => [
+                    'type' => 'string',
+                    'description' => 'Case-insensitive partial match on task title. Optional.',
+                ],
             ],
             description: 'This function retrieves tasks.',
         ));
@@ -198,8 +202,13 @@ class TasksEvents implements EventListenerInterface
                     'description' => 'Optional task priority (0 = normal, higher = more urgent).',
                 ],
                 'completed' => [
+                    'type' => 'datetime',
+                    'description' => 'Must be a datetime string "YYYY-MM-DD HH:MM:SS". ' .
+                        'To mark as done use the current datetime. Never use true, false, 1, or 0.',
+                ],
+                'tasker_id' => [
                     'type' => 'string',
-                    'description' => 'Completion datetime (YYYY-MM-DD HH:MM:SS). Set to mark the task as done.',
+                    'description' => 'UUID from App.get_users. Never a name or username.',
                 ],
             ],
             description: 'Creates a new task or updates an existing one. ' .
@@ -266,11 +275,15 @@ class TasksEvents implements EventListenerInterface
                 }
                 $params = $tasksTable->filter($filter);
 
-                $tasks = $currentUser->applyScope('index', $tasksTable->find())
+                $query = $currentUser->applyScope('index', $tasksTable->find())
                     ->select()
-                    ->where($params['conditions'])
-                    ->all()
-                    ->toArray();
+                    ->where($params['conditions']);
+
+                if (!empty($arguments['title'])) {
+                    $query->where(['Tasks.title LIKE' => '%' . $arguments['title'] . '%']);
+                }
+
+                $tasks = $query->all()->toArray();
 
                 $event->setResult($tasks);
                 break;
@@ -283,7 +296,31 @@ class TasksEvents implements EventListenerInterface
                 break;
 
             case 'Tasks.save_task':
+                if (
+                    !empty($arguments['tasker_id'])
+                    && !preg_match(
+                        '/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i',
+                        (string)$arguments['tasker_id'],
+                    )
+                ) {
+                    $event->setResult([
+                        'error' => 'tasker_id must be a UUID. "' . $arguments['tasker_id'] . '" looks like a name — '
+                            . 'call App.get_users to find the user\'s UUID first.',
+                    ]);
+                    break;
+                }
+
                 $tasksTable = TableRegistry::getTableLocator()->get('Tasks.Tasks');
+
+                // Normalize boolean-like completed values the model sometimes sends.
+                if (isset($arguments['completed'])) {
+                    $completedVal = strtolower(trim((string)$arguments['completed']));
+                    if (in_array($completedVal, ['true', '1', 'yes', 'done'], true)) {
+                        $arguments['completed'] = date('Y-m-d H:i:s');
+                    } elseif (in_array($completedVal, ['false', '0', 'no', 'null', ''], true)) {
+                        $arguments['completed'] = null;
+                    }
+                }
 
                 if (!empty($arguments['id'])) {
                     $entity = $tasksTable->find()
@@ -313,7 +350,17 @@ class TasksEvents implements EventListenerInterface
                 if ($tasksTable->save($entity)) {
                     $event->setResult(['success' => true, 'id' => $entity->id, 'title' => $entity->get('title')]);
                 } else {
-                    $event->setResult(['success' => false, 'errors' => $entity->getErrors()]);
+                    $errors = $entity->getErrors();
+                    $errorParts = [];
+                    foreach ($errors as $field => $fieldErrors) {
+                        foreach ((array)$fieldErrors as $rule => $message) {
+                            $errorParts[] = "$field ($rule): $message";
+                        }
+                    }
+                    $errorMessage = $errorParts !== []
+                        ? implode('; ', $errorParts)
+                        : 'Save failed without validation errors (possible DB or permission issue)';
+                    $event->setResult(['success' => false, 'error' => $errorMessage]);
                 }
                 break;
 

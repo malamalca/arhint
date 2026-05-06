@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App;
 
 use App\Command\HeartBeatCommand;
+use App\Event\AppAIToolsEvents;
 use App\Event\AppEvents;
 use Authentication\AuthenticationService;
 use Authentication\AuthenticationServiceInterface;
@@ -148,6 +149,7 @@ class Application extends BaseApplication implements
     public function events(EventManagerInterface $eventManager): EventManagerInterface
     {
         $eventManager->on(new AppEvents());
+        $eventManager->on(new AppAIToolsEvents());
 
         return $eventManager;
     }

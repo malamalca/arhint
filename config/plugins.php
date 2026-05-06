@@ -9,6 +9,7 @@
   */
 return [
     'DebugKit' => ['onlyDebug' => true],
+    'Cake/Queue' => [],
     'Bake' => ['onlyCli' => true, 'optional' => true],
     'Migrations' => ['onlyCli' => true],
     'Crm',

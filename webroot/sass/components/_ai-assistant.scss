@@ -2,6 +2,10 @@
     padding-left: 1rem;
     padding-right: 1rem;
 
+    h5 {
+        margin-left: 0 !important;
+    }
+
     .ai-assistant-messages {
         max-height: 320px;
         overflow-y: auto;
@@ -36,7 +40,7 @@
         }
 
         &__body {
-            background: rgba(0, 0, 0, .06);
+            background: rgba(0, 0, 0, .09);
             border-radius: 8px;
             padding: .4rem .7rem;
             white-space: normal;
@@ -81,13 +85,24 @@
             }
         }
 
-        &--user &__body {
-            background: rgba(var(--primary-color-rgb, 63, 81, 181), .15);
+        &--assistant {
+            .ai-message__body {
+                background: rgba(16, 163, 127, .12) !important;
+                border-left: 3px solid rgba(16, 163, 127, .45) !important;
+            }
         }
 
-        &--error &__body {
-            background: rgba(200, 0, 0, .1);
-            color: #c00;
+        &--user {
+            .ai-message__body {
+                background: rgba(var(--primary-color-rgb, 63, 81, 181), .18) !important;
+            }
+        }
+
+        &--error {
+            .ai-message__body {
+                background: rgba(200, 0, 0, .1) !important;
+                color: #c00;
+            }
         }
     }
 
@@ -115,6 +130,45 @@
             &:nth-child(1) { animation-delay: 0s; }
             &:nth-child(2) { animation-delay: .2s; }
             &:nth-child(3) { animation-delay: .4s; }
+        }
+    }
+
+    .ai-worker-warning {
+        margin: 0 0 .75rem;
+        padding: .5rem .7rem;
+        border-left: 3px solid #e67e00;
+        background: rgba(230, 126, 0, .1);
+        border-radius: 0 4px 4px 0;
+        color: #7a4400;
+        font-size: .85rem;
+    }
+
+    .ai-assistant-warning {
+        background: rgba(200, 100, 0, .08);
+        border-left: 3px solid rgba(200, 100, 0, .6);
+        border-radius: 4px;
+        padding: .6rem .8rem;
+        color: #7a4400;
+        font-size: .9rem;
+
+        p { margin: .25rem 0; }
+        p:first-child { margin-top: 0; }
+        p:last-child  { margin-bottom: 0; }
+
+        pre {
+            background: rgba(0, 0, 0, .06);
+            border-radius: 3px;
+            padding: .25rem .5rem;
+            font-size: .82em;
+            margin: .25rem 0;
+            overflow-x: auto;
+        }
+
+        code {
+            background: rgba(0, 0, 0, .06);
+            border-radius: 3px;
+            padding: .1em .3em;
+            font-size: .9em;
         }
     }
 

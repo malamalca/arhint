@@ -382,7 +382,7 @@ return [
             'file' => 'ai',
             'url' => null,
             'scopes' => ['ai'],
-            'levels' => ['notice', 'info'],
+            'levels' => ['notice', 'info', 'debug'],
         ],
         'error' => [
             'className' => FileLog::class,
@@ -491,5 +491,12 @@ return [
 
     'Ghostscript' => [
         'executable' => env('GHOSTSCRIPT_EXECUTABLE', '/usr/bin/gs'),
+    ],
+
+    'Queue' => [
+        'default' => [
+            'url' => 'file://' . TMP . 'queue',
+            'queue' => 'default',
+        ],
     ],
 ];
