@@ -49,6 +49,11 @@ $(function () {
         });
     }
 
+    function cancelWorkerCheck() {
+        // Mark as checked so the deferred poll-3 call becomes a no-op.
+        workerStatusChecked = true;
+    }
+
     var $thinking = $('<div>').addClass('ai-message ai-message--assistant ai-message--thinking').append(
         $('<span>').addClass('ai-message__role').text('AI'),
         $('<div>').addClass('ai-message__body').append(
@@ -89,6 +94,12 @@ $(function () {
             return;
         }
 
+        // After a few pending polls the worker has had time to touch its heartbeat;
+        // only then check whether it is actually running.
+        if (pollCount === 3) {
+            checkWorkerStatus();
+        }
+
         $.ajax({
             url: chatStatusUrl,
             method: 'GET',
@@ -107,8 +118,10 @@ $(function () {
                 if (data.status === 'error') {
                     appendMessage('error', data.error || 'An error occurred. Please try again.');
                 } else if (data.redirect) {
+                    cancelWorkerCheck();
                     window.location.href = data.redirect;
                 } else {
+                    cancelWorkerCheck();
                     appendMessage('assistant', data.response);
                 }
             },
@@ -140,8 +153,6 @@ $(function () {
                     appendMessage('error', data.error);
                     return;
                 }
-                // Job dispatched — check worker once, then start polling.
-                checkWorkerStatus();
                 pollJobStatus(data.job_id, 0);
             },
             error: function () {

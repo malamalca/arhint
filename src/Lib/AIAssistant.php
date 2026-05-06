@@ -26,7 +26,7 @@ class AIAssistant
     private const MAX_TOOL_RESULT_CHARS = 800;
 
     public const SYSTEM_PROMPT = "You are an assistant for a business management system.\n" .
-        "Proceed with great speed and accuracy.\n" .
+        "Proceed with great speed and accuracy. Do not show UUIDs in your responses.\n" .
         "\n" .
         "You can use tools. When needed, respond ONLY in plain JSON, without other text, markdown or explanations.\n" .
         "Do not prefix the JSON with any text. The JSON should have the following format:\n" .
@@ -190,7 +190,7 @@ class AIAssistant
                     },
                 ));
                 $systemContent = 'You are an assistant for a business management system. '
-                    . 'Proceed with great speed and accuracy. '
+                    . 'Proceed with great speed and accuracy. Do not show UIDs in your responses. '
                     . 'Current date and time: ' . date('Y-m-d H:i:s');
                 if ($summary !== null && $summary !== '') {
                     $systemContent .= "\n\nConversation context: " . $summary;
