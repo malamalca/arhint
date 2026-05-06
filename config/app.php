@@ -490,7 +490,7 @@ return [
     ],
 
     'Ghostscript' => [
-        'executable' => env('GHOSTSCRIPT_EXECUTABLE', '/usr/bin/gs'),
+        'executable' => '/usr/bin/gs',
     ],
 
     'Queue' => [

@@ -169,14 +169,36 @@ class AIAssistant
             $activeTools = $this->selectToolsForRequest($userInput);
 
             if ($this->provider === 'openai') {
+                // Strip the rolling summary from conversation history (it is stored as a fake assistant
+                // message for serialization purposes) and inject it into the system prompt instead,
+                // avoiding an invalid assistant-before-user turn order in the OpenAI API.
+                $summary = null;
+                $historyWithoutSummary = array_values(array_filter(
+                    $this->conversationHistory,
+                    function (array $msg) use (&$summary): bool {
+                        $content = (string)($msg['content'] ?? '');
+                        if (
+                            ($msg['role'] ?? '') === 'assistant'
+                            && str_starts_with($content, self::HISTORY_SUMMARY_PREFIX)
+                        ) {
+                            $summary = trim(substr($content, strlen(self::HISTORY_SUMMARY_PREFIX)));
+
+                            return false;
+                        }
+
+                        return true;
+                    },
+                ));
+                $systemContent = 'You are an assistant for a business management system. '
+                    . 'Proceed with great speed and accuracy. '
+                    . 'Current date and time: ' . date('Y-m-d H:i:s');
+                if ($summary !== null && $summary !== '') {
+                    $systemContent .= "\n\nConversation context: " . $summary;
+                }
                 $data = [
                     'messages' => array_merge(
-                        [['role' => 'system', 'content' =>
-                            'You are an assistant for a business management system. ' .
-                            'Proceed with great speed and accuracy. ' .
-                            'Current date and time: ' . date('Y-m-d H:i:s'),
-                        ]],
-                        $this->conversationHistory,
+                        [['role' => 'system', 'content' => $systemContent]],
+                        $historyWithoutSummary,
                     ),
                 ];
                 if (!empty($activeTools)) {
@@ -467,32 +489,42 @@ class AIAssistant
      */
     private function selectToolsForRequest(string $userInput): array
     {
-        if (count($this->tools) <= self::MAX_TOOLS_PER_REQUEST) {
-            return $this->tools;
+        // App tools are always included and do not count toward MAX_TOOLS_PER_REQUEST.
+        $appTools = array_values(
+            array_filter($this->tools, fn(AITool $t): bool => str_starts_with($t->name, 'App.')),
+        );
+        $otherTools = array_values(
+            array_filter($this->tools, fn(AITool $t): bool => !str_starts_with($t->name, 'App.')),
+        );
+
+        if (count($otherTools) <= self::MAX_TOOLS_PER_REQUEST) {
+            return array_merge($appTools, $otherTools);
         }
 
-        // Group tools by their module prefix (e.g. "Projects", "Crm").
+        // Group non-App tools by their module prefix (e.g. "Projects", "Crm").
         $moduleGroups = [];
-        foreach ($this->tools as $tool) {
+        foreach ($otherTools as $tool) {
             $module = strtok($tool->name, '.') ?: 'misc';
             $moduleGroups[$module][] = $tool;
         }
 
         $recentModule = $this->getRecentToolModule();
-        $context = trim($userInput . ' ' . $this->getRecentConversationText());
 
-        // Ask the AI which module(s) best match the request; fall back to keyword scoring on failure.
         // Use only the current user input for module detection to avoid old questions from history
         // biasing the routing decision.
-        $detectedModules = $this->detectModulesViaAI(array_keys($moduleGroups), $this->moduleDescriptions, $userInput);
+        $detectedModules = $this->detectModulesViaAI(
+            array_keys($moduleGroups),
+            array_filter($this->moduleDescriptions, fn(string $k): bool => $k !== 'App', ARRAY_FILTER_USE_KEY),
+            $userInput,
+        );
+
+        // Prefer the module used most recently in conversation if it is among the detected ones.
+        if ($recentModule !== null && in_array($recentModule, $detectedModules, true)) {
+            array_unshift($detectedModules, $recentModule);
+            $detectedModules = array_values(array_unique($detectedModules));
+        }
 
         if ($detectedModules !== []) {
-            // Prefer the module used most recently in conversation if it is among the detected ones.
-            if ($recentModule !== null && in_array($recentModule, $detectedModules, true)) {
-                array_unshift($detectedModules, $recentModule);
-                $detectedModules = array_values(array_unique($detectedModules));
-            }
-
             $selected = [];
             foreach ($detectedModules as $module) {
                 foreach ($moduleGroups[$module] ?? [] as $tool) {
@@ -500,71 +532,10 @@ class AIAssistant
                 }
             }
 
-            return $selected;
+            return array_merge($appTools, $selected);
         }
 
-        // Fallback: keyword scoring when the AI detection call fails.
-        $context = mb_strtolower($context);
-        $moduleScores = [];
-        foreach ($moduleGroups as $module => $moduleTools) {
-            $best = 0;
-            foreach ($moduleTools as $tool) {
-                $score = $this->scoreToolAgainstContext($tool, $context);
-                if ($score > $best) {
-                    $best = $score;
-                }
-            }
-            if ($recentModule !== null && strcasecmp($module, $recentModule) === 0) {
-                $best += 15;
-            }
-            $moduleScores[$module] = $best;
-        }
-
-        arsort($moduleScores);
-        $topScore = (int)reset($moduleScores);
-
-        if ($topScore <= 0) {
-            return array_slice($this->tools, 0, self::MAX_TOOLS_PER_REQUEST);
-        }
-
-        if ($topScore >= 40) {
-            $threshold = $topScore - 20;
-            $selected = [];
-            foreach ($moduleScores as $module => $score) {
-                if ($score < $threshold) {
-                    break;
-                }
-                foreach ($moduleGroups[$module] as $tool) {
-                    $selected[] = $tool;
-                }
-            }
-
-            return $selected;
-        }
-
-        $scoredTools = [];
-        foreach ($this->tools as $index => $tool) {
-            $score = $this->scoreToolAgainstContext($tool, $context);
-            if ($recentModule !== null && str_starts_with($tool->name, $recentModule . '.')) {
-                $score += 15;
-            }
-            $scoredTools[] = ['tool' => $tool, 'score' => $score, 'index' => $index];
-        }
-
-        usort($scoredTools, function (array $left, array $right): int {
-            if ($left['score'] === $right['score']) {
-                return $left['index'] <=> $right['index'];
-            }
-
-            return $right['score'] <=> $left['score'];
-        });
-
-        $selected = array_values(array_filter($scoredTools, fn(array $entry): bool => $entry['score'] > 0));
-
-        return array_values(array_map(
-            fn(array $entry): AITool => $entry['tool'],
-            array_slice($selected, 0, self::MAX_TOOLS_PER_REQUEST),
-        ));
+        return array_merge($appTools, array_slice($otherTools, 0, self::MAX_TOOLS_PER_REQUEST));
     }
 
     /**
@@ -634,26 +605,6 @@ class AIAssistant
     }
 
     /**
-     * Collect recent conversation text as additional context for tool selection.
-     *
-     * @return string
-     */
-    private function getRecentConversationText(): string
-    {
-        $recentMessages = array_slice($this->conversationHistory, -4);
-        $parts = [];
-
-        foreach ($recentMessages as $message) {
-            $content = trim((string)($message['content'] ?? ''));
-            if ($content !== '') {
-                $parts[] = $content;
-            }
-        }
-
-        return implode(' ', $parts);
-    }
-
-    /**
      * Detect the most recent tool module used in conversation history.
      *
      * @return string|null
@@ -662,105 +613,26 @@ class AIAssistant
     {
         for ($index = count($this->conversationHistory) - 1; $index >= 0; $index--) {
             $message = $this->conversationHistory[$index];
+            $role = (string)($message['role'] ?? '');
             $content = (string)($message['content'] ?? '');
-            if (!str_starts_with($content, 'Tool result for ')) {
-                continue;
-            }
-            if (preg_match('/^Tool result for ([A-Za-z0-9_.-]+)/', $content, $matches) !== 1) {
-                continue;
+
+            // Local provider: tool result stored as user message with a known prefix.
+            if ($role === 'user' && str_starts_with($content, 'Tool result for ')) {
+                if (preg_match('/^Tool result for ([A-Za-z0-9_.-]+)/', $content, $matches) === 1) {
+                    return strtok($matches[1], '.') ?: null;
+                }
             }
 
-            return strtok($matches[1], '.') ?: null;
+            // OpenAI provider: tool result stored as role=tool with JSON payload containing a 'tool' key.
+            if ($role === 'tool' && str_starts_with(ltrim($content), '{')) {
+                $decoded = json_decode($content, true);
+                if (is_array($decoded) && isset($decoded['tool']) && is_string($decoded['tool'])) {
+                    return strtok($decoded['tool'], '.') ?: null;
+                }
+            }
         }
 
         return null;
-    }
-
-    /**
-     * Score one tool against request context to rank selection relevance.
-     *
-     * @param \App\Lib\AITool $tool Tool metadata.
-     * @param string $context Request context.
-     * @return int
-     */
-    private function scoreToolAgainstContext(AITool $tool, string $context): int
-    {
-        if ($context === '') {
-            return 0;
-        }
-
-        $score = 0;
-        $toolName = mb_strtolower(str_replace(['.', '_'], ' ', $tool->name));
-        $toolDescription = mb_strtolower($tool->description);
-
-        $module = strtok($tool->name, '.');
-        if ($module !== false) {
-            $moduleToken = mb_strtolower($module);
-            if (str_contains($context, $moduleToken)) {
-                $score += 40;
-            }
-            $singularModule = rtrim($moduleToken, 's');
-            if ($singularModule !== $moduleToken && str_contains($context, $singularModule)) {
-                $score += 20;
-            }
-        }
-
-        $keywords = $this->extractToolKeywords($tool);
-        foreach ($keywords as $keyword) {
-            if (str_contains($context, $keyword)) {
-                $score += 8;
-            }
-        }
-
-        // Strong intent boosts to avoid dropping critical tools under tool-cap limits.
-        if (
-            preg_match('/\blogs?\b/u', $context) === 1
-            && str_contains($context, 'project')
-            && str_contains($toolName, 'project logs')
-        ) {
-            $score += 80;
-        }
-        if (
-            preg_match('/\blogs?\b/u', $context) === 1
-            && (str_contains($toolName, 'log') || str_contains($toolDescription, 'log'))
-        ) {
-            $score += 25;
-        }
-        if (
-            preg_match('/\busers?\b|\bteam\b|\bmembers?\b/u', $context) === 1
-            && (str_contains($toolName, 'user') || str_contains($toolDescription, 'user'))
-        ) {
-            $score += 25;
-        }
-        if (
-            preg_match('/\bdocuments?\b|\binvoices?\b|\btravel\b/u', $context) === 1
-            && (
-                str_contains($toolName, 'document')
-                || str_contains($toolName, 'invoice')
-                || str_contains($toolName, 'travel')
-            )
-        ) {
-            $score += 25;
-        }
-
-        return $score;
-    }
-
-    /**
-     * Extract weighted keyword candidates from tool metadata.
-     *
-     * @return array<int, string>
-     */
-    private function extractToolKeywords(AITool $tool): array
-    {
-        $source = $tool->name . ' ' . $tool->description . ' ' . implode(' ', array_keys($tool->arguments));
-        preg_match_all('/[a-z]{4,}/i', $source, $matches);
-        $keywords = array_map('mb_strtolower', $matches[0]);
-        $keywords = array_values(array_unique(array_filter($keywords, fn(string $keyword): bool => !in_array($keyword, [
-            'arguments', 'description', 'include', 'returns', 'using', 'current', 'false', 'true', 'with', 'from',
-        ], true))));
-
-        return array_slice($keywords, 0, 12);
     }
 
     /**
@@ -1036,6 +908,9 @@ class AIAssistant
         }
 
         $ch = curl_init($url);
+        if ($ch === false) {
+            return false;
+        }
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_NOBODY, true);
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeoutSeconds);
@@ -1082,6 +957,9 @@ class AIAssistant
         }
 
         $ch = curl_init($url);
+        if ($ch === false) {
+            throw new Exception('Failed to initialize cURL for: ' . $url);
+        }
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
