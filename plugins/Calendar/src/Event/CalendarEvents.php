@@ -170,9 +170,13 @@ class CalendarEvents implements EventListenerInterface
                 $calendarTable = TableRegistry::getTableLocator()->get('Calendar.Events');
 
                 if (!empty($arguments['id'])) {
-                    $entity = $currentUser->applyScope('index', $calendarTable->find())
-                        ->where(['Events.id' => $arguments['id'], 'Events.calendar_id' => $currentUser->get('id')])
-                        ->first();
+                    $entity = $calendarTable->get($arguments['id']);
+
+                    if (!$currentUser->can('view', $entity)) {
+                        $event->setResult(['error' => 'You are not authorized to view this event.']);
+                        break;
+                    }
+
                     $event->setResult($entity ?: ['error' => 'Event not found or access denied.']);
                     break;
                 }
@@ -201,7 +205,10 @@ class CalendarEvents implements EventListenerInterface
 
                 if (!empty($arguments['id'])) {
                     $entity = $calendarTable->find()
-                        ->where(['Events.id' => $arguments['id'], 'Events.calendar_id' => $currentUser->get('id')])
+                        ->where([
+                            'Events.id' => $arguments['id'],
+                            'Events.calendar_id' => $currentUser->get('id')
+                        ])
                         ->first();
                     if (!$entity) {
                         $event->setResult(['error' => 'Event not found or access denied.']);
