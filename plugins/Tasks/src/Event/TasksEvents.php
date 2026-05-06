@@ -202,7 +202,7 @@ class TasksEvents implements EventListenerInterface
                     'description' => 'Optional task priority (0 = normal, higher = more urgent).',
                 ],
                 'completed' => [
-                    'type' => 'datetime',
+                    'type' => 'string',
                     'description' => 'Must be a datetime string "YYYY-MM-DD HH:MM:SS". ' .
                         'To mark as done use the current datetime. Never use true, false, 1, or 0.',
                 ],

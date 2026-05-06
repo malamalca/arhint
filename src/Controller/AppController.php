@@ -80,6 +80,9 @@ class AppController extends Controller
         if ($this->request->is('ajax')) {
             $this->viewBuilder()->setClassName('Ajax');
         }
+        if ($this->request->is('json')) {
+            $this->viewBuilder()->setClassName('Json');
+        }
         if ($this->request->is('aht')) {
             $this->viewBuilder()->setClassName('Aht');
         }
