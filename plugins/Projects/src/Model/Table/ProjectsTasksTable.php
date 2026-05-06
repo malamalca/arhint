@@ -278,12 +278,12 @@ class ProjectsTasksTable extends Table
         return $query
             ->select([
                 'open' => $query->func()->count(
-                    $query->newExpr()->case()
+                    $query->expr()->case()
                         ->when(['closed IS' => null])
                         ->then(1),
                 ),
                 'closed' => $query->func()->count(
-                    $query->newExpr()->case()
+                    $query->expr()->case()
                         ->when(['closed IS NOT' => null])
                         ->then(1),
                 ),

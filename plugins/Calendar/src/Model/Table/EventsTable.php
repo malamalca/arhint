@@ -154,7 +154,9 @@ class EventsTable extends Table
             $ret['conditions']['Events.calendar_id'] = $filter['calendar'];
         }
 
-        if (!empty($filter['month'])) {
+        if (!empty($filter['from'])) {
+            $startDate = Date::parseDate($filter['from'], 'yyyy-MM-dd') ?? (new Date())->startOfMonth();
+        } elseif (!empty($filter['month'])) {
             $startDate = Date::parseDate($filter['month'] . '-01', 'yyyy-MM-dd');
             if (!$startDate) {
                 $startDate = (new Date())->startOfMonth();
@@ -163,7 +165,12 @@ class EventsTable extends Table
             $startDate = (new Date())->startOfMonth();
         }
 
-        $endDate = $startDate->endOfMonth()->addDays(1);
+        if (!empty($filter['to'])) {
+            $endDate = Date::parseDate($filter['to'], 'yyyy-MM-dd') ?? $startDate->endOfMonth()->addDays(1);
+            $endDate = $endDate->addDays(1);
+        } else {
+            $endDate = $startDate->endOfMonth()->addDays(1);
+        }
 
         $ret['conditions']['AND'] = [
             'Events.dat_start <=' => $endDate,

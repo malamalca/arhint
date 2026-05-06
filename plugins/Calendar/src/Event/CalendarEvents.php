@@ -87,10 +87,14 @@ class CalendarEvents implements EventListenerInterface
         $toolsList->append(new AITool(
             name: 'Calendar.get_events',
             arguments: [
-                'month' => [
+                'from' => [
                     'type' => 'string',
-                    'description' => 'The month for which to retrieve events in YYYY-MM format. If not provided, ' .
-                        'the current month will be used.'],
+                    'description' => 'Start date filter in YYYY-MM-DD format. Only events ending on or after this date are returned.',
+                ],
+                'to' => [
+                    'type' => 'string',
+                    'description' => 'End date filter in YYYY-MM-DD format. Only events starting on or before this date are returned.',
+                ],
             ],
             description: 'This function retrieves events from the calendar based on the specified criteria. ' .
                 'When printing out the events, please format them as a list with each event on a new line, ' .
@@ -162,8 +166,11 @@ class CalendarEvents implements EventListenerInterface
                 $calendarTable = TableRegistry::getTableLocator()->get('Calendar.Events');
 
                 $filter = ['calendar' => $currentUser->get('id')];
-                if (!empty($arguments['month'])) {
-                    $filter['month'] = $arguments['month'];
+                if (!empty($arguments['from'])) {
+                    $filter['from'] = $arguments['from'];
+                }
+                if (!empty($arguments['to'])) {
+                    $filter['to'] = $arguments['to'];
                 }
                 $params = $calendarTable->filter($filter);
 
