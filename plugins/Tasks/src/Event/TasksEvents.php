@@ -158,7 +158,11 @@ class TasksEvents implements EventListenerInterface
                 ],
                 'user_id' => [
                     'type' => 'string',
-                    'description' => 'The ID (UUID) of the user to filter tasks by. Optional.',
+                    'description' => 'The ID (UUID) of the user who created the task. Optional.',
+                ],
+                'tasker_id' => [
+                    'type' => 'string',
+                    'description' => 'The ID (UUID) of the user who must complete the task. Optional.',
                 ],
                 'title' => [
                     'type' => 'string',
@@ -208,7 +212,8 @@ class TasksEvents implements EventListenerInterface
                 ],
                 'tasker_id' => [
                     'type' => 'string',
-                    'description' => 'UUID from App.get_users. Never a name or username.',
+                    'description' => 'UUID from App.get_users. The user who must complete the task. ' .
+                        'Never a name or username.',
                 ],
             ],
             description: 'Creates a new task or updates an existing one. ' .
@@ -279,6 +284,9 @@ class TasksEvents implements EventListenerInterface
                     ->select()
                     ->where($params['conditions']);
 
+                if (!empty($arguments['tasker_id'])) {
+                    $query->where(['Tasks.tasker_id' => $arguments['tasker_id']]);
+                }
                 if (!empty($arguments['title'])) {
                     $query->where(['Tasks.title LIKE' => '%' . $arguments['title'] . '%']);
                 }

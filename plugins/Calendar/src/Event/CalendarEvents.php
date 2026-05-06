@@ -87,6 +87,10 @@ class CalendarEvents implements EventListenerInterface
         $toolsList->append(new AITool(
             name: 'Calendar.get_events',
             arguments: [
+                'id' => [
+                    'type' => 'string',
+                    'description' => 'Optional event UUID. If provided, returns only that specific event.',
+                ],
                 'from' => [
                     'type' => 'string',
                     'description' => 'Start date filter in YYYY-MM-DD format. Only events ending on or after this date are returned.',
@@ -164,6 +168,14 @@ class CalendarEvents implements EventListenerInterface
             case 'Calendar.get_events':
                 /** @var \Calendar\Model\Table\EventsTable $calendarTable */
                 $calendarTable = TableRegistry::getTableLocator()->get('Calendar.Events');
+
+                if (!empty($arguments['id'])) {
+                    $entity = $currentUser->applyScope('index', $calendarTable->find())
+                        ->where(['Events.id' => $arguments['id'], 'Events.calendar_id' => $currentUser->get('id')])
+                        ->first();
+                    $event->setResult($entity ?: ['error' => 'Event not found or access denied.']);
+                    break;
+                }
 
                 $filter = ['calendar' => $currentUser->get('id')];
                 if (!empty($arguments['from'])) {

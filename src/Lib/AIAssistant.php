@@ -38,6 +38,7 @@ class AIAssistant
 
         "Available data:\n" .
         "- Current date and time: %s\n" .
+        "- Current user ID: %s\n" .
         "\n" .
 
         "Available tools:\n %s\n" .
@@ -191,7 +192,8 @@ class AIAssistant
                 ));
                 $systemContent = 'You are an assistant for a business management system. '
                     . 'Proceed with great speed and accuracy. Do not show UIDs in your responses. '
-                    . 'Current date and time: ' . date('Y-m-d H:i:s');
+                    . 'Current date and time: ' . date('Y-m-d H:i:s') . '. '
+                    . 'Current user ID: ' . (string)($this->currentUser?->get('id') ?? '') . '.';
                 if ($summary !== null && $summary !== '') {
                     $systemContent .= "\n\nConversation context: " . $summary;
                 }
@@ -235,6 +237,7 @@ class AIAssistant
                         [['role' => 'system', 'content' => sprintf(
                             self::SYSTEM_PROMPT,
                             date('Y-m-d H:i:s'),
+                            (string)($this->currentUser?->get('id') ?? ''),
                             implode("\n", $promptTools),
                         )]],
                         $this->conversationHistory,
