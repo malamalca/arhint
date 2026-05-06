@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Documents\Model\Entity;
 
+use App\Lib\AISerializableInterface;
 use Cake\ORM\Entity;
 
 /**
@@ -29,7 +30,7 @@ use Cake\ORM\Entity;
  * @property \Cake\I18n\DateTime|null $created
  * @property \Cake\I18n\DateTime|null $modified
  */
-class DocumentsCounter extends Entity
+class DocumentsCounter extends Entity implements AISerializableInterface
 {
     /**
      * Fields that can be mass assigned using newEntity() or patchEntity().
@@ -59,5 +60,18 @@ class DocumentsCounter extends Entity
     public function isInvoice(): bool
     {
         return $this->kind == 'Invoices';
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function toAIArray(): array
+    {
+        return [
+            'id' => $this->id,
+            'title' => $this->title,
+            'kind' => $this->kind,
+            'active' => $this->active,
+        ];
     }
 }

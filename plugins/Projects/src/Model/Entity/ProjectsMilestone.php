@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Projects\Model\Entity;
 
+use App\Lib\AISerializableInterface;
 use Cake\ORM\Entity;
 
 /**
@@ -21,7 +22,7 @@ use Cake\ORM\Entity;
  *
  * @property \Projects\Model\Entity\Project $project
  */
-class ProjectsMilestone extends Entity
+class ProjectsMilestone extends Entity implements AISerializableInterface
 {
     /**
      * Fields that can be mass assigned using newEntity() or patchEntity().
@@ -53,5 +54,20 @@ class ProjectsMilestone extends Entity
     public function __toString(): string
     {
         return (string)$this->title;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function toAIArray(): array
+    {
+        return [
+            'id' => $this->id,
+            'user_id' => $this->user_id,
+            'title' => $this->title,
+            'date_due' => $this->date_due ? (string)$this->date_due : null,
+            'tasks_open' => $this->tasks_open,
+            'tasks_done' => $this->tasks_done,
+        ];
     }
 }

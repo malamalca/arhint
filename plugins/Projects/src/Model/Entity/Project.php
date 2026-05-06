@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Projects\Model\Entity;
 
+use App\Lib\AISerializableInterface;
 use Cake\ORM\Entity;
 
 /**
@@ -10,6 +11,7 @@ use Cake\ORM\Entity;
  *
  * @property string $id
  * @property string $owner_id
+ * @property string|null $status_id
  * @property string $no
  * @property string $title
  * @property string $descript
@@ -22,8 +24,10 @@ use Cake\ORM\Entity;
  * @property \Cake\I18n\DateTime $modified
  *
  * @property \Projects\Model\Entity\Owner $owner
+ * @property \Projects\Model\Entity\ProjectsStatus|null $projects_status
+ * @property \Projects\Model\Entity\ProjectsMilestone[] $projects_milestones
  */
-class Project extends Entity
+class Project extends Entity implements AISerializableInterface
 {
     /**
      * Fields that can be mass assigned using newEntity() or patchEntity().
@@ -68,5 +72,21 @@ class Project extends Entity
     public function __toString(): string
     {
         return $this->no . ' - ' . $this->title;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function toAIArray(): array
+    {
+        return [
+            'id' => $this->id,
+            'no' => $this->no,
+            'title' => $this->title,
+            'active' => $this->active,
+            'view_url' => $this->view_url ?? null,
+            'milestones' => array_map(fn($e) => $e->toAIArray(), $this->projects_milestones ?? []),
+            'status' => $this->projects_status?->toAIArray(),
+        ];
     }
 }

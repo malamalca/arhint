@@ -513,16 +513,25 @@ class AIAssistant
 
         $recentModule = $this->getRecentToolModule();
 
-        // Use only the current user input for module detection to avoid old questions from history
-        // biasing the routing decision.
+        // Build context from recent history for routing follow-up requests like "delete #4".
+        $historyForContext = array_values(array_filter(
+            $this->conversationHistory,
+            fn(array $msg): bool => !str_starts_with((string)($msg['content'] ?? ''), self::HISTORY_SUMMARY_PREFIX),
+        ));
+        // Exclude the last entry (the current user input already appended to history).
+        $priorMessages = array_slice($historyForContext, -4, 3);
+        $priorContext = !empty($priorMessages) ? $this->summarizeMessages($priorMessages) : '';
+
         $detectedModules = $this->detectModulesViaAI(
             array_keys($moduleGroups),
             array_filter($this->moduleDescriptions, fn(string $k): bool => $k !== 'App', ARRAY_FILTER_USE_KEY),
             $userInput,
+            $priorContext,
         );
 
-        // Prefer the module used most recently in conversation if it is among the detected ones.
-        if ($recentModule !== null && in_array($recentModule, $detectedModules, true)) {
+        // Always include the module used most recently in conversation so short follow-ups
+        // like "delete #4" after a calendar listing get the correct toolset.
+        if ($recentModule !== null) {
             array_unshift($detectedModules, $recentModule);
             $detectedModules = array_values(array_unique($detectedModules));
         }
@@ -551,22 +560,35 @@ class AIAssistant
      *
      * @param array<int, string> $modules All available module names.
      * @param array<string, string> $moduleDescriptions Module name => description map.
-     * @param string $context User input plus recent conversation text.
+     * @param string $userInput The current user message.
+     * @param string $priorContext Summary of recent conversation turns (may be empty).
      * @return array<int, string> Matched module names, or [] on failure.
      */
-    private function detectModulesViaAI(array $modules, array $moduleDescriptions, string $context): array
-    {
+    private function detectModulesViaAI(
+        array $modules,
+        array $moduleDescriptions,
+        string $userInput,
+        string $priorContext = '',
+    ): array {
         $moduleLines = array_map(function (string $module) use ($moduleDescriptions): string {
             $desc = $moduleDescriptions[$module] ?? '';
 
             return $desc !== '' ? "- {$module}: {$desc}" : "- {$module}";
         }, $modules);
         $moduleList = implode("\n", $moduleLines);
-        $prompt = 'You are a routing assistant. Given a user request, identify which module(s) it belongs to.' . "\n"
-            . 'Available modules:' . "\n" . $moduleList . "\n"
-            . 'Respond with ONLY a JSON array of matching module names, e.g. ["Projects"] or ["Crm"].' . "\n"
-            . 'If nothing matches, respond with [].' . "\n\n"
-            . 'User request: ' . $context;
+
+        $prompt = 'You are a routing assistant. Your job is to identify which module(s) a user request targets.' . "\n"
+            . 'Available modules:' . "\n" . $moduleList . "\n\n"
+            . 'Rules:' . "\n"
+            . '- If the current request clearly names a new domain (e.g. "projects", "tasks", "calendar"), return that module.' . "\n"
+            . '- If the current request is ambiguous (e.g. "delete #3", "show details") and prior context exists, use the prior context to infer the module.' . "\n"
+            . '- If nothing can be determined, return [].' . "\n"
+            . 'Respond with ONLY a JSON array, e.g. ["Projects"] or ["Crm"] or [].' . "\n\n";
+
+        if ($priorContext !== '') {
+            $prompt .= 'Prior conversation context: ' . $priorContext . "\n";
+        }
+        $prompt .= 'Current request: ' . $userInput;
 
         $data = [
             'messages' => [
@@ -793,6 +815,9 @@ class AIAssistant
         }
 
         if (is_object($item)) {
+            if ($item instanceof AISerializableInterface) {
+                return $item->toAIArray();
+            }
             if (method_exists($item, 'toArray')) {
                 $item = $item->toArray();
             } else {
@@ -804,43 +829,13 @@ class AIAssistant
             return $this->trimText((string)$item, self::MAX_TOOL_RESULT_CHARS);
         }
 
-        $priorityKeys = [
-            'id',
-            'no',
-            'title',
-            'name',
-            'status',
-            'active',
-            'dat_start',
-            'dat_end',
-            'all_day',
-            'location',
-            'body',
-            'reminder',
-            'milestones_open',
-            'milestones_done',
-            'count',
-            'total',
-            'duration',
-            'view_url',
-            'project_view_url',
-            'redirect_url',
-        ];
         $data = [];
-        foreach ($priorityKeys as $key) {
-            if (array_key_exists($key, $item) && (is_scalar($item[$key]) || $item[$key] === null)) {
-                $data[$key] = $item[$key];
+        foreach ($item as $key => $value) {
+            if (is_scalar($value) || $value === null) {
+                $data[(string)$key] = $value;
             }
-        }
-
-        if ($data === []) {
-            foreach ($item as $key => $value) {
-                if (is_scalar($value) || $value === null) {
-                    $data[(string)$key] = $value;
-                }
-                if (count($data) >= 5) {
-                    break;
-                }
+            if (count($data) >= 5) {
+                break;
             }
         }
 

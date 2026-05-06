@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Crm\Model\Entity;
 
+use App\Lib\AISerializableInterface;
 use Cake\Datasource\EntityInterface;
 use Cake\ORM\Entity;
 
@@ -21,7 +22,7 @@ use Cake\ORM\Entity;
  * @property \Cake\I18n\DateTime|null $created
  * @property \Cake\I18n\DateTime|null $modified
  */
-class ContactsAddress extends Entity implements EntityInterface
+class ContactsAddress extends Entity implements EntityInterface, AISerializableInterface
 {
     /**
      * Fields that can be mass assigned using newEntity() or patchEntity().
@@ -41,5 +42,20 @@ class ContactsAddress extends Entity implements EntityInterface
     public function __toString(): string
     {
         return (string)$this->street . ', ' . $this->zip . ' ' . $this->city . ', ' . $this->country;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function toAIArray(): array
+    {
+        return [
+            'kind' => $this->kind,
+            'street' => $this->street,
+            'zip' => $this->zip,
+            'city' => $this->city,
+            'country' => $this->country,
+            'primary' => $this->primary,
+        ];
     }
 }

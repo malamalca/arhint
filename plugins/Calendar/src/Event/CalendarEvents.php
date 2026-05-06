@@ -87,22 +87,31 @@ class CalendarEvents implements EventListenerInterface
         $toolsList->append(new AITool(
             name: 'Calendar.get_events',
             arguments: [
-                'id' => [
-                    'type' => 'string',
-                    'description' => 'Optional event UUID. If provided, returns only that specific event.',
-                ],
                 'from' => [
                     'type' => 'string',
-                    'description' => 'Start date filter in YYYY-MM-DD format. Only events ending on or after this date are returned.',
+                    'description' => 'Optional. Start date filter in YYYY-MM-DD format. ' .
+                        'Only events ending on or after this date are returned.',
                 ],
                 'to' => [
                     'type' => 'string',
-                    'description' => 'End date filter in YYYY-MM-DD format. Only events starting on or before this date are returned.',
+                    'description' => 'Optional. End date filter in YYYY-MM-DD format. ' .
+                        'Only events starting on or before this date are returned.',
                 ],
             ],
-            description: 'This function retrieves events from the calendar based on the specified criteria. ' .
+            description: 'Retrieves a list of calendar events within an optional date range. ' .
                 'When printing out the events, please format them as a list with each event on a new line, ' .
                 'including the event title and date.',
+        ));
+
+        $toolsList->append(new AITool(
+            name: 'Calendar.get_event',
+            arguments: [
+                'id' => [
+                    'type' => 'string',
+                    'description' => 'Event UUID of the event to retrieve.',
+                ],
+            ],
+            description: 'Retrieves a single calendar event by its UUID.',
         ));
 
         $toolsList->append(new AITool(
@@ -169,18 +178,6 @@ class CalendarEvents implements EventListenerInterface
                 /** @var \Calendar\Model\Table\EventsTable $calendarTable */
                 $calendarTable = TableRegistry::getTableLocator()->get('Calendar.Events');
 
-                if (!empty($arguments['id'])) {
-                    $entity = $calendarTable->get($arguments['id']);
-
-                    if (!$currentUser->can('view', $entity)) {
-                        $event->setResult(['error' => 'You are not authorized to view this event.']);
-                        break;
-                    }
-
-                    $event->setResult($entity ?: ['error' => 'Event not found or access denied.']);
-                    break;
-                }
-
                 $filter = ['calendar' => $currentUser->get('id')];
                 if (!empty($arguments['from'])) {
                     $filter['from'] = $arguments['from'];
@@ -199,6 +196,32 @@ class CalendarEvents implements EventListenerInterface
                 $event->setResult($events);
                 break;
 
+            case 'Calendar.get_event':
+                /** @var \Calendar\Model\Table\EventsTable $calendarTable */
+                $calendarTable = TableRegistry::getTableLocator()->get('Calendar.Events');
+
+                if (empty($arguments['id'])) {
+                    $event->setResult(['error' => 'Event ID is required.']);
+                    break;
+                }
+
+                $entity = $calendarTable->find()
+                    ->where(['Events.id' => $arguments['id']])
+                    ->first();
+
+                if (!$entity) {
+                    $event->setResult(['error' => 'Event not found or access denied.']);
+                    break;
+                }
+
+                if (!$currentUser->can('view', $entity)) {
+                    $event->setResult(['error' => 'You are not authorized to view this event.']);
+                    break;
+                }
+
+                $event->setResult($entity);
+                break;
+
             case 'Calendar.save_event':
                 /** @var \Calendar\Model\Table\EventsTable $calendarTable */
                 $calendarTable = TableRegistry::getTableLocator()->get('Calendar.Events');
@@ -207,7 +230,7 @@ class CalendarEvents implements EventListenerInterface
                     $entity = $calendarTable->find()
                         ->where([
                             'Events.id' => $arguments['id'],
-                            'Events.calendar_id' => $currentUser->get('id')
+                            'Events.calendar_id' => $currentUser->get('id'),
                         ])
                         ->first();
                     if (!$entity) {

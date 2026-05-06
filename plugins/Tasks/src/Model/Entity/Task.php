@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Tasks\Model\Entity;
 
+use App\Lib\AISerializableInterface;
 use Cake\ORM\Entity;
 
 /**
@@ -24,7 +25,7 @@ use Cake\ORM\Entity;
  * @property \Cake\I18n\DateTime $created
  * @property \Cake\I18n\DateTime $modified
  */
-class Task extends Entity
+class Task extends Entity implements AISerializableInterface
 {
     /**
      * Fields that can be mass assigned using newEntity() or patchEntity().
@@ -39,4 +40,23 @@ class Task extends Entity
         '*' => true,
         'id' => false,
     ];
+
+    /**
+     * @inheritDoc
+     */
+    public function toAIArray(): array
+    {
+        return [
+            'id' => $this->id,
+            'folder_id' => $this->folder_id,
+            'user_id' => $this->user_id,
+            'tasker_id' => $this->tasker_id,
+            'title' => $this->title,
+            'descript' => $this->descript,
+            'priority' => $this->priority,
+            'started' => $this->started ? (string)$this->started : null,
+            'deadline' => $this->deadline ? (string)$this->deadline : null,
+            'completed' => $this->completed ? (string)$this->completed : null,
+        ];
+    }
 }

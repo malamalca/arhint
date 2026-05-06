@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Projects\Model\Entity;
 
+use App\Lib\AISerializableInterface;
 use Cake\ORM\Entity;
 
 /**
@@ -18,7 +19,7 @@ use Cake\ORM\Entity;
  * @property \Projects\Model\Entity\Project $project
  * @property \Projects\Model\Entity\User $user
  */
-class ProjectsLog extends Entity
+class ProjectsLog extends Entity implements AISerializableInterface
 {
     /**
      * Fields that can be mass assigned using newEntity() or patchEntity().
@@ -38,4 +39,17 @@ class ProjectsLog extends Entity
         'project' => true,
         'user' => true,
     ];
+
+    /**
+     * @inheritDoc
+     */
+    public function toAIArray(): array
+    {
+        return [
+            'id' => $this->id,
+            'user_id' => $this->user_id,
+            'descript' => $this->descript,
+            'created' => $this->created ? (string)$this->created : null,
+        ];
+    }
 }

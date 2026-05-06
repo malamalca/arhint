@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Documents\Model\Entity;
 
+use App\Lib\AISerializableInterface;
 use Cake\ORM\Entity;
 
 /**
@@ -27,7 +28,7 @@ use Cake\ORM\Entity;
  * @property float $net_total
  * @property float $tax_total
  */
-class InvoicesItem extends Entity
+class InvoicesItem extends Entity implements AISerializableInterface
 {
     /**
      * Fields that can be mass assigned using newEntity() or patchEntity().
@@ -98,5 +99,22 @@ class InvoicesItem extends Entity
     protected function _getTotal(): float
     {
         return round($this->net_total + $this->tax_total, 2);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function toAIArray(): array
+    {
+        return [
+            'descript' => $this->descript,
+            'qty' => $this->qty,
+            'unit' => $this->unit,
+            'price' => $this->price,
+            'discount' => $this->discount,
+            'vat_title' => $this->vat_title,
+            'vat_percent' => $this->vat_percent,
+            'net_total' => $this->net_total,
+        ];
     }
 }

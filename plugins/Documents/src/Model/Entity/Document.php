@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Documents\Model\Entity;
 
+use App\Lib\AISerializableInterface;
 use Cake\ORM\Entity;
 use Cake\ORM\TableRegistry;
 
@@ -40,7 +41,7 @@ use Cake\ORM\TableRegistry;
  * @property \Documents\Model\Entity\DocumentsClient[] $documents_clients
  * @property \Documents\Model\Entity\DocumentsLink[] $documents_links
  */
-class Document extends Entity
+class Document extends Entity implements AISerializableInterface
 {
     /**
      * Fields that can be mass assigned using newEntity() or patchEntity().
@@ -102,5 +103,22 @@ class Document extends Entity
 
         // update counter
         $DocumentsCounters->updateAll(['counter' => $counter->counter + 1], ['id' => $counter->id]);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function toAIArray(): array
+    {
+        return [
+            'id' => $this->id,
+            'user_id' => $this->user_id,
+            'counter_id' => $this->counter_id,
+            'project_id' => $this->project_id,
+            'no' => $this->no,
+            'title' => $this->title,
+            'dat_issue' => $this->dat_issue ? (string)$this->dat_issue : null,
+            'view_url' => $this->view_url ?? null,
+        ];
     }
 }

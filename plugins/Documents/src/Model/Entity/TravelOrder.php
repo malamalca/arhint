@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Documents\Model\Entity;
 
+use App\Lib\AISerializableInterface;
 use Cake\ORM\Entity;
 use Cake\ORM\TableRegistry;
 
@@ -54,7 +55,7 @@ use Cake\ORM\TableRegistry;
  * @property \Documents\Model\Entity\TravelOrdersMileage[] $travel_orders_mileages
  * @property \Documents\Model\Entity\TravelOrdersExpense[] $travel_orders_expenses
  */
-class TravelOrder extends Entity
+class TravelOrder extends Entity implements AISerializableInterface
 {
     /**
      * Status constants
@@ -161,5 +162,28 @@ class TravelOrder extends Entity
 
         // update counter
         $DocumentsCounters->updateAll(['counter' => $counter->counter + 1], ['id' => $counter->id]);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function toAIArray(): array
+    {
+        return [
+            'id' => $this->id,
+            'employee_id' => $this->employee_id,
+            'counter_id' => $this->counter_id,
+            'no' => $this->no,
+            'title' => $this->title,
+            'status' => $this->status,
+            'dat_issue' => $this->dat_issue ? (string)$this->dat_issue : null,
+            'departure' => $this->departure ? (string)$this->departure : null,
+            'arrival' => $this->arrival ? (string)$this->arrival : null,
+            'net_total' => $this->net_total,
+            'total' => $this->total,
+            'view_url' => $this->view_url ?? null,
+            'mileages' => array_map(fn($e) => $e->toAIArray(), $this->travel_orders_mileages ?? []),
+            'expenses' => array_map(fn($e) => $e->toAIArray(), $this->travel_orders_expenses ?? []),
+        ];
     }
 }

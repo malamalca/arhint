@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Documents\Model\Entity;
 
+use App\Lib\AISerializableInterface;
 use Cake\ORM\Entity;
 
 /**
@@ -24,7 +25,7 @@ use Cake\ORM\Entity;
  *
  * @property \Documents\Model\Entity\TravelOrder $travel_order
  */
-class TravelOrdersExpense extends Entity
+class TravelOrdersExpense extends Entity implements AISerializableInterface
 {
     /**
      * Fields that can be mass assigned using newEntity() or patchEntity().
@@ -46,4 +47,22 @@ class TravelOrdersExpense extends Entity
         'modified' => true,
         'travel_order' => true,
     ];
+
+    /**
+     * @inheritDoc
+     */
+    public function toAIArray(): array
+    {
+        return [
+            'type' => $this->type,
+            'description' => $this->description,
+            'start_time' => $this->start_time ? (string)$this->start_time : null,
+            'end_time' => $this->end_time ? (string)$this->end_time : null,
+            'quantity' => $this->quantity,
+            'price' => $this->price,
+            'currency' => $this->currency,
+            'total' => $this->total,
+            'approved_total' => $this->approved_total,
+        ];
+    }
 }

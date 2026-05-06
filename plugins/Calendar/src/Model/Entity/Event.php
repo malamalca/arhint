@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Calendar\Model\Entity;
 
+use App\Lib\AISerializableInterface;
 use Cake\ORM\Entity;
 
 /**
@@ -22,7 +23,7 @@ use Cake\ORM\Entity;
  *
  * @property \Contacts\Model\Entity\Contact $calendar
  */
-class Event extends Entity
+class Event extends Entity implements AISerializableInterface
 {
     /**
      * Fields that can be mass assigned using newEntity() or patchEntity().
@@ -47,4 +48,21 @@ class Event extends Entity
         'owner' => true,
         'user' => true,
     ];
+
+    /**
+     * @inheritDoc
+     */
+    public function toAIArray(): array
+    {
+        return [
+            'id' => $this->id,
+            'title' => $this->title,
+            'dat_start' => $this->dat_start ? (string)$this->dat_start : null,
+            'dat_end' => $this->dat_end ? (string)$this->dat_end : null,
+            'all_day' => $this->all_day,
+            'location' => $this->location,
+            'body' => $this->body,
+            'reminder' => $this->reminder,
+        ];
+    }
 }
