@@ -14,6 +14,21 @@ use Cake\Http\Response;
 class TasksFoldersController extends AppController
 {
     /**
+     * Index method
+     *
+     * @return \Cake\Http\Response|void
+     */
+    public function index()
+    {
+        $tasksFolders = $this->Authorization->applyScope($this->TasksFolders->find())
+            ->select()
+            ->orderBy('title')
+            ->all();
+
+        $this->set(compact('tasksFolders'));
+    }
+
+    /**
      * Edit method
      *
      * @param string|null $id Task id.

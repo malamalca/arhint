@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Tasks\Controller;
 
 use Cake\Cache\Cache;
+use Cake\Event\EventInterface;
 use Cake\Http\Exception\NotFoundException;
 use Cake\Http\Response;
 use Cake\I18n\DateTime;
@@ -16,6 +17,19 @@ use Cake\ORM\TableRegistry;
  */
 class TasksController extends AppController
 {
+    /**
+     * beforeFilterCallback
+     *
+     * @param \Cake\Event\EventInterface $event Event object
+     * @return void
+     */
+    public function beforeFilter(EventInterface $event)
+    {
+        parent::beforeFilter($event);
+
+        $this->FormProtection->setConfig('unlockedActions', ['edit']);
+    }
+
     /**
      * Index method
      *
@@ -74,14 +88,51 @@ class TasksController extends AppController
         $this->Authorization->authorize($task);
 
         if ($this->getRequest()->is(['patch', 'post', 'put'])) {
-            $task = $this->Tasks->patchEntity($task, $this->getRequest()->getData());
-            if ($this->Tasks->save($task)) {
-                $this->Flash->success(__d('tasks', 'The task has been saved.'));
+            $requestData = $this->getRequest()->getData();
 
+            // CakePHP does not auto-parse raw JSON bodies; decode manually if needed
+            if (
+                empty($requestData) &&
+                str_contains($this->getRequest()->getHeaderLine('Content-Type'), 'application/json')
+            ) {
+                $requestData = (array)json_decode((string)$this->getRequest()->getBody(), true);
+            }
+
+            // Assign a default folder when none is provided (e.g. Roundcube requests)
+            if (empty($requestData['folder_id'])) {
+                /** @var \Tasks\Model\Table\TasksFoldersTable $TasksFolders */
+                $TasksFolders = TableRegistry::getTableLocator()->get('Tasks.TasksFolders');
+                $folders = $TasksFolders->listForOwner($this->getCurrentUser()->get('company_id'));
+                if (!empty($folders)) {
+                    $requestData['folder_id'] = array_key_first($folders);
+                }
+            }
+
+            $task = $this->Tasks->patchEntity($task, $requestData);
+            $isJson = str_contains($this->getRequest()->getHeaderLine('Content-Type'), 'application/json')
+                || str_contains($this->getRequest()->getHeaderLine('Accept'), 'application/json')
+                || $this->getRequest()->is('json');
+
+            if ($this->Tasks->save($task)) {
                 Cache::delete('Tasks.' . $this->getCurrentUser()->id . '.OpenTasks');
+
+                if ($isJson) {
+                    return $this->response
+                        ->withType('application/json')
+                        ->withStringBody((string)json_encode(['success' => true, 'id' => $task->id]));
+                }
+
+                $this->Flash->success(__d('tasks', 'The task has been saved.'));
 
                 return $this->redirect(['action' => 'index']);
             } else {
+                if ($isJson) {
+                    return $this->response
+                        ->withStatus(422)
+                        ->withType('application/json')
+                        ->withStringBody((string)json_encode(['success' => false, 'errors' => $task->getErrors()]));
+                }
+
                 $this->Flash->error(__d('tasks', 'The task could not be saved. Please, try again.'));
             }
         }

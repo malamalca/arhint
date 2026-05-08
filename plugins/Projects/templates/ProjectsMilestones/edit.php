@@ -23,7 +23,7 @@ $editForm = [
                 'parameters' => ['id'],
             ],
             'referer' => [
-                'method' => 'referer',
+                'method' => 'hidden',
                 'parameters' => ['redirect', ['default' => Router::url($this->getRequest()->referer(), true)]],
             ],
             'project_id' => [

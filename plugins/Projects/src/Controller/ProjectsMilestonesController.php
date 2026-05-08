@@ -15,6 +15,26 @@ use Cake\ORM\TableRegistry;
 class ProjectsMilestonesController extends AppController
 {
     /**
+     * Index method
+     *
+     * @return \Cake\Http\Response|void
+     */
+    public function index()
+    {
+        $projectId = $this->getRequest()->getQuery('project');
+        $project = TableRegistry::getTableLocator()->get('Projects.Projects')->get($projectId);
+        $this->Authorization->authorize($project, 'view');
+
+        $milestones = $this->Authorization->applyScope($this->ProjectsMilestones->find())
+            ->select()
+            ->where(['project_id' => $projectId])
+            ->orderBy('title')
+            ->all();
+
+        $this->set(compact('milestones'));
+    }
+
+    /**
      * Edit method
      *
      * @param string|null $id Projects Milestone id.
@@ -34,7 +54,9 @@ class ProjectsMilestonesController extends AppController
         $this->Authorization->Authorize($projectsMilestone);
 
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $projectsMilestone = $this->ProjectsMilestones->patchEntity($projectsMilestone, $this->request->getData());
+            $requestData = $this->getRequest()->getData();
+
+            $projectsMilestone = $this->ProjectsMilestones->patchEntity($projectsMilestone, $requestData);
             if ($this->ProjectsMilestones->save($projectsMilestone)) {
                 $this->Flash->success(__d('projects', 'The projects milestone has been saved.'));
 
@@ -49,8 +71,9 @@ class ProjectsMilestonesController extends AppController
                 );
 
                 return $this->redirect($redirect);
+            } else {
+                $this->Flash->error(__d('projects', 'The projects milestone could not be saved. Please, try again.'));
             }
-            $this->Flash->error(__d('projects', 'The projects milestone could not be saved. Please, try again.'));
         }
 
         $project = TableRegistry::getTableLocator()->get('Projects.Projects')->get($projectsMilestone->project_id);

@@ -85,6 +85,8 @@ class Project extends Entity implements AISerializableInterface
             'title' => $this->title,
             'active' => $this->active,
             'view_url' => $this->view_url ?? null,
+            'milestones_open' => $this->milestones_open ?? null,
+            'milestones_done' => $this->milestones_done ?? null,
             'milestones' => array_map(fn($e) => $e->toAIArray(), $this->projects_milestones ?? []),
             'status' => $this->projects_status?->toAIArray(),
         ];

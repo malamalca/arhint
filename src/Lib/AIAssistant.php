@@ -438,6 +438,26 @@ class AIAssistant
         $overflowMessages = array_slice($messages, 0, $overflowCount);
         $recentMessages = array_slice($messages, -self::MAX_HISTORY_MESSAGES);
 
+        // Ensure no orphaned 'tool' messages remain at the head of recentMessages.
+        // This happens when the overflow cut falls between an assistant(tool_calls) message and its
+        // paired tool-response messages. Collect all tool_call IDs that are present in recentMessages
+        // and drop any tool message whose ID is not among them.
+        $seenToolCallIds = [];
+        foreach ($recentMessages as $msg) {
+            if (($msg['role'] ?? '') === 'assistant' && !empty($msg['tool_calls']) && is_array($msg['tool_calls'])) {
+                foreach ($msg['tool_calls'] as $tc) {
+                    if (isset($tc['id'])) {
+                        $seenToolCallIds[(string)$tc['id']] = true;
+                    }
+                }
+            }
+        }
+        $recentMessages = array_values(array_filter(
+            $recentMessages,
+            fn(array $msg): bool => ($msg['role'] ?? '') !== 'tool'
+                || isset($seenToolCallIds[(string)($msg['tool_call_id'] ?? '')]),
+        ));
+
         $summaryParts = array_filter([$summary, $this->summarizeMessages($overflowMessages)]);
         $summaryText = $this->trimText(implode(' | ', $summaryParts), self::MAX_HISTORY_SUMMARY_CHARS);
 
@@ -577,6 +597,7 @@ class AIAssistant
         }, $modules);
         $moduleList = implode("\n", $moduleLines);
 
+        // @cs-ignore Generic.Files.LineLength.TooLong -- Prompt formatting.
         $prompt = 'You are a routing assistant. Your job is to identify which module(s) a user request targets.' . "\n"
             . 'Available modules:' . "\n" . $moduleList . "\n\n"
             . 'Rules:' . "\n"

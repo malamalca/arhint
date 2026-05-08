@@ -184,17 +184,18 @@ switch ($activeTab) {
                             $this->getCurrentUser()->hasRole('admin') || ($this->getCurrentUser()->id == $log->user_id) ?
                                 $this->Html->link(
                                     __d('projects', 'delete'),
-                                    ['controller' => 'ProjectsLogs', 'action' => 'delete', $log->id]
+                                    ['controller' => 'ProjectsLogs', 'action' => 'delete', $log->id, ['?' => ['redirect' => Router::url(null, true)]]],
+                                    ['confirm' => __d('projects', 'Are you sure you want to delete this log?')]
                                 ) . ' ' .
                                 $this->Html->link(
                                     __d('projects', 'edit'),
-                                    ['controller' => 'ProjectsLogs', 'action' => 'edit', $log->id]
+                                    ['controller' => 'ProjectsLogs', 'action' => 'edit', $log->id, ['?' => ['redirect' => Router::url(null, true)]]],
                                 )
                                 :
                                 ''
                         ) .
                         //$log->descript
-                        strip_tags($log->descript, ['a', 'strong', 'em', 'span', 'sub', 'sup', 'table', 'tr', 'td', 'p', 'pre', 'blockquote', 'img']),
+                        strip_tags($log->descript ?? '', ['a', 'strong', 'em', 'span', 'sub', 'sup', 'table', 'tr', 'td', 'p', 'pre', 'blockquote', 'img']),
                 ]];
             }
         }

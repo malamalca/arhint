@@ -118,9 +118,9 @@ class TasksUtils
                         'class' => 'lil-task-tick',
                     ]),
 
-                'title' => $prioritySpan .
-                    $view->getRequest()->is('mobile') ? h($task->title) : $view->Html->link(
-                        $task->title,
+                'title' => $prioritySpan . (
+                    $view->getRequest()->is('mobile') ? h($task->title ?? __d('tasks', 'N/A')) : $view->Html->link(
+                        $task->title ?? __d('tasks', 'N/A'),
                         [
                             'plugin' => 'Tasks',
                             'controller' => 'Tasks',
@@ -130,7 +130,8 @@ class TasksUtils
                         [
                             'class' => 'lil-task-edit',
                         ],
-                    ),
+                    )
+                ),
                 'descript' => sprintf('<div class="userdue">%s</div>', $usersDescript . $dueSpan),
                 'descript2' => empty($task->descript) ?
                     null :

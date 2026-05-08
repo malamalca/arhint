@@ -16,6 +16,7 @@ use Cake\ORM\Entity;
  * @property string $tasker_id
  * @property string $model
  * @property string $foreign_id
+ * @property string|null $message_guid
  * @property string $title
  * @property string $descript
  * @property \Cake\I18n\DateTime|null $started

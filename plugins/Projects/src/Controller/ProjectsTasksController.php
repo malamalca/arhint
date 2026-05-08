@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Projects\Controller;
 
+use Cake\Event\EventInterface;
 use Cake\Http\Response;
 use Cake\ORM\TableRegistry;
 use Projects\Filter\ProjectsTasksFilter;
@@ -15,6 +16,19 @@ use Projects\Filter\ProjectsTasksFilter;
  */
 class ProjectsTasksController extends AppController
 {
+    /**
+     * beforeFilterCallback
+     *
+     * @param \Cake\Event\EventInterface $event Event object
+     * @return void
+     */
+    public function beforeFilter(EventInterface $event)
+    {
+        parent::beforeFilter($event);
+
+        $this->FormProtection->setConfig('unlockedActions', ['edit']);
+    }
+
     /**
      * Index method
      *
@@ -83,8 +97,25 @@ class ProjectsTasksController extends AppController
         $this->Authorization->authorize($projectsTask);
 
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $projectsTask = $this->ProjectsTasks->patchEntity($projectsTask, $this->request->getData());
+            $requestData = $this->getRequest()->getData();
+            // CakePHP does not auto-parse raw JSON bodies; decode manually if needed
+            if (empty($requestData) && str_contains($this->getRequest()->getHeaderLine('Content-Type'), 'application/json')) {
+                $requestData = (array)json_decode((string)$this->getRequest()->getBody(), true);
+            }
+
+            $projectsTask = $this->ProjectsTasks->patchEntity($projectsTask, $requestData);
+
+            $isJson = str_contains($this->getRequest()->getHeaderLine('Content-Type'), 'application/json')
+                || str_contains($this->getRequest()->getHeaderLine('Accept'), 'application/json')
+                || $this->getRequest()->is('json');
+
             if ($this->ProjectsTasks->save($projectsTask, ['auditUserId' => $this->getCurrentUser()->get('id')])) {
+                if ($isJson) {
+                    return $this->response
+                        ->withType('application/json')
+                        ->withStringBody((string)json_encode(['success' => true, 'id' => $projectsTask->id]));
+                }
+
                 $this->Flash->success(__d('projects', 'The projects task has been saved.'));
 
                 return $this->redirect($this->getRequest()->getData('referer', [
@@ -92,8 +123,19 @@ class ProjectsTasksController extends AppController
                     'action' => 'view',
                     $projectsTask->project_id,
                 ]));
+            } else {
+                if ($isJson) {
+                    return $this->response
+                        ->withStatus(422)
+                        ->withType('application/json')
+                        ->withStringBody((string)json_encode([
+                            'success' => false,
+                            'errors' => $projectsTask->getErrors(),
+                        ]));
+                }
+
+                $this->Flash->error(__d('projects', 'The projects task could not be saved. Please, try again.'));
             }
-            $this->Flash->error(__d('projects', 'The projects task could not be saved. Please, try again.'));
         }
 
         $this->set(compact('projectsTask'));

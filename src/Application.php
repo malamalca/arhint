@@ -98,6 +98,9 @@ class Application extends BaseApplication implements
                 ['controller' => 'ProjectsWorkhours', 'action' => 'import'],
                 ['controller' => 'Projects', 'action' => 'linkEmail'],
                 ['controller' => ['Invoices', 'Documents'], 'action' => 'edit', $request->hasHeader('Lil-Scan')],
+                ['plugin' => 'Tasks', 'controller' => 'Tasks', 'action' => 'edit', $request->getHeaderLine('Content-Type') === 'application/json'],
+                ['plugin' => 'Projects', 'controller' => 'ProjectsLogs', 'action' => 'edit', $request->getHeaderLine('Content-Type') === 'application/json'],
+                ['plugin' => 'Projects', 'controller' => 'ProjectsTasks', 'action' => 'edit', $request->getHeaderLine('Content-Type') === 'application/json'],
             ]);
         });
 
@@ -192,12 +195,16 @@ class Application extends BaseApplication implements
             $this->checkParams($request->getAttribute('params'), [
                 ['controller' => 'Projects', 'action' => 'view', '_ext' => 'txt'],
             ['controller' => 'Projects', 'action' => 'index', '_ext' => ['txt', 'json', 'xml']],
-            ['controller' => 'Projects', 'action' => 'linkEmail', '_ext' => 'json'],
-
             ['controller' => 'Projects', 'action' => 'view', '_ext' => 'xml'],
+
             ['controller' => 'Calendars', 'action' => 'view'],
             ['controller' => 'ProjectsWorkhours', 'action' => 'import'],
+            ['controller' => 'ProjectsMilestones', 'action' => 'index'],
+            ['controller' => 'ProjectsTasks', 'action' => 'edit'],
+            ['controller' => 'ProjectsLogs', 'action' => 'edit'],
             ['controller' => ['Invoices', 'Documents'], 'action' => 'edit'],
+            ['plugin' => 'Tasks', 'controller' => 'Tasks', 'action' => 'edit'],
+            ['plugin' => 'Tasks', 'controller' => 'TasksFolders', 'action' => 'index'],
             ])
         ) {
             $service->loadAuthenticator('Authentication.HttpBasic', ['realm' => 'intranet', 'fields' => $fields]);

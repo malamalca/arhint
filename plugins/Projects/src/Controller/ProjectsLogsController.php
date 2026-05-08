@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Projects\Controller;
 
+use Cake\Event\EventInterface;
 use Cake\Http\Response;
 use Cake\ORM\TableRegistry;
 
@@ -14,6 +15,19 @@ use Cake\ORM\TableRegistry;
  */
 class ProjectsLogsController extends AppController
 {
+    /**
+     * beforeFilterCallback
+     *
+     * @param \Cake\Event\EventInterface $event Event object
+     * @return void
+     */
+    public function beforeFilter(EventInterface $event)
+    {
+        parent::beforeFilter($event);
+
+        $this->FormProtection->setConfig('unlockedActions', ['edit']);
+    }
+
     /**
      * Edit method
      *
@@ -34,14 +48,33 @@ class ProjectsLogsController extends AppController
         $this->Authorization->Authorize($projectsLog);
 
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $projectsLog = $this->ProjectsLogs->patchEntity($projectsLog, $this->request->getData());
+            $requestData = $this->getRequest()->getData();
+            // CakePHP does not auto-parse raw JSON bodies; decode manually if needed
+            if (
+                empty($requestData) &&
+                str_contains($this->getRequest()->getHeaderLine('Content-Type'), 'application/json')
+            ) {
+                $requestData = (array)json_decode((string)$this->getRequest()->getBody(), true);
+            }
+
+            $projectsLog = $this->ProjectsLogs->patchEntity($projectsLog, $requestData);
+            $isJson = str_contains($this->getRequest()->getHeaderLine('Content-Type'), 'application/json')
+                || str_contains($this->getRequest()->getHeaderLine('Accept'), 'application/json')
+                || $this->getRequest()->is('json');
+
             if ($this->ProjectsLogs->save($projectsLog)) {
-                if ($this->getRequest()->is('ajax')) {
-                    header('Content-Type: text/hml');
+                if ($this->getRequest()->is('json')) {
+                    header('Content-Type: text/html');
 
                     $user = TableRegistry::getTableLocator()->get('Users')->get($projectsLog->user_id);
                     $this->set(compact('projectsLog', 'user'));
                     die((string)$this->render('/element/projects_log'));
+                }
+
+                if ($isJson) {
+                    return $this->response
+                        ->withType('application/json')
+                        ->withStringBody((string)json_encode(['success' => true, 'id' => $projectsLog->id]));
                 }
 
                 $this->Flash->success(__d('projects', 'The projects log has been saved.'));
@@ -57,8 +90,18 @@ class ProjectsLogsController extends AppController
                 );
 
                 return $this->redirect($redirect);
+            } else {
+                if ($isJson) {
+                    return $this->response
+                        ->withStatus(422)
+                        ->withType('application/json')
+                        ->withStringBody(
+                            (string)json_encode(['success' => false, 'errors' => $projectsLog->getErrors()]),
+                        );
+                }
+
+                $this->Flash->error(__d('projects', 'The projects log could not be saved. Please, try again.'));
             }
-            $this->Flash->error(__d('projects', 'The projects log could not be saved. Please, try again.'));
         }
 
         $project = TableRegistry::getTableLocator()->get('Projects.Projects')->get($projectsLog->project_id);
@@ -86,6 +129,16 @@ class ProjectsLogsController extends AppController
             $this->Flash->error(__d('projects', 'The projects log could not be deleted. Please, try again.'));
         }
 
-        return $this->redirect(['controller' => 'Projects', 'action' => 'view', $projectsLog->project_id]);
+        $redirect = $this->getRequest()->getQuery(
+            'redirect',
+            [
+                'controller' => 'Projects',
+                'action' => 'view',
+                $projectsLog->project_id,
+                '?' => ['tab' => 'logs'],
+            ],
+        );
+
+        return $this->redirect($redirect);
     }
 }

@@ -67,6 +67,9 @@ class TasksTable extends Table
             ->allowEmptyString('model');
 
         $validator
+            ->allowEmptyString('message_guid');
+
+        $validator
             ->notEmptyString('title');
 
         $validator
