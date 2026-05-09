@@ -53,7 +53,7 @@ class ContactsAccountsControllerTest extends TestCase
             'contact_id' => COMPANY_FIRST,
             'primary' => 0,
             'kind' => 'P',
-            'bban' => 'SI56 2420 3901 0691 882',
+            'iban' => 'SI56 2420 3901 0691 882',
             'bic' => 'KREKSI22',
         ];
 
@@ -84,7 +84,7 @@ class ContactsAccountsControllerTest extends TestCase
             'contact_id' => COMPANY_FIRST,
             'primary' => 1,
             'kind' => 'P',
-            'bban' => 'SI56 2420 3901 0691 886',
+            'iban' => 'SI56 2420 3901 0691 886',
             'bic' => 'KREKSI22',
         ];
 

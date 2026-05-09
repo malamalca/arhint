@@ -434,9 +434,14 @@ class CrmAIToolsEvents implements EventListenerInterface
         $contactsTable = TableRegistry::getTableLocator()->get('Crm.Contacts');
 
         $filter = ['kind' => $arguments['kind'] ?? 'C'];
+
         if (!empty($arguments['search'])) {
-            $filter['search'] = $arguments['search'];
+            /** @var \Crm\Model\Table\ContactsSearchIndexTable $searchIndexTable */
+            $searchIndexTable = TableRegistry::getTableLocator()->get('Crm.ContactsSearchIndex');
+            $ft = $searchIndexTable->search($arguments['search'], $currentUser->get('company_id'));
+            $filter['id'] = array_keys($ft);
         }
+
         $params = $contactsTable->filter($filter);
 
         $contacts = $currentUser->applyScope('index', $contactsTable->find())

@@ -601,8 +601,10 @@ class AIAssistant
         $prompt = 'You are a routing assistant. Your job is to identify which module(s) a user request targets.' . "\n"
             . 'Available modules:' . "\n" . $moduleList . "\n\n"
             . 'Rules:' . "\n"
-            . '- If the current request clearly names a new domain (e.g. "projects", "tasks", "calendar"), return that module.' . "\n"
-            . '- If the current request is ambiguous (e.g. "delete #3", "show details") and prior context exists, use the prior context to infer the module.' . "\n"
+            . '- If the current request clearly names a new domain (e.g. "projects", "tasks", "calendar"), ' .
+            'return that module.' . "\n"
+            . '- If the current request is ambiguous (e.g. "delete #3", "show details") and prior context exists, ' .
+            'use the prior context to infer the module.' . "\n"
             . '- If nothing can be determined, return [].' . "\n"
             . 'Respond with ONLY a JSON array, e.g. ["Projects"] or ["Crm"] or [].' . "\n\n";
 
@@ -858,6 +860,11 @@ class AIAssistant
             if (count($data) >= 5) {
                 break;
             }
+        }
+
+        // Always carry through view_url even when the 5-field cap was hit.
+        if (!isset($data['view_url']) && isset($item['view_url']) && is_scalar($item['view_url'])) {
+            $data['view_url'] = $item['view_url'];
         }
 
         return $data === []
