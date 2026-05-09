@@ -98,9 +98,24 @@ class Application extends BaseApplication implements
                 ['controller' => 'ProjectsWorkhours', 'action' => 'import'],
                 ['controller' => 'Projects', 'action' => 'linkEmail'],
                 ['controller' => ['Invoices', 'Documents'], 'action' => 'edit', $request->hasHeader('Lil-Scan')],
-                ['plugin' => 'Tasks', 'controller' => 'Tasks', 'action' => 'edit', $request->getHeaderLine('Content-Type') === 'application/json'],
-                ['plugin' => 'Projects', 'controller' => 'ProjectsLogs', 'action' => 'edit', $request->getHeaderLine('Content-Type') === 'application/json'],
-                ['plugin' => 'Projects', 'controller' => 'ProjectsTasks', 'action' => 'edit', $request->getHeaderLine('Content-Type') === 'application/json'],
+                [
+                    'plugin' => 'Tasks',
+                    'controller' => 'Tasks',
+                    'action' => 'edit',
+                    $request->getHeaderLine('Content-Type') === 'application/json',
+                ],
+                [
+                    'plugin' => 'Projects',
+                    'controller' => 'ProjectsLogs',
+                    'action' => 'edit',
+                    $request->getHeaderLine('Content-Type') === 'application/json',
+                ],
+                [
+                    'plugin' => 'Projects',
+                    'controller' => 'ProjectsTasks',
+                    'action' => 'edit',
+                    $request->getHeaderLine('Content-Type') === 'application/json',
+                ],
             ]);
         });
 

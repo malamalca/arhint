@@ -5,6 +5,7 @@ namespace Crm\Controller;
 
 use Cake\Core\Configure;
 use Cake\Http\Exception\NotFoundException;
+use Cake\ORM\TableRegistry;
 use SoapClient;
 use SoapFault;
 
@@ -29,14 +30,12 @@ class ContactsController extends AppController
             $filter['kind'] = 'T';
         }
 
-        $searchStr = $this->getRequest()->getData('search');
+        $searchStr = $this->getRequest()->getData('search', $this->getRequest()->getQuery('term', ''));
         if (!empty($searchStr)) {
-            $filter['search'] = $searchStr;
-        } else {
-            $searchStr = $this->getRequest()->getQuery('term');
-            if (!empty($searchStr)) {
-                $filter['search'] = $searchStr;
-            }
+            /** @var \Crm\Model\Table\ContactsSearchIndexTable $ContactsSearchIndexTable */
+            $ContactsSearchIndexTable = TableRegistry::getTableLocator()->get('Crm.ContactsSearchIndex');
+            $ft = $ContactsSearchIndexTable->search($searchStr, $this->getCurrentUser()->get('company_id'));
+            $filter['id'] = array_keys($ft);
         }
         $filter = array_merge((array)$this->getRequest()->getQuery(), $filter);
 

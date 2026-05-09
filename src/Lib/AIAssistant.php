@@ -597,7 +597,7 @@ class AIAssistant
         }, $modules);
         $moduleList = implode("\n", $moduleLines);
 
-        // @cs-ignore Generic.Files.LineLength.TooLong -- Prompt formatting.
+        // @cs-ignore Generic.Files.LineLength.TooLong
         $prompt = 'You are a routing assistant. Your job is to identify which module(s) a user request targets.' . "\n"
             . 'Available modules:' . "\n" . $moduleList . "\n\n"
             . 'Rules:' . "\n"

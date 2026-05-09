@@ -11,6 +11,7 @@ use Cake\ORM\Entity;
 use Cake\ORM\Rule\IsUnique;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
+use Cake\ORM\TableRegistry;
 use Cake\Validation\Validator;
 
 /**
@@ -167,6 +168,21 @@ class ContactsTable extends Table
     }
 
     /**
+     * afterSave method
+     *
+     * @param \Cake\Event\Event $event Event object.
+     * @param \Crm\Model\Entity\Contact $entity Entity object.
+     * @param \ArrayObject $options Options array.
+     * @return void
+     */
+    public function afterSave(Event $event, Entity $entity, ArrayObject $options): void
+    {
+        /** @var \Crm\Model\Table\ContactsSearchIndexTable $ContactsSearchIndexTable */
+        $ContactsSearchIndexTable = TableRegistry::getTableLocator()->get('Crm.ContactsSearchIndex');
+        $ContactsSearchIndexTable->updateContactIndex($entity->id);
+    }
+
+    /**
      * Checks if entity belongs to user.
      *
      * @param string|null $entityId Entity Id.
@@ -187,11 +203,19 @@ class ContactsTable extends Table
     public function filter(array &$filter): array
     {
         $ret = ['conditions' => [], 'order' => []];
-        if (empty($filter['kind'])) {
-            $filter['kind'] = 'C';
-        }
 
-        $ret['conditions']['Contacts.kind'] = $filter['kind'];
+        if (isset($filter['id'])) {
+            if (empty($filter['id'])) {
+                $ret['conditions']['Contacts.id IS'] = null;
+            } else {
+                $ret['conditions']['Contacts.id IN'] = (array)$filter['id'];
+            }
+        } else {
+            if (empty($filter['kind'])) {
+                $filter['kind'] = 'C';
+            }
+            $ret['conditions']['Contacts.kind'] = $filter['kind'];
+        }
 
         if (!empty($filter['search'])) {
             $subquery = $this->ContactsPhones->find()

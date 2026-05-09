@@ -44,8 +44,19 @@ class CrmCommand extends Command
             case 'findDuplicates':
                 $this->findDuplicates($io);
                 break;
+            case 'rebuildSearchIndex':
+                /** @var \Crm\Model\Table\ContactsTable $ContactsTable */
+                $ContactsTable = TableRegistry::getTableLocator()->get('Crm.Contacts');
+                /** @var \Crm\Model\Table\ContactsSearchIndexTable $ContactsSearchIndexTable */
+                $ContactsSearchIndexTable = TableRegistry::getTableLocator()->get('Crm.ContactsSearchIndex');
+
+                $q = $ContactsTable->find()->select();
+                foreach ($q->all() as $contact) {
+                    $ContactsSearchIndexTable->updateContactIndex($contact->id);
+                }
+                break;
             default:
-                $io->out('Available subcommands: deleteStaleRecords, findDuplicates');
+                $io->out('Available subcommands: deleteStaleRecords, findDuplicates, rebuildSearchIndex');
         }
 
         return null;

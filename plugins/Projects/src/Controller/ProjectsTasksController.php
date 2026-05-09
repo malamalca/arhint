@@ -99,7 +99,10 @@ class ProjectsTasksController extends AppController
         if ($this->request->is(['patch', 'post', 'put'])) {
             $requestData = $this->getRequest()->getData();
             // CakePHP does not auto-parse raw JSON bodies; decode manually if needed
-            if (empty($requestData) && str_contains($this->getRequest()->getHeaderLine('Content-Type'), 'application/json')) {
+            if (
+                empty($requestData) &&
+                str_contains($this->getRequest()->getHeaderLine('Content-Type'), 'application/json')
+            ) {
                 $requestData = (array)json_decode((string)$this->getRequest()->getBody(), true);
             }
 
