@@ -567,6 +567,25 @@ class AIAssistant
             return array_merge($appTools, $selected);
         }
 
+        // AI detection failed — fall back to keyword scoring so that tools whose
+        // name or description match words from the user's input are preferred over
+        // an arbitrary slice of the tool list.
+        $queryWords = array_filter(preg_split('/\W+/', strtolower($userInput)) ?: []);
+        usort($otherTools, function (AITool $a, AITool $b) use ($queryWords): int {
+            $scoreA = 0;
+            $scoreB = 0;
+            foreach ($queryWords as $word) {
+                if (str_contains(strtolower($a->name), $word) || str_contains(strtolower($a->description), $word)) {
+                    $scoreA++;
+                }
+                if (str_contains(strtolower($b->name), $word) || str_contains(strtolower($b->description), $word)) {
+                    $scoreB++;
+                }
+            }
+
+            return $scoreB <=> $scoreA;
+        });
+
         return array_merge($appTools, array_slice($otherTools, 0, self::MAX_TOOLS_PER_REQUEST));
     }
 
