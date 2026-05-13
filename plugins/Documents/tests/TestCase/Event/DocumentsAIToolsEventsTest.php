@@ -87,13 +87,13 @@ class DocumentsAIToolsEventsTest extends TestCase
     // aiAssistantTools — tool registration
     // -------------------------------------------------------------------------
 
-    public function testAiAssistantToolsRegisters17Tools(): void
+    public function testAiAssistantToolsRegisters18Tools(): void
     {
         $event = new Event('App.AIAssistant.tools');
         $toolsList = new ArrayObject();
         $this->listener->aiAssistantTools($event, $toolsList);
 
-        $this->assertCount(17, $toolsList);
+        $this->assertCount(18, $toolsList);
 
         $names = array_map(fn($t) => $t->name, iterator_to_array($toolsList));
         $this->assertContains('Documents.navigate_to_document', $names);
@@ -101,6 +101,7 @@ class DocumentsAIToolsEventsTest extends TestCase
         $this->assertContains('Documents.search_invoices', $names);
         $this->assertContains('Documents.get_invoice', $names);
         $this->assertContains('Documents.create_invoice', $names);
+        $this->assertContains('Documents.get_vat_rates', $names);
         $this->assertContains('Documents.add_invoice_item', $names);
         $this->assertContains('Documents.update_invoice_item', $names);
         $this->assertContains('Documents.delete_invoice_item', $names);
@@ -138,6 +139,23 @@ class DocumentsAIToolsEventsTest extends TestCase
         $result = $event->getResult();
         $this->assertIsArray($result);
         $this->assertCount(2, $result);
+    }
+
+    // -------------------------------------------------------------------------
+    // get_vat_rates
+    // -------------------------------------------------------------------------
+
+    public function testGetVatRatesReturnsArray(): void
+    {
+        $event = $this->makeEvent('Documents.get_vat_rates', []);
+        $this->listener->aiAssistantExecuteTool($event, 'Documents.get_vat_rates', []);
+
+        $result = $event->getResult();
+        $this->assertIsArray($result);
+        $this->assertNotEmpty($result);
+        $this->assertArrayHasKey('id', $result[0]);
+        $this->assertArrayHasKey('descript', $result[0]);
+        $this->assertArrayHasKey('percent', $result[0]);
     }
 
     // -------------------------------------------------------------------------
@@ -209,6 +227,75 @@ class DocumentsAIToolsEventsTest extends TestCase
         $this->assertIsArray($result);
         $this->assertArrayHasKey('id', $result);
         $this->assertEquals('Test Invoice', $result['title']);
+    }
+
+    public function testCreateInvoiceWithItems(): void
+    {
+        $args = [
+            'counter_id' => self::COUNTER_INVOICES_ISSUED,
+            'title' => 'Issued Invoice With Items',
+            'dat_issue' => '2025-01-15',
+            'items' => [
+                [
+                    'descript' => 'Consulting',
+                    'qty' => 10,
+                    'unit' => 'h',
+                    'price' => 100,
+                    'discount' => 0,
+                    'vat_id' => self::VAT_22,
+                ],
+                [
+                    'descript' => 'License',
+                    'qty' => 1,
+                    'unit' => 'pcs',
+                    'price' => 500,
+                    'discount' => 10,
+                    'vat_id' => self::VAT_22,
+                ],
+            ],
+        ];
+        $event = $this->makeEvent('Documents.create_invoice', $args);
+        $this->listener->aiAssistantExecuteTool($event, 'Documents.create_invoice', $args);
+
+        $result = $event->getResult();
+        $this->assertIsArray($result);
+        $this->assertArrayHasKey('id', $result);
+        $this->assertEquals('Issued Invoice With Items', $result['title']);
+
+        $savedItems = TableRegistry::getTableLocator()->get('Documents.InvoicesItems')
+            ->find()
+            ->where(['invoice_id' => $result['id']])
+            ->toArray();
+        $this->assertCount(2, $savedItems);
+    }
+
+    public function testCreateInvoiceWithTaxes(): void
+    {
+        $args = [
+            'counter_id' => self::COUNTER_INVOICES_RECEIVED,
+            'title' => 'Received Invoice With Taxes',
+            'dat_issue' => '2025-01-15',
+            'taxes' => [
+                [
+                    'vat_id' => self::VAT_22,
+                    'vat_percent' => 22,
+                    'base' => 500,
+                ],
+            ],
+        ];
+        $event = $this->makeEvent('Documents.create_invoice', $args);
+        $this->listener->aiAssistantExecuteTool($event, 'Documents.create_invoice', $args);
+
+        $result = $event->getResult();
+        $this->assertIsArray($result);
+        $this->assertArrayHasKey('id', $result);
+        $this->assertEquals('Received Invoice With Taxes', $result['title']);
+
+        $savedTaxes = TableRegistry::getTableLocator()->get('Documents.InvoicesTaxes')
+            ->find()
+            ->where(['invoice_id' => $result['id']])
+            ->toArray();
+        $this->assertCount(1, $savedTaxes);
     }
 
     // -------------------------------------------------------------------------

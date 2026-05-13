@@ -112,7 +112,7 @@ class ActiveSyncTasks implements Syncroton_Data_IData
 
         if (!empty($task->completed)) {
             $entry->complete = 1;
-            $entry->dateCompleted = new DateTime($task->completed->setTimezone('UTC')->toDateTimeString()) ?? '';
+            $entry->dateCompleted = new DateTime($task->completed->setTimezone('UTC')->toDateTimeString(), new \DateTimeZone('UTC'));
         } else {
             $entry->complete = 0;
         }
@@ -142,10 +142,14 @@ class ActiveSyncTasks implements Syncroton_Data_IData
         $task->title = $_entry->subject;
         $task->priority = $_entry->importance;
 
-        if ($_entry->complete == 0) {
+        if ($_entry->complete === 0) {
             $task->completed = null;
-        } elseif (!empty($_entry->dateCompleted)) {
-            $task->completed = $_entry->dateCompleted;
+        } elseif ($_entry->complete === 1) {
+            if (!empty($_entry->dateCompleted)) {
+                $task->completed = $_entry->dateCompleted;
+            } else {
+                $task->completed = new \Cake\I18n\DateTime();
+            }
         }
 
         $task->descript = $_entry->body->data;
@@ -188,10 +192,14 @@ class ActiveSyncTasks implements Syncroton_Data_IData
         $task->title = $_entry->subject;
         $task->priority = $_entry->importance;
 
-        if ($_entry->complete == 0) {
+        if ($_entry->complete === 0) {
             $task->completed = null;
-        } elseif (!empty($_entry->dateCompleted)) {
-            $task->completed = $_entry->dateCompleted;
+        } elseif ($_entry->complete === 1) {
+            if (!empty($_entry->dateCompleted)) {
+                $task->completed = $_entry->dateCompleted;
+            } elseif (empty($task->completed)) {
+                $task->completed = new \Cake\I18n\DateTime();
+            }
         }
 
         $task->descript = $_entry->body->data;

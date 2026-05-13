@@ -334,7 +334,7 @@ $invoiceView = [
             'id' => 'invoice-total',
             'lines' => [[
                 'label' => __d('documents', 'Total') . ':',
-                'text' => $this->Number->currency($document->total),
+                'text' => $this->Number->currency((float)$document->total),
             ]],
         ],
         'signature' => [
