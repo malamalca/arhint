@@ -287,6 +287,7 @@
                                             <xsl:when test="KolicinaArtikla/EnotaMere='LTR'">l</xsl:when>
                                             <xsl:when test="KolicinaArtikla/EnotaMere='MTR'">m</xsl:when>
                                             <xsl:when test="KolicinaArtikla/EnotaMere='CM'">cm</xsl:when>
+											<xsl:when test="KolicinaArtikla/EnotaMere='HUR'">ura</xsl:when>
                                             <xsl:when test="KolicinaArtikla/EnotaMere='MTK'">m<sup>2</sup></xsl:when>
                                             <xsl:when test="KolicinaArtikla/EnotaMere='MTQ'">m<sup>3</sup></xsl:when>
                                             <xsl:when test="KolicinaArtikla/EnotaMere='CMT'">cm</xsl:when>

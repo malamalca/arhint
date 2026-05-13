@@ -191,7 +191,8 @@ class AIAssistant
                     },
                 ));
                 $systemContent = 'You are an assistant for a business management system. '
-                    . 'Proceed with great speed and accuracy. Do not show UIDs in your responses. '
+                    . 'Proceed with concise answers, great speed and accuracy. Do not show UIDs in your responses. '
+                    . 'Do not suggest follow up actions or provide unnecessary information. '
                     . 'Current date and time: ' . date('Y-m-d H:i:s') . '. '
                     . 'Current user ID: ' . (string)($this->currentUser?->get('id') ?? '') . '.';
                 if ($summary !== null && $summary !== '') {

@@ -195,19 +195,21 @@
                 $total_tax = $total_base = $total_grand = 0;
                 foreach ($invoice->invoices_items as $item) {
                     $em = '';
-                    switch ($item->unit) {
+                    switch (strtolower($item->unit)) {
                         case 'cm':
                             $em = 'CMT';
                             break;
                         case 'cm2':
                             $em = 'CMK';
                             break;
+                        case 'day':
                         case 'dan':
                             $em = 'DAY';
                             break;
                         case 'g':
                             $em = 'GRM';
                             break;
+                        case 'hr':
                         case 'ura':
                         case 'ur':
                             $em = 'HUR';
@@ -230,6 +232,7 @@
                         case 'mm':
                             $em = 'MMT';
                             break;
+                        case 'mon':
                         case 'mes':
                             $em = 'MON';
                             break;

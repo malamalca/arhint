@@ -73,10 +73,6 @@ class CrmAIToolsEvents implements EventListenerInterface
                     'type' => 'string',
                     'description' => 'Search term to filter contacts by name or phone number.',
                 ],
-                'kind' => [
-                    'type' => 'string',
-                    'description' => 'Contact kind: "C" for companies, "T" for persons. Defaults to "C".',
-                ],
             ],
             description: 'Searches CRM contacts by name or phone number. Returns a list of matching contacts '
                 . 'including their title, tax number, and primary email/phone/address.',
@@ -433,7 +429,8 @@ class CrmAIToolsEvents implements EventListenerInterface
         /** @var \Crm\Model\Table\ContactsTable $contactsTable */
         $contactsTable = TableRegistry::getTableLocator()->get('Crm.Contacts');
 
-        $filter = ['kind' => $arguments['kind'] ?? 'C'];
+        //$filter = ['kind' => $arguments['kind'] ?? 'C'];
+        $filter = [];
 
         if (!empty($arguments['search'])) {
             /** @var \Crm\Model\Table\ContactsSearchIndexTable $searchIndexTable */
