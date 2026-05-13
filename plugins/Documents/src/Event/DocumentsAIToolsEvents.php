@@ -705,6 +705,7 @@ class DocumentsAIToolsEvents implements EventListenerInterface
      */
     private function executeCreateInvoice(Event $event, array $arguments, mixed $currentUser): void
     {
+        /** @var \Documents\Model\Table\InvoicesTable $invoicesTable */
         $invoicesTable = TableRegistry::getTableLocator()->get('Documents.Invoices');
 
         $data = array_intersect_key(
@@ -729,6 +730,7 @@ class DocumentsAIToolsEvents implements EventListenerInterface
         }
         unset($data['items'], $data['taxes']);
 
+        /** @var \Documents\Model\Entity\Invoice $invoice */
         $invoice = $invoicesTable->newEntity($data, ['associated' => $associated]);
 
         if (!$currentUser->can('edit', $invoice)) {
@@ -745,12 +747,13 @@ class DocumentsAIToolsEvents implements EventListenerInterface
         }
 
         if (empty($invoice->doc_type)) {
+            /** @var \Documents\Model\Table\DocumentsCountersTable $countersTable */
             $countersTable = TableRegistry::getTableLocator()->get('Documents.DocumentsCounters');
+            /** @var \Documents\Model\Entity\DocumentsCounter $counter */
             $counter = $countersTable->get($invoice->counter_id);
             $invoice->doc_type = $counter->doc_type;
         }
 
-        // @phpstan-ignore-next-line
         $invoice->getNextCounterNo();
 
         if (!$invoice->getErrors() && $invoicesTable->save($invoice, ['associated' => $associated])) {
