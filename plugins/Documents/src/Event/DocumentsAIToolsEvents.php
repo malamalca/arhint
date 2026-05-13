@@ -75,7 +75,9 @@ class DocumentsAIToolsEvents implements EventListenerInterface
             arguments: [
                 'kind' => [
                     'type' => 'string',
-                    'description' => 'Kind: "Documents", "Invoices", or "TravelOrders". Omit for all.',
+                    'description' => 'Filter by document type. Valid values: "Invoices", "Documents", '
+                        . '"TravelOrders". Omit for all. The response includes the "direction" field '
+                        . '("issued" or "received") — pick the counter whose direction matches your need.',
                 ],
             ],
             description: 'Lists available document counters (number sequences) grouped by kind and direction. '
@@ -153,9 +155,32 @@ class DocumentsAIToolsEvents implements EventListenerInterface
                     'description' => 'Payment reference number.',
                 ],
                 'descript' => ['type' => 'string', 'description' => 'Internal notes or description.'],
+                'items' => [
+                    'type' => 'array',
+                    'description' => 'Array of line items (for issued invoices). Each item must have: '
+                        . 'descript (string), qty (number), unit (string), price (number), '
+                        . 'vat_id (string — UUID from the VAT rates table). '
+                        . 'Optional: discount (number, 0–100, default 0).',
+                ],
+                'taxes' => [
+                    'type' => 'array',
+                    'description' => 'Array of tax summaries (for received invoices). Each entry must have: '
+                        . 'vat_id (string — UUID from the VAT rates table), '
+                        . 'vat_percent (number), base (number).',
+                ],
             ],
-            description: 'Creates a new invoice draft. Auto-increments the counter and generates the document '
-                . 'number via the counter mask. Returns the new invoice id and number.',
+            description: 'Creates a new invoice with optional line items (issued) or tax summaries (received). '
+                . 'Auto-increments the counter and generates the document number via the counter mask. '
+                . 'Use Documents.get_vat_rates to look up valid vat_id values. '
+                . 'Returns the new invoice id and number.',
+        ));
+
+        $toolsList->append(new AITool(
+            name: 'Documents.get_vat_rates',
+            arguments: [],
+            description: 'Lists all VAT rates with id, descript (label), and percent. '
+                . 'Call this before Documents.create_invoice or Documents.add_invoice_item '
+                . 'to obtain valid vat_id UUIDs.',
         ));
 
         $toolsList->append(new AITool(
@@ -187,11 +212,12 @@ class DocumentsAIToolsEvents implements EventListenerInterface
                 ],
                 'vat_id' => [
                     'type' => 'string',
-                    'description' => 'UUID of the VAT rate to apply. Required.',
+                    'description' => 'UUID of the VAT rate (use Documents.get_vat_rates to find valid IDs). Required.',
                 ],
             ],
             description: 'Appends a line item to an invoice. Invoice totals are recalculated automatically '
-                . 'after save. Returns the new item id and computed net_total.',
+                . 'after save. Call Documents.get_vat_rates first to find the correct vat_id. '
+                . 'Returns the new item id and computed net_total.',
         ));
 
         $toolsList->append(new AITool(
@@ -472,6 +498,7 @@ class DocumentsAIToolsEvents implements EventListenerInterface
                 $arguments,
                 $currentUser,
             ),
+            'Documents.get_vat_rates' => $this->executeGetVatRates($event, $arguments, $currentUser),
             default => null,
         };
     }
@@ -551,10 +578,37 @@ class DocumentsAIToolsEvents implements EventListenerInterface
             ->orderBy(['kind', 'direction', 'title']);
 
         if (!empty($arguments['kind'])) {
-            $query->where(['DocumentsCounters.kind' => $arguments['kind']]);
+            $input = mb_strtolower($arguments['kind']);
+            $allKinds = $countersTable->find()->select(['kind'])->distinct()->all()->extract('kind')->toArray();
+            foreach ($allKinds as $dbKind) {
+                if ($input === mb_strtolower($dbKind) || $input === mb_strtolower(rtrim($dbKind, 's'))) {
+                    $query->where(['DocumentsCounters.kind' => $dbKind]);
+                    break;
+                }
+            }
         }
 
         $event->setResult($query->all()->toArray());
+    }
+
+    /**
+     * Execute Documents.get_vat_rates tool.
+     *
+     * @param \Cake\Event\Event $event Event object.
+     * @param array<mixed> $arguments Tool arguments.
+     * @param mixed $currentUser Current user.
+     * @return void
+     */
+    private function executeGetVatRates(Event $event, array $arguments, mixed $currentUser): void
+    {
+        $vatsTable = TableRegistry::getTableLocator()->get('Documents.Vats');
+        $vats = $vatsTable->find()
+            ->select(['id', 'descript', 'percent'])
+            ->where(['owner_id' => $currentUser->get('company_id')])
+            ->all()
+            ->toArray();
+
+        $event->setResult($vats);
     }
 
     /**
@@ -655,8 +709,8 @@ class DocumentsAIToolsEvents implements EventListenerInterface
 
         $data = array_intersect_key(
             $arguments,
-            array_flip(['counter_id', 'title', 'dat_issue', 'dat_service', 'dat_expire', 'pmt_type', 'pmt_ref',
-                'descript']),
+            array_flip(['counter_id', 'doc_type', 'title', 'dat_issue', 'dat_service', 'dat_expire', 'pmt_type', 'pmt_ref',
+                'descript', 'items', 'taxes']),
         );
         $data['owner_id'] = $currentUser->get('company_id');
         $data['user_id'] = $currentUser->get('id');
@@ -664,7 +718,18 @@ class DocumentsAIToolsEvents implements EventListenerInterface
             $data['dat_issue'] = Date::today();
         }
 
-        $invoice = $invoicesTable->newEntity($data);
+        $associated = [];
+        if (!empty($data['items'])) {
+            $data['invoices_items'] = $data['items'];
+            $associated[] = 'InvoicesItems';
+        }
+        if (!empty($data['taxes'])) {
+            $data['invoices_taxes'] = $data['taxes'];
+            $associated[] = 'InvoicesTaxes';
+        }
+        unset($data['items'], $data['taxes']);
+
+        $invoice = $invoicesTable->newEntity($data, ['associated' => $associated]);
 
         if (!$currentUser->can('edit', $invoice)) {
             $event->setResult(['error' => 'You are not authorized to create invoices.']);
@@ -679,10 +744,16 @@ class DocumentsAIToolsEvents implements EventListenerInterface
             return;
         }
 
+        if (empty($invoice->doc_type)) {
+            $countersTable = TableRegistry::getTableLocator()->get('Documents.DocumentsCounters');
+            $counter = $countersTable->get($invoice->counter_id);
+            $invoice->doc_type = $counter->doc_type;
+        }
+
         // @phpstan-ignore-next-line
         $invoice->getNextCounterNo();
 
-        if (!$invoice->getErrors() && $invoicesTable->save($invoice)) {
+        if (!$invoice->getErrors() && $invoicesTable->save($invoice, ['associated' => $associated])) {
             $event->setResult(['id' => $invoice->id, 'no' => $invoice->get('no'), 'title' => $invoice->get('title')]);
         } else {
             $event->setResult(['error' => 'Failed to create invoice.', 'errors' => $invoice->getErrors()]);
