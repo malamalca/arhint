@@ -95,4 +95,32 @@ return [
             'url' => null,
         ],
     ],
+
+    /*
+     * Embedding service configuration.
+     *
+     * - url (string)   The embedding API endpoint, e.g. "http://localhost:8001/embed"
+     * - timeout (int)  cURL timeout in seconds.
+     */
+    'Embedding' => [
+        'url' => '',
+        'timeout' => 30,
+    ],
+
+    /*
+     * Qdrant vector database configuration.
+     *
+     * - host (string)     Host and port, e.g. "127.0.0.1:6333"
+     * - scheme (string)   HTTP or HTTPS.
+     * - collection (string) Collection name.
+     * - api_key (string)  Optional API key.
+     * - timeout (int)     cURL timeout in seconds.
+     */
+    'Qdrant' => [
+        'host' => '',
+        'scheme' => 'http',
+        'collection' => 'events',
+        'api_key' => '',
+        'timeout' => 30,
+    ],
 ];

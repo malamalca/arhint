@@ -15,6 +15,7 @@ use JsonException;
  * @property string|null $user_id
  * @property string|null $action
  * @property string|null $descript
+ * @property \Cake\I18n\DateTime|null $ai_processed
  * @property \Cake\I18n\DateTime|null $created
  * @property \Cake\I18n\DateTime|null $modified
  * @property \App\Model\Entity\User $user
@@ -36,6 +37,7 @@ class Log extends Entity
         'user_id' => true,
         'action' => true,
         'descript' => true,
+        'ai_processed' => true,
         'created' => true,
         'modified' => true,
         'user' => true,

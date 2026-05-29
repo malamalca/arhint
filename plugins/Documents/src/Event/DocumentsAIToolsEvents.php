@@ -710,8 +710,19 @@ class DocumentsAIToolsEvents implements EventListenerInterface
 
         $data = array_intersect_key(
             $arguments,
-            array_flip(['counter_id', 'doc_type', 'title', 'dat_issue', 'dat_service', 'dat_expire', 'pmt_type', 'pmt_ref',
-                'descript', 'items', 'taxes']),
+            array_flip([
+                'counter_id',
+                'doc_type',
+                'title',
+                'dat_issue',
+                'dat_service',
+                'dat_expire',
+                'pmt_type',
+                'pmt_ref',
+                'descript',
+                'items',
+                'taxes',
+            ]),
         );
         $data['owner_id'] = $currentUser->get('company_id');
         $data['user_id'] = $currentUser->get('id');

@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Event;
 
+use App\Model\Table\LogsTable;
 use App\View\Helper\ArhintHelper;
 use App\View\Widget\DurationWidget;
 use ArrayObject;
@@ -12,9 +13,11 @@ use Cake\Event\Event;
 use Cake\Event\EventListenerInterface;
 use Cake\I18n\DateTime;
 use Cake\ORM\TableRegistry;
+use Cake\Queue\QueueManager;
 use Cake\Routing\Router;
 use Cake\Utility\Inflector;
 use Cake\View\View;
+use DateTimeInterface;
 use Documents\Model\Table\DocumentsTable;
 use Documents\Model\Table\InvoicesTable;
 use Exception;
@@ -246,6 +249,47 @@ class AppEvents implements EventListenerInterface
                 $this->attachments = null;
             }
         }
+
+        // Queue a Job which will process the log entry with AI.
+        // Supports both generic Logs table and Projects plugin logs.
+        $logTables = [LogsTable::class, 'Projects\\Model\\Table\\ProjectsLogsTable'];
+        if (in_array(get_class($event->getSubject()), $logTables)) {
+            // Trigger on new entries, or when core event data actually changes.
+            // Skips purely timestamp/audit-only saves to avoid burning AI tokens unnecessarily.
+            if ($entity->isNew() || $entity->isDirty('descript') || $entity->isDirty('action')) {
+                // Convert entity to scalar-friendly array for queue serialization.
+                $scalarEntity = $this->entityToScalars($entity);
+
+                QueueManager::push('AiProcessLog', [
+                    'user_id' => (string)$entity->get('user_id'),
+                    'entity' => $scalarEntity,
+                    'job_id' => (string)$entity->get('id'),
+                ]);
+            }
+        }
+    }
+
+    /**
+     * Recursively flatten an entity to scalars only.
+     *
+     * Queue serialization requires scalar values, so DateTime objects and nested
+     * entities must be converted to plain strings/numbers.
+     *
+     * @param \Cake\Datasource\EntityInterface $entity The entity to flatten.
+     * @return array<string, mixed>
+     */
+    private function entityToScalars(EntityInterface $entity): array
+    {
+        $data = $entity->toArray();
+        array_walk_recursive($data, static function (&$value): void {
+            if ($value instanceof DateTimeInterface) {
+                $value = $value->format('Y-m-d H:i:s');
+            } elseif (is_object($value) && method_exists($value, '__toString')) {
+                $value = (string)$value;
+            }
+        });
+
+        return $data;
     }
 
     /**

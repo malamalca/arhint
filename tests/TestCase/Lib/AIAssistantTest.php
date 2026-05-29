@@ -5,6 +5,7 @@ namespace App\Test\TestCase\Lib;
 
 use App\Lib\AIAssistant;
 use App\Lib\AITool;
+use App\Model\Entity\User;
 use Cake\TestSuite\TestCase;
 use ReflectionClass;
 
@@ -26,6 +27,32 @@ class AIAssistantTest extends TestCase
         $this->assertSame('assistant', $storedHistory[0]['role']);
         $this->assertStringStartsWith('Conversation summary: ', (string)$storedHistory[0]['content']);
         $this->assertSame('User message 12', $storedHistory[8]['content']);
+    }
+
+    public function testNativeToolCallsEnabledForOpenAIByDefault(): void
+    {
+        $user = new User();
+        $user->set('ai_assistant', (object)['provider' => 'openai']);
+        $assistant = new AIAssistant($user);
+
+        $reflection = new ReflectionClass($assistant);
+        $method = $reflection->getMethod('shouldUseNativeToolCalls');
+        $method->setAccessible(true);
+
+        $this->assertTrue($method->invoke($assistant));
+    }
+
+    public function testNativeToolCallsCanBeEnabledForNonOpenAIProviders(): void
+    {
+        $user = new User();
+        $user->set('ai_assistant', (object)['provider' => 'local', 'native_tool_calls' => true]);
+        $assistant = new AIAssistant($user);
+
+        $reflection = new ReflectionClass($assistant);
+        $method = $reflection->getMethod('shouldUseNativeToolCalls');
+        $method->setAccessible(true);
+
+        $this->assertTrue($method->invoke($assistant));
     }
 
     public function testSelectToolsForRequestPrioritizesRelevantModuleAndCapsList(): void
@@ -78,7 +105,7 @@ class AIAssistantTest extends TestCase
 
         $this->assertSame('Returned 4 items', $result['summary']);
         $this->assertSame(4, $result['count']);
-        $this->assertCount(3, $result['items']);
+        $this->assertCount(4, $result['items']);
         $this->assertSame('Alpha', $result['items'][0]['title']);
     }
 

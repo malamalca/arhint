@@ -499,4 +499,32 @@ return [
             'queue' => 'default',
         ],
     ],
+
+    /*
+     * Embedding service configuration.
+     *
+     * - url (string)   The embedding API endpoint, e.g. "http://localhost:8001/embed"
+     * - timeout (int)  cURL timeout in seconds (default 30).
+     */
+    'Embedding' => [
+        'url' => 'http://127.0.0.1:8000/embed',
+        'timeout' => 30,
+    ],
+
+    /*
+     * Qdrant vector database configuration.
+     *
+     * - host (string)     Host and port, e.g. "127.0.0.1:6333"
+     * - scheme (string)   HTTP or HTTPS (default "http")
+     * - collection (string) Default collection name (default "events")
+     * - api_key (string)  Optional API key for authenticated clusters
+     * - timeout (int)     cURL timeout in seconds (default 30).
+     */
+    'Qdrant' => [
+        'host' => '192.168.88.30:6333',
+        'scheme' => 'http',
+        'collection' => 'events',
+        'api_key' => '',
+        'timeout' => 30,
+    ],
 ];

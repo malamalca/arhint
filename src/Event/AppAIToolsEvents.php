@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Event;
 
 use App\Lib\AITool;
+use App\Lib\QdrantSearchTool;
 use ArrayObject;
 use Cake\Event\Event;
 use Cake\Event\EventListenerInterface;
@@ -61,6 +62,24 @@ class AppAIToolsEvents implements EventListenerInterface
             ],
             description: 'Lists users in the current company. Returns id, name, username, email, and active status.',
         ));
+
+        $toolsList->append(new AITool(
+            name: 'App.qdrant_search',
+            arguments: [
+                'query' => [
+                    'type' => 'string',
+                    'description' => 'Natural language question to answer using project intelligence logs. ' .
+                        'e.g. "What is going on with the current project?" or "Are there any blockers?"',
+                ],
+                'entity_id' => [
+                    'type' => 'string',
+                    'description' => 'UUID of the related entity to filter by '
+                        . '(e.g. project UUID). Optional but recommended.',
+                ],
+            ],
+            description: 'Searches project intelligence logs using semantic similarity and returns an AI-synthesized ' .
+                'answer based on recent activity, risks, blockers, and status updates.',
+        ));
     }
 
     /**
@@ -97,6 +116,31 @@ class AppAIToolsEvents implements EventListenerInterface
             }
 
             $event->setResult($query->all()->toArray());
+        }
+
+        if ($tool === 'App.qdrant_search') {
+            $searchTool = new QdrantSearchTool($currentUser);
+
+            // Build Qdrant filter if entity_id is provided.
+            $filter = [];
+            if (!empty($arguments['entity_id'])) {
+                $filter = [
+                    'must' => [[
+                        'key' => 'log_foreign_id',
+                        'match' => ['value' => (string)$arguments['entity_id']],
+                    ]],
+                ];
+            }
+
+            $result = $searchTool->searchAndAnalyze(
+                query: (string)($arguments['query'] ?? ''),
+                filter: $filter,
+            );
+
+            $event->setResult([
+                'answer' => $result,
+                'source' => 'Qdrant semantic intelligence search',
+            ]);
         }
     }
 }
