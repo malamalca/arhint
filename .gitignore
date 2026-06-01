@@ -35,6 +35,7 @@ Thumbs.db
 #######################
 # PHPUnit
 *.lock
+!composer.lock
 *.cache
 .phpunit.cache
 tests.sqlite
