@@ -17,7 +17,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php-version: ['8.1']
+        php-version: ['8.2']
 
     steps:
     - name: Setup Node.js 24
@@ -67,7 +67,7 @@ jobs:
       run: composer run-script post-install-cmd --no-interaction
 
     - name: Setup problem matchers for PHPUnit
-      if: matrix.php-version == '8.1'
+      if: matrix.php-version == '8.2'
       run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
 
     - name: Run PHPUnit
@@ -94,7 +94,7 @@ jobs:
     - name: Setup PHP
       uses: shivammathur/setup-php@v2
       with:
-        php-version: '8.1'
+        php-version: '8.2'
         extensions: mbstring, intl
         tools: cs2pr
         coverage: none
