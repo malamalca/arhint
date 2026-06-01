@@ -131,7 +131,6 @@ class QdrantSearchTool
         $response = curl_exec($ch);
         $httpCode = (int)curl_getinfo($ch, CURLINFO_HTTP_CODE);
         $curlError = curl_error($ch);
-        curl_close($ch);
 
         if ($response === false || $httpCode !== 200) {
             return "Failed to get intelligence analysis from AI service (HTTP $httpCode: $curlError).";

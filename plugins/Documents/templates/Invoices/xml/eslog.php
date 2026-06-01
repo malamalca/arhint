@@ -71,7 +71,7 @@
                     'VrstaBesedila' => 'ZZZ',
                     'Besedilo' => [
                         'Tekst1' => 'TIP_DOKUMENTA',
-                        'Tekst2' => $docTypes[$invoice->doc_type],
+                        'Tekst2' => $docTypes[$invoice->doc_type ?? ''],
                     ],
                 ],
                 2 => [

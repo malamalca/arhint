@@ -219,6 +219,7 @@ return [
         'trace' => true,
         'ignoredDeprecationPaths' => [
             'vendor/cakephp/migrations/src/Shim/MigrationAdapter.php',
+            'vendor/sabre/vobject/lib/**/*.php',
         ],
     ],
 

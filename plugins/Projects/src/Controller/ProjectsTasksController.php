@@ -58,7 +58,7 @@ class ProjectsTasksController extends AppController
         ]);
 
         $tasksCount = $this->ProjectsTasks->find('tasksCount', $project->id, $this->getCurrentUser(), clone $filter)
-            ->first()
+            ->firstOrFail()
             ->toArray();
 
         /** @var \App\Model\Table\UsersTable $UsersTable */

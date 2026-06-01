@@ -224,7 +224,7 @@ class ExpensesController extends AppController
                     'payments_amount' => $paymentsQuery->func()->sum('Payments.amount'),
                 ])
                 ->contain('Payments')
-                ->where(['PaymentsExpenses.expense_id' => $paymentsQuery->newExpr()->add('Expenses.id')])
+                ->where(['PaymentsExpenses.expense_id' => $paymentsQuery->expr()->add('Expenses.id')])
                 ->groupBy('PaymentsExpenses.expense_id');
 
             $query = $this->Authorization->applyScope($this->Expenses->find(), 'index');
@@ -242,7 +242,7 @@ class ExpensesController extends AppController
                     'Invoices.counter_id IN' => (array)$filter['counter'],
                 ])
                 ->orderBy('Expenses.dat_happened DESC')
-                ->having($query->newExpr()->add('ABS(Expenses.total - COALESCE(payments_total, 0)) > 0.01'));
+                ->having($query->expr()->add('ABS(Expenses.total - COALESCE(payments_total, 0)) > 0.01'));
             $data = $query->all();
 
             $report = new ArhintReport(

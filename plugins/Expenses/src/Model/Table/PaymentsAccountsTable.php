@@ -126,7 +126,7 @@ class PaymentsAccountsTable extends Table
      *
      * @param string $ownerId Company Id.
      * @param bool $showActiveOnly Show only active accounts.
-     * @return array<\Expenses\Model\Entity\PaymentsAccount>
+     * @return array<string, mixed>
      */
     public function listForOwner(string $ownerId, bool $showActiveOnly = false): array
     {

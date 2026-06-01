@@ -35,7 +35,9 @@ class ContactsEmailsController extends AppController
             if (!$email->getErrors() && $this->ContactsEmails->save($email)) {
                 /** @var \Crm\Model\Entity\Contact $contact */
                 $contact = $this->ContactsEmails->Contacts->get($email->contact_id);
-                $this->ContactsEmails->Contacts->touch($contact);
+                /** @var \Cake\ORM\Behavior\TimestampBehavior $timestamp */
+                $timestamp = $this->ContactsEmails->Contacts->getBehavior('Timestamp');
+                $timestamp->touch($contact);
                 $this->ContactsEmails->Contacts->save($contact);
 
                 if ($this->getRequest()->is('ajax')) {

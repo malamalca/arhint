@@ -5,6 +5,7 @@ namespace Crm\Controller;
 
 use Cake\Core\Configure;
 use Cake\Http\Exception\NotFoundException;
+use Cake\Http\Response;
 use Cake\ORM\TableRegistry;
 use SoapClient;
 use SoapFault;
@@ -347,9 +348,9 @@ class ContactsController extends AppController
      *
      * @param string $id Contacts id.
      * @param bool $syncable Syncable flag.
-     * @return object Response.
+     * @return \Cake\Http\Response|null
      */
-    public function setSyncable(string $id, bool $syncable): object
+    public function setSyncable(string $id, bool $syncable): ?Response
     {
         if ($this->getRequest()->is('ajax')) {
             if (!empty($id)) {

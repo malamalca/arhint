@@ -1146,7 +1146,6 @@ class AIAssistant
         curl_setopt($ch, CURLOPT_TIMEOUT, $timeoutSeconds);
         $result = curl_exec($ch);
         $curlError = curl_error($ch);
-        curl_close($ch);
 
         return $result !== false && $curlError === '';
     }
@@ -1232,7 +1231,6 @@ class AIAssistant
         $curlErrno = curl_errno($ch);
         $curlError = curl_error($ch);
         $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        curl_close($ch);
 
         if ($response === false) {
             throw new Exception(sprintf(

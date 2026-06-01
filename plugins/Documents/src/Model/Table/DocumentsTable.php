@@ -275,7 +275,7 @@ class DocumentsTable extends Table
                 'end' => $query->func()->max('Documents.dat_issue', ['string']),
             ])
             ->where(['Documents.counter_id' => $counterId]);
-        $ret = $query->first()->toArray();
+        $ret = $query->firstOrFail()->toArray();
 
         if (empty($ret['start'])) {
             $ret['start'] = new Date();

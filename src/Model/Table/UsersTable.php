@@ -283,7 +283,7 @@ class UsersTable extends Table
      *
      * @param string $companyId Company id
      * @param array<string, mixed> $options Array of options
-     * @return array<\App\Model\Entity\User>
+     * @return array<string, mixed>
      */
     public function fetchForCompany(string $companyId, array $options = []): array
     {

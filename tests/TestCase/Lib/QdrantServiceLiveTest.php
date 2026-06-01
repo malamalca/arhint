@@ -174,7 +174,6 @@ class QdrantServiceLiveTest extends TestCase
         curl_setopt($ch, CURLOPT_TIMEOUT, 5);
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 3);
         $response = curl_exec($ch);
-        curl_close($ch);
 
         if ($response === false) {
             $this->markTestSkipped('Qdrant server is not available at ' . $this->host);
@@ -235,7 +234,6 @@ class QdrantServiceLiveTest extends TestCase
 
         $response = curl_exec($ch);
         $httpCode = (int)curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        curl_close($ch);
 
         return $response !== false && $httpCode === 200;
     }
@@ -255,6 +253,5 @@ class QdrantServiceLiveTest extends TestCase
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'DELETE');
         curl_setopt($ch, CURLOPT_TIMEOUT, 10);
         curl_exec($ch);
-        curl_close($ch);
     }
 }

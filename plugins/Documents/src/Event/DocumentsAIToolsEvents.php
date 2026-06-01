@@ -852,10 +852,8 @@ class DocumentsAIToolsEvents implements EventListenerInterface
             $arguments,
             array_flip(['descript', 'qty', 'unit', 'price', 'discount', 'vat_id']),
         );
-        // @phpstan-ignore argument.templateType
-        $itemsTable->patchEntity($item, $updateData);
 
-        // @phpstan-ignore argument.templateType
+        $itemsTable->patchEntity($item, $updateData);
         if (!$item->getErrors() && $itemsTable->save($item)) {
             $event->setResult([
                 'id' => $item->id,
@@ -1315,8 +1313,6 @@ class DocumentsAIToolsEvents implements EventListenerInterface
 
                 return;
         }
-
-        // @phpstan-ignore argument.templateType
         if ($travelOrdersTable->save($travelOrder)) {
             $event->setResult(['id' => $travelOrder->id, 'status' => $travelOrder->get('status')]);
         } else {
@@ -1398,6 +1394,7 @@ class DocumentsAIToolsEvents implements EventListenerInterface
         }
 
         // Build PDF attachment name
+        /** @var \Cake\Datasource\EntityInterface $doc */
         $doc = $documentList[0];
         $attachmentName = (string)mb_ereg_replace("([^\w\s\d\-_~,;\[\]\(\).])", '', (string)$doc->title);
         $attachmentName = (string)mb_ereg_replace("([\.]{2,})", '', $attachmentName);
@@ -1424,6 +1421,7 @@ class DocumentsAIToolsEvents implements EventListenerInterface
                 ->all();
 
             foreach ($docAttachments as $attachment) {
+                /** @var \App\Model\Entity\Attachment $attachment */
                 $attachments[$attachment->filename] = [
                     'file' => $attachment->getFilePath(),
                 ];

@@ -139,7 +139,7 @@ $invoiceView = [
                         'action' => 'export',
                         $document->id,
                         Text::slug(
-                            mb_strtoupper($docTypes[$document->documents_counter->doc_type] ?? __d('documents', 'Unknown Type')) . ' - ' .
+                            mb_strtoupper($docTypes[$document->documents_counter->doc_type ?? ''] ?? __d('documents', 'Unknown Type')) . ' - ' .
                             $document->title,
                         ) . '.pdf',
                         '?' => ['download' => 1],
@@ -152,7 +152,7 @@ $invoiceView = [
                         'action' => 'export',
                         $document->id,
                         Text::slug(
-                            mb_strtoupper($docTypes[$document->documents_counter->doc_type] ?? __d('documents', 'Unknown Type')) . ' - ' .
+                            mb_strtoupper($docTypes[$document->documents_counter->doc_type ?? ''] ?? __d('documents', 'Unknown Type')) . ' - ' .
                             $document->title,
                         ) . '.sepa.xml',
                         '?' => ['download' => 1],
@@ -165,7 +165,7 @@ $invoiceView = [
                         'action' => 'export',
                         $document->id,
                         Text::slug(
-                            mb_strtoupper($docTypes[$document->documents_counter->doc_type] ?? __d('documents', 'Unknown Type')) . ' - ' .
+                            mb_strtoupper($docTypes[$document->documents_counter->doc_type ?? ''] ?? __d('documents', 'Unknown Type')) . ' - ' .
                             $document->title,
                         ) . '.eslog.xml',
                         '?' => ['download' => 1],
@@ -178,7 +178,7 @@ $invoiceView = [
                         'action' => 'export',
                         $document->id,
                         Text::slug(
-                            mb_strtoupper($docTypes[$document->documents_counter->doc_type] ?? __d('documents', 'Unknown Type')) . ' - ' .
+                            mb_strtoupper($docTypes[$document->documents_counter->doc_type ?? ''] ?? __d('documents', 'Unknown Type')) . ' - ' .
                             $document->title,
                         ) . '.eslog20.xml',
                         '?' => ['download' => 1],

@@ -394,7 +394,7 @@ class TravelOrdersTable extends Table
                 'end' => $query->func()->max('TravelOrders.dat_task', ['string']),
             ])
             ->where(['TravelOrders.counter_id' => $counterId]);
-        $ret = $query->first()->toArray();
+        $ret = $query->firstOrFail()->toArray();
 
         if (empty($ret['start'])) {
             $ret['start'] = new Date();

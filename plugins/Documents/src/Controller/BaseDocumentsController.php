@@ -15,6 +15,7 @@ use Cake\Utility\Text;
 use Documents\Form\EmailForm;
 use Documents\Lib\DocumentsSignatureInfo;
 use Documents\Lib\DocumentsSigner;
+use Documents\Model\Entity\DocumentsCounter;
 use Exception;
 use InvalidArgumentException;
 
@@ -58,9 +59,9 @@ class BaseDocumentsController extends AppController
     /**
      * Index method
      *
-     * @return \Cake\Http\Response|null
+     * @return \Documents\Model\Entity\DocumentsCounter|\Cake\Http\Response|null
      */
-    public function index(): ?Response
+    public function index(): DocumentsCounter|Response|null
     {
         $filter = (array)$this->getRequest()->getQuery();
 
@@ -433,6 +434,7 @@ class BaseDocumentsController extends AppController
         if (!empty($data)) {
             $options = ['download' => $this->getRequest()->getQuery('download')];
             if (count($documents) == 1) {
+                /** @var \Cake\Datasource\EntityInterface $first */
                 $first = reset($documents);
                 $options['filename'] = Text::slug($name ?? $first->title);
             }

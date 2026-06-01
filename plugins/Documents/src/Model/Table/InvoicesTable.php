@@ -324,7 +324,7 @@ class InvoicesTable extends Table
                 'end' => $query->func()->max('Invoices.dat_issue', ['string']),
             ])
             ->where(['Invoices.counter_id' => $counterId]);
-        $ret = $query->first()->toArray();
+        $ret = $query->firstOrFail()->toArray();
 
         if (empty($ret['start'])) {
             $ret['start'] = new Date();

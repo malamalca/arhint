@@ -77,6 +77,7 @@ class TasksEvents implements EventListenerInterface
             ];
 
             foreach ($tasks as $task) {
+                /** @var \Tasks\Model\Entity\Task $task */
                 $panels['panels']['tasks']['lines'][] =
                     $view->Lil->panels(['panels' => [TasksUtils::taskPanel($task, $view)]]);
             }
@@ -342,7 +343,7 @@ class TasksEvents implements EventListenerInterface
                         $event->setResult(['error' => 'You are not authorized to edit this task.']);
                         break;
                     }
-                    // @phpstan-ignore argument.templateType
+
                     $entity = $tasksTable->patchEntity($entity, $arguments);
                 } else {
                     $data = $arguments;

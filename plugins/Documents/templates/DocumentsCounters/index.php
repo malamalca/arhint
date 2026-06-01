@@ -79,7 +79,7 @@ $countersIndex = [
 foreach ($counters as $counter) {
     $countersIndex['table']['body']['rows'][]['columns'] = [
         'title' => $this->Html->link($counter->title, ['controller' => $counter->kind, 'action' => 'index', '?' => ['counter' => $counter->id]]),
-        'doc_type' => isset($documentTypes[$counter->doc_type]) ? h($documentTypes[$counter->doc_type]) : __d('documents', 'N/A'),
+        'doc_type' => isset($documentTypes[$counter->doc_type ?? '']) ? h($documentTypes[$counter->doc_type ?? '']) : __d('documents', 'N/A'),
         'no' => [
             'parameters' => ['class' => 'right-align'],
             'html' => $this->Number->precision((float)$counter->counter, 0),

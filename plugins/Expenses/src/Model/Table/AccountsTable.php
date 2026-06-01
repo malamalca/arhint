@@ -104,6 +104,7 @@ class AccountsTable extends Table
      */
     public function listForSelect(): array
     {
+        /** @var array<int, string> $accounts */
         $accounts = $this->find('treeList', [
             'keyPath' => 'id',
             'valuePath' => 'name',

@@ -148,7 +148,7 @@ class BookingLinker
      * Returns an empty array when all existing entries are already in a
      * locked/posted order (caller should not show the edit form).
      *
-     * @param \Cake\Collection\CollectionInterface<\Expenses\Model\Entity\BookingOrderEntry> $existing Existing entries.
+     * @param \Cake\Collection\CollectionInterface<\Cake\Datasource\EntityInterface> $existing Existing entries.
      * @param bool $hasLocked Whether any existing entry belongs to a locked/posted order.
      * @param \Cake\Datasource\EntityInterface $entity Source entity.
      * @param string $model Model name.

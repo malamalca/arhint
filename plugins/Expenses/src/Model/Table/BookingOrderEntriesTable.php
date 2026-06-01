@@ -173,7 +173,7 @@ class BookingOrderEntriesTable extends Table
      *
      * @param string $model     Entity model name (e.g. 'BankStatementEntry').
      * @param string $foreignId Source entity primary key.
-     * @return \Cake\Datasource\ResultSetInterface<\Expenses\Model\Entity\BookingOrderEntry>
+     * @return \Cake\Datasource\ResultSetInterface<\Cake\Datasource\EntityInterface>
      */
     public function entriesForEntity(string $model, string $foreignId): ResultSetInterface
     {
@@ -270,7 +270,6 @@ class BookingOrderEntriesTable extends Table
         }
 
         if (!empty($entriesToSave)) {
-            // @phpstan-ignore argument.templateType
             $this->saveMany($entriesToSave);
         }
     }

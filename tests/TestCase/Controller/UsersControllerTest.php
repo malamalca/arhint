@@ -106,7 +106,7 @@ class UsersControllerTest extends TestCase
         $model = $this->getMockForModel('Users', ['sendResetEmail']);
         $model->expects($this->once())
         ->method('sendResetEmail')
-        ->will($this->returnValue(true));
+        ->willReturn(true);
 
         $this->post('/users/reset', ['email' => 'admin@arhim.si']);
         $this->assertResponseOk();

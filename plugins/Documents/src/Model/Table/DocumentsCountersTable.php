@@ -76,7 +76,7 @@ class DocumentsCountersTable extends Table
             $data = $this->find()
                 ->select(['id', 'counter', 'mask'])
                 ->where(['id' => $id])
-                ->first()
+                ->firstOrFail()
                 ->toArray();
         } elseif (is_array($id)) {
             $data = $id;

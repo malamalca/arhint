@@ -291,7 +291,6 @@ TXT],
         $response = curl_exec($ch);
         $lastHttpCode = (int)curl_getinfo($ch, CURLINFO_HTTP_CODE);
         $lastError = curl_error($ch);
-        curl_close($ch);
 
         if ($response === false || $lastHttpCode !== 200) {
             return '';

@@ -113,6 +113,7 @@ class CrmCommand extends Command
             if ($answer != 'S') {
                 // this is the contact we want to keep
                 $keepContact = $sameContacts->take(1, (int)$answer)->first();
+                assert($keepContact !== null);
 
                 $io->info('KEEP CONTACT DATA:');
                 $io->info('Title: ' . $keepContact->title);

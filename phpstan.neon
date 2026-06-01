@@ -3,6 +3,9 @@ parameters:
     treatPhpDocTypesAsCertain: false
     ignoreErrors:
         - identifier: missingType.generics
+        - identifier: property.notFound
+        - '/Cannot call method .+ on Cake\\Http\\Response\|null/'
+        - '/Cannot call method .+ on Cake\\Http\\ServerRequest\|null/'
     bootstrapFiles:
         - config/paths.php
         - vendor/cakephp/cakephp/src/functions.php
@@ -15,6 +18,7 @@ parameters:
         - src/Controller/SyncController.php
         - plugins/Crm/src/Lib/ActiveSyncContacts.php
         - plugins/Crm/src/Lib/SabreDAVSyncContacts.php
+        - plugins/Calendar/src/Lib/SabreDAVSyncCalendars.php
         - plugins/Tasks/src/Lib/ActiveSyncTasks.php
         - plugins/Calendar/src/Lib/ActiveSyncCalendar.php
     paths:

@@ -124,7 +124,7 @@ class DocumentsTemplatesTable extends Table
      * List templates by kind for specified owner.
      *
      * @param string $ownerId User Id.
-     * @return array<\Documents\Model\Entity\DocumentsTemplate>
+     * @return array<string, mixed>
      */
     public function findForOwner(string $ownerId): array
     {

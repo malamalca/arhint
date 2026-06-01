@@ -91,7 +91,7 @@ class InvoicesExport
      * export method
      *
      * @param string $ext Export extension.
-     * @param array<\Documents\Model\Entity\Invoice> $invoices Array of invoices
+     * @param array<\Cake\Datasource\EntityInterface|array<string, mixed>|null> $invoices Array of invoices
      * @return mixed
      */
     public function export(string $ext, array $invoices): mixed
@@ -119,6 +119,9 @@ class InvoicesExport
                 $responseHtml = '';
 
                 foreach ($invoices as $invoice) {
+                    if (!is_object($invoice)) {
+                        continue;
+                    }
                     $this->view->set('invoices', [0 => $invoice]);
 
                     $this->view->setTemplate('generic');
@@ -164,7 +167,10 @@ class InvoicesExport
 
                 if (in_array($ext, ['html', 'xml', 'eslog'])) {
                     if ($ext == 'html') {
-                        $result = $this->toHtml($invoices[0], $responseHtml);
+                        $firstInvoice = $invoices[0] ?? null;
+                        if (is_object($firstInvoice)) {
+                            $result = $this->toHtml($firstInvoice, $responseHtml);
+                        }
                     } else {
                         $result = $responseHtml;
                     }
@@ -250,11 +256,11 @@ class InvoicesExport
     /**
      * Convert XML document to HTML
      *
-     * @param object $document Document entity.
+     * @param object|array<string, mixed> $document Document entity.
      * @param string $eslogXml Document XML in eSlog format.
      * @return mixed
      */
-    private function toHtml(object $document, string $eslogXml): mixed
+    private function toHtml(object|array $document, string $eslogXml): mixed
     {
         // load stylesheet for specified document
         $xsl = new DOMDocument();
@@ -262,7 +268,7 @@ class InvoicesExport
             $xsl->loadXml($document->tpl_body->body, LIBXML_NOCDATA);
         } else {
             $xsltTpl = Plugin::path('Documents') . DS . 'webroot' . DS . 'doc_default.xslt';
-            if (get_class($document) == Invoice::class) {
+            if (is_object($document) && get_class($document) == Invoice::class) {
                 $xsltTpl = Plugin::path('Documents') . DS . 'webroot' . DS . 'doc_eslog.xslt';
             }
             $xsl->load($xsltTpl, LIBXML_NOCDATA);
@@ -275,15 +281,17 @@ class InvoicesExport
         $xml->loadXML($eslogXml);
 
         $result = $xslt->transformToXml($xml);
-        $event = new Event(
-            'Documents.Invoices.Export.Html',
-            $document,
-            [$result],
-        );
-        EventManager::instance()->dispatch($event);
-        $eventResult = $event->getResult();
-        if (!empty($eventResult)) {
-            $result = $eventResult;
+        if (is_object($document)) {
+            $event = new Event(
+                'Documents.Invoices.Export.Html',
+                $document,
+                [$result],
+            );
+            EventManager::instance()->dispatch($event);
+            $eventResult = $event->getResult();
+            if (!empty($eventResult)) {
+                $result = $eventResult;
+            }
         }
         file_put_contents(TMP . 'export_debug.html', $result);
 

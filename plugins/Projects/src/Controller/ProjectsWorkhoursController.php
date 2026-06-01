@@ -60,7 +60,7 @@ class ProjectsWorkhoursController extends AppController
         ]);
 
         $workhourCount = $this->ProjectsWorkhours->find('workhoursCount', $this->getCurrentUser(), clone $filter)
-            ->first()
+            ->firstOrFail()
             ->toArray();
 
         /** @var \App\Model\Table\UsersTable $UsersTable */

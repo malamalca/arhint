@@ -38,7 +38,9 @@ class ContactsAddressesController extends AppController
             if (!$address->getErrors() && $this->ContactsAddresses->save($address)) {
                 /** @var \Crm\Model\Entity\Contact $contact */
                 $contact = $this->ContactsAddresses->Contacts->get($address->contact_id);
-                $this->ContactsAddresses->Contacts->touch($contact);
+                /** @var \Cake\ORM\Behavior\TimestampBehavior $timestamp */
+                $timestamp = $this->ContactsAddresses->Contacts->getBehavior('Timestamp');
+                $timestamp->touch($contact);
                 $this->ContactsAddresses->Contacts->save($contact);
 
                 if ($this->getRequest()->is('ajax')) {

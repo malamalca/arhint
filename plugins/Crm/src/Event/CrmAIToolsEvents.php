@@ -746,9 +746,9 @@ class CrmAIToolsEvents implements EventListenerInterface
                 $updateData[$field] = $arguments[$field];
             }
         }
+
         // @phpstan-ignore argument.templateType
         $contactsTable->patchEntity($contact, $updateData);
-
         // @phpstan-ignore argument.templateType
         if (!$contact->getErrors() && $contactsTable->save($contact)) {
             $event->setResult(['id' => $contact->id, 'title' => $contact->get('title')]);
@@ -816,11 +816,7 @@ class CrmAIToolsEvents implements EventListenerInterface
 
             return;
         }
-
-        // @phpstan-ignore argument.templateType
         $table->patchEntity($entry, array_intersect_key($arguments, array_flip(['no', 'kind', 'primary'])));
-
-        // @phpstan-ignore argument.templateType
         if (!$entry->getErrors() && $table->save($entry)) {
             $this->touchContact($table, $entry->contact_id);
             $event->setResult(['id' => $entry->id, 'no' => $entry->get('no')]);
@@ -921,11 +917,7 @@ class CrmAIToolsEvents implements EventListenerInterface
 
             return;
         }
-
-        // @phpstan-ignore argument.templateType
         $table->patchEntity($entry, array_intersect_key($arguments, array_flip(['email', 'kind', 'primary'])));
-
-        // @phpstan-ignore argument.templateType
         if (!$entry->getErrors() && $table->save($entry)) {
             $this->touchContact($table, $entry->contact_id);
             $event->setResult(['id' => $entry->id, 'email' => $entry->get('email')]);
@@ -1030,8 +1022,6 @@ class CrmAIToolsEvents implements EventListenerInterface
 
             return;
         }
-
-        // @phpstan-ignore argument.templateType
         $table->patchEntity(
             $entry,
             array_intersect_key(
@@ -1039,8 +1029,6 @@ class CrmAIToolsEvents implements EventListenerInterface
                 array_flip(['street', 'zip', 'city', 'country', 'country_code', 'kind', 'primary']),
             ),
         );
-
-        // @phpstan-ignore argument.templateType
         if (!$entry->getErrors() && $table->save($entry)) {
             $this->touchContact($table, $entry->contact_id);
             $event->setResult(['id' => $entry->id, 'street' => $entry->get('street')]);
@@ -1143,14 +1131,10 @@ class CrmAIToolsEvents implements EventListenerInterface
 
             return;
         }
-
-        // @phpstan-ignore argument.templateType
         $table->patchEntity(
             $entry,
             array_intersect_key($arguments, array_flip(['iban', 'bic', 'bank', 'kind', 'primary'])),
         );
-
-        // @phpstan-ignore argument.templateType
         if (!$entry->getErrors() && $table->save($entry)) {
             $this->touchContact($table, $entry->contact_id);
             $event->setResult(['id' => $entry->id, 'iban' => $entry->get('iban')]);
@@ -1220,8 +1204,10 @@ class CrmAIToolsEvents implements EventListenerInterface
     {
         // @phpstan-ignore-next-line
         $contact = $subTable->Contacts->get($contactId);
+        /** @var \Cake\ORM\Behavior\TimestampBehavior $timestamp */
         // @phpstan-ignore-next-line
-        $subTable->Contacts->touch($contact);
+        $timestamp = $subTable->Contacts->getBehavior('Timestamp');
+        $timestamp->touch($contact);
         // @phpstan-ignore-next-line
         $subTable->Contacts->save($contact);
     }
