@@ -108,19 +108,17 @@ return [
     ],
 
     /*
-     * Qdrant vector database configuration.
+     * Chroma vector database configuration.
      *
-     * - host (string)     Host and port, e.g. "127.0.0.1:6333"
+     * - host (string)     Host and port, e.g. "192.168.88.30:8001"
      * - scheme (string)   HTTP or HTTPS.
      * - collection (string) Collection name.
-     * - api_key (string)  Optional API key.
      * - timeout (int)     cURL timeout in seconds.
      */
-    'Qdrant' => [
+    'VectorDB' => [
         'host' => '',
         'scheme' => 'http',
         'collection' => 'events',
-        'api_key' => '',
         'timeout' => 30,
     ],
 ];

@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace App\Job;
 
 use App\Lib\EmbeddingService;
-use App\Lib\QdrantService;
+use App\Lib\VectorDBService;
 use App\Model\Entity\User;
 use Authorization\AuthorizationService;
 use Authorization\Policy\OrmResolver;
@@ -135,8 +135,8 @@ class AiProcessLogJob implements JobInterface
                 return Processor::REJECT;
             }
 
-            // Embed and index the analysis summary in Qdrant for semantic search.
-            $this->storeInQdrant($entity, $logsAnalysis, $responseData);
+            // Embed and index the analysis summary in ChromaDB for semantic search.
+            $this->storeInVectorDb($entity, $logsAnalysis, $responseData);
 
             return Processor::ACK;
         } catch (Exception $e) {
@@ -335,7 +335,7 @@ TXT],
     }
 
     /**
-     * Embed the analysis summary and upsert it into Qdrant for vector search.
+     * Embed the analysis summary and upsert it into ChromaDB for vector search.
      *
      * This step is best-effort: a failure here does not cause the whole job to
      * fail — only logs an error so the main ACK result is preserved.
@@ -345,12 +345,12 @@ TXT],
      * @param array<string, mixed>          $responseData Decoded AI response data.
      * @return void
      */
-    private function storeInQdrant(mixed $entity, EntityInterface $logsAnalysis, array $responseData): void
+    private function storeInVectorDb(mixed $entity, EntityInterface $logsAnalysis, array $responseData): void
     {
         // Best-effort: skip silently if services are not configured.
         try {
             $embeddingService = new EmbeddingService();
-            $qdrant = new QdrantService();
+            $vectorDb = new VectorDBService();
         } catch (Exception) {
             return;
         }
@@ -382,7 +382,7 @@ TXT],
             $logAction = (string)($entity['action'] ?? '');
         }
 
-        $payload = [
+        $metadata = [
             'log_id' => (string)$logsAnalysis->get('event_id'),
             'log_model' => $logModel,
             'log_foreign_id' => $logForeignId,
@@ -394,13 +394,13 @@ TXT],
 
         // Optional: filter by related entity model / project during search.
         if ($logModel !== '') {
-            $payload['model'] = $logModel;
+            $metadata['model'] = $logModel;
         }
 
         try {
-            $qdrant->upsert((string)$logsAnalysis->get('id'), $vector, $payload);
+            $vectorDb->upsertOne((string)$logsAnalysis->get('id'), $vector, null, $metadata);
         } catch (Exception) {
-            // Logged inside QdrantService.
+            // Logged inside VectorDBService.
         }
     }
 }

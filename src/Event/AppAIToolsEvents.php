@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace App\Event;
 
 use App\Lib\AITool;
-use App\Lib\QdrantSearchTool;
+use App\Lib\VectorDBSearchTool;
 use ArrayObject;
 use Cake\Event\Event;
 use Cake\Event\EventListenerInterface;
@@ -66,7 +66,7 @@ class AppAIToolsEvents implements EventListenerInterface
         ));
 
         $toolsList->append(new AITool(
-            name: 'App.qdrant_search',
+            name: 'App.vector_search',
             arguments: [
                 'query' => [
                     'type' => 'string',
@@ -79,8 +79,9 @@ class AppAIToolsEvents implements EventListenerInterface
                         . '(e.g. project UUID). Optional but recommended.',
                 ],
             ],
-            description: 'Searches project intelligence logs using semantic similarity and returns an AI-synthesized ' .
-                'answer based on recent activity, risks, blockers, and status updates.',
+            description: 'Searches project intelligence logs using semantic similarity (ChromaDB) ' .
+                'and returns an AI-synthesized answer based on recent activity, risks, blockers, ' .
+                'and status updates.',
         ));
     }
 
@@ -130,28 +131,25 @@ class AppAIToolsEvents implements EventListenerInterface
                 $event->setResult($query->all()->toArray());
             }
 
-            if ($tool === 'App.qdrant_search') {
-                $searchTool = new QdrantSearchTool($currentUser);
+            if ($tool === 'App.vector_search') {
+                $searchTool = new VectorDBSearchTool($currentUser);
 
-                // Build Qdrant filter if entity_id is provided.
-                $filter = [];
+                // Build ChromaDB where filter if entity_id is provided.
+                $where = null;
                 if (!empty($arguments['entity_id'])) {
-                    $filter = [
-                        'must' => [[
-                            'key' => 'log_foreign_id',
-                            'match' => ['value' => (string)$arguments['entity_id']],
-                        ]],
+                    $where = [
+                        'log_foreign_id' => (string)$arguments['entity_id'],
                     ];
                 }
 
                 $result = $searchTool->searchAndAnalyze(
                     query: (string)($arguments['query'] ?? ''),
-                    filter: $filter,
+                    where: $where,
                 );
 
                 $event->setResult([
                     'answer' => $result,
-                    'source' => 'Qdrant semantic intelligence search',
+                    'source' => 'ChromaDB semantic intelligence search',
                 ]);
             }
         } catch (Exception $e) {

@@ -58,7 +58,7 @@ class AiProcessLogJobLiveTest extends TestCase
     }
 
     // =========================================================================
-    // Full pipeline tests — live AI + Embedding + Qdrant
+    // Full pipeline tests — live AI + Embedding + ChromaDB
     // =========================================================================
 
     /**
@@ -69,7 +69,7 @@ class AiProcessLogJobLiveTest extends TestCase
     {
         $this->skipIfAiUnavailable();
 
-        // Use a real Log entity from the fixture so storeInQdrant picks up metadata.
+        // Use a real Log entity from the fixture so storeInVectorDb picks up metadata.
         $log = new Log([
             'id' => uniqid('live-log-', true),
             'model' => 'Projects.Project',

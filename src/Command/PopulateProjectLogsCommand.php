@@ -161,7 +161,7 @@ class PopulateProjectLogsCommand extends Command
         $io->hr();
         $io->out("\n✓ Created {$createdCount} log entries");
         $io->out("✓ Processed {$processedCount}/{$createdCount} through AI analysis");
-        $io->out('✓ Qdrant embeddings stored for processed entries');
+        $io->out('✓ ChromaDB embeddings stored for processed entries');
 
         return static::CODE_SUCCESS;
     }
@@ -352,7 +352,7 @@ class PopulateProjectLogsCommand extends Command
     }
 
     /**
-     * Process a log entry through AI analysis and Qdrant storage.
+     * Process a log entry through AI analysis and ChromaDB storage.
      */
     private function processLog(Log $log, ConsoleIo $io): bool
     {

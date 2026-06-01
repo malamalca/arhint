@@ -7,10 +7,10 @@ use App\Model\Entity\User;
 use Exception;
 
 /**
- * Semantic intelligence tool that queries Qdrant for project log summaries,
+ * Semantic intelligence tool that queries Chroma vector database for project log summaries,
  * feeds them to an LLM for analysis, and returns a synthesized answer.
  */
-class QdrantSearchTool
+class VectorDBSearchTool
 {
     /**
      * Constructor.
@@ -23,18 +23,18 @@ class QdrantSearchTool
     }
 
     /**
-     * Search Qdrant for semantic matches and synthesize an intelligent answer.
+     * Search Chroma for semantic matches and synthesize an intelligent answer.
      *
      * @param string $query Natural language question (e.g. "What is going on with the project?").
-     * @param array<string, mixed> $filter Optional Qdrant payload filter (e.g. ['must' => [['key' => 'log_foreign_id', 'match' => ['value' => 'project-uuid']]]]).
-     * @param int $limit Maximum number of log entries to retrieve from Qdrant.
+     * @param array<string, mixed>|null $where Optional ChromaDB where filter (e.g. ['log_foreign_id' => ['$eq' => 'project-uuid']]).
+     * @param int $limit Maximum number of log entries to retrieve from Chroma.
      * @return string Synthesized answer or error message.
      */
-    public function searchAndAnalyze(string $query, array $filter = [], int $limit = 5): string
+    public function searchAndAnalyze(string $query, ?array $where = null, int $limit = 5): string
     {
         try {
             $embeddingService = new EmbeddingService();
-            $qdrantService = new QdrantService();
+            $vectorDb = new VectorDBService();
         } catch (Exception $e) {
             return "Intelligence search unavailable: {$e->getMessage()}";
         }
@@ -50,23 +50,23 @@ class QdrantSearchTool
             return 'Please provide a meaningful question to search for insights.';
         }
 
-        // 2. Query Qdrant with semantic similarity + optional filters
-        $results = $qdrantService->search($vector, $filter, $limit);
+        // 2. Query Chroma with semantic similarity + optional filters
+        $results = $vectorDb->search($vector, $limit, $where);
         if (empty($results)) {
             return 'No relevant intelligence found for this query in the project logs.';
         }
 
-        // 3. Extract and format payloads for LLM context
+        // 3. Extract and format metadata for LLM context
         $contextEntries = [];
         foreach ($results as $point) {
-            $payload = $point['payload'] ?? [];
-            $summary = (string)($payload['summary'] ?? '');
+            $metadata = $point['metadata'] ?? [];
+            $summary = (string)($metadata['summary'] ?? '');
             if ($summary === '') {
                 continue;
             }
 
-            $action = (string)($payload['log_action'] ?? 'unknown');
-            $priorityLabel = match ((int)($payload['priority'] ?? 0)) {
+            $action = (string)($metadata['log_action'] ?? 'unknown');
+            $priorityLabel = match ((int)($metadata['priority'] ?? 0)) {
                 1 => 'High',
                 2 => 'Medium',
                 3 => 'Low',
@@ -87,9 +87,9 @@ class QdrantSearchTool
     }
 
     /**
-     * Call the AI API directly to synthesize an answer from the Qdrant context.
+     * Call the AI API directly to synthesize an answer from the Chroma context.
      */
-    private function synthesizeAnswer(string $userQuestion, string $qdrantContext): string
+    private function synthesizeAnswer(string $userQuestion, string $vectorContext): string
     {
         $aiUrl = $this->getAiApiUrl();
         $model = $this->getAiModel();
@@ -99,7 +99,7 @@ class QdrantSearchTool
             ['role' => 'system', 'content' => 'You are a project intelligence analyst. '
                 . "Answer the user's question using ONLY the provided log context. "
                 . 'Be concise, factual, and highlight risks or blockers if present.'],
-            ['role' => 'user', 'content' => "Question: $userQuestion\n\nLog Context:\n$qdrantContext"],
+            ['role' => 'user', 'content' => "Question: $userQuestion\n\nLog Context:\n$vectorContext"],
         ];
 
         $payload = json_encode([
@@ -145,7 +145,7 @@ class QdrantSearchTool
             $content = trim((string)$message['reasoning_content']);
         }
 
-        return $content !== '' ? $content : "AI returned an empty analysis. Context:\n$qdrantContext";
+        return $content !== '' ? $content : "AI returned an empty analysis. Context:\n$vectorContext";
     }
 
     /**
