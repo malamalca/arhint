@@ -108,12 +108,8 @@ class AIAssistant
     {
         $this->currentUser = $currentUser;
 
-        $aiConfig = $currentUser?->get('ai_assistant');
-        if (is_array($aiConfig)) {
-            $this->provider = $aiConfig['provider'] ?? 'local';
-        } else {
-            $this->provider = $aiConfig->provider ?? 'local';
-        }
+        $aiConfig = $currentUser?->getProperty('ai_assistant');
+        $this->provider = $aiConfig?->provider ?? 'local';
 
         $modulesList = new ArrayObject();
         $registerEvent = new Event('App.AIAssistant.registerModule', $this, [$modulesList]);
@@ -137,14 +133,9 @@ class AIAssistant
      */
     private function shouldUseNativeToolCalls(): bool
     {
-        $aiConfig = $this->currentUser?->get('ai_assistant');
-        if ($aiConfig !== null) {
-            if (is_array($aiConfig) && array_key_exists('native_tool_calls', $aiConfig)) {
-                return (bool)$aiConfig['native_tool_calls'];
-            }
-            if (is_object($aiConfig) && isset($aiConfig->native_tool_calls)) {
-                return (bool)$aiConfig->native_tool_calls;
-            }
+        $aiConfig = $this->currentUser?->getProperty('ai_assistant');
+        if ($aiConfig !== null && isset($aiConfig->native_tool_calls)) {
+            return (bool)$aiConfig->native_tool_calls;
         }
 
         return $this->provider === 'openai';
@@ -1122,13 +1113,13 @@ class AIAssistant
      */
     public function isAvailable(int $timeoutSeconds = 3): bool
     {
-        $userConfig = $this->currentUser !== null ? $this->currentUser->get('ai_assistant') : null;
-        $provider = $userConfig->provider ?? 'local';
+        $userConfig = $this->currentUser !== null ? $this->currentUser->getProperty('ai_assistant') : null;
+        $provider = $userConfig?->provider ?? 'local';
 
         if ($provider === 'openai') {
             $url = 'https://api.openai.com';
         } else {
-            $rawUrl = $userConfig->url ?? 'http://192.168.68.58:8080/v1/chat/completions';
+            $rawUrl = $userConfig?->url ?? 'http://192.168.68.58:8080/v1/chat/completions';
             $parsed = parse_url($rawUrl);
             $url = ($parsed['scheme'] ?? 'http') . '://' . ($parsed['host'] ?? 'localhost');
             if (isset($parsed['port'])) {
@@ -1160,16 +1151,16 @@ class AIAssistant
      */
     protected function doRequest(array $data): array
     {
-        $userConfig = $this->currentUser !== null ? $this->currentUser->get('ai_assistant') : null;
-        $provider = $userConfig->provider ?? 'local';
-        $apiKey = $userConfig->api_key ?? '';
+        $userConfig = $this->currentUser !== null ? $this->currentUser->getProperty('ai_assistant') : null;
+        $provider = $userConfig?->provider ?? 'local';
+        $apiKey = $userConfig?->api_key ?? '';
 
         if ($provider === 'openai') {
             $url = 'https://api.openai.com/v1/chat/completions';
-            $model = $userConfig->model ?? 'gpt-4o';
+            $model = $userConfig?->model ?? 'gpt-4o';
         } else {
-            $url = $userConfig->url ?? 'http://192.168.68.58:8080/v1/chat/completions';
-            $model = $userConfig->model ?? 'qwen';
+            $url = $userConfig?->url ?? 'http://192.168.68.58:8080/v1/chat/completions';
+            $model = $userConfig?->model ?? 'qwen';
         }
 
         $data['model'] = $model;

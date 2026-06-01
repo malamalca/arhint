@@ -317,7 +317,7 @@ TXT],
      */
     private function getAiConfig(User $user): array
     {
-        $config = $user->get('ai_assistant');
+        $config = $user->getProperty('ai_assistant');
         if (is_object($config)) {
             /** @var object{url: string, model: string, api_key: string} $config */
             return [

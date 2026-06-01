@@ -32,7 +32,7 @@ class AIAssistantTest extends TestCase
     public function testNativeToolCallsEnabledForOpenAIByDefault(): void
     {
         $user = new User();
-        $user->set('ai_assistant', (object)['provider' => 'openai']);
+        $user->set('properties', json_encode(['ai_assistant' => ['provider' => 'openai']]));
         $assistant = new AIAssistant($user);
 
         $reflection = new ReflectionClass($assistant);
@@ -45,7 +45,7 @@ class AIAssistantTest extends TestCase
     public function testNativeToolCallsCanBeEnabledForNonOpenAIProviders(): void
     {
         $user = new User();
-        $user->set('ai_assistant', (object)['provider' => 'local', 'native_tool_calls' => true]);
+        $user->set('properties', json_encode(['ai_assistant' => ['provider' => 'local', 'native_tool_calls' => true]]));
         $assistant = new AIAssistant($user);
 
         $reflection = new ReflectionClass($assistant);
@@ -227,7 +227,7 @@ class AIAssistantTest extends TestCase
         $mockAssistant = new class extends AIAssistant {
             public string $stubbedContent = '';
 
-            protected function doRequest(array $data): array // @phpstan-ignore-line
+            protected function doRequest(array $data): array
             {
                 return ['content' => $this->stubbedContent, 'finish_reason' => 'stop', 'tool_calls' => []];
             }

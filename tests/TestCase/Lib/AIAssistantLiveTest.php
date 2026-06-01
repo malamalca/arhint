@@ -166,12 +166,14 @@ class AIAssistantLiveTest extends TestCase
 
         try {
             $user = new User();
-            $user->set('ai_assistant', (object)[
-                'provider' => 'local',
-                'native_tool_calls' => true,
-                'url' => $this->liveUrl,
-                'model' => $this->model,
-            ]);
+            $user->set('properties', json_encode([
+                'ai_assistant' => [
+                    'provider' => 'local',
+                    'native_tool_calls' => true,
+                    'url' => $this->liveUrl,
+                    'model' => $this->model,
+                ],
+            ]));
 
             $assistant = new AIAssistant($user);
             $response = $assistant->getResponse(
