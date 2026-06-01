@@ -192,7 +192,7 @@ class ArhintPrincipalBackend extends AbstractBackend implements CreatePrincipalS
      * @param string $principalPrefix
      * @return string|null
      */
-    public function findByUri(string $uri, string $principalPrefix): ?string
+    public function findByUri($uri, $principalPrefix): ?string
     {
         $uriParts = Uri\parse($uri);
 

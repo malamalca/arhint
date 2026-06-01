@@ -23,7 +23,7 @@ class ArhintBasicAuth extends AbstractBasic
      * @param mixed $password
      * @return bool
      */
-    public function validateUserPass(mixed $username, mixed $password): bool
+    public function validateUserPass($username, $password): bool
     {
         $Users = TableRegistry::getTableLocator()->get('Users');
         $user = $Users->find()
