@@ -46,7 +46,7 @@ $invoiceView = [
                         'controller' => 'Attachments',
                         'action' => 'edit',
                         '?' => [
-                            'model' => 'Invoice',
+                            'model' => 'Documents.Invoice',
                             'foreign_id' => $document->id,
                             'redirect' => Router::url(null, true),
                         ],
@@ -588,38 +588,6 @@ if (!empty($links)) {
                 ],
             ),
         );
-    }
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////
-// LOGS
-if (isset($logs) && $logs->count() > 0) {
-    $invoiceView['panels']['logs_title'] = sprintf('<h3>%s</h3>', __d('documents', 'Logs'));
-
-    $invoiceView['panels']['logs_table']['table'] = [
-        'parameters' => ['cellspacing' => '0', 'cellpadding' => '0', 'id' => 'invoice-logs-table', 'class' => 'index-static'],
-        'head' => [
-            'rows' => [
-                0 => [
-                    'columns' => [
-                        ['parameters' => ['style' => 'width: 20%'], 'html' => __d('documents', 'Created')],
-                        __d('documents', 'Kind'),
-                        __d('documents', 'Description'),
-                    ],
-                ],
-            ],
-        ],
-        'body' => ['rows' => []],
-    ];
-
-    foreach ($logs as $log) {
-        $invoiceView['panels']['logs_table']['table']['body']['rows'][] = [
-            'columns' => [
-                (string)$log->created,
-                h($log->kind),
-                h($log->descript),
-            ],
-        ];
     }
 }
 

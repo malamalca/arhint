@@ -126,6 +126,7 @@ class TravelOrdersController extends BaseDocumentsController
         $containTables = [
             'DocumentsCounters', 'TravelOrdersMileages', 'TravelOrdersExpenses',
             'EnteredBy', 'ApprovedBy', 'ProcessedBy', 'Attachments',
+            'Logs' => ['Users'],
             'TplHeaders', 'TplBodies', 'TplFooters',
         ];
         if (Plugin::isLoaded('Projects')) {

@@ -48,16 +48,6 @@ $projectView = [
                     ],
                     'params' => ['id' => 'add-projects-log'],
                 ],
-                'log' => [
-                    'title' => __d('projects', 'Add Log'),
-                    'visible' => $this->getCurrentUser()->hasRole('editor'),
-                    'url' => [
-                        'controller' => 'ProjectsLogs',
-                        'action' => 'edit',
-                        '?' => ['project' => $project->id],
-                    ],
-                    'params' => ['id' => 'add-projects-log'],
-                ],
                 'workhour' => [
                     'title' => __d('projects', 'Add Workhour'),
                     'visible' => $this->getCurrentUser()->hasRole('editor'),

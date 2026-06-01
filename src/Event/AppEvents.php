@@ -252,7 +252,7 @@ class AppEvents implements EventListenerInterface
 
         // Queue a Job which will process the log entry with AI.
         // Supports both generic Logs table and Projects plugin logs.
-        $logTables = [LogsTable::class, 'Projects\\Model\\Table\\ProjectsLogsTable'];
+        $logTables = [LogsTable::class];
         if (in_array(get_class($event->getSubject()), $logTables)) {
             // Trigger on new entries, or when core event data actually changes.
             // Skips purely timestamp/audit-only saves to avoid burning AI tokens unnecessarily.

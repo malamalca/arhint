@@ -8,9 +8,11 @@ use Cake\Http\Response;
 use Cake\ORM\TableRegistry;
 
 /**
- * ProjectsLogs Controller
+ * ProjectsLogs Controller — saves/edits/deletes project log entries via App.Logs.
  *
- * @property \Projects\Model\Table\ProjectsLogsTable $ProjectsLogs
+ * Logs are stored with model='Projects.Project', action='Comment', foreign_id=project_id.
+ *
+ * @property \App\Model\Table\LogsTable $Logs
  * @method \Cake\Datasource\Paging\PaginatedInterface paginate($object = null, array $settings = [])
  */
 class ProjectsLogsController extends AppController
@@ -21,7 +23,7 @@ class ProjectsLogsController extends AppController
      * @param \Cake\Event\EventInterface $event Event object
      * @return void
      */
-    public function beforeFilter(EventInterface $event)
+    public function beforeFilter(EventInterface $event): void
     {
         parent::beforeFilter($event);
 
@@ -31,21 +33,28 @@ class ProjectsLogsController extends AppController
     /**
      * Edit method
      *
-     * @param string|null $id Projects Log id.
+     * @param string|null $id Log id.
      * @return \Cake\Http\Response|null
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     public function edit(?string $id = null): ?Response
     {
+        $logsTable = TableRegistry::getTableLocator()->get('App.Logs');
+
         if ($id) {
-            $projectsLog = $this->ProjectsLogs->get($id);
+            /** @var \App\Model\Entity\Log $log */
+            $log = $logsTable->get($id);
         } else {
-            $projectsLog = $this->ProjectsLogs->newEmptyEntity();
-            $projectsLog->project_id = $this->getRequest()->getQuery('project');
-            $projectsLog->user_id = $this->getCurrentUser()->get('id');
+            $projectId = (string)$this->getRequest()->getQuery('project');
+            /** @var \App\Model\Entity\Log $log */
+            $log = $logsTable->newEmptyEntity();
+            $log->model = 'Projects.Project';
+            $log->action = 'Comment';
+            $log->foreign_id = $projectId;
+            $log->user_id = $this->getCurrentUser()->get('id');
         }
 
-        $this->Authorization->Authorize($projectsLog);
+        $this->Authorization->Authorize($log);
 
         if ($this->request->is(['patch', 'post', 'put'])) {
             $requestData = $this->getRequest()->getData();
@@ -57,24 +66,26 @@ class ProjectsLogsController extends AppController
                 $requestData = (array)json_decode((string)$this->getRequest()->getBody(), true);
             }
 
-            $projectsLog = $this->ProjectsLogs->patchEntity($projectsLog, $requestData);
+            /** @var \App\Model\Entity\Log $log */
+            $log = $logsTable->patchEntity($log, $requestData);
             $isJson = str_contains($this->getRequest()->getHeaderLine('Content-Type'), 'application/json')
                 || str_contains($this->getRequest()->getHeaderLine('Accept'), 'application/json')
                 || $this->getRequest()->is('json');
 
-            if ($this->ProjectsLogs->save($projectsLog)) {
+            if ($logsTable->save($log)) {
                 if ($this->getRequest()->is('json')) {
                     header('Content-Type: text/html');
 
-                    $user = TableRegistry::getTableLocator()->get('Users')->get($projectsLog->user_id);
-                    $this->set(compact('projectsLog', 'user'));
+                    $user = TableRegistry::getTableLocator()->get('Users')->get($log->user_id);
+                    $this->set(compact('log', 'user'));
+                    $projectsLog = $log; // alias for template compatibility
                     die((string)$this->render('/element/projects_log'));
                 }
 
                 if ($isJson) {
                     return $this->response
                         ->withType('application/json')
-                        ->withStringBody((string)json_encode(['success' => true, 'id' => $projectsLog->id]));
+                        ->withStringBody((string)json_encode(['success' => true, 'id' => $log->id]));
                 }
 
                 $this->Flash->success(__d('projects', 'The projects log has been saved.'));
@@ -84,7 +95,7 @@ class ProjectsLogsController extends AppController
                     [
                         'controller' => 'Projects',
                         'action' => 'view',
-                        $projectsLog->project_id,
+                        $log->foreign_id,
                         '?' => ['tab' => 'logs'],
                     ],
                 );
@@ -96,7 +107,7 @@ class ProjectsLogsController extends AppController
                         ->withStatus(422)
                         ->withType('application/json')
                         ->withStringBody(
-                            (string)json_encode(['success' => false, 'errors' => $projectsLog->getErrors()]),
+                            (string)json_encode(['success' => false, 'errors' => $log->getErrors()]),
                         );
                 }
 
@@ -104,8 +115,10 @@ class ProjectsLogsController extends AppController
             }
         }
 
-        $project = TableRegistry::getTableLocator()->get('Projects.Projects')->get($projectsLog->project_id);
-        $this->set(compact('projectsLog', 'project'));
+        /** @var \App\Model\Entity\Log $log */
+        $project = TableRegistry::getTableLocator()->get('Projects.Projects')->get($log->foreign_id);
+        $projectsLog = $log; // alias for template compatibility
+        $this->set(compact('log', 'projectsLog', 'project'));
 
         return null;
     }
@@ -113,17 +126,22 @@ class ProjectsLogsController extends AppController
     /**
      * Delete method
      *
-     * @param string|null $id Projects Log id.
+     * @param string|null $id Log id.
      * @return \Cake\Http\Response|null
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     public function delete(?string $id = null): ?Response
     {
         $this->request->allowMethod(['post', 'delete', 'get']);
-        $projectsLog = $this->ProjectsLogs->get($id);
-        $this->Authorization->Authorize($projectsLog);
 
-        if ($this->ProjectsLogs->delete($projectsLog)) {
+        $logsTable = TableRegistry::getTableLocator()->get('App.Logs');
+        /** @var \App\Model\Entity\Log $log */
+        $log = $logsTable->get($id);
+        $this->Authorization->Authorize($log);
+
+        $projectId = $log->foreign_id;
+
+        if ($logsTable->delete($log)) {
             $this->Flash->success(__d('projects', 'The projects log has been deleted.'));
         } else {
             $this->Flash->error(__d('projects', 'The projects log could not be deleted. Please, try again.'));
@@ -134,7 +152,7 @@ class ProjectsLogsController extends AppController
             [
                 'controller' => 'Projects',
                 'action' => 'view',
-                $projectsLog->project_id,
+                $projectId,
                 '?' => ['tab' => 'logs'],
             ],
         );

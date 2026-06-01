@@ -8,8 +8,10 @@ use ArrayObject;
 use Cake\Core\Configure;
 use Cake\Event\Event;
 use Cake\Event\EventListenerInterface;
+use Cake\Log\Log;
 use Cake\ORM\TableRegistry;
 use Cake\Routing\Router;
+use Exception;
 use SoapClient;
 use SoapFault;
 
@@ -346,29 +348,52 @@ class CrmAIToolsEvents implements EventListenerInterface
     {
         $currentUser = $event->getData()[2] ?? null;
 
-        match ($tool) {
-            'Crm.navigate_to_contact' => $this->executeNavigateToContact($event, $arguments, $currentUser),
-            'Crm.search_contacts' => $this->executeSearchContacts($event, $arguments, $currentUser),
-            'Crm.get_contact' => $this->executeGetContact($event, $arguments, $currentUser),
-            'Crm.get_contact_logs' => $this->executeGetContactLogs($event, $arguments, $currentUser),
-            'Crm.add_contact_log' => $this->executeAddContactLog($event, $arguments, $currentUser),
-            'Crm.lookup_company' => $this->executeLookupCompany($event, $arguments),
-            'Crm.create_contact' => $this->executeCreateContact($event, $arguments, $currentUser),
-            'Crm.update_contact' => $this->executeUpdateContact($event, $arguments, $currentUser),
-            'Crm.add_contact_phone' => $this->executeAddContactPhone($event, $arguments, $currentUser),
-            'Crm.edit_contact_phone' => $this->executeEditContactPhone($event, $arguments, $currentUser),
-            'Crm.delete_contact_phone' => $this->executeDeleteContactPhone($event, $arguments, $currentUser),
-            'Crm.add_contact_email' => $this->executeAddContactEmail($event, $arguments, $currentUser),
-            'Crm.edit_contact_email' => $this->executeEditContactEmail($event, $arguments, $currentUser),
-            'Crm.delete_contact_email' => $this->executeDeleteContactEmail($event, $arguments, $currentUser),
-            'Crm.add_contact_address' => $this->executeAddContactAddress($event, $arguments, $currentUser),
-            'Crm.edit_contact_address' => $this->executeEditContactAddress($event, $arguments, $currentUser),
-            'Crm.delete_contact_address' => $this->executeDeleteContactAddress($event, $arguments, $currentUser),
-            'Crm.add_contact_account' => $this->executeAddContactAccount($event, $arguments, $currentUser),
-            'Crm.edit_contact_account' => $this->executeEditContactAccount($event, $arguments, $currentUser),
-            'Crm.delete_contact_account' => $this->executeDeleteContactAccount($event, $arguments, $currentUser),
-            default => null,
-        };
+        Log::debug(
+            'Crm tool executing: ' . $tool,
+            [
+                'scope' => ['ai'],
+                'tool' => $tool,
+                'arguments' => $arguments,
+            ],
+        );
+
+        try {
+            match ($tool) {
+                'Crm.navigate_to_contact' => $this->executeNavigateToContact($event, $arguments, $currentUser),
+                'Crm.search_contacts' => $this->executeSearchContacts($event, $arguments, $currentUser),
+                'Crm.get_contact' => $this->executeGetContact($event, $arguments, $currentUser),
+                'Crm.get_contact_logs' => $this->executeGetContactLogs($event, $arguments, $currentUser),
+                'Crm.add_contact_log' => $this->executeAddContactLog($event, $arguments, $currentUser),
+                'Crm.lookup_company' => $this->executeLookupCompany($event, $arguments),
+                'Crm.create_contact' => $this->executeCreateContact($event, $arguments, $currentUser),
+                'Crm.update_contact' => $this->executeUpdateContact($event, $arguments, $currentUser),
+                'Crm.add_contact_phone' => $this->executeAddContactPhone($event, $arguments, $currentUser),
+                'Crm.edit_contact_phone' => $this->executeEditContactPhone($event, $arguments, $currentUser),
+                'Crm.delete_contact_phone' => $this->executeDeleteContactPhone($event, $arguments, $currentUser),
+                'Crm.add_contact_email' => $this->executeAddContactEmail($event, $arguments, $currentUser),
+                'Crm.edit_contact_email' => $this->executeEditContactEmail($event, $arguments, $currentUser),
+                'Crm.delete_contact_email' => $this->executeDeleteContactEmail($event, $arguments, $currentUser),
+                'Crm.add_contact_address' => $this->executeAddContactAddress($event, $arguments, $currentUser),
+                'Crm.edit_contact_address' => $this->executeEditContactAddress($event, $arguments, $currentUser),
+                'Crm.delete_contact_address' => $this->executeDeleteContactAddress($event, $arguments, $currentUser),
+                'Crm.add_contact_account' => $this->executeAddContactAccount($event, $arguments, $currentUser),
+                'Crm.edit_contact_account' => $this->executeEditContactAccount($event, $arguments, $currentUser),
+                'Crm.delete_contact_account' => $this->executeDeleteContactAccount($event, $arguments, $currentUser),
+                default => null,
+            };
+        } catch (Exception $e) {
+            Log::error(
+                'Crm AI tool error: ' . $e->getMessage() . ' | File: ' . $e->getFile() . ':' . $e->getLine(),
+                [
+                    'scope' => ['ai'],
+                    'tool' => $tool,
+                    'arguments' => $arguments,
+                    'trace' => $e->getTraceAsString(),
+                ],
+            );
+
+            $event->setResult(['error' => $e->getMessage()]);
+        }
     }
 
     /**

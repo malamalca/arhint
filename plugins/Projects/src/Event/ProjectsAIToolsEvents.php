@@ -4,14 +4,17 @@ declare(strict_types=1);
 namespace Projects\Event;
 
 use App\Lib\AITool;
+use App\Policy\LogPolicy;
 use ArrayObject;
 use Cake\Event\Event;
 use Cake\Event\EventListenerInterface;
 use Cake\I18n\Date;
 use Cake\I18n\DateTime;
+use Cake\Log\Log;
 use Cake\ORM\TableRegistry;
 use Cake\Routing\Exception\MissingRouteException;
 use Cake\Routing\Router;
+use Exception;
 use Projects\Model\Table\ProjectsTasksCommentsTable;
 
 class ProjectsAIToolsEvents implements EventListenerInterface
@@ -238,22 +241,45 @@ class ProjectsAIToolsEvents implements EventListenerInterface
     {
         $currentUser = $event->getData()[2] ?? null;
 
-        match ($tool) {
-            'Projects.search_projects' => $this->executeSearchProjects($event, $arguments, $currentUser),
-            'Projects.get_project' => $this->executeGetProject($event, $arguments, $currentUser),
-            'Projects.get_project_tasks' => $this->executeGetProjectTasks($event, $arguments, $currentUser),
-            'Projects.get_task' => $this->executeGetTask($event, $arguments, $currentUser),
-            'Projects.create_task' => $this->executeCreateTask($event, $arguments, $currentUser),
-            'Projects.update_task' => $this->executeUpdateTask($event, $arguments, $currentUser),
-            'Projects.add_task_comment' => $this->executeAddTaskComment($event, $arguments, $currentUser),
-            'Projects.add_project_log' => $this->executeAddProjectLog($event, $arguments, $currentUser),
-            'Projects.log_workhours' => $this->executeLogWorkhours($event, $arguments, $currentUser),
-            'Projects.create_milestone' => $this->executeCreateMilestone($event, $arguments, $currentUser),
-            'Projects.get_project_logs' => $this->executeGetProjectLogs($event, $arguments, $currentUser),
-            'Projects.get_project_users' => $this->executeGetProjectUsers($event, $arguments, $currentUser),
-            'Projects.get_project_documents' => $this->executeGetProjectDocuments($event, $arguments, $currentUser),
-            default => null,
-        };
+        Log::debug(
+            'Projects tool executing: ' . $tool,
+            [
+                'scope' => ['ai'],
+                'tool' => $tool,
+                'arguments' => $arguments,
+            ],
+        );
+
+        try {
+            match ($tool) {
+                'Projects.search_projects' => $this->executeSearchProjects($event, $arguments, $currentUser),
+                'Projects.get_project' => $this->executeGetProject($event, $arguments, $currentUser),
+                'Projects.get_project_tasks' => $this->executeGetProjectTasks($event, $arguments, $currentUser),
+                'Projects.get_task' => $this->executeGetTask($event, $arguments, $currentUser),
+                'Projects.create_task' => $this->executeCreateTask($event, $arguments, $currentUser),
+                'Projects.update_task' => $this->executeUpdateTask($event, $arguments, $currentUser),
+                'Projects.add_task_comment' => $this->executeAddTaskComment($event, $arguments, $currentUser),
+                'Projects.add_project_log' => $this->executeAddProjectLog($event, $arguments, $currentUser),
+                'Projects.log_workhours' => $this->executeLogWorkhours($event, $arguments, $currentUser),
+                'Projects.create_milestone' => $this->executeCreateMilestone($event, $arguments, $currentUser),
+                'Projects.get_project_logs' => $this->executeGetProjectLogs($event, $arguments, $currentUser),
+                'Projects.get_project_users' => $this->executeGetProjectUsers($event, $arguments, $currentUser),
+                'Projects.get_project_documents' => $this->executeGetProjectDocuments($event, $arguments, $currentUser),
+                default => null,
+            };
+        } catch (Exception $e) {
+            Log::error(
+                'Projects AI tool error: ' . $e->getMessage() . ' | File: ' . $e->getFile() . ':' . $e->getLine(),
+                [
+                    'scope' => ['ai'],
+                    'tool' => $tool,
+                    'arguments' => $arguments,
+                    'trace' => $e->getTraceAsString(),
+                ],
+            );
+
+            $event->setResult(['error' => $e->getMessage()]);
+        }
     }
 
     /**
@@ -636,14 +662,18 @@ class ProjectsAIToolsEvents implements EventListenerInterface
             return;
         }
 
-        $logsTable = TableRegistry::getTableLocator()->get('Projects.ProjectsLogs');
+        $logsTable = TableRegistry::getTableLocator()->get('App.Logs');
+        /** @var \App\Model\Entity\Log $log */
         $log = $logsTable->newEntity([
-            'project_id' => $project->id,
+            'model' => 'Projects.Project',
+            'action' => 'Comment',
+            'foreign_id' => $project->id,
             'user_id' => $currentUser->get('id'),
             'descript' => $arguments['descript'] ?? '',
         ]);
 
-        if (!$currentUser->can('edit', $log)) {
+        $policy = new LogPolicy();
+        if (!$policy->canEdit($currentUser, $log)) {
             $event->setResult(['error' => 'You are not authorized to add logs to this project.']);
 
             return;
@@ -761,13 +791,17 @@ class ProjectsAIToolsEvents implements EventListenerInterface
             return;
         }
 
-        $logs = TableRegistry::getTableLocator()->get('Projects.ProjectsLogs')
+        $logs = TableRegistry::getTableLocator()->get('App.Logs')
             ->find()
-            ->select(['ProjectsLogs.id', 'ProjectsLogs.project_id', 'ProjectsLogs.user_id',
-                'ProjectsLogs.descript', 'ProjectsLogs.created'])
+            ->select(['Logs.id', 'Logs.model', 'Logs.foreign_id', 'Logs.user_id',
+                'Logs.action', 'Logs.descript', 'Logs.created'])
             ->contain(['Users'])
-            ->where(['ProjectsLogs.project_id' => $project->id])
-            ->orderBy(['ProjectsLogs.created' => 'DESC'])
+            ->where([
+                'Logs.model' => 'Projects.Project',
+                'Logs.foreign_id' => $project->id,
+                'Logs.action' => 'Comment',
+            ])
+            ->orderBy(['Logs.created' => 'DESC'])
             ->limit(50)
             ->all()
             ->toArray();

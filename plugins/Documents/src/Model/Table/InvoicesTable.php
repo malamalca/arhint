@@ -79,12 +79,12 @@ class InvoicesTable extends Table
         ]);
         $this->hasMany('App.Attachments', [
             'foreignKey' => 'foreign_id',
-            'conditions' => ['Attachments.model' => 'Invoice'],
+            'conditions' => ['Attachments.model' => 'Documents.Invoice'],
             'dependant' => true,
         ]);
         $this->hasMany('App.Logs', [
             'foreignKey' => 'foreign_id',
-            'conditions' => ['Logs.model' => 'Invoice'],
+            'conditions' => ['Logs.model' => 'Documents.Invoice'],
             'dependant' => true,
         ]);
         $this->belongsTo('TplHeaders', [

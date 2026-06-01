@@ -83,7 +83,7 @@ class PopulateProjectLogsCommand extends Command
         // Check if already populated
         $existingCount = $logsTable->find()
             ->where([
-                'model' => 'Projects.ProjectsLog',
+                'model' => 'Projects.Project',
                 'foreign_id' => $projectId,
             ])
             ->count();
@@ -96,7 +96,7 @@ class PopulateProjectLogsCommand extends Command
         // Clean up any previous test data for this project
         if ($existingCount > 0) {
             $logsTable->deleteAll([
-                'model' => 'Projects.ProjectsLog',
+                'model' => 'Projects.Project',
                 'foreign_id' => $projectId,
             ]);
             $io->out("Removed {$existingCount} existing log entries.");
@@ -105,7 +105,7 @@ class PopulateProjectLogsCommand extends Command
             /** @var array<string> $analysisIds */
             $analysisIds = $logsTable->find()
                 ->where([
-                    'model' => 'Projects.ProjectsLog',
+                    'model' => 'Projects.Project',
                     'foreign_id' => $projectId,
                 ])
                 ->all()
@@ -130,7 +130,7 @@ class PopulateProjectLogsCommand extends Command
             /** @var \App\Model\Entity\Log $log */
             $log = $logsTable->newEntity([
                 'id' => uniqid('project-log-', true),
-                'model' => 'Projects.ProjectsLog',
+                'model' => 'Projects.Project',
                 'foreign_id' => $projectId,
                 'user_id' => $userId,
                 'action' => $logData['action'],
@@ -430,6 +430,7 @@ class PopulateProjectLogsCommand extends Command
             /**
              * @inheritDoc
              */
+
             /**
              * @return array<string>
              */
@@ -547,6 +548,7 @@ class PopulateProjectLogsCommand extends Command
             /**
              * @inheritDoc
              */
+
             /**
              * @return array<string, mixed>
              */
@@ -606,6 +608,7 @@ class PopulateProjectLogsCommand extends Command
             /**
              * @inheritDoc
              */
+
             /**
              * @param array<string, mixed> $properties Properties
              */
@@ -616,6 +619,7 @@ class PopulateProjectLogsCommand extends Command
             /**
              * @inheritDoc
              */
+
             /**
              * @return array<string, mixed>
              */
@@ -658,6 +662,7 @@ class PopulateProjectLogsCommand extends Command
             /**
              * @inheritDoc
              */
+
             /**
              * @param array<string, mixed> $headers Headers
              */
@@ -694,10 +699,11 @@ class PopulateProjectLogsCommand extends Command
             /**
              * @inheritDoc
              */
+
             /**
              * @param array<string, mixed> $properties Properties
              * @param array<string, mixed> $headers    Headers
-             * @return QueueMessage
+             * @return \Interop\Queue\Message
              */
             public function createMessage(string $body = '', array $properties = [], array $headers = []): QueueMessage
             {

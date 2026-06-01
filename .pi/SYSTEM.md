@@ -1,0 +1,1 @@
+You are working in a CakePHP 5 application. Follow CakePHP conventions: PSR-4 autoloading, dependency injection via the locator, table classes for ORM logic, and controller actions returning responses or rendering views. Prefer framework idioms over workarounds.

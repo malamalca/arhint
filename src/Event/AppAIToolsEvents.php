@@ -8,7 +8,9 @@ use App\Lib\QdrantSearchTool;
 use ArrayObject;
 use Cake\Event\Event;
 use Cake\Event\EventListenerInterface;
+use Cake\Log\Log;
 use Cake\ORM\TableRegistry;
+use Exception;
 
 class AppAIToolsEvents implements EventListenerInterface
 {
@@ -94,53 +96,76 @@ class AppAIToolsEvents implements EventListenerInterface
     {
         $currentUser = $event->getData()[2] ?? null;
 
-        if ($tool === 'App.get_users') {
-            /** @var \App\Model\Table\UsersTable $usersTable */
-            $usersTable = TableRegistry::getTableLocator()->get('Users');
+        Log::debug(
+            'App tool executing: ' . $tool,
+            [
+                'scope' => ['ai'],
+                'tool' => $tool,
+                'arguments' => $arguments,
+            ],
+        );
 
-            $query = $currentUser->applyScope('index', $usersTable->find())
-                ->select(['Users.id', 'Users.name', 'Users.username', 'Users.email', 'Users.active'])
-                ->orderBy(['Users.name' => 'ASC']);
+        try {
+            if ($tool === 'App.get_users') {
+                /** @var \App\Model\Table\UsersTable $usersTable */
+                $usersTable = TableRegistry::getTableLocator()->get('Users');
 
-            $activeArg = $arguments['active'] ?? 'true';
-            if ($activeArg !== 'all') {
-                $query->where(['Users.active' => $activeArg === 'false' ? 0 : 1]);
+                $query = $currentUser->applyScope('index', $usersTable->find())
+                    ->select(['Users.id', 'Users.name', 'Users.username', 'Users.email', 'Users.active'])
+                    ->orderBy(['Users.name' => 'ASC']);
+
+                $activeArg = $arguments['active'] ?? 'true';
+                if ($activeArg !== 'all') {
+                    $query->where(['Users.active' => $activeArg === 'false' ? 0 : 1]);
+                }
+
+                if (!empty($arguments['search'])) {
+                    $search = '%' . $arguments['search'] . '%';
+                    $query->where(['OR' => [
+                        'Users.name LIKE' => $search,
+                        'Users.username LIKE' => $search,
+                    ]]);
+                }
+
+                $event->setResult($query->all()->toArray());
             }
 
-            if (!empty($arguments['search'])) {
-                $search = '%' . $arguments['search'] . '%';
-                $query->where(['OR' => [
-                    'Users.name LIKE' => $search,
-                    'Users.username LIKE' => $search,
-                ]]);
+            if ($tool === 'App.qdrant_search') {
+                $searchTool = new QdrantSearchTool($currentUser);
+
+                // Build Qdrant filter if entity_id is provided.
+                $filter = [];
+                if (!empty($arguments['entity_id'])) {
+                    $filter = [
+                        'must' => [[
+                            'key' => 'log_foreign_id',
+                            'match' => ['value' => (string)$arguments['entity_id']],
+                        ]],
+                    ];
+                }
+
+                $result = $searchTool->searchAndAnalyze(
+                    query: (string)($arguments['query'] ?? ''),
+                    filter: $filter,
+                );
+
+                $event->setResult([
+                    'answer' => $result,
+                    'source' => 'Qdrant semantic intelligence search',
+                ]);
             }
-
-            $event->setResult($query->all()->toArray());
-        }
-
-        if ($tool === 'App.qdrant_search') {
-            $searchTool = new QdrantSearchTool($currentUser);
-
-            // Build Qdrant filter if entity_id is provided.
-            $filter = [];
-            if (!empty($arguments['entity_id'])) {
-                $filter = [
-                    'must' => [[
-                        'key' => 'log_foreign_id',
-                        'match' => ['value' => (string)$arguments['entity_id']],
-                    ]],
-                ];
-            }
-
-            $result = $searchTool->searchAndAnalyze(
-                query: (string)($arguments['query'] ?? ''),
-                filter: $filter,
+        } catch (Exception $e) {
+            Log::error(
+                'App AI tool error: ' . $e->getMessage() . ' | File: ' . $e->getFile() . ':' . $e->getLine(),
+                [
+                    'scope' => ['ai'],
+                    'tool' => $tool,
+                    'arguments' => $arguments,
+                    'trace' => $e->getTraceAsString(),
+                ],
             );
 
-            $event->setResult([
-                'answer' => $result,
-                'source' => 'Qdrant semantic intelligence search',
-            ]);
+            $event->setResult(['error' => $e->getMessage()]);
         }
     }
 }

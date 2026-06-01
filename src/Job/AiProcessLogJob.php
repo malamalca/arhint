@@ -11,6 +11,7 @@ use Authorization\Policy\OrmResolver;
 use Cake\Datasource\EntityInterface;
 use Cake\ORM\TableRegistry;
 use Cake\Queue\Job\JobInterface;
+use Cake\Log\Log;
 use Cake\Queue\Job\Message;
 use Cake\Utility\Text;
 use Exception;
@@ -18,6 +19,12 @@ use Interop\Queue\Processor;
 
 class AiProcessLogJob implements JobInterface
 {
+    /** Max retries for transient AI failures (empty response, invalid JSON, HTTP errors). */
+    private const MAX_RETRIES = 3;
+
+    /** Backoff delay in seconds between retries: [1, 2, 4]. */
+    private const RETRY_DELAYS = [1, 2, 4];
+
     /**
      * Processes the AI log analysis request from the queue.
      *
@@ -26,7 +33,7 @@ class AiProcessLogJob implements JobInterface
      * for project intelligence analysis, and saves the result to logs_analysis table.
      *
      * @param \Cake\Queue\Job\Message $message Queue message.
-     * @return string|null Processor::ACK on success, Processor::REJECT on permanent failure.
+     * @return string|null Processor::ACK on success, REQUEUE on transient failure, REJECT on permanent failure.
      */
     public function execute(Message $message): ?string
     {
@@ -34,7 +41,14 @@ class AiProcessLogJob implements JobInterface
         $entity = $message->getArgument('entity');
         $jobId = (string)$message->getArgument('job_id', '');
 
-        if ($userId === '' || $entity === null || $jobId === '') {
+        if ($userId === '' || $entity === false || $entity === null || $jobId === '') {
+            Log::warning('AiProcessLogJob: invalid input', [
+                'job_id' => $jobId,
+                'user_id' => $userId,
+                'entity_type' => is_object($entity) ? get_class($entity) : gettype($entity),
+                'entity_is_null' => $entity === null,
+                'entity_is_false' => $entity === false,
+            ], 'ai');
             return Processor::REJECT;
         }
 
@@ -42,6 +56,11 @@ class AiProcessLogJob implements JobInterface
             /** @var \App\Model\Entity\User $user */
             $user = TableRegistry::getTableLocator()->get('Users')->get($userId);
         } catch (Exception $e) {
+            Log::error('AiProcessLogJob: user lookup failed', [
+                'job_id' => $jobId,
+                'user_id' => $userId,
+                'message' => $e->getMessage(),
+            ], 'ai');
             return Processor::REJECT;
         }
 
@@ -52,24 +71,26 @@ class AiProcessLogJob implements JobInterface
             ? (string)$entity
             : print_r($entity, true);
 
-        // Call AI API directly to avoid tool-calling/routing system interference
+        // Call AI API directly with retry logic for transient failures
         try {
-            $response = $this->analyzeWithAI($user, $entityText);
+            $responseData = $this->analyzeWithAI($user, $entityText, $jobId);
 
-            // response is a string containing JSON
-            $responseData = json_decode($response, true);
-            if (json_last_error() !== JSON_ERROR_NONE || !is_array($responseData)) {
-                // JSON decode failed - reject and do not retry
-                return Processor::REJECT;
+            // analyzeWithAI returns decoded JSON array on success, or null after all retries exhausted
+            if ($responseData === null) {
+                // Transient failure — requeue for later retry
+                return Processor::REQUEUE;
             }
 
             // Save response to logs_analysis table
             $logsAnalysisTable = TableRegistry::getTableLocator()->get('LogsAnalysis');
 
             // Derive event_id from the entity or generate a UUID as fallback.
-            $eventId = is_object($entity) && $entity instanceof EntityInterface
-                ? (string)$entity->get('id')
-                : ($entity['id'] ?? null); // plain array
+            $eventId = null;
+            if ($entity instanceof EntityInterface) {
+                $eventId = (string)$entity->get('id');
+            } elseif (is_array($entity)) {
+                $eventId = $entity['id'] ?? null;
+            }
             if (empty($eventId)) {
                 $eventId = (string)Text::uuid();
             }
@@ -100,6 +121,11 @@ class AiProcessLogJob implements JobInterface
 
             $logsAnalysis = $logsAnalysisTable->newEntity($analysisData);
             if (!$logsAnalysisTable->save($logsAnalysis)) {
+                Log::error('AiProcessLogJob: failed to save LogsAnalysis', [
+                    'job_id' => $jobId,
+                    'user_id' => $userId,
+                    'errors' => $logsAnalysis->getErrors(),
+                ], 'ai');
                 return Processor::REJECT;
             }
 
@@ -108,6 +134,13 @@ class AiProcessLogJob implements JobInterface
 
             return Processor::ACK;
         } catch (Exception $e) {
+            Log::error('AiProcessLogJob: execution failed', [
+                'job_id' => $jobId,
+                'user_id' => $userId,
+                'entity_type' => is_object($entity) ? get_class($entity) : gettype($entity),
+                'message' => $e->getMessage(),
+                'file' => $e->getFile() . ':' . $e->getLine(),
+            ], 'ai');
             return Processor::REJECT;
         }
     }
@@ -115,11 +148,15 @@ class AiProcessLogJob implements JobInterface
     /**
      * Call the AI API directly (bypassing tool-calling/routing) to analyze a log entity.
      *
+     * Retries up to MAX_RETRIES times with exponential backoff for transient failures
+     * (empty response, HTTP errors, invalid JSON from server).
+     *
      * @param \App\Model\Entity\User $user The user whose AI config to use.
      * @param string $entityText Text representation of the entity.
-     * @return string Raw AI response content (expected to be JSON).
+     * @param string $jobId Job identifier for logging.
+     * @return array<string, mixed>|null Decoded JSON response on success, null after all retries exhausted.
      */
-    private function analyzeWithAI(User $user, string $entityText): string
+    private function analyzeWithAI(User $user, string $entityText, string $jobId = ''): ?array
     {
         $aiConfig = $this->getAiConfig($user);
         $messages = [
@@ -148,13 +185,82 @@ TXT],
             'messages' => $messages,
             'max_tokens' => 2048,
         ]);
-
         if ($payload === false) {
-            return '';
+            return null;
         }
 
+        $lastHttpCode = 0;
+        $lastError = '';
+        $lastResponse = '';
+
+        for ($attempt = 0; $attempt <= self::MAX_RETRIES; $attempt++) {
+            if ($attempt > 0) {
+                $delay = self::RETRY_DELAYS[$attempt - 1] ?? self::RETRY_DELAYS[count(self::RETRY_DELAYS) - 1];
+                Log::warning('AiProcessLogJob: retrying AI call', [
+                    'job_id' => $jobId,
+                    'attempt' => $attempt,
+                    'delay_seconds' => $delay,
+                    'last_http_code' => $lastHttpCode,
+                    'last_error' => $lastError,
+                    'last_response_preview' => mb_substr($lastResponse, 0, 200),
+                ], 'ai');
+                sleep($delay);
+            }
+
+            $raw = $this->callAiApi($aiConfig, $payload, $lastHttpCode, $lastError);
+
+            // Empty response — transient failure (HTTP error, connection issue)
+            if ($raw === '') {
+                continue;
+            }
+
+            $lastResponse = $raw;
+
+            // Try to decode as JSON
+            $decoded = json_decode($raw, true);
+            if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
+                return $decoded;
+            }
+
+            // Got content but not valid JSON — log and retry
+            Log::warning('AiProcessLogJob: AI returned non-JSON content', [
+                'job_id' => $jobId,
+                'attempt' => $attempt + 1,
+                'json_error' => json_last_error_msg(),
+                'response_length' => strlen($raw),
+                'response_preview' => mb_substr($raw, 0, 300),
+            ], 'ai');
+        }
+
+        Log::error('AiProcessLogJob: AI call failed after all retries', [
+            'job_id' => $jobId,
+            'total_attempts' => self::MAX_RETRIES + 1,
+            'last_http_code' => $lastHttpCode,
+            'last_error' => $lastError,
+            'last_response_preview' => mb_substr($lastResponse, 0, 300),
+        ], 'ai');
+
+        return null;
+    }
+
+    /**
+     * Single HTTP call to the AI API.
+     *
+     * @param array{url: string, model: string, api_key: string} $aiConfig AI config.
+     * @param string $payload JSON-encoded request payload.
+     * @param int $lastHttpCode Output: last HTTP status code.
+     * @param string $lastError Output: last cURL error message.
+     * @return string Raw AI response content, or empty string on failure.
+     */
+    private function callAiApi(
+        array $aiConfig,
+        string $payload,
+        int &$lastHttpCode = 0,
+        string &$lastError = '',
+    ): string {
         $ch = curl_init($aiConfig['url']);
         if ($ch === false) {
+            $lastError = 'curl_init failed';
             return '';
         }
 
@@ -170,10 +276,11 @@ TXT],
         curl_setopt($ch, CURLOPT_TIMEOUT, 120);
 
         $response = curl_exec($ch);
-        $httpCode = (int)curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        $lastHttpCode = (int)curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        $lastError = curl_error($ch);
         curl_close($ch);
 
-        if ($response === false || $httpCode !== 200) {
+        if ($response === false || $lastHttpCode !== 200) {
             return '';
         }
 

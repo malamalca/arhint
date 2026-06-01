@@ -72,7 +72,7 @@ class AiProcessLogJobLiveTest extends TestCase
         // Use a real Log entity from the fixture so storeInQdrant picks up metadata.
         $log = new Log([
             'id' => uniqid('live-log-', true),
-            'model' => 'Projects.ProjectsLog',
+            'model' => 'Projects.Project',
             'foreign_id' => uniqid('proj-', true),
             'user_id' => self::USER_ID,
             'action' => 'test_live_action',
@@ -352,14 +352,12 @@ class AiProcessLogJobLiveTest extends TestCase
 
     public function testExecuteWithFalseEntity(): void
     {
-        $this->skipIfAiUnavailable();
-
         $message = $this->createMessage([
             'user_id' => self::USER_ID,
             'entity' => false,
             'job_id' => 'live-false-job-' . uniqid(),
         ]);
-        $this->assertSame(Processor::ACK, $this->job->execute($message));
+        $this->assertSame(Processor::REJECT, $this->job->execute($message));
     }
 
     // =========================================================================

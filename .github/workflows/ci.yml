@@ -20,6 +20,11 @@ jobs:
         php-version: ['8.1']
 
     steps:
+    - name: Setup Node.js 24
+      uses: actions/setup-node@v4
+      with:
+        node-version: 24
+
     - uses: actions/checkout@v4
 
     - name: Setup MySQL
@@ -79,6 +84,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: Setup Node.js 24
+      uses: actions/setup-node@v4
+      with:
+        node-version: 24
+
     - uses: actions/checkout@v4
 
     - name: Setup PHP

@@ -357,7 +357,7 @@ return [
             'timezone' => 'UTC',
             //'encoding' => 'utf8mb4',
             'flags' => [],
-            'cacheMetadata' => true,
+            'cacheMetadata' => false,
             'quoteIdentifiers' => true,
             'log' => false,
             //'init' => ['SET GLOBAL innodb_stats_on_metadata = 0'],
@@ -382,7 +382,7 @@ return [
             'file' => 'ai',
             'url' => null,
             'scopes' => ['ai'],
-            'levels' => ['notice', 'info', 'debug'],
+            'levels' => ['notice', 'info', 'debug', 'warning', 'error'],
         ],
         'error' => [
             'className' => FileLog::class,

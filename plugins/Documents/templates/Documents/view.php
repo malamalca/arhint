@@ -41,7 +41,7 @@ $invoiceView = [
                         'controller' => 'Attachments',
                         'action' => 'edit',
                         '?' => [
-                            'model' => 'Document',
+                            'model' => 'Documents.Document',
                             'foreign_id' => $document->id,
                             'redirect' => Router::url(null, true),
                         ],

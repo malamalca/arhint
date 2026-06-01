@@ -238,7 +238,7 @@ class ExpensesController extends AppController
                 ->select($this->Expenses->Invoices->Receivers)
                 ->contain(['Invoices' => ['Issuers', 'Receivers']])
                 ->where([
-                    'Expenses.model' => 'Invoice',
+                    'Expenses.model' => 'Documents.Invoice',
                     'Invoices.counter_id IN' => (array)$filter['counter'],
                 ])
                 ->orderBy('Expenses.dat_happened DESC')

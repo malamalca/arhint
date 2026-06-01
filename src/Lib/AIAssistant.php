@@ -216,8 +216,26 @@ class AIAssistant
         $toolCallCount = 0;
         $message = [];
 
+        Log::debug(
+            'AI getResponse: ' . $this->trimText($userInput, 200),
+            [
+                'scope' => ['ai'],
+                'history_length' => count($this->conversationHistory),
+                'provider' => $this->provider,
+            ],
+        );
+
         while (true) {
             $activeTools = $this->selectToolsForRequest($userInput);
+
+            Log::debug(
+                'AI selected tools: ' . implode(', ', array_map(fn($t) => $t->name, $activeTools)),
+                [
+                    'scope' => ['ai'],
+                    'tool_count' => count($activeTools),
+                    'iteration' => $toolCallCount,
+                ],
+            );
 
             if ($this->shouldUseNativeToolCalls()) {
                 $summary = null;
@@ -307,7 +325,20 @@ class AIAssistant
                 ];
             }
 
+            $requestStart = microtime(true);
             $message = $this->doRequest($data);
+            $requestDuration = round((microtime(true) - $requestStart) * 1000, 2);
+
+            Log::debug(
+                'AI response received in ' . $requestDuration . 'ms',
+                [
+                    'scope' => ['ai'],
+                    'duration_ms' => $requestDuration,
+                    'finish_reason' => $message['finish_reason'] ?? 'unknown',
+                    'has_tool_calls' => !empty($message['tool_calls']),
+                    'iteration' => $toolCallCount,
+                ],
+            );
 
             // Native tool_calls support for configured providers.
             if (
@@ -326,29 +357,61 @@ class AIAssistant
                     $tool = $toolNameMap[$safeName] ?? $safeName;
                     $arguments = json_decode($toolCall['function']['arguments'], true) ?? [];
 
-                    $event = new Event('App.AIAssistant.executeTool', $this, [$tool, $arguments, $this->currentUser]);
-                    EventManager::instance()->dispatch($event);
-
-                    $result = $event->getResult();
-                    if (is_array($result) && isset($result['redirect_url'])) {
-                        $this->redirectUrl = $result['redirect_url'];
-                    }
-
-                    $this->appendConversationMessage([
-                        'role' => 'tool',
-                        'tool_call_id' => $toolCall['id'],
-                        'content' => $this->encodeToolResultForHistory($tool, $result),
-                    ]);
-
                     Log::debug(
-                        "Executed tool $tool with arguments " . json_encode($arguments),
+                        "AI executing tool $tool with arguments " . json_encode($arguments),
                         [
                             'scope' => ['ai'],
                             'tool' => $tool,
                             'arguments' => $arguments,
-                            'result' => $result,
                         ],
                     );
+
+                    try {
+                        $event = new Event(
+                            'App.AIAssistant.executeTool',
+                            $this,
+                            [$tool, $arguments, $this->currentUser],
+                        );
+                        EventManager::instance()->dispatch($event);
+
+                        $result = $event->getResult();
+                        if (is_array($result) && isset($result['redirect_url'])) {
+                            $this->redirectUrl = $result['redirect_url'];
+                        }
+
+                        $this->appendConversationMessage([
+                            'role' => 'tool',
+                            'tool_call_id' => $toolCall['id'],
+                            'content' => $this->encodeToolResultForHistory($tool, $result),
+                        ]);
+
+                        Log::debug(
+                            "Executed tool $tool with arguments " . json_encode($arguments),
+                            [
+                                'scope' => ['ai'],
+                                'tool' => $tool,
+                                'arguments' => $arguments,
+                                'result' => $result,
+                            ],
+                        );
+                    } catch (Exception $e) {
+                        $errorResult = ['error' => $e->getMessage()];
+                        Log::error(
+                            'AI tool error: ' . $e->getMessage() . ' | File: ' . $e->getFile() . ':' . $e->getLine(),
+                            [
+                                'scope' => ['ai'],
+                                'tool' => $tool,
+                                'arguments' => $arguments,
+                                'trace' => $e->getTraceAsString(),
+                            ],
+                        );
+
+                        $this->appendConversationMessage([
+                            'role' => 'tool',
+                            'tool_call_id' => $toolCall['id'],
+                            'content' => $this->encodeToolResultForHistory($tool, $errorResult),
+                        ]);
+                    }
                 }
 
                 $toolCallCount++;
@@ -383,29 +446,61 @@ class AIAssistant
                     $tool = $json['tool'];
                     $arguments = $json['arguments'] ?? [];
 
-                    $event = new Event('App.AIAssistant.executeTool', $this, [$tool, $arguments, $this->currentUser]);
-                    EventManager::instance()->dispatch($event);
-
-                    $result = $event->getResult();
-                    if (is_array($result) && isset($result['redirect_url'])) {
-                        $this->redirectUrl = $result['redirect_url'];
-                    }
-
-                    $this->appendConversationMessage(['role' => 'assistant', 'content' => $message['content']]);
-                    $this->appendConversationMessage([
-                        'role' => 'user',
-                        'content' => $this->buildToolResultSummaryMessage($tool, $result),
-                    ]);
-
                     Log::debug(
-                        "Executed tool $tool with arguments " . json_encode($arguments),
+                        "AI executing tool $tool with arguments " . json_encode($arguments),
                         [
                             'scope' => ['ai'],
                             'tool' => $tool,
                             'arguments' => $arguments,
-                            'result' => $result,
                         ],
                     );
+
+                    try {
+                        $event = new Event(
+                            'App.AIAssistant.executeTool',
+                            $this,
+                            [$tool, $arguments, $this->currentUser],
+                        );
+                        EventManager::instance()->dispatch($event);
+
+                        $result = $event->getResult();
+                        if (is_array($result) && isset($result['redirect_url'])) {
+                            $this->redirectUrl = $result['redirect_url'];
+                        }
+
+                        $this->appendConversationMessage(['role' => 'assistant', 'content' => $message['content']]);
+                        $this->appendConversationMessage([
+                            'role' => 'user',
+                            'content' => $this->buildToolResultSummaryMessage($tool, $result),
+                        ]);
+
+                        Log::debug(
+                            "Executed tool $tool with arguments " . json_encode($arguments),
+                            [
+                                'scope' => ['ai'],
+                                'tool' => $tool,
+                                'arguments' => $arguments,
+                                'result' => $result,
+                            ],
+                        );
+                    } catch (Exception $e) {
+                        $errorResult = ['error' => $e->getMessage()];
+                        Log::error(
+                            'AI tool error: ' . $e->getMessage() . ' | File: ' . $e->getFile() . ':' . $e->getLine(),
+                            [
+                                'scope' => ['ai'],
+                                'tool' => $tool,
+                                'arguments' => $arguments,
+                                'trace' => $e->getTraceAsString(),
+                            ],
+                        );
+
+                        $this->appendConversationMessage(['role' => 'assistant', 'content' => $message['content']]);
+                        $this->appendConversationMessage([
+                            'role' => 'user',
+                            'content' => $this->buildToolResultSummaryMessage($tool, $errorResult),
+                        ]);
+                    }
 
                     $toolCallCount++;
                     continue;
@@ -609,6 +704,15 @@ class AIAssistant
             array_filter($this->moduleDescriptions, fn(string $k): bool => $k !== 'App', ARRAY_FILTER_USE_KEY),
             $userInput,
             $priorContext,
+        );
+
+        Log::debug(
+            'AI module detection: ' . (empty($detectedModules) ? 'none' : implode(', ', $detectedModules)),
+            [
+                'scope' => ['ai'],
+                'detected_modules' => $detectedModules,
+                'recent_module' => $recentModule,
+            ],
         );
 
         // Always include the module used most recently in conversation so short follow-ups
@@ -860,6 +964,15 @@ class AIAssistant
         int $maxItems = self::MAX_HISTORY_TOOL_RESULT_ITEMS,
     ): array {
         if (is_array($result) && isset($result['error'])) {
+            Log::debug(
+                "Tool error $tool" . (is_string($result['error']) ? ': ' . $result['error'] : ''),
+                [
+                    'scope' => ['ai'],
+                    'tool' => $tool,
+                    'result' => $result,
+                ],
+            );
+
             return [
                 'tool' => $tool,
                 'summary' => 'Error: ' . $this->trimText((string)$result['error'], self::MAX_TOOL_RESULT_CHARS),
@@ -1071,6 +1184,39 @@ class AIAssistant
         if ($payload === false) {
             throw new Exception('Failed to encode request data: ' . json_last_error_msg());
         }
+
+        // Log the request being sent to the AI (without API keys).
+        $logContext = [
+            'scope' => ['ai'],
+            'provider' => $provider,
+            'model' => $model,
+            'url' => $url,
+            'message_count' => count($data['messages'] ?? []),
+            'tool_count' => count($data['tools'] ?? []),
+        ];
+
+        // Build a safe log payload (strip Authorization header / API key from the log).
+        $logData = $data;
+        // Remove tool definitions from the log to keep it concise; log counts instead.
+        if (isset($logData['tools']) && is_array($logData['tools'])) {
+            $logData['tools'] = array_map(function (array $tool) {
+                return [
+                    'type' => $tool['type'] ?? 'function',
+                    'function' => [
+                        'name' => $tool['function']['name'] ?? '',
+                        'description' => $tool['function']['description'] ?? '',
+                        'parameter_count' => isset($tool['function']['parameters']['properties'])
+                            ? count($tool['function']['parameters']['properties'])
+                            : 0,
+                    ],
+                ];
+            }, $logData['tools']);
+        }
+
+        Log::debug(
+            'AI request: ' . json_encode($logData, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES),
+            $logContext,
+        );
 
         $ch = curl_init($url);
         if ($ch === false) {

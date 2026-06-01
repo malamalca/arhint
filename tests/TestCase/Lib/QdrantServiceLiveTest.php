@@ -144,7 +144,7 @@ class QdrantServiceLiveTest extends TestCase
             $vector = $this->buildTestVector(self::VECTOR_SIZE);
             $payload = [
                 'log_id' => 'abc-123',
-                'log_model' => 'Projects.ProjectsLog',
+                'log_model' => 'Projects.Project',
                 'summary' => 'Project log entry test',
                 'priority' => 5,
             ];

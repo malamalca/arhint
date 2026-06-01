@@ -189,11 +189,11 @@ class EmailForm extends Form
     {
         switch (get_class($document)) {
             case Invoice::class:
-                return 'Invoice';
+                return 'Documents.Invoice';
             case TravelOrder::class:
-                return 'TravelOrder';
+                return 'Documents.TravelOrder';
             default:
-                return 'Document';
+                return 'Documents.Document';
         }
     }
 }
