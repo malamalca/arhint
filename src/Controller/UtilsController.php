@@ -25,7 +25,7 @@ class UtilsController extends AppController
      * @param \Cake\Event\EventInterface $event Event interface
      * @return void
      */
-    public function beforeFilter(EventInterface $event)
+    public function beforeFilter(EventInterface $event): void
     {
         parent::beforeFilter($event);
 
@@ -218,7 +218,7 @@ class UtilsController extends AppController
      * @param string $filename Filename to sign
      * @return void
      */
-    public function pdfSignClient(string $filename)
+    public function pdfSignClient(string $filename): void
     {
         $this->Authorization->skipAuthorization();
 

@@ -78,7 +78,7 @@ class LilTCPDFEngine extends TCPDF implements LilPdfEngineInterface
      * @param array<string, mixed> $enigneOptions Array of options.
      * @return void
      */
-    public function __construct($enigneOptions)
+    public function __construct(array $enigneOptions)
     {
         $this->options(Hash::merge($this->_defaultOptions, $enigneOptions));
         $options = $this->options();
@@ -137,7 +137,7 @@ class LilTCPDFEngine extends TCPDF implements LilPdfEngineInterface
      * @param string $fileName Filename.
      * @return bool
      */
-    public function saveAs($fileName): bool
+    public function saveAs(string $fileName): bool
     {
         $this->Output($fileName, 'F');
 
@@ -151,7 +151,7 @@ class LilTCPDFEngine extends TCPDF implements LilPdfEngineInterface
      * @param array<string, mixed> $options Page options.
      * @return void
      */
-    public function newPage($html, array $options = []): void
+    public function newPage(string $html, array $options = []): void
     {
         $this->addPage();
         $this->writeHTML($html);
@@ -173,7 +173,7 @@ class LilTCPDFEngine extends TCPDF implements LilPdfEngineInterface
      * @param string $html Html page content.
      * @return void
      */
-    public function setHeaderHtml($html): void
+    public function setHeaderHtml(string $html): void
     {
         $this->_options['header']['data'] = $html;
     }
@@ -184,7 +184,7 @@ class LilTCPDFEngine extends TCPDF implements LilPdfEngineInterface
      * @param string $html Html page content.
      * @return void
      */
-    public function setFooterHtml($html): void
+    public function setFooterHtml(string $html): void
     {
         $this->_options['footer']['data'] = $html;
     }

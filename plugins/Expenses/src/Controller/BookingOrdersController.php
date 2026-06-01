@@ -27,7 +27,7 @@ class BookingOrdersController extends AppController
      * @param \Cake\Event\EventInterface $event Event interface
      * @return void
      */
-    public function beforeFilter(EventInterface $event)
+    public function beforeFilter(EventInterface $event): void
     {
         parent::beforeFilter($event);
 

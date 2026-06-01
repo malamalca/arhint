@@ -36,7 +36,7 @@ class BaseDocumentsController extends AppController
      * @param \Cake\Event\EventInterface $event Event interface
      * @return void
      */
-    public function beforeFilter(EventInterface $event)
+    public function beforeFilter(EventInterface $event): void
     {
         parent::beforeFilter($event);
 
@@ -60,7 +60,7 @@ class BaseDocumentsController extends AppController
      *
      * @return \Cake\Http\Response|null
      */
-    public function index()
+    public function index(): ?Response
     {
         $filter = (array)$this->getRequest()->getQuery();
 

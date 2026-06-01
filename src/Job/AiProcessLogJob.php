@@ -9,9 +9,9 @@ use App\Model\Entity\User;
 use Authorization\AuthorizationService;
 use Authorization\Policy\OrmResolver;
 use Cake\Datasource\EntityInterface;
+use Cake\Log\Log;
 use Cake\ORM\TableRegistry;
 use Cake\Queue\Job\JobInterface;
-use Cake\Log\Log;
 use Cake\Queue\Job\Message;
 use Cake\Utility\Text;
 use Exception;
@@ -43,12 +43,14 @@ class AiProcessLogJob implements JobInterface
 
         if ($userId === '' || $entity === false || $entity === null || $jobId === '') {
             Log::warning('AiProcessLogJob: invalid input', [
+                'scope' => 'ai',
                 'job_id' => $jobId,
                 'user_id' => $userId,
                 'entity_type' => is_object($entity) ? get_class($entity) : gettype($entity),
                 'entity_is_null' => $entity === null,
                 'entity_is_false' => $entity === false,
-            ], 'ai');
+            ]);
+
             return Processor::REJECT;
         }
 
@@ -57,10 +59,12 @@ class AiProcessLogJob implements JobInterface
             $user = TableRegistry::getTableLocator()->get('Users')->get($userId);
         } catch (Exception $e) {
             Log::error('AiProcessLogJob: user lookup failed', [
+                'scope' => 'ai',
                 'job_id' => $jobId,
                 'user_id' => $userId,
                 'message' => $e->getMessage(),
-            ], 'ai');
+            ]);
+
             return Processor::REJECT;
         }
 
@@ -122,10 +126,12 @@ class AiProcessLogJob implements JobInterface
             $logsAnalysis = $logsAnalysisTable->newEntity($analysisData);
             if (!$logsAnalysisTable->save($logsAnalysis)) {
                 Log::error('AiProcessLogJob: failed to save LogsAnalysis', [
+                    'scope' => 'ai',
                     'job_id' => $jobId,
                     'user_id' => $userId,
                     'errors' => $logsAnalysis->getErrors(),
-                ], 'ai');
+                ]);
+
                 return Processor::REJECT;
             }
 
@@ -135,12 +141,14 @@ class AiProcessLogJob implements JobInterface
             return Processor::ACK;
         } catch (Exception $e) {
             Log::error('AiProcessLogJob: execution failed', [
+                'scope' => 'ai',
                 'job_id' => $jobId,
                 'user_id' => $userId,
                 'entity_type' => is_object($entity) ? get_class($entity) : gettype($entity),
                 'message' => $e->getMessage(),
                 'file' => $e->getFile() . ':' . $e->getLine(),
-            ], 'ai');
+            ]);
+
             return Processor::REJECT;
         }
     }
@@ -195,15 +203,17 @@ TXT],
 
         for ($attempt = 0; $attempt <= self::MAX_RETRIES; $attempt++) {
             if ($attempt > 0) {
-                $delay = self::RETRY_DELAYS[$attempt - 1] ?? self::RETRY_DELAYS[count(self::RETRY_DELAYS) - 1];
+                $delayIndex = min($attempt - 1, count(self::RETRY_DELAYS) - 1);
+                $delay = self::RETRY_DELAYS[$delayIndex];
                 Log::warning('AiProcessLogJob: retrying AI call', [
+                    'scope' => 'ai',
                     'job_id' => $jobId,
                     'attempt' => $attempt,
                     'delay_seconds' => $delay,
                     'last_http_code' => $lastHttpCode,
                     'last_error' => $lastError,
                     'last_response_preview' => mb_substr($lastResponse, 0, 200),
-                ], 'ai');
+                ]);
                 sleep($delay);
             }
 
@@ -224,21 +234,23 @@ TXT],
 
             // Got content but not valid JSON — log and retry
             Log::warning('AiProcessLogJob: AI returned non-JSON content', [
+                'scope' => 'ai',
                 'job_id' => $jobId,
                 'attempt' => $attempt + 1,
                 'json_error' => json_last_error_msg(),
                 'response_length' => strlen($raw),
                 'response_preview' => mb_substr($raw, 0, 300),
-            ], 'ai');
+            ]);
         }
 
         Log::error('AiProcessLogJob: AI call failed after all retries', [
+            'scope' => 'ai',
             'job_id' => $jobId,
             'total_attempts' => self::MAX_RETRIES + 1,
             'last_http_code' => $lastHttpCode,
             'last_error' => $lastError,
             'last_response_preview' => mb_substr($lastResponse, 0, 300),
-        ], 'ai');
+        ]);
 
         return null;
     }
@@ -261,6 +273,7 @@ TXT],
         $ch = curl_init($aiConfig['url']);
         if ($ch === false) {
             $lastError = 'curl_init failed';
+
             return '';
         }
 

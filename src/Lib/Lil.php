@@ -15,13 +15,9 @@ class Lil
      * @param array<string, mixed> $options Insert options.
      * @return void
      */
-    public static function insertIntoArray(&$input, $element, $options = []): void
+    public static function insertIntoArray(array &$input, array $element, array $options = []): void
     {
-        if (is_object($input)) {
-            $dest = $input->getArrayCopy();
-        } else {
-            $dest = &$input;
-        }
+        $dest = &$input;
 
         if (isset($options['after']) || isset($options['replace'])) {
             $title = $options['after'] ?? $options['replace'];
@@ -109,10 +105,6 @@ class Lil
             }
         } else {
             $dest = $dest + $element;
-        }
-
-        if (is_object($input)) {
-            $input->exchangeArray($dest);
         }
     }
 }

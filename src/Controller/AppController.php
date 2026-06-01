@@ -57,7 +57,7 @@ class AppController extends Controller
      * @param \Cake\Event\EventInterface $event Event object
      * @return void
      */
-    public function beforeFilter(EventInterface $event)
+    public function beforeFilter(EventInterface $event): void
     {
         /** @var \App\Model\Entity\User $user */
         $user = $this->Authentication->getIdentity();

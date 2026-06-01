@@ -26,7 +26,7 @@ class ProjectsWorkhoursController extends AppController
      * @param \Cake\Event\EventInterface $event Event interface
      * @return void
      */
-    public function beforeFilter(EventInterface $event)
+    public function beforeFilter(EventInterface $event): void
     {
         parent::beforeFilter($event);
 
@@ -42,7 +42,7 @@ class ProjectsWorkhoursController extends AppController
      *
      * @return void
      */
-    public function index()
+    public function index(): void
     {
         $filter = new ProjectsWorkhoursFilter($this->getRequest()->getQuery('q', ''));
         $params = $filter->getParams($this->getCurrentUser());
@@ -84,7 +84,7 @@ class ProjectsWorkhoursController extends AppController
      *
      * @return void
      */
-    public function list()
+    public function list(): void
     {
         $sourceUrl = $this->getRequest()->getQuery('source');
         $sourceRequest = [];

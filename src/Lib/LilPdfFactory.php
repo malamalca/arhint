@@ -25,7 +25,7 @@ class LilPdfFactory
      * @param array<string, mixed> $enigneOptions PDF engine options.
      * @return \App\Lib\PdfEngines\LilPdfEngineInterface PDF engine instance.
      */
-    public static function create($engine, $enigneOptions): LilPdfEngineInterface
+    public static function create(string $engine, array $enigneOptions): LilPdfEngineInterface
     {
         switch ($engine) {
             case 'TCPDF':

@@ -63,7 +63,7 @@ class LilWKHTML2PDFEngine extends Pdf implements LilPdfEngineInterface
      * @param array<string, mixed> $enigneOptions Array of options.
      * @return void
      */
-    public function __construct($enigneOptions)
+    public function __construct(array $enigneOptions)
     {
         $this->options(Hash::merge($this->_defaultOptions, $enigneOptions));
         parent::__construct($enigneOptions);
@@ -95,7 +95,7 @@ class LilWKHTML2PDFEngine extends Pdf implements LilPdfEngineInterface
      * @param string $fileName Filename.
      * @return bool
      */
-    public function saveAs($fileName): bool
+    public function saveAs(string $fileName): bool
     {
         $result = parent::saveAs($fileName);
 
@@ -109,7 +109,7 @@ class LilWKHTML2PDFEngine extends Pdf implements LilPdfEngineInterface
      * @param array<string, mixed> $options Page options.
      * @return void
      */
-    public function newPage($html, array $options = []): void
+    public function newPage(string $html, array $options = []): void
     {
         $fileName = TMP . uniqid('', true) . '.html';
         file_put_contents($fileName, $html);
@@ -137,7 +137,7 @@ class LilWKHTML2PDFEngine extends Pdf implements LilPdfEngineInterface
      * @param string $binary Binary data
      * @return string|bool
      */
-    private function getImageType($binary): string|bool
+    private function getImageType(string $binary): string|bool
     {
         $types = [
             'jpeg' => "\xFF\xD8\xFF",
@@ -162,7 +162,7 @@ class LilWKHTML2PDFEngine extends Pdf implements LilPdfEngineInterface
      * @param string $html Html page content.
      * @return void
      */
-    public function setHeaderHtml($html): void
+    public function setHeaderHtml(string $html): void
     {
         if (substr($html, 0, 2) == '{"') {
             $data = json_decode($html, true);
@@ -188,7 +188,7 @@ class LilWKHTML2PDFEngine extends Pdf implements LilPdfEngineInterface
      * @param string $html Html page content.
      * @return void
      */
-    public function setFooterHtml($html): void
+    public function setFooterHtml(string $html): void
     {
         if (substr($html, 0, 2) == '{"') {
             $data = json_decode($html, true);
