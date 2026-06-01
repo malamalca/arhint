@@ -171,7 +171,7 @@ class ExpensesEvents implements EventListenerInterface
 
         if (!is_null($counter->expense)) {
             $expenses = TableRegistry::getTableLocator()->get('Expenses.Expenses')->find()
-                ->where(['model' => 'Invoice', 'foreign_id' => $invoice->id])
+                ->where(['model' => 'Documents.Invoice', 'foreign_id' => $invoice->id])
                 ->contain(['Payments'])
                 ->all();
 

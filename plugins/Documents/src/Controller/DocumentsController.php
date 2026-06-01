@@ -31,7 +31,7 @@ class DocumentsController extends BaseDocumentsController
      * @param \Cake\Event\EventInterface $event Event interface
      * @return void
      */
-    public function beforeFilter(EventInterface $event)
+    public function beforeFilter(EventInterface $event): void
     {
         parent::beforeFilter($event);
 
@@ -47,9 +47,9 @@ class DocumentsController extends BaseDocumentsController
     /**
      * Index method
      *
-     * @return \Cake\Http\Response|void Renders view
+     * @return \Cake\Http\Response|null Renders view
      */
-    public function index()
+    public function index(): ?Response
     {
         /** @var \Documents\Model\Entity\DocumentsCounter|\Cake\Http\Response $counter */
         $counter = parent::index();
@@ -89,6 +89,8 @@ class DocumentsController extends BaseDocumentsController
         $dateSpan = $this->Documents->maxSpan($filter['counter']);
 
         $this->set(compact('data', 'dateSpan', 'filter'));
+
+        return null;
     }
 
     /**
@@ -96,7 +98,7 @@ class DocumentsController extends BaseDocumentsController
      *
      * @return \Cake\Http\Response|null
      */
-    public function list()
+    public function list(): ?Response
     {
         $request = new ServerRequest(['url' => $this->getRequest()->getQuery('source')]);
 

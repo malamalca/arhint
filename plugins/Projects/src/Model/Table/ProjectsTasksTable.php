@@ -31,6 +31,7 @@ use Throwable;
  * @method \Projects\Model\Entity\ProjectsTask patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
  * @method \Projects\Model\Entity\ProjectsTask|false save(\Cake\Datasource\EntityInterface $entity, array $options = [])
  * @mixin \Cake\ORM\Behavior\TimestampBehavior
+ * @extends \Cake\ORM\Table<array{}, \Projects\Model\Entity\ProjectsTask>
  */
 class ProjectsTasksTable extends Table
 {
@@ -220,7 +221,7 @@ class ProjectsTasksTable extends Table
             $maxNo = $this->find()
                 ->where(['project_id' => $entity->project_id])
                 ->select(['max_no' => $this->find()->func()->max('no')])
-                ->first()
+                ->firstOrFail()
                 ->get('max_no');
             $entity->no = $maxNo + 1;
         }

@@ -134,7 +134,7 @@ class EmailForm extends Form
 
                         $atchs = [];
                         foreach ($documents as $doc) {
-                            $atchs[] = $query->newExpr()->and([
+                            $atchs[] = $query->expr()->and([
                                 'model' => $this->getDocumentModelName($doc),
                                 'foreign_id' => $doc->id,
                             ]);
@@ -145,6 +145,7 @@ class EmailForm extends Form
                     ->all();
 
                 foreach ($docAttachments as $attachment) {
+                    /** @var \App\Model\Entity\Attachment $attachment */
                     $attachments[$attachment->filename] = [
                         'file' => $attachment->getFilePath(),
                     ];
@@ -189,11 +190,11 @@ class EmailForm extends Form
     {
         switch (get_class($document)) {
             case Invoice::class:
-                return 'Invoice';
+                return 'Documents.Invoice';
             case TravelOrder::class:
-                return 'TravelOrder';
+                return 'Documents.TravelOrder';
             default:
-                return 'Document';
+                return 'Documents.Document';
         }
     }
 }

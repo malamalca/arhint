@@ -39,7 +39,6 @@ class DocumentsSignerTest extends TestCase
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 2);
         $response = curl_exec($ch);
         $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        curl_close($ch);
 
         if ($httpCode !== 200) {
             $this->markTestSkipped('Signer service is not running on port 8082. Start the service at D:\Dev\arhint-signer\webservice');
@@ -63,23 +62,19 @@ class DocumentsSignerTest extends TestCase
 
         // Set the doc property
         $docProperty = $reflection->getProperty('doc');
-        $docProperty->setAccessible(true);
         $doc = new DOMDocument();
         $doc->loadXML($xmlContent);
         $docProperty->setValue($signer, $doc);
 
         // Set xadesAdded property
         $xadesProperty = $reflection->getProperty('xadesAdded');
-        $xadesProperty->setAccessible(true);
         $xadesProperty->setValue($signer, false);
 
         // Call private methods to add signature structure
         $addSignatureMethod = $reflection->getMethod('addSignature');
-        $addSignatureMethod->setAccessible(true);
         $addSignatureMethod->invoke($signer);
 
         $addReferenceMethod = $reflection->getMethod('addReferenceSha1');
-        $addReferenceMethod->setAccessible(true);
         $addReferenceMethod->invoke($signer, '#data', 'http://www.gzs.si/shemas/eslog/racun/1.6#Racun');
 
         // Set signature datetime
@@ -113,7 +108,6 @@ class DocumentsSignerTest extends TestCase
 
         $response = curl_exec($ch);
         $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        curl_close($ch);
 
         if ($httpCode !== 200) {
             $this->markTestSkipped('Signer service returned error: ' . $response);

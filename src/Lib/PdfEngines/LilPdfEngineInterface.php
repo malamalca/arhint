@@ -33,7 +33,7 @@ interface LilPdfEngineInterface
      * @param array<string, mixed> $enigneOptions Array of options.
      * @return void
      */
-    public function __construct($enigneOptions);
+    public function __construct(array $enigneOptions);
 
     /**
      * Sets or returns object's options
@@ -50,7 +50,7 @@ interface LilPdfEngineInterface
      * @param array<string, mixed> $options Options array.
      * @return void
      */
-    public function newPage($html, array $options = []): void;
+    public function newPage(string $html, array $options = []): void;
 
     /**
      * Saves PDF to a file
@@ -58,7 +58,7 @@ interface LilPdfEngineInterface
      * @param string $fileName Options values.
      * @return mixed
      */
-    public function saveAs($fileName): mixed;
+    public function saveAs(string $fileName): mixed;
 
     /**
      * Get last error.
@@ -73,7 +73,7 @@ interface LilPdfEngineInterface
      * @param string $html Html page content.
      * @return void
      */
-    public function setHeaderHtml($html): void;
+    public function setHeaderHtml(string $html): void;
 
     /**
      * Set page footer html.
@@ -81,5 +81,5 @@ interface LilPdfEngineInterface
      * @param string $html Html page content.
      * @return void
      */
-    public function setFooterHtml($html): void;
+    public function setFooterHtml(string $html): void;
 }

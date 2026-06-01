@@ -23,7 +23,7 @@ class TasksController extends AppController
      * @param \Cake\Event\EventInterface $event Event object
      * @return void
      */
-    public function beforeFilter(EventInterface $event)
+    public function beforeFilter(EventInterface $event): void
     {
         parent::beforeFilter($event);
 
@@ -35,7 +35,7 @@ class TasksController extends AppController
      *
      * @return void
      */
-    public function index()
+    public function index(): void
     {
         $filter = $this->getRequest()->getQueryParams();
         $filter['user'] = $this->getCurrentUser()->get('id');

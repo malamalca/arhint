@@ -20,6 +20,7 @@ use Cake\Validation\Validator;
  * @method \Expenses\Model\Entity\Expense get(mixed $primaryKey, array|string $finder = 'all', \Psr\SimpleCache\CacheInterface|string|null $cache = null, \Closure|string|null $cacheKey = null, mixed ...$args)
  * @method \Expenses\Model\Entity\Expense newEmptyEntity()
  * @method \Expenses\Model\Entity\Expense patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
+ * @extends \Cake\ORM\Table<array{}, \Expenses\Model\Entity\Expense>
  */
 class ExpensesTable extends Table
 {
@@ -49,7 +50,7 @@ class ExpensesTable extends Table
         $this->belongsTo('Invoices', [
             'foreignKey' => 'foreign_id',
             'className' => 'Documents.Invoices',
-            'conditions' => ['Expenses.model' => 'Invoice'],
+            'conditions' => ['Expenses.model' => 'Documents.Invoice'],
         ]);
     }
 

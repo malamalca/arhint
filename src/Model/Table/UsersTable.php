@@ -27,6 +27,7 @@ use Cake\Validation\Validator;
  * @method \App\Model\Entity\User[] patchEntities($entities, array $data, array $options = [])
  * @method \App\Model\Entity\User findOrCreate($search, array<array-key, mixed>|callable|null $callback = null, $options = [])
  * @mixin \Cake\ORM\Behavior\TimestampBehavior
+ * @extends \Cake\ORM\Table<array{}, \App\Model\Entity\User>
  */
 class UsersTable extends Table
 {
@@ -283,7 +284,7 @@ class UsersTable extends Table
      *
      * @param string $companyId Company id
      * @param array<string, mixed> $options Array of options
-     * @return array<\App\Model\Entity\User>
+     * @return array<string, mixed>
      */
     public function fetchForCompany(string $companyId, array $options = []): array
     {

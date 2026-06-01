@@ -22,7 +22,7 @@ class ProjectsTasksController extends AppController
      * @param \Cake\Event\EventInterface $event Event object
      * @return void
      */
-    public function beforeFilter(EventInterface $event)
+    public function beforeFilter(EventInterface $event): void
     {
         parent::beforeFilter($event);
 
@@ -35,7 +35,7 @@ class ProjectsTasksController extends AppController
      * @param string $projectId
      * @return void
      */
-    public function index(string $projectId)
+    public function index(string $projectId): void
     {
         /** @var \Projects\Model\Entity\Project $project */
         $project = $this->ProjectsTasks->getAssociation('Projects')->get($projectId);
@@ -58,7 +58,7 @@ class ProjectsTasksController extends AppController
         ]);
 
         $tasksCount = $this->ProjectsTasks->find('tasksCount', $project->id, $this->getCurrentUser(), clone $filter)
-            ->first()
+            ->firstOrFail()
             ->toArray();
 
         /** @var \App\Model\Table\UsersTable $UsersTable */

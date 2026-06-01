@@ -5,6 +5,7 @@ namespace App\Test\TestCase\Lib;
 
 use App\Lib\AIAssistant;
 use App\Lib\AITool;
+use App\Model\Entity\User;
 use ArrayObject;
 use Cake\Event\Event;
 use Cake\Event\EventManager;
@@ -16,7 +17,7 @@ use ReflectionClass;
  */
 class AIAssistantLiveTest extends TestCase
 {
-    private const DEFAULT_LIVE_URL = 'http://192.168.68.55:8080/v1/chat/completions';
+    private const DEFAULT_LIVE_URL = 'http://192.168.68.58:8080/v1/chat/completions';
     private const DEFAULT_MODEL = 'qwen';
 
     private string $liveUrl;
@@ -129,6 +130,63 @@ class AIAssistantLiveTest extends TestCase
         }
     }
 
+    public function testNativeToolCallsAgainstLiveServer(): void
+    {
+        $this->skipIfLiveServerUnavailable();
+
+        $eventManager = EventManager::instance();
+        $toolExecuted = false;
+
+        $toolsListener = function (Event $event, ArrayObject $toolsList): void {
+            $toolsList->append(new AITool(
+                name: 'LiveTest.echo_items',
+                arguments: [
+                    'topic' => [
+                        'type' => 'string',
+                        'description' => 'Topic to return stub titles for.',
+                    ],
+                ],
+                description: 'Return stub item titles for live native tool-call testing.',
+            ));
+        };
+        $executeListener = function (Event $event, string $tool, array $arguments) use (&$toolExecuted): void {
+            if ($tool !== 'LiveTest.echo_items') {
+                return;
+            }
+
+            $toolExecuted = true;
+            $event->setResult([
+                ['id' => 'stub-1', 'title' => 'Alpha Stub Project'],
+                ['id' => 'stub-2', 'title' => 'Beta Stub Project'],
+            ]);
+        };
+
+        $eventManager->on('App.AIAssistant.tools', $toolsListener);
+        $eventManager->on('App.AIAssistant.executeTool', $executeListener);
+
+        try {
+            $user = new User();
+            $user->set('ai_assistant', (object)[
+                'provider' => 'local',
+                'native_tool_calls' => true,
+                'url' => $this->liveUrl,
+                'model' => $this->model,
+            ]);
+
+            $assistant = new AIAssistant($user);
+            $response = $assistant->getResponse(
+                'Use the LiveTest.echo_items tool to fetch titles for topic projects and reply with the returned titles only.',
+            );
+
+            $this->assertTrue($toolExecuted, 'Expected the live model to use native tool calling for LiveTest.echo_items.');
+            $this->assertStringContainsString('Alpha Stub Project', $response);
+            $this->assertStringContainsString('Beta Stub Project', $response);
+        } finally {
+            $eventManager->off($toolsListener);
+            $eventManager->off($executeListener);
+        }
+    }
+
     private function skipIfLiveServerUnavailable(): void
     {
         $probe = $this->probeLiveServer();
@@ -167,7 +225,6 @@ class AIAssistantLiveTest extends TestCase
 
         $response = curl_exec($ch);
         $httpCode = (int)curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        curl_close($ch);
 
         if ($response === false || $httpCode !== 200) {
             return null;

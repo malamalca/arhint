@@ -705,12 +705,24 @@ class DocumentsAIToolsEvents implements EventListenerInterface
      */
     private function executeCreateInvoice(Event $event, array $arguments, mixed $currentUser): void
     {
+        /** @var \Documents\Model\Table\InvoicesTable $invoicesTable */
         $invoicesTable = TableRegistry::getTableLocator()->get('Documents.Invoices');
 
         $data = array_intersect_key(
             $arguments,
-            array_flip(['counter_id', 'doc_type', 'title', 'dat_issue', 'dat_service', 'dat_expire', 'pmt_type', 'pmt_ref',
-                'descript', 'items', 'taxes']),
+            array_flip([
+                'counter_id',
+                'doc_type',
+                'title',
+                'dat_issue',
+                'dat_service',
+                'dat_expire',
+                'pmt_type',
+                'pmt_ref',
+                'descript',
+                'items',
+                'taxes',
+            ]),
         );
         $data['owner_id'] = $currentUser->get('company_id');
         $data['user_id'] = $currentUser->get('id');
@@ -729,6 +741,7 @@ class DocumentsAIToolsEvents implements EventListenerInterface
         }
         unset($data['items'], $data['taxes']);
 
+        /** @var \Documents\Model\Entity\Invoice $invoice */
         $invoice = $invoicesTable->newEntity($data, ['associated' => $associated]);
 
         if (!$currentUser->can('edit', $invoice)) {
@@ -745,12 +758,13 @@ class DocumentsAIToolsEvents implements EventListenerInterface
         }
 
         if (empty($invoice->doc_type)) {
+            /** @var \Documents\Model\Table\DocumentsCountersTable $countersTable */
             $countersTable = TableRegistry::getTableLocator()->get('Documents.DocumentsCounters');
+            /** @var \Documents\Model\Entity\DocumentsCounter $counter */
             $counter = $countersTable->get($invoice->counter_id);
             $invoice->doc_type = $counter->doc_type;
         }
 
-        // @phpstan-ignore-next-line
         $invoice->getNextCounterNo();
 
         if (!$invoice->getErrors() && $invoicesTable->save($invoice, ['associated' => $associated])) {
@@ -838,10 +852,8 @@ class DocumentsAIToolsEvents implements EventListenerInterface
             $arguments,
             array_flip(['descript', 'qty', 'unit', 'price', 'discount', 'vat_id']),
         );
-        // @phpstan-ignore argument.templateType
-        $itemsTable->patchEntity($item, $updateData);
 
-        // @phpstan-ignore argument.templateType
+        $itemsTable->patchEntity($item, $updateData);
         if (!$item->getErrors() && $itemsTable->save($item)) {
             $event->setResult([
                 'id' => $item->id,
@@ -1301,8 +1313,6 @@ class DocumentsAIToolsEvents implements EventListenerInterface
 
                 return;
         }
-
-        // @phpstan-ignore argument.templateType
         if ($travelOrdersTable->save($travelOrder)) {
             $event->setResult(['id' => $travelOrder->id, 'status' => $travelOrder->get('status')]);
         } else {
@@ -1336,9 +1346,9 @@ class DocumentsAIToolsEvents implements EventListenerInterface
 
         // Resolve model/table/exporter from kind
         [$tableName, $modelAlias, $exporter] = match ($kind) {
-            'document' => ['Documents.Documents', 'Document', new DocumentsExport()],
-            'travel_order' => ['Documents.TravelOrders', 'TravelOrder', new TravelOrdersExport()],
-            default => ['Documents.Invoices', 'Invoice', new InvoicesExport()],
+            'document' => ['Documents.Documents', 'Documents.Document', new DocumentsExport()],
+            'travel_order' => ['Documents.TravelOrders', 'Documents.TravelOrder', new TravelOrdersExport()],
+            default => ['Documents.Invoices', 'Documents.Invoice', new InvoicesExport()],
         };
 
         // Load and authorize the entity
@@ -1384,6 +1394,7 @@ class DocumentsAIToolsEvents implements EventListenerInterface
         }
 
         // Build PDF attachment name
+        /** @var \Cake\Datasource\EntityInterface $doc */
         $doc = $documentList[0];
         $attachmentName = (string)mb_ereg_replace("([^\w\s\d\-_~,;\[\]\(\).])", '', (string)$doc->title);
         $attachmentName = (string)mb_ereg_replace("([\.]{2,})", '', $attachmentName);
@@ -1410,6 +1421,7 @@ class DocumentsAIToolsEvents implements EventListenerInterface
                 ->all();
 
             foreach ($docAttachments as $attachment) {
+                /** @var \App\Model\Entity\Attachment $attachment */
                 $attachments[$attachment->filename] = [
                     'file' => $attachment->getFilePath(),
                 ];

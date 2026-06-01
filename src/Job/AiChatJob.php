@@ -6,6 +6,7 @@ namespace App\Job;
 use App\Lib\AIAssistant;
 use Authorization\AuthorizationService;
 use Authorization\Policy\OrmResolver;
+use Cake\Log\Log;
 use Cake\ORM\TableRegistry;
 use Cake\Queue\Job\JobInterface;
 use Cake\Queue\Job\Message;
@@ -81,6 +82,17 @@ class AiChatJob implements JobInterface
                 'history' => $assistant->getHistory(),
             ]));
         } catch (Exception $e) {
+            Log::error(
+                'AI ChatJob error: ' . $e->getMessage() . ' | File: ' . $e->getFile() . ':' . $e->getLine(),
+                [
+                    'scope' => ['ai'],
+                    'user_id' => $userId,
+                    'job_id' => $jobId,
+                    'trace' => $e->getTraceAsString(),
+                    'previous' => $e->getPrevious() ? $e->getPrevious()->getMessage() : null,
+                ],
+            );
+
             file_put_contents($resultFile, (string)json_encode([
                 'user_id' => $userId,
                 'status' => 'error',

@@ -5,6 +5,7 @@ namespace Crm\Test\TestCase\Model\Table;
 
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\TestCase;
+use Crm\Model\Table\ContactsTable;
 
 /**
  * Crm\Model\Table\ContactsTable Test Case
@@ -20,6 +21,11 @@ class ContactsTableTest extends TestCase
         'Contacts' => 'plugin.Crm.Contacts',
         'Adremas' => 'plugin.Crm.Adremas',
     ];
+
+    /**
+     * @var \Crm\Model\Table\ContactsTable
+     */
+    protected ContactsTable $Contacts;
 
     /**
      * setUp method

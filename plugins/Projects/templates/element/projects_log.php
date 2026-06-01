@@ -5,3 +5,4 @@
         $projectsLog->created,
         h((string)$user)
     );
+?>

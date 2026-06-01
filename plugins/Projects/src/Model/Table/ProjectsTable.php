@@ -17,7 +17,6 @@ use Projects\Model\Entity\Project;
 /**
  * Projects Model
  *
- * @property \Projects\Model\Table\ProjectsLogsTable|\Cake\ORM\Association\HasMany $ProjectsLogs
  * @property \Projects\Model\Table\ProjectsStatusesTable|\Cake\ORM\Association\HasMany $ProjectsStatuses
  * @property \App\Model\Table\UsersTable&\Cake\ORM\Association\BelongsTo $Users
  * @method \Projects\Model\Entity\Project get(mixed $primaryKey, array|string $finder = 'all', \Psr\SimpleCache\CacheInterface|string|null $cache = null, \Closure|string|null $cacheKey = null, mixed ...$args)
@@ -29,6 +28,7 @@ use Projects\Model\Entity\Project;
  * @method \Projects\Model\Entity\Project[] patchEntities($entities, array $data, array $options = [])
  * @method \Projects\Model\Entity\Project findOrCreate($search, array<array-key, mixed>|callable|null $callback = null, $options = [])
  * @mixin \Cake\ORM\Behavior\TimestampBehavior
+ * @extends \Cake\ORM\Table<array{}, \Projects\Model\Entity\Project>
  */
 class ProjectsTable extends Table
 {
@@ -58,11 +58,6 @@ class ProjectsTable extends Table
             'className' => 'Projects.ProjectsStatuses',
         ]);
 
-        $this->hasMany('ProjectsLogs', [
-            'foreignKey' => 'project_id',
-            'className' => 'Projects.ProjectsLogs',
-        ]);
-
         $this->hasMany('ProjectsMilestones', [
             'foreignKey' => 'project_id',
             'className' => 'Projects.ProjectsMilestones',
@@ -74,12 +69,16 @@ class ProjectsTable extends Table
 
         $this->hasOne('LastLog', [
             'foreignKey' => false,
-            'className' => 'Projects.ProjectsLogs',
+            'className' => 'App.Logs',
+            'table' => 'logs',
             'conditions' => function (QueryExpression $exp, SelectQuery $query) {
                 $subquery = clone $query;
                 $subquery->select(['SubLastLog.id'])
-                    ->from(['SubLastLog' => 'projects_logs'])
-                    ->where(['Projects.id = SubLastLog.project_id'])
+                    ->from(['SubLastLog' => 'logs'])
+                    ->where([
+                        'Projects.id = SubLastLog.foreign_id',
+                        'SubLastLog.model' => 'Projects.Project',
+                    ])
                     ->orderBy(['SubLastLog.created' => 'DESC'])
                     ->limit(1);
 

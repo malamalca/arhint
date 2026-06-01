@@ -32,7 +32,7 @@ class InvoicesController extends BaseDocumentsController
      * @param \Cake\Event\EventInterface $event Event interface
      * @return void
      */
-    public function beforeFilter(EventInterface $event)
+    public function beforeFilter(EventInterface $event): void
     {
         parent::beforeFilter($event);
 
@@ -49,7 +49,7 @@ class InvoicesController extends BaseDocumentsController
      *
      * @return \Cake\Http\Response|null
      */
-    public function index()
+    public function index(): ?Response
     {
         /** @var \Documents\Model\Entity\DocumentsCounter|\Cake\Http\Response $counter */
         $counter = parent::index();
@@ -131,7 +131,7 @@ class InvoicesController extends BaseDocumentsController
      *
      * @return \Cake\Http\Response|null
      */
-    public function list()
+    public function list(): ?Response
     {
         $request = new ServerRequest(['url' => $this->getRequest()->getQuery('source')]);
         $sourceRequest = Router::parseRequest($request);
@@ -273,7 +273,7 @@ class InvoicesController extends BaseDocumentsController
      * @return \Cake\Http\Response|null
      * @throws \Cake\Http\Exception\NotFoundException When record not found.
      */
-    public function validate(?string $id, string $kind = 'sepa')
+    public function validate(?string $id, string $kind = 'sepa'): ?Response
     {
         if (!in_array($kind, ['sepa', 'eslog', 'eslog20'])) {
             die('Invalid extension!');

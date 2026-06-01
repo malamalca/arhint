@@ -135,30 +135,30 @@ class ActiveSyncContacts implements Syncroton_Data_IData
         $c->contacts_phones = [];
         $c->contacts_addresses = [];
         if (!empty($_entry->email1Address)) {
-            $c->contacts_emails[] = $Contacts->ContactsEmails->newEntity([
-                'email' => $_entry->email1Address,
-                'kind' => 'P',
-            ]);
+            $contactAddress = $Contacts->ContactsEmails->newEmptyEntity();
+            $contactAddress->kind = 'P';
+            $contactAddress->email = $_entry->email1Address;
+            $c->contacts_emails[] = $contactAddress;
         }
         if (!empty($_entry->email2Address)) {
-            $c->contacts_emails[] = $Contacts->ContactsEmails->newEntity([
-                'email' => $_entry->email2Address,
-                'kind' => 'W',
-            ]);
+            $contactAddress = $Contacts->ContactsEmails->newEmptyEntity();
+            $contactAddress->kind = 'W';
+            $contactAddress->email = $_entry->email2Address;
+            $c->contacts_emails[] = $contactAddress;
         }
         if (!empty($_entry->email3Address)) {
-            $c->contacts_emails[] = $Contacts->ContactsEmails->newEntity([
-                'email' => $_entry->email3Address,
-                'kind' => null,
-            ]);
+            $contactAddress = $Contacts->ContactsEmails->newEmptyEntity();
+            $contactAddress->kind = null;
+            $contactAddress->email = $_entry->email3Address;
+            $c->contacts_emails[] = $contactAddress;
         }
 
         foreach ($this->_phoneTrans as $kind => $propName) {
             if (isset($_entry->{$propName}) && !empty($_entry->{$propName})) {
-                $c->contacts_phones[] = $Contacts->ContactsPhones->newEntity([
-                    'no' => $_entry->{$propName},
-                    'kind' => $kind,
-                ]);
+                $contactPhone = $Contacts->ContactsPhones->newEmptyEntity();
+                $contactPhone->no = $_entry->{$propName};
+                $contactPhone->kind = $kind;
+                $c->contacts_phones[] = $contactPhone;
             }
             if (!isset($_entry->{$propName})) {
                 Log::write('debug', 'ActiveSyncContacts: Trans property "' . $propName . '" does not exist.');
@@ -172,7 +172,8 @@ class ActiveSyncContacts implements Syncroton_Data_IData
                 !empty($_entry->{$root . 'AddressPostalCode'}) ||
                 !empty($_entry->{$root . 'AddressStreet'})
             ) {
-                $a = $Contacts->ContactsAddresses->newEntity(['kind' => $kind]);
+                $a = $Contacts->ContactsAddresses->newEmptyEntity();
+                $a->kind = $kind;
                 if (!empty($_entry->{$root . 'AddressStreet'})) {
                     $a->street = $_entry->{$root . 'AddressStreet'};
                 }
@@ -189,9 +190,12 @@ class ActiveSyncContacts implements Syncroton_Data_IData
             }
         }
 
-        $Contacts->save($c);
+        if (!$Contacts->save($c)) {
+            Log::write('debug', 'ActiveSyncContacts: Failed to save contact. . ' . print_r($c->getErrors(), true));
+            throw new \RuntimeException('ActiveSyncContacts: Failed to save contact.');
+        }
 
-        return $c->id;
+        return (string)$c->id;
     }
 
     /**

@@ -15,6 +15,7 @@ use Cake\Validation\Validator;
  * @method \Expenses\Model\Entity\PaymentsAccount get(mixed $primaryKey, array|string $finder = 'all', \Psr\SimpleCache\CacheInterface|string|null $cache = null, \Closure|string|null $cacheKey = null, mixed ...$args)
  * @method \Expenses\Model\Entity\PaymentsAccount newEmptyEntity()
  * @method \Expenses\Model\Entity\PaymentsAccount patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
+ * @extends \Cake\ORM\Table<array{}, \Expenses\Model\Entity\PaymentsAccount>
  */
 class PaymentsAccountsTable extends Table
 {
@@ -126,7 +127,7 @@ class PaymentsAccountsTable extends Table
      *
      * @param string $ownerId Company Id.
      * @param bool $showActiveOnly Show only active accounts.
-     * @return array<\Expenses\Model\Entity\PaymentsAccount>
+     * @return array<string, mixed>
      */
     public function listForOwner(string $ownerId, bool $showActiveOnly = false): array
     {

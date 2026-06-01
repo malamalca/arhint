@@ -17,9 +17,14 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php-version: ['8.1']
+        php-version: ['8.2']
 
     steps:
+    - name: Setup Node.js 24
+      uses: actions/setup-node@v4
+      with:
+        node-version: 24
+
     - uses: actions/checkout@v4
 
     - name: Setup MySQL
@@ -53,7 +58,7 @@ jobs:
         key: ${{ runner.os }}-composer-${{ steps.key-date.outputs.date }}-${{ hashFiles('composer.json') }}
 
     - name: Composer Install
-      run: composer update
+      run: composer install --no-interaction
 
     - name: Install Ghostscript
       run: sudo apt-get install -y ghostscript
@@ -62,7 +67,7 @@ jobs:
       run: composer run-script post-install-cmd --no-interaction
 
     - name: Setup problem matchers for PHPUnit
-      if: matrix.php-version == '8.1'
+      if: matrix.php-version == '8.2'
       run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
 
     - name: Run PHPUnit
@@ -79,12 +84,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: Setup Node.js 24
+      uses: actions/setup-node@v4
+      with:
+        node-version: 24
+
     - uses: actions/checkout@v4
 
     - name: Setup PHP
       uses: shivammathur/setup-php@v2
       with:
-        php-version: '8.1'
+        php-version: '8.2'
         extensions: mbstring, intl
         tools: cs2pr
         coverage: none
@@ -104,7 +114,7 @@ jobs:
         key: ${{ runner.os }}-composer-${{ steps.key-date.outputs.date }}-${{ hashFiles('composer.json') }}
 
     - name: Composer Install
-      run: composer update
+      run: composer install --no-interaction
 
     - name: Run PHP CodeSniffer
       run: vendor/bin/phpcs --report=checkstyle | cs2pr

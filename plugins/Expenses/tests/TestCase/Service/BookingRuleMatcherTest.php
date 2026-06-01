@@ -8,6 +8,7 @@ use Cake\TestSuite\TestCase;
 use Expenses\Model\Entity\BookingRule;
 use Expenses\Model\Entity\BookingRuleFilter;
 use Expenses\Service\BookingRuleMatcher;
+use PHPUnit\Framework\Attributes\DataProvider;
 use ReflectionClass;
 
 /**
@@ -180,13 +181,13 @@ class BookingRuleMatcherTest extends TestCase
     // -------------------------------------------------------------------------
 
     /**
-     * @dataProvider operatorProvider
      * @param string $operator
      * @param string $fieldValue
      * @param string $ruleValue
      * @param bool   $expected
      * @return void
      */
+    #[DataProvider('operatorProvider')]
     public function testOperatorEvaluation(
         string $operator,
         string $fieldValue,
@@ -218,7 +219,6 @@ class BookingRuleMatcherTest extends TestCase
         // Use reflection to call the private ruleMatchesEntity method
         $reflection = new ReflectionClass($this->matcher);
         $method = $reflection->getMethod('ruleMatchesEntity');
-        $method->setAccessible(true);
         $result = $method->invoke($this->matcher, $rule, $entity);
 
         $this->assertSame($expected, $result);
@@ -270,7 +270,6 @@ class BookingRuleMatcherTest extends TestCase
 
         $reflection = new ReflectionClass($this->matcher);
         $method = $reflection->getMethod('resolveValue');
-        $method->setAccessible(true);
 
         $result = $method->invoke($this->matcher, 'net_total', $entity);
         $this->assertSame(250.50, $result);
@@ -287,7 +286,6 @@ class BookingRuleMatcherTest extends TestCase
 
         $reflection = new ReflectionClass($this->matcher);
         $method = $reflection->getMethod('resolveValue');
-        $method->setAccessible(true);
 
         $result = $method->invoke($this->matcher, '150.75', $entity);
         $this->assertSame(150.75, $result);
@@ -304,7 +302,6 @@ class BookingRuleMatcherTest extends TestCase
 
         $reflection = new ReflectionClass($this->matcher);
         $method = $reflection->getMethod('resolveValue');
-        $method->setAccessible(true);
 
         $result = $method->invoke($this->matcher, '-75.00', $entity);
         $this->assertSame(-75.0, $result);
@@ -321,7 +318,6 @@ class BookingRuleMatcherTest extends TestCase
 
         $reflection = new ReflectionClass($this->matcher);
         $method = $reflection->getMethod('resolveValue');
-        $method->setAccessible(true);
 
         $result = $method->invoke($this->matcher, '0', $entity);
         $this->assertSame(0.0, $result);

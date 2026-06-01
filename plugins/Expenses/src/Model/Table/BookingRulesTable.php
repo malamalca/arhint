@@ -16,6 +16,7 @@ use Expenses\Model\Entity\BookingRule;
  * @method \Expenses\Model\Entity\BookingRule get(mixed $primaryKey, array|string $finder = 'all', \Psr\SimpleCache\CacheInterface|string|null $cache = null, \Closure|string|null $cacheKey = null, mixed ...$args)
  * @method \Expenses\Model\Entity\BookingRule newEmptyEntity()
  * @method \Expenses\Model\Entity\BookingRule patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
+ * @extends \Cake\ORM\Table<array{}, \Expenses\Model\Entity\BookingRule>
  */
 class BookingRulesTable extends Table
 {

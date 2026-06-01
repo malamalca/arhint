@@ -50,7 +50,7 @@ $invoiceView = [
                         'controller' => 'Attachments',
                         'action' => 'edit',
                         '?' => [
-                            'model' => 'TravelOrder',
+                            'model' => 'Documents.TravelOrder',
                             'foreign_id' => $document->id,
                             'redirect' => Router::url(null, true),
                         ],
@@ -479,6 +479,16 @@ if (!empty($document->travel_orders_expenses) || $canEditRows) {
             ['id' => 'AddExpenseBtn', 'class' => 'btn btn-small filled'],
         );
     }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+// LOGS
+if (!empty($document->logs)) {
+    $invoiceView['panels']['logs_title'] = sprintf('<h3>%s</h3>', __d('documents', 'Logs'));
+    $invoiceView['panels']['logs'] = $this->element('logs', [
+        'logs' => $document->logs,
+        'redirectUrl' => Router::url(null, true),
+    ]);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////

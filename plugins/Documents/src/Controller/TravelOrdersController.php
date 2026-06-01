@@ -43,9 +43,9 @@ class TravelOrdersController extends BaseDocumentsController
     /**
      * Index method
      *
-     * @return \Cake\Http\Response|void Renders view
+     * @return \Cake\Http\Response|null Renders view
      */
-    public function index()
+    public function index(): ?Response
     {
         /** @var \Documents\Model\Entity\DocumentsCounter|\Cake\Http\Response $counter */
         $counter = parent::index();
@@ -112,6 +112,8 @@ class TravelOrdersController extends BaseDocumentsController
         }
 
         $this->set(compact('data', 'dateSpan', 'docFilter', 'statusCounts', 'openCount', 'closedCount', 'employees'));
+
+        return null;
     }
 
     /**
@@ -126,6 +128,7 @@ class TravelOrdersController extends BaseDocumentsController
         $containTables = [
             'DocumentsCounters', 'TravelOrdersMileages', 'TravelOrdersExpenses',
             'EnteredBy', 'ApprovedBy', 'ProcessedBy', 'Attachments',
+            'Logs' => ['Users'],
             'TplHeaders', 'TplBodies', 'TplFooters',
         ];
         if (Plugin::isLoaded('Projects')) {

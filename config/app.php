@@ -219,6 +219,7 @@ return [
         'trace' => true,
         'ignoredDeprecationPaths' => [
             'vendor/cakephp/migrations/src/Shim/MigrationAdapter.php',
+            'vendor/sabre/vobject/lib/**/*.php',
         ],
     ],
 
@@ -357,7 +358,7 @@ return [
             'timezone' => 'UTC',
             //'encoding' => 'utf8mb4',
             'flags' => [],
-            'cacheMetadata' => true,
+            'cacheMetadata' => false,
             'quoteIdentifiers' => true,
             'log' => false,
             //'init' => ['SET GLOBAL innodb_stats_on_metadata = 0'],
@@ -382,7 +383,7 @@ return [
             'file' => 'ai',
             'url' => null,
             'scopes' => ['ai'],
-            'levels' => ['notice', 'info', 'debug'],
+            'levels' => ['notice', 'info', 'debug', 'warning', 'error'],
         ],
         'error' => [
             'className' => FileLog::class,
@@ -498,5 +499,31 @@ return [
             'url' => 'file://' . TMP . 'queue',
             'queue' => 'default',
         ],
+    ],
+
+    /*
+     * Embedding service configuration.
+     *
+     * - url (string)   The embedding API endpoint, e.g. "http://localhost:8001/embed"
+     * - timeout (int)  cURL timeout in seconds (default 30).
+     */
+    'Embedding' => [
+        'url' => 'http://127.0.0.1:8000/embed',
+        'timeout' => 30,
+    ],
+
+    /*
+     * Chroma vector database configuration.
+     *
+     * - host (string)     Host and port, e.g. "192.168.88.30:8001"
+     * - scheme (string)   HTTP or HTTPS (default "http")
+     * - collection (string) Default collection name (default "events")
+     * - timeout (int)     cURL timeout in seconds (default 30).
+     */
+    'VectorDB' => [
+        'host' => '192.168.88.30:8001',
+        'scheme' => 'http',
+        'collection' => 'events',
+        'timeout' => 30,
     ],
 ];

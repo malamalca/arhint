@@ -19,7 +19,7 @@ class AppController extends BaseController
      * @param \Cake\Event\EventInterface $event Event object
      * @return void
      */
-    public function beforeFilter(EventInterface $event)
+    public function beforeFilter(EventInterface $event): void
     {
         parent::beforeFilter($event);
 

@@ -19,11 +19,11 @@ class ArhintBasicAuth extends AbstractBasic
      * This method should return true or false depending on if login
      * succeeded.
      *
-     * @param string $username
-     * @param string $password
+     * @param mixed $username
+     * @param mixed $password
      * @return bool
      */
-    public function validateUserPass($username, $password): bool
+    public function validateUserPass(mixed $username, mixed $password): bool
     {
         $Users = TableRegistry::getTableLocator()->get('Users');
         $user = $Users->find()

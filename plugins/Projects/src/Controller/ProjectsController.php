@@ -36,7 +36,7 @@ class ProjectsController extends AppController
 
         $query = $this->Authorization->applyScope($this->Projects->find())
             ->select($this->Projects)
-            ->select(['LastLog.id', 'LastLog.user_id', 'LastLog.project_id', 'LastLog.created', 'LastLog.descript'])
+            ->select(['LastLog.id', 'LastLog.user_id', 'LastLog.foreign_id', 'LastLog.created', 'LastLog.descript'])
             ->contain(['LastLog' => ['Users']])
             ->where($params['conditions'])
             ->orderBy($params['order']);
@@ -136,10 +136,14 @@ class ProjectsController extends AppController
         $WorkhoursTable = TableRegistry::getTableLocator()->get('Projects.ProjectsWorkhours');
         $workDuration = $WorkhoursTable->getTotalDuration($project->id);
 
-        $logs = TableRegistry::getTableLocator()->get('Projects.ProjectsLogs')->find()
+        $logs = TableRegistry::getTableLocator()->get('App.Logs')->find()
             ->select()
-            ->where(['project_id' => $id])
-            ->orderBy('ProjectsLogs.created DESC')
+            ->where([
+                'Logs.model' => 'Projects.Project',
+                'Logs.foreign_id' => $id,
+                'Logs.action' => 'Comment',
+            ])
+            ->orderBy('Logs.created DESC')
             ->limit(5)
             ->all();
 

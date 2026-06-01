@@ -18,8 +18,8 @@ class ProjectsAIToolsEventsTest extends TestCase
 {
     protected array $fixtures = [
         'app.Users',
+        'app.Logs',
         'plugin.Projects.Projects',
-        'plugin.Projects.ProjectsLogs',
         'plugin.Projects.ProjectsMilestones',
         'plugin.Projects.ProjectsTasks',
         'plugin.Projects.ProjectsWorkhours',
@@ -412,7 +412,7 @@ class ProjectsAIToolsEventsTest extends TestCase
         $result = $event->getResult();
         $this->assertIsArray($result);
         $this->assertNotEmpty($result);
-        $this->assertSame(self::PROJECT_1, $result[0]->project_id);
+        $this->assertSame(self::PROJECT_1, $result[0]->foreign_id);
     }
 
     public function testGetProjectLogsProjectNotFound(): void
@@ -435,7 +435,7 @@ class ProjectsAIToolsEventsTest extends TestCase
         $result = $event->getResult();
         $this->assertIsArray($result);
         $this->assertNotEmpty($result);
-        $this->assertSame(self::PROJECT_1, $result[0]->project_id);
+        $this->assertSame(self::PROJECT_1, $result[0]->foreign_id);
     }
 
     // -------------------------------------------------------------------------

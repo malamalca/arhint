@@ -33,6 +33,7 @@ use Documents\Model\Entity\TravelOrder;
  * @method \Documents\Model\Entity\TravelOrder[] patchEntities(iterable $entities, array $data, array $options = [])
  * @method \Documents\Model\Entity\TravelOrder|false save(\Cake\Datasource\EntityInterface $entity, $options = [])
  * @mixin \Cake\ORM\Behavior\TimestampBehavior
+ * @extends \Cake\ORM\Table<array{}, \Documents\Model\Entity\TravelOrder>
  */
 class TravelOrdersTable extends Table
 {
@@ -90,7 +91,12 @@ class TravelOrdersTable extends Table
 
         $this->hasMany('App.Attachments', [
             'foreignKey' => 'foreign_id',
-            'conditions' => ['Attachments.model' => 'TravelOrder'],
+            'conditions' => ['Attachments.model' => 'Documents.TravelOrder'],
+            'dependent' => true,
+        ]);
+        $this->hasMany('App.Logs', [
+            'foreignKey' => 'foreign_id',
+            'conditions' => ['Logs.model' => 'Documents.TravelOrder'],
             'dependent' => true,
         ]);
 
@@ -389,7 +395,7 @@ class TravelOrdersTable extends Table
                 'end' => $query->func()->max('TravelOrders.dat_task', ['string']),
             ])
             ->where(['TravelOrders.counter_id' => $counterId]);
-        $ret = $query->first()->toArray();
+        $ret = $query->firstOrFail()->toArray();
 
         if (empty($ret['start'])) {
             $ret['start'] = new Date();

@@ -15,6 +15,7 @@ use Cake\Utility\Text;
 use Documents\Form\EmailForm;
 use Documents\Lib\DocumentsSignatureInfo;
 use Documents\Lib\DocumentsSigner;
+use Documents\Model\Entity\DocumentsCounter;
 use Exception;
 use InvalidArgumentException;
 
@@ -36,7 +37,7 @@ class BaseDocumentsController extends AppController
      * @param \Cake\Event\EventInterface $event Event interface
      * @return void
      */
-    public function beforeFilter(EventInterface $event)
+    public function beforeFilter(EventInterface $event): void
     {
         parent::beforeFilter($event);
 
@@ -58,9 +59,9 @@ class BaseDocumentsController extends AppController
     /**
      * Index method
      *
-     * @return \Cake\Http\Response|null
+     * @return \Documents\Model\Entity\DocumentsCounter|\Cake\Http\Response|null
      */
-    public function index()
+    public function index(): DocumentsCounter|Response|null
     {
         $filter = (array)$this->getRequest()->getQuery();
 
@@ -114,10 +115,6 @@ class BaseDocumentsController extends AppController
         $LinksTable = TableRegistry::getTableLocator()->get('Documents.DocumentsLinks');
         $links = $LinksTable->forDocument($id, $this->documentsScope);
 
-        /** @var \Documents\Model\Table\DocumentsLogsTable $LogsTable */
-        $LogsTable = TableRegistry::getTableLocator()->get('Documents.DocumentsLogs');
-        $logs = $LogsTable->forDocument($id, $this->documentsScope);
-
         /** @var \Documents\Model\Table\DocumentsCountersTable $DocumentsCounters */
         $DocumentsCounters = TableRegistry::getTableLocator()->get('Documents.DocumentsCounters');
         $counters = $DocumentsCounters->rememberForUser(
@@ -128,7 +125,7 @@ class BaseDocumentsController extends AppController
 
         $currentCounter = $document->documents_counter->id;
 
-        $this->set(compact('document', 'counters', 'links', 'logs', 'currentCounter'));
+        $this->set(compact('document', 'counters', 'links', 'currentCounter'));
     }
 
     /**
@@ -437,6 +434,7 @@ class BaseDocumentsController extends AppController
         if (!empty($data)) {
             $options = ['download' => $this->getRequest()->getQuery('download')];
             if (count($documents) == 1) {
+                /** @var \Cake\Datasource\EntityInterface $first */
                 $first = reset($documents);
                 $options['filename'] = Text::slug($name ?? $first->title);
             }

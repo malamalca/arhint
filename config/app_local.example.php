@@ -95,4 +95,30 @@ return [
             'url' => null,
         ],
     ],
+
+    /*
+     * Embedding service configuration.
+     *
+     * - url (string)   The embedding API endpoint, e.g. "http://localhost:8001/embed"
+     * - timeout (int)  cURL timeout in seconds.
+     */
+    'Embedding' => [
+        'url' => '',
+        'timeout' => 30,
+    ],
+
+    /*
+     * Chroma vector database configuration.
+     *
+     * - host (string)     Host and port, e.g. "192.168.88.30:8001"
+     * - scheme (string)   HTTP or HTTPS.
+     * - collection (string) Collection name.
+     * - timeout (int)     cURL timeout in seconds.
+     */
+    'VectorDB' => [
+        'host' => '',
+        'scheme' => 'http',
+        'collection' => 'events',
+        'timeout' => 30,
+    ],
 ];

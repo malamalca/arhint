@@ -84,7 +84,7 @@ class DocumentsExport
      * export method
      *
      * @param string $ext Export extension.
-     * @param array<\Documents\Model\Entity\Document> $data Array of documents
+     * @param array<\Cake\Datasource\EntityInterface|array<string, mixed>|null> $data Array of documents
      * @return mixed
      */
     public function export(string $ext, array $data): mixed
@@ -100,6 +100,9 @@ class DocumentsExport
         $responseHtml = '';
 
         foreach ($data as $document) {
+            if (!is_object($document)) {
+                continue;
+            }
             $this->view->set('documents', [0 => $document]);
             $this->view->setTemplate('generic');
 
@@ -141,7 +144,10 @@ class DocumentsExport
 
         switch ($ext) {
             case 'html':
-                $result = $this->toHtml($data[0], $responseHtml);
+                $firstDoc = $data[0] ?? null;
+                if (is_object($firstDoc)) {
+                    $result = $this->toHtml($firstDoc, $responseHtml);
+                }
                 break;
             case 'xml':
                 $result = $responseHtml;
@@ -201,11 +207,11 @@ class DocumentsExport
     /**
      * Convert XML document to HTML
      *
-     * @param object $document Document entity.
+     * @param object|array<string, mixed> $document Document entity.
      * @param string $eslogXml Document XML in eSlog format.
      * @return mixed
      */
-    private function toHtml(object $document, string $eslogXml): mixed
+    private function toHtml(object|array $document, string $eslogXml): mixed
     {
         // load stylesheet for specified document
         $xsl = new DOMDocument();
@@ -225,11 +231,13 @@ class DocumentsExport
 
         $result = $xslt->transformToXml($xml);
 
-        $event = new Event('Documents.Documents.Export.Html', $document, [$result]);
-        EventManager::instance()->dispatch($event);
-        $eventResult = $event->getResult();
-        if (!empty($eventResult)) {
-            $result = $eventResult;
+        if (is_object($document)) {
+            $event = new Event('Documents.Documents.Export.Html', $document, [$result]);
+            EventManager::instance()->dispatch($event);
+            $eventResult = $event->getResult();
+            if (!empty($eventResult)) {
+                $result = $eventResult;
+            }
         }
 
         return $result;

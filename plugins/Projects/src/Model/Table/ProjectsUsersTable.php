@@ -21,6 +21,7 @@ use Cake\Validation\Validator;
  * @method \Projects\Model\Entity\ProjectsUser[] patchEntities(iterable $entities, array $data, array $options = [])
  * @method \Projects\Model\Entity\ProjectsUser|false save(\Cake\Datasource\EntityInterface $entity, $options = [])
  * @method \Projects\Model\Entity\ProjectsUser saveOrFail(\Cake\Datasource\EntityInterface $entity, $options = [])
+ * @extends \Cake\ORM\Table<array{}, \Projects\Model\Entity\ProjectsUser>
  */
 class ProjectsUsersTable extends Table
 {

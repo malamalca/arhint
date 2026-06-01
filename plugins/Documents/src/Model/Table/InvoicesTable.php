@@ -25,6 +25,7 @@ use Documents\Model\Entity\Invoice;
  * @method \Documents\Model\Entity\Invoice get(mixed $primaryKey, array|string $finder = 'all', \Psr\SimpleCache\CacheInterface|string|null $cache = null, \Closure|string|null $cacheKey = null, mixed ...$args)
  * @method \Documents\Model\Entity\Invoice newEmptyEntity()
  * @method \Documents\Model\Entity\Invoice patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
+ * @extends \Cake\ORM\Table<array{}, \Documents\Model\Entity\Invoice>
  */
 class InvoicesTable extends Table
 {
@@ -79,12 +80,12 @@ class InvoicesTable extends Table
         ]);
         $this->hasMany('App.Attachments', [
             'foreignKey' => 'foreign_id',
-            'conditions' => ['Attachments.model' => 'Invoice'],
+            'conditions' => ['Attachments.model' => 'Documents.Invoice'],
             'dependant' => true,
         ]);
         $this->hasMany('App.Logs', [
             'foreignKey' => 'foreign_id',
-            'conditions' => ['Logs.model' => 'Invoice'],
+            'conditions' => ['Logs.model' => 'Documents.Invoice'],
             'dependant' => true,
         ]);
         $this->belongsTo('TplHeaders', [
@@ -324,7 +325,7 @@ class InvoicesTable extends Table
                 'end' => $query->func()->max('Invoices.dat_issue', ['string']),
             ])
             ->where(['Invoices.counter_id' => $counterId]);
-        $ret = $query->first()->toArray();
+        $ret = $query->firstOrFail()->toArray();
 
         if (empty($ret['start'])) {
             $ret['start'] = new Date();

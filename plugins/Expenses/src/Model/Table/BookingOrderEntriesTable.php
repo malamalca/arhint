@@ -20,6 +20,7 @@ use Exception;
  * @method \Expenses\Model\Entity\BookingOrderEntry get(mixed $primaryKey, array|string $finder = 'all', \Psr\SimpleCache\CacheInterface|string|null $cache = null, \Closure|string|null $cacheKey = null, mixed ...$args)
  * @method \Expenses\Model\Entity\BookingOrderEntry newEmptyEntity()
  * @method \Expenses\Model\Entity\BookingOrderEntry patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
+ * @extends \Cake\ORM\Table<array{}, \Expenses\Model\Entity\BookingOrderEntry>
  */
 class BookingOrderEntriesTable extends Table
 {
@@ -173,7 +174,7 @@ class BookingOrderEntriesTable extends Table
      *
      * @param string $model     Entity model name (e.g. 'BankStatementEntry').
      * @param string $foreignId Source entity primary key.
-     * @return \Cake\Datasource\ResultSetInterface<\Expenses\Model\Entity\BookingOrderEntry>
+     * @return \Cake\Datasource\ResultSetInterface<\Cake\Datasource\EntityInterface>
      */
     public function entriesForEntity(string $model, string $foreignId): ResultSetInterface
     {
@@ -270,7 +271,6 @@ class BookingOrderEntriesTable extends Table
         }
 
         if (!empty($entriesToSave)) {
-            // @phpstan-ignore argument.templateType
             $this->saveMany($entriesToSave);
         }
     }

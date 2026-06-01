@@ -58,6 +58,9 @@ define('BOOKING_RULE_ACCOUNT_ENTRY_2', '00000002-0000-0007-0000-000000000002');
 // Load Crm plugin configuration so table validators and callbacks work correctly in tests.
 Configure::write(require dirname(__DIR__) . '/plugins/Crm/config/config.php');
 
+// Use a separate ChromaDB collection for tests to avoid polluting production data.
+Configure::write('VectorDB.collection', 'events_test');
+
 $migrator = new Migrator();
 $migrator->runMany([
     ['connection' => 'test'],

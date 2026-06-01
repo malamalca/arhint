@@ -12,6 +12,7 @@ use Cake\Validation\Validator;
  * @method \Documents\Model\Entity\Vat get(mixed $primaryKey, array|string $finder = 'all', \Psr\SimpleCache\CacheInterface|string|null $cache = null, \Closure|string|null $cacheKey = null, mixed ...$args)
  * @method \Documents\Model\Entity\Vat newEmptyEntity()
  * @method \Documents\Model\Entity\Vat patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
+ * @extends \Cake\ORM\Table<array{}, \Documents\Model\Entity\Vat>
  */
 class VatsTable extends Table
 {

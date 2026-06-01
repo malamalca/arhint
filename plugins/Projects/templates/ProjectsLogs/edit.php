@@ -25,9 +25,17 @@ $editForm = [
                 'method' => 'hidden',
                 'parameters' => ['redirect', ['default' => Router::url($this->getRequest()->referer(), true)]],
             ],
-            'project_id' => [
+            'model' => [
                 'method' => 'hidden',
-                'parameters' => ['project_id'],
+                'parameters' => ['model'],
+            ],
+            'action' => [
+                'method' => 'hidden',
+                'parameters' => ['action'],
+            ],
+            'foreign_id' => [
+                'method' => 'hidden',
+                'parameters' => ['foreign_id'],
             ],
             'user_id' => [
                 'method' => 'hidden',

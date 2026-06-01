@@ -7,6 +7,7 @@ use App\Controller\AppController;
 use Cake\Event\EventInterface;
 use Cake\Http\Response;
 use Cake\Http\ServerRequest;
+use Cake\I18n\Date;
 use Cake\I18n\DateTime;
 use Cake\ORM\TableRegistry;
 use Cake\Routing\Router;
@@ -26,7 +27,7 @@ class ProjectsWorkhoursController extends AppController
      * @param \Cake\Event\EventInterface $event Event interface
      * @return void
      */
-    public function beforeFilter(EventInterface $event)
+    public function beforeFilter(EventInterface $event): void
     {
         parent::beforeFilter($event);
 
@@ -42,7 +43,7 @@ class ProjectsWorkhoursController extends AppController
      *
      * @return void
      */
-    public function index()
+    public function index(): void
     {
         $filter = new ProjectsWorkhoursFilter($this->getRequest()->getQuery('q', ''));
         $params = $filter->getParams($this->getCurrentUser());
@@ -60,7 +61,7 @@ class ProjectsWorkhoursController extends AppController
         ]);
 
         $workhourCount = $this->ProjectsWorkhours->find('workhoursCount', $this->getCurrentUser(), clone $filter)
-            ->first()
+            ->firstOrFail()
             ->toArray();
 
         /** @var \App\Model\Table\UsersTable $UsersTable */
@@ -84,7 +85,7 @@ class ProjectsWorkhoursController extends AppController
      *
      * @return void
      */
-    public function list()
+    public function list(): void
     {
         $sourceUrl = $this->getRequest()->getQuery('source');
         $sourceRequest = [];
@@ -309,7 +310,7 @@ class ProjectsWorkhoursController extends AppController
 
                 foreach ($workhours as $workhour) {
                     $this->Authorization->authorize($workhour, 'edit');
-                    $workhour->dat_confirmed = DateTime::now();
+                    $workhour->dat_confirmed = Date::now();
                     if ($this->ProjectsWorkhours->save($workhour)) {
                         $bulkCount++;
                     }

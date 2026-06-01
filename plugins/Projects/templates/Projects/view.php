@@ -48,16 +48,6 @@ $projectView = [
                     ],
                     'params' => ['id' => 'add-projects-log'],
                 ],
-                'log' => [
-                    'title' => __d('projects', 'Add Log'),
-                    'visible' => $this->getCurrentUser()->hasRole('editor'),
-                    'url' => [
-                        'controller' => 'ProjectsLogs',
-                        'action' => 'edit',
-                        '?' => ['project' => $project->id],
-                    ],
-                    'params' => ['id' => 'add-projects-log'],
-                ],
                 'workhour' => [
                     'title' => __d('projects', 'Add Workhour'),
                     'visible' => $this->getCurrentUser()->hasRole('editor'),
@@ -115,25 +105,25 @@ $projectView = [
                 '<li class="tab col"><a href="%1$s" target="_self"%3$s>%2$s</a></li>',
                 $this->Url->build([$project->id, '?' => ['tab' => 'milestones']]),
                 __d('projects', 'Milestones'),
-                !$this->getRequest()->getQuery('tab') || $this->getRequest()->getQuery('tab') == 'milestones' ? ' class="active"' : ''
+                !$this->getRequest()->getQuery('tab') || $this->getRequest()->getQuery('tab') == 'milestones' ? ' class="active"' : '',
             ),
             'logs' => sprintf(
                 '<li class="tab col"><a href="%1$s" target="_self"%3$s>%2$s</a></li>',
                 $this->Url->build([$project->id, '?' => ['tab' => 'logs']]),
                 __d('projects', 'Logs'),
-                $this->getRequest()->getQuery('tab') == 'logs' ? ' class="active"' : ''
+                $this->getRequest()->getQuery('tab') == 'logs' ? ' class="active"' : '',
             ),
             'workhours' => sprintf(
                 '<li class="tab col"><a href="%1$s" target="_self"%3$s>%2$s</a></li>',
                 $this->Url->build([$project->id, '?' => ['tab' => 'workhours']]),
                 __d('projects', 'Workhours'),
-                $this->getRequest()->getQuery('tab') == 'workhours' ? ' class="active"' : ''
+                $this->getRequest()->getQuery('tab') == 'workhours' ? ' class="active"' : '',
             ),
             'users' => !$this->getCurrentUser()->hasRole('admin') ? null : sprintf(
                 '<li class="tab col"><a href="%1$s" target="_self"%3$s>%2$s</a></li>',
                 $this->Url->build([$project->id, '?' => ['tab' => 'users']]),
                 __d('projects', 'Users'),
-                $this->getRequest()->getQuery('tab') == 'users' ? ' class="active"' : ''
+                $this->getRequest()->getQuery('tab') == 'users' ? ' class="active"' : '',
             ),
             'post' => '</ul></div>',
         ]],
@@ -184,15 +174,16 @@ switch ($activeTab) {
                             $this->getCurrentUser()->hasRole('admin') || ($this->getCurrentUser()->id == $log->user_id) ?
                                 $this->Html->link(
                                     __d('projects', 'delete'),
-                                    ['controller' => 'ProjectsLogs', 'action' => 'delete', $log->id, ['?' => ['redirect' => Router::url(null, true)]]],
-                                    ['confirm' => __d('projects', 'Are you sure you want to delete this log?')]
+                                    ['controller' => 'ProjectsLogs', 'action' => 'delete', $log->id, '?' => ['redirect' => Router::url(null, true)]],
+                                    ['confirm' => __d('projects', 'Are you sure you want to delete this log?')],
                                 ) . ' ' .
                                 $this->Html->link(
                                     __d('projects', 'edit'),
-                                    ['controller' => 'ProjectsLogs', 'action' => 'edit', $log->id, ['?' => ['redirect' => Router::url(null, true)]]],
+                                    ['controller' => 'ProjectsLogs', 'action' => 'edit', $log->id, '?' => ['redirect' => Router::url(null, true)]],
+                                    ['class' => 'btn-edit-log'],
                                 )
                                 :
-                                ''
+                                '',
                         ) .
                         //$log->descript
                         strip_tags($log->descript ?? '', ['a', 'strong', 'em', 'span', 'sub', 'sup', 'table', 'tr', 'td', 'p', 'pre', 'blockquote', 'img']),
@@ -294,6 +285,13 @@ echo $this->Lil->panels($projectView, 'Projects.Projects.view');
             $(this).modalPopup({
                 title: "<?= __d('projects', 'Edit Milestone') ?>",
                 onOpen: function(popup) { $("#projects-milestone-title", popup).focus(); }
+            });
+        });
+
+        $(".btn-edit-log").each(function() {
+            $(this).modalPopup({
+                title: "<?= __d('projects', 'Edit Log') ?>",
+                onOpen: function(popup) { $("#projects-logs-descript", popup).focus(); }
             });
         });
     });

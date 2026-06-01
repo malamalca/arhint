@@ -86,7 +86,7 @@ class InvoicesExportEracuni
         foreach ($data as $doc) {
             $activeSheet->setCellValueExplicit(
                 'A' . $i,
-                strtolower($documentTypes[$doc->documents_counter->doc_type]),
+                strtolower($documentTypes[$doc->documents_counter->doc_type ?? '']),
                 DataType::TYPE_STRING,
             );
 

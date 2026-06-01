@@ -189,7 +189,7 @@ class CrmMailer extends ArhintMailer
             /** @var \App\Model\Table\LogsTable $LogsTable */
             $LogsTable = TableRegistry::getTableLocator()->get('App.Logs');
             $LogsTable::log(
-                model: 'Adremas',
+                model: 'Crm.Adremas',
                 foreignId: $this->viewBuilder()->getVar('adrema')->id,
                 userId: $this->currentUser->id,
                 action: 'AdremaEmail',

@@ -28,6 +28,7 @@ use Documents\Model\Entity\Document;
  * @method \Documents\Model\Entity\Document[] patchEntities(iterable $entities, array $data, array $options = [])
  * @method \Documents\Model\Entity\Document|false save(\Cake\Datasource\EntityInterface $entity, $options = [])
  * @mixin \Cake\ORM\Behavior\TimestampBehavior
+ * @extends \Cake\ORM\Table<array{}, \Documents\Model\Entity\Document>
  */
 class DocumentsTable extends Table
 {
@@ -72,13 +73,13 @@ class DocumentsTable extends Table
         ]);
         $this->hasMany('App.Attachments', [
             'foreignKey' => 'foreign_id',
-            'conditions' => ['Attachments.model' => 'Document'],
+            'conditions' => ['Attachments.model' => 'Documents.Document'],
             'dependant' => true,
         ]);
         $this->hasMany('App.Logs', [
             'foreignKey' => 'foreign_id',
-            'conditions' => ['Logs.model' => 'Document'],
-            'dependant' => true,
+            'conditions' => ['Logs.model' => 'Documents.Document'],
+            'dependent' => true,
         ]);
 
         $this->belongsTo('TplHeaders', [
@@ -275,7 +276,7 @@ class DocumentsTable extends Table
                 'end' => $query->func()->max('Documents.dat_issue', ['string']),
             ])
             ->where(['Documents.counter_id' => $counterId]);
-        $ret = $query->first()->toArray();
+        $ret = $query->firstOrFail()->toArray();
 
         if (empty($ret['start'])) {
             $ret['start'] = new Date();

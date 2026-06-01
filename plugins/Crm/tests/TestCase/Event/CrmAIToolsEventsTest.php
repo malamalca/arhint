@@ -23,6 +23,7 @@ class CrmAIToolsEventsTest extends TestCase
         'plugin.Crm.ContactsPhones',
         'plugin.Crm.ContactsAddresses',
         'plugin.Crm.ContactsAccounts',
+        'plugin.Crm.ContactsSearchIndex',
     ];
 
     protected CrmAIToolsEvents $listener;

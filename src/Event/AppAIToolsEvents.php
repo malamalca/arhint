@@ -4,10 +4,13 @@ declare(strict_types=1);
 namespace App\Event;
 
 use App\Lib\AITool;
+use App\Lib\VectorDBSearchTool;
 use ArrayObject;
 use Cake\Event\Event;
 use Cake\Event\EventListenerInterface;
+use Cake\Log\Log;
 use Cake\ORM\TableRegistry;
+use Exception;
 
 class AppAIToolsEvents implements EventListenerInterface
 {
@@ -61,6 +64,25 @@ class AppAIToolsEvents implements EventListenerInterface
             ],
             description: 'Lists users in the current company. Returns id, name, username, email, and active status.',
         ));
+
+        $toolsList->append(new AITool(
+            name: 'App.vector_search',
+            arguments: [
+                'query' => [
+                    'type' => 'string',
+                    'description' => 'Natural language question to answer using project intelligence logs. ' .
+                        'e.g. "What is going on with the current project?" or "Are there any blockers?"',
+                ],
+                'entity_id' => [
+                    'type' => 'string',
+                    'description' => 'UUID of the related entity to filter by '
+                        . '(e.g. project UUID). Optional but recommended.',
+                ],
+            ],
+            description: 'Searches project intelligence logs using semantic similarity (ChromaDB) ' .
+                'and returns an AI-synthesized answer based on recent activity, risks, blockers, ' .
+                'and status updates.',
+        ));
     }
 
     /**
@@ -75,28 +97,73 @@ class AppAIToolsEvents implements EventListenerInterface
     {
         $currentUser = $event->getData()[2] ?? null;
 
-        if ($tool === 'App.get_users') {
-            /** @var \App\Model\Table\UsersTable $usersTable */
-            $usersTable = TableRegistry::getTableLocator()->get('Users');
+        Log::debug(
+            'App tool executing: ' . $tool,
+            [
+                'scope' => ['ai'],
+                'tool' => $tool,
+                'arguments' => $arguments,
+            ],
+        );
 
-            $query = $currentUser->applyScope('index', $usersTable->find())
-                ->select(['Users.id', 'Users.name', 'Users.username', 'Users.email', 'Users.active'])
-                ->orderBy(['Users.name' => 'ASC']);
+        try {
+            if ($tool === 'App.get_users') {
+                /** @var \App\Model\Table\UsersTable $usersTable */
+                $usersTable = TableRegistry::getTableLocator()->get('Users');
 
-            $activeArg = $arguments['active'] ?? 'true';
-            if ($activeArg !== 'all') {
-                $query->where(['Users.active' => $activeArg === 'false' ? 0 : 1]);
+                $query = $currentUser->applyScope('index', $usersTable->find())
+                    ->select(['Users.id', 'Users.name', 'Users.username', 'Users.email', 'Users.active'])
+                    ->orderBy(['Users.name' => 'ASC']);
+
+                $activeArg = $arguments['active'] ?? 'true';
+                if ($activeArg !== 'all') {
+                    $query->where(['Users.active' => $activeArg === 'false' ? 0 : 1]);
+                }
+
+                if (!empty($arguments['search'])) {
+                    $search = '%' . $arguments['search'] . '%';
+                    $query->where(['OR' => [
+                        'Users.name LIKE' => $search,
+                        'Users.username LIKE' => $search,
+                    ]]);
+                }
+
+                $event->setResult($query->all()->toArray());
             }
 
-            if (!empty($arguments['search'])) {
-                $search = '%' . $arguments['search'] . '%';
-                $query->where(['OR' => [
-                    'Users.name LIKE' => $search,
-                    'Users.username LIKE' => $search,
-                ]]);
-            }
+            if ($tool === 'App.vector_search') {
+                $searchTool = new VectorDBSearchTool($currentUser);
 
-            $event->setResult($query->all()->toArray());
+                // Build ChromaDB where filter if entity_id is provided.
+                $where = null;
+                if (!empty($arguments['entity_id'])) {
+                    $where = [
+                        'log_foreign_id' => (string)$arguments['entity_id'],
+                    ];
+                }
+
+                $result = $searchTool->searchAndAnalyze(
+                    query: (string)($arguments['query'] ?? ''),
+                    where: $where,
+                );
+
+                $event->setResult([
+                    'answer' => $result,
+                    'source' => 'ChromaDB semantic intelligence search',
+                ]);
+            }
+        } catch (Exception $e) {
+            Log::error(
+                'App AI tool error: ' . $e->getMessage() . ' | File: ' . $e->getFile() . ':' . $e->getLine(),
+                [
+                    'scope' => ['ai'],
+                    'tool' => $tool,
+                    'arguments' => $arguments,
+                    'trace' => $e->getTraceAsString(),
+                ],
+            );
+
+            $event->setResult(['error' => $e->getMessage()]);
         }
     }
 }

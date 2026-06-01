@@ -3,6 +3,9 @@ declare(strict_types=1);
 
 namespace App\Lib;
 
+use ArrayAccess;
+use ArrayObject;
+
 class Lil
 {
     /**
@@ -10,18 +13,17 @@ class Lil
      *
      * Insert a new element into array
      *
-     * @param array<string, mixed> $input Destination for insert operation.
+     * @param \ArrayAccess|array<string, mixed> $input Destination for insert operation.
      * @param array<string, mixed> $element Element to be inserted.
      * @param array<string, mixed> $options Insert options.
      * @return void
      */
-    public static function insertIntoArray(&$input, $element, $options = []): void
+    public static function insertIntoArray(array|ArrayAccess &$input, array $element, array $options = []): void
     {
-        if (is_object($input)) {
-            $dest = $input->getArrayCopy();
-        } else {
-            $dest = &$input;
-        }
+        // Normalize to plain array for manipulation; track if we need to export back.
+        $isArrayObject = ($input instanceof ArrayObject);
+        /** @var array<string, mixed> $dest */
+        $dest = $isArrayObject ? $input->getArrayCopy() : $input;
 
         if (isset($options['after']) || isset($options['replace'])) {
             $title = $options['after'] ?? $options['replace'];
@@ -111,8 +113,11 @@ class Lil
             $dest = $dest + $element;
         }
 
-        if (is_object($input)) {
+        // Export back to ArrayObject if needed; otherwise write directly.
+        if ($isArrayObject && $input instanceof ArrayObject) {
             $input->exchangeArray($dest);
+        } else {
+            $input = $dest;
         }
     }
 }

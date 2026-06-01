@@ -18,6 +18,7 @@ use Cake\Validation\Validator;
  * @method \Crm\Model\Entity\ContactsEmail newEmptyEntity()
  * @method \Crm\Model\Entity\ContactsEmail newEntity(array $data, array $options = [])
  * @method \Crm\Model\Entity\ContactsEmail|false save(\Cake\Datasource\EntityInterface $entity, array $options = [])
+ * @extends \Cake\ORM\Table<array{}, \Crm\Model\Entity\ContactsEmail>
  */
 class ContactsEmailsTable extends Table
 {

@@ -334,8 +334,8 @@ class DocumentsSignatureInfo
             if (function_exists('gmp_init')) {
                 $result['serialNumberHex'] = strtoupper(gmp_strval(gmp_init($parsedCert['serialNumber'], 10), 16));
             } else {
-                // Fallback for systems without GMP
-                $result['serialNumberHex'] = strtoupper(dechex((int)$parsedCert['serialNumber']));
+                // Fallback for systems without GMP — use base_convert to avoid int overflow on large serials
+                $result['serialNumberHex'] = strtoupper(base_convert($parsedCert['serialNumber'], 10, 16));
             }
         }
 
