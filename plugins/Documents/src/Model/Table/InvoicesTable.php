@@ -25,6 +25,7 @@ use Documents\Model\Entity\Invoice;
  * @method \Documents\Model\Entity\Invoice get(mixed $primaryKey, array|string $finder = 'all', \Psr\SimpleCache\CacheInterface|string|null $cache = null, \Closure|string|null $cacheKey = null, mixed ...$args)
  * @method \Documents\Model\Entity\Invoice newEmptyEntity()
  * @method \Documents\Model\Entity\Invoice patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
+ * @extends \Cake\ORM\Table<array{}, \Documents\Model\Entity\Invoice>
  */
 class InvoicesTable extends Table
 {

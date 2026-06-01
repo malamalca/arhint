@@ -15,6 +15,7 @@ use Cake\Validation\Validator;
  * @method \Documents\Model\Entity\DocumentsCounter get(mixed $primaryKey, array|string $finder = 'all', \Psr\SimpleCache\CacheInterface|string|null $cache = null, \Closure|string|null $cacheKey = null, mixed ...$args)
  * @method \Documents\Model\Entity\DocumentsCounter newEmptyEntity()
  * @method \Documents\Model\Entity\DocumentsCounter patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
+ * @extends \Cake\ORM\Table<array{}, \Documents\Model\Entity\DocumentsCounter>
  */
 class DocumentsCountersTable extends Table
 {

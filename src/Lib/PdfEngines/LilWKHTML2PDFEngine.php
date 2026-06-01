@@ -95,7 +95,7 @@ class LilWKHTML2PDFEngine extends Pdf implements LilPdfEngineInterface
      * @param string $fileName Filename.
      * @return bool
      */
-    public function saveAs(string $fileName): bool
+    public function saveAs($fileName): bool
     {
         $result = parent::saveAs($fileName);
 

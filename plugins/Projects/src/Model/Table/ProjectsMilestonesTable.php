@@ -17,6 +17,7 @@ use Cake\Validation\Validator;
  * @method \Projects\Model\Entity\ProjectsMilestone patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
  * @method \Projects\Model\Entity\ProjectsMilestone|false save(\Cake\Datasource\EntityInterface $entity, array $options = [])
  * @mixin \Cake\ORM\Behavior\TimestampBehavior
+ * @extends \Cake\ORM\Table<array{}, \Projects\Model\Entity\ProjectsMilestone>
  */
 class ProjectsMilestonesTable extends Table
 {

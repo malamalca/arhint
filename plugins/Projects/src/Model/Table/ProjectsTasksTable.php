@@ -31,6 +31,7 @@ use Throwable;
  * @method \Projects\Model\Entity\ProjectsTask patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
  * @method \Projects\Model\Entity\ProjectsTask|false save(\Cake\Datasource\EntityInterface $entity, array $options = [])
  * @mixin \Cake\ORM\Behavior\TimestampBehavior
+ * @extends \Cake\ORM\Table<array{}, \Projects\Model\Entity\ProjectsTask>
  */
 class ProjectsTasksTable extends Table
 {

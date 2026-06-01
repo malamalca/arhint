@@ -14,6 +14,7 @@ use Cake\ORM\Table;
  * @method \App\Model\Entity\LogsAnalysis patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
  * @method \App\Model\Entity\LogsAnalysis|false save(\Cake\Datasource\EntityInterface $entity, array $options = [])
  * @mixin \Cake\ORM\Behavior\TimestampBehavior
+ * @extends \Cake\ORM\Table<array{}, \App\Model\Entity\LogsAnalysis>
  */
 class LogsAnalysisTable extends Table
 {

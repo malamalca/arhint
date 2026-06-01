@@ -18,6 +18,7 @@ use Cake\Validation\Validator;
  * @method \Projects\Model\Entity\ProjectsTasksComment patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
  * @method \Projects\Model\Entity\ProjectsTasksComment|false save(\Cake\Datasource\EntityInterface $entity, array $options = [])
  * @mixin \Cake\ORM\Behavior\TimestampBehavior
+ * @extends \Cake\ORM\Table<array{}, \Projects\Model\Entity\ProjectsTasksComment>
  */
 class ProjectsTasksCommentsTable extends Table
 {

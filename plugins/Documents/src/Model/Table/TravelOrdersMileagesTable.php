@@ -22,6 +22,7 @@ use Documents\Model\Entity\TravelOrdersMileage;
  * @method \Documents\Model\Entity\TravelOrdersMileage[] patchEntities(iterable $entities, array $data, array $options = [])
  * @method \Documents\Model\Entity\TravelOrdersMileage|false save(\Cake\Datasource\EntityInterface $entity, $options = [])
  * @mixin \Cake\ORM\Behavior\TimestampBehavior
+ * @extends \Cake\ORM\Table<array{}, \Documents\Model\Entity\TravelOrdersMileage>
  */
 class TravelOrdersMileagesTable extends Table
 {

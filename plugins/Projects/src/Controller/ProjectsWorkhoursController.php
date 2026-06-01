@@ -7,6 +7,7 @@ use App\Controller\AppController;
 use Cake\Event\EventInterface;
 use Cake\Http\Response;
 use Cake\Http\ServerRequest;
+use Cake\I18n\Date;
 use Cake\I18n\DateTime;
 use Cake\ORM\TableRegistry;
 use Cake\Routing\Router;
@@ -309,7 +310,7 @@ class ProjectsWorkhoursController extends AppController
 
                 foreach ($workhours as $workhour) {
                     $this->Authorization->authorize($workhour, 'edit');
-                    $workhour->dat_confirmed = DateTime::now();
+                    $workhour->dat_confirmed = Date::now();
                     if ($this->ProjectsWorkhours->save($workhour)) {
                         $bulkCount++;
                     }

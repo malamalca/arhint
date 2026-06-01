@@ -13,6 +13,7 @@ use Cake\Validation\Validator;
  * @method \Documents\Model\Entity\InvoicesTax get(mixed $primaryKey, array|string $finder = 'all', \Psr\SimpleCache\CacheInterface|string|null $cache = null, \Closure|string|null $cacheKey = null, mixed ...$args)
  * @method \Documents\Model\Entity\InvoicesTax newEmptyEntity()
  * @method \Documents\Model\Entity\InvoicesTax patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
+ * @extends \Cake\ORM\Table<array{}, \Documents\Model\Entity\InvoicesTax>
  */
 class InvoicesTaxesTable extends Table
 {

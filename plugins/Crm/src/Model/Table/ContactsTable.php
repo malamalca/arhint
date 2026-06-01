@@ -22,6 +22,7 @@ use Cake\Validation\Validator;
  * @property \Crm\Model\Table\ContactsAddressesTable $ContactsAddresses
  * @property \Crm\Model\Table\ContactsEmailsTable $ContactsEmails
  * @property \Crm\Model\Table\ContactsPhonesTable $ContactsPhones
+ * @extends \Cake\ORM\Table<array{}, \Crm\Model\Entity\Contact>
  */
 class ContactsTable extends Table
 {

@@ -28,6 +28,7 @@ use Documents\Model\Entity\Document;
  * @method \Documents\Model\Entity\Document[] patchEntities(iterable $entities, array $data, array $options = [])
  * @method \Documents\Model\Entity\Document|false save(\Cake\Datasource\EntityInterface $entity, $options = [])
  * @mixin \Cake\ORM\Behavior\TimestampBehavior
+ * @extends \Cake\ORM\Table<array{}, \Documents\Model\Entity\Document>
  */
 class DocumentsTable extends Table
 {

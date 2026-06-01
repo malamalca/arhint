@@ -33,6 +33,7 @@ use Documents\Model\Entity\TravelOrder;
  * @method \Documents\Model\Entity\TravelOrder[] patchEntities(iterable $entities, array $data, array $options = [])
  * @method \Documents\Model\Entity\TravelOrder|false save(\Cake\Datasource\EntityInterface $entity, $options = [])
  * @mixin \Cake\ORM\Behavior\TimestampBehavior
+ * @extends \Cake\ORM\Table<array{}, \Documents\Model\Entity\TravelOrder>
  */
 class TravelOrdersTable extends Table
 {

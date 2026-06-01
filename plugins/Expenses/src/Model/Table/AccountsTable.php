@@ -13,6 +13,7 @@ use Cake\Validation\Validator;
  * @method \Expenses\Model\Entity\Account newEmptyEntity()
  * @method \Expenses\Model\Entity\Account patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
  * @mixin \Cake\ORM\Behavior\TreeBehavior
+ * @extends \Cake\ORM\Table<array{}, \Expenses\Model\Entity\Account>
  */
 class AccountsTable extends Table
 {

@@ -16,6 +16,7 @@ use Cake\Validation\Validator;
  * @method \Tasks\Model\Entity\TasksFolder newEntity($data = null, array $options = [])
  * @method \Tasks\Model\Entity\TasksFolder newEmptyEntity(array $options = [])
  * @method \Tasks\Model\Entity\TasksFolder patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
+ * @extends \Cake\ORM\Table<array{}, \Tasks\Model\Entity\TasksFolder>
  */
 class TasksFoldersTable extends Table
 {
