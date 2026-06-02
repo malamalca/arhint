@@ -46,7 +46,24 @@ class AiController extends AppController
         $history = $session->read('AIAssistant.history') ?? [];
         $userId = $this->getCurrentUser()->get('id');
 
+        // Reject if a job is already pending for this user — prevents duplicate
+        // queue pushes when the client fires rapid requests before polling resolves.
+        $pendingJobId = (string)$session->read('AIAssistant.pendingJobId');
+        if ($pendingJobId !== '') {
+            $existingResult = TMP . 'ai_jobs' . DS . $pendingJobId . '_result.json';
+            if (!file_exists($existingResult)) {
+                return $this->response
+                    ->withType('application/json')
+                    ->withStringBody((string)json_encode([
+                        'job_id' => $pendingJobId,
+                        'status' => 'pending',
+                        'notice' => 'A job is already running. Keep polling the existing job_id.',
+                    ]));
+            }
+        }
+
         $jobId = Text::uuid();
+        $session->write('AIAssistant.pendingJobId', $jobId);
         $jobsDir = TMP . 'ai_jobs' . DS;
 
         if (!is_dir($jobsDir)) {
@@ -106,6 +123,9 @@ class AiController extends AppController
 
         unlink($resultFile);
 
+        // Clear the pending flag so a new job can be submitted.
+        $this->request->getSession()->delete('AIAssistant.pendingJobId');
+
         if (!empty($result['history'])) {
             $this->request->getSession()->write('AIAssistant.history', $result['history']);
         }
@@ -146,7 +166,9 @@ class AiController extends AppController
         $this->Authorization->skipAuthorization();
         $this->request->allowMethod('post');
 
-        $this->request->getSession()->delete('AIAssistant.history');
+        $session = $this->request->getSession();
+        $session->delete('AIAssistant.history');
+        $session->delete('AIAssistant.pendingJobId');
 
         return $this->response
             ->withType('application/json')
