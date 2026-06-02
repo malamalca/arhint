@@ -334,6 +334,20 @@ class AIAssistant
                 ],
             );
 
+            // Log the main request response for diagnostics (tools provided but model chose not to call any).
+            if ($this->shouldUseNativeToolCalls() && empty($message['tool_calls']) && !empty($activeTools)) {
+                Log::debug(
+                    'AI model returned no tool_calls despite tools being available',
+                    [
+                        'scope' => ['ai'],
+                        'finish_reason' => $message['finish_reason'] ?? 'unknown',
+                        'content_empty' => trim((string)$message['content']) === '',
+                        'content_snippet' => $this->trimText((string)$message['content'], 200),
+                        'tools_available' => array_map(fn($t) => $t->name, $activeTools),
+                    ],
+                );
+            }
+
             // Native tool_calls support for configured providers.
             if (
                 $this->shouldUseNativeToolCalls()
@@ -1264,6 +1278,14 @@ class AIAssistant
 
         if ($finishReason !== 'tool_calls' && !isset($responseMessage['content'])) {
             throw new Exception('Unexpected API response: ' . $response);
+        }
+
+        // Check for model refusal (OpenAI may refuse tool calls or the request itself).
+        if (!empty($responseMessage['refusal'])) {
+            throw new Exception(sprintf(
+                'Model refused: %s',
+                $this->trimText((string)$responseMessage['refusal'], self::MAX_TOOL_RESULT_CHARS),
+            ));
         }
 
         $content = $responseMessage['content'] ?? '';
