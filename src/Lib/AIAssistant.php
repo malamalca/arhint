@@ -213,6 +213,7 @@ class AIAssistant
                 'scope' => ['ai'],
                 'history_length' => count($this->conversationHistory),
                 'provider' => $this->provider,
+                'pid' => getmypid(),
             ],
         );
 
@@ -295,6 +296,18 @@ class AIAssistant
                         ];
                     }, $activeTools);
                     $data['tool_choice'] = 'auto';
+
+                    // Verify the full payload serialises before sending — tools with complex
+                    // argument schemas can silently produce invalid JSON.
+                    try {
+                        json_encode($data, JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE);
+                    } catch (\ValueError $jsonErr) {
+                        Log::error(
+                            'AI payload JSON encode failed: ' . $jsonErr->getMessage(),
+                            ['scope' => ['ai'], 'tool_count' => count($activeTools)],
+                        );
+                        throw new \Exception('Failed to encode AI request with tools: ' . $jsonErr->getMessage());
+                    }
                 }
             } else {
                 if ($this->customSystemPrompt !== null) {
@@ -320,7 +333,7 @@ class AIAssistant
             }
 
             Log::debug(
-                'AI >>> MAIN REQUEST START <<< tools=' . count($data['tools'] ?? []) . ' messages=' . count($data['messages'] ?? []),
+                'AI >>> MAIN REQUEST START <<< tools=' . count($data['tools'] ?? []) . ' messages=' . count($data['messages'] ?? []) . ' pid=' . getmypid(),
                 ['scope' => ['ai']],
             );
 
@@ -1197,10 +1210,15 @@ class AIAssistant
             $headers[] = 'Authorization: Bearer ' . $apiKey;
         }
 
-        $payload = json_encode($data);
+        $payload = json_encode($data, JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
         if ($payload === false) {
             throw new Exception('Failed to encode request data: ' . json_last_error_msg());
         }
+
+        Log::debug(
+            'AI payload encoded, size=' . strlen($payload) . ' bytes',
+            ['scope' => ['ai']],
+        );
 
         // Log the request being sent to the AI (without API keys).
         $logContext = [
@@ -1245,7 +1263,9 @@ class AIAssistant
         curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
         curl_setopt($ch, CURLOPT_TIMEOUT, 180);
 
+        Log::debug('AI cURL exec starting...', ['scope' => ['ai']]);
         $response = curl_exec($ch);
+        Log::debug('AI cURL exec finished, responseLen=' . strlen((string)$response), ['scope' => ['ai']]);
         $curlErrno = curl_errno($ch);
         $curlError = curl_error($ch);
         $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
