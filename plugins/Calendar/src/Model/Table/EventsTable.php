@@ -123,8 +123,15 @@ class EventsTable extends Table
      */
     public function beforeMarshal(Event $event, ArrayObject $data, ArrayObject $options): void
     {
-        if (($data['all_day'] ?? null) == '1') {
+        if (empty($data['all_day'])) {
+            return;
+        }
+
+        if (!empty($data['dat_start']) && !str_contains($data['dat_start'], ' ')) {
             $data['dat_start'] .= ' 00:00:00';
+        }
+
+        if (!empty($data['dat_end']) && !str_contains($data['dat_end'], ' ')) {
             $data['dat_end'] .= ' 00:00:00';
         }
     }

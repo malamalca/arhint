@@ -6,6 +6,7 @@ namespace Calendar;
 use Cake\Core\BasePlugin;
 use Cake\Event\EventManagerInterface;
 use Cake\Routing\RouteBuilder;
+use Calendar\Event\CalendarAIToolsEvents;
 use Calendar\Event\CalendarEvents;
 
 /**
@@ -44,6 +45,7 @@ class CalendarPlugin extends BasePlugin
     public function events(EventManagerInterface $eventManager): EventManagerInterface
     {
         $eventManager->on(new CalendarEvents());
+        $eventManager->on(new CalendarAIToolsEvents());
 
         return $eventManager;
     }

@@ -156,8 +156,13 @@ class VectorDBSearchTool
     private function getAiApiUrl(): string
     {
         $config = $this->currentUser?->get('ai_assistant');
-        if ($config) {
-            return (string)$config->url ?: 'http://192.168.68.58:8080/v1/chat/completions';
+        if (is_object($config)) {
+            $provider = $config->provider ?? 'local';
+            if ($provider === 'openai') {
+                return 'https://api.openai.com/v1/chat/completions';
+            }
+
+            return (string)($config->url ?: 'http://192.168.68.58:8080/v1/chat/completions');
         }
 
         return 'http://192.168.68.58:8080/v1/chat/completions';
@@ -171,8 +176,13 @@ class VectorDBSearchTool
     private function getAiModel(): string
     {
         $config = $this->currentUser?->get('ai_assistant');
-        if ($config) {
-            return (string)$config->model ?: 'qwen';
+        if (is_object($config)) {
+            $provider = $config->provider ?? 'local';
+            if ($provider === 'openai') {
+                return (string)($config->model ?: 'gpt-4o');
+            }
+
+            return (string)($config->model ?: 'qwen');
         }
 
         return 'qwen';

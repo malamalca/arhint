@@ -319,11 +319,21 @@ TXT],
     {
         $config = $user->getProperty('ai_assistant');
         if (is_object($config)) {
-            /** @var object{url: string, model: string, api_key: string} $config */
+            $provider = $config->provider ?? 'local';
+            $apiKey = (string)($config->{'api_key'} ?? '');
+
+            if ($provider === 'openai') {
+                return [
+                    'url' => 'https://api.openai.com/v1/chat/completions',
+                    'model' => (string)($config->model ?: 'gpt-4o'),
+                    'api_key' => $apiKey,
+                ];
+            }
+
             return [
                 'url' => (string)($config->url ?: 'http://192.168.68.58:8080/v1/chat/completions'),
                 'model' => (string)($config->model ?: 'qwen'),
-                'api_key' => (string)($config->{'api_key'} ?? ''),
+                'api_key' => $apiKey,
             ];
         }
 
