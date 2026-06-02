@@ -332,19 +332,9 @@ class AIAssistant
                 ];
             }
 
-            Log::debug(
-                'AI >>> MAIN REQUEST START <<< tools=' . count($data['tools'] ?? []) . ' messages=' . count($data['messages'] ?? []) . ' pid=' . getmypid(),
-                ['scope' => ['ai']],
-            );
-
             $requestStart = microtime(true);
             $message = $this->doRequest($data);
             $requestDuration = round((microtime(true) - $requestStart) * 1000, 2);
-
-            Log::debug(
-                'AI >>> MAIN REQUEST END <<< finish=' . ($message['finish_reason'] ?? '?') . ' toolCalls=' . count($message['tool_calls'] ?? []) . ' contentLen=' . strlen((string)$message['content']),
-                ['scope' => ['ai']],
-            );
 
             Log::debug(
                 'AI response received in ' . $requestDuration . 'ms',
@@ -1215,44 +1205,7 @@ class AIAssistant
             throw new Exception('Failed to encode request data: ' . json_last_error_msg());
         }
 
-        Log::debug(
-            'AI payload encoded, size=' . strlen($payload) . ' bytes',
-            ['scope' => ['ai']],
-        );
-
-        // Log the request being sent to the AI (without API keys).
-        $logContext = [
-            'scope' => ['ai'],
-            'provider' => $provider,
-            'model' => $model,
-            'url' => $url,
-            'message_count' => count($data['messages'] ?? []),
-            'tool_count' => count($data['tools'] ?? []),
-        ];
-
-        // Build a safe log payload (strip Authorization header / API key from the log).
-        $logData = $data;
-        // Remove tool definitions from the log to keep it concise; log counts instead.
-        if (isset($logData['tools']) && is_array($logData['tools'])) {
-            $logData['tools'] = array_map(function (array $tool) {
-                return [
-                    'type' => $tool['type'] ?? 'function',
-                    'function' => [
-                        'name' => $tool['function']['name'] ?? '',
-                        'description' => $tool['function']['description'] ?? '',
-                        'parameter_count' => isset($tool['function']['parameters']['properties'])
-                            ? count($tool['function']['parameters']['properties'])
-                            : 0,
-                    ],
-                ];
-            }, $logData['tools']);
-        }
-
-        Log::debug(
-            'AI request: ' . json_encode($logData, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES),
-            $logContext,
-        );
-
+        // @phpstan-ignore-next-line
         $ch = curl_init($url);
         if ($ch === false) {
             throw new Exception('Failed to initialize cURL for: ' . $url);
@@ -1263,9 +1216,7 @@ class AIAssistant
         curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
         curl_setopt($ch, CURLOPT_TIMEOUT, 180);
 
-        Log::debug('AI cURL exec starting...', ['scope' => ['ai']]);
         $response = curl_exec($ch);
-        Log::debug('AI cURL exec finished, responseLen=' . strlen((string)$response), ['scope' => ['ai']]);
         $curlErrno = curl_errno($ch);
         $curlError = curl_error($ch);
         $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
@@ -1280,8 +1231,6 @@ class AIAssistant
         }
 
         $result = json_decode((string)$response, true);
-
-        Log::debug('AI raw response: ' . $response, ['scope' => ['ai']]);
 
         if (isset($result['error'])) {
             $errorDetail = is_array($result['error'])

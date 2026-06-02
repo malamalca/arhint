@@ -12,6 +12,7 @@ use Cake\Queue\Job\JobInterface;
 use Cake\Queue\Job\Message;
 use Exception;
 use Interop\Queue\Processor;
+use Throwable;
 use League\CommonMark\GithubFlavoredMarkdownConverter;
 
 class AiChatJob implements JobInterface
@@ -33,7 +34,22 @@ class AiChatJob implements JobInterface
         $history = (array)$message->getArgument('history', []);
         $jobId = (string)$message->getArgument('job_id', '');
 
+        Log::debug(
+            'AiChatJob starting',
+            [
+                'scope' => ['ai'],
+                'user_id' => $userId,
+                'message' => mb_substr($userMessage, 0, 100),
+                'job_id' => $jobId,
+                'history_count' => count($history),
+            ],
+        );
+
         if ($userId === '' || $userMessage === '' || $jobId === '') {
+            Log::warning(
+                'AiChatJob rejected: empty required argument',
+                ['scope' => ['ai'], 'user_id' => $userId, 'message_empty' => $userMessage === '', 'job_id' => $jobId],
+            );
             return Processor::REJECT;
         }
 
@@ -49,7 +65,7 @@ class AiChatJob implements JobInterface
         try {
             /** @var \App\Model\Entity\User $user */
             $user = TableRegistry::getTableLocator()->get('Users')->get($userId);
-        } catch (Exception $e) {
+        } catch (Throwable $e) {
             file_put_contents($resultFile, (string)json_encode([
                 'user_id' => $userId,
                 'status' => 'error',
@@ -60,12 +76,12 @@ class AiChatJob implements JobInterface
             return Processor::REJECT;
         }
 
-        $user->setAuthorization(new AuthorizationService(new OrmResolver()));
-
-        $assistant = new AIAssistant($user);
-        $assistant->setHistory($history);
-
         try {
+            $user->setAuthorization(new AuthorizationService(new OrmResolver()));
+
+            $assistant = new AIAssistant($user);
+            $assistant->setHistory($history);
+
             $response = $assistant->getResponse($userMessage);
 
             $converter = new GithubFlavoredMarkdownConverter([
@@ -74,6 +90,16 @@ class AiChatJob implements JobInterface
             ]);
             $responseHtml = (string)$converter->convert($response);
 
+            Log::debug(
+                'AiChatJob writing result',
+                [
+                    'scope' => ['ai'],
+                    'job_id' => $jobId,
+                    'result_file' => $resultFile,
+                    'response_len' => strlen($responseHtml),
+                ],
+            );
+
             file_put_contents($resultFile, (string)json_encode([
                 'user_id' => $userId,
                 'status' => 'done',
@@ -81,9 +107,9 @@ class AiChatJob implements JobInterface
                 'redirect' => $assistant->getRedirectUrl(),
                 'history' => $assistant->getHistory(),
             ]));
-        } catch (Exception $e) {
+        } catch (Throwable $e) {
             Log::error(
-                'AI ChatJob error: ' . $e->getMessage() . ' | File: ' . $e->getFile() . ':' . $e->getLine(),
+                'AI ChatJob error: ' . get_class($e) . ': ' . $e->getMessage() . ' | File: ' . $e->getFile() . ':' . $e->getLine(),
                 [
                     'scope' => ['ai'],
                     'user_id' => $userId,

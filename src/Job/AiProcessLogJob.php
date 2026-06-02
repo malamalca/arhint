@@ -16,6 +16,7 @@ use Cake\Queue\Job\Message;
 use Cake\Utility\Text;
 use Exception;
 use Interop\Queue\Processor;
+use Throwable;
 
 class AiProcessLogJob implements JobInterface
 {
@@ -57,18 +58,16 @@ class AiProcessLogJob implements JobInterface
         try {
             /** @var \App\Model\Entity\User $user */
             $user = TableRegistry::getTableLocator()->get('Users')->get($userId);
-        } catch (Exception $e) {
+        } catch (Throwable $e) {
             Log::error('AiProcessLogJob: user lookup failed', [
                 'scope' => 'ai',
                 'job_id' => $jobId,
                 'user_id' => $userId,
-                'message' => $e->getMessage(),
+                'message' => get_class($e) . ': ' . $e->getMessage(),
             ]);
 
             return Processor::REJECT;
         }
-
-        $user->setAuthorization(new AuthorizationService(new OrmResolver()));
 
         // Convert entity to a readable text representation
         $entityText = is_object($entity) && method_exists($entity, '__toString')
@@ -77,6 +76,8 @@ class AiProcessLogJob implements JobInterface
 
         // Call AI API directly with retry logic for transient failures
         try {
+            $user->setAuthorization(new AuthorizationService(new OrmResolver()));
+
             $responseData = $this->analyzeWithAI($user, $entityText, $jobId);
 
             // analyzeWithAI returns decoded JSON array on success, or null after all retries exhausted
@@ -139,13 +140,13 @@ class AiProcessLogJob implements JobInterface
             $this->storeInVectorDb($entity, $logsAnalysis, $responseData);
 
             return Processor::ACK;
-        } catch (Exception $e) {
+        } catch (Throwable $e) {
             Log::error('AiProcessLogJob: execution failed', [
                 'scope' => 'ai',
                 'job_id' => $jobId,
                 'user_id' => $userId,
                 'entity_type' => is_object($entity) ? get_class($entity) : gettype($entity),
-                'message' => $e->getMessage(),
+                'message' => get_class($e) . ': ' . $e->getMessage(),
                 'file' => $e->getFile() . ':' . $e->getLine(),
             ]);
 
