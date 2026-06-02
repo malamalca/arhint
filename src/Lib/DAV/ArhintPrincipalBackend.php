@@ -34,7 +34,7 @@ class ArhintPrincipalBackend extends AbstractBackend implements CreatePrincipalS
      * @param string $prefixPath
      * @return array
      */
-    public function getPrincipalsByPrefix(string $prefixPath): array
+    public function getPrincipalsByPrefix($prefixPath): array
     {
         $UsersTable = TableRegistry::getTableLocator()->get('Users');
         $users = $UsersTable->find()
@@ -64,7 +64,7 @@ class ArhintPrincipalBackend extends AbstractBackend implements CreatePrincipalS
      * @param string $path
      * @return array
      */
-    public function getPrincipalByPath(string $path): array
+    public function getPrincipalByPath($path): array
     {
         $username = explode('/', $path);
 
@@ -102,7 +102,7 @@ class ArhintPrincipalBackend extends AbstractBackend implements CreatePrincipalS
      *
      * @param string $path
      */
-    public function updatePrincipal(string $path, DAV\PropPatch $propPatch): void
+    public function updatePrincipal($path, DAV\PropPatch $propPatch): void
     {
     }
 
@@ -134,7 +134,7 @@ class ArhintPrincipalBackend extends AbstractBackend implements CreatePrincipalS
      * @param string $test
      * @return array
      */
-    public function searchPrincipals(string $prefixPath, array $searchProperties, string $test = 'allof'): array
+    public function searchPrincipals($prefixPath, array $searchProperties, $test = 'allof'): array
     {
         if (count($searchProperties) == 0) {
             return [];
@@ -240,7 +240,7 @@ class ArhintPrincipalBackend extends AbstractBackend implements CreatePrincipalS
      * @param string $principal
      * @return array
      */
-    public function getGroupMemberSet(string $principal): array
+    public function getGroupMemberSet($principal): array
     {
         $result = [];
 
@@ -267,7 +267,7 @@ class ArhintPrincipalBackend extends AbstractBackend implements CreatePrincipalS
      *
      * @param string $principal
      */
-    public function setGroupMemberSet(string $principal, array $members): void
+    public function setGroupMemberSet($principal, array $members): void
     {
     }
 
@@ -280,7 +280,7 @@ class ArhintPrincipalBackend extends AbstractBackend implements CreatePrincipalS
      *
      * @param string $path
      */
-    public function createPrincipal(string $path, MkCol $mkCol): void
+    public function createPrincipal($path, MkCol $mkCol): void
     {
     }
 }
