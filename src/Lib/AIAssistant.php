@@ -319,9 +319,19 @@ class AIAssistant
                 ];
             }
 
+            Log::debug(
+                'AI >>> MAIN REQUEST START <<< tools=' . count($data['tools'] ?? []) . ' messages=' . count($data['messages'] ?? []),
+                ['scope' => ['ai']],
+            );
+
             $requestStart = microtime(true);
             $message = $this->doRequest($data);
             $requestDuration = round((microtime(true) - $requestStart) * 1000, 2);
+
+            Log::debug(
+                'AI >>> MAIN REQUEST END <<< finish=' . ($message['finish_reason'] ?? '?') . ' toolCalls=' . count($message['tool_calls'] ?? []) . ' contentLen=' . strlen((string)$message['content']),
+                ['scope' => ['ai']],
+            );
 
             Log::debug(
                 'AI response received in ' . $requestDuration . 'ms',
