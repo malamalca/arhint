@@ -216,17 +216,20 @@ class AIAssistant
             ],
         );
 
-        while (true) {
-            $activeTools = $this->selectToolsForRequest($userInput);
+        // Select tools once before the loop — calling detectModulesViaAI() on every
+        // iteration wastes API calls, tokens, and time (the routing prompt is stateless
+        // and always returns the same result for a given user input).
+        $activeTools = $this->selectToolsForRequest($userInput);
 
-            Log::debug(
-                'AI selected tools: ' . implode(', ', array_map(fn($t) => $t->name, $activeTools)),
-                [
-                    'scope' => ['ai'],
-                    'tool_count' => count($activeTools),
-                    'iteration' => $toolCallCount,
-                ],
-            );
+        Log::debug(
+            'AI selected tools: ' . implode(', ', array_map(fn($t) => $t->name, $activeTools)),
+            [
+                'scope' => ['ai'],
+                'tool_count' => count($activeTools),
+            ],
+        );
+
+        while (true) {
 
             if ($this->shouldUseNativeToolCalls()) {
                 $summary = null;
