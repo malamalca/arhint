@@ -19,7 +19,6 @@ use Cake\Validation\Validator;
  * @method \Projects\Model\Entity\ProjectsStatus patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
  * @method \Projects\Model\Entity\ProjectsStatus[] patchEntities(iterable $entities, array $data, array $options = [])
  * @method \Projects\Model\Entity\ProjectsStatus|false save(\Cake\Datasource\EntityInterface $entity, $options = [])
- * @extends \Cake\ORM\Table<array{}, \Projects\Model\Entity\ProjectsStatus>
  */
 class ProjectsStatusesTable extends Table
 {

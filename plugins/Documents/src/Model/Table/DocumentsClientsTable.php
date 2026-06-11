@@ -17,7 +17,6 @@ use Documents\Model\Entity\DocumentsClient;
  * @method \Documents\Model\Entity\DocumentsClient newEntity(array $data = [], array $options = [])
  * @method \Documents\Model\Entity\DocumentsClient newEmptyEntity()
  * @method \Documents\Model\Entity\DocumentsClient patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
- * @extends \Cake\ORM\Table<array{}, \Documents\Model\Entity\DocumentsClient>
  */
 class DocumentsClientsTable extends Table
 {

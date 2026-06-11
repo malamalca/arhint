@@ -28,7 +28,6 @@ use Projects\Model\Entity\Project;
  * @method \Projects\Model\Entity\Project[] patchEntities($entities, array $data, array $options = [])
  * @method \Projects\Model\Entity\Project findOrCreate($search, array<array-key, mixed>|callable|null $callback = null, $options = [])
  * @mixin \Cake\ORM\Behavior\TimestampBehavior
- * @extends \Cake\ORM\Table<array{}, \Projects\Model\Entity\Project>
  */
 class ProjectsTable extends Table
 {

@@ -13,7 +13,6 @@ use Cake\Validation\Validator;
  * @property \Crm\Model\Table\ContactsTable $Contacts
  * @method \Crm\Model\Entity\ContactsLog newEmptyEntity()
  * @method \Crm\Model\Entity\ContactsLog newEntity(array $data, array $options = [])
- * @extends \Cake\ORM\Table<array{}, \Crm\Model\Entity\ContactsLog>
  */
 class ContactsLogsTable extends Table
 {

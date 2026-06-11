@@ -28,7 +28,6 @@ use Cake\Validation\Validator;
  * @method \Calendar\Model\Entity\Event[]|\Cake\Datasource\ResultSetInterface|false deleteMany(iterable $entities, $options = [])
  * @method \Calendar\Model\Entity\Event[]|\Cake\Datasource\ResultSetInterface deleteManyOrFail(iterable $entities, $options = [])
  * @mixin \Cake\ORM\Behavior\TimestampBehavior
- * @extends \Cake\ORM\Table<array{}, \Calendar\Model\Entity\Event>
  */
 class EventsTable extends Table
 {

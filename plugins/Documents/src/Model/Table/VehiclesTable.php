@@ -19,7 +19,6 @@ use Cake\Validation\Validator;
  * @method \Documents\Model\Entity\Vehicle[] patchEntities(iterable $entities, array $data, array $options = [])
  * @method \Documents\Model\Entity\Vehicle|false save(\Cake\Datasource\EntityInterface $entity, $options = [])
  * @mixin \Cake\ORM\Behavior\TimestampBehavior
- * @extends \Cake\ORM\Table<array{}, \Documents\Model\Entity\Vehicle>
  */
 class VehiclesTable extends Table
 {

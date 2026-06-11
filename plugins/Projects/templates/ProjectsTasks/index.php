@@ -133,10 +133,10 @@ $tableIndex = [
             'params' => ['id' => 'menu-add-task'],
         ],
     ],
-    'pre' => '<div id="tasks-index">',
+    'pre' => '<div id="panel-index">',
     'post' => '</div>',
     'panels' => [
-        'search' => '<div id="tasks-search">' .
+        'search' => '<div id="panel-search">' .
             sprintf('<form method="get" action="%s">', Router::url()) .
             sprintf('<input name="q" id="query" value="%s" />', htmlspecialchars($this->request->getQuery('q'))) .
             '<button type="submit" class="btn-small tonal" id="btn-search"><i class="material-icons">search</i></button>' .
@@ -155,13 +155,9 @@ $tableIndex = [
                 ]),
             ) .
             '</div>',
-        'filter' => '<div id="tasks-filter"><ul>' .
-            sprintf('<li><a href="#" class="btn text dropdown-trigger-costum" data-target="dropdown-users">%s &#128899;</a></li>', __d('projects', 'Author')) .
-            sprintf('<li><a href="#" class="btn text dropdown-trigger-costum" data-target="dropdown-milestones">%s &#128899;</a></li>', __d('projects', 'Milestone')) .
-            sprintf('<li><a href="#" class="btn text dropdown-trigger-costum" data-target="dropdown-sort"><i class="material-icons">sort</i>%s &#128899;</a></li>', h(__d('projects', 'Newest'))) .
-            '</ul>' .
+        'filter' => '<div id="panel-filter">' .
             '<div class="checkbox"><input type="checkbox" id="select-all-tasks" /></div>' .
-            '<div id="tasks-counters">' .
+            '<div id="panel-counters">' .
                 $this->Html->link(
                     h(__d('projects', 'Open')) . sprintf('<span class="badge">%d</span></a>', $tasksCount['open']),
                     [
@@ -185,13 +181,18 @@ $tableIndex = [
                     ],
                 ) .
             '</div>' .
+            '<ul id="panel-filters">' .
+            sprintf('<li><a href="#" class="btn text dropdown-trigger-costum" data-target="dropdown-users">%s &#128899;</a></li>', __d('projects', 'Author')) .
+            sprintf('<li><a href="#" class="btn text dropdown-trigger-costum" data-target="dropdown-milestones">%s &#128899;</a></li>', __d('projects', 'Milestone')) .
+            sprintf('<li><a href="#" class="btn text dropdown-trigger-costum" data-target="dropdown-sort"><i class="material-icons">sort</i>%s &#128899;</a></li>', h(__d('projects', 'Newest'))) .
+            '</ul>' .
             '</div>',
         'tasks' => [
-            'params' => ['id' => 'tasks-list'],
+            'params' => ['id' => 'panel-list'],
             'lines' => [],
         ],
         'footer' => [
-            'params' => ['id' => 'tasks-footer'],
+            'params' => ['id' => 'panel-footer'],
             'lines' => [
                 '<ul class="paginator">' .
                 $this->Paginator->numbers(['first' => 1, 'last' => 1, 'modulus' => 3]) .
@@ -206,7 +207,7 @@ $errors = $filter->getErrors();
 if (count($errors)) {
     $errors = Hash::extract($errors, '{*}.{*}');
     $errorsPanel = ['errors' =>
-        '<div id="tasks-errors">' .
+        '<div id="panel-errors">' .
             '<div><i class="material-icons">warning</i>' .
             __dn('projects', 'Filter contains one issue:', 'Filter contains {0} issues:', count($errors), count($errors)) .
             '</div>' .
@@ -221,7 +222,7 @@ if (count($errors)) {
 
 if ($projectsTasks->items()->isEmpty()) {
     $tableIndex['panels']['tasks']['lines'][] =
-        '<div id="no-tasks-found">' .
+        '<div id="no-rows-found">' .
         '<h4>' . __d('projects', 'No tasks found.') . '</h4>' .
         '<p>' . __d('projects', 'Try adjusting your search filters.') . '</p>' .
         '</div>';
@@ -258,10 +259,10 @@ echo $this->Lil->panels($tableIndex, 'Projects.ProjectsTasks.index');
         });
 
         $("#select-all-tasks").on("change", function(e) {
-            $("div.task-row div.checkbox input").prop("checked", $(this).prop("checked"));
+            $("div.panel-row div.checkbox input").prop("checked", $(this).prop("checked"));
             allTasksChecked = true;
         });
-        $("div.task-row div.checkbox input").on("change", function(e) {
+        $("div.panel-row div.checkbox input").on("change", function(e) {
             if (allTasksChecked) {
                 $("#select-all-tasks").prop("checked", false);
             }

@@ -20,7 +20,6 @@ use Documents\Model\Entity\DocumentsLink;
  * @method \Documents\Model\Entity\DocumentsLink get(mixed $primaryKey, array|string $finder = 'all', \Psr\SimpleCache\CacheInterface|string|null $cache = null, \Closure|string|null $cacheKey = null, mixed ...$args)
  * @method \Documents\Model\Entity\DocumentsLink newEmptyEntity()
  * @method \Documents\Model\Entity\DocumentsLink patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
- * @extends \Cake\ORM\Table<array{}, \Documents\Model\Entity\DocumentsLink>
  */
 class DocumentsLinksTable extends Table
 {

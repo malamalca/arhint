@@ -1,7 +1,10 @@
 @use '../vendor/Materialize/components/buttons' as *;
 @use '../vendor/Materialize/components/grid' as *;
 
-div#panel-index {
+// Universal index/table component. Include it on any wrapper selector to get
+// the search bar, filter/counters/actions bar, bordered list rows and footer.
+// Custom tables (e.g. milestones) @include this and override only their bits.
+@mixin panel-index {
     div#no-rows-found {
         padding: 0.5rem 0;
         border: solid 1px #ccc;
@@ -112,11 +115,17 @@ div#panel-index {
                 }
 
                 span.badge {
+                    float: none;
+                    display: inline-block;
+                    vertical-align: middle;
+                    text-align: center;
                     min-width: 2rem !important;
+                    height: 1.4rem;
+                    line-height: 1.4rem;
                     margin: 0;
-                    background-color: #ccc;
-                    padding: 0;
                     margin-left: 0.5rem;
+                    padding: 0 0.4rem;
+                    background-color: #ccc;
                     border-radius: 0.8rem;
                     font-size: 90%;
                 }
@@ -249,6 +258,7 @@ div#panel-index {
             div.details {
                 height: 1rem;
                 font-size: 0.8rem;
+                font-weight: normal;
                 color: #666;
                 white-space: nowrap;
                 overflow: hidden;
@@ -343,7 +353,7 @@ div#panel-index {
                     width: 100%;
                     padding-left: 0.5rem !important;
                     padding-right: 0.5rem !important;
-                    
+
                     &:hover {
                         background-color: #ddd !important;
                     }
@@ -351,4 +361,8 @@ div#panel-index {
             }
         }
     }
+}
+
+div#panel-index {
+    @include panel-index;
 }

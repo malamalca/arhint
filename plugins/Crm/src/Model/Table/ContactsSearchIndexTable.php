@@ -25,7 +25,6 @@ use Cake\Validation\Validator;
  * @method iterable<\Crm\Model\Entity\ContactsSearchIndex>|\Cake\Datasource\ResultSetInterface<\Crm\Model\Entity\ContactsSearchIndex>|false deleteMany(iterable $entities, array $options = [])
  * @method iterable<\Crm\Model\Entity\ContactsSearchIndex>|\Cake\Datasource\ResultSetInterface<\Crm\Model\Entity\ContactsSearchIndex> deleteManyOrFail(iterable $entities, array $options = [])
  * @mixin \Cake\ORM\Behavior\TimestampBehavior
- * @extends \Cake\ORM\Table<array{}, \Crm\Model\Entity\ContactsSearchIndex>
  */
 class ContactsSearchIndexTable extends Table
 {

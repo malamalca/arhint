@@ -20,7 +20,6 @@ use Laminas\Diactoros\UploadedFile;
  * @method \Crm\Model\Entity\AdremasContact newEntity(array $data, array $options = [])
  * @method \Crm\Model\Entity\AdremasContact get(mixed $primaryKey, array|string $finder = 'all', \Psr\SimpleCache\CacheInterface|string|null $cache = null, \Closure|string|null $cacheKey = null, mixed ...$args)
  * @method \Crm\Model\Entity\AdremasContact patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
- * @extends \Cake\ORM\Table<array{}, \Crm\Model\Entity\AdremasContact>
  */
 class AdremasContactsTable extends Table
 {

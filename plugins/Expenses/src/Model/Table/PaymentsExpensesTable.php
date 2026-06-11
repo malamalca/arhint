@@ -12,7 +12,6 @@ use Cake\Validation\Validator;
  *
  * @property \Cake\ORM\Association\BelongsTo $Payments
  * @property \Cake\ORM\Association\BelongsTo $Expenses
- * @extends \Cake\ORM\Table<array{}, \Expenses\Model\Entity\PaymentsExpense>
  */
 class PaymentsExpensesTable extends Table
 {

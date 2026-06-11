@@ -19,7 +19,6 @@ use Expenses\Model\Entity\BookingOrder;
  * @method \Expenses\Model\Entity\BookingOrder get(mixed $primaryKey, array|string $finder = 'all', \Psr\SimpleCache\CacheInterface|string|null $cache = null, \Closure|string|null $cacheKey = null, mixed ...$args)
  * @method \Expenses\Model\Entity\BookingOrder newEmptyEntity()
  * @method \Expenses\Model\Entity\BookingOrder patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
- * @extends \Cake\ORM\Table<array{}, \Expenses\Model\Entity\BookingOrder>
  */
 class BookingOrdersTable extends Table
 {

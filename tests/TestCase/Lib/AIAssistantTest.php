@@ -227,7 +227,7 @@ class AIAssistantTest extends TestCase
         $mockAssistant = new class extends AIAssistant {
             public string $stubbedContent = '';
 
-            protected function doRequest(array $data): array
+            protected function doRequest(array $data, int $timeoutSeconds = 180): array
             {
                 return ['content' => $this->stubbedContent, 'finish_reason' => 'stop', 'tool_calls' => []];
             }

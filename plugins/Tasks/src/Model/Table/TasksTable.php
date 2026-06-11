@@ -19,7 +19,6 @@ use Tasks\Model\Entity\Task;
  * @method \Tasks\Model\Entity\Task newEntity($data = null, array $options = [])
  * @method \Tasks\Model\Entity\Task newEmptyEntity(array $options = [])
  * @method \Tasks\Model\Entity\Task patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
- * @extends \Cake\ORM\Table<array{}, \Tasks\Model\Entity\Task>
  */
 class TasksTable extends Table
 {

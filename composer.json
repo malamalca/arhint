@@ -126,9 +126,7 @@
             "dealerdirect/phpcodesniffer-composer-installer": true,
             "php-http/discovery": true
         },
-        "audit": {
-            "block-insecure": false
-        }
+        "process-timeout": 900
     },
     "minimum-stability": "dev"
 }

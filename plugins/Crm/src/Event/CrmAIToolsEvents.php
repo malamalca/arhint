@@ -798,6 +798,7 @@ class CrmAIToolsEvents implements EventListenerInterface
      */
     private function executeEditContactPhone(Event $event, array $arguments, mixed $currentUser): void
     {
+        /** @var \Crm\Model\Table\ContactsPhonesTable $table */
         $table = TableRegistry::getTableLocator()->get('Crm.ContactsPhones');
         $entry = $table->find()->where(['id' => $arguments['id'] ?? ''])->first();
 
@@ -831,6 +832,7 @@ class CrmAIToolsEvents implements EventListenerInterface
      */
     private function executeDeleteContactPhone(Event $event, array $arguments, mixed $currentUser): void
     {
+        /** @var \Crm\Model\Table\ContactsPhonesTable $table */
         $table = TableRegistry::getTableLocator()->get('Crm.ContactsPhones');
         $entry = $table->find()->where(['id' => $arguments['id'] ?? ''])->first();
 
@@ -899,6 +901,7 @@ class CrmAIToolsEvents implements EventListenerInterface
      */
     private function executeEditContactEmail(Event $event, array $arguments, mixed $currentUser): void
     {
+        /** @var \Crm\Model\Table\ContactsEmailsTable $table */
         $table = TableRegistry::getTableLocator()->get('Crm.ContactsEmails');
         $entry = $table->find()->where(['id' => $arguments['id'] ?? ''])->first();
 
@@ -932,6 +935,7 @@ class CrmAIToolsEvents implements EventListenerInterface
      */
     private function executeDeleteContactEmail(Event $event, array $arguments, mixed $currentUser): void
     {
+        /** @var \Crm\Model\Table\ContactsEmailsTable $table */
         $table = TableRegistry::getTableLocator()->get('Crm.ContactsEmails');
         $entry = $table->find()->where(['id' => $arguments['id'] ?? ''])->first();
 
@@ -1004,6 +1008,7 @@ class CrmAIToolsEvents implements EventListenerInterface
      */
     private function executeEditContactAddress(Event $event, array $arguments, mixed $currentUser): void
     {
+        /** @var \Crm\Model\Table\ContactsAddressesTable $table */
         $table = TableRegistry::getTableLocator()->get('Crm.ContactsAddresses');
         $entry = $table->find()->where(['id' => $arguments['id'] ?? ''])->first();
 
@@ -1043,6 +1048,7 @@ class CrmAIToolsEvents implements EventListenerInterface
      */
     private function executeDeleteContactAddress(Event $event, array $arguments, mixed $currentUser): void
     {
+        /** @var \Crm\Model\Table\ContactsAddressesTable $table */
         $table = TableRegistry::getTableLocator()->get('Crm.ContactsAddresses');
         $entry = $table->find()->where(['id' => $arguments['id'] ?? ''])->first();
 
@@ -1113,6 +1119,7 @@ class CrmAIToolsEvents implements EventListenerInterface
      */
     private function executeEditContactAccount(Event $event, array $arguments, mixed $currentUser): void
     {
+        /** @var \Crm\Model\Table\ContactsAccountsTable $table */
         $table = TableRegistry::getTableLocator()->get('Crm.ContactsAccounts');
         $entry = $table->find()->where(['id' => $arguments['id'] ?? ''])->first();
 
@@ -1149,6 +1156,7 @@ class CrmAIToolsEvents implements EventListenerInterface
      */
     private function executeDeleteContactAccount(Event $event, array $arguments, mixed $currentUser): void
     {
+        /** @var \Crm\Model\Table\ContactsAccountsTable $table */
         $table = TableRegistry::getTableLocator()->get('Crm.ContactsAccounts');
         $entry = $table->find()->where(['id' => $arguments['id'] ?? ''])->first();
 

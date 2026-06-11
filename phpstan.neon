@@ -4,8 +4,7 @@ parameters:
     ignoreErrors:
         - identifier: missingType.generics
         - identifier: property.notFound
-        - '/Cannot call method .+ on Cake\\Http\\Response\|null/'
-        - '/Cannot call method .+ on Cake\\Http\\ServerRequest\|null/'
+        - '#Unable to resolve the template type TEntity in call to method#'
     bootstrapFiles:
         - config/paths.php
         - vendor/cakephp/cakephp/src/functions.php

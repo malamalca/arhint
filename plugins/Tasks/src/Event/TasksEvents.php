@@ -319,6 +319,7 @@ class TasksEvents implements EventListenerInterface
                     break;
                 }
 
+                /** @var \Tasks\Model\Table\TasksTable $tasksTable */
                 $tasksTable = TableRegistry::getTableLocator()->get('Tasks.Tasks');
 
                 // Normalize boolean-like completed values the model sometimes sends.

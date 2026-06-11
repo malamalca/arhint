@@ -25,7 +25,7 @@ switch ($task->status) {
 
 ?>
 
-<div class="task-row">
+<div class="panel-row">
     <div class="checkbox"><input type="checkbox" /></div>
     <div class="status"><?= $this->Html->image('/projects/img/' . $taskImage, ['class' => $taskImageClass]) ?></div>
     <div class="title"><?= $this->Html->link(
@@ -35,8 +35,8 @@ switch ($task->status) {
             $task->id,
             '?' => ['redirect' => Router::url(null, true)],
         ],
-    ) ?></div>
-    <div class="details">
+    ) ?>
+        <div class="details">
         #<?= $task->no ?> ·
         <?php
             $userLink = $this->Html->link(
@@ -61,5 +61,6 @@ switch ($task->status) {
                 echo ' · ' . $this->Html->image('/projects/img/milestone-16.svg') . ' ' . $milestoneLink;
             }
         ?>
+        </div>
     </div>
 </div>

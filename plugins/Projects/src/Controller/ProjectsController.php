@@ -147,11 +147,20 @@ class ProjectsController extends AppController
             ->limit(5)
             ->all();
 
-        $milestones = TableRegistry::getTableLocator()->get('Projects.ProjectsMilestones')->find()
+        // Open milestones are shown by default; pass ms=all to show every one.
+        $milestoneStatus = $this->getRequest()->getQuery('ms', 'open');
+
+        $milestonesQuery = TableRegistry::getTableLocator()->get('Projects.ProjectsMilestones')->find()
             ->select()
-            ->where(['project_id' => $id])
-            ->orderBy('date_due ASC')
-            ->all();
+            ->where(['project_id' => $id]);
+
+        if ($milestoneStatus === 'open') {
+            $milestonesQuery->where(['ProjectsMilestones.date_complete IS' => null]);
+        } elseif ($milestoneStatus === 'closed') {
+            $milestonesQuery->where(['ProjectsMilestones.date_complete IS NOT' => null]);
+        }
+
+        $milestones = $milestonesQuery->orderBy(['date_complete' => 'ASC', 'title' => 'ASC'])->all();
 
         $userIds = array_unique(Hash::extract($logs->toArray(), '{n}.user_id') +
             Hash::extract($milestones->toArray(), '{n}.user_id'));

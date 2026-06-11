@@ -24,7 +24,6 @@ use Projects\Filter\ProjectsWorkhoursFilter;
  * @method \Projects\Model\Entity\ProjectsWorkhour[] patchEntities(iterable $entities, array $data, array $options = [])
  * @method \Projects\Model\Entity\ProjectsWorkhour findOrCreate($search, array<array-key, mixed>|callable|null $callback = null, $options = [])
  * @mixin \Cake\ORM\Behavior\TimestampBehavior
- * @extends \Cake\ORM\Table<array{}, \Projects\Model\Entity\ProjectsWorkhour>
  */
 class ProjectsWorkhoursTable extends Table
 {

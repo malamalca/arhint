@@ -17,7 +17,6 @@ use Cake\Validation\Validator;
  * @method \Expenses\Model\Entity\BankStatement get(mixed $primaryKey, array|string $finder = 'all', \Psr\SimpleCache\CacheInterface|string|null $cache = null, \Closure|string|null $cacheKey = null, mixed ...$args)
  * @method \Expenses\Model\Entity\BankStatement newEmptyEntity()
  * @method \Expenses\Model\Entity\BankStatement patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
- * @extends \Cake\ORM\Table<array{}, \Expenses\Model\Entity\BankStatement>
  */
 class BankStatementsTable extends Table
 {

@@ -1,107 +1,127 @@
-@use '../../../../../webroot/sass/vendor/Materialize/components/grid' as *;
+@use '../../../../../webroot/sass/components/panel-index' as panel;
 
+// Milestones reuse the universal panel-index component (search/filter/list/
+// footer chrome) by including its base mixin, then override only the elements
+// specific to the milestone row layout: the title column + the progress /
+// labels / actions column on the right.
 #projects-milestones {
-    padding: 0;
+    @include panel.panel-index;
+
     max-width: 750px;
-    border: solid 1px #ccc;
 
-    div.title {
-        background-color: #e0e0e0;
-        padding: 0.8rem 1rem;
+    #panel-list {
+        // Milestone rows are taller than the standard 4rem panel-row and their
+        // meta wraps onto several lines, so relax the row constraints.
+        .panel-row:has(.milestone-progress) {
+            height: auto;
+            align-items: flex-start;
+            padding-top: 0.8rem;
+            padding-bottom: 0.8rem;
 
-        img {
-            margin-right: 0.5rem;
-            vertical-align: middle;
-        }
-    }
+            // The row is top-aligned for the columns, so nudge the checkbox down
+            // to line up with the title text rather than the very top.
+            .checkbox {
+                padding-top: 0.4rem;
+            }
 
-    div.milestone-item {
-        @extend .row;
-        padding: 0.8rem 1rem;
-        width: 100%;
+            // Left column: title + meta. Grows from a 300px basis so it never
+            // collapses too narrow next to the progress column.
+            > .title {
+                flex: 1 1 300px;
 
-        &:last-child {
-            border-bottom: none !important;
-        }
-
-        div.milestone-info {
-            @extend .s6;
-
-            color: #666;
-            font-size: 0.8rem;
-
-            div.milestone-title {
-                margin-bottom: 0.5rem;
-
-                a {
+                // Only the milestone title itself is enlarged — links inside the
+                // nested .details must keep their normal size.
+                > a {
                     font-size: 1.5rem;
-                    color: #000;
-                    text-decoration: none;
-
-                    &:hover {
-                        text-decoration: underline;
-                    }
                 }
-            }
 
-            span {
-                display: inline-block;
-                margin-right: 0.6rem;
+                .details {
+                    height: auto;
+                    white-space: normal;
+                    overflow: visible;
+                    text-overflow: clip;
+                    margin-top: 0.4rem;
 
-                img {
-                    margin-right: 0.3rem;
-                    margin-top: -0.4rem;
-                    vertical-align: middle;
-                    filter: opacity(0.7);
-                    height: 14px;
-                }
-            }
-        }
+                    span {
+                        display: inline-block;
+                        margin-right: 0.6rem;
 
-        div.milestone-progress {
-            @extend .s6;
-            padding-top: 0.2rem;
-
-            div.total {
-                width: 100%;
-                height: 8px !important;
-                background-color: #f0f0f0;
-                border: solid 1px #ccc;
-                margin-bottom: 0.1rem;
-
-                div.completed {
-                    background-color: #4caf50;
-                    height: 100%;
-                }
-            }
-
-            div.labels {
-                display: flex;
-                justify-content: space-between;
-                color: #333;
-                margin-bottom: 0.2rem;
-
-                span {
-                    font-size: 0.9rem;
-
-                    a {
-                        color: #333;
-                        text-decoration: none;
-
-                        &:hover {
-                            text-decoration: underline;
+                        img {
+                            width: 14px;
+                            height: 14px;
+                            margin-top: -0.2rem;
+                            margin-right: 0.3rem;
+                            margin-bottom: 0;
+                            vertical-align: middle;
                         }
                     }
                 }
             }
 
-            div.actions {
-                text-align: right;
+            // Completed milestones: strike through and grey out the title.
+            &.done > .title > a {
+                color: #999;
+                text-decoration: line-through;
+            }
 
-                a.button {
-                    margin-left: 0.3rem;
+            // Right column: progress bar, labels and action buttons. This
+            // overrides panel-index's generic extra-column rule (flex: 0 0 auto,
+            // which shrinks to content) so the progress column shares the row
+            // width with the title instead of hugging the left.
+            > div:not(.checkbox):not(.status):not(.title) {
+                flex: 1 1 200px;
+                padding-left: 1rem;
+                padding-top: 0.2rem;
+            }
+
+            .milestone-progress {
+                .bar {
+                    width: 100%;
+                    height: 8px;
+                    background-color: #f0f0f0;
+                    border: solid 1px #ccc;
+                    margin-bottom: 0.1rem;
+
+                    .completed {
+                        background-color: #4caf50;
+                        height: 100%;
+                    }
+                }
+
+                .labels {
+                    display: flex;
+                    justify-content: space-between;
+                    color: #333;
+                    margin-bottom: 0.2rem;
+
+                    span {
+                        font-size: 0.9rem;
+
+                        a {
+                            color: #333;
+                            text-decoration: none;
+
+                            &:hover {
+                                text-decoration: underline;
+                            }
+                        }
+                    }
+                }
+
+                .actions {
+                    text-align: right;
+
+                    a {
+                        margin-left: 0.3rem;
+                    }
                 }
             }
+        }
+
+        // No footer on the milestones list, so the last row closes the card.
+        .panel-row:has(.milestone-progress):last-child {
+            border-bottom-left-radius: var(--md-sys-shape-corner-small, 4px);
+            border-bottom-right-radius: var(--md-sys-shape-corner-small, 4px);
         }
     }
 }

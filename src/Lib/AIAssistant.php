@@ -9,6 +9,7 @@ use Cake\Event\Event;
 use Cake\Event\EventManager;
 use Cake\Log\Log;
 use Exception;
+use JsonException;
 use stdClass;
 
 class AIAssistant
@@ -29,6 +30,9 @@ class AIAssistant
     // Maximum items in a tool-result list injected into the LLM prompt (native tool calls).
     private const MAX_PROMPT_TOOL_RESULT_ITEMS = 20;
     private const MAX_TOOL_RESULT_CHARS = 800;
+
+    // Fallback endpoint for the local provider when the user has no configured 'url'.
+    private const DEFAULT_LOCAL_URL = 'http://192.168.68.58:8080/v1/chat/completions';
 
     public const SYSTEM_PROMPT = "You are an assistant for a business management system.\n" .
         "Proceed with great speed and accuracy. Do not show UUIDs in your responses.\n" .
@@ -101,6 +105,15 @@ class AIAssistant
     private ?string $customSystemPrompt = null;
 
     /**
+     * Cached 'ai_assistant' configuration object from the current user (provider, url, model,
+     * api_key, native_tool_calls, ...). Resolved once in the constructor as it is invariant for
+     * this object's lifetime.
+     *
+     * @var object|null
+     */
+    private ?object $aiConfig;
+
+    /**
      * Constructor to initialize the AIAssistant with available tools.
      * Tools can be added by listening to the 'AIAssistant.tools' event and modifying the provided tools list.
      */
@@ -109,7 +122,8 @@ class AIAssistant
         $this->currentUser = $currentUser;
 
         $aiConfig = $currentUser?->getProperty('ai_assistant');
-        $this->provider = $aiConfig?->provider ?? 'local';
+        $this->aiConfig = is_object($aiConfig) ? $aiConfig : null;
+        $this->provider = $this->aiConfig?->provider ?? 'local';
 
         $modulesList = new ArrayObject();
         $registerEvent = new Event('App.AIAssistant.registerModule', $this, [$modulesList]);
@@ -133,9 +147,8 @@ class AIAssistant
      */
     private function shouldUseNativeToolCalls(): bool
     {
-        $aiConfig = $this->currentUser?->getProperty('ai_assistant');
-        if ($aiConfig !== null && isset($aiConfig->native_tool_calls)) {
-            return (bool)$aiConfig->native_tool_calls;
+        if ($this->aiConfig !== null && isset($this->aiConfig->native_tool_calls)) {
+            return (bool)$this->aiConfig->native_tool_calls;
         }
 
         return $this->provider === 'openai';
@@ -206,6 +219,11 @@ class AIAssistant
         $this->redirectUrl = null;
         $toolCallCount = 0;
         $message = [];
+        $toolNameMap = [];
+
+        // Invariant for this object's lifetime — compute once instead of re-reading the
+        // user property on every loop iteration and branch below.
+        $nativeToolCalls = $this->shouldUseNativeToolCalls();
 
         Log::debug(
             'AI getResponse: ' . $this->trimText($userInput, 200),
@@ -231,8 +249,7 @@ class AIAssistant
         );
 
         while (true) {
-
-            if ($this->shouldUseNativeToolCalls()) {
+            if ($nativeToolCalls) {
                 $summary = null;
                 $historyWithoutSummary = $this->conversationHistory;
                 if ($this->provider === 'openai') {
@@ -260,7 +277,7 @@ class AIAssistant
                     $systemContent = $this->customSystemPrompt;
                 } else {
                     $systemContent = 'You are an assistant for a business management system. '
-                        . 'Proceed with great speed and accuracy. Do not show UIDs in your responses. '
+                        . 'Proceed with great speed and accuracy. Do not show UUIDs in your responses. '
                         . 'Current date and time: ' . date('Y-m-d H:i:s') . '. '
                         . 'Current user ID: ' . (string)($this->currentUser?->get('id') ?? '') . '.';
                 }
@@ -301,12 +318,12 @@ class AIAssistant
                     // argument schemas can silently produce invalid JSON.
                     try {
                         json_encode($data, JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE);
-                    } catch (\ValueError $jsonErr) {
+                    } catch (JsonException $jsonErr) {
                         Log::error(
                             'AI payload JSON encode failed: ' . $jsonErr->getMessage(),
                             ['scope' => ['ai'], 'tool_count' => count($activeTools)],
                         );
-                        throw new \Exception('Failed to encode AI request with tools: ' . $jsonErr->getMessage());
+                        throw new Exception('Failed to encode AI request with tools: ' . $jsonErr->getMessage());
                     }
                 }
             } else {
@@ -348,7 +365,7 @@ class AIAssistant
             );
 
             // Log the main request response for diagnostics (tools provided but model chose not to call any).
-            if ($this->shouldUseNativeToolCalls() && empty($message['tool_calls']) && !empty($activeTools)) {
+            if ($nativeToolCalls && empty($message['tool_calls']) && !empty($activeTools)) {
                 Log::debug(
                     'AI model returned no tool_calls despite tools being available',
                     [
@@ -363,7 +380,7 @@ class AIAssistant
 
             // Native tool_calls support for configured providers.
             if (
-                $this->shouldUseNativeToolCalls()
+                $nativeToolCalls
                 && $toolCallCount < self::MAX_TOOL_CALLS
                 && !empty($message['tool_calls'])
             ) {
@@ -376,7 +393,8 @@ class AIAssistant
                 foreach ($message['tool_calls'] as $toolCall) {
                     $safeName = $toolCall['function']['name'];
                     $tool = $toolNameMap[$safeName] ?? $safeName;
-                    $arguments = json_decode($toolCall['function']['arguments'], true) ?? [];
+                    $decodedArgs = json_decode($toolCall['function']['arguments'] ?? '[]', true);
+                    $arguments = is_array($decodedArgs) ? $decodedArgs : [];
 
                     Log::debug(
                         "AI executing tool $tool with arguments " . json_encode($arguments),
@@ -440,7 +458,7 @@ class AIAssistant
             }
 
             // Prompt-based tool calls for providers without native tool_calls enabled.
-            if (!$this->shouldUseNativeToolCalls()) {
+            if (!$nativeToolCalls) {
                 // Strip markdown code fences that some models add despite instructions
                 $content = trim($message['content']);
                 $content = (string)preg_replace('/^```(?:json)?\s*/i', '', $content);
@@ -533,11 +551,18 @@ class AIAssistant
                 }
             }
 
-            $this->appendConversationMessage(['role' => 'assistant', 'content' => $message['content']]);
+            // Native path: the model may still want more tool calls after the limit is reached,
+            // returning an empty content with finish_reason=tool_calls. Surface a usable reply
+            // instead of an empty string.
+            if ($nativeToolCalls && trim((string)$message['content']) === '') {
+                $message['content'] = 'Done.';
+            }
+
+            $this->appendConversationMessage(['role' => 'assistant', 'content' => (string)$message['content']]);
             break;
         }
 
-        return $message['content'];
+        return (string)$message['content'];
     }
 
     /**
@@ -589,6 +614,13 @@ class AIAssistant
      */
     private function compactConversationHistory(): void
     {
+        // Fast path: with at most MAX_HISTORY_MESSAGES total entries, the real-message count can
+        // never exceed the limit (even if one entry is the rolling summary), so nothing needs
+        // collapsing. Skips the full re-scan that would otherwise run on every single append.
+        if (count($this->conversationHistory) <= self::MAX_HISTORY_MESSAGES) {
+            return;
+        }
+
         $summary = null;
         $messages = [];
 
@@ -716,8 +748,10 @@ class AIAssistant
             $this->conversationHistory,
             fn(array $msg): bool => !str_starts_with((string)($msg['content'] ?? ''), self::HISTORY_SUMMARY_PREFIX),
         ));
-        // Exclude the last entry (the current user input already appended to history).
-        $priorMessages = array_slice($historyForContext, -4, 3);
+        // Exclude the last entry (the current user input already appended to history),
+        // then take up to the 3 most recent prior turns. Slicing in two steps keeps the
+        // current input out even when the history is shorter than 4 messages.
+        $priorMessages = array_slice(array_slice($historyForContext, 0, -1), -3);
         $priorContext = !empty($priorMessages) ? $this->summarizeMessages($priorMessages) : '';
 
         $detectedModules = $this->detectModulesViaAI(
@@ -744,6 +778,9 @@ class AIAssistant
         }
 
         if ($detectedModules !== []) {
+            // A confidently detected module's full toolset is included intentionally — the
+            // MAX_TOOLS_PER_REQUEST budget only bounds the uncertain keyword-fallback path below,
+            // not targeted routing (a module like Projects legitimately has >8 tools).
             $selected = [];
             foreach ($detectedModules as $module) {
                 foreach ($moduleGroups[$module] ?? [] as $tool) {
@@ -757,7 +794,7 @@ class AIAssistant
         // AI detection failed — fall back to keyword scoring so that tools whose
         // name or description match words from the user's input are preferred over
         // an arbitrary slice of the tool list.
-        $queryWords = array_filter(preg_split('/\W+/', strtolower($userInput)) ?: []);
+        $queryWords = array_filter(preg_split('/[^\p{L}\p{N}]+/u', mb_strtolower($userInput)) ?: []);
         usort($otherTools, function (AITool $a, AITool $b) use ($queryWords): int {
             $scoreA = 0;
             $scoreB = 0;
@@ -826,7 +863,9 @@ class AIAssistant
         ];
 
         try {
-            $message = $this->doRequest($data);
+            // Routing is a tiny stateless prompt; cap the wait well below the main request's
+            // 180s so a slow model cannot double user-perceived latency on every request.
+            $message = $this->doRequest($data, 30);
         } catch (Exception) {
             return [];
         }
@@ -1143,13 +1182,13 @@ class AIAssistant
      */
     public function isAvailable(int $timeoutSeconds = 3): bool
     {
-        $userConfig = $this->currentUser !== null ? $this->currentUser->getProperty('ai_assistant') : null;
+        $userConfig = $this->aiConfig;
         $provider = $userConfig?->provider ?? 'local';
 
         if ($provider === 'openai') {
             $url = 'https://api.openai.com';
         } else {
-            $rawUrl = $userConfig?->url ?? 'http://192.168.68.58:8080/v1/chat/completions';
+            $rawUrl = $userConfig?->url ?? self::DEFAULT_LOCAL_URL;
             $parsed = parse_url($rawUrl);
             $url = ($parsed['scheme'] ?? 'http') . '://' . ($parsed['host'] ?? 'localhost');
             if (isset($parsed['port'])) {
@@ -1176,12 +1215,13 @@ class AIAssistant
      * Provider, URL, model and API key are read from the user's 'ai_assistant' property.
      *
      * @param array<mixed> $data The data to send in the API request.
+     * @param int $timeoutSeconds Maximum time to wait for the response.
      * @return array<mixed> The decoded response from the API, containing at least 'id' and 'content' keys.
      * @throws \Exception If the API call fails or returns an error
      */
-    protected function doRequest(array $data): array
+    protected function doRequest(array $data, int $timeoutSeconds = 180): array
     {
-        $userConfig = $this->currentUser !== null ? $this->currentUser->getProperty('ai_assistant') : null;
+        $userConfig = $this->aiConfig;
         $provider = $userConfig?->provider ?? 'local';
         $apiKey = $userConfig?->api_key ?? '';
 
@@ -1189,7 +1229,7 @@ class AIAssistant
             $url = 'https://api.openai.com/v1/chat/completions';
             $model = $userConfig?->model ?? 'gpt-4o';
         } else {
-            $url = $userConfig?->url ?? 'http://192.168.68.58:8080/v1/chat/completions';
+            $url = $userConfig?->url ?? self::DEFAULT_LOCAL_URL;
             $model = $userConfig?->model ?? 'qwen';
         }
 
@@ -1200,12 +1240,15 @@ class AIAssistant
             $headers[] = 'Authorization: Bearer ' . $apiKey;
         }
 
-        $payload = json_encode($data, JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
-        if ($payload === false) {
-            throw new Exception('Failed to encode request data: ' . json_last_error_msg());
+        try {
+            $payload = json_encode(
+                $data,
+                JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES,
+            );
+        } catch (JsonException $jsonErr) {
+            throw new Exception('Failed to encode request data: ' . $jsonErr->getMessage());
         }
 
-        // @phpstan-ignore-next-line
         $ch = curl_init($url);
         if ($ch === false) {
             throw new Exception('Failed to initialize cURL for: ' . $url);
@@ -1214,7 +1257,7 @@ class AIAssistant
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
-        curl_setopt($ch, CURLOPT_TIMEOUT, 180);
+        curl_setopt($ch, CURLOPT_TIMEOUT, $timeoutSeconds);
 
         $response = curl_exec($ch);
         $curlErrno = curl_errno($ch);

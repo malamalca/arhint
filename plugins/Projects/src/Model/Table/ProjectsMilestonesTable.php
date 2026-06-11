@@ -17,7 +17,6 @@ use Cake\Validation\Validator;
  * @method \Projects\Model\Entity\ProjectsMilestone patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
  * @method \Projects\Model\Entity\ProjectsMilestone|false save(\Cake\Datasource\EntityInterface $entity, array $options = [])
  * @mixin \Cake\ORM\Behavior\TimestampBehavior
- * @extends \Cake\ORM\Table<array{}, \Projects\Model\Entity\ProjectsMilestone>
  */
 class ProjectsMilestonesTable extends Table
 {
@@ -40,6 +39,19 @@ class ProjectsMilestonesTable extends Table
         $this->belongsTo('Projects', [
             'foreignKey' => 'project_id',
             'className' => 'Projects.Projects',
+        ]);
+
+        // Keep the project's milestone counters in sync whenever a milestone is
+        // created, closed/reopened (date_complete changes) or deleted.
+        $this->addBehavior('CounterCache', [
+            'Projects' => [
+                'milestones_open' => [
+                    'conditions' => ['ProjectsMilestones.date_complete IS' => null],
+                ],
+                'milestones_done' => [
+                    'conditions' => ['ProjectsMilestones.date_complete IS NOT' => null],
+                ],
+            ],
         ]);
 
         $this->hasMany('ProjectsTasks', [

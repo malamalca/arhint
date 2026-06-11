@@ -10,10 +10,9 @@ use Cake\Log\Log;
 use Cake\ORM\TableRegistry;
 use Cake\Queue\Job\JobInterface;
 use Cake\Queue\Job\Message;
-use Exception;
 use Interop\Queue\Processor;
-use Throwable;
 use League\CommonMark\GithubFlavoredMarkdownConverter;
+use Throwable;
 
 class AiChatJob implements JobInterface
 {
@@ -50,6 +49,7 @@ class AiChatJob implements JobInterface
                 'AiChatJob rejected: empty required argument',
                 ['scope' => ['ai'], 'user_id' => $userId, 'message_empty' => $userMessage === '', 'job_id' => $jobId],
             );
+
             return Processor::REJECT;
         }
 
@@ -109,7 +109,8 @@ class AiChatJob implements JobInterface
             ]));
         } catch (Throwable $e) {
             Log::error(
-                'AI ChatJob error: ' . get_class($e) . ': ' . $e->getMessage() . ' | File: ' . $e->getFile() . ':' . $e->getLine(),
+                'AI ChatJob error: ' . get_class($e) . ': ' . $e->getMessage() . ' | File: ' . $e->getFile() .
+                ':' . $e->getLine(),
                 [
                     'scope' => ['ai'],
                     'user_id' => $userId,

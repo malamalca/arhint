@@ -829,6 +829,7 @@ class DocumentsAIToolsEvents implements EventListenerInterface
      */
     private function executeUpdateInvoiceItem(Event $event, array $arguments, mixed $currentUser): void
     {
+        /** @var \Documents\Model\Table\InvoicesItemsTable $itemsTable */
         $itemsTable = TableRegistry::getTableLocator()->get('Documents.InvoicesItems');
 
         $item = $itemsTable->find()
@@ -875,6 +876,7 @@ class DocumentsAIToolsEvents implements EventListenerInterface
      */
     private function executeDeleteInvoiceItem(Event $event, array $arguments, mixed $currentUser): void
     {
+        /** @var \Documents\Model\Table\InvoicesItemsTable $itemsTable */
         $itemsTable = TableRegistry::getTableLocator()->get('Documents.InvoicesItems');
 
         $item = $itemsTable->find()
@@ -1223,6 +1225,7 @@ class DocumentsAIToolsEvents implements EventListenerInterface
      */
     private function executeSubmitTravelOrder(Event $event, array $arguments, mixed $currentUser): void
     {
+        /** @var \Documents\Model\Table\TravelOrdersTable $travelOrdersTable */
         $travelOrdersTable = TableRegistry::getTableLocator()->get('Documents.TravelOrders');
 
         $travelOrder = $travelOrdersTable->find()

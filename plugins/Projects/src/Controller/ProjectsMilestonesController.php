@@ -128,4 +128,78 @@ class ProjectsMilestonesController extends AppController
 
         return $this->redirect(['controller' => 'Projects', 'action' => 'view', $projectsMilestone->project_id]);
     }
+
+    /**
+     * Reopen method
+     *
+     * @param string|null $id Projects Milestone id.
+     * @return \Cake\Http\Response|null
+     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
+     */
+    public function reopen(?string $id = null): ?Response
+    {
+        $this->request->allowMethod(['post', 'delete', 'get']);
+        $projectsMilestone = $this->ProjectsMilestones->get($id);
+        $this->Authorization->Authorize($projectsMilestone, 'edit');
+
+        $projectsMilestone->date_complete = null;
+
+        if ($this->ProjectsMilestones->save($projectsMilestone)) {
+            $this->Flash->success(__d('projects', 'The projects milestone has been reopened.'));
+        } else {
+            $this->Flash->error(__d('projects', 'The projects milestone could not be reopened. Please, try again.'));
+        }
+
+        return $this->redirect(['controller' => 'Projects', 'action' => 'view', $projectsMilestone->project_id]);
+    }
+
+    /**
+     * Bulk method
+     *
+     * Applies an action ("done" or "delete") to the selected milestones.
+     *
+     * @return \Cake\Http\Response|null
+     */
+    public function bulk(): ?Response
+    {
+        $this->getRequest()->allowMethod(['post']);
+
+        $action = $this->getRequest()->getData('action');
+        $ids = (array)$this->getRequest()->getData('ids');
+
+        if (!in_array($action, ['done', 'delete'], true) || empty($ids)) {
+            $this->Authorization->skipAuthorization();
+            $this->Flash->error(__d('projects', 'Invalid bulk action or no milestones selected.'));
+
+            return $this->redirect($this->getRequest()->getData('redirect') ?? ['action' => 'index']);
+        }
+
+        $milestones = $this->ProjectsMilestones->find()
+            ->where(['id IN' => $ids])
+            ->all();
+
+        $bulkCount = 0;
+        foreach ($milestones as $milestone) {
+            if ($action === 'delete') {
+                $this->Authorization->authorize($milestone, 'delete');
+                if ($this->ProjectsMilestones->delete($milestone)) {
+                    $bulkCount++;
+                }
+            } else {
+                $this->Authorization->authorize($milestone, 'edit');
+                $milestone->date_complete = new Date();
+                if ($this->ProjectsMilestones->save($milestone)) {
+                    $bulkCount++;
+                }
+            }
+        }
+
+        if ($bulkCount > 0) {
+            $this->Flash->success(__d('projects', '{0} milestones have been modified or deleted.', $bulkCount));
+        } else {
+            $this->Flash->error(__d('projects', 'No milestones have been updated. Please, try again.'));
+        }
+
+        return $this->redirect($this->getRequest()->getData('redirect') ?? ['action' => 'index']);
+    }
 }

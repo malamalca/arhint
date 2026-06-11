@@ -21,7 +21,6 @@ use Laminas\Diactoros\UploadedFile;
  * @method \App\Model\Entity\Attachment get(mixed $primaryKey, array|string $finder = 'all', \Psr\SimpleCache\CacheInterface|string|null $cache = null, \Closure|string|null $cacheKey = null, mixed ...$args)
  * @method \App\Model\Entity\Attachment newEmptyEntity()
  * @method \App\Model\Entity\Attachment patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
- * @extends \Cake\ORM\Table<array{}, \App\Model\Entity\Attachment>
  */
 class AttachmentsTable extends Table
 {
