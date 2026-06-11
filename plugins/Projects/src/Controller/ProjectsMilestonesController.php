@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Projects\Controller;
 
 use Cake\Http\Response;
+use Cake\I18n\Date;
 use Cake\ORM\TableRegistry;
 
 /**
@@ -99,6 +100,30 @@ class ProjectsMilestonesController extends AppController
             $this->Flash->success(__d('projects', 'The projects milestone has been deleted.'));
         } else {
             $this->Flash->error(__d('projects', 'The projects milestone could not be deleted. Please, try again.'));
+        }
+
+        return $this->redirect(['controller' => 'Projects', 'action' => 'view', $projectsMilestone->project_id]);
+    }
+
+    /**
+     * Close method
+     *
+     * @param string|null $id Projects Milestone id.
+     * @return \Cake\Http\Response|null
+     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
+     */
+    public function close(?string $id = null): ?Response
+    {
+        $this->request->allowMethod(['post', 'delete', 'get']);
+        $projectsMilestone = $this->ProjectsMilestones->get($id);
+        $this->Authorization->Authorize($projectsMilestone, 'edit');
+
+        $projectsMilestone->date_complete = new Date();
+
+        if ($this->ProjectsMilestones->save($projectsMilestone)) {
+            $this->Flash->success(__d('projects', 'The projects milestone has been closed.'));
+        } else {
+            $this->Flash->error(__d('projects', 'The projects milestone could not be closed. Please, try again.'));
         }
 
         return $this->redirect(['controller' => 'Projects', 'action' => 'view', $projectsMilestone->project_id]);

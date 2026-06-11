@@ -32,7 +32,7 @@ class AccountsController extends AppController
         $query = $this->Authorization->applyScope($this->Accounts->find())
             ->where($params['conditions'])
             ->contain($params['contain'])
-            ->order($params['order']);
+            ->orderBy($params['order']);
 
         // When searching, return flat list; otherwise build threaded tree
         if (!empty($filter['search'])) {

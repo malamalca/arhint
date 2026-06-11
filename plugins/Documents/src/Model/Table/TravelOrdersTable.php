@@ -91,7 +91,7 @@ class TravelOrdersTable extends Table
 
         $this->hasMany('App.Attachments', [
             'foreignKey' => 'foreign_id',
-            'conditions' => ['Attachments.model' => 'Documents.TravelOrder'],
+            'conditions' => ['Attachments.model' => 'TravelOrder'],
             'dependent' => true,
         ]);
         $this->hasMany('App.Logs', [

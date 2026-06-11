@@ -140,7 +140,7 @@ switch ($activeTab) {
         $milestonesPanel = [
             'milestones_list' => [
                 'params' => ['id' => 'projects-milestones'],
-                'lines' => [$this->Element('Projects.milestones_list', ['milestones' => $milestones])],
+                'lines' => [$this->Element('Projects.milestones_list', ['milestones' => $milestones, 'project' => $project])],
             ],
         ];
         $this->Lil->insertIntoArray($projectView['panels'], $milestonesPanel);

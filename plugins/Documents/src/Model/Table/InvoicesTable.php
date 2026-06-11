@@ -80,7 +80,7 @@ class InvoicesTable extends Table
         ]);
         $this->hasMany('App.Attachments', [
             'foreignKey' => 'foreign_id',
-            'conditions' => ['Attachments.model' => 'Documents.Invoice'],
+            'conditions' => ['Attachments.model' => 'Invoice'],
             'dependant' => true,
         ]);
         $this->hasMany('App.Logs', [

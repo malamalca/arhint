@@ -3,8 +3,13 @@ declare(strict_types=1);
 
 use App\Filter\Filter;
 use Cake\Routing\Router;
+
 ?>
-<div class="title"><?= $this->Html->image('/projects/img/milestone-16.svg') ?> 0 open 0 closed</div>
+<div class="title">
+    <?= $this->Html->image('/projects/img/milestone-16.svg') ?> 
+    <?= __d('projects', '{0} open', $project->milestones_open) ?>
+    <?= __d('projects', '{0} closed', $project->milestones_done) ?>
+</div>
 <?php
 foreach ($milestones as $milestone) :
     $completedPercent = $milestone->tasks_done + $milestone->tasks_open > 0 ?

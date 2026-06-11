@@ -6,6 +6,8 @@ declare(strict_types=1);
  */
 require __DIR__ . DIRECTORY_SEPARATOR . 'paths.php';
 
+define('_DEBUG_LEVEL', 3);
+
 /*
  * Bootstrap CakePHP.
  *

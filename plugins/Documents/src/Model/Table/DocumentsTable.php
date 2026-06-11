@@ -73,7 +73,7 @@ class DocumentsTable extends Table
         ]);
         $this->hasMany('App.Attachments', [
             'foreignKey' => 'foreign_id',
-            'conditions' => ['Attachments.model' => 'Documents.Document'],
+            'conditions' => ['Attachments.model' => 'Document'],
             'dependant' => true,
         ]);
         $this->hasMany('App.Logs', [

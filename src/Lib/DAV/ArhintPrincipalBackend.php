@@ -253,7 +253,7 @@ class ArhintPrincipalBackend extends AbstractBackend implements CreatePrincipalS
      * @param string $principal
      * @return array
      */
-    public function getGroupMembership(string $principal): array
+    public function getGroupMembership($principal): array
     {
         $result = [];
 
