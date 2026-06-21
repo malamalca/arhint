@@ -116,6 +116,12 @@ jobs:
     - name: Composer Install
       run: composer install --no-interaction
 
+    # The plugin bootstraps `require CONFIG . 'app_local.php'`, which PHPStan
+    # resolves statically. This job has no database, so post-install-cmd cannot
+    # reliably create the (git-ignored) file; create it from the example.
+    - name: Create app_local.php config
+      run: cp config/app_local.example.php config/app_local.php
+
     - name: Run PHP CodeSniffer
       run: vendor/bin/phpcs --report=checkstyle | cs2pr
 

@@ -30,7 +30,7 @@
         "sabre/vobject": "4.5",
         "symfony/http-client": "*",
         "syncroton/syncroton": "dev-master",
-        "tecnickcom/tcpdf": "dev-main",
+        "tecnickcom/tcpdf": "^6.11",
         "zendframework/zendframework1": "1.12.20pl61 as 1.12.20"
     },
     "require-dev": {

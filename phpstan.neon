@@ -13,7 +13,12 @@ parameters:
         -
             message: '#PHPDoc tag @property for property .+ contains unknown class#'
             identifier: class.notFound
-        - '#Unable to resolve the template type TEntity in call to method#'
+        # CakePHP ORM generic-resolution noise (Table<array>::patchEntity/save).
+        # Whether it surfaces depends on the analysis environment (PHP version),
+        # so allow the pattern to go unmatched without failing the build.
+        -
+            message: '#Unable to resolve the template type TEntity in call to method#'
+            reportUnmatched: false
     bootstrapFiles:
         - config/paths.php
         - vendor/cakephp/cakephp/src/functions.php
