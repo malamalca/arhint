@@ -165,9 +165,9 @@ class UtilsController extends AppController
         $textColor = '#000000';
         $textColor = (int)imagecolorallocatealpha(
             $newImage,
-            (int)hexdec(substr($textColor, 1, 2)),
-            (int)hexdec(substr($textColor, 3, 2)),
-            (int)hexdec(substr($textColor, 5, 2)),
+            min(255, max(0, (int)hexdec(substr($textColor, 1, 2)))),
+            min(255, max(0, (int)hexdec(substr($textColor, 3, 2)))),
+            min(255, max(0, (int)hexdec(substr($textColor, 5, 2)))),
             0,
         );
         $transparent = (int)imagecolorallocate($newImage, 240, 240, 240);

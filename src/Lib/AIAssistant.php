@@ -123,7 +123,7 @@ class AIAssistant
 
         $aiConfig = $currentUser?->getProperty('ai_assistant');
         $this->aiConfig = is_object($aiConfig) ? $aiConfig : null;
-        $this->provider = $this->aiConfig?->provider ?? 'local';
+        $this->provider = $this->aiConfig->provider ?? 'local';
 
         $modulesList = new ArrayObject();
         $registerEvent = new Event('App.AIAssistant.registerModule', $this, [$modulesList]);
@@ -1183,12 +1183,12 @@ class AIAssistant
     public function isAvailable(int $timeoutSeconds = 3): bool
     {
         $userConfig = $this->aiConfig;
-        $provider = $userConfig?->provider ?? 'local';
+        $provider = $userConfig->provider ?? 'local';
 
         if ($provider === 'openai') {
             $url = 'https://api.openai.com';
         } else {
-            $rawUrl = $userConfig?->url ?? self::DEFAULT_LOCAL_URL;
+            $rawUrl = $userConfig->url ?? self::DEFAULT_LOCAL_URL;
             $parsed = parse_url($rawUrl);
             $url = ($parsed['scheme'] ?? 'http') . '://' . ($parsed['host'] ?? 'localhost');
             if (isset($parsed['port'])) {
@@ -1222,15 +1222,15 @@ class AIAssistant
     protected function doRequest(array $data, int $timeoutSeconds = 180): array
     {
         $userConfig = $this->aiConfig;
-        $provider = $userConfig?->provider ?? 'local';
-        $apiKey = $userConfig?->api_key ?? '';
+        $provider = $userConfig->provider ?? 'local';
+        $apiKey = $userConfig->api_key ?? '';
 
         if ($provider === 'openai') {
             $url = 'https://api.openai.com/v1/chat/completions';
-            $model = $userConfig?->model ?? 'gpt-4o';
+            $model = $userConfig->model ?? 'gpt-4o';
         } else {
-            $url = $userConfig?->url ?? self::DEFAULT_LOCAL_URL;
-            $model = $userConfig?->model ?? 'qwen';
+            $url = $userConfig->url ?? self::DEFAULT_LOCAL_URL;
+            $model = $userConfig->model ?? 'qwen';
         }
 
         $data['model'] = $model;

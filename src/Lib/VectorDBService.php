@@ -311,7 +311,7 @@ class VectorDBService
      *
      * @param string $url    Target URL.
      * @param string $body   JSON-encoded request body (empty string for GET/DELETE).
-     * @param string $method HTTP method.
+     * @param non-empty-string $method HTTP method.
      * @return mixed|null Decoded JSON response, or null on failure.
      */
     private function send(string $url, string $body, string $method): mixed

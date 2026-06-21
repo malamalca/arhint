@@ -39,6 +39,8 @@ class ProjectsFuncs
      */
     public static function thumb(Project $project, int $thumbSize = self::THUMB_SIZE): mixed
     {
+        $thumbSize = max(1, $thumbSize);
+
         if (empty($project->ico)) {
             $newImage = imagecreatetruecolor($thumbSize, $thumbSize);
             if (!$newImage) {
@@ -51,9 +53,9 @@ class ProjectsFuncs
             $textColor = empty($project->colorize) ? '#ffffff' : $project->colorize;
             $textColor = (int)imagecolorallocatealpha(
                 $newImage,
-                (int)hexdec(substr($textColor, 1, 2)),
-                (int)hexdec(substr($textColor, 3, 2)),
-                (int)hexdec(substr($textColor, 5, 2)),
+                min(255, max(0, (int)hexdec(substr($textColor, 1, 2)))),
+                min(255, max(0, (int)hexdec(substr($textColor, 3, 2)))),
+                min(255, max(0, (int)hexdec(substr($textColor, 5, 2)))),
                 0,
             );
             $white = (int)imagecolorallocatealpha($newImage, 255, 255, 255, 127);

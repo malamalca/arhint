@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace App\Lib;
 
-use ArrayAccess;
 use ArrayObject;
 
 class Lil
@@ -13,12 +12,13 @@ class Lil
      *
      * Insert a new element into array
      *
-     * @param \ArrayAccess|array<string, mixed> $input Destination for insert operation.
+     * @param \ArrayObject<int|string, mixed>|array<int|string, mixed> $input Destination for insert operation.
+     * @param-out \ArrayObject<int|string, mixed>|array<int|string, mixed> $input
      * @param array<string, mixed> $element Element to be inserted.
      * @param array<string, mixed> $options Insert options.
      * @return void
      */
-    public static function insertIntoArray(array|ArrayAccess &$input, array $element, array $options = []): void
+    public static function insertIntoArray(array|ArrayObject &$input, array $element, array $options = []): void
     {
         // Normalize to plain array for manipulation; track if we need to export back.
         $isArrayObject = ($input instanceof ArrayObject);

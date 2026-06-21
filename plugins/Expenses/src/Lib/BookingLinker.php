@@ -68,7 +68,7 @@ class BookingLinker
     public function assertOwnership(EntityInterface $entity, string $model, string $ownerId): void
     {
         $entityOwnerId = match ($model) {
-            'BankStatementEntry' => $entity->bank_statement?->owner_id ?? null,
+            'BankStatementEntry' => $entity->bank_statement->owner_id ?? null,
             default => $entity->get('owner_id') ?? null,
         };
         if ($entityOwnerId !== null && $entityOwnerId !== $ownerId) {

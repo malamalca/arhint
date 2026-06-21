@@ -51,6 +51,8 @@ class DocumentsSidebar
             $controller->Authorization->applyScope($DocumentsCounters->find(), 'index'),
         );
 
+        /** @var array<string, mixed> $documents */
+        $documents = [];
         $documents['title'] = __d('documents', 'Documents');
         $documents['visible'] = true;
         $documents['active'] = $request->getParam('plugin') == 'Documents';
@@ -68,11 +70,9 @@ class DocumentsSidebar
             }
         }
 
-        $sidebar['documents'] = $documents;
-
         ////////////////////////////////////////////////////////////////////////////////////////
-        if (empty($sidebar['documents']['items']['reports'])) {
-            $sidebar['documents']['items']['reports'] = [
+        if (empty($documents['items']['reports'])) {
+            $documents['items']['reports'] = [
                 'visible' => $currentUser->hasRole('admin'),
                 'title' => __d('documents', 'Reports'),
                 'url' => false,
@@ -82,7 +82,7 @@ class DocumentsSidebar
             ];
         }
 
-        $sidebar['documents']['items']['reports']['submenu']['documents_report'] = [
+        $documents['items']['reports']['submenu']['documents_report'] = [
             'visible' => true,
             'title' => __d('documents', 'List'),
             'url' => [
@@ -95,7 +95,7 @@ class DocumentsSidebar
 
         ////////////////////////////////////////////////////////////////////////////////////////
         Lil::insertIntoArray(
-            $sidebar['documents']['items'],
+            $documents['items'],
             [
                 'documents' => [
                     'visible' => true,
@@ -120,8 +120,8 @@ class DocumentsSidebar
         );
 
         // EXPORT SIDEBAR SUBMENU
-        if (empty($sidebar['documents']['items']['exports'])) {
-            $sidebar['documents']['items']['exports'] = [
+        if (empty($documents['items']['exports'])) {
+            $documents['items']['exports'] = [
                 'visible' => $currentUser->hasRole('admin'),
                 'title' => __d('documents', 'Export'),
                 'url' => false,
@@ -146,8 +146,8 @@ class DocumentsSidebar
         }
 
         // LOOKUPS SIDEBAR SUBMENU
-        if (empty($sidebar['documents']['items']['lookups'])) {
-            $sidebar['documents']['items']['lookups'] = [
+        if (empty($documents['items']['lookups'])) {
+            $documents['items']['lookups'] = [
                 'visible' => $currentUser->hasRole('admin'),
                 'title' => __d('documents', 'Lookups'),
                 'url' => false,
@@ -157,7 +157,7 @@ class DocumentsSidebar
             ];
         }
 
-        $sidebar['documents']['items']['lookups']['active'] =
+        $documents['items']['lookups']['active'] =
             in_array($request->getParam('controller'), ['Items', 'DocumentsCounters']) ||
             ($request->getParam('controller') == 'Vats' &&
                         in_array($request->getParam('action'), ['index', 'edit'])) ||
@@ -168,7 +168,7 @@ class DocumentsSidebar
             ($request->getParam('controller') == 'Items' &&
                         in_array($request->getParam('action'), ['index', 'edit']));
 
-        $sidebar['documents']['items']['lookups']['submenu'] =
+        $documents['items']['lookups']['submenu'] =
             [
                 'documents_items' => [
                     'visible' => true,
@@ -243,12 +243,12 @@ class DocumentsSidebar
             // build submenus
             foreach ($counters as $c) {
                 if ($currentCounter == $c->id) {
-                    $sidebar['documents']['items'][strtolower($c->kind)]['active'] = true;
+                    $documents['items'][strtolower($c->kind)]['active'] = true;
                 }
 
                 $controllerName = $c->kind;
 
-                $sidebar['documents']['items'][strtolower($c->kind)]['submenu'][$c->id] = [
+                $documents['items'][strtolower($c->kind)]['submenu'][$c->id] = [
                     'visible' => true,
                     'title' => $c->title,
                     'url' => [
@@ -262,12 +262,14 @@ class DocumentsSidebar
             }
 
             // when user has no rights to access any of counter kinds
-            foreach ($sidebar['documents']['items'] as $i => $counterSubmenu) {
-                if (empty($sidebar['documents']['items'][$i]['submenu'])) {
-                    unset($sidebar['documents']['items'][$i]);
+            foreach ($documents['items'] as $i => $counterSubmenu) {
+                if (empty($documents['items'][$i]['submenu'])) {
+                    unset($documents['items'][$i]);
                 }
             }
         }
+
+        $sidebar['documents'] = $documents;
 
         $event->setResult(['sidebar' => $sidebar]);
     }

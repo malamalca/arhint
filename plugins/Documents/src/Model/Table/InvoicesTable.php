@@ -19,9 +19,9 @@ use Documents\Model\Entity\Invoice;
  * Invoices Model
  *
  * @property \Documents\Model\Table\DocumentsCountersTable $DocumentsCounters
- * @property \Documents\Model\Table\DocumentsClientsTable|\Cake\ORM\Association\hasOne $Buyers
- * @property \Documents\Model\Table\DocumentsClientsTable|\Cake\ORM\Association\hasOne $Issuers
- * @property \Documents\Model\Table\DocumentsClientsTable|\Cake\ORM\Association\hasOne $Receivers
+ * @property \Documents\Model\Table\DocumentsClientsTable|\Cake\ORM\Association\HasOne $Buyers
+ * @property \Documents\Model\Table\DocumentsClientsTable|\Cake\ORM\Association\HasOne $Issuers
+ * @property \Documents\Model\Table\DocumentsClientsTable|\Cake\ORM\Association\HasOne $Receivers
  * @method \Documents\Model\Entity\Invoice get(mixed $primaryKey, array|string $finder = 'all', \Psr\SimpleCache\CacheInterface|string|null $cache = null, \Closure|string|null $cacheKey = null, mixed ...$args)
  * @method \Documents\Model\Entity\Invoice newEmptyEntity()
  * @method \Documents\Model\Entity\Invoice patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])

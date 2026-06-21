@@ -2,8 +2,17 @@ parameters:
     level: 8
     treatPhpDocTypesAsCertain: false
     ignoreErrors:
+        # CakePHP bake auto-generates @method/@property docblocks whose array
+        # types omit value types and reference associated classes that aren't
+        # present in every app build. PHPStan 2.x reports these; they are
+        # docblock noise, not real bugs (same policy as missingType.generics).
         - identifier: missingType.generics
+        - identifier: missingType.iterableValue
         - identifier: property.notFound
+        - identifier: propertyTag.unresolvableType
+        -
+            message: '#PHPDoc tag @property for property .+ contains unknown class#'
+            identifier: class.notFound
         - '#Unable to resolve the template type TEntity in call to method#'
     bootstrapFiles:
         - config/paths.php
@@ -11,10 +20,6 @@ parameters:
     excludePaths:
         - src/Console/Installer.php
         - src/Lib/DAV/ArhintPrincipalBackend.php
-        - src/App/Controller/ErrorController.php
-        - src/App/Command/ConsoleCommand.php
-        - src/App/Controller/PagesController.php
-        - src/Controller/SyncController.php
         - plugins/Crm/src/Lib/ActiveSyncContacts.php
         - plugins/Crm/src/Lib/SabreDAVSyncContacts.php
         - plugins/Calendar/src/Lib/SabreDAVSyncCalendars.php

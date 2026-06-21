@@ -16,7 +16,7 @@ class ArhintReport
     /**
      * @var string $ext
      */
-    private ?string $ext = null;
+    private string $ext = 'pdf';
     /**
      * @var \Cake\View\View $view
      */

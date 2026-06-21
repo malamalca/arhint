@@ -415,7 +415,7 @@ class PopulateProjectLogsCommand extends Command
             /**
              * @inheritDoc
              */
-            public function getId(): ?string
+            public function getId(): ?string // @phpstan-ignore return.unusedType (fixed by QueueMessage interface)
             {
                 return null;
             }
@@ -458,7 +458,7 @@ class PopulateProjectLogsCommand extends Command
             /**
              * @inheritDoc
              */
-            public function getMessageTypeId(): ?string
+            public function getMessageTypeId(): ?string // @phpstan-ignore return.unusedType (fixed by QueueMessage interface)
             {
                 return null;
             }
@@ -592,7 +592,7 @@ class PopulateProjectLogsCommand extends Command
             /**
              * @inheritDoc
              */
-            public function getDeliveryTag(): ?string
+            public function getDeliveryTag(): ?string // @phpstan-ignore return.unusedType (fixed by QueueMessage interface)
             {
                 return null;
             }

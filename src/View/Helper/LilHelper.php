@@ -575,7 +575,7 @@ class LilHelper extends Helper
      *
      * Insert a new element into array
      *
-     * @param array<string, mixed> $dest Destination for insert operation.
+     * @param array<int|string, mixed> $dest Destination for insert operation.
      * @param array<string, mixed> $element Element to be inserted.
      * @param array<string, mixed> $options Insert options.
      * @return void
