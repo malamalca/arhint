@@ -7,6 +7,7 @@ use Cake\Event\EventInterface;
 use Cake\Http\Response;
 use Cake\ORM\TableRegistry;
 use Projects\Filter\ProjectsTasksFilter;
+use Projects\Lib\ProjectsFuncs;
 
 /**
  * ProjectsTasks Controller
@@ -26,7 +27,7 @@ class ProjectsTasksController extends AppController
     {
         parent::beforeFilter($event);
 
-        $this->FormProtection->setConfig('unlockedActions', ['edit']);
+        $this->FormProtection->setConfig('unlockedActions', ['edit', 'bulk']);
     }
 
     /**
@@ -207,5 +208,59 @@ class ProjectsTasksController extends AppController
         }
 
         return $this->redirect(['action' => 'index', $projectsTask->project_id]);
+    }
+
+    /**
+     * Bulk action method
+     *
+     * @return \Cake\Http\Response|null
+     */
+    public function bulk(): ?Response
+    {
+        $this->getRequest()->allowMethod(['post']);
+
+        $action = $this->getRequest()->getData('action');
+        $ids = (array)$this->getRequest()->getData('ids');
+
+        if (!in_array($action, ['delete', 'close'], true) || empty($ids)) {
+            $this->Authorization->skipAuthorization();
+            $this->Flash->error(__d('projects', 'Invalid bulk action or no tasks selected.'));
+
+            return $this->redirect($this->getRequest()->getData('redirect') ?? ['action' => 'index']);
+        }
+
+        $tasks = $this->ProjectsTasks->find()
+            ->where(['id IN' => $ids])
+            ->all();
+
+        $bulkCount = 0;
+        foreach ($tasks as $task) {
+            switch ($action) {
+                case 'delete':
+                    $this->Authorization->authorize($task, 'delete');
+                    if ($this->ProjectsTasks->delete($task)) {
+                        $bulkCount++;
+                    }
+                    break;
+                case 'close':
+                    $this->Authorization->authorize($task, 'edit');
+                    if ($task->status === ProjectsFuncs::STATUS_CLOSED) {
+                        break;
+                    }
+                    $task->status = ProjectsFuncs::STATUS_CLOSED;
+                    if ($this->ProjectsTasks->save($task, ['auditUserId' => $this->getCurrentUser()->get('id')])) {
+                        $bulkCount++;
+                    }
+                    break;
+            }
+        }
+
+        if ($bulkCount > 0) {
+            $this->Flash->success(__d('projects', '{0} tasks have been modified or deleted.', $bulkCount));
+        } else {
+            $this->Flash->error(__d('projects', 'No tasks have been updated. Please, try again.'));
+        }
+
+        return $this->redirect($this->getRequest()->getData('redirect') ?? ['action' => 'index']);
     }
 }

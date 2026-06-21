@@ -365,4 +365,41 @@
 
 div#panel-index {
     @include panel-index;
+
+    // Task rows carry more meta (author, assignee, created/closed dates,
+    // milestone) than fits on the standard single clipped line, so let their
+    // details wrap and the row grow instead of truncating with an ellipsis.
+    div#panel-list div.panel-row.task-row {
+        height: auto;
+        min-height: 4rem;
+        align-items: flex-start;
+        padding-top: 0.6rem;
+        padding-bottom: 0.6rem;
+
+        div.checkbox,
+        div.status {
+            padding-top: 0.2rem;
+        }
+
+        div.details {
+            height: auto;
+            white-space: normal;
+            overflow: visible;
+            text-overflow: clip;
+            line-height: 1.5;
+
+            // The .details block lives inside .title, so the generic
+            // `div.title a { display: block }` rule also catches links here
+            // (e.g. the author link) and forces a line break. Keep them inline.
+            a {
+                display: inline;
+            }
+        }
+
+        // Closed tasks: strike through and grey out the title.
+        &.done > div.title > a {
+            color: #999;
+            text-decoration: line-through;
+        }
+    }
 }

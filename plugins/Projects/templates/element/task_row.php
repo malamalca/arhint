@@ -25,8 +25,8 @@ switch ($task->status) {
 
 ?>
 
-<div class="panel-row">
-    <div class="checkbox"><input type="checkbox" /></div>
+<div class="panel-row task-row<?= $task->status === ProjectsFuncs::STATUS_CLOSED ? ' done' : '' ?>">
+    <div class="checkbox"><?= $this->Form->checkbox('ids[]', ['value' => $task->id, 'hiddenField' => false]); ?></div>
     <div class="status"><?= $this->Html->image('/projects/img/' . $taskImage, ['class' => $taskImageClass]) ?></div>
     <div class="title"><?= $this->Html->link(
         $task->title,
@@ -39,27 +39,25 @@ switch ($task->status) {
         <div class="details">
         #<?= $task->no ?> ·
         <?php
-            $userLink = $this->Html->link(
-                (string)$users[$task->user_id],
-                [$project->id, '?' => ['q' => $filter->buildQuery('user', (string)$users[$task->user_id])]],
-            );
-            if ($task->status === ProjectsFuncs::STATUS_OPEN) {
-                echo __d('projects', '{0} opened {1}', $userLink, h((new Date($task->created))->nice()));
-            } else {
-                echo __d('projects', '{0} closed {1}', $userLink, h((new Date($task->closed))->nice()));
+            $details = [];
+
+            // Created date
+            $details[] = $this->Html->image('/projects/img/calendar-16.svg') . ' ' .
+                (new Date($task->created))->nice();
+
+            // Assigned user
+            if (!empty($task->assigned_user_id) && isset($users[$task->assigned_user_id])) {
+                $details[] = $this->Html->image('/projects/img/person-16.svg') . ' ' .
+                    __d('projects', 'Assigned to {0}', h((string)$users[$task->assigned_user_id]));
             }
 
-            if (isset($milestones[$task->milestone_id])) {
-                $milestoneLink = $this->Html->link(
-                    (string)$milestones[$task->milestone_id],
-                    [
-                        $project->id,
-                        '?' => ['q' => $filter->buildQuery('milestone', (string)$milestones[$task->milestone_id])],
-                    ],
-                );
-
-                echo ' · ' . $this->Html->image('/projects/img/milestone-16.svg') . ' ' . $milestoneLink;
+            // Closing date
+            if (!empty($task->closed)) {
+                $details[] = $this->Html->image('/projects/img/issue-closed-16.svg') . ' ' .
+                    __d('projects', 'Closed {0}', h((new Date($task->closed))->nice()));
             }
+
+            echo implode(' · ', $details);
         ?>
         </div>
     </div>

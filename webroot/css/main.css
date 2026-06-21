@@ -9362,6 +9362,31 @@ div#panel-index div#panel-list div.panel-row div.details img {
   color: #888;
   filter: brightness(0) saturate(100%) invert(62%) sepia(0%) saturate(2641%) hue-rotate(333deg) brightness(86%) contrast(96%);
 }
+div#panel-index div#panel-list div.panel-row.task-row {
+  height: auto;
+  min-height: 4rem;
+  align-items: flex-start;
+  padding-top: 0.6rem;
+  padding-bottom: 0.6rem;
+}
+div#panel-index div#panel-list div.panel-row.task-row div.checkbox,
+div#panel-index div#panel-list div.panel-row.task-row div.status {
+  padding-top: 0.2rem;
+}
+div#panel-index div#panel-list div.panel-row.task-row div.details {
+  height: auto;
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+  line-height: 1.5;
+}
+div#panel-index div#panel-list div.panel-row.task-row div.details a {
+  display: inline;
+}
+div#panel-index div#panel-list div.panel-row.task-row.done > div.title > a {
+  color: #999;
+  text-decoration: line-through;
+}
 div#panel-index div#panel-list div.panel-row > div:not(.checkbox):not(.status):not(.title) {
   flex: 0 0 auto;
   padding-left: 1rem;

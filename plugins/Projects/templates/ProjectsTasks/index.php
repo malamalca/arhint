@@ -155,6 +155,8 @@ $tableIndex = [
                 ]),
             ) .
             '</div>',
+        'form_start' => $this->Form->create(null, ['type' => 'post', 'url' => ['action' => 'bulk']]),
+        'from_redirect' => $this->Form->hidden('redirect', ['value' => Router::url(null, true)]),
         'filter' => '<div id="panel-filter">' .
             '<div class="checkbox"><input type="checkbox" id="select-all-tasks" /></div>' .
             '<div id="panel-counters">' .
@@ -186,11 +188,26 @@ $tableIndex = [
             sprintf('<li><a href="#" class="btn text dropdown-trigger-costum" data-target="dropdown-milestones">%s &#128899;</a></li>', __d('projects', 'Milestone')) .
             sprintf('<li><a href="#" class="btn text dropdown-trigger-costum" data-target="dropdown-sort"><i class="material-icons">sort</i>%s &#128899;</a></li>', h(__d('projects', 'Newest'))) .
             '</ul>' .
+            '<div id="panel-actions" style="display:none;">' .
+                $this->Form->button(__d('projects', 'Close'), [
+                    'type' => 'submit',
+                    'name' => 'action',
+                    'value' => 'close',
+                    'confirm' => __d('projects', 'Are you sure you want to close the selected tasks?'),
+                ]) .
+                $this->Form->button(__d('projects', 'Delete'), [
+                    'type' => 'submit',
+                    'name' => 'action',
+                    'value' => 'delete',
+                    'confirm' => __d('projects', 'Are you sure you want to delete the selected tasks? This action cannot be undone.'),
+                ]) .
+            '</div>' .
             '</div>',
         'tasks' => [
             'params' => ['id' => 'panel-list'],
             'lines' => [],
         ],
+        'form_end' => $this->Form->end(),
         'footer' => [
             'params' => ['id' => 'panel-footer'],
             'lines' => [
@@ -240,8 +257,6 @@ if ($projectsTasks->items()->isEmpty()) {
 echo $this->Lil->panels($tableIndex, 'Projects.ProjectsTasks.index');
 ?>
 <script type="text/javascript">
-    var allTasksChecked = false;
-
     document.addEventListener("DOMContentLoaded", function() {
         const elems = document.querySelectorAll(".dropdown-trigger-costum");
         elems.forEach((dropdown) => {
@@ -258,15 +273,38 @@ echo $this->Lil->panels($tableIndex, 'Projects.ProjectsTasks.index');
             }
         });
 
+        function updateTasksActionsVisibility() {
+            var anyChecked = false;
+            var allChecked = true;
+            $("div.panel-row div.checkbox input").each(function() {
+                anyChecked = anyChecked || $(this).prop("checked");
+                allChecked = allChecked && $(this).prop("checked");
+            });
+
+            $("#select-all-tasks").prop("checked", allChecked);
+            if (!allChecked && anyChecked) {
+                $("#select-all-tasks").addClass("somechecked");
+            } else {
+                $("#select-all-tasks").removeClass("somechecked");
+            }
+
+            if (anyChecked) {
+                $("#panel-actions").show();
+                $("#panel-filters").hide();
+                $("#panel-counters").hide();
+            } else {
+                $("#panel-actions").hide();
+                $("#panel-filters").show();
+                $("#panel-counters").show();
+            }
+        }
+
         $("#select-all-tasks").on("change", function(e) {
             $("div.panel-row div.checkbox input").prop("checked", $(this).prop("checked"));
-            allTasksChecked = true;
+            updateTasksActionsVisibility();
         });
         $("div.panel-row div.checkbox input").on("change", function(e) {
-            if (allTasksChecked) {
-                $("#select-all-tasks").prop("checked", false);
-            }
-            allTasksChecked = false;
+            updateTasksActionsVisibility();
         });
     });
 </script>
