@@ -46,16 +46,16 @@ switch ($task->status) {
                 (new Date($task->created))->nice();
 
             // Assigned user
-            if (!empty($task->assigned_user_id) && isset($users[$task->assigned_user_id])) {
-                $details[] = $this->Html->image('/projects/img/person-16.svg') . ' ' .
-                    __d('projects', 'Assigned to {0}', h((string)$users[$task->assigned_user_id]));
-            }
+        if (!empty($task->assigned_user_id) && isset($users[$task->assigned_user_id])) {
+            $details[] = $this->Html->image('/projects/img/person-16.svg') . ' ' .
+                __d('projects', 'Assigned to {0}', h((string)$users[$task->assigned_user_id]));
+        }
 
             // Closing date
-            if (!empty($task->closed)) {
-                $details[] = $this->Html->image('/projects/img/issue-closed-16.svg') . ' ' .
-                    __d('projects', 'Closed {0}', h((new Date($task->closed))->nice()));
-            }
+        if (!empty($task->closed)) {
+            $details[] = $this->Html->image('/projects/img/issue-closed-16.svg') . ' ' .
+                __d('projects', 'Closed {0}', h((new Date($task->closed))->nice()));
+        }
 
             echo implode(' · ', $details);
         ?>
