@@ -116,9 +116,17 @@ class PdfImportFormTest extends TestCase
         $stored = $request->getSession()->read('ImportEslogData');
         $this->assertIsArray($stored);
         $this->assertSame('TEST-2025-001', $stored['invoice']['no']);
+        $this->assertSame('Web development project', $stored['invoice']['title']);
         // Buyer tax SI98765432 is not in the Contacts fixture for this company.
         $this->assertFalse($form->clientExists);
         $this->assertSame('SI98765432', $form->missingClientInfo['tax_no']);
+
+        // The original PDF is stashed for attachment after the invoice is saved.
+        $attachment = $request->getSession()->read('ImportPdfAttachment');
+        $this->assertIsArray($attachment);
+        $this->assertSame('invoice.pdf', $attachment['name']);
+        $this->assertFileExists($attachment['path']);
+        unlink($attachment['path']);
     }
 
     /**

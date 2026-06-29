@@ -790,6 +790,7 @@ class InvoicesControllerTest extends TestCase
         /** @var \Documents\Model\Entity\Invoice $document */
         $document = $this->viewVariable('document');
         $this->assertSame('TEST-2025-001', $document->no);
+        $this->assertSame('Web development project', $document->title);
 
         // Items must be marshalled as entities so the edit template can read them as objects.
         $this->assertCount(2, $document->invoices_items);
@@ -944,6 +945,65 @@ class InvoicesControllerTest extends TestCase
         } finally {
             if (file_exists($tmpFile)) {
                 unlink($tmpFile);
+            }
+        }
+    }
+
+    /**
+     * Test that a PDF stashed by the import flow is attached to the invoice on its first save.
+     *
+     * @return void
+     */
+    public function testEditAttachesImportedPdf()
+    {
+        $this->login(USER_ADMIN);
+        Configure::write('App.uploadFolder', TMP);
+
+        // Seed a pending imported PDF, as PdfImportForm would.
+        $importDir = TMP . 'import_pdf' . DS;
+        if (!is_dir($importDir)) {
+            mkdir($importDir, 0775, true);
+        }
+        $pdfPath = $importDir . 'ctrl_' . uniqid() . '.pdf';
+        file_put_contents($pdfPath, '%PDF-1.4 imported invoice');
+        $this->session(['ImportPdfAttachment' => ['path' => $pdfPath, 'name' => 'racun.pdf']]);
+
+        $data = [
+            'counter_id' => '1d53bc5b-de2d-4e85-b13b-81b39a97fc89',
+            'title' => 'Imported via PDF',
+            'dat_issue' => '2026-06-28',
+        ];
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+
+        $dest = TMP . 'Invoice' . DS . 'racun.pdf';
+        try {
+            $this->post('/documents/invoices/edit?counter=1d53bc5b-de2d-4e85-b13b-81b39a97fc89', $data);
+            $this->assertResponseSuccess();
+
+            $Invoices = TableRegistry::getTableLocator()->get('Documents.Invoices');
+            $invoice = $Invoices->find()
+                ->where(['counter_id' => '1d53bc5b-de2d-4e85-b13b-81b39a97fc89', 'title' => 'Imported via PDF'])
+                ->orderBy(['created DESC'])
+                ->first();
+            $this->assertNotNull($invoice, 'Invoice should have been saved');
+
+            $Attachments = TableRegistry::getTableLocator()->get('Attachments');
+            $attachment = $Attachments->find()
+                ->where(['model' => 'Invoice', 'foreign_id' => $invoice->id])
+                ->first();
+            $this->assertNotNull($attachment, 'The imported PDF should be attached to the invoice');
+            $this->assertSame('racun.pdf', $attachment->filename);
+            $this->assertSame('application/pdf', $attachment->mimetype);
+
+            // The temp file was moved into the upload folder.
+            $this->assertFileExists($dest);
+            $this->assertFileDoesNotExist($pdfPath);
+        } finally {
+            foreach ([$dest, $pdfPath] as $f) {
+                if (file_exists($f)) {
+                    unlink($f);
+                }
             }
         }
     }

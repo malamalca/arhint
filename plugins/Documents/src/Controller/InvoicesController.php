@@ -17,6 +17,7 @@ use Documents\Lib\InvoicesExportEracuni;
 use Documents\Model\Entity\Invoice;
 use Documents\Model\Entity\Vat;
 use DOMDocument;
+use Laminas\Diactoros\UploadedFile;
 
 /**
  * Invoices Controller
@@ -268,7 +269,65 @@ class InvoicesController extends BaseDocumentsController
 
         $this->set(compact('vatLevels', 'projects'));
 
-        return parent::edit($document, $containTables);
+        $result = parent::edit($document, $containTables);
+
+        // After a successful first save, attach the originally uploaded PDF (PDF import flow).
+        $this->attachImportedPdf($document);
+
+        return $result;
+    }
+
+    /**
+     * Attach the PDF that was uploaded during a PDF import to the invoice once it has been saved.
+     *
+     * The PDF was stashed in a temp file + session by {@see \Documents\Form\PdfImportForm}; this
+     * runs after {@see \Documents\Controller\BaseDocumentsController::edit()} has saved the new
+     * invoice (so a foreign id exists). It is a no-op for ordinary edits.
+     *
+     * @param \Documents\Model\Entity\Invoice $document The (possibly just-saved) invoice entity.
+     * @return void
+     */
+    private function attachImportedPdf(Invoice $document): void
+    {
+        if (!$this->getRequest()->is(['post', 'put', 'patch'])) {
+            return;
+        }
+
+        $session = $this->getRequest()->getSession();
+        $pending = $session->read('ImportPdfAttachment');
+        if (!is_array($pending) || empty($pending['path'])) {
+            return;
+        }
+
+        // Only after a brand-new invoice was saved successfully (id assigned, no errors).
+        if ($document->isNew() || $document->getErrors() !== [] || empty($document->id)) {
+            return;
+        }
+
+        $path = (string)$pending['path'];
+        $name = is_string($pending['name'] ?? null) && $pending['name'] !== '' ? $pending['name'] : 'invoice.pdf';
+
+        // Defensive: only accept files we wrote into the import temp directory.
+        $expectedDir = TMP . 'import_pdf' . DS;
+        if (!str_starts_with($path, $expectedDir) || !is_file($path)) {
+            $session->delete('ImportPdfAttachment');
+
+            return;
+        }
+        $session->delete('ImportPdfAttachment');
+
+        /** @var \App\Model\Table\AttachmentsTable $Attachments */
+        $Attachments = TableRegistry::getTableLocator()->get('Attachments');
+        $attachment = $Attachments->newEmptyEntity();
+        $attachment->model = 'Invoice';
+        $attachment->foreign_id = (string)$document->id;
+        $attachment->filename = $name;
+        $attachment->mimetype = 'application/pdf';
+        $attachment->filesize = (int)filesize($path);
+
+        // AttachmentsTable::afterSave() moves the file into the upload folder via this option.
+        $uploaded = new UploadedFile($path, (int)filesize($path), UPLOAD_ERR_OK, $name, 'application/pdf');
+        $Attachments->save($attachment, ['uploadedFilename' => [$attachment->filename => $uploaded]]);
     }
 
     /**
@@ -287,6 +346,9 @@ class InvoicesController extends BaseDocumentsController
 
         if (!empty($invoiceData['no'])) {
             $document->no = $invoiceData['no'];
+        }
+        if (!empty($invoiceData['title'])) {
+            $document->title = $invoiceData['title'];
         }
         if (!empty($invoiceData['dat_issue'])) {
             $parsedDate = Date::parseDate($invoiceData['dat_issue'], 'yyyy-MM-dd');
@@ -553,8 +615,12 @@ class InvoicesController extends BaseDocumentsController
                     return null;
                 }
 
-                // Redirect to edit with prefilled data (same hand-off as the eSlog XML import)
-                $this->Flash->success(__d('documents', 'Invoice imported from PDF successfully.'));
+                // Redirect to edit with prefilled data (same hand-off as the eSlog XML import).
+                // The uploaded PDF is attached automatically once the invoice is saved.
+                $this->Flash->success(__d(
+                    'documents',
+                    'Invoice imported from PDF. The uploaded PDF will be attached when you save the invoice.',
+                ));
 
                 return $this->redirect([
                     'action' => 'edit',

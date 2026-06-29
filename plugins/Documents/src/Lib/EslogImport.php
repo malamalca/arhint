@@ -6,6 +6,8 @@ namespace Documents\Lib;
 use Cake\Core\Plugin;
 use Cake\Utility\Xml;
 use DOMDocument;
+use Exception;
+use SimpleXMLElement;
 
 /**
  * EslogImport - Parse eSlog 2.0 XML invoices into structured data.
@@ -56,12 +58,17 @@ class EslogImport
         }
 
         try {
-            // Use CakePHP Xml utility to build SimpleXMLElement
-            $simpleXml = Xml::build($xmlString);
+            // Use CakePHP Xml utility to build a SimpleXMLElement explicitly
+            $simpleXml = Xml::build($xmlString, ['return' => 'simplexml']);
+            if (!$simpleXml instanceof SimpleXMLElement) {
+                $this->lastError = 'Failed to parse XML content';
+
+                return null;
+            }
 
             // Convert SimpleXMLElement to array for easier traversal
             $data = $this->simpleXmlToArray($simpleXml);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->lastError = $e->getMessage();
 
             return null;
@@ -110,10 +117,15 @@ class EslogImport
      * @param \SimpleXMLElement $xml SimpleXML element.
      * @return array<string, mixed>
      */
-    private function simpleXmlToArray(\SimpleXMLElement $xml): array
+    private function simpleXmlToArray(SimpleXMLElement $xml): array
     {
         // json_encode handles SimpleXMLElement natively, preserving structure
-        return (array)json_decode(json_encode($xml), true);
+        $json = json_encode($xml);
+        if ($json === false) {
+            return [];
+        }
+
+        return (array)json_decode($json, true);
     }
 
     /**
@@ -129,6 +141,12 @@ class EslogImport
         // Document number from S_BGM/C_C106/D_1004
         if (!empty($mInvoic['S_BGM']['C_C106']['D_1004'])) {
             $invoice['no'] = (string)$mInvoic['S_BGM']['C_C106']['D_1004'];
+        }
+
+        // Free-text title from S_FTX with qualifier AAI
+        $title = $this->extractTitle($mInvoic);
+        if ($title !== null) {
+            $invoice['title'] = $title;
         }
 
         // Parse dates from S_DTM elements
@@ -150,6 +168,31 @@ class EslogImport
         }
 
         return $invoice;
+    }
+
+    /**
+     * Extract the free-text invoice title from an S_FTX segment with qualifier AAI.
+     *
+     * @param array<string, mixed> $mInvoic The M_INVOIC data block.
+     * @return string|null
+     */
+    private function extractTitle(array $mInvoic): ?string
+    {
+        if (empty($mInvoic['S_FTX'])) {
+            return null;
+        }
+
+        foreach ($this->normalizeArray($mInvoic['S_FTX']) as $ftx) {
+            if (!is_array($ftx) || (string)($ftx['D_4451'] ?? '') !== 'AAI') {
+                continue;
+            }
+            $text = $ftx['C_C108']['D_4440'] ?? '';
+            if (is_string($text) && trim($text) !== '') {
+                return trim($text);
+            }
+        }
+
+        return null;
     }
 
     /**
@@ -180,10 +223,10 @@ class EslogImport
                 case '137': // Invoice issue date
                     $dates['dat_issue'] = $value;
                     break;
-                case '35':  // Service/delivery date
+                case '35': // Service/delivery date
                     $dates['dat_service'] = $value;
                     break;
-                case '13':  // Due/expiry date (from G_SG8)
+                case '13': // Due/expiry date (from G_SG8)
                     $dates['dat_expire'] = $value;
                     break;
             }
@@ -269,7 +312,7 @@ class EslogImport
                 case '388': // Total amount including VAT
                     $totals['total'] = $amount;
                     break;
-                case '9':   // Amount due/payable
+                case '9': // Amount due/payable
                     if (!isset($totals['total'])) {
                         $totals['total'] = $amount;
                     }
@@ -464,7 +507,7 @@ class EslogImport
                         // Line total - can be used to derive discount if needed
                         $lineTotal = (float)$cC509['D_5118'];
                         if (isset($item['qty']) && isset($item['price'])) {
-                            $calculated = round($item['qty'] * $item['price'], 2);
+                            $calculated = round((float)$item['qty'] * (float)$item['price'], 2);
                             if ($calculated > 0 && $lineTotal < $calculated) {
                                 // There might be a discount
                                 $discountPercent = round((1 - $lineTotal / $calculated) * 100, 2);

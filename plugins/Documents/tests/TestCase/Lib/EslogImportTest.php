@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Documents\Test\TestCase\Lib;
 
-use Cake\Core\Plugin;
 use Cake\TestSuite\TestCase;
 use Documents\Lib\EslogImport;
 
@@ -45,6 +44,7 @@ class EslogImportTest extends TestCase
 
         // Check invoice header
         $this->assertEquals('TEST-2025-001', $result['invoice']['no']);
+        $this->assertEquals('Web development project', $result['invoice']['title']);
         $this->assertEquals('2025-06-15', $result['invoice']['dat_issue']);
         $this->assertEquals('2025-06-15', $result['invoice']['dat_service']);
 
@@ -97,6 +97,28 @@ class EslogImportTest extends TestCase
         $this->assertEquals('pcs', $item2['unit']);
         $this->assertEquals(100.0, $item2['price']);
         $this->assertEquals(22.0, $item2['vat_percent']);
+    }
+
+    /**
+     * Test that no title key is set when the invoice has no S_FTX/AAI segment.
+     *
+     * @return void
+     */
+    public function testParseWithoutTitle(): void
+    {
+        $xml = '<?xml version="1.0" encoding="UTF-8"?>' .
+            '<Invoice xmlns="urn:eslog:2.00">' .
+            '<M_INVOIC>' .
+            '<S_BGM><C_C106><D_1004>NO-TITLE-1</D_1004></C_C106></S_BGM>' .
+            '</M_INVOIC>' .
+            '</Invoice>';
+
+        $importer = new EslogImport();
+        $result = $importer->parse($xml);
+
+        $this->assertNotNull($result);
+        $this->assertSame('NO-TITLE-1', $result['invoice']['no']);
+        $this->assertArrayNotHasKey('title', $result['invoice']);
     }
 
     /**

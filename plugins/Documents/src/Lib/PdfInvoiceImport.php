@@ -54,6 +54,9 @@ Output rules:
   the amounts and at least one line item, output exactly: <error>CANNOT_PARSE</error>
 
 Field mapping (UN/EDIFACT codes used by e-SLOG):
+- Invoice title   -> S_FTX with D_4451=AAI and the title text in C_C108/D_4440. The title is a
+  short human-readable subject for the invoice (the main service/purpose, e.g.
+  "Najem poslovnih prostorov"); fall back to "Račun <invoice number>" if nothing fits.
 - Invoice number  -> S_BGM/C_C106/D_1004
 - Issue date      -> S_DTM with C_C507/D_2005=137, D_2380=YYYY-MM-DD
 - Service date    -> S_DTM with C_C507/D_2005=35  (date of supply / "datum opr. dobave")
@@ -93,6 +96,7 @@ Template:
     </S_BGM>
     <S_DTM><C_C507><D_2005>137</D_2005><D_2380>YYYY-MM-DD</D_2380></C_C507></S_DTM>
     <S_DTM><C_C507><D_2005>35</D_2005><D_2380>YYYY-MM-DD</D_2380></C_C507></S_DTM>
+    <S_FTX><D_4451>AAI</D_4451><C_C108><D_4440>INVOICE TITLE</D_4440></C_C108></S_FTX>
     <G_SG1><S_RFF><C_C506><D_1153>PQ</D_1153><D_1154>SI12...</D_1154></C_C506></S_RFF></G_SG1>
     <G_SG2>
       <S_NAD>

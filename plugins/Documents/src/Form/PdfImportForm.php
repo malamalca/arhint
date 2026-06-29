@@ -7,6 +7,7 @@ use App\Lib\AIAssistant;
 use App\Model\Entity\User;
 use Cake\Form\Schema;
 use Cake\Http\ServerRequest;
+use Cake\Utility\Text;
 use Cake\Validation\Validator;
 use Documents\Lib\PdfInvoiceImport;
 
@@ -145,7 +146,37 @@ class PdfImportForm extends EslogImportForm
             return false;
         }
 
+        // Stash the original PDF so it can be attached to the invoice once it is saved.
+        $this->storePdfForAttachment($pdfContent, $this->getFileName($uploadedFile) ?: 'invoice.pdf');
+
         return true;
+    }
+
+    /**
+     * Persist the uploaded PDF to a temp location and record it in the session so the invoice
+     * edit form can attach it to the invoice after it is first saved.
+     *
+     * @param string $pdfContent Raw PDF bytes.
+     * @param string $filename Original client file name.
+     * @return void
+     */
+    private function storePdfForAttachment(string $pdfContent, string $filename): void
+    {
+        $dir = TMP . 'import_pdf' . DS;
+        if (!is_dir($dir)) {
+            mkdir($dir, 0775, true);
+        }
+
+        $path = $dir . Text::uuid() . '.pdf';
+        if (file_put_contents($path, $pdfContent) === false) {
+            // Non-fatal: the import still succeeds, just without the attachment.
+            return;
+        }
+
+        $this->request->getSession()->write('ImportPdfAttachment', [
+            'path' => $path,
+            'name' => $filename,
+        ]);
     }
 
     /**
