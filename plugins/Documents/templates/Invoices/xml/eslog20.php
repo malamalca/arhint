@@ -1,15 +1,10 @@
 <?php
-use Cake\Core\Configure;
 use Cake\Utility\Xml;
 
 $transformed = ['Invoice' => [
     '@xmlns' => 'urn:eslog:2.00',
     'xmlns:xsi' => 'http://www.w3.org/2001/XMLSchema-instance',
 ]];
-
-// find bank name for current users' company
-$banks = Configure::read('Documents.banks');
-$docTypes = Configure::read('Documents.documentTypes');
 
 $i = 0;
 foreach ((array)$invoices as $invoice) {
@@ -214,15 +209,13 @@ foreach ((array)$invoices as $invoice) {
     ////////////////////////////////////////////////////////////////////////////////////////////
     // ITEMS
     $total_wo_discount = 0;
-    $total_discount = 0;
     $total_base = 0;
     $total_tax = 0;
-    $total_grand = 0;
     if ($invoice->documents_counter->direction == 'issued') {
         if (!empty($invoice->invoices_items)) {
             $j = 1;
             $tax_spec = [];
-            $total_tax = $total_base = $total_grand = 0;
+            $total_tax = $total_base = 0;
             foreach ($invoice->invoices_items as $item) {
                 $em = '';
                 switch ($item->unit) {
@@ -342,10 +335,8 @@ foreach ((array)$invoices as $invoice) {
                 $tax_spec[$item->vat_id]['percent'] = $item->vat_percent;
 
                 $total_wo_discount += $item->items_total;
-                $total_discount += $item->discount_total;
                 $total_base += $item->net_total;
                 $total_tax += $item->tax_total;
-                $total_grand += $item->total;
 
                 $j++;
             }
@@ -421,7 +412,7 @@ foreach ((array)$invoices as $invoice) {
     $transformed['Invoice']['M_INVOIC'][$i]['G_SG52'] = [];
 
     if (isset($tax_spec)) {
-        foreach ($tax_spec as $vat_id => $vat_data) {
+        foreach ($tax_spec as $vat_data) {
             $transformed['Invoice']['M_INVOIC'][$i]['G_SG52'][] = [
                 'S_TAX' => [
                     'D_5283' => '7',

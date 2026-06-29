@@ -1175,6 +1175,26 @@ class AIAssistant
     }
 
     /**
+     * Run a single stateless chat completion and return the model's text content.
+     *
+     * Reuses the configured provider, endpoint, model and API key (the same request path as
+     * the conversational flow), but bypasses tool selection and conversation history. Messages
+     * are passed through verbatim, so callers may use multimodal content parts (text + image or
+     * file) where the configured provider/model supports them.
+     *
+     * @param array<int, array<string, mixed>> $messages OpenAI-style chat messages.
+     * @param int $timeoutSeconds Maximum time to wait for the response.
+     * @return string The assistant message content.
+     * @throws \Exception If the API call fails or returns an error.
+     */
+    public function complete(array $messages, int $timeoutSeconds = 180): string
+    {
+        $message = $this->doRequest(['messages' => $messages], $timeoutSeconds);
+
+        return (string)$message['content'];
+    }
+
+    /**
      * Checks whether the configured AI provider host is reachable.
      *
      * @param int $timeoutSeconds Connection timeout in seconds.

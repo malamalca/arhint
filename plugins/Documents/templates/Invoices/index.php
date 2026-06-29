@@ -66,6 +66,26 @@ $invoicesIndex = [
                 '?' => ['counter' => $counter->id],
             ],
         ],
+        'add_eslog' => [
+            'title' => __d('documents', 'Import eSlog'),
+            'visible' => $counter->active && $this->getCurrentUser()->hasRole('editor'),
+            'url' => [
+                'plugin' => 'Documents',
+                'controller' => 'Invoices',
+                'action' => 'importEslog',
+                '?' => ['counter' => $counter->id],
+            ],
+        ],
+        'add_pdf' => [
+            'title' => __d('documents', 'Import PDF'),
+            'visible' => $counter->active && $this->getCurrentUser()->hasRole('editor'),
+            'url' => [
+                'plugin' => 'Documents',
+                'controller' => 'Invoices',
+                'action' => 'importPdf',
+                '?' => ['counter' => $counter->id],
+            ],
+        ],
         'print' => [
             'title' => __d('documents', 'Print'),
             'visible' => true,

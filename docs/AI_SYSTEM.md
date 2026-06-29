@@ -145,6 +145,24 @@ The central orchestrator class. Responsible for:
 | Local/Other | Prompt-based (default) | Tools listed in system prompt; model responds with JSON `{tool, arguments}` |
 | Other + config | Configurable | Set `ai_assistant.native_tool_calls = true` on user to enable for any provider |
 
+**One-shot completions:**
+
+`AIAssistant::complete(array $messages, int $timeoutSeconds = 180): string` runs a single
+stateless chat completion — no tool selection, no conversation history — reusing the same
+provider/endpoint/model/API-key resolution as the conversational flow. Messages are passed
+through verbatim, so callers may include multimodal content parts (text + `image_url` or
+`file`) where the configured provider/model supports them. This is the entry point for
+non-chat AI features such as PDF invoice import (see below).
+
+**PDF invoice import (`Documents\Lib\PdfInvoiceImport`):**
+
+Converts an uploaded PDF invoice into Slovenian e-SLOG 2.0 INVOIC XML by sending the PDF
+(base64 `file` content part) plus a strict mapping prompt + template through
+`AIAssistant::complete()`. The returned XML is then fed into the regular `EslogImport`
+pipeline, so the rest of the import (client lookup, edit-form prefill) is identical to a
+plain XML upload. Requires a multimodal provider/model (e.g. OpenAI `gpt-*`); when the model
+cannot read the invoice it returns a `CANNOT_PARSE` sentinel and the user is notified.
+
 ### 3.2 `AITool` (`src/Lib/AITool.php`)
 
 A simple data class representing one tool:

@@ -9,6 +9,8 @@ use Cake\Event\EventManager;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\IntegrationTestTrait;
 use Cake\TestSuite\TestCase;
+use Documents\Lib\EslogImport;
+use Documents\Model\Entity\InvoicesItem;
 use Laminas\Diactoros\UploadedFile;
 use const UPLOAD_ERR_OK;
 
@@ -641,5 +643,308 @@ class InvoicesControllerTest extends TestCase
 
         $this->get('/documents/invoices/delete/d0d59a31-6de7-4eb4-8230-ca09113a7fe5');
         $this->assertRedirect(['action' => 'index', '?' => ['counter' => '1d53bc5b-de2d-4e85-b13b-81b39a97fc88']]);
+    }
+
+    /**
+     * Test importEslog GET - shows upload form.
+     *
+     * @return void
+     */
+    public function testImportEslogGet()
+    {
+        $this->login(USER_ADMIN);
+
+        $this->get('/documents/invoices/importEslog?counter=1d53bc5b-de2d-4e85-b13b-81b39a97fc89');
+        $this->assertResponseOk();
+        $this->assertResponseContains('Import eSlog 2.0 Invoice');
+    }
+
+    /**
+     * Test importEslog without counter parameter redirects.
+     *
+     * @return void
+     */
+    public function testImportEslogWithoutCounter()
+    {
+        $this->login(USER_ADMIN);
+
+        $this->get('/documents/invoices/importEslog');
+        $this->assertRedirect(['action' => 'index']);
+    }
+
+    /**
+     * Test importEslog POST without file shows error.
+     *
+     * @return void
+     */
+    public function testImportEslogPostWithoutFile()
+    {
+        $this->login(USER_ADMIN);
+
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+
+        $this->post('/documents/invoices/importEslog?counter=1d53bc5b-de2d-4e85-b13b-81b39a97fc89', []);
+        $this->assertResponseSuccess();
+        $this->assertResponseContains('Please select an XML file');
+    }
+
+    /**
+     * Test importEslog POST with valid XML whose client is missing shows the new-client prompt.
+     *
+     * @return void
+     */
+    public function testImportEslogPostValidXmlMissingClient()
+    {
+        $this->login(USER_ADMIN);
+
+        // The test XML buyer tax_no SI98765432 is not present in the Contacts
+        // fixture, so the controller should render the "new client" prompt.
+        $xmlPath = dirname(__DIR__) . DS . 'Controller' . DS . 'data' . DS . 'testInvoice_eslog20.xml';
+        $this->assertFileExists($xmlPath, 'Test XML file should exist');
+
+        $data = [
+            'eslog_file' => new UploadedFile(
+                $xmlPath,
+                (int)filesize($xmlPath),
+                UPLOAD_ERR_OK,
+                'test_invoice.xml',
+                'application/xml',
+            ),
+        ];
+
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+
+        $this->post('/documents/invoices/importEslog?counter=1d53bc5b-de2d-4e85-b13b-81b39a97fc90', $data);
+
+        $this->assertResponseOk();
+        $this->assertResponseContains('New Client Required');
+        $this->assertResponseContains('SI98765432');
+    }
+
+    /**
+     * Test importEslog POST with valid XML and an existing client redirects to edit.
+     *
+     * @return void
+     */
+    public function testImportEslogPostValidXmlExistingClient()
+    {
+        $this->login(USER_ADMIN);
+
+        // Insert a contact for the current company matching the XML buyer tax_no
+        // so the import skips the new-client prompt and redirects straight to edit.
+        $Contacts = TableRegistry::getTableLocator()->get('Crm.Contacts');
+        $contact = $Contacts->newEntity([
+            'owner_id' => COMPANY_FIRST,
+            'kind' => 'C',
+            'title' => 'Test Client d.o.o.',
+            'tax_no' => 'SI98765432',
+            'tax_status' => 1,
+        ], ['validate' => false]);
+        $Contacts->saveOrFail($contact, ['checkRules' => false]);
+
+        $xmlPath = dirname(__DIR__) . DS . 'Controller' . DS . 'data' . DS . 'testInvoice_eslog20.xml';
+
+        $data = [
+            'eslog_file' => new UploadedFile(
+                $xmlPath,
+                (int)filesize($xmlPath),
+                UPLOAD_ERR_OK,
+                'test_invoice.xml',
+                'application/xml',
+            ),
+        ];
+
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+
+        $this->post('/documents/invoices/importEslog?counter=1d53bc5b-de2d-4e85-b13b-81b39a97fc90', $data);
+
+        $this->assertRedirect([
+            'action' => 'edit',
+            '?' => ['counter' => '1d53bc5b-de2d-4e85-b13b-81b39a97fc90', 'importFromEslog' => '1'],
+        ]);
+    }
+
+    /**
+     * Test that edit() applies imported eSlog data to the document as proper entities.
+     *
+     * @return void
+     */
+    public function testEditAppliesImportedEslogData()
+    {
+        $this->login(USER_ADMIN);
+
+        // Parse the sample invoice and seed the session as importEslog would.
+        $xmlPath = dirname(__DIR__) . DS . 'Controller' . DS . 'data' . DS . 'testInvoice_eslog20.xml';
+        $xmlContent = file_get_contents($xmlPath);
+        $this->assertNotFalse($xmlContent);
+        $parsed = (new EslogImport())->parse($xmlContent);
+        $this->assertNotNull($parsed);
+        $this->session(['ImportEslogData' => $parsed]);
+
+        $this->get('/documents/invoices/edit?counter=1d53bc5b-de2d-4e85-b13b-81b39a97fc90&importFromEslog=1');
+        $this->assertResponseOk();
+
+        /** @var \Documents\Model\Entity\Invoice $document */
+        $document = $this->viewVariable('document');
+        $this->assertSame('TEST-2025-001', $document->no);
+
+        // Items must be marshalled as entities so the edit template can read them as objects.
+        $this->assertCount(2, $document->invoices_items);
+        $this->assertInstanceOf(
+            InvoicesItem::class,
+            $document->invoices_items[0],
+            'Imported items must be entities, not plain arrays',
+        );
+        $this->assertSame('Web development services', $document->invoices_items[0]->descript);
+        $this->assertEquals(10.0, $document->invoices_items[0]->qty);
+        $this->assertEquals(50.0, $document->invoices_items[0]->price);
+
+        // Tax breakdown is grouped by VAT rate (both items are 22%).
+        $this->assertCount(1, $document->invoices_taxes);
+        $this->assertEquals(22.0, $document->invoices_taxes[0]->vat_percent);
+        $this->assertEquals(600.0, $document->invoices_taxes[0]->base);
+    }
+
+    /**
+     * Test importEslog with invalid XML shows validation errors.
+     *
+     * @return void
+     */
+    public function testImportEslogPostInvalidXml()
+    {
+        $this->login(USER_ADMIN);
+
+        // Create a temp file with invalid XML content
+        $tmpFile = TMP . 'invalid_test.xml';
+        file_put_contents($tmpFile, '<invalid xml content');
+
+        try {
+            $data = [
+                'eslog_file' => [
+                    'name' => 'invalid.xml',
+                    'type' => 'application/xml',
+                    'tmp_name' => $tmpFile,
+                    'error' => UPLOAD_ERR_OK,
+                    'size' => filesize($tmpFile),
+                ],
+            ];
+
+            $this->enableSecurityToken();
+            $this->enableCsrfToken();
+
+            $this->post('/documents/invoices/importEslog?counter=1d53bc5b-de2d-4e85-b13b-81b39a97fc89', $data);
+
+            // Should show validation errors or return to form
+            $this->assertResponseSuccess();
+        } finally {
+            if (file_exists($tmpFile)) {
+                unlink($tmpFile);
+            }
+        }
+    }
+
+    /**
+     * Test importEslog POST with non-XML file shows error.
+     *
+     * @return void
+     */
+    public function testImportEslogPostNonXmlFile()
+    {
+        $this->login(USER_ADMIN);
+
+        // Create a temp file with non-xml extension
+        $tmpFile = TMP . 'test_document.pdf';
+        file_put_contents($tmpFile, 'fake pdf content');
+
+        try {
+            $data = [
+                'eslog_file' => [
+                    'name' => 'document.pdf',
+                    'type' => 'application/pdf',
+                    'tmp_name' => $tmpFile,
+                    'error' => UPLOAD_ERR_OK,
+                    'size' => filesize($tmpFile),
+                ],
+            ];
+
+            $this->enableSecurityToken();
+            $this->enableCsrfToken();
+
+            $this->post('/documents/invoices/importEslog?counter=1d53bc5b-de2d-4e85-b13b-81b39a97fc89', $data);
+
+            $this->assertResponseSuccess();
+            $this->assertResponseContains('Please upload a valid XML file');
+        } finally {
+            if (file_exists($tmpFile)) {
+                unlink($tmpFile);
+            }
+        }
+    }
+
+    /**
+     * Test importPdf GET - shows upload form.
+     *
+     * @return void
+     */
+    public function testImportPdfGet()
+    {
+        $this->login(USER_ADMIN);
+
+        $this->get('/documents/invoices/importPdf?counter=1d53bc5b-de2d-4e85-b13b-81b39a97fc89');
+        $this->assertResponseOk();
+        $this->assertResponseContains('Import Invoice from PDF');
+    }
+
+    /**
+     * Test importPdf without counter parameter redirects.
+     *
+     * @return void
+     */
+    public function testImportPdfWithoutCounter()
+    {
+        $this->login(USER_ADMIN);
+
+        $this->get('/documents/invoices/importPdf');
+        $this->assertRedirect(['action' => 'index']);
+    }
+
+    /**
+     * Test importPdf POST with a non-PDF file shows a validation error (AI is never called).
+     *
+     * @return void
+     */
+    public function testImportPdfPostNonPdfFile()
+    {
+        $this->login(USER_ADMIN);
+
+        $tmpFile = TMP . 'test_document.txt';
+        file_put_contents($tmpFile, 'just text, not a pdf');
+
+        try {
+            $data = [
+                'pdf_file' => [
+                    'name' => 'document.txt',
+                    'type' => 'text/plain',
+                    'tmp_name' => $tmpFile,
+                    'error' => UPLOAD_ERR_OK,
+                    'size' => filesize($tmpFile),
+                ],
+            ];
+
+            $this->enableSecurityToken();
+            $this->enableCsrfToken();
+
+            $this->post('/documents/invoices/importPdf?counter=1d53bc5b-de2d-4e85-b13b-81b39a97fc90', $data);
+
+            $this->assertResponseSuccess();
+            $this->assertResponseContains('Please upload a valid PDF file');
+        } finally {
+            if (file_exists($tmpFile)) {
+                unlink($tmpFile);
+            }
+        }
     }
 }
