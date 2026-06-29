@@ -254,9 +254,28 @@ class UsersController extends AppController
         $this->Authorization->authorize($user);
 
         if ($this->getRequest()->is(['patch', 'post', 'put'])) {
-            $user = $this->Users->patchEntity($user, $this->getRequest()->getData(), ['validate' => 'properties']);
+            // Build AI assistant config from individual form fields and merge into properties JSON.
+            $aiConfig = $this->buildAiConfig($user);
+            $requestData = $this->getRequest()->getData();
 
-            $avatarFile = $this->getRequest()->getData('avatar_file');
+            // Merge or remove ai_assistant into the properties JSON before patching.
+            if (!empty($requestData['properties'])) {
+                $properties = json_decode($requestData['properties'], true) ?? [];
+            } else {
+                $properties = $user->properties !== null ? (json_decode($user->properties, true) ?? []) : [];
+            }
+
+            // Only store ai_assistant when a provider other than 'none' is selected.
+            if ($aiConfig['provider'] !== 'none') {
+                $properties['ai_assistant'] = $aiConfig;
+            } else {
+                unset($properties['ai_assistant']);
+            }
+            $requestData['properties'] = json_encode($properties);
+
+            $user = $this->Users->patchEntity($user, $requestData, ['validate' => 'properties']);
+
+            $avatarFile = $requestData['avatar_file'];
             if ($avatarFile) {
                 if ($avatarFile->getError() == UPLOAD_ERR_OK) {
                     $avatarData = (string)file_get_contents($avatarFile->getStream()->getMetadata('uri'));
@@ -268,10 +287,10 @@ class UsersController extends AppController
                 }
             }
 
-            if (empty($this->getRequest()->getData('passwd'))) {
+            if (empty($requestData['passwd'])) {
                 unset($user->passwd);
             } else {
-                $user->passwd = $this->getRequest()->getData('passwd');
+                $user->passwd = $requestData['passwd'];
             }
 
             if ($this->Users->save($user)) {
@@ -282,9 +301,65 @@ class UsersController extends AppController
             $this->Flash->error(__('Properties could not be saved. Please, try again.'));
         }
 
-        $this->set(compact('user'));
+        // Prefill AI config for the form.
+        $aiConfig = $this->getAiConfig($user);
+        $this->set(compact('user', 'aiConfig'));
 
         return null;
+    }
+
+    /**
+     * Parse existing ai_assistant config from user properties.
+     *
+     * @param \App\Model\Entity\User $user User entity.
+     * @return array<string, mixed> AI config array with defaults.
+     */
+    protected function getAiConfig($user): array
+    {
+        $aiAssistant = $user->getProperty('ai_assistant');
+
+        return [
+            'provider' => is_object($aiAssistant) ? ($aiAssistant->provider ?? 'local') : 'local',
+            'url' => is_object($aiAssistant) ? ($aiAssistant->url ?? '') : '',
+            'model' => is_object($aiAssistant) ? ($aiAssistant->model ?? '') : '',
+            'api_key' => is_object($aiAssistant) ? ($aiAssistant->api_key ?? '') : '',
+            'native_tool_calls' => is_object($aiAssistant) ? (bool)($aiAssistant->native_tool_calls ?? false) : false,
+        ];
+    }
+
+    /**
+     * Build AI assistant config from form data.
+     *
+     * @param \App\Model\Entity\User $user User entity.
+     * @return array<string, mixed> AI config array.
+     */
+    protected function buildAiConfig($user): array
+    {
+        $requestData = $this->getRequest()->getData();
+        $provider = (string)($requestData['ai_provider'] ?? 'none');
+
+        if ($provider === 'openai') {
+            return [
+                'provider' => 'openai',
+                'model' => 'gpt-5-mini',
+                'api_key' => (string)($requestData['ai_api_key'] ?? ''),
+                'native_tool_calls' => true,
+            ];
+        }
+
+        if ($provider === 'local') {
+            return [
+                'provider' => 'local',
+                'url' => (string)($requestData['ai_url'] ?? ''),
+                'model' => (string)($requestData['ai_model'] ?? ''),
+                'api_key' => (string)($requestData['ai_api_key'] ?? ''),
+                'native_tool_calls' => !empty($requestData['ai_native_tool_calls']),
+            ];
+        }
+
+        return [
+            'provider' => 'none',
+        ];
     }
 
     /**

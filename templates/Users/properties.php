@@ -75,6 +75,99 @@ $userForm = [
             ],
             'fs_emails_end' => '</fieldset>',
 
+            'fs_ai_start' => '<fieldset>',
+            'lg_ai' => sprintf('<legend>%s</legend>', __('AI Settings')),
+
+            'ai_provider' => [
+                'method' => 'control',
+                'parameters' => ['ai_provider', [
+                    'type' => 'select',
+                    'label' => __('Provider') . ':',
+                    'options' => [
+                        'none' => __('None'),
+                        'openai' => __('OpenAI'),
+                        'local' => __('Local'),
+                    ],
+                    'default' => $aiConfig['provider'] ?? 'none',
+                    'empty' => '',
+                    'id' => 'ai_provider',
+                ]],
+            ],
+
+            // OpenAI fields (hidden by default)
+            'ai_fields_openai_start' => '<div id="ai_fields_openai" style="display:none;">',
+            'ai_api_key_openai' => [
+                'method' => 'control',
+                'parameters' => ['ai_api_key', [
+                    'type' => 'text',
+                    'label' => __('API Key') . ':',
+                    'default' => $aiConfig['api_key'] ?? '',
+                ]],
+            ],
+            'ai_fields_openai_end' => '</div>',
+
+            // Local fields (hidden by default)
+            'ai_fields_local_start' => '<div id="ai_fields_local" style="display:none;">',
+            'ai_url' => [
+                'method' => 'control',
+                'parameters' => ['ai_url', [
+                    'type' => 'text',
+                    'label' => __('API URL') . ':',
+                    'default' => $aiConfig['url'] ?? '',
+                    'placeholder' => 'http://192.168.68.58:8080/v1/chat/completions',
+                ]],
+            ],
+            'ai_model' => [
+                'method' => 'control',
+                'parameters' => ['ai_model', [
+                    'type' => 'text',
+                    'label' => __('Model') . ':',
+                    'default' => $aiConfig['model'] ?? '',
+                    'placeholder' => __('e.g. qwen'),
+                ]],
+            ],
+            'ai_api_key_local' => [
+                'method' => 'control',
+                'parameters' => ['ai_api_key', [
+                    'type' => 'text',
+                    'label' => __('API Key') . ':',
+                    'default' => $aiConfig['api_key'] ?? '',
+                ]],
+            ],
+            'ai_native_tool_calls' => [
+                'method' => 'control',
+                'parameters' => ['ai_native_tool_calls', [
+                    'type' => 'checkbox',
+                    'label' => __('Native Tool Calls'),
+                    'default' => $aiConfig['native_tool_calls'] ?? false,
+                ]],
+            ],
+            'ai_fields_local_end' => '</div>',
+
+            // JS to toggle visibility
+            'ai_toggle_js' => '<script>
+(function() {
+    var provider = document.getElementById("ai_provider");
+    var openaiFields = document.getElementById("ai_fields_openai");
+    var localFields = document.getElementById("ai_fields_local");
+
+    function toggleAiFields() {
+        openaiFields.style.display = "none";
+        localFields.style.display = "none";
+        if (provider.value === "openai") {
+            openaiFields.style.display = "block";
+        } else if (provider.value === "local") {
+            localFields.style.display = "block";
+        }
+    }
+
+    provider.addEventListener("change", toggleAiFields);
+    toggleAiFields(); // run on page load
+})();
+</script>',
+
+            'fs_ai_end' => '</fieldset>',
+
             'fs_properties_start' => '<fieldset>',
             'lg_properties' => sprintf('<legend>%s</legend>', __('Properties')),
 
