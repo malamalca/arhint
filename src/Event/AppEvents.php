@@ -316,7 +316,30 @@ class AppEvents implements EventListenerInterface
         $attachmentLines = [
             'fs_attachments_start' => '<fieldset>',
             'fs_attachments_legend' => sprintf('<legend>%s</legend>', __('Archive')),
-            'file.name.0' => [
+        ];
+
+        // When an invoice was imported from a PDF, that PDF is already pending (stashed in the
+        // session by InvoiceImportForm and attached after the first save by
+        // InvoicesController::attachImportedPdf()). Show it by name with a remove option instead
+        // of an empty file input, so the import reuses this single attachment section.
+        $importPdfName = $view->get('importPdfName');
+        if (is_string($importPdfName) && $importPdfName !== '') {
+            $attachmentLines['attachment_import_name'] = sprintf(
+                '<div class="helper-text import-pdf-pending">%s</div>',
+                h(__('The uploaded PDF will be attached: {0}', $importPdfName)),
+            );
+            $attachmentLines['attachment_import_remove'] = [
+                'method' => 'control',
+                'parameters' => [
+                    'field' => 'remove_import_pdf',
+                    'options' => [
+                        'type' => 'checkbox',
+                        'label' => __('Remove (do not attach this PDF)'),
+                    ],
+                ],
+            ];
+        } else {
+            $attachmentLines['file.name.0'] = [
                 'method' => 'control',
                 'parameters' => [
                     'field' => 'documents_attachments.0.filename',
@@ -325,8 +348,8 @@ class AppEvents implements EventListenerInterface
                         'label' => false,
                     ],
                 ],
-            ],
-            'file.document_id.0' => [
+            ];
+            $attachmentLines['file.document_id.0'] = [
                 'method' => 'control',
                 'parameters' => [
                     'field' => 'documents_attachments.0.document_id',
@@ -334,8 +357,8 @@ class AppEvents implements EventListenerInterface
                         'type' => 'hidden',
                     ],
                 ],
-            ],
-            'file.model.0' => [
+            ];
+            $attachmentLines['file.model.0'] = [
                 'method' => 'control',
                 'parameters' => [
                     'field' => 'documents_attachments.0.model',
@@ -344,9 +367,10 @@ class AppEvents implements EventListenerInterface
                         'value' => $modelName,
                     ],
                 ],
-            ],
-            'fs_attachments_end' => '</fieldset>',
-        ];
+            ];
+        }
+
+        $attachmentLines['fs_attachments_end'] = '</fieldset>';
 
         $view->Lil->insertIntoArray($formLines->form['lines'], $attachmentLines, ['before' => 'submit']);
     }

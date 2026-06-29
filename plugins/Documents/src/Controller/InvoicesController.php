@@ -16,6 +16,7 @@ use Documents\Lib\InvoicesExportEracuni;
 use Documents\Model\Entity\Invoice;
 use Documents\Model\Entity\Vat;
 use DOMDocument;
+use Laminas\Diactoros\Stream;
 use Laminas\Diactoros\UploadedFile;
 
 /**
@@ -271,7 +272,14 @@ class InvoicesController extends BaseDocumentsController
         $VatsTable = TableRegistry::getTableLocator()->get('Documents.Vats');
         $vatLevels = $VatsTable->levels($this->getCurrentUser()->get('company_id'));
 
-        $this->set(compact('vatLevels', 'projects'));
+        // A PDF import leaves the original file pending in the session; the edit form shows its
+        // name with a remove option instead of an empty file input.
+        $pendingPdf = $this->getRequest()->getSession()->read('ImportPdfAttachment');
+        $importPdfName = is_array($pendingPdf) && !empty($pendingPdf['name'])
+            ? (string)$pendingPdf['name']
+            : null;
+
+        $this->set(compact('vatLevels', 'projects', 'importPdfName'));
 
         $result = parent::edit($document, $containTables);
 
@@ -303,17 +311,30 @@ class InvoicesController extends BaseDocumentsController
             return;
         }
 
-        // Only after a brand-new invoice was saved successfully (id assigned, no errors).
-        if ($document->isNew() || $document->getErrors() !== [] || empty($document->id)) {
-            return;
-        }
-
         $path = (string)$pending['path'];
         $name = is_string($pending['name'] ?? null) && $pending['name'] !== '' ? $pending['name'] : 'invoice.pdf';
 
         // Defensive: only accept files we wrote into the import temp directory.
         $expectedDir = TMP . 'import_pdf' . DS;
-        if (!str_starts_with($path, $expectedDir) || !is_file($path)) {
+        $isOurFile = str_starts_with($path, $expectedDir) && is_file($path);
+
+        // The user unchecked/removed the pending PDF — discard it instead of attaching.
+        if ($this->getRequest()->getData('remove_import_pdf')) {
+            if ($isOurFile) {
+                unlink($path);
+            }
+            $session->delete('ImportPdfAttachment');
+
+            return;
+        }
+
+        // Only after a brand-new invoice was saved successfully (id assigned, no errors).
+        // On a failed save the pending PDF is kept so it still attaches on the next submit.
+        if ($document->isNew() || $document->getErrors() !== [] || empty($document->id)) {
+            return;
+        }
+
+        if (!$isOurFile) {
             $session->delete('ImportPdfAttachment');
 
             return;
@@ -330,8 +351,21 @@ class InvoicesController extends BaseDocumentsController
         $attachment->filesize = (int)filesize($path);
 
         // AttachmentsTable::afterSave() moves the file into the upload folder via this option.
-        $uploaded = new UploadedFile($path, (int)filesize($path), UPLOAD_ERR_OK, $name, 'application/pdf');
+        // Build the UploadedFile from a Stream (not a path) so moveTo() copies the stream instead
+        // of calling move_uploaded_file(), which rejects server-side files under a web SAPI.
+        $uploaded = new UploadedFile(
+            new Stream($path, 'r'),
+            (int)filesize($path),
+            UPLOAD_ERR_OK,
+            $name,
+            'application/pdf',
+        );
         $Attachments->save($attachment, ['uploadedFilename' => [$attachment->filename => $uploaded]]);
+
+        // The stream copy leaves the temp file in place; remove it.
+        if (is_file($path)) {
+            unlink($path);
+        }
     }
 
     /**

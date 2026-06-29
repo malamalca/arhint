@@ -243,26 +243,8 @@ $documentEdit = [
             'fs_descript_end' => '</fieldset>',
 
             ////////////////////////////////////////////////////////////////////////////////////
-            // Attachment upload is only offered while creating an invoice; existing invoices
-            // manage attachments through the dedicated Attachments controller.
-            'fs_archive_start' => $document->isNew() ? '<fieldset>' : null,
-            'fs_archive_legend' => $document->isNew()
-                ? sprintf('<legend>%s</legend>', __d('documents', 'Archive')) : null,
-            'attachment_model' => $document->isNew() ? [
-                'method' => 'control',
-                'parameters' => [
-                    'attachments.0.model',
-                    ['type' => 'hidden', 'value' => 'Invoice'],
-                ],
-            ] : null,
-            'attachment_file' => $document->isNew() ? [
-                'method' => 'control',
-                'parameters' => [
-                    'attachments.0.filename',
-                    ['type' => 'file', 'label' => __d('documents', 'Attach a file') . ':'],
-                ],
-            ] : null,
-            'fs_archive_end' => $document->isNew() ? '</fieldset>' : null,
+            // The attachment upload section is injected by AppEvents::addAttachmentFormLines();
+            // for a PDF import it shows the pending file there instead of an empty file input.
 
             ////////////////////////////////////////////////////////////////////////////////////
             'submit' => [

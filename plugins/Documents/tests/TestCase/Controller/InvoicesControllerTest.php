@@ -862,10 +862,18 @@ class InvoicesControllerTest extends TestCase
         $this->assertNotFalse($xmlContent);
         $parsed = (new EslogImport())->parse($xmlContent);
         $this->assertNotNull($parsed);
-        $this->session(['ImportEslogData' => $parsed]);
+        $this->session([
+            'ImportEslogData' => $parsed,
+            'ImportPdfAttachment' => ['path' => dirname(__FILE__) . DS . 'data' . DS . 'Racun1.pdf', 'name' => 'Racun1.pdf'],
+        ]);
 
         $this->get('/documents/invoices/edit?counter=1d53bc5b-de2d-4e85-b13b-81b39a97fc90&importFromEslog=1');
         $this->assertResponseOk();
+
+        // The pending PDF is shown by name with a remove option, not as an empty file input.
+        $this->assertResponseContains('Racun1.pdf');
+        $this->assertResponseContains('remove_import_pdf');
+        $this->assertResponseNotContains('attachments[0][filename]');
 
         /** @var \Documents\Model\Entity\Invoice $document */
         $document = $this->viewVariable('document');
@@ -1019,6 +1027,59 @@ class InvoicesControllerTest extends TestCase
                 if (file_exists($f)) {
                     unlink($f);
                 }
+            }
+        }
+    }
+
+    /**
+     * Test that checking "remove" discards the pending imported PDF instead of attaching it.
+     *
+     * @return void
+     */
+    public function testEditRemovesImportedPdf()
+    {
+        $this->login(USER_ADMIN);
+        Configure::write('App.uploadFolder', TMP);
+
+        $importDir = TMP . 'import_pdf' . DS;
+        if (!is_dir($importDir)) {
+            mkdir($importDir, 0775, true);
+        }
+        $pdfPath = $importDir . 'remove_' . uniqid() . '.pdf';
+        file_put_contents($pdfPath, '%PDF-1.4 to be removed');
+        $this->session(['ImportPdfAttachment' => ['path' => $pdfPath, 'name' => 'racun.pdf']]);
+
+        $data = [
+            'counter_id' => '1d53bc5b-de2d-4e85-b13b-81b39a97fc89',
+            'title' => 'Imported but PDF removed',
+            'dat_issue' => '2026-06-28',
+            'remove_import_pdf' => '1',
+        ];
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+
+        try {
+            $this->post('/documents/invoices/edit?counter=1d53bc5b-de2d-4e85-b13b-81b39a97fc89', $data);
+            $this->assertResponseSuccess();
+
+            $Invoices = TableRegistry::getTableLocator()->get('Documents.Invoices');
+            $invoice = $Invoices->find()
+                ->where(['counter_id' => '1d53bc5b-de2d-4e85-b13b-81b39a97fc89', 'title' => 'Imported but PDF removed'])
+                ->orderBy(['created DESC'])
+                ->first();
+            $this->assertNotNull($invoice, 'Invoice should have been saved');
+
+            $Attachments = TableRegistry::getTableLocator()->get('Attachments');
+            $count = $Attachments->find()
+                ->where(['model' => 'Invoice', 'foreign_id' => $invoice->id])
+                ->count();
+            $this->assertSame(0, $count, 'Removed PDF must not be attached');
+
+            // The pending temp file is discarded.
+            $this->assertFileDoesNotExist($pdfPath);
+        } finally {
+            if (file_exists($pdfPath)) {
+                unlink($pdfPath);
             }
         }
     }
