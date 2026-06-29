@@ -49,7 +49,7 @@ class ExpensesTable extends Table
         $this->belongsTo('Invoices', [
             'foreignKey' => 'foreign_id',
             'className' => 'Documents.Invoices',
-            'conditions' => ['Expenses.model' => 'Documents.Invoice'],
+            'conditions' => ['Expenses.model' => 'Invoice'],
         ]);
     }
 
