@@ -234,9 +234,11 @@ class InvoicesControllerTest extends TestCase
         $counters = TableRegistry::getTableLocator()->get('Documents.DocumentsCounters');
         $counter = $counters->get('1d53bc5b-de2d-4e85-b13b-81b39a97fc89');
 
+        $jpgSource = TMP . 'scan_' . uniqid() . '.jpg';
+        file_put_contents($jpgSource, 'fake-jpeg-bytes');
         $jpgAttachment = new UploadedFile(
-            dirname(__FILE__) . DS . 'data' . DS . 'sunset.jpg',
-            100963,
+            $jpgSource,
+            (int)filesize($jpgSource),
             UPLOAD_ERR_OK,
             'sunset.jpg',
             'image/jpg',
@@ -249,6 +251,7 @@ class InvoicesControllerTest extends TestCase
             'dat_issue' => '2020-05-31',
             'attachments' => [
                 0 => [
+                    'model' => 'Invoice',
                     'filename' => $jpgAttachment,
                 ],
             ],
@@ -256,6 +259,10 @@ class InvoicesControllerTest extends TestCase
 
         $this->enableSecurityToken();
         $this->enableCsrfToken();
+
+        // Start from a clean upload folder so the persisted filename is deterministic.
+        $invoiceFolder = TMP . 'Invoice' . DS;
+        array_map('unlink', glob($invoiceFolder . 'sunset*.jpg') ?: []);
 
         $this->post('/documents/invoices/edit', $data);
 
@@ -281,8 +288,80 @@ class InvoicesControllerTest extends TestCase
 
         $this->assertEventFired('Model.beforeSave');
 
-        // test if file exists
-        // $this->assertTrue(file_exists(Configure::read('App.uploadFolder') . DS . 'Invoice' . DS . 'sunset.jpg'));
+        // The scanned/uploaded file is persisted to the upload folder by AttachmentsTable.
+        $dest = Configure::read('App.uploadFolder') . 'Invoice' . DS . 'sunset.jpg';
+        try {
+            $this->assertFileExists($dest);
+
+            $Attachments = TableRegistry::getTableLocator()->get('Attachments');
+            $attachment = $Attachments->find()
+                ->where(['model' => 'Invoice', 'foreign_id' => $invoice->id])
+                ->first();
+            $this->assertNotNull($attachment, 'The scanned file should be attached to the invoice');
+            $this->assertSame('sunset.jpg', $attachment->filename);
+        } finally {
+            if (file_exists($dest)) {
+                unlink($dest);
+            }
+        }
+    }
+
+    /**
+     * Test adding an invoice with an attachment through the normal edit form (FormProtection on).
+     *
+     * @return void
+     */
+    public function testAddInvoiceWithAttachment()
+    {
+        $this->login(USER_ADMIN);
+        Configure::write('App.uploadFolder', TMP);
+
+        $source = TMP . 'formscan_' . uniqid() . '.pdf';
+        file_put_contents($source, '%PDF-1.4 attached via form');
+        $upload = new UploadedFile($source, (int)filesize($source), UPLOAD_ERR_OK, 'scan.pdf', 'application/pdf');
+
+        $invoiceFolder = TMP . 'Invoice' . DS;
+        array_map('unlink', glob($invoiceFolder . 'scan*.pdf') ?: []);
+
+        $data = [
+            'counter_id' => '1d53bc5b-de2d-4e85-b13b-81b39a97fc89',
+            'title' => 'With attachment',
+            'dat_issue' => '2026-06-28',
+            'attachments' => [
+                0 => ['model' => 'Invoice', 'filename' => $upload],
+            ],
+        ];
+
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $this->setUnlockedFields(['attachments']);
+
+        $dest = $invoiceFolder . 'scan.pdf';
+        try {
+            $this->post('/documents/invoices/edit?counter=1d53bc5b-de2d-4e85-b13b-81b39a97fc89', $data);
+            $this->assertResponseSuccess();
+
+            $Invoices = TableRegistry::getTableLocator()->get('Documents.Invoices');
+            $invoice = $Invoices->find()
+                ->where(['counter_id' => '1d53bc5b-de2d-4e85-b13b-81b39a97fc89', 'title' => 'With attachment'])
+                ->orderBy(['created DESC'])
+                ->first();
+            $this->assertNotNull($invoice, 'Invoice should have been saved');
+
+            $Attachments = TableRegistry::getTableLocator()->get('Attachments');
+            $attachment = $Attachments->find()
+                ->where(['model' => 'Invoice', 'foreign_id' => $invoice->id])
+                ->first();
+            $this->assertNotNull($attachment, 'The uploaded file should be attached to the invoice');
+            $this->assertSame('scan.pdf', $attachment->filename);
+            $this->assertFileExists($dest);
+        } finally {
+            foreach ([$dest, $source] as $f) {
+                if (file_exists($f)) {
+                    unlink($f);
+                }
+            }
+        }
     }
 
     /**
@@ -646,55 +725,56 @@ class InvoicesControllerTest extends TestCase
     }
 
     /**
-     * Test importEslog GET - shows upload form.
+     * Test import GET - shows the single upload form.
      *
      * @return void
      */
-    public function testImportEslogGet()
+    public function testImportGet()
     {
         $this->login(USER_ADMIN);
 
-        $this->get('/documents/invoices/importEslog?counter=1d53bc5b-de2d-4e85-b13b-81b39a97fc89');
+        $this->get('/documents/invoices/import?counter=1d53bc5b-de2d-4e85-b13b-81b39a97fc89');
         $this->assertResponseOk();
-        $this->assertResponseContains('Import eSlog 2.0 Invoice');
+        $this->assertResponseContains('Import Invoice');
+        $this->assertResponseContains('import_file');
     }
 
     /**
-     * Test importEslog without counter parameter redirects.
+     * Test import without counter parameter redirects.
      *
      * @return void
      */
-    public function testImportEslogWithoutCounter()
+    public function testImportWithoutCounter()
     {
         $this->login(USER_ADMIN);
 
-        $this->get('/documents/invoices/importEslog');
+        $this->get('/documents/invoices/import');
         $this->assertRedirect(['action' => 'index']);
     }
 
     /**
-     * Test importEslog POST without file shows error.
+     * Test import POST without file shows error.
      *
      * @return void
      */
-    public function testImportEslogPostWithoutFile()
+    public function testImportPostWithoutFile()
     {
         $this->login(USER_ADMIN);
 
         $this->enableSecurityToken();
         $this->enableCsrfToken();
 
-        $this->post('/documents/invoices/importEslog?counter=1d53bc5b-de2d-4e85-b13b-81b39a97fc89', []);
+        $this->post('/documents/invoices/import?counter=1d53bc5b-de2d-4e85-b13b-81b39a97fc89', []);
         $this->assertResponseSuccess();
-        $this->assertResponseContains('Please select an XML file');
+        $this->assertResponseContains('Please select an XML or PDF file');
     }
 
     /**
-     * Test importEslog POST with valid XML whose client is missing shows the new-client prompt.
+     * Test import POST with valid XML whose client is missing shows the new-client prompt.
      *
      * @return void
      */
-    public function testImportEslogPostValidXmlMissingClient()
+    public function testImportPostValidXmlMissingClient()
     {
         $this->login(USER_ADMIN);
 
@@ -704,7 +784,7 @@ class InvoicesControllerTest extends TestCase
         $this->assertFileExists($xmlPath, 'Test XML file should exist');
 
         $data = [
-            'eslog_file' => new UploadedFile(
+            'import_file' => new UploadedFile(
                 $xmlPath,
                 (int)filesize($xmlPath),
                 UPLOAD_ERR_OK,
@@ -716,7 +796,7 @@ class InvoicesControllerTest extends TestCase
         $this->enableSecurityToken();
         $this->enableCsrfToken();
 
-        $this->post('/documents/invoices/importEslog?counter=1d53bc5b-de2d-4e85-b13b-81b39a97fc90', $data);
+        $this->post('/documents/invoices/import?counter=1d53bc5b-de2d-4e85-b13b-81b39a97fc90', $data);
 
         $this->assertResponseOk();
         $this->assertResponseContains('New Client Required');
@@ -724,11 +804,11 @@ class InvoicesControllerTest extends TestCase
     }
 
     /**
-     * Test importEslog POST with valid XML and an existing client redirects to edit.
+     * Test import POST with valid XML and an existing client redirects to edit.
      *
      * @return void
      */
-    public function testImportEslogPostValidXmlExistingClient()
+    public function testImportPostValidXmlExistingClient()
     {
         $this->login(USER_ADMIN);
 
@@ -747,7 +827,7 @@ class InvoicesControllerTest extends TestCase
         $xmlPath = dirname(__DIR__) . DS . 'Controller' . DS . 'data' . DS . 'testInvoice_eslog20.xml';
 
         $data = [
-            'eslog_file' => new UploadedFile(
+            'import_file' => new UploadedFile(
                 $xmlPath,
                 (int)filesize($xmlPath),
                 UPLOAD_ERR_OK,
@@ -759,7 +839,7 @@ class InvoicesControllerTest extends TestCase
         $this->enableSecurityToken();
         $this->enableCsrfToken();
 
-        $this->post('/documents/invoices/importEslog?counter=1d53bc5b-de2d-4e85-b13b-81b39a97fc90', $data);
+        $this->post('/documents/invoices/import?counter=1d53bc5b-de2d-4e85-b13b-81b39a97fc90', $data);
 
         $this->assertRedirect([
             'action' => 'edit',
@@ -776,7 +856,7 @@ class InvoicesControllerTest extends TestCase
     {
         $this->login(USER_ADMIN);
 
-        // Parse the sample invoice and seed the session as importEslog would.
+        // Parse the sample invoice and seed the session as the import action would.
         $xmlPath = dirname(__DIR__) . DS . 'Controller' . DS . 'data' . DS . 'testInvoice_eslog20.xml';
         $xmlContent = file_get_contents($xmlPath);
         $this->assertNotFalse($xmlContent);
@@ -810,11 +890,11 @@ class InvoicesControllerTest extends TestCase
     }
 
     /**
-     * Test importEslog with invalid XML shows validation errors.
+     * Test import with invalid XML (valid extension) shows validation errors.
      *
      * @return void
      */
-    public function testImportEslogPostInvalidXml()
+    public function testImportPostInvalidXml()
     {
         $this->login(USER_ADMIN);
 
@@ -824,7 +904,7 @@ class InvoicesControllerTest extends TestCase
 
         try {
             $data = [
-                'eslog_file' => [
+                'import_file' => [
                     'name' => 'invalid.xml',
                     'type' => 'application/xml',
                     'tmp_name' => $tmpFile,
@@ -836,10 +916,10 @@ class InvoicesControllerTest extends TestCase
             $this->enableSecurityToken();
             $this->enableCsrfToken();
 
-            $this->post('/documents/invoices/importEslog?counter=1d53bc5b-de2d-4e85-b13b-81b39a97fc89', $data);
+            $this->post('/documents/invoices/import?counter=1d53bc5b-de2d-4e85-b13b-81b39a97fc90', $data);
 
-            // Should show validation errors or return to form
             $this->assertResponseSuccess();
+            $this->assertResponseContains('not a valid eSlog 2.0 invoice');
         } finally {
             if (file_exists($tmpFile)) {
                 unlink($tmpFile);
@@ -848,85 +928,20 @@ class InvoicesControllerTest extends TestCase
     }
 
     /**
-     * Test importEslog POST with non-XML file shows error.
+     * Test import POST with an unsupported file type shows the extension error.
      *
      * @return void
      */
-    public function testImportEslogPostNonXmlFile()
-    {
-        $this->login(USER_ADMIN);
-
-        // Create a temp file with non-xml extension
-        $tmpFile = TMP . 'test_document.pdf';
-        file_put_contents($tmpFile, 'fake pdf content');
-
-        try {
-            $data = [
-                'eslog_file' => [
-                    'name' => 'document.pdf',
-                    'type' => 'application/pdf',
-                    'tmp_name' => $tmpFile,
-                    'error' => UPLOAD_ERR_OK,
-                    'size' => filesize($tmpFile),
-                ],
-            ];
-
-            $this->enableSecurityToken();
-            $this->enableCsrfToken();
-
-            $this->post('/documents/invoices/importEslog?counter=1d53bc5b-de2d-4e85-b13b-81b39a97fc89', $data);
-
-            $this->assertResponseSuccess();
-            $this->assertResponseContains('Please upload a valid XML file');
-        } finally {
-            if (file_exists($tmpFile)) {
-                unlink($tmpFile);
-            }
-        }
-    }
-
-    /**
-     * Test importPdf GET - shows upload form.
-     *
-     * @return void
-     */
-    public function testImportPdfGet()
-    {
-        $this->login(USER_ADMIN);
-
-        $this->get('/documents/invoices/importPdf?counter=1d53bc5b-de2d-4e85-b13b-81b39a97fc89');
-        $this->assertResponseOk();
-        $this->assertResponseContains('Import Invoice from PDF');
-    }
-
-    /**
-     * Test importPdf without counter parameter redirects.
-     *
-     * @return void
-     */
-    public function testImportPdfWithoutCounter()
-    {
-        $this->login(USER_ADMIN);
-
-        $this->get('/documents/invoices/importPdf');
-        $this->assertRedirect(['action' => 'index']);
-    }
-
-    /**
-     * Test importPdf POST with a non-PDF file shows a validation error (AI is never called).
-     *
-     * @return void
-     */
-    public function testImportPdfPostNonPdfFile()
+    public function testImportPostUnsupportedFile()
     {
         $this->login(USER_ADMIN);
 
         $tmpFile = TMP . 'test_document.txt';
-        file_put_contents($tmpFile, 'just text, not a pdf');
+        file_put_contents($tmpFile, 'just text, neither xml nor pdf');
 
         try {
             $data = [
-                'pdf_file' => [
+                'import_file' => [
                     'name' => 'document.txt',
                     'type' => 'text/plain',
                     'tmp_name' => $tmpFile,
@@ -938,10 +953,10 @@ class InvoicesControllerTest extends TestCase
             $this->enableSecurityToken();
             $this->enableCsrfToken();
 
-            $this->post('/documents/invoices/importPdf?counter=1d53bc5b-de2d-4e85-b13b-81b39a97fc90', $data);
+            $this->post('/documents/invoices/import?counter=1d53bc5b-de2d-4e85-b13b-81b39a97fc90', $data);
 
             $this->assertResponseSuccess();
-            $this->assertResponseContains('Please upload a valid PDF file');
+            $this->assertResponseContains('Please upload an eSlog XML or a PDF file');
         } finally {
             if (file_exists($tmpFile)) {
                 unlink($tmpFile);
@@ -959,7 +974,7 @@ class InvoicesControllerTest extends TestCase
         $this->login(USER_ADMIN);
         Configure::write('App.uploadFolder', TMP);
 
-        // Seed a pending imported PDF, as PdfImportForm would.
+        // Seed a pending imported PDF, as the import form would.
         $importDir = TMP . 'import_pdf' . DS;
         if (!is_dir($importDir)) {
             mkdir($importDir, 0775, true);

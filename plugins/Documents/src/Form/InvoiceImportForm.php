@@ -3,20 +3,29 @@ declare(strict_types=1);
 
 namespace Documents\Form;
 
+use App\Lib\AIAssistant;
+use App\Model\Entity\User;
 use Cake\Core\Plugin;
 use Cake\Form\Form;
 use Cake\Form\Schema;
 use Cake\Http\ServerRequest;
 use Cake\ORM\TableRegistry;
+use Cake\Utility\Text;
 use Cake\Validation\Validator;
 use Documents\Lib\EslogImport;
+use Documents\Lib\PdfInvoiceImport;
 use DOMDocument;
 use Laminas\Diactoros\UploadedFile;
 
 /**
- * EslogImportForm - Form for importing eSlog 2.0 XML invoices.
+ * InvoiceImportForm - Single entry point for importing invoices from a file.
+ *
+ * Accepts either an eSlog 2.0 XML file or a PDF. XML is parsed directly; a PDF is first
+ * converted to eSlog 2.0 XML with AI ({@see \Documents\Lib\PdfInvoiceImport}). Both paths then
+ * feed the same downstream pipeline ({@see processEslogXml()}), so the invoice edit prefill,
+ * client lookup and (for PDFs) attachment hand-off are identical.
  */
-class EslogImportForm extends Form
+class InvoiceImportForm extends Form
 {
     /**
      * @var \Cake\Http\ServerRequest
@@ -39,13 +48,23 @@ class EslogImportForm extends Form
     public array $missingClientInfo = [];
 
     /**
-     * Form constructor.
-     *
-     * @param \Cake\Http\ServerRequest $request Request object.
+     * @var string|null Human-readable error when AI conversion of a PDF fails or yields too little data.
      */
-    public function __construct(ServerRequest $request)
+    public ?string $aiError = null;
+
+    /**
+     * @var \Documents\Lib\PdfInvoiceImport|null Injected PDF converter (tests); built on demand otherwise.
+     */
+    private ?PdfInvoiceImport $converter;
+
+    /**
+     * @param \Cake\Http\ServerRequest $request Request object.
+     * @param \Documents\Lib\PdfInvoiceImport|null $converter Optional converter override (for testing).
+     */
+    public function __construct(ServerRequest $request, ?PdfInvoiceImport $converter = null)
     {
         $this->request = $request;
+        $this->converter = $converter;
     }
 
     /**
@@ -56,7 +75,7 @@ class EslogImportForm extends Form
      */
     protected function _buildSchema(Schema $schema): Schema
     {
-        return $schema->addField('eslog_file', ['type' => 'string'])
+        return $schema->addField('import_file', ['type' => 'string'])
             ->addField('counter_id', ['type' => 'string']);
     }
 
@@ -75,18 +94,18 @@ class EslogImportForm extends Form
                 'rule' => [$this, 'validateCounter'],
                 'message' => __d('documents', 'Invalid counter selected.'),
             ])
-            ->requirePresence('eslog_file', 'create')
-            ->notEmptyFile('eslog_file', __d('documents', 'Please select an XML file to upload.'))
-            ->add('eslog_file', 'validXmlExtension', [
-                'rule' => [$this, 'validateXmlExtension'],
-                'message' => __d('documents', 'Please upload a valid XML file.'),
+            ->requirePresence('import_file', 'create')
+            ->notEmptyFile('import_file', __d('documents', 'Please select an XML or PDF file to upload.'))
+            ->add('import_file', 'validExtension', [
+                'rule' => [$this, 'validateImportExtension'],
+                'message' => __d('documents', 'Please upload an eSlog XML or a PDF file.'),
             ])
-            ->add('eslog_file', 'readableFile', [
+            ->add('import_file', 'readableFile', [
                 'rule' => [$this, 'validateReadable'],
                 'message' => __d('documents', 'Failed to read the uploaded file.'),
             ])
-            ->add('eslog_file', 'validEslogXml', [
-                'rule' => [$this, 'validateEslogSchema'],
+            ->add('import_file', 'validContent', [
+                'rule' => [$this, 'validateImportContent'],
                 'message' => __d('documents', 'The uploaded XML is not a valid eSlog 2.0 invoice.'),
             ]);
     }
@@ -119,21 +138,19 @@ class EslogImportForm extends Form
     }
 
     /**
-     * Validate that the file has .xml extension.
+     * Validate that the file has an accepted extension (.xml or .pdf).
      *
      * @param mixed $file Uploaded file data (array or UploadedFile object).
      * @return bool
      */
-    public function validateXmlExtension(mixed $file): bool
+    public function validateImportExtension(mixed $file): bool
     {
         $fileName = $this->getFileName($file);
         if ($fileName === '') {
             return true;
         }
 
-        $extension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
-
-        return $extension === 'xml';
+        return in_array(strtolower(pathinfo($fileName, PATHINFO_EXTENSION)), ['xml', 'pdf'], true);
     }
 
     /**
@@ -153,27 +170,33 @@ class EslogImportForm extends Form
     }
 
     /**
-     * Validate that the XML is a valid eSlog 2.0 invoice against XSD schema.
+     * Validate the file content. XML must be a valid eSlog 2.0 document; PDFs are validated
+     * later by the AI conversion step, so they pass here.
      *
      * @param mixed $file Uploaded file data (array or UploadedFile object).
      * @return bool
      */
-    public function validateEslogSchema(mixed $file): bool
+    public function validateImportContent(mixed $file): bool
     {
         $tmpName = $this->getTmpName($file);
         if ($tmpName === '') {
             return false;
         }
 
-        $xmlContent = file_get_contents($tmpName);
-        if ($xmlContent === false) {
+        $content = file_get_contents($tmpName);
+        if ($content === false) {
             return false;
+        }
+
+        // PDFs are handled by the AI step, not validated against the eSlog XSD.
+        if ($this->isPdf($this->getFileName($file), $content)) {
+            return true;
         }
 
         libxml_use_internal_errors(true);
 
         $dom = new DOMDocument();
-        if (!$dom->loadXML($xmlContent, LIBXML_NOCDATA | LIBXML_NONET)) {
+        if (!$dom->loadXML($content, LIBXML_NOCDATA | LIBXML_NONET)) {
             libxml_clear_errors();
 
             return false;
@@ -236,38 +259,99 @@ class EslogImportForm extends Form
     }
 
     /**
-     * Execute the import process.
+     * Execute the import: detect XML vs PDF, obtain eSlog XML, then run the shared pipeline.
      *
      * @param array<string, mixed> $data Form data including uploaded file.
-     * @return bool True on success (parsed and stored), false on failure.
+     * @return bool True on success (parsed and stored), false on failure (see {@see $aiError}).
      */
     protected function _execute(array $data): bool
     {
-        // Get uploaded file info from request
-        /** @var mixed|null $uploadedFile */
-        $uploadedFile = $this->request->getData('eslog_file');
+        $this->aiError = null;
+
+        // Reset any pending attachment from a previous (possibly abandoned) import; the PDF path
+        // re-stashes it below, the XML path intentionally leaves it cleared.
+        $this->request->getSession()->delete('ImportPdfAttachment');
+
+        /** @var mixed $uploadedFile */
+        $uploadedFile = $this->request->getData('import_file');
         if (empty($uploadedFile)) {
             return false;
         }
 
-        // Read file content
         $tmpName = $this->getTmpName($uploadedFile);
         if ($tmpName === '') {
             return false;
         }
-        $xmlContent = file_get_contents($tmpName);
-        if ($xmlContent === false) {
+        $content = file_get_contents($tmpName);
+        if ($content === false) {
+            $this->aiError = __d('documents', 'Failed to read the uploaded file.');
+
             return false;
         }
 
-        return $this->processEslogXml($xmlContent);
+        $filename = $this->getFileName($uploadedFile) ?: 'invoice';
+
+        if ($this->isPdf($filename, $content)) {
+            return $this->executePdf($content, $filename);
+        }
+
+        return $this->processEslogXml($content);
+    }
+
+    /**
+     * Convert a PDF to eSlog XML via AI, run the shared pipeline and stash the PDF for attachment.
+     *
+     * @param string $pdfContent Raw PDF bytes.
+     * @param string $filename Original client file name.
+     * @return bool
+     */
+    private function executePdf(string $pdfContent, string $filename): bool
+    {
+        $xml = $this->getConverter()->convert($pdfContent, $filename);
+        if ($xml === null) {
+            $this->aiError = $this->getConverter()->lastError
+                ?? __d('documents', 'The AI could not process the uploaded invoice.');
+
+            return false;
+        }
+
+        if (!$this->processEslogXml($xml)) {
+            $this->aiError = __d('documents', 'The AI produced an invoice that could not be read.');
+
+            return false;
+        }
+
+        if (!$this->hasSufficientData()) {
+            $this->aiError = __d(
+                'documents',
+                'The AI could not extract enough data from the invoice. Please enter it manually.',
+            );
+
+            return false;
+        }
+
+        // Stash the original PDF so it can be attached to the invoice once it is saved.
+        $this->storePdfForAttachment($pdfContent, $filename);
+
+        return true;
+    }
+
+    /**
+     * Determine whether an uploaded file is a PDF, by extension or by the %PDF magic header.
+     *
+     * @param string $filename Client file name.
+     * @param string $content Raw file content.
+     * @return bool
+     */
+    private function isPdf(string $filename, string $content): bool
+    {
+        return strtolower(pathinfo($filename, PATHINFO_EXTENSION)) === 'pdf'
+            || str_starts_with($content, '%PDF');
     }
 
     /**
      * Parse eSlog 2.0 XML content, check whether the invoice client already exists and stash the
      * parsed payload in the session for transfer to the invoice edit form.
-     *
-     * Shared by the XML upload flow and the PDF-to-XML (AI) flow.
      *
      * @param string $xmlContent Raw eSlog 2.0 XML content.
      * @return bool True when parsed and stored, false when the XML could not be parsed.
@@ -329,5 +413,72 @@ class EslogImportForm extends Form
         $session->write('ImportEslogData', $parsedData);
 
         return true;
+    }
+
+    /**
+     * Whether the parsed invoice contains the minimum data worth pre-filling a form with:
+     * at least one line item, an identifier (number or issue date) and a named party.
+     *
+     * @return bool
+     */
+    private function hasSufficientData(): bool
+    {
+        $data = $this->parsedData ?? [];
+        $invoice = is_array($data['invoice'] ?? null) ? $data['invoice'] : [];
+        $items = is_array($data['items'] ?? null) ? $data['items'] : [];
+        $issuer = is_array($data['issuer'] ?? null) ? $data['issuer'] : [];
+        $receiver = is_array($data['receiver'] ?? null) ? $data['receiver'] : [];
+        $buyer = is_array($data['buyer'] ?? null) ? $data['buyer'] : [];
+
+        $hasItems = $items !== [];
+        $hasIdentifier = !empty($invoice['no']) || !empty($invoice['dat_issue']);
+        $hasParty = !empty($issuer['title']) || !empty($issuer['tax_no'])
+            || !empty($receiver['title']) || !empty($buyer['title']);
+
+        return $hasItems && $hasIdentifier && $hasParty;
+    }
+
+    /**
+     * Persist the uploaded PDF to a temp location and record it in the session so the invoice
+     * edit form can attach it to the invoice after it is first saved.
+     *
+     * @param string $pdfContent Raw PDF bytes.
+     * @param string $filename Original client file name.
+     * @return void
+     */
+    private function storePdfForAttachment(string $pdfContent, string $filename): void
+    {
+        $dir = TMP . 'import_pdf' . DS;
+        if (!is_dir($dir)) {
+            mkdir($dir, 0775, true);
+        }
+
+        $path = $dir . Text::uuid() . '.pdf';
+        if (file_put_contents($path, $pdfContent) === false) {
+            // Non-fatal: the import still succeeds, just without the attachment.
+            return;
+        }
+
+        $this->request->getSession()->write('ImportPdfAttachment', [
+            'path' => $path,
+            'name' => $filename,
+        ]);
+    }
+
+    /**
+     * Resolve the PDF converter, building one from the current user's AI configuration when no
+     * override was injected.
+     *
+     * @return \Documents\Lib\PdfInvoiceImport
+     */
+    private function getConverter(): PdfInvoiceImport
+    {
+        if ($this->converter === null) {
+            $identity = $this->request->getAttribute('identity');
+            $user = $identity instanceof User ? $identity : null;
+            $this->converter = new PdfInvoiceImport(new AIAssistant($user));
+        }
+
+        return $this->converter;
     }
 }

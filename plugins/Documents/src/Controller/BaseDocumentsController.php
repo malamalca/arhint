@@ -18,6 +18,8 @@ use Documents\Lib\DocumentsSigner;
 use Documents\Model\Entity\DocumentsCounter;
 use Exception;
 use InvalidArgumentException;
+use Laminas\Diactoros\UploadedFile;
+use const UPLOAD_ERR_OK;
 
 /**
  * BaseDocuments Controller
@@ -46,13 +48,12 @@ class BaseDocumentsController extends AppController
         }
 
         if (in_array($this->getRequest()->getParam('action'), ['sign'])) {
-            $this->FormProtection->setConfig('validatePost', false);
             $this->FormProtection->setConfig('validate', false);
         }
 
         // post from external program like LilScan
         if (in_array($this->getRequest()->getParam('action'), ['edit']) && $this->request->hasHeader('Lil-Scan')) {
-            $this->FormProtection->setConfig('validatePost', false);
+            $this->FormProtection->setConfig('validate', false);
         }
     }
 
@@ -157,8 +158,16 @@ class BaseDocumentsController extends AppController
                     $document->getNextCounterNo();
                 }
 
+                // Pass uploaded attachment files so AttachmentsTable::afterSave() persists them
+                // to disk (the association marshals the rows, but the file move needs this option).
+                $saveOptions = ['associated' => $containTables];
+                $attachmentUploads = $this->collectAttachmentUploads();
+                if ($attachmentUploads !== []) {
+                    $saveOptions['uploadedFilename'] = $attachmentUploads;
+                }
+
                 if (
-                    $this->{$this->documentsScope}->save($document, ['associated' => $containTables])
+                    $this->{$this->documentsScope}->save($document, $saveOptions)
                 ) {
                     $conn->commit();
                     if ($this->getRequest()->is('ajax') || $this->getRequest()->is('lilScan')) {
@@ -198,6 +207,26 @@ class BaseDocumentsController extends AppController
         $this->set(compact('document'));
 
         return null;
+    }
+
+    /**
+     * Collect uploaded files posted in the `attachments` association data, keyed by client
+     * filename, for the AttachmentsTable `uploadedFilename` save option.
+     *
+     * @return array<string, \Laminas\Diactoros\UploadedFile>
+     */
+    protected function collectAttachmentUploads(): array
+    {
+        $uploads = [];
+
+        foreach ((array)$this->getRequest()->getData('attachments') as $attachment) {
+            $file = is_array($attachment) ? ($attachment['filename'] ?? null) : null;
+            if ($file instanceof UploadedFile && $file->getError() === UPLOAD_ERR_OK) {
+                $uploads[(string)$file->getClientFilename()] = $file;
+            }
+        }
+
+        return $uploads;
     }
 
     /**

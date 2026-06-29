@@ -8,7 +8,7 @@ use Cake\Routing\Router;
  * @var string|null $missingClientTitle Title of missing client.
  */
 
-$this->assign('title', __d('documents', 'Import eSlog 2.0 Invoice - New Client'));
+$this->assign('title', __d('documents', 'Import Invoice - New Client'));
 ?>
 
 <div class="invoices content">

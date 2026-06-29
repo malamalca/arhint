@@ -10,8 +10,7 @@ use Cake\Http\ServerRequest;
 use Cake\I18n\Date;
 use Cake\ORM\TableRegistry;
 use Cake\Routing\Router;
-use Documents\Form\EslogImportForm;
-use Documents\Form\PdfImportForm;
+use Documents\Form\InvoiceImportForm;
 use Documents\Lib\InvoicesExport;
 use Documents\Lib\InvoicesExportEracuni;
 use Documents\Model\Entity\Invoice;
@@ -45,12 +44,13 @@ class InvoicesController extends BaseDocumentsController
         if (in_array($this->getRequest()->getParam('action'), ['edit', 'editPreview'])) {
             $this->FormProtection->setConfig(
                 'unlockedFields',
-                ['invoices_taxes', 'invoices_items', 'receiver', 'buyer', 'issuer'],
+                ['invoices_taxes', 'invoices_items', 'receiver', 'buyer', 'issuer', 'attachments'],
             );
         }
 
-        if (in_array($this->getRequest()->getParam('action'), ['importEslog', 'importPdf'])) {
-            $this->FormProtection->setConfig('validatePost', false);
+        if ($this->getRequest()->getParam('action') === 'import') {
+            // Disable form tampering protection for the file-upload entry point (CSRF still applies).
+            $this->FormProtection->setConfig('validate', false);
             // Skip authorization - no entity to authorize, user just needs to be logged in
             $this->Authorization->skipAuthorization();
         }
@@ -253,6 +253,10 @@ class InvoicesController extends BaseDocumentsController
             if (!empty($importData)) {
                 $document = $this->_applyEslogImportData($document, $importData);
             }
+        } elseif ($this->getRequest()->is('get')) {
+            // Opening any non-import invoice form discards a pending PDF from an abandoned import,
+            // so it can never attach itself to an unrelated invoice. The import save POST keeps it.
+            $this->getRequest()->getSession()->delete('ImportPdfAttachment');
         }
 
         $projects = [];
@@ -280,7 +284,7 @@ class InvoicesController extends BaseDocumentsController
     /**
      * Attach the PDF that was uploaded during a PDF import to the invoice once it has been saved.
      *
-     * The PDF was stashed in a temp file + session by {@see \Documents\Form\PdfImportForm}; this
+     * The PDF was stashed in a temp file + session by {@see \Documents\Form\InvoiceImportForm}; this
      * runs after {@see \Documents\Controller\BaseDocumentsController::edit()} has saved the new
      * invoice (so a foreign id exists). It is a no-op for ordinary edits.
      *
@@ -527,14 +531,16 @@ class InvoicesController extends BaseDocumentsController
     }
 
     /**
-     * Import eSlog 2.0 XML invoice.
+     * Import an invoice from an uploaded file (single entry point for XML and PDF).
      *
-     * GET: Show upload form.
-     * POST: Parse uploaded XML, validate, and redirect to edit() with prefilled data.
+     * GET: Show the upload form.
+     * POST: Detect the file type — an eSlog 2.0 XML is parsed directly, a PDF is converted to
+     * eSlog 2.0 XML with AI first — then prefill the invoice edit form. For PDFs the original
+     * file is attached to the invoice once it is saved.
      *
      * @return \Cake\Http\Response|null
      */
-    public function importEslog(): ?Response
+    public function import(): ?Response
     {
         $counterId = (string)$this->getRequest()->getQuery('counter');
         if (empty($counterId)) {
@@ -543,62 +549,7 @@ class InvoicesController extends BaseDocumentsController
             return $this->redirect(['action' => 'index']);
         }
 
-        /** @var \Documents\Form\EslogImportForm $form */
-        $form = new EslogImportForm($this->getRequest());
-
-        if ($this->getRequest()->is('post')) {
-            // Add counter_id to data for form execution
-            $data = $this->getRequest()->getData();
-            $data['counter_id'] = $counterId;
-
-            if ($form->execute($data)) {
-                if (!$form->clientExists) {
-                    // Show prompt to create new client
-                    $this->set('counterId', $counterId);
-                    $this->set('missingClientTaxNo', $form->missingClientInfo['tax_no'] ?? '');
-                    $this->set('missingClientTitle', $form->missingClientInfo['title'] ?? '');
-                    $this->viewBuilder()->setTemplate('import_eslog_new_client');
-
-                    return null;
-                }
-
-                // Redirect to edit with prefilled data
-                $this->Flash->success(__d('documents', 'eSlog XML imported successfully.'));
-
-                return $this->redirect([
-                    'action' => 'edit',
-                    '?' => ['counter' => $counterId, 'importFromEslog' => '1'],
-                ]);
-            }
-
-            // Validation failed - show form with errors
-        }
-
-        $this->set('counterId', $counterId);
-        $this->set('form', $form);
-
-        return null;
-    }
-
-    /**
-     * Import an invoice from a PDF file using AI.
-     *
-     * GET: Show upload form.
-     * POST: Send the PDF to the configured AI provider, which converts it to eSlog 2.0 XML,
-     * then process that XML exactly like an uploaded eSlog file (prefill the invoice edit form).
-     *
-     * @return \Cake\Http\Response|null
-     */
-    public function importPdf(): ?Response
-    {
-        $counterId = (string)$this->getRequest()->getQuery('counter');
-        if (empty($counterId)) {
-            $this->Flash->error(__d('documents', 'Counter ID is required.'));
-
-            return $this->redirect(['action' => 'index']);
-        }
-
-        $form = new PdfImportForm($this->getRequest());
+        $form = new InvoiceImportForm($this->getRequest());
 
         if ($this->getRequest()->is('post')) {
             $data = $this->getRequest()->getData();
@@ -610,17 +561,20 @@ class InvoicesController extends BaseDocumentsController
                     $this->set('counterId', $counterId);
                     $this->set('missingClientTaxNo', $form->missingClientInfo['tax_no'] ?? '');
                     $this->set('missingClientTitle', $form->missingClientInfo['title'] ?? '');
-                    $this->viewBuilder()->setTemplate('import_eslog_new_client');
+                    $this->viewBuilder()->setTemplate('import_new_client');
 
                     return null;
                 }
 
-                // Redirect to edit with prefilled data (same hand-off as the eSlog XML import).
-                // The uploaded PDF is attached automatically once the invoice is saved.
-                $this->Flash->success(__d(
-                    'documents',
-                    'Invoice imported from PDF. The uploaded PDF will be attached when you save the invoice.',
-                ));
+                // Redirect to edit with prefilled data. A PDF import also attaches the original
+                // file once the invoice is saved (see attachImportedPdf()).
+                $message = $this->getRequest()->getSession()->check('ImportPdfAttachment')
+                    ? __d(
+                        'documents',
+                        'Invoice imported. The uploaded PDF will be attached when you save the invoice.',
+                    )
+                    : __d('documents', 'Invoice imported successfully.');
+                $this->Flash->success($message);
 
                 return $this->redirect([
                     'action' => 'edit',

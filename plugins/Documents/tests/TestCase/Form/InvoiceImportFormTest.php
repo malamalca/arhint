@@ -7,19 +7,19 @@ use App\Lib\AIAssistant;
 use Cake\Http\ServerRequest;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\TestCase;
-use Documents\Form\PdfImportForm;
+use Documents\Form\InvoiceImportForm;
 use Documents\Lib\PdfInvoiceImport;
 use Laminas\Diactoros\UploadedFile;
 use const UPLOAD_ERR_OK;
 
 /**
- * PdfImportForm Test Case
+ * InvoiceImportForm Test Case
  *
- * Exercises the full PDF import flow with the AI conversion stubbed out, so the form's
- * validation, AI-error handling, data-sufficiency check and session hand-off are covered
- * without any network access.
+ * Exercises the single import entry point for both the XML-direct path and the PDF-via-AI path
+ * (AI conversion stubbed), covering validation, type detection, AI-error handling, the
+ * data-sufficiency check and the session hand-off — without any network access.
  */
-class PdfImportFormTest extends TestCase
+class InvoiceImportFormTest extends TestCase
 {
     /**
      * @var array<string>
@@ -45,7 +45,7 @@ class PdfImportFormTest extends TestCase
         parent::setUp();
         // Unique per test: the UploadedFile stream stays open for the test's lifetime, which on
         // Windows would otherwise lock a shared path and break sibling tests.
-        $this->pdfPath = TMP . 'pdf_import_form_test_' . uniqid() . '.pdf';
+        $this->pdfPath = TMP . 'invoice_import_form_test_' . uniqid() . '.pdf';
         file_put_contents($this->pdfPath, '%PDF-1.4 test invoice');
     }
 
@@ -60,53 +60,86 @@ class PdfImportFormTest extends TestCase
     }
 
     /**
-     * Build a request carrying the identity, counter and uploaded PDF the form expects.
+     * Build a request carrying the identity, counter and an uploaded file.
      *
+     * @param string $path Source file path.
+     * @param string $name Client file name (its extension drives type detection).
      * @param string $counterId Counter id to place in the request body.
      * @return \Cake\Http\ServerRequest
      */
-    private function buildRequest(string $counterId = self::COUNTER_ID): ServerRequest
+    private function buildRequest(string $path, string $name, string $counterId = self::COUNTER_ID): ServerRequest
     {
         $user = TableRegistry::getTableLocator()->get('Users')->get(USER_ADMIN);
-        $uploaded = new UploadedFile(
-            $this->pdfPath,
-            (int)filesize($this->pdfPath),
-            UPLOAD_ERR_OK,
-            'invoice.pdf',
-            'application/pdf',
-        );
+        $uploaded = new UploadedFile($path, (int)filesize($path), UPLOAD_ERR_OK, $name, 'application/octet-stream');
 
         return (new ServerRequest())
             ->withAttribute('identity', $user)
-            ->withParsedBody(['pdf_file' => $uploaded, 'counter_id' => $counterId]);
+            ->withParsedBody(['import_file' => $uploaded, 'counter_id' => $counterId]);
     }
 
     /**
-     * Build a PdfImportForm whose AI conversion returns the given canned completion.
+     * Build a request for the throwaway PDF.
+     *
+     * @param string $counterId Counter id.
+     * @return \Cake\Http\ServerRequest
+     */
+    private function buildPdfRequest(string $counterId = self::COUNTER_ID): ServerRequest
+    {
+        return $this->buildRequest($this->pdfPath, 'invoice.pdf', $counterId);
+    }
+
+    /**
+     * Build an InvoiceImportForm whose AI conversion returns the given canned completion.
      *
      * @param \Cake\Http\ServerRequest $request Request.
      * @param string $completion The text the mocked assistant returns.
-     * @return \Documents\Form\PdfImportForm
+     * @return \Documents\Form\InvoiceImportForm
      */
-    private function formReturning(ServerRequest $request, string $completion): PdfImportForm
+    private function formReturning(ServerRequest $request, string $completion): InvoiceImportForm
     {
         $assistant = $this->createMock(AIAssistant::class);
         $assistant->method('complete')->willReturn($completion);
 
-        return new PdfImportForm($request, new PdfInvoiceImport($assistant));
+        return new InvoiceImportForm($request, new PdfInvoiceImport($assistant));
     }
 
     /**
-     * A valid converted invoice is parsed and stashed in the session for the edit form.
+     * An uploaded XML is parsed directly (no AI) and stashed in the session, without a PDF attachment.
      *
      * @return void
      */
-    public function testExecuteStoresParsedDataInSession(): void
+    public function testExecuteXmlGoesDirect(): void
+    {
+        $xmlPath = dirname(__DIR__) . DS . 'Controller' . DS . 'data' . DS . 'testInvoice_eslog20.xml';
+        $request = $this->buildRequest($xmlPath, 'invoice.xml');
+
+        // The converter must never be consulted for an XML upload.
+        $assistant = $this->createMock(AIAssistant::class);
+        $assistant->expects($this->never())->method('complete');
+        $form = new InvoiceImportForm($request, new PdfInvoiceImport($assistant));
+
+        $result = $form->execute($request->getData());
+
+        $this->assertTrue($result);
+        $this->assertNull($form->aiError);
+        $stored = $request->getSession()->read('ImportEslogData');
+        $this->assertIsArray($stored);
+        $this->assertSame('TEST-2025-001', $stored['invoice']['no']);
+        // XML uploads are not attached.
+        $this->assertNull($request->getSession()->read('ImportPdfAttachment'));
+    }
+
+    /**
+     * A PDF is converted via AI, parsed and stashed, and the original PDF is kept for attachment.
+     *
+     * @return void
+     */
+    public function testExecutePdfStoresParsedDataAndAttachment(): void
     {
         $xml = (string)file_get_contents(
             dirname(__DIR__) . DS . 'Controller' . DS . 'data' . DS . 'testInvoice_eslog20.xml',
         );
-        $request = $this->buildRequest();
+        $request = $this->buildPdfRequest();
         $form = $this->formReturning($request, $xml);
 
         $result = $form->execute($request->getData());
@@ -130,13 +163,32 @@ class PdfImportFormTest extends TestCase
     }
 
     /**
+     * Importing an XML clears any pending PDF attachment left over from a previous import.
+     *
+     * @return void
+     */
+    public function testXmlImportClearsStalePdfAttachment(): void
+    {
+        $xmlPath = dirname(__DIR__) . DS . 'Controller' . DS . 'data' . DS . 'testInvoice_eslog20.xml';
+        $request = $this->buildRequest($xmlPath, 'invoice.xml');
+        $request->getSession()->write('ImportPdfAttachment', ['path' => 'stale', 'name' => 'old.pdf']);
+
+        $assistant = $this->createMock(AIAssistant::class);
+        $assistant->expects($this->never())->method('complete');
+        $form = new InvoiceImportForm($request, new PdfInvoiceImport($assistant));
+
+        $this->assertTrue($form->execute($request->getData()));
+        $this->assertNull($request->getSession()->read('ImportPdfAttachment'));
+    }
+
+    /**
      * The CANNOT_PARSE sentinel surfaces an AI error and does not write the session.
      *
      * @return void
      */
     public function testExecuteAiCannotParse(): void
     {
-        $request = $this->buildRequest();
+        $request = $this->buildPdfRequest();
         $form = $this->formReturning($request, '<error>CANNOT_PARSE</error>');
 
         $result = $form->execute($request->getData());
@@ -147,13 +199,13 @@ class PdfImportFormTest extends TestCase
     }
 
     /**
-     * A parseable but near-empty invoice is rejected as insufficient.
+     * A parseable but near-empty AI result is rejected as insufficient.
      *
      * @return void
      */
     public function testExecuteInsufficientData(): void
     {
-        $request = $this->buildRequest();
+        $request = $this->buildPdfRequest();
         $form = $this->formReturning(
             $request,
             '<Invoice xmlns="urn:eslog:2.00"><M_INVOIC></M_INVOIC></Invoice>',
@@ -173,10 +225,10 @@ class PdfImportFormTest extends TestCase
     public function testExecuteRejectsForeignCounter(): void
     {
         // Counter 1d53bc...fc89 is owned by a different company.
-        $request = $this->buildRequest('1d53bc5b-de2d-4e85-b13b-81b39a97fc89');
+        $request = $this->buildPdfRequest('1d53bc5b-de2d-4e85-b13b-81b39a97fc89');
         $assistant = $this->createMock(AIAssistant::class);
         $assistant->expects($this->never())->method('complete');
-        $form = new PdfImportForm($request, new PdfInvoiceImport($assistant));
+        $form = new InvoiceImportForm($request, new PdfInvoiceImport($assistant));
 
         $result = $form->execute($request->getData());
 
