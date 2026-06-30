@@ -4,11 +4,14 @@ declare(strict_types=1);
 namespace Projects\Event;
 
 use ArrayObject;
+use Cake\Datasource\EntityInterface;
 use Cake\Event\Event;
 use Cake\Event\EventListenerInterface;
 use Cake\ORM\Query\SelectQuery;
 use Cake\ORM\TableRegistry;
+use Cake\Routing\Router;
 use Projects\Lib\ProjectsSidebar;
+use Throwable;
 
 class ProjectsEvents implements EventListenerInterface
 {
@@ -26,7 +29,99 @@ class ProjectsEvents implements EventListenerInterface
             'Documents.Documents.indexQuery' => 'filterDashboardDocuments',
             'App.Form.Crm.Adremas.edit' => 'addProjectToAdremas',
             'App.Index.Crm.Adremas.index' => 'addProjectToAdremas',
+            'Model.afterSave' => 'logProjectDocument',
         ];
+    }
+
+    /**
+     * Create a project log entry when a document or invoice is saved to a project.
+     *
+     * Fired on every Model.afterSave; only acts when the saved entity is a Document
+     * or Invoice whose project_id changed in this save (i.e. it was just assigned or
+     * reassigned to a project). The log
+     * is stored as a project comment (model='Projects.Project', action='Comment') so
+     * it shows up in the project's logs tab, with a link to the document/invoice.
+     *
+     * @param \Cake\Event\Event $event Event object.
+     * @param \Cake\Datasource\EntityInterface $entity Saved entity.
+     * @param \ArrayObject $options Save options.
+     * @return void
+     */
+    public function logProjectDocument(Event $event, EntityInterface $entity, ArrayObject $options): void
+    {
+        $map = [
+            'Documents\\Model\\Table\\DocumentsTable' => [
+                'controller' => 'Documents',
+                'label' => __d('projects', 'Document'),
+            ],
+            'Documents\\Model\\Table\\InvoicesTable' => [
+                'controller' => 'Invoices',
+                'label' => __d('projects', 'Invoice'),
+            ],
+        ];
+
+        $subjectClass = get_class($event->getSubject());
+        if (!isset($map[$subjectClass])) {
+            return;
+        }
+
+        // Documents/invoices are created first (without a project) and the project is
+        // assigned in a separate, later save. So only log when project_id actually
+        // changed in this save and now points at a project.
+        $projectId = $entity->get('project_id');
+        if (empty($projectId) || !$entity->isDirty('project_id')) {
+            return;
+        }
+
+        $config = $map[$subjectClass];
+
+        // Resolve the acting user from the current request, when available.
+        $userId = null;
+        $identity = Router::getRequest()?->getAttribute('identity');
+        if ($identity !== null) {
+            $userId = $identity->getOriginalData()?->get('id');
+        }
+
+        $url = Router::url([
+            'plugin' => 'Documents',
+            'controller' => $config['controller'],
+            'action' => 'view',
+            $entity->get('id'),
+        ], true);
+
+        $title = trim(sprintf('%s %s', (string)$entity->get('no'), (string)$entity->get('title')));
+        if ($title === '') {
+            $title = $config['label'];
+        }
+
+        // dat_issue is a Cake\I18n\Date (or DateTime); format it deterministically.
+        $datIssue = $entity->get('dat_issue');
+        $dateStr = '';
+        if (is_object($datIssue) && method_exists($datIssue, 'i18nFormat')) {
+            $dateStr = ' <span class="small">(' . h((string)$datIssue->i18nFormat('yyyy-MM-dd')) . ')</span>';
+        }
+
+        $descript = sprintf(
+            '%1$s: <a href="%2$s">%3$s</a>%4$s',
+            h($config['label']),
+            $url,
+            h($title),
+            $dateStr,
+        );
+
+        try {
+            $logsTable = TableRegistry::getTableLocator()->get('App.Logs');
+            $log = $logsTable->newEntity([
+                'model' => 'Projects.Project',
+                'foreign_id' => $projectId,
+                'user_id' => $userId,
+                'action' => 'Comment',
+                'descript' => $descript,
+            ]);
+            $logsTable->save($log);
+        } catch (Throwable $e) {
+            // Never break the document/invoice save because of logging.
+        }
     }
 
     /**
