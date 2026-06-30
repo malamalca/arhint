@@ -504,11 +504,23 @@ return [
     /*
      * Embedding service configuration.
      *
-     * - url (string)   The embedding API endpoint, e.g. "http://localhost:8001/embed"
-     * - timeout (int)  cURL timeout in seconds (default 30).
+     * - provider (string) "local" (default) or "openai".
+     * - url (string)      The embedding API endpoint. For "local", e.g.
+     *                     "http://localhost:8001/embed". For "openai" it defaults to
+     *                     "https://api.openai.com/v1/embeddings" when left empty.
+     * - model (string)    Model name (openai only), e.g. "text-embedding-3-small".
+     * - api_key (string)  Bearer token (openai only).
+     * - timeout (int)     cURL timeout in seconds (default 30).
+     *
+     * NOTE: Switching providers changes the vector dimension (e.g. OpenAI
+     * text-embedding-3-small = 1536). Existing vectors must be re-embedded into a
+     * fresh collection; mixing dimensions in one VectorDB collection will fail.
      */
     'Embedding' => [
+        'provider' => 'local',
         'url' => 'http://127.0.0.1:8000/embed',
+        'model' => 'text-embedding-3-small',
+        'api_key' => '',
         'timeout' => 30,
     ],
 

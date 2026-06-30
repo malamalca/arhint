@@ -10,16 +10,43 @@ use Exception;
 /**
  * Service for generating text embeddings via an external API.
  *
- * Configuration is read from Configure::read('Embedding') with keys:
- * - url (string)   The embedding API endpoint, e.g. "http://localhost:8001/embed"
- * - timeout (int)  cURL timeout in seconds (default 30).
+ * Supports two providers, selected via Configure::read('Embedding.provider'):
+ *
+ * - "local" (default): a custom JSON endpoint that accepts {"text": ...} and
+ *   returns a vector. Reads `url` and `timeout`.
+ * - "openai": the OpenAI-compatible embeddings API. Sends {"input": ..., "model": ...}
+ *   with a Bearer token. Reads `url` (defaults to the OpenAI endpoint), `model`,
+ *   `api_key` and `timeout`.
+ *
+ * Configuration keys (Configure::read('Embedding')):
+ * - provider (string) "local" | "openai" (default "local").
+ * - url (string)      The embedding API endpoint. Required for "local"; for
+ *                     "openai" defaults to "https://api.openai.com/v1/embeddings".
+ * - model (string)    Model name (openai only, default "text-embedding-3-small").
+ * - api_key (string)  Bearer token (openai only).
+ * - timeout (int)     cURL timeout in seconds (default 30).
  */
 class EmbeddingService
 {
     /**
+     * @var string Provider identifier ("local" or "openai").
+     */
+    private string $provider;
+
+    /**
      * @var string API endpoint URL.
      */
     private string $url;
+
+    /**
+     * @var string Model name (openai provider only).
+     */
+    private string $model;
+
+    /**
+     * @var string Bearer API key (openai provider only).
+     */
+    private string $apiKey;
 
     /**
      * @var int cURL timeout in seconds.
@@ -31,17 +58,34 @@ class EmbeddingService
      *
      * Reads embedding configuration from CakePHP Configure.
      *
-     * @throws \Exception If the 'Embedding.url' config key is missing or empty.
+     * @throws \Exception If the configured provider is unknown or required keys are missing.
      */
     public function __construct()
     {
-        $url = (string)Configure::read('Embedding.url', '');
-        if ($url === '') {
-            throw new Exception('Embedding service not configured. Set Embedding.url in your app configuration.');
-        }
-        $this->url = $url;
-
+        $this->provider = strtolower((string)Configure::read('Embedding.provider', 'local'));
         $this->timeout = (int)Configure::read('Embedding.timeout', 30);
+        $this->model = (string)Configure::read('Embedding.model', 'text-embedding-3-small');
+        $this->apiKey = (string)Configure::read('Embedding.api_key', '');
+
+        if ($this->provider === 'openai') {
+            $this->url = (string)Configure::read('Embedding.url', 'https://api.openai.com/v1/embeddings');
+            if ($this->apiKey === '') {
+                throw new Exception(
+                    'OpenAI embedding provider requires an API key. Set Embedding.api_key in your app configuration.',
+                );
+            }
+        } elseif ($this->provider === 'local') {
+            $url = (string)Configure::read('Embedding.url', '');
+            if ($url === '') {
+                throw new Exception('Embedding service not configured. Set Embedding.url in your app configuration.');
+            }
+            $this->url = $url;
+        } else {
+            throw new Exception(sprintf(
+                'Unknown embedding provider "%s". Set Embedding.provider to "local" or "openai".',
+                $this->provider,
+            ));
+        }
     }
 
     /**
@@ -59,7 +103,18 @@ class EmbeddingService
             return [];
         }
 
-        $payload = json_encode(['text' => $text]);
+        if ($this->provider === 'openai') {
+            $data = ['input' => $text, 'model' => $this->model];
+            $headers = [
+                'Content-Type: application/json',
+                'Authorization: Bearer ' . $this->apiKey,
+            ];
+        } else {
+            $data = ['text' => $text];
+            $headers = ['Content-Type: application/json'];
+        }
+
+        $payload = json_encode($data);
         if ($payload === false) {
             throw new Exception('Failed to encode request data: ' . json_last_error_msg());
         }
@@ -70,7 +125,7 @@ class EmbeddingService
         }
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
         curl_setopt($ch, CURLOPT_TIMEOUT, $this->timeout);
 

@@ -99,11 +99,19 @@ return [
     /*
      * Embedding service configuration.
      *
-     * - url (string)   The embedding API endpoint, e.g. "http://localhost:8001/embed"
-     * - timeout (int)  cURL timeout in seconds.
+     * - provider (string) "local" or "openai".
+     * - url (string)      The embedding API endpoint. For "local", e.g.
+     *                     "http://localhost:8001/embed". For "openai", leave empty to
+     *                     use "https://api.openai.com/v1/embeddings".
+     * - model (string)    Model name (openai only), e.g. "text-embedding-3-small".
+     * - api_key (string)  Bearer token (openai only).
+     * - timeout (int)     cURL timeout in seconds.
      */
     'Embedding' => [
+        'provider' => 'local',
         'url' => '',
+        'model' => 'text-embedding-3-small',
+        'api_key' => '',
         'timeout' => 30,
     ],
 

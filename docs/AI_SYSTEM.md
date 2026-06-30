@@ -426,21 +426,53 @@ Log Event Created
 
 ### 7.2 `EmbeddingService` (`src/Lib/EmbeddingService.php`)
 
-Generates embedding vectors by calling an external API.
+Generates embedding vectors by calling an external API. Supports two providers,
+selected via the `Embedding.provider` config key.
 
 **Configuration:** `Configure::read('Embedding')`
 
 | Key | Default | Description |
 |-----|---------|-------------|
-| `url` | `http://127.0.0.1:8000/embed` | Embedding API endpoint |
+| `provider` | `local` | `local` or `openai` |
+| `url` | `http://127.0.0.1:8000/embed` | Embedding API endpoint. For `openai`, defaults to `https://api.openai.com/v1/embeddings` when empty |
+| `model` | `text-embedding-3-small` | Model name (openai only) |
+| `api_key` | `""` | Bearer token (openai only; required when provider=`openai`) |
 | `timeout` | 30 | cURL timeout in seconds |
 
-**Supported response formats:**
+**Request format by provider:**
+
+| Provider | Payload | Auth header |
+|----------|---------|-------------|
+| `local` | `{"text": "..."}` | none |
+| `openai` | `{"input": "...", "model": "..."}` | `Authorization: Bearer {api_key}` |
+
+**Supported response formats** (both providers; auto-detected):
 ```json
-{"vector": [0.1, 0.2, ...]}           // Direct vector key
+{"vector": [0.1, 0.2, ...]}           // Direct vector key (local)
 {"embedding": [0.1, 0.2, ...]}        // OpenAI-style top-level
 {"data": [{"embedding": [...]}]}      // OpenAI data array format
 ```
+
+> ⚠️ **Switching providers changes the vector dimension** (e.g. OpenAI
+> `text-embedding-3-small` = 1536). You **cannot mix vectors of different
+> dimensions in one VectorDB collection**. After changing provider, recreate the
+> collection and re-embed existing analyses with `ReindexEmbeddingsCommand`:
+>
+> ```bash
+> # Re-embed everything into a fresh collection using the now-configured provider
+> bin/cake reindex_embeddings --recreate
+>
+> # Or target a provider-specific collection (set VectorDB.collection to match)
+> bin/cake reindex_embeddings --collection events_openai --recreate
+>
+> # Preview without writing
+> bin/cake reindex_embeddings --dry-run
+> ```
+>
+> `ReindexEmbeddingsCommand` iterates `logs_analysis` summaries, embeds each with
+> the **currently configured** `Embedding.provider`, and upserts into the target
+> collection — mirroring the metadata written by `AiProcessLogJob`. Filter scope
+> with `--project <foreign_id>` or `--model "Projects.Project"`.
 
 ### 7.3 `QdrantService` (`src/Lib/QdrantService.php`)
 
@@ -542,7 +574,10 @@ Each user's AI configuration is stored in the `properties` JSON column of the `u
 ```php
 // Embedding service configuration
 'Embedding' => [
-    'url' => 'http://127.0.0.1:8000/embed',
+    'provider' => 'local',                  // 'local' | 'openai'
+    'url' => 'http://127.0.0.1:8000/embed', // openai: defaults to OpenAI endpoint when empty
+    'model' => 'text-embedding-3-small',    // openai only
+    'api_key' => '',                        // openai only
     'timeout' => 30,
 ],
 
@@ -561,7 +596,7 @@ Each user's AI configuration is stored in the `properties` JSON column of the `u
 | Service | Purpose | Default Endpoint | Protocol |
 |---------|---------|-----------------|----------|
 | **LLM API** | Chat completions (OpenAI-compatible) | `http://192.168.68.58:8080/v1/chat/completions` | OpenAI chat completions format |
-| **Embedding API** | Text → vector embedding | `http://127.0.0.1:8000/embed` | Custom JSON (accepts `{text}`, returns `{vector}`) |
+| **Embedding API** | Text → vector embedding | `http://127.0.0.1:8000/embed` (local) or `https://api.openai.com/v1/embeddings` (openai) | Local: custom JSON (`{text}`→`{vector}`). OpenAI: `{input,model}`→`{data:[{embedding}]}` |
 | **Qdrant** | Vector database for semantic search | `http://192.168.88.30:6333` | Qdrant REST API |
 
 ---
