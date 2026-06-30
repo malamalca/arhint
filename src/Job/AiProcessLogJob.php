@@ -82,8 +82,15 @@ class AiProcessLogJob implements JobInterface
 
             // analyzeWithAI returns decoded JSON array on success, or null after all retries exhausted
             if ($responseData === null) {
-                // Transient failure — requeue for later retry
-                return Processor::REQUEUE;
+                // All in-process retries exhausted. Reject (fail) the job rather than
+                // requeueing — requeueing a persistent error (e.g. a bad model/param)
+                // would loop forever.
+                Log::error(
+                    sprintf('AiProcessLogJob: giving up after %d retries — rejecting job [job_id=%s, user_id=%s]', self::MAX_RETRIES, $jobId, $userId),
+                    ['scope' => 'ai', 'job_id' => $jobId, 'user_id' => $userId],
+                );
+
+                return Processor::REJECT;
             }
 
             // Save response to logs_analysis table
@@ -189,10 +196,13 @@ TXT],
             ['role' => 'user', 'content' => 'Analyze this event and provide intelligence.'],
         ];
 
+        // No explicit token limit: OpenAI GPT-5/o-series reject 'max_tokens' (require
+        // 'max_completion_tokens'), while local providers expect 'max_tokens'. Omitting it
+        // entirely — as AIAssistant::doRequest() does — works across all providers and lets
+        // the model use its default output cap, which is ample for this small JSON analysis.
         $payload = json_encode([
             'model' => $aiConfig['model'],
             'messages' => $messages,
-            'max_tokens' => 2048,
         ]);
         if ($payload === false) {
             return null;
@@ -202,26 +212,56 @@ TXT],
         $lastError = '';
         $lastResponse = '';
 
+        $totalAttempts = self::MAX_RETRIES + 1;
+        Log::debug(
+            sprintf(
+                'AiProcessLogJob: starting AI analysis [job_id=%s, url=%s, model=%s, max_attempts=%d]',
+                $jobId,
+                $aiConfig['url'],
+                $aiConfig['model'],
+                $totalAttempts,
+            ),
+            ['scope' => 'ai', 'job_id' => $jobId],
+        );
+
+        // attempt 0 is the initial call; attempts 1..MAX_RETRIES are the retries.
         for ($attempt = 0; $attempt <= self::MAX_RETRIES; $attempt++) {
             if ($attempt > 0) {
                 $delayIndex = min($attempt - 1, count(self::RETRY_DELAYS) - 1);
                 $delay = self::RETRY_DELAYS[$delayIndex];
-                Log::warning('AiProcessLogJob: retrying AI call', [
-                    'scope' => 'ai',
-                    'job_id' => $jobId,
-                    'attempt' => $attempt,
-                    'delay_seconds' => $delay,
-                    'last_http_code' => $lastHttpCode,
-                    'last_error' => $lastError,
-                    'last_response_preview' => mb_substr($lastResponse, 0, 200),
-                ]);
+                Log::warning(
+                    sprintf(
+                        'AiProcessLogJob: retry %d/%d in %ds [job_id=%s, last_http=%d, last_error=%s, last_response=%s]',
+                        $attempt,
+                        self::MAX_RETRIES,
+                        $delay,
+                        $jobId,
+                        $lastHttpCode,
+                        $lastError !== '' ? $lastError : '(none)',
+                        $lastResponse !== '' ? mb_substr($lastResponse, 0, 200) : '(empty)',
+                    ),
+                    ['scope' => 'ai', 'job_id' => $jobId, 'attempt' => $attempt],
+                );
                 sleep($delay);
             }
 
             $raw = $this->callAiApi($aiConfig, $payload, $lastHttpCode, $lastError);
 
-            // Empty response — transient failure (HTTP error, connection issue)
+            // Empty response — transient failure (HTTP error, connection issue).
+            // $lastError now carries the HTTP status and API error body from callAiApi().
             if ($raw === '') {
+                Log::warning(
+                    sprintf(
+                        'AiProcessLogJob: empty AI response on attempt %d/%d [job_id=%s, http=%d, error=%s]',
+                        $attempt + 1,
+                        $totalAttempts,
+                        $jobId,
+                        $lastHttpCode,
+                        $lastError !== '' ? $lastError : '(none)',
+                    ),
+                    ['scope' => 'ai', 'job_id' => $jobId, 'attempt' => $attempt + 1],
+                );
+
                 continue;
             }
 
@@ -230,28 +270,40 @@ TXT],
             // Try to decode as JSON
             $decoded = json_decode($raw, true);
             if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
+                Log::debug(
+                    sprintf('AiProcessLogJob: AI analysis succeeded on attempt %d/%d [job_id=%s]', $attempt + 1, $totalAttempts, $jobId),
+                    ['scope' => 'ai', 'job_id' => $jobId],
+                );
+
                 return $decoded;
             }
 
             // Got content but not valid JSON — log and retry
-            Log::warning('AiProcessLogJob: AI returned non-JSON content', [
-                'scope' => 'ai',
-                'job_id' => $jobId,
-                'attempt' => $attempt + 1,
-                'json_error' => json_last_error_msg(),
-                'response_length' => strlen($raw),
-                'response_preview' => mb_substr($raw, 0, 300),
-            ]);
+            Log::warning(
+                sprintf(
+                    'AiProcessLogJob: AI returned non-JSON content on attempt %d/%d [job_id=%s, json_error=%s, length=%d, preview=%s]',
+                    $attempt + 1,
+                    $totalAttempts,
+                    $jobId,
+                    json_last_error_msg(),
+                    strlen($raw),
+                    mb_substr($raw, 0, 300),
+                ),
+                ['scope' => 'ai', 'job_id' => $jobId, 'attempt' => $attempt + 1],
+            );
         }
 
-        Log::error('AiProcessLogJob: AI call failed after all retries', [
-            'scope' => 'ai',
-            'job_id' => $jobId,
-            'total_attempts' => self::MAX_RETRIES + 1,
-            'last_http_code' => $lastHttpCode,
-            'last_error' => $lastError,
-            'last_response_preview' => mb_substr($lastResponse, 0, 300),
-        ]);
+        Log::error(
+            sprintf(
+                'AiProcessLogJob: AI call failed after %d attempts [job_id=%s, last_http=%d, last_error=%s, last_response=%s]',
+                $totalAttempts,
+                $jobId,
+                $lastHttpCode,
+                $lastError !== '' ? $lastError : '(none)',
+                $lastResponse !== '' ? mb_substr($lastResponse, 0, 300) : '(empty)',
+            ),
+            ['scope' => 'ai', 'job_id' => $jobId],
+        );
 
         return null;
     }
@@ -293,7 +345,17 @@ TXT],
         $lastHttpCode = (int)curl_getinfo($ch, CURLINFO_HTTP_CODE);
         $lastError = curl_error($ch);
 
-        if ($response === false || $lastHttpCode !== 200) {
+        if ($response === false) {
+            // Connection-level failure (timeout, DNS, refused). $lastError holds the cURL message.
+            return '';
+        }
+
+        if ($lastHttpCode !== 200) {
+            // Surface the API error body (e.g. OpenAI "Unsupported parameter" 400s) so the
+            // retry/failure logs explain *why* the call failed instead of just an empty result.
+            $body = mb_substr(trim((string)$response), 0, 500);
+            $lastError = trim(sprintf('%s HTTP %d body: %s', $lastError, $lastHttpCode, $body));
+
             return '';
         }
 
@@ -306,6 +368,10 @@ TXT],
         if (isset($decoded['choices'][0]['message']['reasoning_content'])) {
             return trim((string)$decoded['choices'][0]['message']['reasoning_content']);
         }
+
+        // HTTP 200 but no usable content — record a preview so the retry log is actionable.
+        $lastError = 'HTTP 200 but no content/reasoning_content in response: '
+            . mb_substr(trim((string)$response), 0, 300);
 
         return '';
     }

@@ -109,6 +109,31 @@ class VectorDBService
     }
 
     /**
+     * Get metadata for the current collection (without creating it).
+     *
+     * Returns null if the collection does not exist or the request fails.
+     *
+     * @return array<string, mixed>|null Collection info including id, name, metadata, dimension, etc.
+     */
+    public function getCollectionInfo(): ?array
+    {
+        $url = $this->collectionsUrl();
+        $response = $this->send($url, '', 'GET');
+
+        if (!is_array($response)) {
+            return null;
+        }
+
+        foreach ($response as $col) {
+            if (isset($col['name']) && $col['name'] === $this->collection) {
+                return $col;
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * Resolve the collection name to its ChromaDB UUID.
      * Creates the collection if it does not exist.
      *
@@ -167,8 +192,10 @@ class VectorDBService
     public function deleteCollection(): bool
     {
         // ChromaDB v2 DELETE endpoint requires the collection name, not UUID.
+        // A 404 here just means the collection is already absent, which is a
+        // successful outcome for a delete — allow it through without an error log.
         $url = $this->collectionsUrl() . '/' . urlencode($this->collection);
-        $response = $this->send($url, '', 'DELETE');
+        $response = $this->send($url, '', 'DELETE', [404]);
 
         // ChromaDB returns {} on success or an error object.
         if (!is_array($response)) {
@@ -312,9 +339,11 @@ class VectorDBService
      * @param string $url    Target URL.
      * @param string $body   JSON-encoded request body (empty string for GET/DELETE).
      * @param non-empty-string $method HTTP method.
+     * @param array<int, int> $okCodes HTTP status codes >= 400 that should NOT be treated
+     *                                 as errors (no error log, response still decoded).
      * @return mixed|null Decoded JSON response, or null on failure.
      */
-    private function send(string $url, string $body, string $method): mixed
+    private function send(string $url, string $body, string $method, array $okCodes = []): mixed
     {
         $ch = curl_init($url);
         if ($ch === false) {
@@ -352,7 +381,7 @@ class VectorDBService
             return null;
         }
 
-        if ($httpCode >= 400) {
+        if ($httpCode >= 400 && !in_array($httpCode, $okCodes, true)) {
             Log::error(sprintf(
                 'VectorDBService: HTTP error [%d] from %s: %s',
                 $httpCode,
