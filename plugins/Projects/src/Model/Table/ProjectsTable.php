@@ -76,7 +76,7 @@ class ProjectsTable extends Table
                     ->from(['SubLastLog' => 'logs'])
                     ->where([
                         'Projects.id = SubLastLog.foreign_id',
-                        'SubLastLog.model' => 'Projects.Project',
+                        'SubLastLog.model' => 'Project',
                     ])
                     ->orderBy(['SubLastLog.created' => 'DESC'])
                     ->limit(1);

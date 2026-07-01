@@ -10,7 +10,7 @@ use Cake\ORM\TableRegistry;
 /**
  * ProjectsLogs Controller — saves/edits/deletes project log entries via App.Logs.
  *
- * Logs are stored with model='Projects.Project', action='Comment', foreign_id=project_id.
+ * Logs are stored with model='Project', action='Comment', foreign_id=project_id.
  *
  * @property \App\Model\Table\LogsTable $Logs
  * @method \Cake\Datasource\Paging\PaginatedInterface paginate($object = null, array $settings = [])
@@ -48,7 +48,7 @@ class ProjectsLogsController extends AppController
             $projectId = (string)$this->getRequest()->getQuery('project');
             /** @var \App\Model\Entity\Log $log */
             $log = $logsTable->newEmptyEntity();
-            $log->model = 'Projects.Project';
+            $log->model = 'Project';
             $log->action = 'Comment';
             $log->foreign_id = $projectId;
             $log->user_id = $this->getCurrentUser()->get('id');

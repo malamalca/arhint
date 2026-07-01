@@ -72,7 +72,7 @@ class AiProcessLogJobLiveTest extends TestCase
         // Use a real Log entity from the fixture so storeInVectorDb picks up metadata.
         $log = new Log([
             'id' => uniqid('live-log-', true),
-            'model' => 'Projects.Project',
+            'model' => 'Project',
             'foreign_id' => uniqid('proj-', true),
             'user_id' => self::USER_ID,
             'action' => 'test_live_action',
