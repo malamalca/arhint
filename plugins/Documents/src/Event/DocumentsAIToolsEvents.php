@@ -1349,9 +1349,9 @@ class DocumentsAIToolsEvents implements EventListenerInterface
 
         // Resolve model/table/exporter from kind
         [$tableName, $modelAlias, $exporter] = match ($kind) {
-            'document' => ['Documents.Documents', 'Documents.Document', new DocumentsExport()],
-            'travel_order' => ['Documents.TravelOrders', 'Documents.TravelOrder', new TravelOrdersExport()],
-            default => ['Documents.Invoices', 'Documents.Invoice', new InvoicesExport()],
+            'document' => ['Documents.Documents', 'Document', new DocumentsExport()],
+            'travel_order' => ['Documents.TravelOrders', 'TravelOrder', new TravelOrdersExport()],
+            default => ['Documents.Invoices', 'Invoice', new InvoicesExport()],
         };
 
         // Load and authorize the entity

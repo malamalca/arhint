@@ -934,8 +934,8 @@ class InvoicesControllerTest extends TestCase
         $this->assertSame($contact->id, $document->buyer->contact_id);
         $this->assertSame($contact->id, $document->receiver->contact_id);
 
-        // The XML issuer's tax number (SI55736645) has no matching contact.
-        $this->assertNull($document->issuer->contact_id);
+        // The XML issuer's tax number (SI55736645) matches the fixture's own company contact.
+        $this->assertSame(COMPANY_FIRST, $document->issuer->contact_id);
     }
 
     /**

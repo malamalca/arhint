@@ -277,7 +277,7 @@ $documentEdit = [
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 // hidden client fields
-require dirname(dirname(__FILE__)) . DS . 'element' . DS . 'edit_client.php';
+require_once dirname(dirname(__FILE__)) . DS . 'element' . DS . 'edit_client.php';
 $this->Lil->insertIntoArray($documentEdit['form']['lines'], clientFields('receiver', 'Invoice'), ['after' => 'client_error']);
 $this->Lil->insertIntoArray($documentEdit['form']['lines'], clientFields('issuer', 'Invoice'), ['after' => 'client_error']);
 
