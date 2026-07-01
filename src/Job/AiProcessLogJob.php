@@ -9,6 +9,7 @@ use App\Model\Entity\User;
 use Authorization\AuthorizationService;
 use Authorization\Policy\OrmResolver;
 use Cake\Datasource\EntityInterface;
+use Cake\I18n\DateTime;
 use Cake\Log\Log;
 use Cake\ORM\TableRegistry;
 use Cake\Queue\Job\JobInterface;
@@ -146,6 +147,11 @@ class AiProcessLogJob implements JobInterface
             // Embed and index the analysis summary in ChromaDB for semantic search.
             $this->storeInVectorDb($entity, $logsAnalysis, $responseData);
 
+            // Mark the source log row as AI-processed. Use updateAll (a direct UPDATE)
+            // rather than a save/patch so this write does not re-fire the afterSave
+            // event that queued this job — which would loop forever.
+            $this->markLogProcessed($jobId);
+
             return Processor::ACK;
         } catch (Throwable $e) {
             Log::error('AiProcessLogJob: execution failed', [
@@ -158,6 +164,35 @@ class AiProcessLogJob implements JobInterface
             ]);
 
             return Processor::REJECT;
+        }
+    }
+
+    /**
+     * Stamp the source log row's ai_processed column with the current time.
+     *
+     * Best-effort: a failure here only logs an error and does not fail the job,
+     * since the analysis has already been saved and indexed successfully.
+     *
+     * @param string $logId The id of the log row that was processed (== job_id).
+     * @return void
+     */
+    private function markLogProcessed(string $logId): void
+    {
+        if ($logId === '') {
+            return;
+        }
+
+        try {
+            TableRegistry::getTableLocator()->get('Logs')->updateAll(
+                ['ai_processed' => new DateTime()],
+                ['id' => $logId],
+            );
+        } catch (Throwable $e) {
+            Log::error('AiProcessLogJob: failed to mark log as processed', [
+                'scope' => 'ai',
+                'log_id' => $logId,
+                'message' => get_class($e) . ': ' . $e->getMessage(),
+            ]);
         }
     }
 

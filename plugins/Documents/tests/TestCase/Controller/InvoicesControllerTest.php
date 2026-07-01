@@ -898,6 +898,47 @@ class InvoicesControllerTest extends TestCase
     }
 
     /**
+     * Test that edit() links the imported buyer to an existing contact by tax number.
+     *
+     * @return void
+     */
+    public function testEditAppliesImportedEslogDataLinksExistingContactByTaxNo()
+    {
+        $this->login(USER_ADMIN);
+
+        // Insert a contact for the current company matching the XML buyer tax_no.
+        $Contacts = TableRegistry::getTableLocator()->get('Crm.Contacts');
+        $contact = $Contacts->newEntity([
+            'owner_id' => COMPANY_FIRST,
+            'kind' => 'C',
+            'title' => 'Test Client d.o.o.',
+            'tax_no' => 'SI98765432',
+            'tax_status' => 1,
+        ], ['validate' => false]);
+        $Contacts->saveOrFail($contact, ['checkRules' => false]);
+
+        $xmlPath = dirname(__DIR__) . DS . 'Controller' . DS . 'data' . DS . 'testInvoice_eslog20.xml';
+        $xmlContent = file_get_contents($xmlPath);
+        $this->assertNotFalse($xmlContent);
+        $parsed = (new EslogImport())->parse($xmlContent);
+        $this->assertNotNull($parsed);
+        $this->session(['ImportEslogData' => $parsed]);
+
+        $this->get('/documents/invoices/edit?counter=1d53bc5b-de2d-4e85-b13b-81b39a97fc90&importFromEslog=1');
+        $this->assertResponseOk();
+
+        /** @var \Documents\Model\Entity\Invoice $document */
+        $document = $this->viewVariable('document');
+
+        // The XML buyer's tax number (SI98765432) matches the seeded contact above.
+        $this->assertSame($contact->id, $document->buyer->contact_id);
+        $this->assertSame($contact->id, $document->receiver->contact_id);
+
+        // The XML issuer's tax number (SI55736645) has no matching contact.
+        $this->assertNull($document->issuer->contact_id);
+    }
+
+    /**
      * Test import with invalid XML (valid extension) shows validation errors.
      *
      * @return void

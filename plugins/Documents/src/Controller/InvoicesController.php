@@ -422,9 +422,12 @@ class InvoicesController extends BaseDocumentsController
         /** @var \Documents\Model\Table\DocumentsClientsTable $DocumentsClients */
         $DocumentsClients = TableRegistry::getTableLocator()->get('Documents.DocumentsClients');
 
+        $ownerId = (string)$this->getCurrentUser()->get('company_id');
+
         // Apply issuer data (seller)
         $issuerData = $importData['issuer'] ?? [];
         if (!empty($issuerData)) {
+            $issuerData['contact_id'] = $this->_findContactIdByTaxNo($ownerId, $issuerData['tax_no'] ?? null);
             $document->issuer = $DocumentsClients->newEntity(array_merge($issuerData, ['kind' => 'II']));
         }
 
@@ -434,10 +437,12 @@ class InvoicesController extends BaseDocumentsController
         // from the seller, the receiver/buyer below from the invoicee.
         $receiverData = $importData['receiver'] ?? $importData['buyer'] ?? [];
         if (!empty($receiverData)) {
+            $receiverData['contact_id'] = $this->_findContactIdByTaxNo($ownerId, $receiverData['tax_no'] ?? null);
             $document->receiver = $DocumentsClients->newEntity(array_merge($receiverData, ['kind' => 'IV']));
         }
         $buyerData = $importData['buyer'] ?? $importData['receiver'] ?? [];
         if (!empty($buyerData)) {
+            $buyerData['contact_id'] = $this->_findContactIdByTaxNo($ownerId, $buyerData['tax_no'] ?? null);
             $document->buyer = $DocumentsClients->newEntity(array_merge($buyerData, ['kind' => 'BY']));
         }
 
@@ -529,6 +534,36 @@ class InvoicesController extends BaseDocumentsController
         }
 
         return $document;
+    }
+
+    /**
+     * Look up an existing CRM contact by tax number, scoped to the current company.
+     *
+     * Tax numbers are unique per owner (see ContactsTable's uniqueTax rule), so a match
+     * lets the imported party be linked to the existing contact instead of only carrying
+     * a snapshot of its details.
+     *
+     * @param string $ownerId Current user's company id.
+     * @param mixed $taxNo Tax number parsed from the eSlog data, if any.
+     * @return string|null Matching contact id, or null when not found.
+     */
+    private function _findContactIdByTaxNo(string $ownerId, mixed $taxNo): ?string
+    {
+        if (empty($taxNo) || !is_string($taxNo) || $ownerId === '') {
+            return null;
+        }
+
+        /** @var \Crm\Model\Table\ContactsTable $ContactsTable */
+        $ContactsTable = TableRegistry::getTableLocator()->get('Crm.Contacts');
+        $contact = $ContactsTable->find()
+            ->select(['id'])
+            ->where([
+                'Contacts.owner_id' => $ownerId,
+                'Contacts.tax_no' => $taxNo,
+            ])
+            ->first();
+
+        return $contact?->id;
     }
 
     /**
