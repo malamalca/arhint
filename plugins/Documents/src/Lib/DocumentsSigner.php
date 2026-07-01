@@ -47,7 +47,7 @@ class DocumentsSigner
         $documents = $Exporter->find(['id' => $documentId], 'Invoices');
         $document = $documents->first();
 
-        $xml = $Exporter->export('xml', [$document]);
+        $xml = $Exporter->export('eslog', [$document]);
 
         $this->doc = new DOMDocument();
         if ($this->doc->loadXML($xml)) {

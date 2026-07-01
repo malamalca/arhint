@@ -619,10 +619,15 @@ class BaseDocumentsController extends AppController
         } else {
             try {
                 // Generate fresh XML from current invoice data
+<<<<<<< Updated upstream
                 $ExporterClass = '\\Documents\\Lib\\' . $this->documentsScope . 'Export';
                 /** @var \Documents\Lib\InvoicesExport|\Documents\Lib\DocumentsExport $Exporter */
                 $Exporter = new $ExporterClass();
                 $currentXml = $Exporter->export('xml', [$invoice]);
+=======
+                $Exporter = new DocumentsExport();
+                $currentXml = $Exporter->export('eslog', [$invoice]);
+>>>>>>> Stashed changes
 
                 // Create signature info instance and compare with current data
                 $signatureInfo = new DocumentsSignatureInfo($invoice->signed);
