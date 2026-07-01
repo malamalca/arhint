@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Model\Entity\User;
 use Cake\Event\EventInterface;
 use Cake\Http\Exception\NotFoundException;
 use Cake\Http\Response;
@@ -275,7 +276,7 @@ class UsersController extends AppController
 
             $user = $this->Users->patchEntity($user, $requestData, ['validate' => 'properties']);
 
-            $avatarFile = $requestData['avatar_file'];
+            $avatarFile = $requestData['avatar_file'] ?? null;
             if ($avatarFile) {
                 if ($avatarFile->getError() == UPLOAD_ERR_OK) {
                     $avatarData = (string)file_get_contents($avatarFile->getStream()->getMetadata('uri'));
@@ -314,7 +315,7 @@ class UsersController extends AppController
      * @param \App\Model\Entity\User $user User entity.
      * @return array<string, mixed> AI config array with defaults.
      */
-    protected function getAiConfig($user): array
+    protected function getAiConfig(User $user): array
     {
         $aiAssistant = $user->getProperty('ai_assistant');
 
@@ -333,7 +334,7 @@ class UsersController extends AppController
      * @param \App\Model\Entity\User $user User entity.
      * @return array<string, mixed> AI config array.
      */
-    protected function buildAiConfig($user): array
+    protected function buildAiConfig(User $user): array
     {
         $requestData = $this->getRequest()->getData();
         $provider = (string)($requestData['ai_provider'] ?? 'none');

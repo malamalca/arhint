@@ -87,7 +87,12 @@ class AiProcessLogJob implements JobInterface
                 // requeueing — requeueing a persistent error (e.g. a bad model/param)
                 // would loop forever.
                 Log::error(
-                    sprintf('AiProcessLogJob: giving up after %d retries — rejecting job [job_id=%s, user_id=%s]', self::MAX_RETRIES, $jobId, $userId),
+                    sprintf(
+                        'AiProcessLogJob: giving up after %d retries — rejecting job [job_id=%s, user_id=%s]',
+                        self::MAX_RETRIES,
+                        $jobId,
+                        $userId,
+                    ),
                     ['scope' => 'ai', 'job_id' => $jobId, 'user_id' => $userId],
                 );
 
@@ -266,7 +271,8 @@ TXT],
                 $delay = self::RETRY_DELAYS[$delayIndex];
                 Log::warning(
                     sprintf(
-                        'AiProcessLogJob: retry %d/%d in %ds [job_id=%s, last_http=%d, last_error=%s, last_response=%s]',
+                        'AiProcessLogJob: retry %d/%d in %ds ' .
+                        '[job_id=%s, last_http=%d, last_error=%s, last_response=%s]',
                         $attempt,
                         self::MAX_RETRIES,
                         $delay,
@@ -306,7 +312,12 @@ TXT],
             $decoded = json_decode($raw, true);
             if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
                 Log::debug(
-                    sprintf('AiProcessLogJob: AI analysis succeeded on attempt %d/%d [job_id=%s]', $attempt + 1, $totalAttempts, $jobId),
+                    sprintf(
+                        'AiProcessLogJob: AI analysis succeeded on attempt %d/%d [job_id=%s]',
+                        $attempt + 1,
+                        $totalAttempts,
+                        $jobId,
+                    ),
                     ['scope' => 'ai', 'job_id' => $jobId],
                 );
 
@@ -316,7 +327,8 @@ TXT],
             // Got content but not valid JSON — log and retry
             Log::warning(
                 sprintf(
-                    'AiProcessLogJob: AI returned non-JSON content on attempt %d/%d [job_id=%s, json_error=%s, length=%d, preview=%s]',
+                    'AiProcessLogJob: AI returned non-JSON content on attempt %d/%d ' .
+                    '[job_id=%s, json_error=%s, length=%d, preview=%s]',
                     $attempt + 1,
                     $totalAttempts,
                     $jobId,
@@ -330,7 +342,8 @@ TXT],
 
         Log::error(
             sprintf(
-                'AiProcessLogJob: AI call failed after %d attempts [job_id=%s, last_http=%d, last_error=%s, last_response=%s]',
+                'AiProcessLogJob: AI call failed after %d attempts ' .
+                '[job_id=%s, last_http=%d, last_error=%s, last_response=%s]',
                 $totalAttempts,
                 $jobId,
                 $lastHttpCode,

@@ -101,7 +101,9 @@ class ProjectsEvents implements EventListenerInterface
             $dateStr = ' <span class="small">(' . h((string)$datIssue->i18nFormat('yyyy-MM-dd')) . ')</span>';
         }
 
-        $descript = __d('projects', 'A new {0} has been assigned to this project. Document: {1}. Issue date: {2}.',
+        $descript = __d(
+            'projects',
+            'A new {0} has been assigned to this project. Document: {1}. Issue date: {2}.',
             h($config['label']),
             sprintf('<a href="%1$s">%2$s</a>', $url, h($title)),
             $dateStr,

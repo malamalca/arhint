@@ -134,8 +134,8 @@ class DocumentsController extends BaseDocumentsController
         $data = $this->paginate($query, ['limit' => 5]);
 
         $subQueryCounters = $this->Authorization->applyScope($this->Documents->find(), 'index')
-            ->select(['counter_id'])
-            ->distinct(['counter_id'])
+            ->select(['Documents.counter_id'])
+            ->distinct(['Documents.counter_id'])
             ->where($params['conditions']);
 
         /** @var \Documents\Model\Table\DocumentsCountersTable $DocumentsCountersTable */

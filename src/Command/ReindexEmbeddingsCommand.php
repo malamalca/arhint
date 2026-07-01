@@ -141,7 +141,7 @@ class ReindexEmbeddingsCommand extends Command
 
             if ($recreate) {
                 $io->out("Recreating collection \"{$collection}\"...");
-                Log::info("Recreating vector collection", [
+                Log::info('Recreating vector collection', [
                     'scope' => 'reindex',
                     'collection' => $collection,
                 ]);
@@ -234,7 +234,6 @@ class ReindexEmbeddingsCommand extends Command
         $failed = 0;
         $index = 0;
 
-        /** @var array{expected: int, actual: int}|null */
         $dimensionMismatch = null;
 
         foreach ($query->all() as $analysis) {
@@ -304,18 +303,17 @@ class ReindexEmbeddingsCommand extends Command
             } else {
                 $failed++;
 
-                // Detect dimension mismatch on first failure and build a helpful hint.
-                if ($dimensionMismatch === null) {
-                    $dimCheck = $this->detectDimensionMismatch($vectorDb, count($vector));
-                    if ($dimCheck !== null) {
-                        $dimensionMismatch = $dimCheck;
-                        Log::error('Vector dimension mismatch detected', [
-                            'scope' => 'reindex',
-                            'expected_dimension' => $dimCheck['expected'],
-                            'actual_dimension' => $dimCheck['actual'],
-                            'collection' => $collection,
-                        ]);
-                    }
+                // Detect dimension mismatch on failure and build a helpful hint. Once found,
+                // the loop aborts below, so this only ever runs while still undetected.
+                $dimCheck = $this->detectDimensionMismatch($vectorDb, count($vector));
+                if ($dimCheck !== null) {
+                    $dimensionMismatch = $dimCheck;
+                    Log::error('Vector dimension mismatch detected', [
+                        'scope' => 'reindex',
+                        'expected_dimension' => $dimCheck['expected'],
+                        'actual_dimension' => $dimCheck['actual'],
+                        'collection' => $collection,
+                    ]);
                 }
 
                 Log::warning('Upsert failed for analysis', [

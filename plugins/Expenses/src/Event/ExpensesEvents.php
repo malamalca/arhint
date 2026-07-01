@@ -78,9 +78,9 @@ class ExpensesEvents implements EventListenerInterface
      *
      * @param \Cake\Event\Event $event Event object
      * @param \App\Lib\LilForm $form Form array
-     * @return \App\Lib\LilForm
+     * @return void
      */
-    public function modifyCountersForm(Event $event, LilForm $form): LilForm
+    public function modifyCountersForm(Event $event, LilForm $form): void
     {
         /** @var \App\View\AppView $view */
         $view = $event->getSubject();
@@ -104,8 +104,6 @@ class ExpensesEvents implements EventListenerInterface
 
         $form->form['lines'] = $form->form['lines'] ?? [];
         $view->Lil->insertIntoArray($form->form['lines'], $expenseFieldset, ['after' => 'fs_basics_end']);
-
-        return $form;
     }
 
     /**

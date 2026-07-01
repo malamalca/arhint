@@ -189,8 +189,8 @@ class InvoicesController extends BaseDocumentsController
             ->first();
 
         $subQueryCounters = $this->Authorization->applyScope($this->Invoices->find(), 'index')
-            ->select(['counter_id'])
-            ->distinct(['counter_id'])
+            ->select(['Invoices.counter_id'])
+            ->distinct(['Invoices.counter_id'])
             ->where($params['conditions']);
 
         /** @var \Documents\Model\Table\DocumentsCountersTable $DocumentsCountersTable */

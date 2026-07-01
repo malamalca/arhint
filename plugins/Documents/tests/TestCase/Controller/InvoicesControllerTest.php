@@ -94,6 +94,25 @@ class InvoicesControllerTest extends TestCase
     }
 
     /**
+     * Regression test: InvoicesController::list() must not break for non-admin
+     * users. InvoicesTablePolicy::scopeIndex() joins documents_counters_users
+     * (aliased 'c', which also has a counter_id column) for non-admin users, and
+     * the counters subquery's distinct()/select() must qualify counter_id with
+     * the Invoices alias, otherwise MySQL raises
+     * "Column 'counter_id' in GROUP BY is ambiguous".
+     *
+     * @return void
+     */
+    public function testListNonAdmin()
+    {
+        $this->login(USER_COMMON);
+
+        $source = urlencode('/crm/contacts/view/49a90cfe-fda4-49ca-b7ec-ca50783b5a43');
+        $this->get('/documents/invoices/list.aht?source=' . $source);
+        $this->assertResponseOk();
+    }
+
+    /**
      * Test view method
      *
      * @return void
