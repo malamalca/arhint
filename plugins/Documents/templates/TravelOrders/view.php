@@ -50,7 +50,7 @@ $invoiceView = [
                         'controller' => 'Attachments',
                         'action' => 'edit',
                         '?' => [
-                            'model' => 'Documents.TravelOrder',
+                            'model' => 'TravelOrder',
                             'foreign_id' => $document->id,
                             'redirect' => Router::url(null, true),
                         ],
