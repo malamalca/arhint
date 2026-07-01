@@ -5,7 +5,7 @@ use Migrations\AbstractMigration;
 
 /**
  * Drop the projects_logs table - logs are now stored in App.Logs (logs table)
- * with model='Projects.Project', action='Comment', foreign_id=project_id.
+ * with model='Project', action='Comment', foreign_id=project_id.
  */
 class DropProjectsLogs extends AbstractMigration
 {

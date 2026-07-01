@@ -39,7 +39,7 @@ class ProjectsEvents implements EventListenerInterface
      * Fired on every Model.afterSave; only acts when the saved entity is a Document
      * or Invoice whose project_id changed in this save (i.e. it was just assigned or
      * reassigned to a project). The log
-     * is stored as a project comment (model='Projects.Project', action='Comment') so
+     * is stored as a project comment (model='Project', action='Comment') so
      * it shows up in the project's logs tab, with a link to the document/invoice.
      *
      * @param \Cake\Event\Event $event Event object.
@@ -101,18 +101,16 @@ class ProjectsEvents implements EventListenerInterface
             $dateStr = ' <span class="small">(' . h((string)$datIssue->i18nFormat('yyyy-MM-dd')) . ')</span>';
         }
 
-        $descript = sprintf(
-            '%1$s: <a href="%2$s">%3$s</a>%4$s',
+        $descript = __d('projects', 'A new {0} has been assigned to this project. Document: {1}. Issue date: {2}.',
             h($config['label']),
-            $url,
-            h($title),
+            sprintf('<a href="%1$s">%2$s</a>', $url, h($title)),
             $dateStr,
         );
 
         try {
             $logsTable = TableRegistry::getTableLocator()->get('App.Logs');
             $log = $logsTable->newEntity([
-                'model' => 'Projects.Project',
+                'model' => 'Project',
                 'foreign_id' => $projectId,
                 'user_id' => $userId,
                 'action' => 'Comment',

@@ -139,7 +139,7 @@ class ProjectsController extends AppController
         $logs = TableRegistry::getTableLocator()->get('App.Logs')->find()
             ->select()
             ->where([
-                'Logs.model' => 'Projects.Project',
+                'Logs.model' => 'Project',
                 'Logs.foreign_id' => $id,
                 'Logs.action' => 'Comment',
             ])

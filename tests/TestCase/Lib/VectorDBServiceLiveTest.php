@@ -157,7 +157,7 @@ class VectorDBServiceLiveTest extends TestCase
             $vector = $this->buildTestVector(self::VECTOR_SIZE);
             $metadata = [
                 'log_id' => 'abc-123',
-                'log_model' => 'Projects.Project',
+                'log_model' => 'Project',
                 'summary' => 'Project log entry test',
                 'priority' => 5,
             ];

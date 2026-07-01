@@ -665,7 +665,7 @@ class ProjectsAIToolsEvents implements EventListenerInterface
         $logsTable = TableRegistry::getTableLocator()->get('App.Logs');
         /** @var \App\Model\Entity\Log $log */
         $log = $logsTable->newEntity([
-            'model' => 'Projects.Project',
+            'model' => 'Project',
             'action' => 'Comment',
             'foreign_id' => $project->id,
             'user_id' => $currentUser->get('id'),
@@ -797,7 +797,7 @@ class ProjectsAIToolsEvents implements EventListenerInterface
                 'Logs.action', 'Logs.descript', 'Logs.created'])
             ->contain(['Users'])
             ->where([
-                'Logs.model' => 'Projects.Project',
+                'Logs.model' => 'Project',
                 'Logs.foreign_id' => $project->id,
                 'Logs.action' => 'Comment',
             ])

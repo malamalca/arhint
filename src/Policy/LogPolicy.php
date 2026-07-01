@@ -76,7 +76,7 @@ class LogPolicy
         }
 
         // Project logs
-        if ($model === 'Projects.Project') {
+        if ($model === 'Project') {
             return $this->canAccess($foreignId, $user);
         }
 

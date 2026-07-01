@@ -134,7 +134,7 @@ class AdremasController extends AppController
         if ($this->request->getQuery('tab') === 'logs') {
             $this->set('logs', $this->paginate(
                 TableRegistry::getTableLocator()->get('App.Logs')->find()->where([
-                    'model' => 'Crm.Adremas',
+                    'model' => 'Adrema',
                     'foreign_id' => $adrema->id,
                 ])->contain(['Users']),
                 ['limit' => 20, 'order' => ['Logs.created' => 'DESC']],

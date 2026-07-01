@@ -81,7 +81,7 @@ class ProjectsEventsTest extends TestCase
 
         $log = $this->latestComment(self::PROJECT_1);
         $this->assertNotNull($log);
-        $this->assertSame('Projects.Project', $log->model);
+        $this->assertSame('Project', $log->model);
         $this->assertSame(self::PROJECT_1, $log->foreign_id);
         $this->assertSame('Comment', $log->action);
         $this->assertStringContainsString('2024-042', (string)$log->descript);
@@ -177,7 +177,7 @@ class ProjectsEventsTest extends TestCase
     {
         return TableRegistry::getTableLocator()->get('App.Logs')->find()
             ->where([
-                'model' => 'Projects.Project',
+                'model' => 'Project',
                 'foreign_id' => $projectId,
                 'action' => 'Comment',
             ])
@@ -188,7 +188,7 @@ class ProjectsEventsTest extends TestCase
     {
         return TableRegistry::getTableLocator()->get('App.Logs')->find()
             ->where([
-                'model' => 'Projects.Project',
+                'model' => 'Project',
                 'foreign_id' => $projectId,
                 'action' => 'Comment',
             ])

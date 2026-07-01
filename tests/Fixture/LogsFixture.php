@@ -29,7 +29,7 @@ class LogsFixture extends TestFixture
             ],
             [
                 'id' => '307a7922-29ec-4616-a97f-9c4fdc51100d',
-                'model' => 'Projects.Project',
+                'model' => 'Project',
                 'foreign_id' => '4dd53305-9715-4be4-b169-20defe113d2a',
                 'user_id' => 'a5903f19-046a-4e44-b4cf-6aa3ecbbdd17',
                 'action' => 'Comment',

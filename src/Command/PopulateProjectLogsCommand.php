@@ -83,7 +83,7 @@ class PopulateProjectLogsCommand extends Command
         // Check if already populated
         $existingCount = $logsTable->find()
             ->where([
-                'model' => 'Projects.Project',
+                'model' => 'Project',
                 'foreign_id' => $projectId,
             ])
             ->count();
@@ -96,7 +96,7 @@ class PopulateProjectLogsCommand extends Command
         // Clean up any previous test data for this project
         if ($existingCount > 0) {
             $logsTable->deleteAll([
-                'model' => 'Projects.Project',
+                'model' => 'Project',
                 'foreign_id' => $projectId,
             ]);
             $io->out("Removed {$existingCount} existing log entries.");
@@ -105,7 +105,7 @@ class PopulateProjectLogsCommand extends Command
             /** @var array<string> $analysisIds */
             $analysisIds = $logsTable->find()
                 ->where([
-                    'model' => 'Projects.Project',
+                    'model' => 'Project',
                     'foreign_id' => $projectId,
                 ])
                 ->all()
@@ -130,7 +130,7 @@ class PopulateProjectLogsCommand extends Command
             /** @var \App\Model\Entity\Log $log */
             $log = $logsTable->newEntity([
                 'id' => uniqid('project-log-', true),
-                'model' => 'Projects.Project',
+                'model' => 'Project',
                 'foreign_id' => $projectId,
                 'user_id' => $userId,
                 'action' => $logData['action'],
