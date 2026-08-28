@@ -322,11 +322,11 @@ class CalendarAIToolsEvents implements EventListenerInterface
         $eventsTable = TableRegistry::getTableLocator()->get('Calendar.Events');
 
         /** @var \Calendar\Model\Entity\Event|null $entity */
-        $entity = $currentUser->applyScope('view', $eventsTable->find())
+        $entity = $currentUser->applyScope('index', $eventsTable->find())
             ->where(['Events.id' => $arguments['id']])
             ->first();
 
-        if (!$entity) {
+        if (!$entity || !$currentUser->can('view', $entity)) {
             $event->setResult(['error' => 'Event not found.']);
 
             return;
@@ -410,11 +410,11 @@ class CalendarAIToolsEvents implements EventListenerInterface
         $eventsTable = TableRegistry::getTableLocator()->get('Calendar.Events');
 
         /** @var \Calendar\Model\Entity\Event|null $entity */
-        $entity = $currentUser->applyScope('edit', $eventsTable->find())
+        $entity = $currentUser->applyScope('index', $eventsTable->find())
             ->where(['Events.id' => $arguments['id']])
             ->first();
 
-        if (!$entity) {
+        if (!$entity || !$currentUser->can('edit', $entity)) {
             $event->setResult(['error' => 'Event not found or access denied.']);
 
             return;
@@ -470,11 +470,11 @@ class CalendarAIToolsEvents implements EventListenerInterface
         $eventsTable = TableRegistry::getTableLocator()->get('Calendar.Events');
 
         /** @var \Calendar\Model\Entity\Event|null $entity */
-        $entity = $currentUser->applyScope('delete', $eventsTable->find())
+        $entity = $currentUser->applyScope('index', $eventsTable->find())
             ->where(['Events.id' => $arguments['id']])
             ->first();
 
-        if (!$entity) {
+        if (!$entity || !$currentUser->can('delete', $entity)) {
             $event->setResult(['error' => 'Event not found or access denied.']);
 
             return;

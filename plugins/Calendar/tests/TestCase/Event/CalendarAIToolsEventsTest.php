@@ -5,7 +5,8 @@ namespace Calendar\Test\TestCase\Event;
 
 use App\Model\Entity\User;
 use ArrayObject;
-use Authorization\AuthorizationServiceInterface;
+use Authorization\AuthorizationService;
+use Authorization\Policy\OrmResolver;
 use Cake\Event\Event;
 use Cake\ORM\TableRegistry;
 use Cake\Routing\Route\DashedRoute;
@@ -38,16 +39,24 @@ class CalendarAIToolsEventsTest extends TestCase
         });
         $this->listener = new CalendarAIToolsEvents();
 
-        $authService = $this->createMock(AuthorizationServiceInterface::class);
-        $authService->method('applyScope')
-            ->willReturnCallback(fn($identity, $action, $resource) => $resource);
-        $authService->method('can')
-            ->willReturn(true);
+        // Use the real authorization service so the policies the tools rely on
+        // are actually resolved. A mocked service hides missing policy methods.
+        $this->user = $this->loadUser(USER_ADMIN);
+    }
 
-        // @phpstan-ignore-next-line
-        $this->user = TableRegistry::getTableLocator()->get('Users')->get(USER_ADMIN);
-        // @phpstan-ignore-next-line
-        $this->user->setAuthorization($authService);
+    /**
+     * Load a user identity backed by the real authorization service.
+     *
+     * @param string $userId User id.
+     * @return \App\Model\Entity\User
+     */
+    protected function loadUser(string $userId): User
+    {
+        /** @var \App\Model\Entity\User $user */
+        $user = TableRegistry::getTableLocator()->get('Users')->get($userId);
+        $user->setAuthorization(new AuthorizationService(new OrmResolver()));
+
+        return $user;
     }
 
     // -------------------------------------------------------------------------
@@ -536,6 +545,55 @@ class CalendarAIToolsEventsTest extends TestCase
         $this->assertIsArray($result);
         $this->assertNotEmpty($result);
         $this->assertTrue(property_exists($result[0], 'view_url') || isset($result[0]->view_url));
+    }
+
+    // -------------------------------------------------------------------------
+    // Ownership
+    // -------------------------------------------------------------------------
+
+    public function testGetEventOfAnotherUserIsDenied(): void
+    {
+        $this->user = $this->loadUser(USER_COMMON);
+
+        $args = ['id' => self::EVENT_ID];
+        $event = $this->makeEvent('Calendar.get_event', $args);
+        $this->listener->aiAssistantExecuteTool($event, 'Calendar.get_event', $args);
+
+        $result = $event->getResult();
+        $this->assertIsArray($result);
+        $this->assertArrayHasKey('error', $result);
+    }
+
+    public function testUpdateEventOfAnotherUserIsDenied(): void
+    {
+        $this->user = $this->loadUser(USER_COMMON);
+
+        $args = ['id' => self::EVENT_ID, 'title' => 'Hijacked'];
+        $event = $this->makeEvent('Calendar.update_event', $args);
+        $this->listener->aiAssistantExecuteTool($event, 'Calendar.update_event', $args);
+
+        $result = $event->getResult();
+        $this->assertIsArray($result);
+        $this->assertArrayHasKey('error', $result);
+
+        $eventsTable = TableRegistry::getTableLocator()->get('Calendar.Events');
+        $this->assertEquals('Meeting About Arhint', $eventsTable->get(self::EVENT_ID)->title);
+    }
+
+    public function testDeleteEventOfAnotherUserIsDenied(): void
+    {
+        $this->user = $this->loadUser(USER_COMMON);
+
+        $args = ['id' => self::EVENT_ID];
+        $event = $this->makeEvent('Calendar.delete_event', $args);
+        $this->listener->aiAssistantExecuteTool($event, 'Calendar.delete_event', $args);
+
+        $result = $event->getResult();
+        $this->assertIsArray($result);
+        $this->assertArrayHasKey('error', $result);
+
+        $eventsTable = TableRegistry::getTableLocator()->get('Calendar.Events');
+        $this->assertTrue($eventsTable->exists(['id' => self::EVENT_ID]));
     }
 
     // -------------------------------------------------------------------------
