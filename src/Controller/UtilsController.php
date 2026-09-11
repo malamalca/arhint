@@ -80,7 +80,7 @@ class UtilsController extends AppController
         if ($this->getRequest()->is(['patch', 'post', 'put'])) {
             $file = $this->getRequest()->getData('file');
             if (!empty($file) && !$file->getError()) {
-                $clientBasename = substr($file->getClientFilename(), 0, -4);
+                $clientBasename = pathinfo((string)$file->getClientFilename(), PATHINFO_FILENAME);
                 $doMultiPage = (bool)$this->getRequest()->getData('multiPage');
 
                 $pdfProcessor = new LilPdfProcessor();

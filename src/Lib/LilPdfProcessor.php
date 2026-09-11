@@ -146,13 +146,12 @@ class LilPdfProcessor
             $lastPage = $firstPage;
         }
 
-        $outputExtension = null;
         if ($format === self::FORMAT_PNG) {
             $deviceParam = '-sDEVICE=png16m -r600';
             $outputExtension = '.png';
         } else {
             $deviceParam = '-sDEVICE=pdfwrite';
-            // $outputExtension resolved per-file below from the source filename
+            $outputExtension = '.pdf';
         }
 
         $gsParams = $deviceParam . ' -dBATCH -dNOPAUSE -dFirstPage=%3$s -dLastPage=%4$s -sOutputFile=%2$s %1$s';
@@ -160,14 +159,13 @@ class LilPdfProcessor
         $ret = [];
 
         foreach ($this->filesList as $file) {
-            $ext = $outputExtension ?? substr(basename($file), -4);
-            $baseName = $outputBasename ?? substr(basename($file), 0, -4);
+            $baseName = $outputBasename ?? pathinfo(basename($file), PATHINFO_FILENAME);
 
             if ($multiPage) {
                 // Run GS once per page to avoid passing a %03d pattern through
                 // cmd.exe on Windows, where escapeshellarg expands % sequences.
                 for ($page = $firstPage; $page <= $lastPage; $page++) {
-                    $pageFile = TMP . $baseName . '_' . sprintf('%03d', $page) . $ext;
+                    $pageFile = TMP . $baseName . '_' . sprintf('%03d', $page) . $outputExtension;
 
                     $command = sprintf(
                         escapeshellarg($this->gsExecutablePath) . ' ' . $gsParams,
@@ -188,7 +186,7 @@ class LilPdfProcessor
                     }
                 }
             } else {
-                $outputFile = TMP . $baseName . $ext;
+                $outputFile = TMP . $baseName . $outputExtension;
 
                 $command = sprintf(
                     escapeshellarg($this->gsExecutablePath) . ' ' . $gsParams,
