@@ -48,6 +48,18 @@ class InvoicePolicy
     }
 
     /**
+     * Authorize (re)sending of tax confirmation
+     *
+     * @param \App\Model\Entity\User $user User
+     * @param \Documents\Model\Entity\Invoice $entity Entity
+     * @return bool
+     */
+    public function canTaxConfirm(User $user, Invoice $entity): bool
+    {
+        return $entity->owner_id == $user->company_id && $user->hasRole('editor');
+    }
+
+    /**
      * Authorize sign action
      *
      * @param \App\Model\Entity\User $user User

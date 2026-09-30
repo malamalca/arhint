@@ -55,6 +55,23 @@ class DocumentsCountersTable extends Table
             ->allowEmptyString('tpl_header_id')
             ->allowEmptyString('tpl_body_id')
             ->allowEmptyString('tpl_footer_id')
+            ->add('tax_confirmation', 'valid', ['rule' => 'boolean'])
+            ->allowEmptyString('tax_confirmation')
+            ->notEmptyString(
+                'tax_premise_id',
+                __d('documents', 'Business premise is required for tax confirmation.'),
+                fn($context) => !empty($context['data']['tax_confirmation']),
+            )
+            ->notEmptyString(
+                'device_no',
+                __d('documents', 'Electronic device no is required for tax confirmation.'),
+                fn($context) => !empty($context['data']['tax_confirmation']),
+            )
+            ->maxLength('device_no', 20)
+            ->add('device_no', 'chars', [
+                'rule' => ['custom', '/^[A-Za-z0-9]*$/'],
+                'message' => __d('documents', 'Only letters and digits are allowed.'),
+            ])
             ->add('active', 'valid', ['rule' => 'boolean'])
             ->requirePresence('active', 'create')
             ->notEmptyString('active');

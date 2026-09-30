@@ -51,7 +51,11 @@ class DocumentsPlugin extends BasePlugin
             'Documents',
             ['path' => '/documents'],
             function (RouteBuilder $builder): void {
-                // Add custom routes here
+                // REST API (HTTP Basic authentication)
+                $builder->prefix('Api', function (RouteBuilder $api): void {
+                    $api->connect('/invoices', ['controller' => 'Invoices', 'action' => 'create', '_method' => 'POST']);
+                });
+
                 $builder->fallbacks();
             },
         );

@@ -26,6 +26,7 @@ use Cake\Http\BaseApplication;
 use Cake\Http\Middleware\EncryptedCookieMiddleware;
 use Cake\Http\Middleware\SessionCsrfProtectionMiddleware;
 use Cake\Http\MiddlewareQueue;
+use Cake\Http\ServerRequest;
 use Cake\I18n\DateTime;
 use Cake\ORM\Locator\TableLocator;
 use Cake\Routing\Middleware\AssetMiddleware;
@@ -33,7 +34,9 @@ use Cake\Routing\Middleware\RoutingMiddleware;
 use Cake\Routing\Route\DashedRoute;
 use Cake\Routing\RouteBuilder;
 use Cake\Routing\Router;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 
 /**
  * Application setup class.
@@ -92,8 +95,26 @@ class Application extends BaseApplication implements
      */
     public function middleware(MiddlewareQueue $middlewareQueue): MiddlewareQueue
     {
+        $authorizationMiddleware = new AuthorizationMiddleware($this, [
+            'unauthorizedHandler' => [
+                'className' => 'Authorization.Redirect',
+                'url' => $this->getLoginPath(),
+                'queryParam' => 'redirect',
+                'exceptions' => [
+                    MissingIdentityException::class,
+                ],
+            ],
+            'identityDecorator' => function ($auth, $user) {
+                return $user->setAuthorization($auth);
+            },
+        ]);
+
         $csrf = new SessionCsrfProtectionMiddleware();
         $csrf->skipCheckCallback(function ($request) {
+            if ($this->isApiRequest($request)) {
+                return true;
+            }
+
             return $this->checkParams($request->getAttribute('params'), [
                 ['controller' => 'ProjectsWorkhours', 'action' => 'import'],
                 ['controller' => 'Projects', 'action' => 'linkEmail'],
@@ -140,19 +161,17 @@ class Application extends BaseApplication implements
         ->add($csrf)
         ->add(new EncryptedCookieMiddleware([self::REMEMBERME_COOKIE_NAME], Configure::read('Security.cookieKey')))
         ->add(new AuthenticationMiddleware($this))
-        ->add(new AuthorizationMiddleware($this, [
-            'unauthorizedHandler' => [
-                'className' => 'Authorization.Redirect',
-                'url' => $this->getLoginPath(),
-                'queryParam' => 'redirect',
-                'exceptions' => [
-                    MissingIdentityException::class,
-                ],
-            ],
-            'identityDecorator' => function ($auth, $user) {
-                return $user->setAuthorization($auth);
-            },
-        ]));
+        ->add(function (
+            ServerRequestInterface $request,
+            RequestHandlerInterface $handler,
+        ) use ($authorizationMiddleware): ResponseInterface {
+            // REST API controllers check access themselves and answer with JSON
+            if ($this->isApiRequest($request)) {
+                return $handler->handle($request);
+            }
+
+            return $authorizationMiddleware->process($request, $handler);
+        });
 
         return $middlewareQueue;
     }
@@ -180,6 +199,20 @@ class Application extends BaseApplication implements
      */
     public function getAuthenticationService(ServerRequestInterface $request): AuthenticationServiceInterface
     {
+        // REST API: stateless HTTP Basic, no redirects, no session or cookies
+        if ($this->isApiRequest($request)) {
+            $service = new AuthenticationService();
+            $service->loadAuthenticator('Authentication.HttpBasic', [
+                'realm' => 'arhint',
+                'fields' => [
+                    AbstractIdentifier::CREDENTIAL_USERNAME => 'username',
+                    AbstractIdentifier::CREDENTIAL_PASSWORD => 'passwd',
+                ],
+            ]);
+
+            return $service;
+        }
+
         $service = new AuthenticationService([
             'unauthenticatedRedirect' => $this->getLoginPath(),
             'loginUrl' => $this->getLoginPath(),
@@ -309,5 +342,16 @@ class Application extends BaseApplication implements
     private function getLoginPath(): string
     {
         return Router::url('/users/login');
+    }
+
+    /**
+     * Whether the request targets the REST API (`Api` routing prefix).
+     *
+     * @param \Psr\Http\Message\ServerRequestInterface $request Request.
+     * @return bool
+     */
+    private function isApiRequest(ServerRequestInterface $request): bool
+    {
+        return $request instanceof ServerRequest && $request->getParam('prefix') === 'Api';
     }
 }

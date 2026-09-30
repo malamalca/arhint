@@ -1,0 +1,990 @@
+<schema
+            xmlns="http://www.w3.org/2001/XMLSchema"
+            xmlns:xs="http://www.w3.org/2001/XMLSchema"
+            xmlns:ds="http://www.w3.org/2000/09/xmldsig#"
+            xmlns:fu="http://www.fu.gov.si/" targetNamespace="http://www.fu.gov.si/" elementFormDefault="qualified">
+            <element name="InvoiceRequest">
+                <annotation>
+                    <documentation>Vsebina in oblika sporocila s podatki o racunu. / Content and form of the message with data about the invoice.</documentation>
+                </annotation>
+                <complexType>
+                    <sequence>
+                        <element name="Header" type="fu:HeaderType" minOccurs="1" maxOccurs="1">
+                            <annotation>
+                                <documentation>Glava sporocila / Message header</documentation>
+                            </annotation>
+                        </element>
+                        <choice>
+                            <element name="Invoice" type="fu:InvoiceType" minOccurs="0" maxOccurs="1">
+                                <annotation>
+                                    <documentation>Vpisejo se podatki o racunu, ki je izdan z uporabo elektronske naprave. / Data are entered about the invoice, which is issued with usage of the electronic device.</documentation>
+                                </annotation>
+                            </element>
+                            <element name="SalesBookInvoice" type="fu:SalesBookType" minOccurs="0" maxOccurs="1">
+                                <annotation>
+                                    <documentation>Vpise se davcna stevilka zavezanca, ki je izdal racun. / The tax number of the person liable, who has issued the invoice, is entered.</documentation>
+                                </annotation>
+                            </element>
+                        </choice>
+                        <element ref="ds:Signature" minOccurs="1" maxOccurs="1"/>
+                    </sequence>
+                    <attribute name="Id" type="string">
+                        <annotation>
+                            <documentation>Atribut za potrebe digitalnega podpisa. V njem imamo id, ki se veze na digitalni podpis. / Attribute for needs of the digital signature. In it we have id, which is linked to the digital signature.</documentation>
+                        </annotation>
+                    </attribute>
+                </complexType>
+            </element>
+            <element name="InvoiceResponse">
+                <annotation>
+                    <documentation>Odgovor za oddajo racuna. / Response for submitting the invoice.</documentation>
+                </annotation>
+                <complexType>
+                    <sequence>
+                        <element name="Header" type="fu:HeaderResponseType"/>
+                        <element name="UniqueInvoiceID" type="fu:UUIDType" minOccurs="0">
+                            <annotation>
+                                <documentation>Enkratni identifikator sporocila. / Unique identifier of the message.</documentation>
+                            </annotation>
+                        </element>
+                        <element name="Error" type="fu:ErrorType" minOccurs="0"/>
+                        <element ref="ds:Signature" minOccurs="0"/>
+                    </sequence>
+                    <attribute name="Id" type="string">
+                        <annotation>
+                            <documentation>Atribut za potrebe digitalnega podpisa. V njem imamo id, ki se veze na digitalni podpis./ Attribute for needs of the digital signature. In it we have id, which is linked to the digital signature.</documentation>
+                        </annotation>
+                    </attribute>
+                </complexType>
+            </element>
+            <element name="BusinessPremiseRequest">
+                <annotation>
+                    <documentation>Vsebina in oblika sporocila s podatki o poslovnem prostoru zavezanca. / Content and form of the message with data about business premises of the person liable.</documentation>
+                </annotation>
+                <complexType>
+                    <sequence>
+                        <element name="Header" type="fu:HeaderType" minOccurs="1" maxOccurs="1"/>
+                        <element name="BusinessPremise" type="fu:BusinessPremiseType" minOccurs="1" maxOccurs="1"/>
+                        <element ref="ds:Signature" minOccurs="1" maxOccurs="1"/>
+                    </sequence>
+                    <attribute name="Id" type="string">
+                        <annotation>
+                            <documentation>Atribut za potrebe digitalnega podpisa. V njem imamo id, ki se veze na digitalni podpis. / Attribute for needs of the digital signature. In it we have id, which is linked to the digital signature.</documentation>
+                        </annotation>
+                    </attribute>
+                </complexType>
+            </element>
+            <element name="BusinessPremiseResponse">
+                <annotation>
+                    <documentation>Odgovor na zahtevo poslovnega prostora. / Response for submitting the business premise.</documentation>
+                </annotation>
+                <complexType>
+                    <sequence>
+                        <element name="Header" type="fu:HeaderResponseType"/>
+                        <element name="Error" type="fu:ErrorType" minOccurs="0"/>
+                        <element ref="ds:Signature" minOccurs="0" maxOccurs="1"/>
+                    </sequence>
+                    <attribute name="Id" type="string">
+                        <annotation>
+                            <documentation>Atribut za potrebe digitalnega podpisa. V njem imamo id, ki se veze na digitalni podpis. / Attribute for needs of the digital signature. In it we have id, which is linked to the digital signature.</documentation>
+                        </annotation>
+                    </attribute>
+                </complexType>
+            </element>
+            <complexType name="BusinessPremiseType">
+                <annotation>
+                    <documentation>Poslovni prostor / Business premises</documentation>
+                </annotation>
+                <sequence>
+                    <element name="TaxNumber" type="fu:TaxNumberType" minOccurs="1" maxOccurs="1">
+                        <annotation>
+                            <documentation>Davcna stevilka zavezanca, ki izdaja racune / Tax number of the person liable, who issues invoices</documentation>
+                        </annotation>
+                    </element>
+                    <element name="BusinessPremiseID" type="fu:BusinessPremiseIDType" minOccurs="1" maxOccurs="1">
+                        <annotation>
+                            <documentation>Vpise se oznaka poslovnega prostora v katerem zavezanec izdaja racune pri gotovinskem poslovanju. Oznaka je lahko sestavljena iz stevilk in crk 0-9, a-z, A-Z. Oznaka mora biti enaka kot tista, ki je navedena na racunih. Oznaka je enkratna na nivoju zavezanca. / The mark is entered of business premises, in which the person liable issues invoices in cash operations. The mark may include the following number and letters: 0-9, a-z, A-Z. The mark shall be the same as the mark, stated on invoices. The mark is unique at the level of the person liable.</documentation>
+                        </annotation>
+                    </element>
+                    <element name="BPIdentifier" type="fu:BPIdentifierType" minOccurs="1" maxOccurs="1">
+                        <annotation>
+                            <documentation>Vpisejo se podatki o nepremicnem ali premicnem poslovnem prostoru. / Data are entered about immovable or movable business premises.</documentation>
+                        </annotation>
+                    </element>
+                    <element name="ValidityDate" type="fu:date">
+                        <annotation>
+                            <documentation>Datum zacetka veljavnosti podatkov o poslovnem prostoru, ki se posredujejo. Podatek se vpise v obliki: LLLL-MM-DD. / The date when data about business premises, which are submitted, become valid. DD / The data is entered in the following form: YYYY-MM-DD.</documentation>
+                        </annotation>
+                    </element>
+                    <element name="ClosingTag" type="fu:ClosingTagType" minOccurs="0">
+                        <annotation>
+                            <documentation>Vpise se podatek o zaprtju poslovnega prostora, ce gre za trajno zaprtje. Mozna je vrednost »Z«. Po zaprtju v tem poslovnem prostoru ni vec mozno izdajati racunov in racunov z oznako tega poslovnega prostora ni vec mozno posredovati davcnemu organu. / The data is entered about the closure of business premises if the closure is permanent. The possible value is »Z«. After closure issuing invoices is not possible anymore in these business premises and it is not possible to submit invoices to the tax authority with the mark of these business premises.</documentation>
+                        </annotation>
+                    </element>
+                    <element name="SoftwareSupplier" type="fu:SoftwareSupplierType" maxOccurs="1000">
+                        <annotation>
+                            <documentation>Vpise se podatek o proizvajalcu  ali vzdrzevalcu programske opreme za izdajanje racunov. Vpise se eden od podatkov: 1. Davcna stevilka pravne ali fizicne osebe / proizvajalca ali vzdrzevalca programske opreme s sedezem v Sloveniji  in 2. Naziv in naslov proizvajalca ali vzdrzevalca programske opreme, ki nima sedeza v Sloveniji. / The data is entered about the producer or software maintenance provider for issuing invoices. One of the following data is entered: 1. tax number of a legal entity or an individual - producer or software maintenance provider established in Slovenia and 2. title and address of the producer or software maintenance provider not established in Slovenia.</documentation>
+                        </annotation>
+                    </element>
+                    <element name="SpecialNotes" minOccurs="0">
+                        <annotation>
+                            <documentation>Vpisejo se morebitne druge oznake, ki podrobneje pojasnjujejo zapise v zvezi z vsebino podatkov o poslovnem prostoru. / Any other potential marks are entered, which explain in detail the records in connection with the content of data about business premises.</documentation>
+                        </annotation>
+                        <simpleType>
+                            <restriction base="string">
+                                <minLength value="1"/>
+                                <maxLength value="1000"/>
+                            </restriction>
+                        </simpleType>
+                    </element>
+                </sequence>
+            </complexType>
+            <complexType name="InvoiceType">
+                <annotation>
+                    <documentation>Racun / Invoice</documentation>
+                </annotation>
+                <sequence>
+                    <element name="TaxNumber" type="fu:TaxNumberType" minOccurs="1" maxOccurs="1">
+                        <annotation>
+                            <documentation>Vpise se davcna stevilka zavezanca, ki je izdal racun. / The tax number of the person liable, who has issued the invoice, is entered.</documentation>
+                        </annotation>
+                    </element>
+                    <element name="IssueDateTime" type="fu:dateTime" minOccurs="1" maxOccurs="1">
+                        <annotation>
+                            <documentation>Vpise se datum in cas izdaje racuna, ki je naveden na racunu. Podatek se vpise v formatu LLLL-MM-DDTUU:MM:SS. / Date and time of issuing the invoice, which is stated on the invoice, are entered. The data is entered in the following format YYYY-MM-DDTHH:MM:SS.
+        </documentation>
+                        </annotation>
+                    </element>
+                    <element name="NumberingStructure" type="fu:NumberingStructureType" minOccurs="1" maxOccurs="1">
+                        <annotation>
+                            <documentation>Vpise se oznaka nacina dodeljevanja stevilk racunom: C - centralno na nivoju poslovnega prostora, B - po posamezni elektronski napravi (blagajna) Oznaka pojasnjuje na kaksen nacin se racunom dodeljujejo stevilke. Stevilke racunov se lahko dodeljujejo centralno na nivoju poslovnega prostora ali posamicno na elektronski napravi za izdajanje racunov. / The mark is entered for the method of assigning numbers to invoices: C - centrally at the level of business premises, B - per individual electronic device (cash register). The mark explains the method for assigning numbers to invoices. Invoice numbers may be assigned centrally at the level of business premises or individually on the electronic device for issuing invoices.</documentation>
+                        </annotation>
+                    </element>
+                    <element name="InvoiceIdentifier" type="fu:IdentifierType" minOccurs="1" maxOccurs="1">
+                        <annotation>
+                            <documentation>Vpise se stevilka izdanega racuna. Vpise se tudi stevilka dokumenta, ki spreminja prvotni racun (dobropis, storno,…) v primeru izvajanja postopka potrjevanja naknadne spremembe podatkov na racunu, ki spreminja prvoten racun in se nanj nedvoumno nanasa. Stevilka racuna je sestavljena iz treh delov: oznaka poslovnega prostora; oznaka elektronske naprave za izdajanje racunov; zaporedna stevilka racuna. Stevilka racuna se na racunu navede v naslednji obliki: oznaka poslovnega prostora-oznaka elektronske naprave-zaporedna stevilka racuna. Primer: TRGOVINA1-BLAG2-1234 Podatki se vpisujejo loceno. / The number of the issued invoice is entered. The number of the document is also entered, which changes the original invoice (credit, reversing, etc.) in cases of performing the procedure for verification of subsequent changes of data on the invoice, which changes the original invoice and refers to it with reasonable certainty. The invoice number includes three parts: mark of business premises; mark of the electronic device for issuing invoices; sequence number of the invoice. The invoice number is stated on the invoice in the following form: mark of business premises-mark of the electronic device-sequence invoice number. Example: TRGOVINA1-BLAG2-1234. Data are entered separately.</documentation>
+                        </annotation>
+                    </element>
+                    <element name="CustomerVATNumber" type="fu:CustomerVATType" minOccurs="0" maxOccurs="1">
+                        <annotation>
+                            <documentation>Vpise se davcna stevilka oziroma identifikacijska stevilka za namene DDV kupca oziroma narocnika v primeru, ko so ti podatki v skladu z davcnimi predpisi navedeni na racunu. Podatek se vpise, ce je naveden na racunu. / The tax number is entered or identification number for VAT purposes of the buyer or ordering party in cases when these data are stated on the invoice in accordance with tax regulations.</documentation>
+                        </annotation>
+                    </element>
+                    <element name="InvoiceAmount" type="fu:AmountType" minOccurs="1" maxOccurs="1">
+                        <annotation>
+                            <documentation>Vnese se skupni znesek racuna. Vpise se znesek racuna skupaj z DDV in ostalimi davki/dajatvami, zmanjsan za zneske popustov. Decimalno locilo je pika. / The total amount of the invoice is entered. The amount of the invoice is entered together with VAT and other taxes/duties, decreased for amounts of discounts. The decimal separator is a dot.</documentation>
+                        </annotation>
+                    </element>
+                    <element name="ReturnsAmount" type="fu:AmountType" minOccurs="0" maxOccurs="1">
+                        <annotation>
+                            <documentation>Vpise se znesek povracil na racunu, ki se priznajo kupcu (npr. na podlagi dobropisa za vracilo embalaze). Podatek se vpise le, ce na racunu obstajajo povracila. Decimalno locilo je pika. / The amount of refunds on the invoice, which are recognized to the buyer (e.g. on the basis of credit for returning packaging), is entered. The data is entered only if there are refunds on the invoice. The decimal separator is a dot.</documentation>
+                        </annotation>
+                    </element>
+                    <element name="PaymentAmount" type="fu:AmountType" minOccurs="1" maxOccurs="1">
+                        <annotation>
+                            <documentation>Vpise se znesek racuna za placilo. Decimalno locilo je pika. / The amount of the invoice for payment is entered. The decimal separator is a dot.</documentation>
+                        </annotation>
+                    </element>
+                    <element name="TaxesPerSeller" type="fu:TaxesPerSellerType" maxOccurs="1000">
+                        <annotation>
+                            <documentation>Vpise se vrednost osnov po vrsti davka ali dajatve, razdeljeno po davcnih stopnjah, in pripadajoci davek ali dajatev, vrednost dobav na podlagi posebnih ureditev, dobav pri katerih je placnik DDV kupec blaga ali narocnik storitve, oproscenih dobav in neobdavcljivih dobav, loceno po davcnih stevilkah davcnih zavezancev. / The value is entered for bases according to types of taxes or duties, separated per tax rates, and associated taxes or duties, value of supplies on the basis of special arrangements, supplies where the payer of VAT is the buyer of goods or party ordering services, exempt supplies and non-taxable supplies, separated according to tax numbers of taxpayers.</documentation>
+                        </annotation>
+                    </element>
+                    <element name="OperatorTaxNumber" type="fu:TaxNumberType" minOccurs="0" maxOccurs="1">
+                        <annotation>
+                            <documentation>Vpise se davcna stevilka fizicne osebe (operaterja), ki izda racun z uporabo elektronske naprave za izdajanje racunov. V primeru izdaje racuna preko samopostreznih elektronskih naprav oziroma ko se racun izda brez prisotnosti fizicne osebe, se vpise davcna stevilka zavezanca. Ce oseba nima slovenske davcne stevilke, se podatek ne vpisuje. / The tax number is entered of the individual (operator), who issues the invoice with the usage of the electronic device for issuing invoices. In cases of issuing invoices via self-service electronic devices or when invoices are issued without the presence of individuals, the tax number of the person liable is entered. The data is not entered if the person has no Slovene tax number.</documentation>
+                        </annotation>
+                    </element>
+                    <element name="ForeignOperator" type="boolean" minOccurs="0" maxOccurs="1">
+                        <annotation>
+                            <documentation>Vpise se true, ce fizicna oseba (operater), ki izda racun z uporabo elektronske naprave, nima slovenske davcne stevilke, drugace false (1 - true, 0 - false). / You enter »true« if the individual (operator), who issues the invoice with the usage of the electronic device, has no Slovene tax number, otherwise »false« (1 - true, 0 - false).</documentation>
+                        </annotation>
+                    </element>
+                    <element name="ProtectedID" minOccurs="1" maxOccurs="1">
+                        <annotation>
+                            <documentation>Vpise se zascitna oznaka izdajatelja racuna. Zascitna oznaka je sestavljena iz 32 znakov v heksadecimalnem formatu. Primer: 8202f0f963e37a2258b034cf8ae7bbc1. / The protective mark of the invoice issuer is entered. The protective mark includes 32 characters in the hexadecimal notation. Example: 8202f0f963e37a2258b034cf8ae7bbc1.</documentation>
+                        </annotation>
+                        <simpleType>
+                            <restriction base="string">
+                                <length value="32"/>
+                            </restriction>
+                        </simpleType>
+                    </element>
+                    <element name="SubsequentSubmit" type="boolean" minOccurs="0" maxOccurs="1">
+                        <annotation>
+                            <documentation>Naknadno posredovani racun je racun, ki je bil izdan brez enkratne identifikacijske oznake racuna - EOR  (npr. zaradi prekinitve elektronske povezave z davcnim organom). Vpise se true, ce je racun naknadno posredovan davcnemu organu, drugace false (1 - true, 0 - false). / Subsequently submitted invoices are invoices, which have been issued without the unique identification invoice mark - EOR (e.g. due to disconnections of electronic connections with the tax authority). If the invoice is subsequently submitted to the tax authority, »true« is entered, otherwise »false« (1 - true, 0 - false).</documentation>
+                        </annotation>
+                    </element>
+                    <element name="ReferenceInvoice" minOccurs="0" maxOccurs="1000">
+                        <annotation>
+                            <documentation>Racun iz elektronske naprave, ki se spreminja.</documentation>
+                        </annotation>
+                        <complexType>
+                            <sequence>
+                                <element name="ReferenceInvoiceIdentifier" type="fu:IdentifierType">
+                                    <annotation>
+                                        <documentation>Vpise se stevilka prvotnega racuna v primeru naknadne spremembe podatkov na prvotnem racunu, ce je bil prvoten racun izdan preko elektronske naprave. Zavezanec izvaja postopek potrjevanja racunov tudi za vse naknadne spremembe podatkov na racunu, ki spreminjajo prvoten racun in se nanj nedvoumno nanasajo. Podatek se vpise v primeru, ce se z racunom, izdanim preko elektronske naprave, spreminja prvoten racun, ki je bil izdan preko elektronske naprave. Za vpis stevilke racuna, ki se spreminja, veljajo enaka pravila kot pri vpisu stevilke racuna. Stevilka racuna je sestavljena iz treh delov: oznaka poslovnega prostora, oznaka elektronske naprave za izdajanje racunov, zaporedna stevilka racuna. Stevilka racuna se na racunu navede v naslednji obliki: oznaka poslovnega prostora-oznaka elektronske naprave-zaporedna stevilka racuna Primer: TRGOVINA1-BLAG2-1234 Podatki se vpisujejo loceno. / The number of the original invoice is entered in cases of subsequent changes of data on the original invoice if the original invoice has been issued via the electronic device. The person liable conducts the procedure for verification of invoices also for all subsequent changes of data on the invoice, which change the original invoice and they refer to it with reasonable certainty. The data is entered in cases if the original invoice, which has been issued via the electronic device, changes with the invoice, issued via the electronic device. Rules for entry of the invoice number, which is changed, are the same as those for entry of the invoice number. The invoice number includes three parts: mark of business premises; mark of the electronic device for issuing invoices; sequence number of the invoice. The invoice number is stated on the invoice in the following form: mark of business premises-mark of the electronic device- sequence invoice number. Example: TRGOVINA1-BLAG2-1234. Data are entered separately.</documentation>
+                                    </annotation>
+                                </element>
+                                <element name="ReferenceInvoiceIssueDateTime" type="fu:dateTime">
+                                    <annotation>
+                                        <documentation>Vpise se datum in cas izdaje prvotnega racuna v primeru naknadne spremembe podatkov na prvotnem racunu, ce je bil prvoten racun izdan preko elektronske naprave. Podatek se vpise v primeru, ce se z racunom, izdanim preko elektronske naprave, spreminja prvoten racun, ki je bil izdan preko elektronske naprave. Podatek se vpise v formatu LLLL-MM-DDTUU:MM:SS. / Date and time are entered of issuing the original invoice in cases of subsequent changes of data on the original invoice if the original invoice has been issued via the electronic device. The data is entered in cases if the original invoice, which has been issued via the electronic device, is changed with the invoice, issued via the electronic device. The data is entered in the following format YYYY-MM-DDTHH:MM:SS.</documentation>
+                                    </annotation>
+                                </element>
+                            </sequence>
+                        </complexType>
+                    </element>
+                    <element name="ReferenceSalesBook" minOccurs="0" maxOccurs="1000">
+                        <annotation>
+                            <documentation>Stevilka racuna iz vezane knjige racunov, ki se spreminja; stevilka seta racuna iz vezane knjige racunov, ki se spreminja; serijska stevilka vezane knjige racunov iz katere je bil izdan racun, ki se spreminja; datum izdaje racuna iz vezane knjige racunov, ki se spreminja. / The number is entered of the issued invoice from the pre-numbered invoice book, which is changed, if the original invoice has been issued from the pre-numbered invoice book; number of the invoice from the pre-numbered invoice book, which is changed; number of the invoice set (original invoice + its two copies) from the pre-numbered invoice book, which is changed; serial number of the pre-numbered invoice book, from which the invoice, which is changed, has been issued; date of issuing the invoice from the pre-numbered invoice book, which is changed.</documentation>
+                        </annotation>
+                        <complexType>
+                            <sequence>
+                                <element name="ReferenceSalesBookIdentifier" type="fu:SalesBookIdentifierType">
+                                    <annotation>
+                                        <documentation>Stevilka racuna iz vezane knjige racunov, ki se spreminja; stevilka seta racuna iz vezane knjige racunov, ki se spreminja; serijska stevilka vezane knjige racunov iz katere je bil izdan racun, ki se spreminja. / The number is entered of the issued invoice from the pre-numbered invoice book, which is changed, if the original invoice has been issued from the pre-numbered invoice book; number of the invoice from the pre-numbered invoice book, which is changed; number of the invoice set (original invoice + its two copies) from the pre-numbered invoice book, which is changed; serial number of the pre-numbered invoice book, from which the invoice, which is changed, has been issued.</documentation>
+                                    </annotation>
+                                </element>
+                                <element name="ReferenceSalesBookIssueDate" type="date">
+                                    <annotation>
+                                        <documentation>Vpise se datum izdaje prvotnega racuna iz vezane knjige racunov, ki se spreminja, ce je bil prvoten racun izdan iz vezane knjige racunov. Podatek se vpise v formatu LLLL-MM-DD. Podatek se vpise v primeru, ce se z racunom, izdanim preko elektronske naprave, spreminja prvoten racun, ki je bil izdan iz vezane knjige racunov. / The issuing date is entered for the original invoice from the pre-numbered invoice book, which is changed if the original invoice has been issued from the pre-numbered invoice book. The data is entered in the following format: YYYY-MM-DD. The data is entered in cases when the original invoice, which has been issued from the pre-numbered invoice book, is changed with the invoice, issued via the electronic device.</documentation>
+                                    </annotation>
+                                </element>
+                            </sequence>
+                        </complexType>
+                    </element>
+                    <element name="SpecialNotes" minOccurs="0">
+                        <annotation>
+                            <documentation>R_3.20 Vpisejo se morebitne druge oznake, ki podrobneje pojasnjujejo zapise v zvezi z vsebino izdanih racunov in njihove spremembe. / Potential other marks are entered, which explain in detail the records in connection with the content of invoices issued and their changes.</documentation>
+                        </annotation>
+                        <simpleType>
+                            <restriction base="string">
+                                <minLength value="1"/>
+                                <maxLength value="1000"/>
+                            </restriction>
+                        </simpleType>
+                    </element>
+                </sequence>
+            </complexType>
+            <complexType name="SalesBookType">
+                <annotation>
+                    <documentation>Racun - vezana knjiga racunov / Invoice - pre-numbered invoice book</documentation>
+                </annotation>
+                <sequence>
+                    <element name="TaxNumber" type="fu:TaxNumberType" minOccurs="1" maxOccurs="1">
+                        <annotation>
+                            <documentation>Vpise se davcna stevilka zavezanca, ki je izdal racun. / The tax number of the person liable, who has issued the invoice, is entered.</documentation>
+                        </annotation>
+                    </element>
+                    <element name="IssueDate" type="fu:date" minOccurs="1" maxOccurs="1">
+                        <annotation>
+                            <documentation>Vpise se datum izdaje racuna, ki je naveden na racunu. Podatek se vpise v formatu LLLL-MM-DD. / The date of issuing the invoice, which is stated on the invoice, is entered. The data is entered in the following format: YYYY-MM-DD.</documentation>
+                        </annotation>
+                    </element>
+                    <element name="SalesBookIdentifier" type="fu:SalesBookIdentifierType" minOccurs="0">
+                        <annotation>
+                            <documentation>Vpise se stevilka racuna, izdanega iz vezane knjige racunov.Vpise se tudi stevilka dokumenta, ki spreminja prvotni racun (dobropis, storno,…), v primeru izvajanja postopka potrjevanja naknadne spremembe podatkov na racunu, ki spreminja prvoten racun in se nanj nedvoumno nanasa. / The number of the invoice is entered, issued from the pre-numbered invoice book. The number of the document is also entered, which changes the original invoice (credit, reversing, etc.) in cases of performing the procedure for verification of subsequent changes of data on the invoice, which changes the original invoice and refers to it with reasonable certainty.</documentation>
+                        </annotation>
+                    </element>
+                    <element name="BusinessPremiseID" type="fu:BusinessPremiseIDType" minOccurs="1" maxOccurs="1">
+                        <annotation>
+                            <documentation>Vpise se oznaka poslovnega prostora v katerem je bil izdan racun iz vezane knjige racunov. Oznaka poslovnega prostora mora biti enaka oznaki, ki je bila posredovana v okviru podatkov o poslovnih prostorih. Vsebuje lahko samo crke in stevilke: 0-9, a-z, A-Z. / The mark of business premises is entered, in which the invoice has been issued from the pre-numbered invoice book. The mark of business premises shall be the same as the mark, which has been submitted within data about business premises. It may include only the following letters and numbers: 0-9, a-z, A-Z.</documentation>
+                        </annotation>
+                    </element>
+                    <element name="CustomerVATNumber" type="fu:CustomerVATType" minOccurs="0" maxOccurs="1">
+                        <annotation>
+                            <documentation>Vpise se davcna stevilka oziroma identifikacijska stevilka za namene DDV kupca oziroma narocnika v primeru, ko so ti podatki v skladu z davcnimi predpisi navedeni na racunu. Podatek se vpise, ce je naveden na racunu. / The tax number is entered or identification number for VAT purposes of the buyer or ordering party in cases when these data are in accordance with tax regulations stated on the invoice. The data is entered if it is stated on the invoice.
+        </documentation>
+                        </annotation>
+                    </element>
+                    <element name="InvoiceAmount" type="fu:AmountType" minOccurs="1" maxOccurs="1">
+                        <annotation>
+                            <documentation>Vnese se skupni znesek racuna. Vpise se znesek racuna skupaj z DDV in ostalimi davki/dajatvami, zmanjsan za zneske popustov. Decimalno locilo je pika. / The total amount of the invoice is entered. The amount of the invoice is entered together with VAT and other taxes/duties, decreased for amounts of discounts. The decimal separator is a dot.</documentation>
+                        </annotation>
+                    </element>
+                    <element name="ReturnsAmount" type="fu:AmountType" minOccurs="0" maxOccurs="1">
+                        <annotation>
+                            <documentation>Vpise se znesek povracil na racunu, ki se priznajo kupcu (npr. na podlagi dobropisa za vracilo embalaze). Podatek se vpise le, ce na racunu obstajajo povracila. Decimalno locilo je pika. / The amount of refunds on the invoice is entered, which are recognized to the buyer (e.g. on the credit basis for returning packaging). The data is entered only if there are refunds on the invoice. The decimal separator is a dot.</documentation>
+                        </annotation>
+                    </element>
+                    <element name="PaymentAmount" type="fu:AmountType" minOccurs="1" maxOccurs="1">
+                        <annotation>
+                            <documentation>Vpise se znesek racuna za placilo. Decimalno locilo je pika. / The invoice amount for payment is entered. The decimal separator is a dot. </documentation>
+                        </annotation>
+                    </element>
+                    <element name="TaxesPerSeller" type="fu:TaxesPerSellerType" maxOccurs="1000">
+                        <annotation>
+                            <documentation>Vpise se vrednost osnov po vrsti davka ali dajatve, razdeljeno po davcnih stopnjah, in pripadajoci davek ali dajatev, vrednost dobav na podlagi posebnih ureditev, dobav pri katerih je placnik DDV kupec blaga ali narocnik storitve, oproscenih dobav in neobdavcljivih dobav, loceno po davcnih stevilkah davcnih zavezancev. / The value of bases is entered according to the type of taxes or duties, divided according to tax rates, and associated taxes or duties, value of supplies on the basis of special arrangements, supplies where the payer of VAT is the buyer of goods or party ordering services, exempt supplies and non-taxable supplies, divided according to tax numbers of taxpayers.</documentation>
+                        </annotation>
+                    </element>
+                    <element name="ReferenceSalesBook" minOccurs="0" maxOccurs="1000">
+                        <annotation>
+                            <documentation>Stevilka racuna iz vezane knjige racunov, ki se spreminja; stevilka seta racuna iz vezane knjige racunov, ki se spreminja; serijska stevilka vezane knjige racunov iz katere je bil izdan racun, ki se spreminja; datum izdaje racuna iz vezane knjige racunov, ki se spreminja. / Number of the invoice from the pre-numbered invoice book, which is changed; number of the invoice set (original invoice + its two copies) from the pre-numbered invoice book, which is changed; serial number of the pre-numbered invoice book, from which the invoice has been issued, which is changed; date of issuing the invoice from the pre-numbered invoice book, which is changed.</documentation>
+                        </annotation>
+                        <complexType>
+                            <sequence>
+                                <element name="ReferenceSalesBookIdentifier" type="fu:SalesBookIdentifierType">
+                                    <annotation>
+                                        <documentation>Stevilka racuna iz vezane knjige racunov, ki se spreminja; stevilka seta racuna iz vezane knjige racunov, ki se spreminja; serijska stevilka vezane knjige racunov iz katere je bil izdan racun, ki se spreminja. / Number of the invoice from the pre-numbered invoice book, which is changed; number of the invoice set (original invoice + its two copies) from the pre-numbered invoice book, which is changed; serial number of the pre-numbered invoice book, from which the invoice has been issued, which is changed.</documentation>
+                                    </annotation>
+                                </element>
+                                <element name="ReferenceSalesBookIssueDate" type="date">
+                                    <annotation>
+                                        <documentation>Vpise se datum izdaje prvotnega racuna iz vezane knjige racunov, ki se spreminja, ce se spreminja prvoten racun izdan iz vezane knjige racunov. Podatek se vpise v formatu LLLL-MM-DD. Podatek se vpise v primeru, ce se z racunom, izdanim iz vezane knjige racunov, spreminja prvoten racun, ki je bil izdan iz vezane knjige racunov. / The date is entered of issuing the original invoice from the pre-numbered invoice book, which is changed, if the original invoice is changed issued from the pre-numbered invoice book. The data is written in the following format: YYYY-MM-DD. The data is entered in cases when the original invoice, which has been issued from the pre-numbered invoice book, is changed with the invoice, issued from the pre-numbered invoice book.</documentation>
+                                    </annotation>
+                                </element>
+                            </sequence>
+                        </complexType>
+                    </element>
+                    <element name="ReferenceInvoice" minOccurs="0" maxOccurs="1000">
+                        <annotation>
+                            <documentation>Racun iz elektronske naprave, ki se spreminja. / Number of the invoice, issued via the electronic device, which is changed </documentation>
+                        </annotation>
+                        <complexType>
+                            <sequence>
+                                <element name="ReferenceInvoiceIdentifier" type="fu:IdentifierType">
+                                    <annotation>
+                                        <documentation>Vpise se stevilka prvotnega racuna v primeru naknadne spremembe podatkov na prvotnem racunu, ce je bil prvoten racun izdan preko elektronske naprave. Podatek se vpise v primeru, ce se z racunom, izdanim iz vezane knjige racunov, spreminja prvoten racun, ki je bil izdan preko elektronske naprave. Za vpis stevilke racuna, ki se spreminja, veljajo enaka pravila kot pri vpisu stevilke racuna. Stevilka racuna je sestavljena iz treh delov: oznaka poslovnega prostora, oznaka elektronske naprave za izdajanje racunov, zaporedna stevilka racuna  Stevilka racuna se na racunu navede v naslednji obliki: oznaka poslovnega prostora-oznaka elektronske naprave-zaporedna stevilka racuna. Primer: TRGOVINA1-BLAG2-1234. Podatki se vpisujejo loceno. / The number is entered of the original invoice in cases of subsequent changes of data on the original invoice if the original invoice has been issued via the electronic device. The data is entered in cases when the original invoice, which has been issued via the electronic device, is changed with the invoice, issued from the pre-numbered invoice book. For entry of the number of the invoice, which is changed, the same rules apply as for entry of the number of the invoice. The number of the invoice includes three parts: mark of business premises, mark of the electronic device for issuing invoices, sequence invoice number. The number of the invoice is stated on the invoice in the following form: mark of business premises-mark of the electronic device-sequence number of the invoice. Example: TRGOVINA1-BLAG2-1234. Data are entered separately.</documentation>
+                                    </annotation>
+                                </element>
+                                <element name="ReferenceInvoiceIssueDateTime" type="fu:dateTime" minOccurs="0">
+                                    <annotation>
+                                        <documentation>Vpise se datum in cas izdaje prvotnega racuna v primeru naknadne spremembe podatkov na prvotnem racunu, ce je bil prvoten racun izdan preko elektronske naprave. Podatek se vpise v primeru, ce se z racunom, izdanim iz vezane knjige racunov, spreminja prvoten racun, ki je bil izdan preko elektronske naprave. Podatek se vpise v formatu LLLL-MM-DDTUU:MM:SS. / The date and time are entered of issuing the original invoice in cases of subsequent changes of data on the original invoice if the original invoice has been issued via the electronic device. The data is entered in cases when the original invoice, which has been issued via the electronic device, is changed with the invoice, issued from the pre-numbered invoice book. The data is entered in the following format: YYYY-MM-DDTHH:MM:SS.</documentation>
+                                    </annotation>
+                                </element>
+                            </sequence>
+                        </complexType>
+                    </element>
+                    <element name="SpecialNotes" minOccurs="0">
+                        <annotation>
+                            <documentation>Vpisejo se morebitne druge oznake, ki podrobneje pojasnjujejo zapise v zvezi z vsebino izdanih racunov in njihove spremembe. / Any potential other marks are entered, which explain in detail the records in connection with the content of issued invoices and their changes.</documentation>
+                        </annotation>
+                        <simpleType>
+                            <restriction base="string">
+                                <minLength value="1"/>
+                                <maxLength value="1000"/>
+                            </restriction>
+                        </simpleType>
+                    </element>
+                </sequence>
+            </complexType>
+            <simpleType name="UUIDType">
+                <annotation>
+                    <documentation>Enkratni identifikator sporocila. Vsako sporocilo mora imeti enkratno identifikacijsko oznako. Enako velja tudi pri posiljanju sporocila, ki se zaradi napake posilja ponovno. / Unique identifier of the message. Every message shall have the unique identification mark. The same is valid also for sending messages, which are resent due to errors.</documentation>
+                </annotation>
+                <restriction base="string">
+                    <pattern value="[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="ClosingTagType">
+                <annotation>
+                    <documentation>Zaprtje poslovnega prostora / Closure of business premises</documentation>
+                </annotation>
+                <restriction base="string">
+                    <enumeration value="Z"/>
+                </restriction>
+            </simpleType>
+            <complexType name="HeaderType">
+                <annotation>
+                    <documentation>Glava sporocila / Message header</documentation>
+                </annotation>
+                <sequence>
+                    <element name="MessageID" type="fu:UUIDType" minOccurs="1" maxOccurs="1">
+                        <annotation>
+                            <documentation>Enkratni identifikator sporocila. Vsako sporocilo mora imeti enkratno identifikacijsko oznako. Enako velja tudi pri posiljanju sporocila, ki se zaradi napake posilja ponovno. / Unique identifier of the message. Every message shall have the unique identification mark. The same is valid also for sending messages, which are resent due to errors. </documentation>
+                        </annotation>
+                    </element>
+                    <element name="DateTime" type="fu:dateTime" minOccurs="1" maxOccurs="1">
+                        <annotation>
+                            <documentation>Datum in cas posiljanja sporocila. LLLL-MM-DDTUU:MM:SS. / Date and time of sending the message YYYY-MM-DDTHH:MM:SS</documentation>
+                        </annotation>
+                    </element>
+                </sequence>
+            </complexType>
+            <complexType name="HeaderResponseType">
+                <annotation>
+                    <documentation>Glava sporocila / Message header</documentation>
+                </annotation>
+                <sequence>
+                    <element name="MessageID">
+                        <annotation>
+                            <documentation>Identifikator sporocila / Identifier of the message</documentation>
+                        </annotation>
+                        <simpleType>
+                            <restriction base="string">
+                                <minLength value="0"/>
+                                <maxLength value="36"/>
+                            </restriction>
+                        </simpleType>
+                    </element>
+                    <element name="DateTime" type="fu:dateTime">
+                        <annotation>
+                            <documentation>Datum in cas posiljanja sporocila. LLLL-MM-DDTUU:MM:SS. / Date and time of sending the message</documentation>
+                        </annotation>
+                    </element>
+                </sequence>
+            </complexType>
+            <simpleType name="TaxNumberType">
+                <annotation>
+                    <documentation>Davcna stevilka / Tax number</documentation>
+                </annotation>
+                <restriction base="positiveInteger">
+                    <pattern value=".{8}"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="NumberingStructureType">
+                <annotation>
+                    <documentation>Vpise se oznaka nacina dodeljevanja stevilk racunom: C - centralno na nivoju poslovnega prostora, B - po posamezni elektronski napravi (blagajna) Oznaka pojasnjuje na kaksen nacin se racunom dodeljujejo stevilke. Stevilke racunov se lahko dodeljujejo centralno na nivoju poslovnega prostora ali posamicno na elektronski napravi za izdajanje racunov. / The mark is entered for the method of assigning numbers to invoices: C - centrally at the level of business premises, B - per individual electronic device (cash register). The mark explains the method for assigning numbers to invoices. Invoice numbers may be assigned centrally at the level of business premises or individually on the electronic device for issuing invoices.</documentation>
+                </annotation>
+                <restriction base="string">
+                    <enumeration value="B"/>
+                    <enumeration value="C"/>
+                </restriction>
+            </simpleType>
+            <complexType name="IdentifierType">
+                <annotation>
+                    <documentation>Stevilka racuna / Number of the invoice</documentation>
+                </annotation>
+                <sequence>
+                    <element name="BusinessPremiseID" type="fu:BusinessPremiseIDType" minOccurs="1" maxOccurs="1">
+                        <annotation>
+                            <documentation>Oznaka poslovnega prostora. Vsebuje lahko samo crke in stevilke: 0-9, a-z, A-Z. / Mark of business premises. It may include only the following letters and numbers: 0-9, a-z, A-Z.</documentation>
+                        </annotation>
+                    </element>
+                    <element name="ElectronicDeviceID" minOccurs="1" maxOccurs="1">
+                        <annotation>
+                            <documentation>Oznaka elektronske naprave. Vsebuje lahko samo crke in stevilke: 0-9, a-z, A-Z. / Mark of the electronic device. It may include only the following letters and numbers: 0-9, a-z, A-Z.</documentation>
+                        </annotation>
+                        <simpleType>
+                            <restriction base="fu:ElectronicDeviceIDType">
+                                <maxLength value="20"/>
+                            </restriction>
+                        </simpleType>
+                    </element>
+                    <element name="InvoiceNumber" minOccurs="1" maxOccurs="1">
+                        <annotation>
+                            <documentation>Zaporedna stevilka racuna. Vsebuje lahko samo stevilke 0-9. Niso dovoljene vodilne nicle. / Sequence number of the invoice. It may include only numbers 0-9. Zeros cannot be on the first place.</documentation>
+                        </annotation>
+                        <simpleType>
+                            <restriction base="string">
+                                <maxLength value="20"/>
+                                <minLength value="1"/>
+                                <pattern value="\d*"/>
+                            </restriction>
+                        </simpleType>
+                    </element>
+                </sequence>
+            </complexType>
+            <complexType name="SalesBookIdentifierType">
+                <annotation>
+                    <documentation>Stevilka racuna / Number of the invoice</documentation>
+                </annotation>
+                <sequence>
+                    <element name="InvoiceNumber" minOccurs="1" maxOccurs="1">
+                        <annotation>
+                            <documentation>Vpise se stevilka racuna, izdanega iz vezane knjige racunov. / The number of the invoice is entered, issued from the pre-numbered invoice book.</documentation>
+                        </annotation>
+                        <simpleType>
+                            <restriction base="string">
+                                <minLength value="1"/>
+                                <maxLength value="20"/>
+                            </restriction>
+                        </simpleType>
+                    </element>
+                    <element name="SetNumber" minOccurs="1" maxOccurs="1">
+                        <annotation>
+                            <documentation>Stevilka seta racuna iz vezane knjige racunov, ki se spreminja / Number of the invoice set (original invoice + its two copies) from the pre-numbered invoice book, which is changed.</documentation>
+                        </annotation>
+                        <simpleType>
+                            <restriction base="string">
+                                <length value="2"/>
+                            </restriction>
+                        </simpleType>
+                    </element>
+                    <element name="SerialNumber" minOccurs="1" maxOccurs="1">
+                        <annotation>
+                            <documentation>Vpise se serijska stevilka vezane knjige racunov iz katere je bil izdan racun, ki se spreminja, ce je bil prvoten racun izdan iz vezane knjige racunov. / The serial number is entered of the pre-numbered invoice book, from which the invoice, which is changed, has been issued if the original invoice has been issued from the pre-numbered invoice book.</documentation>
+                        </annotation>
+                        <simpleType>
+                            <restriction base="string">
+                                <length value="12"/>
+                            </restriction>
+                        </simpleType>
+                    </element>
+                </sequence>
+            </complexType>
+            <simpleType name="BusinessPremiseIDType">
+                <annotation>
+                    <documentation>Oznaka poslovnega prostora / Mark of business premises</documentation>
+                </annotation>
+                <restriction base="string">
+                    <minLength value="1"/>
+                    <maxLength value="20"/>
+                    <pattern value="[0-9a-zA-Z]{1,20}"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="ElectronicDeviceIDType">
+                <annotation>
+                    <documentation>Oznaka elektronske naprave / Mark of the electronic device</documentation>
+                </annotation>
+                <restriction base="string">
+                    <maxLength value="20"/>
+                    <minLength value="1"/>
+                    <pattern value="[0-9a-zA-Z]{1,20}"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="CustomerVATType">
+                <annotation>
+                    <documentation>Davcna stevilka oziroma identifikacijska oznaka za namene DDV kupca / Tax number or identification mark for VAT purposes of the buyer</documentation>
+                </annotation>
+                <restriction base="string">
+                    <minLength value="1"/>
+                    <maxLength value="20"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="TaxRateType">
+                <annotation>
+                    <documentation>Vrednost davcne stopnje. / Value of the tax rate</documentation>
+                </annotation>
+                <restriction base="decimal">
+                    <totalDigits value="7"/>
+                    <fractionDigits value="2"/>
+                    <maxExclusive value="100000"/>
+                    <minExclusive value="-100000"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="TaxableAmountType">
+                <annotation>
+                    <documentation>Znesek davcne osnove (po zmanjsanju za popuste). / Amount of the tax base (after reduction for discounts)</documentation>
+                </annotation>
+                <restriction base="decimal">
+                    <totalDigits value="16"/>
+                    <fractionDigits value="2"/>
+                    <maxExclusive value="100000000000000"/>
+                    <minExclusive value="-100000000000000"/>
+                </restriction>
+            </simpleType>
+            <complexType name="VATType">
+                <annotation>
+                    <documentation>Vpisejo se podatki o DDV. / Data about VAT are entered.</documentation>
+                </annotation>
+                <sequence>
+                    <element name="TaxRate" type="fu:TaxRateType" minOccurs="1" maxOccurs="1">
+                        <annotation>
+                            <documentation>Vrednost davcne stopnje. Decimalno locilo je pika. / Value of the tax rate. The decimal separator is a dot.</documentation>
+                        </annotation>
+                    </element>
+                    <element name="TaxableAmount" type="fu:TaxableAmountType" minOccurs="1" maxOccurs="1">
+                        <annotation>
+                            <documentation>Znesek davcne osnove (po zmanjsanju za popuste). Decimalno locilo je pika. / Amount of the tax base (after reduction for discounts). The decimal separator is a dot.</documentation>
+                        </annotation>
+                    </element>
+                    <element name="TaxAmount" type="fu:TaxAmountType" minOccurs="1" maxOccurs="1">
+                        <annotation>
+                            <documentation>Znesek davka. Decimalno locilo je pika. / Amount of tax. The decimal separator is a dot.</documentation>
+                        </annotation>
+                    </element>
+                </sequence>
+            </complexType>
+            <complexType name="FlatRateCompensationType">
+                <annotation>
+                    <documentation>Vpisejo se podatki o pavsalnem nadomestilu. / Data about the flat-rate compensation are entered.</documentation>
+                </annotation>
+                <sequence>
+                    <element name="FlatRateRate" type="fu:TaxRateType" minOccurs="1" maxOccurs="1">
+                        <annotation>
+                            <documentation>Vrednost stopnje pavsalnega nadomestila. Decimalno locilo je pika. / Value of the flat-rate compensation's rate. The decimal separator is a dot.</documentation>
+                        </annotation>
+                    </element>
+                    <element name="FlatRateTaxableAmount" type="fu:TaxableAmountType" minOccurs="1" maxOccurs="1">
+                        <annotation>
+                            <documentation>Osnova oziroma vrednost od katere se obracuna znesek pavsalnega nadomestila (po zmanjsanju za popuste). Decimalno locilo je pika. / The base or value from which the amount of the flat-rate compensation is settled (after reduction for discounts). The decimal separator is a dot.</documentation>
+                        </annotation>
+                    </element>
+                    <element name="FlatRateAmount" type="fu:TaxAmountType" minOccurs="1" maxOccurs="1">
+                        <annotation>
+                            <documentation>Znesek pavsalnega nadomestila. Decimalno locilo je pika. / Amount of the flat-rate compensation. The decimal separator is a dot.</documentation>
+                        </annotation>
+                    </element>
+                </sequence>
+            </complexType>
+            <complexType name="TaxesPerSellerType">
+                <annotation>
+                    <documentation>Vpise se skupni znesek ostalih davkov oziroma dajatev (razen DDV), ki so na racunu. / The total amount is entered of other taxes or duties (except VAT), which are on the invoice.</documentation>
+                </annotation>
+                <sequence>
+                    <element name="SellerTaxNumber" type="fu:TaxNumberType" minOccurs="0" maxOccurs="1">
+                        <annotation>
+                            <documentation>Vpise se davcna stevilka davcnega zavezanca, v imenu in za racun katerega je bil izdan racun, ce je racun izdan v tujem imenu in za tuj racun oziroma ce je racun izdal prejemnik racuna v imenu in za racun dobavitelja. Ce racun ni bil izdan v tujem imenu in za tuj racun, se podatek ne vpisuje. / The tax number of the taxpayer is entered in the name of and on behalf of whose the invoice has been issued, if the invoice has been issued in the name of and on behalf of another person or if the invoice has been issued by the recipient of the invoice in the name of and on behalf of the supplier. If the invoice has not been issued in the name of and on behalf of another person, the data is not entered.</documentation>
+                        </annotation>
+                    </element>
+                    <element name="VAT" type="fu:VATType" minOccurs="0" maxOccurs="unbounded">
+                        <annotation>
+                            <documentation>Vpisejo se podatki o DDV. Podatek se posreduje le, ce racun vsebuje znesek obracunanega DDV. Podatek je sestavljen iz davcne stopnje, davcne osnove in zneska davka. Za davcne stopnje lahko obstaja seznam davcnih stopenj pri davcnemu organu. / Data about VAT are entered. The data is submitted only if the invoice  includes the amount of VAT settled. The data consists of the tax rate, tax base and amount of tax. The tax authority may have a list of tax rates.</documentation>
+                        </annotation>
+                    </element>
+                    <element name="FlatRateCompensation" type="fu:FlatRateCompensationType" minOccurs="0" maxOccurs="unbounded">
+                        <annotation>
+                            <documentation>Vpisejo se podatki o pavsalnem nadomestilu. Podatek se posreduje le, ce racun vsebuje znesek obracunanega pavsalnega nadomestila. Podatek je sestavljen iz stopnje, osnove in zneska pavsalnega nadomestila. / Data about the flat-rate compensation are entered. The data is submitted only if the invoice includes the amount of the flat-rate compensation settled. The data consists of the rate, base and amount of the flat-rate compensation.</documentation>
+                        </annotation>
+                    </element>
+                    <element name="OtherTaxesAmount" type="fu:TaxAmountType" minOccurs="0" maxOccurs="1">
+                        <annotation>
+                            <documentation>Vpise se skupni znesek ostalih davkov oziroma dajatev (razen DDV), ki so na racunu. Podatek se vpisuje le, ce racun vsebuje davke oziroma dajatve, ki niso DDV. Decimalno locilo je pika. / The total amount is entered of other taxes or duties (except VAT), which are on the invoice. The data is entered only if the invoice includes taxes or duties, which are not VAT. The decimal separator is a dot.</documentation>
+                        </annotation>
+                    </element>
+                    <element name="ExemptVATTaxableAmount" type="fu:TaxableAmountType" minOccurs="0" maxOccurs="1">
+                        <annotation>
+                            <documentation>Skupna vrednost dobav blaga ali storitev na racunu, ki so v skladu z Zakonom o davku na dodano vrednost oproscene placila DDV (po zmanjsanju za popuste). Podatek se vpise le, ce na racunu obstaja znesek oproscenih dobav. Decimalno locilo je pika. / The total value of supplies of goods or services on the invoice, which are in accordance with the Value Added Tax Act exempt from VAT payment (after reduction for discounts). The data is entered only if the amount of exempt supplies exists on the invoice. The decimal separator is a dot.</documentation>
+                        </annotation>
+                    </element>
+                    <element name="ReverseVATTaxableAmount" type="fu:TaxableAmountType" minOccurs="0" maxOccurs="1">
+                        <annotation>
+                            <documentation>Vrednost dobav, za katere je v skladu s 76.a clenom Zakona  o davku na dodano vrednost prejemnik blaga ali storitev placnik DDV - obrnjena davcna obveznost (po zmanjsanju za popuste). Podatek se vpise le, ce na racunu obstajajo taksne dobave. Decimalno locilo je pika. / The value of supplies, for which in accordance with Article 76.a of the Value Added Tax Act the recipient of goods or services is the payer of VAT - reverse charge procedure (after reduction for discounts). The decimal separator is a dot.</documentation>
+                        </annotation>
+                    </element>
+                    <element name="NontaxableAmount" type="fu:TaxableAmountType" minOccurs="0" maxOccurs="1">
+                        <annotation>
+                            <documentation>Vrednost neobdavcljivih dobav blaga ali storitev na racunu (po zmanjsanju za popuste). Podatek se vpise le, ce na racunu obstaja vrednost dobav, ki v skladu z Zakonom o davku na dodano vrednost niso predmet DDV. Decimalno locilo je pika. The data is entered only if such supplies exist on the invoice. / The value of non-taxable supplies of goods or services on the invoice (after reduction for discounts). The data is entered only if the value of supplies, which are not subject to VAT in accordance with the Value Added Tax Act, exists on the invoice. The decimal separator is a dot.</documentation>
+                        </annotation>
+                    </element>
+                    <element name="SpecialTaxRulesAmount" type="fu:TaxableAmountType" minOccurs="0" maxOccurs="1">
+                        <annotation>
+                            <documentation>Vrednost dobav, za katere se uporablja posebna ureditev, po kateri se obdavcuje razlika v ceni, in sicer posebna ureditev za rabljeno blago, umetniske predmete, zbirke in starine (101. clen Zakona o davku na dodano vrednost). Vpise se tudi vrednost dobav, za katere se obracunava in placuje DDV po posebni ureditvi za potovalne agencije (97. clen Zakona o davku na dodano vrednost). Vpise se znesek, ki je zmanjsan za popuste. Decimalno locilo je pika. / The value of supplies, for which a special arrangement is used, on the basis of which the margin is taxed, i.e. the special arrangement for second-hand goods, works of art, collector’s items and antiques (Article 101 of the Value Added Tax Act). The value of supplies is also entered, for which VAT is charged and paid according to the special arrangement for travel agencies (Article 97 of the Value Added Tax Act). The amount is entered, which is reduced for discounts. The decimal separator is a dot.</documentation>
+                        </annotation>
+                    </element>
+                </sequence>
+            </complexType>
+            <simpleType name="TaxAmountType">
+                <annotation>
+                    <documentation>Znesek davcne osnove (po zmanjsanju za popuste). / Amount of the tax base (after reduction for discounts).</documentation>
+                </annotation>
+                <restriction base="decimal">
+                    <totalDigits value="16"/>
+                    <fractionDigits value="2"/>
+                    <maxExclusive value="100000000000000"/>
+                    <minExclusive value="-100000000000000"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="TaxDescriptionType">
+                <annotation>
+                    <documentation/>
+                </annotation>
+                <restriction base="string">
+                    <maxLength value="1"/>
+                    <minLength value="1"/>
+                </restriction>
+            </simpleType>
+            <complexType name="PropertyIDType">
+                <sequence>
+                    <element name="CadastralNumber">
+                        <annotation>
+                            <documentation>Stevilka katastrske obcine / Number of the cadastral community</documentation>
+                        </annotation>
+                        <simpleType>
+                            <restriction base="integer">
+                                <totalDigits value="4"/>
+                            </restriction>
+                        </simpleType>
+                    </element>
+                    <element name="BuildingNumber">
+                        <annotation>
+                            <documentation>Stevilka stavbe / Number of the building</documentation>
+                        </annotation>
+                        <simpleType>
+                            <restriction base="integer">
+                                <totalDigits value="5"/>
+                            </restriction>
+                        </simpleType>
+                    </element>
+                    <element name="BuildingSectionNumber">
+                        <annotation>
+                            <documentation>Stevilka dela stavbe / Number of the part of the building</documentation>
+                        </annotation>
+                        <simpleType>
+                            <restriction base="integer">
+                                <totalDigits value="4"/>
+                            </restriction>
+                        </simpleType>
+                    </element>
+                </sequence>
+            </complexType>
+            <simpleType name="PremNumberType">
+                <restriction base="string">
+                    <minLength value="1"/>
+                    <maxLength value="20"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="AmountType">
+                <annotation>
+                    <documentation>Znesek / Amount </documentation>
+                </annotation>
+                <restriction base="decimal">
+                    <totalDigits value="16"/>
+                    <fractionDigits value="2"/>
+                    <maxExclusive value="100000000000000"/>
+                    <minExclusive value="-100000000000000"/>
+                </restriction>
+            </simpleType>
+            <complexType name="AddressInfoType">
+                <choice>
+                    <element name="Address" type="fu:AddressType">
+                        <annotation>
+                            <documentation>Naslov poslovnega prostora / Address of business premises</documentation>
+                        </annotation>
+                    </element>
+                    <element name="PremiseType" type="fu:OtherPremiseType">
+                        <annotation>
+                            <documentation>Vpise se vrsta poslovnega prostora, ce zavezanec izdaja racune v premicnem poslovnem prostoru: A - premicen objekt (npr. prevozno sredstvo, premicna stojnica) ali B - objekt na stalni lokaciji (npr. stojnica na trznici, kiosk) ali C - posamezna elektronska naprava za izdajo racunov ali vezana knjiga racunov v primerih, ko zavezanec ne uporablja drugega poslovnega prostora. / The type of business premises is entered if the person liable issues invoices in movable business premises: A - movable object (e.g. vehicle, movable stand) or B- object at a permanent location (e.g. market stand, newsstand) or C - individual electronic device for issuing invoices or pre-numbered invoice book in cases when the person liable doesn't use other business premises</documentation>
+                        </annotation>
+                    </element>
+                </choice>
+            </complexType>
+            <complexType name="VendingMachineBPType">
+                <sequence>
+                    <element name="VPremiseType" type="fu:VendingPremiseType">
+                        <annotation>
+                            <documentation>Vpise se vrsta avtomata za prodajo blaga ali storitev: / The type of vending machine for selling goods and services is entered:D - avtomat za prodajo blaga in storitev; avtomat ne izdaja racunov in je zavezan k sporocanju podatkov ob vsakokratni prodaji;/ Vending machine for selling goods and services; a vending machine does not issue invoices but is liable for fiscal verification of invoices; E - avtomat za prodajo blaga in storitev;avtomat ne izdaja racunov in je zavezan k sporocanju podatkov o prodaji v roku 10 delovnih dni (14.d clen ZDavPR); / Vending machine for selling goods and services; a vending machine does not issue invoices and is obliged to report sales data within 10 working days (14.d article of ZDavPR); F - avtomat za prodajo blaga in storitev; avtomat ne izdaja racunov in ni zavezan k sporocanju podatkov o prodaji (izjema od obveznosti sporocanja po 4. odstavku 14.a clena ZDavPR)./ Vending machine for selling goods and services; a vending machine does not issue invoices and is not obliged to report sales data  (exception based on the 4th paragraph of the 14.a article of ZDavPR);</documentation>
+                        </annotation>
+                    </element>
+                    <choice>
+                        <element name="Address" type="fu:AddressType">
+                            <annotation>
+                                <documentation>Vpise se podatek o naslovu lokacije avtomata za prodajo blaga ali storitev. ce naslova avtomata ni mozno natancno dolociti, se vpise podatke o najblizjemu obstojecemu naslovu. Naslov sestavljajo ulica in hisna stevilka, dodatek k hisni stevilki, naselje, posta in postna stevilka.ce podatki o naslovu niso na razpolago, se vpisejo podatki o geolokaciji avtomata (zemljepisna sirina in dolzina). / Geolocation data of the vending machine must be entered (latitude and longitude).</documentation>
+                            </annotation>
+                        </element>
+                        <element name="Geolocation" type="fu:GeolocationType">
+                            <annotation>
+                                <documentation>Vpisejo se podatki o geolokaciji avtomata (zemljepisna sirina in dolzina). / Data about the geolocation of the vending machine are entered (latitude and longitude).</documentation>
+                            </annotation>
+                        </element>
+                    </choice>
+                </sequence>
+            </complexType>
+            <simpleType name="VendingPremiseType">
+                <annotation>
+                    <documentation>Vpise se vrsta avtomata za prodajo blaga ali storitev: D - avtomat za prodajo blaga in storitev; avtomat ne izdaja racunov in je zavezan k sporocanju podatkov ob vsakokratni prodaji; E - avtomat za prodajo blaga in storitev; avtomat ne izdaja racunov in je zavezan k sporocanju podatkov o prodaji v roku 10 delovnih dni (14.d clen ZDavPR); F - avtomat za prodajo blaga in storitev; avtomat ne izdaja racunov in ni zavezan k sporocanju podatkov o prodaji (izjema od obveznosti sporocanja po 4. odstavku 14.a clena ZDavPR).</documentation>
+                </annotation>
+                <restriction base="string">
+                    <minLength value="1"/>
+                    <maxLength value="1"/>
+                    <enumeration value="D"/>
+                    <enumeration value="E"/>
+                    <enumeration value="F"/>
+                </restriction>
+            </simpleType>
+            <complexType name="GeolocationType">
+                <sequence>
+                    <element name="Latitude">
+                        <annotation>
+                            <documentation>Vpise se podatek o zemljepisni sirini. Decimalno locilo je pika. / Latitude is entered. The decimal separator is a dot</documentation>
+                        </annotation>
+                        <simpleType>
+                            <restriction base="decimal">
+                                <totalDigits value="8"/>
+                                <fractionDigits value="6"/>
+                            </restriction>
+                        </simpleType>
+                    </element>
+                    <element name="Longitude">
+                        <annotation>
+                            <documentation>Vpise se podatek o zemljepisni dolzini. Decimalno locilo je pika. / Vpise se podatek o zemljepisni dolzini. Decimalno locilo je pika. / Longitude is entered. The decimal separator is a dot</documentation>
+                        </annotation>
+                        <simpleType>
+                            <restriction base="decimal">
+                                <totalDigits value="9"/>
+                                <fractionDigits value="6"/>
+                            </restriction>
+                        </simpleType>
+                    </element>
+                </sequence>
+            </complexType>
+            <complexType name="BPIdentifierType">
+                <choice>
+                    <element name="RealEstateBP" type="fu:RealEstateBPType">
+                        <annotation>
+                            <documentation>Vpisejo se podatki o nepremicnem poslovnem prostoru, ce zavezanec izdaja racune v nepremicnem poslovnem prostoru. / Data about immovable business premises are entered if the person liable issues invoices in immovable business premises.</documentation>
+                        </annotation>
+                    </element>
+                    <element name="PremiseType" type="fu:OtherPremiseType">
+                        <annotation>
+                            <documentation>Vpise se vrsta poslovnega prostora, ce zavezanec izdaja racune v premicnem poslovnem prostoru: A - premicen objekt (npr. prevozno sredstvo, premicna stojnica) ali B - objekt na stalni lokaciji (npr. stojnica na trznici, kiosk) ali C - posamezna elektronska naprava za izdajo racunov ali vezana knjiga racunov v primerih, ko zavezanec ne uporablja drugega poslovnega prostora. / The type of business premises is entered if the person liable issues invoices in movable business premises: A - movable object (e.g. vehicle, movable stand) or B - object at a permanent location (e.g. market stand, newsstand) or C - individual electronic device for issuing invoices or pre-numbered invoice book in cases when the person liable doesn't use other business premises.</documentation>
+                        </annotation>
+                    </element>
+                    <element name="VendingMachine" type="fu:VendingMachineBPType">
+                        <annotation>
+                            <documentation>Vpisejo se podatki o avtomatu za prodajo blaga ali storitev, ce zavezanec za sporocanje opravlja prodajo prek avtomata. / Data about vending machines for selling goods and services is entered, if the person liable issues invoices from vending machine.</documentation>
+                        </annotation>
+                    </element>
+                </choice>
+            </complexType>
+            <complexType name="RealEstateBPType">
+                <sequence>
+                    <element name="PropertyID" type="fu:PropertyIDType">
+                        <annotation>
+                            <documentation>Vpise se identifikacijska oznaka stavbe oziroma dela stavbe, kjer se nahaja poslovni prostor, kot je dolocena v registru nepremicnin. Oznaka se vpise, ce zavezanec izdaja racune v nepremicnem poslovnem prostoru. Identifikacijska oznaka nepremicnine je sestavljena iz treh delov: stevilka katastrske obcine, stevilka stavbe, stevilka dela stavbe. Podatki se vpisujejo loceno. / The identification mark of the building or part of the building is entered, where business premises are located, as it is defined in the register of immovable property. The mark is entered if the person liable issues invoices in immovable business premises. The identification mark of the immovable property consists of three parts: number of the cadastral community, number of the building, number of the part of the building. Data are entered separately.</documentation>
+                        </annotation>
+                    </element>
+                    <element name="Address" type="fu:AddressType">
+                        <annotation>
+                            <documentation>Vpise se naslov poslovnega prostora, ce zavezanec izdaja racune v nepremicnem poslovnem prostoru. Naslov sestavljajo ulica in hisna stevilka, dodatek k hisni stevilki, naselje, posta in postna stevilka. / The address of business premises is entered if the person liable issues invoices in immovable business premises. The address includes: street, house number, addition to the house number, town, post office and postcode.</documentation>
+                        </annotation>
+                    </element>
+                </sequence>
+            </complexType>
+            <complexType name="AddressType">
+                <sequence>
+                    <element name="Street">
+                        <annotation>
+                            <documentation>Ulica / Street</documentation>
+                        </annotation>
+                        <simpleType>
+                            <restriction base="string">
+                                <minLength value="1"/>
+                                <maxLength value="100"/>
+                            </restriction>
+                        </simpleType>
+                    </element>
+                    <element name="HouseNumber">
+                        <annotation>
+                            <documentation>Hisna stevilka / House number</documentation>
+                        </annotation>
+                        <simpleType>
+                            <restriction base="string">
+                                <minLength value="1"/>
+                                <maxLength value="10"/>
+                            </restriction>
+                        </simpleType>
+                    </element>
+                    <element name="HouseNumberAdditional" minOccurs="0">
+                        <annotation>
+                            <documentation>Dodatek k hisni stevilki / Addition to the house number</documentation>
+                        </annotation>
+                        <simpleType>
+                            <restriction base="string">
+                                <minLength value="1"/>
+                                <maxLength value="10"/>
+                            </restriction>
+                        </simpleType>
+                    </element>
+                    <element name="Community">
+                        <annotation>
+                            <documentation>Naselje / Town</documentation>
+                        </annotation>
+                        <simpleType>
+                            <restriction base="string">
+                                <minLength value="1"/>
+                                <maxLength value="100"/>
+                            </restriction>
+                        </simpleType>
+                    </element>
+                    <element name="City">
+                        <annotation>
+                            <documentation>Posta / Post office</documentation>
+                        </annotation>
+                        <simpleType>
+                            <restriction base="string">
+                                <minLength value="1"/>
+                                <maxLength value="100"/>
+                            </restriction>
+                        </simpleType>
+                    </element>
+                    <element name="PostalCode">
+                        <annotation>
+                            <documentation>Postna stevilka / Postcode</documentation>
+                        </annotation>
+                        <simpleType>
+                            <restriction base="string">
+                                <length value="4"/>
+                            </restriction>
+                        </simpleType>
+                    </element>
+                </sequence>
+            </complexType>
+            <simpleType name="OtherPremiseType">
+                <annotation>
+                    <documentation>Vpise se vrsta poslovnega prostora, ce zavezanec izdaja racune v premicnem poslovnem prostoru: A - premicen objekt (npr. prevozno sredstvo, premicna stojnica) ali B - objekt na stalni lokaciji (npr. stojnica na trznici, kiosk) ali C - posamezna elektronska naprava za izdajo racunov ali vezana knjiga racunov v primerih, ko zavezanec ne uporablja drugega poslovnega prostora. prostoru / The type of business premises is entered if the person liable issues invoices in movable business premises: A - movable object (e.g. vehicle, movable stand) or B - object at a permanent location (e.g. market stand, newsstand) or C - individual electronic device for issuing invoices or pre-numbered invoice book in cases when the person liable doesn't use other business premises</documentation>
+                </annotation>
+                <restriction base="string">
+                    <minLength value="1"/>
+                    <maxLength value="1"/>
+                    <enumeration value="A"/>
+                    <enumeration value="B"/>
+                    <enumeration value="C"/>
+                </restriction>
+            </simpleType>
+            <complexType name="SoftwareSupplierType">
+                <choice>
+                    <element name="TaxNumber" type="fu:TaxNumberType">
+                        <annotation>
+                            <documentation>Vpise se davcna stevilka pravne ali fizicne osebe - proizvajalca ali vzdrzevalca programske opreme s sedezem v Sloveniji. / The tax number is entered of a legal entity or an individual - producer or software maintenance provider established in Slovenia.</documentation>
+                        </annotation>
+                    </element>
+                    <element name="NameForeign">
+                        <annotation>
+                            <documentation>Vpise se naziv in naslov proizvajalca ali vzdrzevalca programske opreme, ki nima sedeza v Sloveniji. / The title and address is entered of the producer or software maintenance provider not established in Slovenia.</documentation>
+                        </annotation>
+                        <simpleType>
+                            <restriction base="string">
+                                <minLength value="1"/>
+                                <maxLength value="1000"/>
+                            </restriction>
+                        </simpleType>
+                    </element>
+                </choice>
+            </complexType>
+            <complexType name="ErrorType">
+                <sequence>
+                    <element name="ErrorCode">
+                        <simpleType>
+                            <restriction base="fu:ErrorCodeType">
+                                <maxLength value="5"/>
+                                <minLength value="1"/>
+                            </restriction>
+                        </simpleType>
+                    </element>
+                    <element name="ErrorMessage" type="fu:ErrorMessageType"/>
+                </sequence>
+            </complexType>
+            <simpleType name="ErrorCodeType">
+                <annotation>
+                    <documentation>Sifra napake je v formatu sXXX, kjer je XXX triznakovna stevilka. / The error code is in sXXX format, where XXX is a three-character number.</documentation>
+                </annotation>
+                <restriction base="string">
+                    <pattern value="S[0-9]{3}"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="ErrorMessageType">
+                <annotation>
+                    <documentation>Sporocilo napake omejeno na 500 napak. / The error message is limited to 500 errors.</documentation>
+                </annotation>
+                <restriction base="string">
+                    <maxLength value="500"/>
+                </restriction>
+            </simpleType>
+            <complexType name="ErrorsType">
+                <sequence>
+                    <element name="Error" type="fu:ErrorType" minOccurs="1" maxOccurs="unbounded"/>
+                </sequence>
+            </complexType>
+            <element name="EchoRequest" type="string" nillable="false">
+                <annotation>
+                    <documentation>Echo sporocilo. / Echo message.</documentation>
+                </annotation>
+            </element>
+            <element name="EchoResponse" type="string" nillable="false">
+                <annotation>
+                    <documentation>Echo odgovor. / Echo response.</documentation>
+                </annotation>
+            </element>
+            <simpleType name="date">
+                <restriction base="xs:date">
+                    <pattern value="\d{4}[-]\d{2}[-]\d{2}"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="dateTime">
+                <restriction base="xs:dateTime">
+                    <pattern value="\d{4}[-]\d{2}[-]\d{2}(.)*"/>
+                </restriction>
+            </simpleType>
+        </schema>

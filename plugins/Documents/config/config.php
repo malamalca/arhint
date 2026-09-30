@@ -32,4 +32,20 @@ return ['Documents' => [
     'WKHTML2PDF' => [
         'binary' => 'C:\bin\wkhtmltopdf\bin\wkhtmltopdf.exe',
     ],
+    // FURS tax confirmation of invoices (override in config/app_local.php)
+    'furs' => [
+        'production' => false,
+        // total request timeout in seconds
+        'timeout' => 30,
+        'urls' => [
+            'test' => 'https://blagajne-test.fu.gov.si:9002/v1/cash_registers',
+            'production' => 'https://blagajne.fu.gov.si:9003/v1/cash_registers',
+        ],
+        // tax number of the software supplier prefilled on new business premises
+        'vendorTaxNo' => null,
+        'caFiles' => [
+            dirname(__FILE__) . DS . 'furs' . DS . 'si-trust-root.crt',
+            dirname(__FILE__) . DS . 'furs' . DS . 'sigov-ca2.crt',
+        ],
+    ],
 ]];

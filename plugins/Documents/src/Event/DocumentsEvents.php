@@ -15,7 +15,10 @@ use Cake\ORM\TableRegistry;
 use Cake\Routing\Router;
 use Cake\View\View;
 use Documents\Lib\DocumentsSidebar;
+use Documents\Lib\FursXml;
+use Documents\Model\Entity\Invoice;
 use Exception;
+use Malamalca\FiscalPHP\FiscalQr;
 use Throwable;
 
 class DocumentsEvents implements EventListenerInterface
@@ -37,7 +40,74 @@ class DocumentsEvents implements EventListenerInterface
             'App.Panels.Projects.Projects.view' => 'showDocumentsTable',
             'Model.afterSave' => 'updateAttachmentsCounter',
             'Model.afterDelete' => 'updateAttachmentsCounter',
+            'Documents.Invoices.Export.Html' => 'showTaxBlock',
         ];
+    }
+
+    /**
+     * Add tax confirmation block (QR, ZOI, EOR) to the invoice html before it is converted to PDF.
+     *
+     * @param \Cake\Event\Event $event Event object, subject is the invoice.
+     * @param string $html Invoice html.
+     * @return string
+     */
+    public function showTaxBlock(Event $event, string $html): string
+    {
+        $invoice = $event->getSubject();
+        if (!$invoice instanceof Invoice || empty($invoice->id)) {
+            return $html;
+        }
+
+        /** @var \Documents\Model\Table\InvoicesTaxConfirmationsTable $Confirmations */
+        $Confirmations = TableRegistry::getTableLocator()->get('Documents.InvoicesTaxConfirmations');
+        $confirmation = $Confirmations->findForInvoice($invoice->id);
+        if (!$confirmation || !$confirmation->isConfirmed()) {
+            return $html;
+        }
+
+        try {
+            $qr = base64_encode(FiscalQr::png(
+                (string)$confirmation->zoi,
+                (string)$confirmation->issuer_taxno,
+                FursXml::localTime($confirmation->issued_at),
+            ));
+        } catch (Throwable $e) {
+            return $html;
+        }
+
+        // FURS: QR symbol has to be printed at least 12 x 12 mm (image is 16.764 mm with the quiet zone)
+        $block = sprintf(
+            '<div class="tax-confirmation" style="display: block; margin-top: 19mm; page-break-inside: avoid;">' .
+            '<div style="display: block;"><img src="data:image/png;base64,%1$s" ' .
+            'style="width: 16.764mm; height: 16.764mm;" /></div>' .
+            '<div style="display: block; font-size: 6pt; line-height: 1.3; white-space: nowrap;">%2$s: %3$s</div>' .
+            '<div style="display: block; font-size: 6pt; line-height: 1.3; white-space: nowrap;">%4$s: %5$s</div>' .
+            '</div>',
+            $qr,
+            __d('documents', 'ZOI'),
+            h($confirmation->zoi),
+            __d('documents', 'EOR'),
+            h($confirmation->eor),
+        );
+
+        // the default template reserves a slot next to the invoice data (currency, place and date of issue)
+        $slot = '<div id="tax-block-slot" style="float: right; width: 28%;"></div>';
+        if (str_contains($html, $slot)) {
+            return str_replace($slot, str_replace('></div>', '>', $slot) . $block . '</div>', $html);
+        }
+
+        // custom templates without the slot: end of the content, above the footer
+        $footerPos = strpos($html, '<div id="footer1"');
+        if ($footerPos !== false) {
+            return substr_replace($html, $block, $footerPos, 0);
+        }
+
+        $index = strripos($html, '</body>');
+        if ($index === false) {
+            return $html . $block;
+        }
+
+        return substr_replace($html, $block . '</body>', $index, strlen('</body>'));
     }
 
     /**

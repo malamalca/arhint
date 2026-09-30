@@ -8,12 +8,15 @@ use Cake\Core\Plugin;
 use Cake\Event\Event;
 use Cake\Http\ServerRequest;
 use Cake\I18n\Date;
+use Cake\Log\Log;
 use Cake\ORM\Entity;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
+use Cake\Routing\Router;
 use Cake\Validation\Validator;
 use Documents\Model\Entity\Invoice;
+use Throwable;
 
 /**
  * Invoices Model
@@ -194,6 +197,41 @@ class InvoicesTable extends Table
                 $invoice->net_total += $item->net_total;
                 $invoice->total += $item->total;
             }
+        }
+    }
+
+    /**
+     * FURS tax confirmation of newly issued invoices.
+     *
+     * Runs inside the controller's save transaction; a failed confirmation never fails the save,
+     * it is stored on the confirmation record and can be retried from the invoice view.
+     *
+     * @param \Cake\Event\Event $event Event object.
+     * @param \Cake\ORM\Entity $invoice Saved invoice.
+     * @param \ArrayObject $options Save options.
+     * @return void
+     */
+    public function afterSave(Event $event, Entity $invoice, ArrayObject $options): void
+    {
+        if (!$invoice->isNew() || empty($invoice->counter_id)) {
+            return;
+        }
+
+        try {
+            /** @var \Documents\Model\Entity\DocumentsCounter $counter */
+            $counter = $this->DocumentsCounters->get($invoice->counter_id);
+            if (!$counter->tax_confirmation || $counter->direction !== 'issued') {
+                return;
+            }
+
+            $identity = Router::getRequest()?->getAttribute('identity');
+            $userId = $identity ? (string)$identity->getIdentifier() : ($invoice->user_id ?: null);
+
+            /** @var \Documents\Model\Table\InvoicesTaxConfirmationsTable $Confirmations */
+            $Confirmations = TableRegistry::getTableLocator()->get('Documents.InvoicesTaxConfirmations');
+            $Confirmations->signAndSend($invoice->id, $userId);
+        } catch (Throwable $e) {
+            Log::error('Tax confirmation failed: ' . $e->getMessage(), 'furs');
         }
     }
 

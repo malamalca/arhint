@@ -539,6 +539,57 @@ if ($document->documents_counter->direction == 'received') {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
+// TAX CONFIRMATION
+if ($document->documents_counter->tax_confirmation && $document->documents_counter->direction == 'issued') {
+    $invoiceView['panels']['tax_title'] = sprintf('<h3>%s</h3>', __d('documents', 'Tax Confirmation'));
+
+    // QR code is valid as soon as the ZOI exists
+    $taxQrLine = null;
+    if (!empty($taxConfirmation->zoi) && !empty($taxConfirmation->issuer_taxno)) {
+        try {
+            $taxQrPng = \Malamalca\FiscalPHP\FiscalQr::png(
+                (string)$taxConfirmation->zoi,
+                (string)$taxConfirmation->issuer_taxno,
+                \Documents\Lib\FursXml::localTime($taxConfirmation->issued_at),
+            );
+            $taxQrLine = [
+                'label' => __d('documents', 'QR') . ':',
+                'text' => sprintf(
+                    '<img src="data:image/png;base64,%s" style="width: 120px; height: 120px;" alt="QR" />',
+                    base64_encode($taxQrPng),
+                ),
+            ];
+        } catch (Throwable $e) {
+            $taxQrLine = null;
+        }
+    }
+
+    if (!empty($taxConfirmation) && $taxConfirmation->isConfirmed()) {
+        $invoiceView['panels']['tax'] = [
+            'lines' => [
+                ['label' => __d('documents', 'ZOI') . ':', 'text' => h($taxConfirmation->zoi)],
+                ['label' => __d('documents', 'EOR') . ':', 'text' => h($taxConfirmation->eor)],
+            ],
+        ];
+    } else {
+        $errorMessage = !empty($taxConfirmation->error_message) ? ': ' . h($taxConfirmation->error_message) : '';
+        $invoiceView['panels']['tax'] = [
+            'lines' => [
+                ['text' => sprintf('<span class="red-text">%s%s</span>', __d('documents', 'Invoice is not confirmed'), $errorMessage)],
+                ['text' => $this->getCurrentUser()->hasRole('editor') ? $this->Form->postLink(
+                    __d('documents', 'Retry Tax Confirmation'),
+                    ['action' => 'taxConfirm', $document->id],
+                    ['class' => 'btn'],
+                ) : ''],
+            ],
+        ];
+    }
+    if ($taxQrLine) {
+        $invoiceView['panels']['tax']['lines'][] = $taxQrLine;
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////
 // ATTACHMENTS
 if (!empty($document->attachments)) {
     $invoiceView['panels']['attachments_title'] = sprintf('<h3>%s</h3>', __d('documents', 'Attachments'));

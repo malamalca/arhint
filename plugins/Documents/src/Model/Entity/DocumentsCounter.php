@@ -25,6 +25,9 @@ use Cake\ORM\Entity;
  * @property string|null $tpl_header_id
  * @property string|null $tpl_body_id
  * @property string|null $tpl_footer_id
+ * @property bool $tax_confirmation
+ * @property string|null $tax_premise_id
+ * @property string|null $device_no
  * @property bool $primary
  * @property bool $active
  * @property \Cake\I18n\DateTime|null $created

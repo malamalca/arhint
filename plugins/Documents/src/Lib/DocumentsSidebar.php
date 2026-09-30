@@ -158,7 +158,7 @@ class DocumentsSidebar
         }
 
         $documents['items']['lookups']['active'] =
-            in_array($request->getParam('controller'), ['Items', 'DocumentsCounters']) ||
+            in_array($request->getParam('controller'), ['Items', 'DocumentsCounters', 'TaxPremises']) ||
             ($request->getParam('controller') == 'Vats' &&
                         in_array($request->getParam('action'), ['index', 'edit'])) ||
             ($request->getParam('controller') == 'DocumentsTemplates' &&
@@ -211,6 +211,16 @@ class DocumentsSidebar
                     ],
                     'active' => $request->getParam('controller') == 'DocumentsTemplates' &&
                         in_array($request->getParam('action'), ['index', 'edit']),
+                ],
+                'tax_premises' => [
+                    'visible' => true,
+                    'title' => __d('documents', 'Business Premises'),
+                    'url' => [
+                        'plugin' => 'Documents',
+                        'controller' => 'TaxPremises',
+                        'action' => 'index',
+                    ],
+                    'active' => $request->getParam('controller') == 'TaxPremises',
                 ],
                 'vehicles' => [
                     'visible' => true,

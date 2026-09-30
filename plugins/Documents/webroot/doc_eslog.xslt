@@ -155,6 +155,7 @@
     				</tr>
 					<tr>
 						<td>
+							<div id="tax-block-slot" style="float: right; width: 28%;"></div>
 							<table width="70%" class="basics" cellpadding="0" cellspacing="0">
 								<tr>
 									<td width="40%" class="big" style="border-bottom: 1px solid black;"><h1><xsl:value-of select="$TIP_DOKUMENTA"/> št.:</h1></td>

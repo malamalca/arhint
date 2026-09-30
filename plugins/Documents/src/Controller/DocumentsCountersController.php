@@ -74,7 +74,15 @@ class DocumentsCountersController extends AppController
         /** @var \Documents\Model\Table\DocumentsTemplatesTable $DocumentsTemplates */
         $DocumentsTemplates = TableRegistry::getTableLocator()->get('Documents.DocumentsTemplates');
         $templates = $DocumentsTemplates->findForOwner($this->getCurrentUser()->get('company_id'));
-        $this->set(compact('counter', 'templates'));
+
+        /** @var \Documents\Model\Table\TaxPremisesTable $TaxPremises */
+        $TaxPremises = TableRegistry::getTableLocator()->get('Documents.TaxPremises');
+        $taxPremises = $TaxPremises->findForOwner($this->getCurrentUser()->get('company_id'))
+            ->where(['closed' => false])
+            ->all()
+            ->combine('id', fn($premise) => $premise->no . ' - ' . $premise->title)
+            ->toArray();
+        $this->set(compact('counter', 'templates', 'taxPremises'));
 
         return null;
     }

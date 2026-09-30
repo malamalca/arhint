@@ -144,6 +144,42 @@ $counter_edit = [
             ],
             'fs_pmt_end' => '</fieldset>',
 
+            'fs_tax_start' => '<fieldset id="tax-confirmation">',
+            'lg_tax' => sprintf('<legend>%s</legend>', __d('documents', 'Tax Confirmation')),
+            'tax_confirmation' => [
+                'method' => 'control',
+                'parameters' => [
+                    'field' => 'tax_confirmation',
+                    'options' => [
+                        'type' => 'checkbox',
+                        'label' => __d('documents', 'Confirm issued invoices with tax authority (FURS)'),
+                    ],
+                ],
+            ],
+            'tax_premise_id' => [
+                'method' => 'control',
+                'parameters' => [
+                    'field' => 'tax_premise_id',
+                    'options' => [
+                        'type' => 'select',
+                        'label' => __d('documents', 'Business Premise') . ':',
+                        'options' => $taxPremises ?? [],
+                        'empty' => '-- ' . __d('documents', 'none') . ' --',
+                    ],
+                ],
+            ],
+            'device_no' => [
+                'method' => 'control',
+                'parameters' => [
+                    'field' => 'device_no',
+                    'options' => [
+                        'type' => 'text',
+                        'label' => __d('documents', 'Electronic Device No') . ':',
+                    ],
+                ],
+            ],
+            'fs_tax_end' => '</fieldset>',
+
             'fs_layout_start' => '<fieldset>',
             'lg_layout' => sprintf('<legend>%s</legend>', __d('documents', 'Default Layouts')),
             'tpl_header_id' => [
@@ -203,10 +239,13 @@ echo $this->Lil->form($counter_edit, 'Documents.DocumentsCounters.edit');
 
 <script type="text/javascript">
     $(document).ready(function() {
-        $("#counter-kind").val() == "Invoices" ? $("#payment-templates").show() : $("#payment-templates").hide();
+        function toggleInvoiceFieldsets() {
+            var isInvoices = $("#counter-kind").val() == "Invoices";
+            isInvoices ? $("#payment-templates").show() : $("#payment-templates").hide();
+            isInvoices && $("#counter-direction").val() == "issued" ? $("#tax-confirmation").show() : $("#tax-confirmation").hide();
+        }
 
-        $("#counter-kind").change(function(e) {
-            $("#counter-kind").val() == "Invoices" ? $("#payment-templates").show() : $("#payment-templates").hide();
-        });
+        toggleInvoiceFieldsets();
+        $("#counter-kind, #counter-direction").change(toggleInvoiceFieldsets);
     });
 </script>
