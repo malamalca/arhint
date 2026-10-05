@@ -1,14 +1,14 @@
 <?php
 declare(strict_types=1);
 
-use Migrations\AbstractMigration;
+use Migrations\BaseMigration;
 
 /**
  * Drop the documents_logs table - logs are now stored in App.Logs (logs table)
  * with model='Documents.Document', 'Documents.Invoice', or 'Documents.TravelOrder',
  * foreign_id=document_id.
  */
-class DropDocumentsLogs extends AbstractMigration
+class DropDocumentsLogs extends BaseMigration
 {
     /**
      * Change Method.

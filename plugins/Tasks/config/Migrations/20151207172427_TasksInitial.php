@@ -1,7 +1,7 @@
 <?php
-use Migrations\AbstractMigration;
+use Migrations\BaseMigration;
 
-class TasksInitial extends AbstractMigration
+class TasksInitial extends BaseMigration
 {
     public function up()
     {

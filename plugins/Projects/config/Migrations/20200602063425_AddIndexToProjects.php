@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-use Migrations\AbstractMigration;
+use Migrations\BaseMigration;
 
-class AddIndexToProjects extends AbstractMigration
+class AddIndexToProjects extends BaseMigration
 {
     /**
      * Change Method.

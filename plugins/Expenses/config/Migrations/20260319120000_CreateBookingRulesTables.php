@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-use Migrations\AbstractMigration;
+use Migrations\BaseMigration;
 
-class CreateBookingRulesTables extends AbstractMigration
+class CreateBookingRulesTables extends BaseMigration
 {
     /**
      * Up Method.

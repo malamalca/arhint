@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-use Migrations\AbstractMigration;
+use Migrations\BaseMigration;
 
-class AddModelForeignIdToBookingEntries extends AbstractMigration
+class AddModelForeignIdToBookingEntries extends BaseMigration
 {
     /**
      * Up Method.

@@ -2,9 +2,9 @@
 declare(strict_types=1);
 
 use Cake\Core\Configure;
-use Migrations\AbstractMigration;
+use Migrations\BaseMigration;
 
-class AddPropertiesToUsers extends AbstractMigration
+class AddPropertiesToUsers extends BaseMigration
 {
     /**
      * Change Method.

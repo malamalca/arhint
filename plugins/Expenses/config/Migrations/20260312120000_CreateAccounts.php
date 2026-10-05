@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-use Migrations\AbstractMigration;
+use Migrations\BaseMigration;
 
-class CreateAccounts extends AbstractMigration
+class CreateAccounts extends BaseMigration
 {
     /**
      * Up Method.

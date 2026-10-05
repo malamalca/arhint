@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-use Migrations\AbstractMigration;
+use Migrations\BaseMigration;
 
-class DropTableProjectsMaterials extends AbstractMigration
+class DropTableProjectsMaterials extends BaseMigration
 {
     /**
      * Change Method.

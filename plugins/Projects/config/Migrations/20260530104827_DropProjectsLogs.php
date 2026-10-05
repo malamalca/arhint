@@ -1,13 +1,13 @@
 <?php
 declare(strict_types=1);
 
-use Migrations\AbstractMigration;
+use Migrations\BaseMigration;
 
 /**
  * Drop the projects_logs table - logs are now stored in App.Logs (logs table)
  * with model='Project', action='Comment', foreign_id=project_id.
  */
-class DropProjectsLogs extends AbstractMigration
+class DropProjectsLogs extends BaseMigration
 {
     /**
      * Change Method.

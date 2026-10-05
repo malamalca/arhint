@@ -2,9 +2,9 @@
 declare(strict_types=1);
 
 use Cake\Core\Configure;
-use Migrations\AbstractMigration;
+use Migrations\BaseMigration;
 
-class CreateDashboardNotes extends AbstractMigration
+class CreateDashboardNotes extends BaseMigration
 {
     /**
      * Change Method.

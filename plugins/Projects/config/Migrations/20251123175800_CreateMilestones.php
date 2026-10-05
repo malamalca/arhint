@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-use Migrations\AbstractMigration;
-use Phinx\Db\Adapter\MysqlAdapter;
+use Migrations\BaseMigration;
+use Migrations\Db\Adapter\MysqlAdapter;
 
-class CreateMilestones extends AbstractMigration
+class CreateMilestones extends BaseMigration
 {
     /**
      * Change Method.

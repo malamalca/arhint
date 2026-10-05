@@ -1,12 +1,12 @@
 <?php
 declare(strict_types=1);
 
-use Migrations\AbstractMigration;
+use Migrations\BaseMigration;
 
 /**
  * Initial Migration
  */
-class CrmAddIndexesForPrimarySubitems extends AbstractMigration
+class CrmAddIndexesForPrimarySubitems extends BaseMigration
 {
     /**
      * Up migration tasks

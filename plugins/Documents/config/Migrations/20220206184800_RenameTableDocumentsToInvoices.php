@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-use Migrations\AbstractMigration;
+use Migrations\BaseMigration;
 
-class RenameTableDocumentsToInvoices extends AbstractMigration
+class RenameTableDocumentsToInvoices extends BaseMigration
 {
     /**
      * Change Method.

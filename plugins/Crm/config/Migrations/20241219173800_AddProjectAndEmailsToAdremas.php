@@ -2,10 +2,10 @@
 declare(strict_types=1);
 
 use Cake\Core\Configure;
-use Migrations\AbstractMigration;
-use Phinx\Db\Adapter\MysqlAdapter;
+use Migrations\BaseMigration;
+use Migrations\Db\Adapter\MysqlAdapter;
 
-class AddProjectAndEmailsToAdremas extends AbstractMigration
+class AddProjectAndEmailsToAdremas extends BaseMigration
 {
     /**
      * Change Method.

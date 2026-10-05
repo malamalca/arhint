@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-use Migrations\AbstractMigration;
+use Migrations\BaseMigration;
 
-class CreateTableAttachments extends AbstractMigration
+class CreateTableAttachments extends BaseMigration
 {
     public function up()
     {
