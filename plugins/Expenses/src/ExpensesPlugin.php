@@ -22,6 +22,8 @@ class ExpensesPlugin extends BasePlugin
      */
     public function bootstrap(PluginApplicationInterface $app): void
     {
+        parent::bootstrap($app);
+
         if (!defined('EXPENSES_COUNTER_INCOME')) {
             define('EXPENSES_COUNTER_INCOME', 0);
         }

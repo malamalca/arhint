@@ -25,6 +25,8 @@ class ProjectsPlugin extends BasePlugin
      */
     public function bootstrap(PluginApplicationInterface $app): void
     {
+        parent::bootstrap($app);
+
         Configure::load('Projects.config');
 
         $defaults = require CONFIG . 'app_local.php';

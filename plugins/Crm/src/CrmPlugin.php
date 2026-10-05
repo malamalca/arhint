@@ -25,6 +25,8 @@ class CrmPlugin extends BasePlugin
      */
     public function bootstrap(PluginApplicationInterface $app): void
     {
+        parent::bootstrap($app);
+
         Configure::load('Crm.config');
 
         $defaults = require CONFIG . 'app_local.php';

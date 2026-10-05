@@ -43,7 +43,6 @@
         "phpunit/phpunit": "^10.5.5 || ^11.1.3 || ^12.1"
     },
     "repositories": [
-        {"type": "path", "url": "../fiscal-php", "options": {"symlink": false, "versions": {"malamalca/fiscal-php": "dev-main"}}},
         {
             "type": "package",
             "package": {

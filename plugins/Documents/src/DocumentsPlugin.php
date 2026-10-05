@@ -25,6 +25,8 @@ class DocumentsPlugin extends BasePlugin
      */
     public function bootstrap(PluginApplicationInterface $app): void
     {
+        parent::bootstrap($app);
+
         Configure::load('Documents.config', 'default', true);
 
         $defaults = require CONFIG . 'app_local.php';
