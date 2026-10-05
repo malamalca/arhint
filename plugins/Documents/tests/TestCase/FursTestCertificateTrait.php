@@ -13,9 +13,10 @@ trait FursTestCertificateTrait
     /**
      * Create p12 contents. Skips the test when OpenSSL cannot generate keys (missing openssl.cnf on Windows).
      *
+     * @param string $unit Organizational unit of the certificate subject.
      * @return string
      */
-    protected function createP12(): string
+    protected function createP12(string $unit = '10039953'): string
     {
         $candidates = [
             null,
@@ -40,7 +41,7 @@ trait FursTestCertificateTrait
             $this->markTestSkipped('OpenSSL cannot generate a test key; set OPENSSL_CONF.');
         }
 
-        $csr = openssl_csr_new(['commonName' => 'FiscalTest', 'organizationalUnitName' => '10039953'], $key, $config);
+        $csr = openssl_csr_new(['commonName' => 'FiscalTest', 'organizationalUnitName' => $unit], $key, $config);
         $cert = openssl_csr_sign($csr, null, $key, 1, $config);
         if (!openssl_pkcs12_export($cert, $p12, $key, self::P12_PASSWORD)) {
             $this->markTestSkipped('OpenSSL cannot create a p12 store.');

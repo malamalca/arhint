@@ -130,6 +130,13 @@ class FursClient
      */
     private function send(string $method, string $signedXml): string
     {
+        $production = (bool)Configure::read('Documents.furs.production');
+        if ($production && $this->isTestCertificate()) {
+            throw new RuntimeException(
+                'The FURS test certificate (DavPotRacTEST) cannot be used with the production service.',
+            );
+        }
+
         $ca = $this->caBundle();
         try {
             $soap = (new FiscalSoap())
@@ -140,9 +147,31 @@ class FursClient
                 ->setCert($ca);
 
             return (string)$soap->{$method}($signedXml);
+        } catch (Exception $e) {
+            $message = $e->getMessage() . ' [FURS ' . ($production ? 'production' : 'test') . ': ' . self::url() . ']';
+            // an unaccepted client certificate shows up as a TLS failure, not as a FURS error message
+            if (preg_match('/bad record mac|handshake failure|certificate|alert/i', $e->getMessage())) {
+                $message .= ' The FURS server probably rejected the client certificate: use a test certificate with ' .
+                    'the test service and a production certificate (with its certificate chain in the p12) with ' .
+                    'the production service (Documents.furs.production).';
+            }
+
+            throw new RuntimeException($message, 0, $e);
         } finally {
             unlink($ca);
         }
+    }
+
+    /**
+     * Certificate belongs to the FURS test environment.
+     *
+     * @return bool
+     */
+    public function isTestCertificate(): bool
+    {
+        $info = $this->certificateInfo();
+
+        return in_array('DavPotRacTEST', (array)($info['subject']['OU'] ?? []), true);
     }
 
     /**
@@ -158,7 +187,9 @@ class FursClient
         try {
             $doc = FiscalUtils::parseXml($xml);
         } catch (Exception $e) {
-            $ret['error'] = 'Invalid response';
+            // not a SOAP message, e.g. the HTML page of a firewall rejecting the request
+            $text = trim((string)preg_replace('/\s+/', ' ', strip_tags(self::toUtf8($xml))));
+            $ret['error'] = 'Invalid response' . ($text !== '' ? ': ' . mb_substr($text, 0, 400) : '');
 
             return $ret;
         }
@@ -196,6 +227,21 @@ class FursClient
         $ret['error'] = 'Unexpected response';
 
         return $ret;
+    }
+
+    /**
+     * Convert a response to valid UTF-8. FURS error pages are not UTF-8 (ISO-8859-2).
+     *
+     * @param string $text Response text.
+     * @return string
+     */
+    public static function toUtf8(string $text): string
+    {
+        if (mb_check_encoding($text, 'UTF-8')) {
+            return $text;
+        }
+
+        return mb_convert_encoding($text, 'UTF-8', 'ISO-8859-2');
     }
 
     /**

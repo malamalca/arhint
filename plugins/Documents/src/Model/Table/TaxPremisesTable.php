@@ -129,7 +129,7 @@ class TaxPremisesTable extends Table
             return $e->getMessage();
         }
 
-        $premise->last_response = $response;
+        $premise->last_response = FursClient::toUtf8($response);
         $result = FursClient::parseResponse($response);
         if ($result['ok']) {
             $premise->active = !$premise->closed;

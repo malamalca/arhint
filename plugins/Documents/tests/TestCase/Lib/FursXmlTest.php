@@ -152,4 +152,25 @@ class FursXmlTest extends TestCase
 
         $this->assertFalse(FursClient::parseResponse('<nonsense')['ok']);
     }
+
+    public function testNonXmlResponseIsReportedAndConvertedToUtf8(): void
+    {
+        // the FURS firewall answers with an ISO-8859-2 HTML page
+        $html = mb_convert_encoding(
+            '<html><head><title>Request Rejected</title></head><body>Vaša zahteva je bila zavrnjena.</body></html>',
+            'ISO-8859-2',
+            'UTF-8',
+        );
+
+        $this->assertFalse(mb_check_encoding($html, 'UTF-8'));
+        $this->assertSame(
+            '<html><head><title>Request Rejected</title></head><body>Vaša zahteva je bila zavrnjena.</body></html>',
+            FursClient::toUtf8($html),
+        );
+
+        $result = FursClient::parseResponse($html);
+        $this->assertFalse($result['ok']);
+        $this->assertStringContainsString('Request Rejected', (string)$result['error']);
+        $this->assertStringContainsString('Vaša zahteva je bila zavrnjena.', (string)$result['error']);
+    }
 }

@@ -143,7 +143,7 @@ class InvoicesTaxConfirmationsTable extends Table
             return $this->fail($confirmation, self::ERROR_REQUEST, $e->getMessage());
         }
 
-        $confirmation->last_response = $response;
+        $confirmation->last_response = FursClient::toUtf8($response);
         $result = FursClient::parseResponse($response);
         if ($result['ok']) {
             $confirmation->eor = $result['eor'];
