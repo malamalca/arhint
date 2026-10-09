@@ -261,4 +261,97 @@ class AIAssistantTest extends TestCase
         $result = $detectMethod->invoke($mockAssistant, ['Projects', 'Crm'], [], 'hello');
         $this->assertSame([], $result);
     }
+
+    // -------------------------------------------------------------------------
+    // Empty replies and long tool results
+    // -------------------------------------------------------------------------
+
+    /**
+     * Assistant whose model returns the given contents one after another.
+     *
+     * @param array<int, string> $contents Replies of the model.
+     * @return \App\Lib\AIAssistant
+     */
+    private function assistantReplying(array $contents): AIAssistant
+    {
+        return new class ($contents) extends AIAssistant {
+            /**
+             * @var array<int, array<string, mixed>>
+             */
+            public array $requests = [];
+
+            /**
+             * @param array<int, string> $contents
+             */
+            public function __construct(private array $contents)
+            {
+                parent::__construct();
+            }
+
+            protected function doRequest(array $data, int $timeoutSeconds = 180): array
+            {
+                $this->requests[] = $data;
+
+                return [
+                    'content' => array_shift($this->contents) ?? '',
+                    'finish_reason' => 'stop',
+                    'tool_calls' => [],
+                ];
+            }
+        };
+    }
+
+    public function testEmptyReplyIsRetriedOnce(): void
+    {
+        $assistant = $this->assistantReplying(['', 'Here is the answer.']);
+
+        $this->assertSame('Here is the answer.', $assistant->getResponse('Hello'));
+
+        $this->assertCount(2, $assistant->requests);
+        $lastMessage = end($assistant->requests[1]['messages']);
+        $this->assertStringContainsString('previous reply was empty', $lastMessage['content']);
+
+        // The nudge is not stored in the conversation history.
+        $contents = array_column($assistant->getHistory(), 'content');
+        $this->assertNotContains($lastMessage['content'], $contents);
+    }
+
+    public function testEmptyReplyIsNeverReturnedOrStored(): void
+    {
+        $assistant = $this->assistantReplying(['', '']);
+
+        $reply = $assistant->getResponse('Hello');
+
+        $this->assertNotSame('', $reply);
+        foreach ($assistant->getHistory() as $message) {
+            $this->assertNotSame('', trim((string)$message['content']));
+        }
+    }
+
+    public function testOldToolMessagesAreShortenedButRepliesAreKept(): void
+    {
+        $longText = str_repeat('Zahteva. ', 1000);
+        $longAnswer = str_repeat('Odgovor. ', 500);
+        $assistant = $this->assistantReplying(['Short answer.']);
+        $assistant->setHistory([
+            ['role' => 'user', 'content' => 'Read the attachment'],
+            ['role' => 'assistant', 'content' => json_encode([
+                'tool' => 'Documents.update_document',
+                'arguments' => ['id' => 'd1', 'descript' => $longText],
+            ])],
+            ['role' => 'user', 'content' => 'Tool result for App.read_attachment: ' . $longText],
+            ['role' => 'assistant', 'content' => $longAnswer],
+        ]);
+
+        $assistant->getResponse('Make it shorter');
+
+        // [0] system prompt, [1] user, [2] tool call, [3] tool result, [4] earlier reply, [5] new question.
+        $sent = $assistant->requests[0]['messages'];
+        $toolCall = json_decode($sent[2]['content'], true);
+        $this->assertSame('Documents.update_document', $toolCall['tool']);
+        $this->assertLessThan(500, mb_strlen($sent[2]['content']));
+        $this->assertLessThan(1600, mb_strlen($sent[3]['content']));
+        $this->assertStringContainsString('[truncated]', $sent[3]['content']);
+        $this->assertSame($longAnswer, $sent[4]['content']);
+    }
 }

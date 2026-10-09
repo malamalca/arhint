@@ -18,7 +18,7 @@ class AppAIToolsEvents implements EventListenerInterface
     /**
      * Maximum number of characters of attachment text returned by a single read_attachment call.
      */
-    private const ATTACHMENT_CHUNK_CHARS = 12000;
+    private const ATTACHMENT_CHUNK_CHARS = 6000;
 
     /**
      * Return implemented events.

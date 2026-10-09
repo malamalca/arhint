@@ -44,7 +44,8 @@ class DocumentsAIToolsEvents implements EventListenerInterface
      */
     public function aiAssistantRegisterModule(Event $event, ArrayObject $modulesList): void
     {
-        $modulesList['Documents'] = 'Documents module for invoices, generic documents, and travel orders.';
+        $modulesList['Documents'] = 'Documents module for invoices, generic documents (their numbers like P.1051, '
+            . 'description field and attachments), and travel orders.';
     }
 
     /**

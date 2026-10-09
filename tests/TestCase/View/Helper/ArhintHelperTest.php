@@ -251,7 +251,7 @@ class ArhintHelperTest extends TestCase
         // Without an identity there is no re-analysis button.
         $table = $this->Arhint->attachmentsTable([$attachment], 'Document', 'd1', ['showAddButton' => false]);
         $actions = $table['table']['body']['rows'][0]['columns']['actions']['html'];
-        $this->assertStringNotContainsString('auto_awesome', $actions);
+        $this->assertStringNotContainsString('autorenew', $actions);
 
         $user = $this->createMock(User::class);
         $user->method('hasRole')->willReturn(true);
@@ -264,7 +264,7 @@ class ArhintHelperTest extends TestCase
 
         $table = $arhint->attachmentsTable([$attachment], 'Document', 'd1', ['showAddButton' => false]);
         $actions = $table['table']['body']['rows'][0]['columns']['actions']['html'];
-        $this->assertStringContainsString('auto_awesome', $actions);
+        $this->assertStringContainsString('autorenew', $actions);
         $this->assertStringContainsString('/attachments/reanalyze/a1', $actions);
     }
 }

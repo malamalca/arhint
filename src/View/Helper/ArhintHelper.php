@@ -413,7 +413,7 @@ class ArhintHelper extends Helper
         }
 
         return $this->Form->postLink(
-            '<i class="material-icons">auto_awesome</i>',
+            '<i class="material-icons">autorenew</i>',
             [
                 'prefix' => false,
                 'plugin' => false,

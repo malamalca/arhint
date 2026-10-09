@@ -17,6 +17,36 @@ use Throwable;
 class AiChatJob implements JobInterface
 {
     /**
+     * Convert the reply of the AI to HTML for the chat window.
+     *
+     * HTML in the reply is shown as text, never rendered. It used to be stripped, which left an
+     * empty answer when the user asked the AI to "format the output as html".
+     *
+     * @param string $markdown Reply of the AI (Markdown, possibly with HTML).
+     * @return string
+     */
+    public static function renderMarkdown(string $markdown): string
+    {
+        // A reply that starts with an HTML tag is HTML code the user asked for: show it as code.
+        if (preg_match('/^\s*<[a-z!][^>]*>/i', $markdown)) {
+            $markdown = "````html\n" . trim($markdown) . "\n````";
+        }
+
+        $converter = new GithubFlavoredMarkdownConverter([
+            'html_input' => 'escape',
+            'allow_unsafe_links' => false,
+        ]);
+        $html = trim((string)$converter->convert($markdown));
+
+        // Never turn a reply into nothing.
+        if ($html === '' && trim($markdown) !== '') {
+            return '<pre>' . h($markdown) . '</pre>';
+        }
+
+        return $html;
+    }
+
+    /**
      * Processes the AI chat request from the queue.
      *
      * Reads user_id, message, history, and job_id from the message body,
@@ -84,11 +114,7 @@ class AiChatJob implements JobInterface
 
             $response = $assistant->getResponse($userMessage);
 
-            $converter = new GithubFlavoredMarkdownConverter([
-                'html_input' => 'strip',
-                'allow_unsafe_links' => false,
-            ]);
-            $responseHtml = (string)$converter->convert($response);
+            $responseHtml = self::renderMarkdown($response);
 
             Log::debug(
                 'AiChatJob writing result',
