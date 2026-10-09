@@ -6,10 +6,15 @@ namespace App\Test\TestCase\Event;
 use App\Event\AppEvents;
 use App\View\Helper\LilHelper;
 use ArrayObject;
+use Cake\Core\Configure;
 use Cake\Event\Event;
+use Cake\I18n\Date;
 use Cake\ORM\Table;
+use Cake\Queue\QueueManager;
 use Cake\TestSuite\TestCase;
 use Cake\View\View;
+use Documents\Model\Entity\Document;
+use Documents\Model\Table\DocumentsTable;
 use stdClass;
 
 /**
@@ -23,11 +28,24 @@ use stdClass;
 class AppEventsTest extends TestCase
 {
     protected AppEvents $appEvents;
+    private ?string $queueDir = null;
 
     public function setUp(): void
     {
         parent::setUp();
         $this->appEvents = new AppEvents();
+    }
+
+    public function tearDown(): void
+    {
+        if ($this->queueDir !== null) {
+            QueueManager::drop('default');
+            QueueManager::setConfig('default', (array)Configure::read('Queue.default'));
+
+            $this->queueDir = null;
+        }
+
+        parent::tearDown();
     }
 
     // -------------------------------------------------------------------------
@@ -185,5 +203,117 @@ class AppEventsTest extends TestCase
 
         // Lines must be unchanged
         $this->assertSame($lines, $formLines->form['lines']);
+    }
+
+    // -------------------------------------------------------------------------
+    // updateModelAttachments — AI analysis of new documents
+    // -------------------------------------------------------------------------
+
+    /**
+     * A new document queues an AiProcessLog job carrying the ids of its attachments.
+     */
+    public function testNewDocumentQueuesAiAnalysis(): void
+    {
+        $queueDir = TMP . 'tests_queue' . DS;
+        $this->configureTestQueue($queueDir);
+
+        $document = new Document([
+            'id' => 'd0d59a31-6de7-4eb4-8230-ca09113a7fe6',
+            'user_id' => USER_ADMIN,
+            'project_id' => 'p-1',
+            'no' => 'P.1051',
+            'title' => 'Poročilo',
+            'descript' => '<p>Opis</p>',
+            'dat_issue' => new Date('2026-10-01'),
+        ]);
+
+        $event = new Event('Model.afterSave', new DocumentsTable());
+        $this->appEvents->updateModelAttachments($event, $document, new ArrayObject());
+
+        $messages = $this->readQueuedMessages($queueDir);
+        $this->assertCount(1, $messages);
+
+        $data = $messages[0]['data'][0] ?? $messages[0]['data'];
+        $this->assertSame(USER_ADMIN, $data['user_id']);
+        $this->assertSame('Document', $data['entity']['model']);
+        $this->assertSame('d0d59a31-6de7-4eb4-8230-ca09113a7fe6', $data['entity']['foreign_id']);
+        $this->assertSame('p-1', $data['entity']['project_id']);
+        $this->assertSame([], $data['entity']['attachment_ids']);
+        $this->assertStringContainsString('No: P.1051', $data['entity']['descript']);
+        $this->assertStringContainsString('Description: Opis', $data['entity']['descript']);
+    }
+
+    /**
+     * Saving an existing document does not queue another analysis.
+     */
+    public function testExistingDocumentDoesNotQueueAiAnalysis(): void
+    {
+        $queueDir = TMP . 'tests_queue' . DS;
+        $this->configureTestQueue($queueDir);
+
+        $document = new Document(['id' => 'd0d59a31-6de7-4eb4-8230-ca09113a7fe6', 'user_id' => USER_ADMIN]);
+        $document->setNew(false);
+
+        $event = new Event('Model.afterSave', new DocumentsTable());
+        $this->appEvents->updateModelAttachments($event, $document, new ArrayObject());
+
+        $this->assertCount(0, $this->readQueuedMessages($queueDir));
+    }
+
+    /**
+     * Point the default queue to a temporary file transport.
+     *
+     * @param string $queueDir Directory for queue files.
+     * @return void
+     */
+    private function configureTestQueue(string $queueDir): void
+    {
+        if (!is_dir($queueDir)) {
+            mkdir($queueDir, 0777, true);
+        }
+        // The file transport keeps its lock file open until the process ends, so the directory
+        // is shared and only the message files are removed.
+        foreach (glob($queueDir . '*') ?: [] as $file) {
+            if (!str_ends_with($file, '.lock')) {
+                unlink($file);
+            }
+        }
+        $this->queueDir = $queueDir;
+
+        QueueManager::drop('default');
+        QueueManager::setConfig('default', [
+            'url' => ['transport' => ['dsn' => 'file:', 'path' => $queueDir]],
+            'queue' => 'default',
+        ]);
+    }
+
+    /**
+     * Read messages from the test queue directory.
+     *
+     * @param string $queueDir Directory for queue files.
+     * @return array<int, array<string, mixed>>
+     */
+    private function readQueuedMessages(string $queueDir): array
+    {
+        $messages = [];
+        foreach (glob($queueDir . '*') ?: [] as $file) {
+            if (str_ends_with($file, '.lock')) {
+                continue;
+            }
+            foreach (file($file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) ?: [] as $line) {
+                // Enqueue FS format: "|{...envelope...}" followed by the JSON body.
+                $start = strpos($line, '{"');
+                $envelope = $start === false ? null : json_decode(substr($line, $start), true);
+                if (!is_array($envelope) || !isset($envelope['body'])) {
+                    continue;
+                }
+                $body = json_decode((string)$envelope['body'], true);
+                if (is_array($body)) {
+                    $messages[] = $body;
+                }
+            }
+        }
+
+        return $messages;
     }
 }

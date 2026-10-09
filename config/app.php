@@ -494,6 +494,14 @@ return [
         'executable' => '/usr/bin/gs',
     ],
 
+    /*
+     * Poppler `pdftotext` used to read the text of PDF attachments (AI assistant, vector database).
+     * Just the program name is looked up in PATH; set a full path when it is installed elsewhere.
+     */
+    'Poppler' => [
+        'pdftotext' => 'pdftotext',
+    ],
+
     'Queue' => [
         'default' => [
             'url' => 'file://' . TMP . 'queue',

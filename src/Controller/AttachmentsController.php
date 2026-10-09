@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Lib\DocumentAiIndexer;
 use Cake\Core\Configure;
 use Cake\Http\Exception\NotFoundException;
 use Cake\Http\Response;
@@ -139,6 +140,42 @@ class AttachmentsController extends AppController
         }
 
         $redirect = $this->getRequest()->getQuery('redirect', ['action' => 'index']);
+
+        return $this->redirect($redirect);
+    }
+
+    /**
+     * Queue a new AI analysis of the document the attachment belongs to.
+     *
+     * The analysis replaces the previous one in the vector database and covers all attachments
+     * of the document.
+     *
+     * @param string|null $id Attachment id.
+     * @return \Cake\Http\Response Redirects back.
+     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
+     */
+    public function reanalyze(?string $id = null): Response
+    {
+        $this->request->allowMethod(['post']);
+        $attachment = $this->Attachments->get($id);
+
+        $this->Authorization->authorize($attachment);
+
+        if (
+            $attachment->model === 'Document'
+            && (new DocumentAiIndexer())->requeue((string)$attachment->foreign_id)
+        ) {
+            $this->Flash->success(__('The AI analysis has been queued. The result will be visible shortly.'));
+        } else {
+            $this->Flash->error(__('The AI analysis could not be queued.'));
+        }
+
+        // Only redirect to addresses on this site.
+        $redirect = (string)$this->getRequest()->getQuery('redirect', '');
+        $host = preg_quote($this->getRequest()->host(), '#');
+        if (!preg_match('#^(/(?!/)|https?://' . $host . '(/|$))#', $redirect)) {
+            $redirect = '/';
+        }
 
         return $this->redirect($redirect);
     }

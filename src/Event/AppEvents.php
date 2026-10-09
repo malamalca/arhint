@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Event;
 
+use App\Lib\DocumentAiIndexer;
 use App\Model\Table\LogsTable;
 use App\View\Helper\ArhintHelper;
 use App\View\Widget\DurationWidget;
@@ -225,6 +226,7 @@ class AppEvents implements EventListenerInterface
     public function updateModelAttachments(Event $event, EntityInterface $entity, ArrayObject $options): void
     {
         if (in_array(get_class($event->getSubject()), [DocumentsTable::class, InvoicesTable::class])) {
+            $savedAttachmentIds = [];
             if (!empty($this->attachments)) {
                 $AttachmentsTable = TableRegistry::getTableLocator()->get('Attachments');
 
@@ -237,16 +239,24 @@ class AppEvents implements EventListenerInterface
                         $attachment = $AttachmentsTable->newEntity(
                             array_merge($attch, ['foreign_id' => $entity->get('id')]),
                         );
-                        $AttachmentsTable->save(
+                        $savedAttachment = $AttachmentsTable->save(
                             $attachment,
                             ['uploadedFilename' => [
                                 (string)$attch['filename']->getClientFilename() => $attch['filename'],
                             ]],
                         );
+                        if ($savedAttachment) {
+                            $savedAttachmentIds[] = (string)$savedAttachment->get('id');
+                        }
                     }
                 }
 
                 $this->attachments = null;
+            }
+
+            // Index new documents (and the text of their attachments) in the vector database.
+            if ($event->getSubject() instanceof DocumentsTable && $entity->isNew()) {
+                (new DocumentAiIndexer())->queue($entity, $savedAttachmentIds);
             }
         }
 

@@ -117,6 +117,8 @@ class Document extends Entity implements AISerializableInterface
             'project_id' => $this->project_id,
             'no' => $this->no,
             'title' => $this->title,
+            'descript' => $this->descript,
+            'attachments_count' => $this->attachments_count,
             'dat_issue' => $this->dat_issue ? (string)$this->dat_issue : null,
             'view_url' => $this->view_url ?? null,
         ];

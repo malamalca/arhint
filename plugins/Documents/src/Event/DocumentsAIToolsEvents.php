@@ -310,6 +310,23 @@ class DocumentsAIToolsEvents implements EventListenerInterface
         ));
 
         $toolsList->append(new AITool(
+            name: 'Documents.update_document',
+            arguments: [
+                'id' => ['type' => 'string', 'description' => 'UUID of the document to update.'],
+                'descript' => [
+                    'type' => 'string',
+                    'description' => 'Text for the document description field (supports HTML or plain text).',
+                ],
+                'mode' => [
+                    'type' => 'string',
+                    'description' => '"replace" overwrites the description (default), "append" adds after it.',
+                ],
+            ],
+            description: 'Writes text into the description field of a generic document, e.g. requirements and '
+                . 'findings from an analysed attachment. Documents with attachments: use App.read_attachment first.',
+        ));
+
+        $toolsList->append(new AITool(
             name: 'Documents.search_travel_orders',
             arguments: [
                 'counter_id' => [
@@ -476,6 +493,7 @@ class DocumentsAIToolsEvents implements EventListenerInterface
             'Documents.get_invoice_report' => $this->executeGetInvoiceReport($event, $arguments, $currentUser),
             'Documents.search_documents' => $this->executeSearchDocuments($event, $arguments, $currentUser),
             'Documents.get_document' => $this->executeGetDocument($event, $arguments, $currentUser),
+            'Documents.update_document' => $this->executeUpdateDocument($event, $arguments, $currentUser),
             'Documents.search_travel_orders' => $this->executeSearchTravelOrders(
                 $event,
                 $arguments,
@@ -1029,6 +1047,70 @@ class DocumentsAIToolsEvents implements EventListenerInterface
         ], true);
 
         $event->setResult($document);
+    }
+
+    /**
+     * Execute Documents.update_document tool.
+     *
+     * @param \Cake\Event\Event $event Event object.
+     * @param array<mixed> $arguments Tool arguments.
+     * @param mixed $currentUser Current user.
+     * @return void
+     */
+    private function executeUpdateDocument(Event $event, array $arguments, mixed $currentUser): void
+    {
+        /** @var \Documents\Model\Table\DocumentsTable $documentsTable */
+        $documentsTable = TableRegistry::getTableLocator()->get('Documents.Documents');
+
+        /** @var \Documents\Model\Entity\Document|null $document */
+        $document = $documentsTable->find()
+            ->where(['Documents.id' => $arguments['id'] ?? ''])
+            ->first();
+
+        if (!$document) {
+            $event->setResult(['error' => 'Document not found.']);
+
+            return;
+        }
+
+        if (!$currentUser->can('edit', $document)) {
+            $event->setResult(['error' => 'You are not authorized to edit this document.']);
+
+            return;
+        }
+
+        $descript = trim((string)($arguments['descript'] ?? ''));
+        if ($descript === '') {
+            $event->setResult(['error' => 'descript argument is required.']);
+
+            return;
+        }
+
+        $mode = strtolower((string)($arguments['mode'] ?? 'replace'));
+        if (!in_array($mode, ['replace', 'append'], true)) {
+            $event->setResult(['error' => 'mode must be "replace" or "append".']);
+
+            return;
+        }
+
+        $current = trim((string)$document->descript);
+        if ($mode === 'append' && $current !== '') {
+            $descript = $current . "\n\n" . $descript;
+        }
+
+        $documentsTable->patchEntity($document, ['descript' => $descript]);
+        if (!$document->getErrors() && $documentsTable->save($document)) {
+            $event->setResult([
+                'id' => $document->id,
+                'no' => $document->no,
+                'descript_length' => mb_strlen($descript),
+                'view_url' => Router::url([
+                    'plugin' => 'Documents', 'controller' => 'Documents', 'action' => 'view', $document->id,
+                ], true),
+            ]);
+        } else {
+            $event->setResult(['error' => 'Failed to update document.', 'errors' => $document->getErrors()]);
+        }
     }
 
     /**

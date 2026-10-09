@@ -4,23 +4,31 @@ declare(strict_types=1);
 namespace App\Test\TestCase\Job;
 
 use App\Job\AiProcessLogJob;
+use App\Test\TestCase\MakesPdfTrait;
+use Cake\Core\Configure;
+use Cake\ORM\TableRegistry;
 use Cake\Core\ContainerInterface;
 use Cake\Queue\Job\Message;
 use Cake\TestSuite\TestCase;
 use Interop\Queue\Context;
 use Interop\Queue\Message as QueueMessage;
 use Interop\Queue\Processor;
+use ReflectionMethod;
 
 class AiProcessLogJobTest extends TestCase
 {
+    use MakesPdfTrait;
+
     /**
      * @var array<string> Fixtures to use during tests.
      */
     protected array $fixtures = [
         'app.Users',
+        'app.Attachments',
     ];
 
     private AiProcessLogJob $job;
+    private string $originalUploadFolder = '';
 
     protected function setUp(): void
     {
@@ -239,8 +247,115 @@ class AiProcessLogJobTest extends TestCase
     }
 
     // =========================================================================
+    // Attachment text of document events
+    // =========================================================================
+
+    public function testWithAttachmentTextAddsTextOfAttachments(): void
+    {
+        $uploads = $this->prepareUploads();
+        $this->writePdf($uploads . 'Test' . DS . 'test.pdf', ['Zahteva: toplotna prehodnost U 0.15']);
+
+        $readIds = [];
+        $result = $this->callWithAttachmentText([
+            'id' => 'doc-1',
+            'attachment_ids' => ['3e7c2fba-1c29-4e5b-9bb2-000000000001'],
+        ], $readIds);
+
+        $this->cleanUploads($uploads);
+        $this->assertSame(['3e7c2fba-1c29-4e5b-9bb2-000000000001'], $readIds);
+        $this->assertArrayNotHasKey('attachment_ids', $result);
+        $this->assertSame('doc-1', $result['id']);
+        $this->assertStringContainsString('--- Attachment: test.pdf ---', $result['attachments_text']);
+        $this->assertStringContainsString('toplotna prehodnost U 0.15', $result['attachments_text']);
+    }
+
+    public function testWithAttachmentTextNotesUnreadableAttachment(): void
+    {
+        $uploads = $this->prepareUploads();
+
+        $readIds = [];
+        $result = $this->callWithAttachmentText([
+            'attachment_ids' => ['3e7c2fba-1c29-4e5b-9bb2-000000000001'],
+        ], $readIds);
+
+        $this->cleanUploads($uploads);
+        $this->assertSame([], $readIds);
+        $this->assertStringContainsString('(text could not be read)', $result['attachments_text']);
+    }
+
+    public function testWithAttachmentTextWithoutAttachments(): void
+    {
+        $result = $this->callWithAttachmentText(['id' => 'doc-1', 'attachment_ids' => []]);
+
+        $this->assertSame(['id' => 'doc-1'], $result);
+    }
+
+    public function testMarkAttachmentsProcessedStampsAttachments(): void
+    {
+        $attachments = TableRegistry::getTableLocator()->get('Attachments');
+        $this->assertNull($attachments->get('3e7c2fba-1c29-4e5b-9bb2-000000000001')->ai_processed);
+
+        $method = new ReflectionMethod($this->job, 'markAttachmentsProcessed');
+        $method->invoke($this->job, ['3e7c2fba-1c29-4e5b-9bb2-000000000001']);
+
+        $this->assertNotNull($attachments->get('3e7c2fba-1c29-4e5b-9bb2-000000000001')->ai_processed);
+    }
+
+    public function testMarkAttachmentsProcessedIgnoresEmptyList(): void
+    {
+        $method = new ReflectionMethod($this->job, 'markAttachmentsProcessed');
+
+        $this->assertNull($method->invoke($this->job, []));
+    }
+
+    // =========================================================================
     // Helpers
     // =========================================================================
+
+    /**
+     * Call the private withAttachmentText() method.
+     *
+     * @param array<string, mixed> $entity Event data.
+     * @param array<int, string> $readIds Output: ids of attachments whose text was added.
+     * @return array<string, mixed>
+     */
+    private function callWithAttachmentText(array $entity, array &$readIds = []): array
+    {
+        $method = new ReflectionMethod($this->job, 'withAttachmentText');
+
+        return $method->invokeArgs($this->job, [$entity, &$readIds]);
+    }
+
+    /**
+     * Point the upload folder to a temporary directory with a `Test` model folder.
+     *
+     * @return string Upload folder path.
+     */
+    private function prepareUploads(): string
+    {
+        $uploads = TMP . 'tests_uploads_' . uniqid() . DS;
+        mkdir($uploads . 'Test', 0777, true);
+        $this->originalUploadFolder = (string)Configure::read('App.uploadFolder');
+        Configure::write('App.uploadFolder', $uploads);
+
+        return $uploads;
+    }
+
+    /**
+     * Remove the temporary upload folder and restore configuration.
+     *
+     * @param string $uploads Upload folder path.
+     * @return void
+     */
+    private function cleanUploads(string $uploads): void
+    {
+        foreach (glob($uploads . 'Test' . DS . '*') ?: [] as $file) {
+            unlink($file);
+        }
+        rmdir($uploads . 'Test');
+        rmdir($uploads);
+        Configure::write('App.uploadFolder', $this->originalUploadFolder);
+    }
 
     /**
      * Create a real Cake\Queue\Job\Message instance with the given arguments.

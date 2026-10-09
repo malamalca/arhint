@@ -19,6 +19,7 @@ use Cake\ORM\Entity;
  * @property string|null $mimetype
  * @property int|null $filesize
  * @property string|null $description
+ * @property \Cake\I18n\DateTime|null $ai_processed When the text was analysed and stored in the vector database
  * @property \Cake\I18n\DateTime|null $created
  * @property \Cake\I18n\DateTime|null $modified
  */

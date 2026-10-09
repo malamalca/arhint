@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\View\Helper;
 
+use App\Model\Entity\Attachment;
 use App\Model\Entity\User;
 use Cake\Collection\Collection;
 use Cake\I18n\Date;
@@ -23,7 +24,7 @@ class ArhintHelper extends Helper
     /**
      * @var array<string> $helpers
      */
-    protected array $helpers = ['Html', 'Number', 'Lil'];
+    protected array $helpers = ['Html', 'Form', 'Number', 'Lil'];
 
     /**
      * Returns duration in form HH:MM
@@ -373,6 +374,64 @@ class ArhintHelper extends Helper
     }
 
     /**
+     * Icon showing whether the text of an attachment was analysed by AI and stored in the vector database.
+     *
+     * @param \App\Model\Entity\Attachment $attachment Attachment.
+     * @return string Empty for attachments which are not analysed (other than those of documents).
+     */
+    private function attachmentAiStatus(Attachment $attachment): string
+    {
+        if ($attachment->model !== 'Document') {
+            return '';
+        }
+
+        if ($attachment->ai_processed !== null) {
+            return sprintf(
+                '<i class="material-icons attachment-ai-done" title="%s">check_circle</i>',
+                h(__('Analysed by AI on {0}', $attachment->ai_processed->i18nFormat('dd.MM.yyyy HH:mm'))),
+            );
+        }
+
+        return sprintf(
+            '<i class="material-icons attachment-ai-pending" title="%s">radio_button_unchecked</i>',
+            h(__('Not analysed by AI')),
+        );
+    }
+
+    /**
+     * Button which queues a new AI analysis of the document an attachment belongs to.
+     *
+     * @param \App\Model\Entity\Attachment $attachment Attachment.
+     * @param mixed $redirectUrl Where to return after the request.
+     * @return string Empty when the attachment is not a document attachment or the user cannot edit.
+     */
+    private function attachmentReanalyzeLink(Attachment $attachment, mixed $redirectUrl): string
+    {
+        $currentUser = $this->getView()->getRequest()->getAttribute('identity');
+        if ($attachment->model !== 'Document' || !$currentUser || !$currentUser->hasRole('editor')) {
+            return '';
+        }
+
+        return $this->Form->postLink(
+            '<i class="material-icons">auto_awesome</i>',
+            [
+                'prefix' => false,
+                'plugin' => false,
+                'controller' => 'Attachments',
+                'action' => 'reanalyze',
+                $attachment->id,
+                '?' => ['redirect' => $redirectUrl],
+            ],
+            [
+                'escape' => false,
+                'class' => 'btn-small filled',
+                'title' => __('Analyse again with AI'),
+                'confirm' => __('Analyse the document and its attachments with AI again?'),
+            ],
+        ) . ' ';
+    }
+
+    /**
      * Output line with search panel
      *
      * @param \Cake\Collection\Collection|array<\App\Model\Entity\Attachment> $attachments Attachments list
@@ -401,17 +460,22 @@ class ArhintHelper extends Helper
         }
 
         if ($attachments->count() > 0) {
+            // Text of document attachments is analysed by AI and stored in the vector database.
+            $showAi = $attachments->some(fn($attachment): bool => $attachment->model === 'Document');
+
+            $headColumns = [__('Filename'), __('Size')];
+            if ($showAi) {
+                $headColumns[] = __('AI');
+            }
+            $headColumns[] = '&nbsp;';
+
             $attachmentsTable = ['table' => [
                 'parameters' => ['id' => 'AttachmentsList'],
-                'head' => ['rows' => [['columns' => [
-                    __('Filename'),
-                    __('Size'),
-                    '&nbsp;',
-                ]]]],
+                'head' => ['rows' => [['columns' => $headColumns]]],
             ]];
             foreach ($attachments as $attachment) {
                 /** @var \App\Model\Entity\Attachment $attachment */
-                $attachmentsTable['table']['body']['rows'][] = ['columns' => [
+                $row = ['columns' => [
                     $this->Html->link(
                         $attachment->filename ?? 'N/A',
                         [
@@ -425,6 +489,7 @@ class ArhintHelper extends Helper
                         ['class' => 'AttacmhmentPreviewLink'],
                     ),
                     $this->Number->toReadableSize((int)$attachment->filesize),
+                    'ai' => ['params' => ['class' => 'center-align'], 'html' => $this->attachmentAiStatus($attachment)],
                     'actions' => [
                         'params' => ['class' => 'right-align nowrap'],
                         'html' =>
@@ -452,6 +517,7 @@ class ArhintHelper extends Helper
                                 ],
                                 ['escape' => false, 'class' => 'btn-small filled'],
                             ) . ' ' .
+                            $this->attachmentReanalyzeLink($attachment, $_options['redirectUrl']) .
                             $this->Lil->deleteLink([
                                 'prefix' => false,
                                 'plugin' => false,
@@ -462,6 +528,10 @@ class ArhintHelper extends Helper
                             ]),
                     ],
                 ]];
+                if (!$showAi) {
+                    unset($row['columns']['ai']);
+                }
+                $attachmentsTable['table']['body']['rows'][] = $row;
             }
 
             $this->Lil->jsReady(sprintf(
