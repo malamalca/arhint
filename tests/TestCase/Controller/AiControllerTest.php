@@ -198,5 +198,25 @@ class AiControllerTest extends TestCase
         $this->assertResponseOk();
         $body = json_decode((string)$this->_response?->getBody(), true);
         $this->assertTrue($body['cleared']);
+        $this->assertSession(null, 'AIAssistant.history');
+    }
+
+    // -------------------------------------------------------------------------
+    // GET / (dashboard) starts a new conversation
+    // -------------------------------------------------------------------------
+
+    public function testDashboardStartsNewConversation(): void
+    {
+        $this->login(USER_ADMIN);
+        $this->session(['AIAssistant' => [
+            'history' => [['role' => 'user', 'content' => 'hi']],
+            'pendingJobId' => '3e7c2fba-1c29-4e5b-9bb2-000000000001',
+        ]]);
+
+        $this->get('/');
+
+        $this->assertResponseOk();
+        $this->assertSession(null, 'AIAssistant.history');
+        $this->assertSession(null, 'AIAssistant.pendingJobId');
     }
 }

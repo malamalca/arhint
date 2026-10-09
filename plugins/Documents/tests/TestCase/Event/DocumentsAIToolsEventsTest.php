@@ -4,8 +4,10 @@ declare(strict_types=1);
 namespace Documents\Test\TestCase\Event;
 
 use App\Model\Entity\User;
+use App\Test\TestCase\MakesPdfTrait;
 use ArrayObject;
 use Authorization\AuthorizationServiceInterface;
+use Cake\Core\Configure;
 use Cake\Event\Event;
 use Cake\ORM\TableRegistry;
 use Cake\Routing\Route\DashedRoute;
@@ -18,6 +20,8 @@ use Documents\Event\DocumentsAIToolsEvents;
  */
 class DocumentsAIToolsEventsTest extends TestCase
 {
+    use MakesPdfTrait;
+
     protected array $fixtures = [
         'app.Users',
         'plugin.Documents.DocumentsCounters',
@@ -26,6 +30,7 @@ class DocumentsAIToolsEventsTest extends TestCase
         'plugin.Documents.InvoicesTaxes',
         'plugin.Documents.Vats',
         'plugin.Documents.Documents',
+        'app.Attachments',
         'plugin.Documents.DocumentsClients',
         'plugin.Documents.TravelOrders',
         'plugin.Documents.TravelOrdersExpenses',
@@ -87,13 +92,13 @@ class DocumentsAIToolsEventsTest extends TestCase
     // aiAssistantTools — tool registration
     // -------------------------------------------------------------------------
 
-    public function testAiAssistantToolsRegisters19Tools(): void
+    public function testAiAssistantToolsRegisters20Tools(): void
     {
         $event = new Event('App.AIAssistant.tools');
         $toolsList = new ArrayObject();
         $this->listener->aiAssistantTools($event, $toolsList);
 
-        $this->assertCount(19, $toolsList);
+        $this->assertCount(20, $toolsList);
 
         $names = array_map(fn($t) => $t->name, iterator_to_array($toolsList));
         $this->assertContains('Documents.navigate_to_document', $names);
@@ -109,6 +114,7 @@ class DocumentsAIToolsEventsTest extends TestCase
         $this->assertContains('Documents.search_documents', $names);
         $this->assertContains('Documents.get_document', $names);
         $this->assertContains('Documents.update_document', $names);
+        $this->assertContains('Documents.read_counter_documents', $names);
         $this->assertContains('Documents.search_travel_orders', $names);
         $this->assertContains('Documents.get_travel_order', $names);
         $this->assertContains('Documents.create_travel_order', $names);
@@ -680,5 +686,87 @@ class DocumentsAIToolsEventsTest extends TestCase
     private function makeEvent(string $tool, array $arguments): Event
     {
         return new Event('App.AIAssistant.executeTool', null, [$tool, $arguments, $this->user]);
+    }
+
+    // -------------------------------------------------------------------------
+    // read_counter_documents
+    // -------------------------------------------------------------------------
+
+    public function testReadCounterDocumentsByCounterId(): void
+    {
+        $args = ['counter' => self::COUNTER_DOCUMENTS];
+        $event = $this->makeEvent('Documents.read_counter_documents', $args);
+        $this->listener->aiAssistantExecuteTool($event, 'Documents.read_counter_documents', $args);
+
+        $result = $event->getResult();
+        $this->assertCount(1, $result);
+        $this->assertEquals(self::DOCUMENT_ID, $result[0]['id']);
+        $this->assertEquals('First issued document', $result[0]['title']);
+        $this->assertEquals('This is a test', $result[0]['descript']);
+        $this->assertEquals(1, $result[0]['total_documents']);
+        $this->assertNull($result[0]['next_offset']);
+        $this->assertStringContainsString('/documents/documents/view/' . self::DOCUMENT_ID, $result[0]['view_url']);
+    }
+
+    public function testReadCounterDocumentsFindsCounterByLooseTitle(): void
+    {
+        // Case, a missing leading underscore and a partial title are enough.
+        $args = ['counter' => 'issued documents'];
+        $event = $this->makeEvent('Documents.read_counter_documents', $args);
+        $this->listener->aiAssistantExecuteTool($event, 'Documents.read_counter_documents', $args);
+
+        $this->assertEquals(self::DOCUMENT_ID, $event->getResult()[0]['id']);
+    }
+
+    public function testReadCounterDocumentsReadsAttachments(): void
+    {
+        $uploads = TMP . 'tests_uploads_' . uniqid() . DS;
+        mkdir($uploads . 'Document', 0777, true);
+        $originalFolder = (string)Configure::read('App.uploadFolder');
+        Configure::write('App.uploadFolder', $uploads);
+        $this->writePdf($uploads . 'Document' . DS . 'soglasje.pdf', ['Soglasje: Elektro d.o.o. - DA']);
+        TableRegistry::getTableLocator()->get('Attachments')->saveOrFail(
+            TableRegistry::getTableLocator()->get('Attachments')->newEntity([
+                'model' => 'Document',
+                'foreign_id' => self::DOCUMENT_ID,
+                'filename' => 'soglasje.pdf',
+                'ext' => 'pdf',
+                'mimetype' => 'application/pdf',
+                'filesize' => 100,
+            ]),
+        );
+
+        $args = ['counter' => self::COUNTER_DOCUMENTS];
+        $event = $this->makeEvent('Documents.read_counter_documents', $args);
+        $this->listener->aiAssistantExecuteTool($event, 'Documents.read_counter_documents', $args);
+
+        unlink($uploads . 'Document' . DS . 'soglasje.pdf');
+        rmdir($uploads . 'Document');
+        rmdir($uploads);
+        Configure::write('App.uploadFolder', $originalFolder);
+
+        $result = $event->getResult();
+        $this->assertEquals('soglasje.pdf', $result[0]['attachments']);
+        $this->assertStringContainsString('--- soglasje.pdf ---', $result[0]['attachments_text']);
+        $this->assertStringContainsString('Elektro d.o.o. - DA', $result[0]['attachments_text']);
+    }
+
+    public function testReadCounterDocumentsOffsetBeyondEnd(): void
+    {
+        $args = ['counter' => self::COUNTER_DOCUMENTS, 'offset' => 5];
+        $event = $this->makeEvent('Documents.read_counter_documents', $args);
+        $this->listener->aiAssistantExecuteTool($event, 'Documents.read_counter_documents', $args);
+
+        $this->assertArrayHasKey('message', $event->getResult());
+    }
+
+    public function testReadCounterDocumentsValidatesCounter(): void
+    {
+        foreach ([[], ['counter' => 'No such counter']] as $args) {
+            $event = $this->makeEvent('Documents.read_counter_documents', $args);
+            $this->listener->aiAssistantExecuteTool($event, 'Documents.read_counter_documents', $args);
+
+            $this->assertArrayHasKey('error', $event->getResult());
+        }
     }
 }

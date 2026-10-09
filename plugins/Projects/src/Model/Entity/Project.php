@@ -83,6 +83,7 @@ class Project extends Entity implements AISerializableInterface
             'id' => $this->id,
             'no' => $this->no,
             'title' => $this->title,
+            'descript' => $this->descript,
             'active' => $this->active,
             'view_url' => $this->view_url ?? null,
             'milestones_open' => $this->milestones_open ?? null,

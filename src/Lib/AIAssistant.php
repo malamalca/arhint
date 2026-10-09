@@ -15,7 +15,7 @@ use stdClass;
 class AIAssistant
 {
     private const HISTORY_SUMMARY_PREFIX = 'Conversation summary: ';
-    private const MAX_TOOL_CALLS = 5;
+    private const MAX_TOOL_CALLS = 10;
     private const MAX_TOOLS_PER_REQUEST = 8;
     private const MAX_HISTORY_MESSAGES = 8;
     private const MAX_HISTORY_SUMMARY_CHARS = 1500;

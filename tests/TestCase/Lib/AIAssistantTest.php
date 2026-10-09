@@ -354,4 +354,22 @@ class AIAssistantTest extends TestCase
         $this->assertStringContainsString('[truncated]', $sent[3]['content']);
         $this->assertSame($longAnswer, $sent[4]['content']);
     }
+
+    public function testUpToTenToolCallsAreExecutedPerRequest(): void
+    {
+        $toolCall = '{"tool": "Unknown.tool", "arguments": {}}';
+        $assistant = $this->assistantReplying(array_merge(array_fill(0, 7, $toolCall), ['Final answer.']));
+
+        $this->assertSame('Final answer.', $assistant->getResponse('Do many things'));
+        $this->assertCount(8, $assistant->requests);
+    }
+
+    public function testToolCallsStopAfterTenAndNeverExposeRawJson(): void
+    {
+        $toolCall = '{"tool": "Unknown.tool", "arguments": {}}';
+        $assistant = $this->assistantReplying(array_fill(0, 12, $toolCall));
+
+        $this->assertSame('Done.', $assistant->getResponse('Loop forever'));
+        $this->assertCount(11, $assistant->requests);
+    }
 }

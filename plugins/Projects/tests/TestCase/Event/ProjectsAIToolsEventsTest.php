@@ -69,17 +69,18 @@ class ProjectsAIToolsEventsTest extends TestCase
     // aiAssistantTools — tool registration
     // -------------------------------------------------------------------------
 
-    public function testAiAssistantToolsRegisters13Tools(): void
+    public function testAiAssistantToolsRegisters14Tools(): void
     {
         $event = new Event('App.AIAssistant.tools');
         $toolsList = new ArrayObject();
         $this->listener->aiAssistantTools($event, $toolsList);
 
-        $this->assertCount(13, $toolsList);
+        $this->assertCount(14, $toolsList);
 
         $names = array_map(fn($t) => $t->name, iterator_to_array($toolsList));
         $this->assertContains('Projects.search_projects', $names);
         $this->assertContains('Projects.get_project', $names);
+        $this->assertContains('Projects.update_project', $names);
         $this->assertContains('Projects.get_project_tasks', $names);
         $this->assertContains('Projects.get_task', $names);
         $this->assertContains('Projects.create_task', $names);
@@ -515,5 +516,74 @@ class ProjectsAIToolsEventsTest extends TestCase
     private function makeEvent(string $tool, array $arguments): Event
     {
         return new Event('App.AIAssistant.executeTool', null, [$tool, $arguments, $this->user]);
+    }
+
+    // -------------------------------------------------------------------------
+    // update_project
+    // -------------------------------------------------------------------------
+
+    public function testUpdateProjectReplacesDescription(): void
+    {
+        $table = TableRegistry::getTableLocator()->get('Projects.Projects');
+        $table->updateAll(['descript' => 'Old'], ['id' => self::PROJECT_1]);
+
+        $text = "| Soglasodajalec | Soglasje |\n|---|---|\n| Elektro | da |";
+        $args = ['id' => self::PROJECT_1, 'descript' => $text];
+        $event = $this->makeEvent('Projects.update_project', $args);
+        $this->listener->aiAssistantExecuteTool($event, 'Projects.update_project', $args);
+
+        $result = $event->getResult();
+        $this->assertArrayNotHasKey('error', $result, json_encode($result));
+        $this->assertEquals(self::PROJECT_1, $result['id']);
+        $this->assertStringContainsString('/projects/view/' . self::PROJECT_1, $result['view_url']);
+        $this->assertEquals($text, $table->get(self::PROJECT_1)->descript);
+    }
+
+    public function testUpdateProjectAppendsToDescription(): void
+    {
+        $table = TableRegistry::getTableLocator()->get('Projects.Projects');
+        $table->updateAll(['descript' => 'Old'], ['id' => self::PROJECT_1]);
+
+        $args = ['id' => self::PROJECT_1, 'descript' => 'New', 'mode' => 'append'];
+        $event = $this->makeEvent('Projects.update_project', $args);
+        $this->listener->aiAssistantExecuteTool($event, 'Projects.update_project', $args);
+
+        $this->assertArrayNotHasKey('error', $event->getResult());
+        $this->assertEquals("Old\n\nNew", $table->get(self::PROJECT_1)->descript);
+    }
+
+    public function testUpdateProjectFindsProjectByTitle(): void
+    {
+        $args = ['id' => 'Second Project Title', 'descript' => 'By title'];
+        $event = $this->makeEvent('Projects.update_project', $args);
+        $this->listener->aiAssistantExecuteTool($event, 'Projects.update_project', $args);
+
+        $this->assertEquals(self::PROJECT_2, $event->getResult()['id']);
+    }
+
+    public function testUpdateProjectValidatesArguments(): void
+    {
+        foreach (
+            [
+                ['id' => self::PROJECT_1, 'descript' => '  '],
+                ['id' => self::PROJECT_1, 'descript' => 'x', 'mode' => 'delete'],
+                ['id' => '00000000-0000-0000-0000-000000000000', 'descript' => 'x'],
+            ] as $args
+        ) {
+            $event = $this->makeEvent('Projects.update_project', $args);
+            $this->listener->aiAssistantExecuteTool($event, 'Projects.update_project', $args);
+
+            $this->assertArrayHasKey('error', $event->getResult());
+        }
+    }
+
+    public function testProjectDescriptionIsPassedToTheModel(): void
+    {
+        $table = TableRegistry::getTableLocator()->get('Projects.Projects');
+        $table->updateAll(['descript' => 'Opis projekta'], ['id' => self::PROJECT_1]);
+
+        $project = $table->get(self::PROJECT_1);
+
+        $this->assertSame('Opis projekta', $project->toAIArray()['descript']);
     }
 }

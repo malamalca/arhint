@@ -42,8 +42,9 @@ class ProjectsAIToolsEvents implements EventListenerInterface
      */
     public function aiAssistantRegisterModule(Event $event, ArrayObject $modulesList): void
     {
-        $modulesList['Projects'] = 'Project management tools for searching projects, managing milestones, tasks, ' .
-            'project documents, project invoices, project users and logging work.';
+        $modulesList['Projects'] = 'Project management tools for searching projects, reading and editing the ' .
+            'project description, managing milestones, tasks, project documents, project invoices, ' .
+            'project users and logging work.';
     }
 
     /**
@@ -79,6 +80,28 @@ class ProjectsAIToolsEvents implements EventListenerInterface
             description: 'Fetches full details of a single project including description, status, '
                 . 'team members, and milestones with task counts. Includes a view_url field; '
                 . 'always render no as a markdown link: [no](view_url).',
+        ));
+
+        $toolsList->append(new AITool(
+            name: 'Projects.update_project',
+            arguments: [
+                'id' => [
+                    'type' => 'string',
+                    'description' => 'UUID of the project (or its number or title).',
+                ],
+                'descript' => [
+                    'type' => 'string',
+                    'description' => 'Text for the project description field. Markdown is supported, '
+                        . 'including tables.',
+                ],
+                'mode' => [
+                    'type' => 'string',
+                    'description' => '"replace" overwrites the description (default), "append" adds after it.',
+                ],
+            ],
+            description: 'Writes text into the description field of a project. To change a part of the '
+                . 'existing description, read it with Projects.get_project first and send the whole new text '
+                . 'with mode "replace".',
         ));
 
         $toolsList->append(new AITool(
@@ -254,6 +277,7 @@ class ProjectsAIToolsEvents implements EventListenerInterface
             match ($tool) {
                 'Projects.search_projects' => $this->executeSearchProjects($event, $arguments, $currentUser),
                 'Projects.get_project' => $this->executeGetProject($event, $arguments, $currentUser),
+                'Projects.update_project' => $this->executeUpdateProject($event, $arguments, $currentUser),
                 'Projects.get_project_tasks' => $this->executeGetProjectTasks($event, $arguments, $currentUser),
                 'Projects.get_task' => $this->executeGetTask($event, $arguments, $currentUser),
                 'Projects.create_task' => $this->executeCreateTask($event, $arguments, $currentUser),
@@ -395,6 +419,65 @@ class ProjectsAIToolsEvents implements EventListenerInterface
         $project->view_url = $this->projectViewUrl((string)$project->id);
 
         $event->setResult($project);
+    }
+
+    /**
+     * Execute Projects.update_project tool.
+     *
+     * @param \Cake\Event\Event $event Event object.
+     * @param array<mixed> $arguments Tool arguments.
+     * @param mixed $currentUser Current user.
+     * @return void
+     */
+    private function executeUpdateProject(Event $event, array $arguments, mixed $currentUser): void
+    {
+        /** @var \Projects\Model\Entity\Project|null $project */
+        $project = $this->loadAccessibleProject($currentUser, (string)($arguments['id'] ?? ''));
+        if (!$project) {
+            $event->setResult(['error' => 'Project not found or access denied.']);
+
+            return;
+        }
+
+        if (!$currentUser->can('edit', $project)) {
+            $event->setResult(['error' => 'You are not authorized to edit this project.']);
+
+            return;
+        }
+
+        $descript = trim((string)($arguments['descript'] ?? ''));
+        if ($descript === '') {
+            $event->setResult(['error' => 'descript argument is required.']);
+
+            return;
+        }
+
+        $mode = strtolower((string)($arguments['mode'] ?? 'replace'));
+        if (!in_array($mode, ['replace', 'append'], true)) {
+            $event->setResult(['error' => 'mode must be "replace" or "append".']);
+
+            return;
+        }
+
+        $current = trim((string)$project->descript);
+        if ($mode === 'append' && $current !== '') {
+            $descript = $current . "\n\n" . $descript;
+        }
+
+        $projectsTable = TableRegistry::getTableLocator()->get('Projects.Projects');
+        $projectsTable->patchEntity($project, ['descript' => $descript]);
+
+        if (!$project->getErrors() && $projectsTable->save($project)) {
+            $event->setResult([
+                'id' => $project->id,
+                'no' => $project->no,
+                'title' => $project->title,
+                'descript_length' => mb_strlen($descript),
+                'view_url' => $this->projectViewUrl((string)$project->id),
+            ]);
+        } else {
+            $event->setResult(['error' => 'Failed to update project.', 'errors' => $project->getErrors()]);
+        }
     }
 
     /**

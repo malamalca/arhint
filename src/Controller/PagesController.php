@@ -122,6 +122,12 @@ class PagesController extends AppController
     {
         $this->Authorization->skipAuthorization();
 
+        // The chat window is rendered empty on every page load, so the conversation of an earlier
+        // page view must not stay in the session and leak into the new conversation.
+        $session = $this->request->getSession();
+        $session->delete('AIAssistant.history');
+        $session->delete('AIAssistant.pendingJobId');
+
         $FormHelper = new FormHelper(new View());
         $aiConfig = $this->hasCurrentUser() ? $this->getCurrentUser()->getProperty('ai_assistant') : null;
         if (!$aiConfig || empty($aiConfig->provider)) {
