@@ -21,7 +21,7 @@
         "genkgo/camt": "*",
         "krivart/php-qr-code": "dev-master",
         "league/commonmark": "*",
-        "malamalca/fiscal-php": "dev-main",
+        "malamalca/fiscal-php": "dev-master",
         "mikehaertl/phpwkhtmltopdf": "^2.5",
         "mishahawthorn/ocrmypdf": "*",
         "mobiledetect/mobiledetectlib": "^4.8.03",

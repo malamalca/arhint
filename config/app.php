@@ -546,4 +546,8 @@ return [
         'collection' => 'events',
         'timeout' => 30,
     ],
+
+    'Migrations' => [
+        'legacyTables' => false,
+    ],
 ];

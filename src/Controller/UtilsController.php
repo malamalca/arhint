@@ -30,6 +30,7 @@ class UtilsController extends AppController
         parent::beforeFilter($event);
 
         $this->FormProtection->setConfig('validate', false);
+        $this->FormProtection->setConfig('pdfSplice', ['bulk']);
     }
 
     /**
