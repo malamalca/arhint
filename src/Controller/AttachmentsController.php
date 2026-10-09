@@ -151,10 +151,10 @@ class AttachmentsController extends AppController
      * of the document.
      *
      * @param string|null $id Attachment id.
-     * @return \Cake\Http\Response Redirects back.
+     * @return \Cake\Http\Response|null Redirects back.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function reanalyze(?string $id = null): Response
+    public function reanalyze(?string $id = null): ?Response
     {
         $this->request->allowMethod(['post']);
         $attachment = $this->Attachments->get($id);
@@ -172,8 +172,9 @@ class AttachmentsController extends AppController
 
         // Only redirect to addresses on this site.
         $redirect = (string)$this->getRequest()->getQuery('redirect', '');
-        $host = preg_quote($this->getRequest()->host(), '#');
-        if (!preg_match('#^(/(?!/)|https?://' . $host . '(/|$))#', $redirect)) {
+        $host = $this->getRequest()->host();
+        $allowed = '/(?!/)' . ($host !== null ? '|https?://' . preg_quote($host, '#') . '(/|$)' : '');
+        if (!preg_match('#^(' . $allowed . ')#', $redirect)) {
             $redirect = '/';
         }
 

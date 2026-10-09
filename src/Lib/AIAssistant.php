@@ -30,6 +30,10 @@ class AIAssistant
     // Maximum items in a tool-result list injected into the LLM prompt (native tool calls).
     private const MAX_PROMPT_TOOL_RESULT_ITEMS = 20;
     private const MAX_TOOL_RESULT_CHARS = 800;
+    // Tool results (e.g. text of an attachment) and tool call arguments of earlier turns are cut to
+    // this size, so that they do not fill the context of the model in the following turns.
+    private const MAX_OLD_TOOL_MESSAGE_CHARS = 1500;
+    private const EMPTY_REPLY_NUDGE = 'Your previous reply was empty. Reply now with a short plain-text answer.';
 
     // Fallback endpoint for the local provider when the user has no configured 'url'.
     private const DEFAULT_LOCAL_URL = 'http://192.168.68.58:8080/v1/chat/completions';
@@ -214,10 +218,14 @@ class AIAssistant
      */
     public function getResponse(string $userInput): string
     {
+        $this->shrinkOldToolMessages();
         $this->appendConversationMessage(['role' => 'user', 'content' => $userInput]);
 
         $this->redirectUrl = null;
         $toolCallCount = 0;
+        // Set when the model returned nothing: the next request asks it once more to answer.
+        $nudgeEmptyReply = false;
+        $emptyReplyRetried = false;
         $message = [];
         $toolNameMap = [];
 
@@ -347,6 +355,11 @@ class AIAssistant
                         $this->conversationHistory,
                     ),
                 ];
+            }
+
+            if ($nudgeEmptyReply) {
+                $data['messages'][] = ['role' => 'user', 'content' => self::EMPTY_REPLY_NUDGE];
+                $nudgeEmptyReply = false;
             }
 
             $requestStart = microtime(true);
@@ -551,11 +564,26 @@ class AIAssistant
                 }
             }
 
-            // Native path: the model may still want more tool calls after the limit is reached,
-            // returning an empty content with finish_reason=tool_calls. Surface a usable reply
-            // instead of an empty string.
-            if ($nativeToolCalls && trim((string)$message['content']) === '') {
-                $message['content'] = 'Done.';
+            // The model may return nothing (context too long, all output in reasoning, tool call limit
+            // reached). Ask once more for a plain-text answer; never store or return an empty reply,
+            // because an empty assistant message in the history breaks the following turns.
+            if (trim((string)$message['content']) === '') {
+                if (!$emptyReplyRetried) {
+                    $emptyReplyRetried = true;
+                    $nudgeEmptyReply = true;
+
+                    Log::warning('AI returned an empty reply, asking again', [
+                        'scope' => ['ai'],
+                        'finish_reason' => $message['finish_reason'] ?? 'unknown',
+                        'history_length' => count($this->conversationHistory),
+                    ]);
+
+                    continue;
+                }
+
+                $message['content'] = $nativeToolCalls || $toolCallCount > 0
+                    ? 'Done.'
+                    : 'The AI returned an empty response. Please try again.';
             }
 
             $this->appendConversationMessage(['role' => 'assistant', 'content' => (string)$message['content']]);
@@ -563,6 +591,52 @@ class AIAssistant
         }
 
         return (string)$message['content'];
+    }
+
+    /**
+     * Shorten tool results and tool call arguments of earlier turns in the history.
+     *
+     * Large tool results, like the text of an attachment, are needed only while the model works on
+     * the request that fetched them. Replies of the assistant are kept untouched, because the user
+     * may ask to rewrite or shorten them.
+     *
+     * @return void
+     */
+    private function shrinkOldToolMessages(): void
+    {
+        $limit = self::MAX_OLD_TOOL_MESSAGE_CHARS;
+
+        foreach ($this->conversationHistory as $index => $message) {
+            $content = (string)($message['content'] ?? '');
+            $role = $message['role'] ?? '';
+
+            if ($role === 'tool' || ($role === 'user' && str_starts_with($content, 'Tool result for '))) {
+                if (mb_strlen($content) > $limit) {
+                    $this->conversationHistory[$index]['content'] = mb_substr($content, 0, $limit)
+                        . ' ...[truncated]';
+                }
+                continue;
+            }
+
+            if ($role !== 'assistant' || !str_starts_with($content, '{')) {
+                continue;
+            }
+
+            // Prompt-based tool call: {"tool": "...", "arguments": {...}}.
+            $decoded = json_decode($content, true);
+            if (!is_array($decoded) || !isset($decoded['tool']) || !is_array($decoded['arguments'] ?? null)) {
+                continue;
+            }
+            foreach ($decoded['arguments'] as $name => $value) {
+                if (is_string($value) && mb_strlen($value) > 300) {
+                    $decoded['arguments'][$name] = mb_substr($value, 0, 300) . ' ...[truncated]';
+                }
+            }
+            $encoded = json_encode($decoded, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+            if ($encoded !== false) {
+                $this->conversationHistory[$index]['content'] = $encoded;
+            }
+        }
     }
 
     /**
