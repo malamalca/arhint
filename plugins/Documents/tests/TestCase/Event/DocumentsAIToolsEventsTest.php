@@ -87,13 +87,13 @@ class DocumentsAIToolsEventsTest extends TestCase
     // aiAssistantTools — tool registration
     // -------------------------------------------------------------------------
 
-    public function testAiAssistantToolsRegisters18Tools(): void
+    public function testAiAssistantToolsRegisters19Tools(): void
     {
         $event = new Event('App.AIAssistant.tools');
         $toolsList = new ArrayObject();
         $this->listener->aiAssistantTools($event, $toolsList);
 
-        $this->assertCount(18, $toolsList);
+        $this->assertCount(19, $toolsList);
 
         $names = array_map(fn($t) => $t->name, iterator_to_array($toolsList));
         $this->assertContains('Documents.navigate_to_document', $names);
@@ -108,6 +108,7 @@ class DocumentsAIToolsEventsTest extends TestCase
         $this->assertContains('Documents.get_invoice_report', $names);
         $this->assertContains('Documents.search_documents', $names);
         $this->assertContains('Documents.get_document', $names);
+        $this->assertContains('Documents.update_document', $names);
         $this->assertContains('Documents.search_travel_orders', $names);
         $this->assertContains('Documents.get_travel_order', $names);
         $this->assertContains('Documents.create_travel_order', $names);
@@ -452,6 +453,63 @@ class DocumentsAIToolsEventsTest extends TestCase
         $result = $event->getResult();
         $this->assertIsArray($result);
         $this->assertArrayHasKey('error', $result);
+    }
+
+    // -------------------------------------------------------------------------
+    // update_document
+    // -------------------------------------------------------------------------
+
+    public function testUpdateDocumentReplacesDescription(): void
+    {
+        $args = ['id' => self::DOCUMENT_ID, 'descript' => 'Requirements: R1, R2'];
+        $event = $this->makeEvent('Documents.update_document', $args);
+        $this->listener->aiAssistantExecuteTool($event, 'Documents.update_document', $args);
+
+        $result = $event->getResult();
+        $this->assertArrayNotHasKey('error', $result);
+        $this->assertEquals(self::DOCUMENT_ID, $result['id']);
+
+        $document = TableRegistry::getTableLocator()->get('Documents.Documents')->get(self::DOCUMENT_ID);
+        $this->assertEquals('Requirements: R1, R2', $document->descript);
+    }
+
+    public function testUpdateDocumentAppendsToDescription(): void
+    {
+        $args = ['id' => self::DOCUMENT_ID, 'descript' => 'Findings', 'mode' => 'append'];
+        $event = $this->makeEvent('Documents.update_document', $args);
+        $this->listener->aiAssistantExecuteTool($event, 'Documents.update_document', $args);
+
+        $this->assertArrayNotHasKey('error', $event->getResult());
+
+        $document = TableRegistry::getTableLocator()->get('Documents.Documents')->get(self::DOCUMENT_ID);
+        $this->assertEquals("This is a test\n\nFindings", $document->descript);
+    }
+
+    public function testUpdateDocumentRequiresDescript(): void
+    {
+        $args = ['id' => self::DOCUMENT_ID, 'descript' => '  '];
+        $event = $this->makeEvent('Documents.update_document', $args);
+        $this->listener->aiAssistantExecuteTool($event, 'Documents.update_document', $args);
+
+        $this->assertArrayHasKey('error', $event->getResult());
+    }
+
+    public function testUpdateDocumentRejectsUnknownMode(): void
+    {
+        $args = ['id' => self::DOCUMENT_ID, 'descript' => 'x', 'mode' => 'delete'];
+        $event = $this->makeEvent('Documents.update_document', $args);
+        $this->listener->aiAssistantExecuteTool($event, 'Documents.update_document', $args);
+
+        $this->assertArrayHasKey('error', $event->getResult());
+    }
+
+    public function testUpdateDocumentNotFound(): void
+    {
+        $args = ['id' => '00000000-0000-0000-0000-000000000000', 'descript' => 'x'];
+        $event = $this->makeEvent('Documents.update_document', $args);
+        $this->listener->aiAssistantExecuteTool($event, 'Documents.update_document', $args);
+
+        $this->assertArrayHasKey('error', $event->getResult());
     }
 
     // -------------------------------------------------------------------------

@@ -55,6 +55,21 @@ class AttachmentPolicy
     }
 
     /**
+     * Authorize reanalyze action (new AI analysis of the attachment's document)
+     *
+     * @param \App\Model\Entity\User $authUser User
+     * @param \App\Model\Entity\Attachment $attachment Attachment
+     * @return bool
+     */
+    public function canReanalyze(User $authUser, Attachment $attachment): bool
+    {
+        /** @var \App\Model\Table\AttachmentsTable $AttachmentsTable */
+        $AttachmentsTable = TableRegistry::getTableLocator()->get('Attachments');
+
+        return $authUser->hasRole('editor') && $AttachmentsTable->isOwnedBy($attachment, $authUser->company_id);
+    }
+
+    /**
      * Authorize delete action
      *
      * @param \App\Model\Entity\User $authUser User

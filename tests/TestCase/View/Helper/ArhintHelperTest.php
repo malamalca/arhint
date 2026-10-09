@@ -3,9 +3,13 @@ declare(strict_types=1);
 
 namespace App\Test\TestCase\View\Helper;
 
+use App\Model\Entity\Attachment;
+use App\Model\Entity\User;
 use App\View\Helper\ArhintHelper;
 use App\View\Helper\LilHelper;
+use Cake\Http\ServerRequest;
 use Cake\I18n\Date;
+use Cake\I18n\DateTime;
 use Cake\Routing\Route\DashedRoute;
 use Cake\Routing\Router;
 use Cake\TestSuite\TestCase;
@@ -207,5 +211,60 @@ class ArhintHelperTest extends TestCase
         $today = new Date('now');
         $result = $this->Arhint->calendarDay($today);
         $this->assertStringContainsString('today', $result);
+    }
+
+    // -------------------------------------------------------------------------
+    // attachmentsTable - AI analysis status
+    // -------------------------------------------------------------------------
+
+    public function testAttachmentsTableShowsAiStatusOfDocumentAttachments(): void
+    {
+        $done = new Attachment(['id' => 'a1', 'model' => 'Document', 'filename' => 'a.pdf', 'filesize' => 10]);
+        $done->ai_processed = new DateTime('2026-10-01 10:30:00');
+        $pending = new Attachment(['id' => 'a2', 'model' => 'Document', 'filename' => 'b.pdf', 'filesize' => 10]);
+
+        $table = $this->Arhint->attachmentsTable([$done, $pending], 'Document', 'd1', ['showAddButton' => false]);
+
+        $head = $table['table']['head']['rows'][0]['columns'];
+        $this->assertContains('AI', $head);
+
+        $rows = $table['table']['body']['rows'];
+        $this->assertStringContainsString('check_circle', $rows[0]['columns']['ai']['html']);
+        $this->assertStringContainsString('01.10.2026 10:30', $rows[0]['columns']['ai']['html']);
+        $this->assertStringContainsString('radio_button_unchecked', $rows[1]['columns']['ai']['html']);
+    }
+
+    public function testAttachmentsTableWithoutDocumentAttachmentsHasNoAiColumn(): void
+    {
+        $attachment = new Attachment(['id' => 'a1', 'model' => 'Invoice', 'filename' => 'a.pdf', 'filesize' => 10]);
+
+        $table = $this->Arhint->attachmentsTable([$attachment], 'Invoice', 'i1', ['showAddButton' => false]);
+
+        $this->assertNotContains('AI', $table['table']['head']['rows'][0]['columns']);
+        $this->assertArrayNotHasKey('ai', $table['table']['body']['rows'][0]['columns']);
+    }
+
+    public function testAttachmentsTableOffersReanalysisToEditors(): void
+    {
+        $attachment = new Attachment(['id' => 'a1', 'model' => 'Document', 'filename' => 'a.pdf', 'filesize' => 10]);
+
+        // Without an identity there is no re-analysis button.
+        $table = $this->Arhint->attachmentsTable([$attachment], 'Document', 'd1', ['showAddButton' => false]);
+        $actions = $table['table']['body']['rows'][0]['columns']['actions']['html'];
+        $this->assertStringNotContainsString('auto_awesome', $actions);
+
+        $user = $this->createMock(User::class);
+        $user->method('hasRole')->willReturn(true);
+        $view = new View(new ServerRequest(['url' => '/']));
+        $view->setRequest($view->getRequest()->withAttribute('identity', $user));
+        $view->loadHelper('Html');
+        $view->loadHelper('Number');
+        $view->loadHelper('Lil', ['className' => LilHelper::class]);
+        $arhint = new ArhintHelper($view);
+
+        $table = $arhint->attachmentsTable([$attachment], 'Document', 'd1', ['showAddButton' => false]);
+        $actions = $table['table']['body']['rows'][0]['columns']['actions']['html'];
+        $this->assertStringContainsString('auto_awesome', $actions);
+        $this->assertStringContainsString('/attachments/reanalyze/a1', $actions);
     }
 }

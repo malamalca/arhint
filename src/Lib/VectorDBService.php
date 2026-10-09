@@ -269,6 +269,36 @@ class VectorDBService
     }
 
     /**
+     * Delete documents from the collection.
+     *
+     * @param array<int, string> $ids Document IDs to remove.
+     * @return bool True on success (also when some IDs do not exist).
+     */
+    public function delete(array $ids): bool
+    {
+        if ($ids === []) {
+            return true;
+        }
+
+        try {
+            $id = $this->resolveCollectionId();
+        } catch (Exception) {
+            return false;
+        }
+
+        $body = json_encode(['ids' => array_values($ids)]);
+        if ($body === false) {
+            Log::error('VectorDBService: failed to encode delete request', ['scope' => ['ai']]);
+
+            return false;
+        }
+
+        $response = $this->send($this->collectionEndpointUrl($id, 'delete'), $body, 'POST');
+
+        return is_array($response) && !isset($response['error']);
+    }
+
+    /**
      * Search for documents similar to the given vectors.
      *
      * @param array<int, float>          $queryVector Query embedding vector.

@@ -437,7 +437,22 @@ class ReindexEmbeddingsCommand extends Command
             ->where(['id' => $eventId])
             ->first();
 
+        $document = null;
         if ($log === null) {
+            // Events of new documents use the document id as event id and have no log row.
+            $document = TableRegistry::getTableLocator()->get('Documents.Documents')
+                ->find()
+                ->select(['id', 'user_id', 'project_id'])
+                ->where(['id' => $eventId])
+                ->first();
+        }
+
+        if ($document !== null) {
+            $logModel = 'Document';
+            $logForeignId = (string)$document->get('id');
+            $logUserId = (string)$document->get('user_id');
+            $logAction = 'document_created';
+        } elseif ($log === null) {
             Log::warning('Related log not found when building metadata', [
                 'scope' => 'reindex',
                 'analysis_id' => (string)$analysis->get('id'),
@@ -462,6 +477,10 @@ class ReindexEmbeddingsCommand extends Command
 
         if ($logModel !== '') {
             $metadata['model'] = $logModel;
+        }
+
+        if ($document !== null && (string)$document->get('project_id') !== '') {
+            $metadata['log_project_id'] = (string)$document->get('project_id');
         }
 
         return $metadata;
