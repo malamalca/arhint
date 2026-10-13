@@ -723,11 +723,7 @@ msgstr ""
 msgid "Other response"
 msgstr ""
 
-msgid "Suitability confirmed"
-msgstr ""
 
-msgid "Suitability revoked"
-msgstr ""
 
 msgid "Event invalidated"
 msgstr ""
@@ -741,11 +737,7 @@ msgstr ""
 msgid "Supplement required"
 msgstr ""
 
-msgid "Received / under review"
-msgstr ""
 
-msgid "Review required"
-msgstr ""
 
 msgid "Authority"
 msgstr ""
@@ -960,8 +952,6 @@ msgstr ""
 msgid "Enter the documentation version."
 msgstr ""
 
-msgid "The response must have a document belonging to this project."
-msgstr ""
 
 msgid "Confirm against the current DGD documentation version."
 msgstr ""
@@ -1065,17 +1055,9 @@ msgstr ""
 msgid "The project has authority procedures and cannot be deleted."
 msgstr ""
 
-msgid "Documents changed since confirmation. Check the response again."
-msgstr ""
 
-msgid "Opinions confirmed: {0} of {1}"
-msgstr ""
 
-msgid "Not required: {0}"
-msgstr ""
 
-msgid "Missing: {0}"
-msgstr ""
 
 msgid "Responses or supplements are still outstanding."
 msgstr ""
@@ -1083,5 +1065,5 @@ msgstr ""
 msgid "An authority contact is not available."
 msgstr ""
 
-msgid "All opinions are confirmed. Awaiting confirmation of readiness."
+msgid "All opinions have been received. Awaiting confirmation of readiness."
 msgstr ""

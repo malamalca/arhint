@@ -23,8 +23,6 @@ class AuthorityWorkflow
             'request' => __d('projects', 'Supplement requested'),
             'supplement' => __d('projects', 'Supplement submitted'),
             'other' => __d('projects', 'Other response'),
-            'approve' => __d('projects', 'Suitability confirmed'),
-            'revoke' => __d('projects', 'Suitability revoked'),
             'void' => __d('projects', 'Event invalidated'),
         ];
     }
@@ -38,15 +36,13 @@ class AuthorityWorkflow
             'unsubmitted' => __d('projects', 'Not submitted'),
             'waiting' => __d('projects', 'Waiting for response'),
             'supplement' => __d('projects', 'Supplement required'),
-            'received' => __d('projects', 'Received / under review'),
             'complete' => __d('projects', 'Completed'),
-            'review' => __d('projects', 'Review required'),
             'exempt' => __d('projects', 'Not required'),
         ];
     }
 
     /**
-     * Parent links must remain in one case; early DPP opinions can be approved for DGD.
+     * Parent links must remain in one case.
      * An invalidation can itself be invalidated, which restores the original event.
      *
      * @param string $kind New kind.
@@ -55,13 +51,8 @@ class AuthorityWorkflow
      */
     public static function canFollow(string $kind, string $parentKind): bool
     {
-        if ($kind === 'approve') {
-            return in_array($parentKind, ['conditions', 'opinion'], true);
-        }
-
         return match ($kind) {
             'supplement' => $parentKind === 'request',
-            'revoke' => $parentKind === 'approve',
             'void' => true,
             'conditions', 'opinion', 'request', 'other' => in_array($parentKind, ['submission', 'supplement'], true),
             default => false,
@@ -193,28 +184,21 @@ class AuthorityWorkflow
     }
 
     /**
-     * Fingerprint document membership, metadata and attachments for an approval.
+     * Fingerprint document membership, metadata and attachments of an event.
      *
-     * @param \Cake\Datasource\EntityInterface $event Response event.
+     * @param \Cake\Datasource\EntityInterface $event Event with its document links.
      * @param string $projectId Expected project.
      * @param string $ownerId Expected company.
-     * @param bool $requirePrimary Require a primary response document.
-     * @return string|null Null if primary evidence is missing or has moved.
+     * @return string|null Null if a linked document is missing or has moved to another project.
      */
-    public function evidenceHash(
-        EntityInterface $event,
-        string $projectId,
-        string $ownerId,
-        bool $requirePrimary = true,
-    ): ?string {
+    public function documentsHash(EntityInterface $event, string $projectId, string $ownerId): ?string
+    {
         $documents = [];
-        $primary = false;
         foreach ($event->event_documents ?? [] as $link) {
             $document = $link->document;
             if (!$document || $document->project_id !== $projectId || $document->owner_id !== $ownerId) {
                 return null;
             }
-            $primary = $primary || $link->role === 'primary';
             $attachments = [];
             foreach ($document->attachments ?? [] as $attachment) {
                 $attachments[] = $attachment->toArray();
@@ -226,38 +210,31 @@ class AuthorityWorkflow
         }
         ksort($documents);
 
-        return $primary || !$requirePrimary ? $this->hash($documents) : null;
+        return $this->hash($documents);
     }
 
     /**
+     * A received opinion completes the procedure; a new submission or request reopens it
+     * until it is answered again.
+     *
      * @param \Cake\Datasource\EntityInterface $case Case with events.
-     * @param string $phase DPP or DGD.
-     * @param string $ownerId Project company.
+     * @param string $phase DPP (conditions) or DGD (opinion).
      * @return array<string, mixed>
      */
-    public function phase(
-        EntityInterface $case,
-        string $phase,
-        string $ownerId,
-    ): array {
-        $events = $this->effectiveEvents($case->events ?? []);
-        $byId = [];
+    public function phase(EntityInterface $case, string $phase): array
+    {
         $pending = [];
         $requests = [];
-        $approval = null;
         $received = null;
         $last = null;
-        foreach ($events as $event) {
-            $byId[$event->id] = $event;
+        $expectedKind = $phase === 'DPP' ? 'conditions' : 'opinion';
+        foreach ($this->effectiveEvents($case->events ?? []) as $event) {
             $last = $event;
-            $expectedKind = $phase === 'DPP' ? 'conditions' : 'opinion';
             if (in_array($event->kind, ['conditions', 'opinion'], true)) {
                 unset($pending[(string)$event->parent_id]);
-            }
-            if (in_array($event->kind, ['conditions', 'opinion'], true) && $event->kind !== $expectedKind) {
-                continue;
-            }
-            if ($event->kind === 'approve' && ($byId[$event->parent_id]->kind ?? '') !== $expectedKind) {
+                if ($event->kind === $expectedKind) {
+                    $received = $event;
+                }
                 continue;
             }
             switch ($event->kind) {
@@ -265,44 +242,18 @@ class AuthorityWorkflow
                 case 'supplement':
                     unset($requests[(string)$event->parent_id]);
                     $pending[$event->id] = $event;
-                    $approval = null;
                     break;
                 case 'request':
                     unset($pending[(string)$event->parent_id]);
                     $requests[$event->id] = $event;
-                    $approval = null;
-                    break;
-                case 'conditions':
-                case 'opinion':
-                    unset($pending[(string)$event->parent_id]);
-                    $received = $event;
-                    $approval = null;
                     break;
                 case 'other':
                     // Any answer ends the wait; it only completes nothing by itself.
                     unset($pending[(string)$event->parent_id]);
                     break;
-                case 'approve':
-                    $approval = $event;
-                    $received = $byId[$event->parent_id] ?? $received;
-                    break;
-                case 'revoke':
-                    if ($approval && $approval->id === $event->parent_id) {
-                        $approval = null;
-                    }
-                    break;
             }
         }
-        $state = 'unsubmitted';
-        if ($received) {
-            $state = 'received';
-        }
-        if ($approval) {
-            $parent = $byId[$approval->parent_id] ?? null;
-            $hash = $parent ? $this->evidenceHash($parent, $case->project_id, $ownerId) : null;
-            $matches = $hash && $approval->evidence_hash === $hash;
-            $state = $matches ? 'complete' : 'review';
-        }
+        $state = $received ? 'complete' : 'unsubmitted';
         if ($pending) {
             $state = 'waiting';
         }
@@ -310,7 +261,7 @@ class AuthorityWorkflow
             $state = 'supplement';
         }
 
-        return compact('state', 'last', 'pending', 'requests', 'approval', 'received');
+        return compact('state', 'last', 'pending', 'requests', 'received');
     }
 
     /**
@@ -339,11 +290,11 @@ class AuthorityWorkflow
                 $eventData = $event->toArray();
                 unset($eventData['user'], $eventData['event_documents']);
                 $history[$event->id] = [
-                    $eventData, $this->evidenceHash($event, $project->id, $project->owner_id, false),
+                    $eventData, $this->documentsHash($event, $project->id, $project->owner_id),
                 ];
             }
-            $dpp = $this->phase($case, 'DPP', $project->owner_id);
-            $dgd = $this->phase($case, 'DGD', $project->owner_id);
+            $dpp = $this->phase($case, 'DPP');
+            $dgd = $this->phase($case, 'DGD');
             $isExempt = self::isExempt($case);
             $status = $isExempt ? 'exempt' : $dgd['state'];
             $rows[$case->id] = ['DPP' => $dpp, 'DGD' => $dgd, 'status' => $status];

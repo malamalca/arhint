@@ -811,11 +811,7 @@ msgstr "Dopolnitev oddana"
 msgid "Other response"
 msgstr "Drug odgovor"
 
-msgid "Suitability confirmed"
-msgstr "Ustreznost potrjena"
 
-msgid "Suitability revoked"
-msgstr "Ustreznost preklicana"
 
 msgid "Event invalidated"
 msgstr "Dogodek razveljavljen"
@@ -829,11 +825,7 @@ msgstr "Čakamo odgovor"
 msgid "Supplement required"
 msgstr "Potrebna dopolnitev"
 
-msgid "Received / under review"
-msgstr "Prejeto / v pregledu"
 
-msgid "Review required"
-msgstr "Potreben ponovni pregled"
 
 msgid "Authority"
 msgstr "Soglasodajalec"
@@ -1048,8 +1040,6 @@ msgstr "Izberite veljaven dogodek te zadeve."
 msgid "Enter the documentation version."
 msgstr "Vnesite različico dokumentacije."
 
-msgid "The response must have a document belonging to this project."
-msgstr "Odgovor mora imeti dokument, ki pripada temu projektu."
 
 msgid "Confirm against the current DGD documentation version."
 msgstr "Potrdite ustreznost za trenutno različico dokumentacije DGD."
@@ -1153,17 +1143,9 @@ msgstr "Kontakt je uporabljen kot soglasodajalec na projektu in ga ni mogoče iz
 msgid "The project has authority procedures and cannot be deleted."
 msgstr "Projekt ima postopke soglasodajalcev in ga ni mogoče izbrisati."
 
-msgid "Documents changed since confirmation. Check the response again."
-msgstr "Dokumenti so se po potrditvi spremenili. Ponovno preverite odgovor."
 
-msgid "Opinions confirmed: {0} of {1}"
-msgstr "Potrjena mnenja: {0} od {1}"
 
-msgid "Not required: {0}"
-msgstr "Ni potrebno: {0}"
 
-msgid "Missing: {0}"
-msgstr "Manjka: {0}"
 
 msgid "Responses or supplements are still outstanding."
 msgstr "Odgovori ali dopolnitve so še odprti."
@@ -1171,5 +1153,5 @@ msgstr "Odgovori ali dopolnitve so še odprti."
 msgid "An authority contact is not available."
 msgstr "Kontakt soglasodajalca ni na voljo."
 
-msgid "All opinions are confirmed. Awaiting confirmation of readiness."
-msgstr "Vsa mnenja so potrjena. Čaka potrditev pripravljenosti."
+msgid "All opinions have been received. Awaiting confirmation of readiness."
+msgstr "Vsa mnenja so prejeta. Čaka potrditev pripravljenosti."

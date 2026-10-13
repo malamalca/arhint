@@ -56,7 +56,7 @@ class ProjectsAuthorityEventsTable extends Table
         $rules->add($rules->existsIn(['user_id'], 'Users'));
         $rules->add(function ($entity) {
             if (!$entity->parent_id) {
-                return !in_array($entity->kind, ['supplement', 'approve', 'revoke', 'void'], true);
+                return !in_array($entity->kind, ['supplement', 'void'], true);
             }
             $parent = $this->Parents->find()
                 ->where(['id' => $entity->parent_id, 'case_id' => $entity->case_id])->first();

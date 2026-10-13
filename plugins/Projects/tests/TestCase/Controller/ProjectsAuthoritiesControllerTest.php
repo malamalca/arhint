@@ -426,22 +426,14 @@ class ProjectsAuthoritiesControllerTest extends TestCase
     /**
      * @return void
      */
-    public function testOpinionApprovalAndReadinessLifecycle(): void
+    public function testOpinionCompletesAndReadinessLifecycle(): void
     {
         $id = $this->createCase();
         $this->getTableLocator()->get('Documents.Documents')->updateAll(['project_id' => self::PROJECT], ['id' => self::DOCUMENT]);
-        $this->post('/projects/projects-authorities/event/' . $id, [
-            'snapshot_hash' => $this->summary()['snapshotHash'], 'kind' => 'opinion',
-            'event_date' => '2026-10-13',
-            'document_ids' => [self::DOCUMENT],
-        ]);
-        $this->assertResponseCode(302);
-        $events = $this->getTableLocator()->get('Projects.ProjectsAuthorityEvents');
-        $response = $events->find()->where(['case_id' => $id])->firstOrFail();
         $this->assertFalse($this->summary()['collected']);
         $this->post('/projects/projects-authorities/event/' . $id, [
-            'snapshot_hash' => $this->summary()['snapshotHash'], 'kind' => 'approve',
-            'parent_id' => $response->id, 'event_date' => '2026-10-13',
+            'snapshot_hash' => $this->summary()['snapshotHash'], 'kind' => 'opinion',
+            'event_date' => '2026-10-13', 'document_ids' => [self::DOCUMENT],
         ]);
         $this->assertResponseCode(302);
         $this->assertTrue($this->summary()['collected']);
@@ -451,6 +443,11 @@ class ProjectsAuthoritiesControllerTest extends TestCase
         $this->assertFalse($this->summary()['ready']);
         $this->review('ready');
         $this->assertTrue($this->summary()['ready']);
+        // A new submission reopens the case and withdraws the readiness.
+        $this->postEvent($id, ['kind' => 'submission']);
+        $this->assertResponseCode(302);
+        $this->assertFalse($this->summary()['collected']);
+        $this->assertFalse($this->summary()['ready']);
     }
 
     /**
@@ -536,26 +533,23 @@ class ProjectsAuthoritiesControllerTest extends TestCase
     }
 
     /**
-     * The receipt date is the response itself and survives approval and later events.
+     * The receipt date is the response itself and survives later events.
      *
      * @return void
      */
-    public function testReceiptDateStaysAfterApprovalAndLaterEvents(): void
+    public function testReceiptDateStaysAfterLaterEvents(): void
     {
         $id = $this->createCase();
         $this->getTableLocator()->get('Documents.Documents')->updateAll([
             'project_id' => self::PROJECT, 'dat_issue' => '2026-09-08',
         ], ['id' => self::DOCUMENT]);
         $this->postEvent($id, ['kind' => 'opinion', 'document_ids' => [self::DOCUMENT]]);
-        $response = $this->getTableLocator()->get('Projects.ProjectsAuthorityEvents')->find()
-            ->where(['case_id' => $id])->firstOrFail();
-        $this->postEvent($id, ['kind' => 'approve', 'parent_id' => $response->id]);
         $this->postEvent($id, ['kind' => 'other']);
         $this->get('/projects/projects/view/' . self::PROJECT . '?tab=authorities');
         $this->assertResponseOk();
         $this->assertResponseContains('authority-receipt');
         $this->assertResponseContains('08.09.2026');
-        $this->assertResponseContains('Potrjena mnenja: 1 od 1');
+        $this->assertResponseNotContains('Potrjena mnenja');
     }
 
     /**

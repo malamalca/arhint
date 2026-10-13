@@ -23,22 +23,18 @@ Vnesite vrsto dogodka, datum oddaje oziroma prejema, po potrebi povezani dogodek
 - Vloga oddana lahko ostane brez dokumenta.
 - Pogoji prejeti, mnenje prejeto in zahteva za dopolnitev zahtevajo dokument odgovora.
 - Dopolnitev oddana se poveže z zahtevo za dopolnitev.
-- Potrditev ustreznosti se poveže s prejetimi pogoji ali mnenjem.
-- Preklic ustreznosti se poveže s potrditvijo, razveljavitev pa z dogodkom, ki ga popravljate. Vnesite tudi razlog.
-
 - Razveljavitev se poveže z dogodkom, ki ga razveljavlja (tudi z drugo razveljavitvijo). Razveljavitev razveljavitve povrne prvotni dogodek in odvisne dogodke.
-- Drug odgovor, povezan z vlogo ali dopolnitvijo, konča čakanje na odgovor, vendar sam ničesar ne zaključi: mnenje mora še vedno prispeti in biti potrjeno.
+- Drug odgovor, povezan z vlogo ali dopolnitvijo, konča čakanje na odgovor, vendar sam ničesar ne zaključi: mnenje mora še vedno prispeti.
+- Prejeto mnenje zaključi postopek pri soglasodajalcu; potrditve mnenja ni. Postopek ponovno odprete z novo vlogo ali zahtevo (npr. ker je mnenje poteklo): zadeva je spet *Čakamo odgovor*, dokler ne prispe novo mnenje. Prejeto mnenje lahko tudi razveljavite.
 - Rok ne sme biti pred datumom dogodka, dogodek pa ne pred povezanim dogodkom.
 
 Izbirnik ponuja povezane dogodke glede na njihovo vrsto. Povezave niso omejene po nekdanjih fazah DPP/DGD. Obrazec samo evidentira dejanje; vloge ne pošilja.
 
 ## Pregledna tabela
 
-Nad tabelo je povzetek: število potrjenih mnenj od zahtevanih, imena manjkajočih, opozorilo o odprtih odgovorih ali dopolnitvah in stanje pripravljenosti.
+Nad tabelo je po potrebi kratko opozorilo (odprti odgovori ali dopolnitve, nedostopen kontakt) in stanje pripravljenosti. Stanje posamezne zadeve je razvidno iz stolpca Status.
 
-Tabela uporablja enako glavo in širino kot druge tabele v zavihkih. Prikaže soglasodajalca, stanje (Ni oddano, Čakamo odgovor, Potrebna dopolnitev, Prejeto, Zaključeno, Potreben ponovni pregled, Ni potrebno), projektne pogoje, mnenje in zahtevo za dopolnitev. Stolpca Naslednji korak in Odgovorna oseba sta skrita.
-
-Stanje *Potreben ponovni pregled* pomeni, da se je dokument odgovora po potrditvi spremenil ali premaknil; odgovor je treba ponovno potrditi.
+Tabela uporablja enako glavo in širino kot druge tabele v zavihkih. Prikaže soglasodajalca, stanje (Ni oddano, Čakamo odgovor, Potrebna dopolnitev, Zaključeno, Ni potrebno), projektne pogoje, mnenje in zahtevo za dopolnitev. Stolpca Naslednji korak in Odgovorna oseba sta skrita.
 
 Vsaka odprta zahteva za dopolnitev (brez oddane dopolnitve) ima samostojen stolpec. Povezava **Rok: dd.mm.yyyy** odpre prvi povezani dokument. Pretečen rok je poudarjen z barvo. Rok druge vrste zadnjega dogodka se prikaže pod nazivom soglasodajalca. Ko novi zadnji dogodek nima roka, prejšnji rok ni več prikazan.
 
@@ -46,9 +42,9 @@ Za prejete pogoje oziroma mnenje se v ustreznem stolpcu pokaže datum izdaje prv
 
 ## Pripravljenost za UE
 
-Potrjevanja seznama soglasodajalcev in Opombe pregleda ni. Administrator lahko potrdi pripravljenost za UE, ko so mnenja vseh dodanih soglasodajalcev (razen tistih z razlogom *Ni potrebno*) potrjena in ni odprtih vlog oziroma dopolnitev. Šteje samo mnenje; projektni pogoji pripravljenosti ne pogojujejo. Prazen seznam ne pomeni pripravljenosti; če nobeden soglasodajalec ni potreben, dodajte zadevo z razlogom *Ni potrebno*.
+Potrjevanja seznama soglasodajalcev in Opombe pregleda ni. Administrator lahko potrdi pripravljenost za UE, ko so mnenja vseh dodanih soglasodajalcev (razen tistih z razlogom *Ni potrebno*) prejeta in ni odprtih vlog oziroma dopolnitev. Šteje samo mnenje; projektni pogoji pripravljenosti ne pogojujejo. Prazen seznam ne pomeni pripravljenosti; če nobeden soglasodajalec ni potreben, dodajte zadevo z razlogom *Ni potrebno*.
 
-Ročna potrditev oziroma njen preklic ostaneta evidentirana. Vsaka sprememba zadev, dogodkov in dokazil samodejno razveljavi potrditev; potem jo je treba ponoviti. Različice dokumentacije se ne preverjajo.
+Ročna potrditev oziroma njen preklic ostaneta evidentirana. Vsaka sprememba zadev, dogodkov in dokumentov samodejno razveljavi potrditev; potem jo je treba ponoviti. Različice dokumentacije se ne preverjajo.
 
 Če se je postopek spremenil, medtem ko je bil obrazec odprt, shranjevanje ne uspe, obrazec ostane z vnesenimi podatki in prikaže se sporočilo; podatke preverite in shranite znova.
 

@@ -39,17 +39,13 @@ $(document).ready(function() {
         return {value: option.value, text: option.text};
     });
     function compatible(event) {
-        if (kind.value === 'approve') {
-            return ['conditions', 'opinion'].includes(event.kind);
-        }
         if (kind.value === 'supplement') { return event.kind === 'request'; }
-        if (kind.value === 'revoke') { return event.kind === 'approve'; }
         if (kind.value === 'void') { return true; }
         return ['conditions', 'opinion', 'request', 'other'].includes(kind.value) &&
             ['submission', 'supplement'].includes(event.kind);
     }
     function updateRequirements() {
-        reason.required = ['revoke', 'void'].includes(kind.value);
+        reason.required = kind.value === 'void';
         $(reason).parent().toggleClass('required', reason.required);
         var selected = parent.value;
         var instance = M.FormSelect.getInstance(parent);

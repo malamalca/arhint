@@ -62,7 +62,7 @@ class AuthorityWorkflowTest extends TestCase
      * @param \Cake\ORM\Entity $response Response.
      * @return \Cake\ORM\Entity
      */
-    private function approve(Entity $response): Entity
+    private function withDocument(Entity $response): Entity
     {
         $response->event_documents = [new Entity([
             'id' => 'link', 'role' => 'primary',
@@ -71,10 +71,8 @@ class AuthorityWorkflowTest extends TestCase
                 'title' => 'Opinion', 'modified' => '2026-10-13 10:00:00', 'attachments' => [],
             ]),
         ])];
-        $approval = $this->event('approve', 'approve', $response->id);
-        $approval->evidence_hash = $this->workflow->evidenceHash($response, 'project', 'company');
 
-        return $approval;
+        return $response;
     }
 
     /**
@@ -88,16 +86,16 @@ class AuthorityWorkflowTest extends TestCase
             $this->event('s2', 'supplement', 'r1'),
             $this->event('r2', 'request', 's2'),
         ];
-        $state = $this->workflow->phase($this->case($events), 'DGD', 'company');
+        $state = $this->workflow->phase($this->case($events), 'DGD');
         $this->assertSame('supplement', $state['state']);
         $this->assertSame(['r2'], array_keys($state['requests']));
         $events[] = $this->event('s3', 'supplement', 'r2');
-        $state = $this->workflow->phase($this->case($events), 'DGD', 'company');
+        $state = $this->workflow->phase($this->case($events), 'DGD');
         $this->assertSame('waiting', $state['state']);
         $this->assertSame(['s3'], array_keys($state['pending']));
         $events[] = $this->event('response', 'opinion', 's3');
-        $state = $this->workflow->phase($this->case($events), 'DGD', 'company');
-        $this->assertSame('received', $state['state']);
+        $state = $this->workflow->phase($this->case($events), 'DGD');
+        $this->assertSame('complete', $state['state']);
         $this->assertEmpty($state['requests']);
         $this->assertEmpty($state['pending']);
     }
@@ -108,45 +106,64 @@ class AuthorityWorkflowTest extends TestCase
     public function testUnrelatedResponseDoesNotResolveAnOpenRequest(): void
     {
         $events = [$this->event('r1', 'request'), $this->event('response', 'opinion')];
-        $approval = $this->approve($events[1]);
-        $events[] = $approval;
-        $this->assertSame('supplement', $this->workflow->phase($this->case($events), 'DGD', 'company')['state']);
+        $this->assertSame('supplement', $this->workflow->phase($this->case($events), 'DGD')['state']);
     }
 
     /**
      * @return void
      */
-    public function testEarlyOpinionNeedsExplicitApproval(): void
+    public function testReceivedOpinionCompletesWithoutConfirmation(): void
     {
-        $response = $this->event('response', 'opinion');
-        $case = $this->case([$response]);
-        $this->assertSame('received', $this->workflow->phase($case, 'DGD', 'company')['state']);
-        $case->events = [$response, $this->approve($response)];
-        $this->assertSame('complete', $this->workflow->phase($case, 'DGD', 'company')['state']);
+        $case = $this->case([$this->event('s1', 'submission')]);
+        $this->assertSame('waiting', $this->workflow->phase($case, 'DGD')['state']);
+        $case->events[] = $this->event('response', 'opinion', 's1');
+        $this->assertSame('complete', $this->workflow->phase($case, 'DGD')['state']);
+        // An early opinion without any recorded submission is complete as well.
+        $this->assertSame('complete', $this->workflow->phase($this->case([$this->event('o', 'opinion')]), 'DGD')['state']);
+    }
+
+    /**
+     * Conditions complete only their own phase.
+     *
+     * @return void
+     */
+    public function testConditionsDoNotCompleteTheOpinion(): void
+    {
+        $case = $this->case([$this->event('s1', 'submission'), $this->event('c1', 'conditions', 's1')]);
+        $this->assertSame('complete', $this->workflow->phase($case, 'DPP')['state']);
+        $this->assertSame('unsubmitted', $this->workflow->phase($case, 'DGD')['state']);
+    }
+
+    /**
+     * An expired opinion is reopened by a new submission and completed again by a new opinion.
+     *
+     * @return void
+     */
+    public function testNewSubmissionReopensACompletedOpinion(): void
+    {
+        $events = [$this->event('s1', 'submission'), $this->event('o1', 'opinion', 's1')];
+        $this->assertSame('complete', $this->workflow->phase($this->case($events), 'DGD')['state']);
+        $events[] = $this->event('s2', 'submission');
+        $state = $this->workflow->phase($this->case($events), 'DGD');
+        $this->assertSame('waiting', $state['state']);
+        $this->assertSame('o1', $state['received']->id);
+        $summary = $this->workflow->summary($this->project(), [$this->case($events)], []);
+        $this->assertFalse($summary['collected']);
+        $events[] = $this->event('o2', 'opinion', 's2');
+        $state = $this->workflow->phase($this->case($events), 'DGD');
+        $this->assertSame('complete', $state['state']);
+        $this->assertSame('o2', $state['received']->id);
     }
 
     /**
      * @return void
      */
-    public function testChangedOrMovedEvidenceInvalidatesApproval(): void
+    public function testInvalidatingResponseReopensTheCase(): void
     {
         $response = $this->event('response', 'opinion');
-        $case = $this->case([$response, $this->approve($response)]);
-        $response->event_documents[0]->document->modified = '2026-10-14 10:00:00';
-        $this->assertSame('review', $this->workflow->phase($case, 'DGD', 'company')['state']);
-        $response->event_documents[0]->document->project_id = 'other-project';
-        $this->assertSame('review', $this->workflow->phase($case, 'DGD', 'company')['state']);
-    }
-
-    /**
-     * @return void
-     */
-    public function testInvalidatingResponseAlsoInvalidatesDependentApproval(): void
-    {
-        $response = $this->event('response', 'opinion');
-        $events = [$response, $this->approve($response), $this->event('void', 'void', 'response')];
+        $events = [$response, $this->event('void', 'void', 'response')];
         $this->assertEmpty($this->workflow->effectiveEvents($events));
-        $this->assertSame('unsubmitted', $this->workflow->phase($this->case($events), 'DGD', 'company')['state']);
+        $this->assertSame('unsubmitted', $this->workflow->phase($this->case($events), 'DGD')['state']);
     }
 
     /**
@@ -155,7 +172,7 @@ class AuthorityWorkflowTest extends TestCase
     public function testReadinessRequiresOpinionsAndFreshSnapshot(): void
     {
         $response = $this->event('response', 'opinion');
-        $case = $this->case([$response, $this->approve($response)]);
+        $case = $this->case([$this->withDocument($response)]);
         $project = $this->project();
         $summary = $this->workflow->summary($project, [$case], []);
         $this->assertTrue($summary['collected']);
@@ -204,20 +221,16 @@ class AuthorityWorkflowTest extends TestCase
     public function testInvalidationCanBeInvalidatedToRestoreTheEvent(): void
     {
         $response = $this->event('response', 'opinion');
-        $approval = $this->approve($response);
-        $events = [$response, $approval, $this->event('void1', 'void', 'response')];
+        $events = [$response, $this->event('void1', 'void', 'response')];
         $this->assertEmpty($this->workflow->effectiveEvents($events));
         $this->assertSame(['void1'], array_map(fn($e) => $e->id, $this->workflow->selectableEvents($events)));
         $events[] = $this->event('void2', 'void', 'void1');
+        $this->assertSame(['response'], array_map(fn($e) => $e->id, $this->workflow->effectiveEvents($events)));
         $this->assertSame(
-            ['response', 'approve'],
-            array_map(fn($e) => $e->id, $this->workflow->effectiveEvents($events)),
-        );
-        $this->assertSame(
-            ['response', 'approve', 'void2'],
+            ['response', 'void2'],
             array_map(fn($e) => $e->id, $this->workflow->selectableEvents($events)),
         );
-        $this->assertSame('complete', $this->workflow->phase($this->case($events), 'DGD', 'company')['state']);
+        $this->assertSame('complete', $this->workflow->phase($this->case($events), 'DGD')['state']);
     }
 
     /**
@@ -226,7 +239,7 @@ class AuthorityWorkflowTest extends TestCase
     public function testAnyAnswerEndsTheWaitButCompletesNothing(): void
     {
         $events = [$this->event('s1', 'submission'), $this->event('o1', 'other', 's1')];
-        $state = $this->workflow->phase($this->case($events), 'DGD', 'company');
+        $state = $this->workflow->phase($this->case($events), 'DGD');
         $this->assertEmpty($state['pending']);
         $this->assertNotSame('waiting', $state['state']);
         $summary = $this->workflow->summary($this->project(), [$this->case($events)], []);
@@ -240,9 +253,9 @@ class AuthorityWorkflowTest extends TestCase
     public function testReceivedResponseSurvivesLaterEvents(): void
     {
         $response = $this->event('response', 'opinion', 's1');
-        $events = [$this->event('s1', 'submission'), $response, $this->approve($response)];
+        $events = [$this->event('s1', 'submission'), $response];
         $events[] = $this->event('o1', 'other', 's1');
-        $state = $this->workflow->phase($this->case($events), 'DGD', 'company');
+        $state = $this->workflow->phase($this->case($events), 'DGD');
         $this->assertSame('response', $state['received']->id);
         $this->assertSame('o1', $state['last']->id);
     }

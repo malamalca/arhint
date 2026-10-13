@@ -29,10 +29,8 @@ foreach ($cases as $case) {
             )) . '</strong>' . ($overdue ? ' · ' . h(__d('projects', 'Overdue')) : '') . '</div>';
     }
     $status = $phases['status'];
-    $columns['status'] = '<span class="authority-status authority-status-' . h($status) . '"' .
-        ($status === 'review' ?
-            ' title="' . h(__d('projects', 'Documents changed since confirmation. Check the response again.')) . '"' :
-            '') . '>' . h($states[$status]) . '</span>';
+    $columns['status'] = '<span class="authority-status authority-status-' . h($status) . '">' .
+        h($states[$status]) . '</span>';
     // The receipt is the response itself, not the latest thing that happened to the case.
     foreach (['DPP' => 'conditions', 'DGD' => 'opinion'] as $phase => $kind) {
         $received = $phases[$phase]['received'];
@@ -71,14 +69,6 @@ foreach ($cases as $case) {
 
 $notes = [];
 if ($cases) {
-    $line = __d('projects', 'Opinions confirmed: {0} of {1}', $summary['complete'], $summary['required']);
-    if ($summary['exempt']) {
-        $line .= ' · ' . __d('projects', 'Not required: {0}', $summary['exempt']);
-    }
-    $notes[] = '<strong>' . h($line) . '</strong>';
-    if ($summary['missing']) {
-        $notes[] = h(__d('projects', 'Missing: {0}', implode(', ', $summary['missing'])));
-    }
     if ($summary['blocked']) {
         $notes[] = h(__d('projects', 'Responses or supplements are still outstanding.'));
     }
@@ -88,7 +78,7 @@ if ($cases) {
     if ($summary['ready']) {
         $notes[] = '<strong>' . h(__d('projects', 'Ready for submission to UE')) . '</strong>';
     } elseif ($summary['collected']) {
-        $notes[] = h(__d('projects', 'All opinions are confirmed. Awaiting confirmation of readiness.'));
+        $notes[] = h(__d('projects', 'All opinions have been received. Awaiting confirmation of readiness.'));
     }
 }
 ?>

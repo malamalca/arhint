@@ -263,7 +263,7 @@ class ProjectsAuthoritiesController extends AppController
                     if (!$editing) {
                         $event->sequence = count($case->events) + 1;
                     }
-                    $this->validateEvent($event, $case, $freshProject, $workflow);
+                    $this->validateEvent($event, $case, $workflow);
                     $allowed = $this->documentOptions($freshProject);
                     $links = [];
                     foreach (array_unique($selectedDocuments) as $documentId) {
@@ -424,18 +424,16 @@ class ProjectsAuthoritiesController extends AppController
     }
 
     /**
-     * Validate transitions against current evidence, never trust submitted approval hashes.
+     * Validate transitions against the current history of the case.
      *
      * @param \Cake\Datasource\EntityInterface $event New event.
      * @param \Cake\Datasource\EntityInterface $case Loaded case.
-     * @param \Cake\Datasource\EntityInterface $project Project.
      * @param \Projects\Lib\AuthorityWorkflow $workflow Workflow.
      * @return void
      */
     private function validateEvent(
         EntityInterface $event,
         EntityInterface $case,
-        EntityInterface $project,
         AuthorityWorkflow $workflow,
     ): void {
         $parent = null;
@@ -450,21 +448,11 @@ class ProjectsAuthoritiesController extends AppController
         if ($parent && !AuthorityWorkflow::canFollow($event->kind, $parent->kind)) {
             $event->setError('parent_id', __d('projects', 'The related event must match the event type.'));
         }
-        if (!$event->parent_id && in_array($event->kind, ['supplement', 'approve', 'revoke', 'void'], true)) {
+        if (!$event->parent_id && in_array($event->kind, ['supplement', 'void'], true)) {
             $event->setError('parent_id', __d('projects', 'Select a valid event from this case.'));
         }
-        if (in_array($event->kind, ['void', 'revoke'], true) && trim((string)$event->descript) === '') {
+        if ($event->kind === 'void' && trim((string)$event->descript) === '') {
             $event->setError('descript', __d('projects', 'A reason is required.'));
-        }
-        if ($event->kind === 'approve') {
-            $hash = $parent ? $workflow->evidenceHash($parent, $project->id, $project->owner_id) : null;
-            if (!$hash) {
-                $event->setError('parent_id', __d(
-                    'projects',
-                    'The response must have a document belonging to this project.',
-                ));
-            }
-            $event->evidence_hash = $hash;
         }
     }
 
@@ -530,7 +518,7 @@ class ProjectsAuthoritiesController extends AppController
     }
 
     /**
-     * Reject stale forms rather than approving or overwriting changed evidence.
+     * Reject stale forms rather than overwriting a changed procedure.
      *
      * @param array<string, mixed> $summary Fresh summary.
      * @return void
