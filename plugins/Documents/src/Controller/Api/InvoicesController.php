@@ -14,6 +14,7 @@ use Documents\Lib\EslogImport;
 use Documents\Lib\EslogInvoiceBuilder;
 use Documents\Lib\InvoicesExport;
 use Documents\Model\Entity\DocumentsCounter;
+use Documents\Model\Entity\Invoice;
 use Documents\Model\Table\ApiRequestsTable;
 use Documents\Model\Table\InvoicesTaxConfirmationsTable;
 use Throwable;
@@ -293,12 +294,15 @@ class InvoicesController extends Controller
     private function pdfResponse(string $invoiceId, ?string $zoi, ?string $eor, int $status): Response
     {
         $exporter = new InvoicesExport();
-        $invoice = null;
+        $invoiceNo = '';
         $pdf = false;
 
         try {
             $invoice = $exporter->find(['id' => $invoiceId])->first();
-            $pdf = $invoice ? $exporter->export('pdf', [$invoice]) : false;
+            if ($invoice instanceof Invoice) {
+                $invoiceNo = (string)$invoice->no;
+                $pdf = $exporter->export('pdf', [$invoice]);
+            }
         } catch (Throwable $e) {
             $pdf = false;
             Log::error('Invoice API PDF export failed: ' . $e->getMessage());
@@ -316,11 +320,11 @@ class InvoicesController extends Controller
 
         $response = $exporter->response('pdf', (string)$pdf, [
             'download' => true,
-            'filename' => 'racun-' . preg_replace('/[^A-Za-z0-9._-]+/', '-', (string)$invoice?->no),
+            'filename' => 'racun-' . preg_replace('/[^A-Za-z0-9._-]+/', '-', $invoiceNo),
         ])
             ->withStatus($status)
             ->withHeader('X-Invoice-Id', $invoiceId)
-            ->withHeader('X-Invoice-No', rawurlencode((string)$invoice?->no));
+            ->withHeader('X-Invoice-No', rawurlencode($invoiceNo));
 
         if ($zoi) {
             $response = $response->withHeader('X-Tax-Zoi', $zoi);
