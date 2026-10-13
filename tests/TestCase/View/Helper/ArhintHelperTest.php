@@ -253,7 +253,7 @@ class ArhintHelperTest extends TestCase
         $actions = $table['table']['body']['rows'][0]['columns']['actions']['html'];
         $this->assertStringNotContainsString('autorenew', $actions);
 
-        $user = $this->createMock(User::class);
+        $user = $this->createStub(User::class);
         $user->method('hasRole')->willReturn(true);
         $view = new View(new ServerRequest(['url' => '/']));
         $view->setRequest($view->getRequest()->withAttribute('identity', $user));

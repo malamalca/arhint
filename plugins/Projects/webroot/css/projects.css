@@ -118,3 +118,67 @@ textarea#project-descript {
     overflow-x: scroll;
     font-family:Consolas,Monaco,"Lucida Console","Liberation Mono","DejaVu Sans Mono","Bitstream Vera Sans Mono","Courier New", monospace !important;
 }
+
+#projects-authorities {
+    width: 750px;
+    max-width: 100%;
+}
+
+.projects-authorities form {
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+
+.authority-deadline {
+    margin-top: 0.5em;
+    padding: 0.5em;
+    border-left: 3px solid #b26a00;
+    background-color: #fff4db;
+}
+
+.authority-deadline.overdue {
+    border-left-color: #b3261e;
+    background-color: #fce8e6;
+    color: #b3261e;
+}
+
+.authority-deadline a {
+    color: inherit;
+    text-decoration: underline;
+}
+
+.authority-receipt {
+    margin-top: 0.5em;
+    padding: 0.5em;
+    border-left: 3px solid #137333;
+    background-color: #e6f4ea;
+    color: #137333;
+}
+
+.authority-receipt a {
+    color: inherit;
+    text-decoration: underline;
+}
+
+.authority-parent-select.input-field > label {
+    top: 8px;
+    transform: scale(0.75);
+}
+
+.authority-summary {
+    margin-bottom: 1em;
+}
+
+.authority-summary p {
+    margin: 0.25em 0;
+}
+
+.authority-status-review,
+.authority-status-supplement {
+    color: #b3261e;
+    font-weight: bold;
+}
+
+.authority-status-exempt {
+    color: #5f6368;
+}

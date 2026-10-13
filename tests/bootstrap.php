@@ -16,6 +16,11 @@ require dirname(__DIR__) . '/vendor/autoload.php';
 
 require dirname(__DIR__) . '/config/bootstrap.php';
 
+// Test translations must not create or clear cache files used by the web application.
+\Cake\Cache\Cache::drop('_cake_translations_');
+\Cake\Cache\Cache::setConfig('_cake_translations_', ['className' => 'Null']);
+\Cake\I18n\I18n::clear();
+
 $_SERVER['PHP_SELF'] = '/';
 
 if (empty($_SERVER['HTTP_HOST']) && !Configure::read('App.fullBaseUrl')) {

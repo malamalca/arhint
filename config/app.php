@@ -139,7 +139,7 @@ return [
         '_cake_translations_' => [
             'className' => FileEngine::class,
             'prefix' => 'arhint_translations_',
-            'path' => CACHE . 'persistent' . DS,
+            'path' => CACHE . 'translations' . DS,
             'serialize' => true,
             'duration' => '+1 years',
             'url' => null,

@@ -374,7 +374,7 @@ class AiProcessLogJobTest extends TestCase
         $body = json_encode($wrapped);
 
         /** @var QueueMessage&MockObject $queueMessage */
-        $queueMessage = $this->createMock(QueueMessage::class);
+        $queueMessage = $this->createStub(QueueMessage::class);
         $queueMessage->method('getBody')->willReturn($body);
 
         /** @var Context&MockObject $context */

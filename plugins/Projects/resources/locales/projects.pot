@@ -692,3 +692,396 @@ msgstr ""
 msgid "{0} closed {1}"
 msgstr ""
 
+
+msgid "Conditions and opinions"
+msgstr ""
+
+msgid "Not determined"
+msgstr ""
+
+msgid "Required"
+msgstr ""
+
+msgid "Not required"
+msgstr ""
+
+msgid "Application submitted"
+msgstr ""
+
+msgid "Conditions received"
+msgstr ""
+
+msgid "Opinion received"
+msgstr ""
+
+msgid "Supplement requested"
+msgstr ""
+
+msgid "Supplement submitted"
+msgstr ""
+
+msgid "Other response"
+msgstr ""
+
+msgid "Suitability confirmed"
+msgstr ""
+
+msgid "Suitability revoked"
+msgstr ""
+
+msgid "Event invalidated"
+msgstr ""
+
+msgid "Not submitted"
+msgstr ""
+
+msgid "Waiting for response"
+msgstr ""
+
+msgid "Supplement required"
+msgstr ""
+
+msgid "Received / under review"
+msgstr ""
+
+msgid "Review required"
+msgstr ""
+
+msgid "Authority"
+msgstr ""
+
+msgid "Authority register"
+msgstr ""
+
+msgid "Add authority"
+msgstr ""
+
+msgid "Edit authority"
+msgstr ""
+
+msgid "Contact"
+msgstr ""
+
+msgid "Inactive"
+msgstr ""
+
+msgid "Add authority case"
+msgstr ""
+
+msgid "Edit authority case"
+msgstr ""
+
+msgid "Case title / area"
+msgstr ""
+
+msgid "Project conditions"
+msgstr ""
+
+msgid "Opinion"
+msgstr ""
+
+msgid "Reason conditions are not required"
+msgstr ""
+
+msgid "Reason opinion is not required"
+msgstr ""
+
+msgid "Responsible person"
+msgstr ""
+
+msgid "Case reference"
+msgstr ""
+
+msgid "Next step"
+msgstr ""
+
+msgid "Back to project"
+msgstr ""
+
+msgid "Record procedure event"
+msgstr ""
+
+msgid "Phase"
+msgstr ""
+
+msgid "Event type"
+msgstr ""
+
+msgid "Submission / receipt date"
+msgstr ""
+
+msgid "Related event"
+msgstr ""
+
+msgid "Documentation version"
+msgstr ""
+
+msgid "Next check / supplement due"
+msgstr ""
+
+msgid "Summary / next step / reason"
+msgstr ""
+
+msgid "Application / response documents"
+msgstr ""
+
+msgid "Proof of submission"
+msgstr ""
+
+msgid "Submitted documentation"
+msgstr ""
+
+msgid "Record an actual submission or response. This form does not send an application."
+msgstr ""
+
+msgid "For supplements, approvals and invalidations, select the related event. Early DPP opinions can be confirmed for DGD."
+msgstr ""
+
+msgid "Ready for submission to UE"
+msgstr ""
+
+msgid "Opinions collected"
+msgstr ""
+
+msgid "Opinions outstanding"
+msgstr ""
+
+msgid "{0} of {1} required opinions confirmed."
+msgstr ""
+
+msgid "Missing opinions: {0}"
+msgstr ""
+
+msgid "Determine the phase requirements and confirm the authority list."
+msgstr ""
+
+msgid "There are unresolved submissions or supplement requests."
+msgstr ""
+
+msgid "The previous readiness confirmation is no longer active."
+msgstr ""
+
+msgid "No authority cases recorded."
+msgstr ""
+
+msgid "Current DGD documentation version: {0}"
+msgstr ""
+
+msgid "DGD documentation version"
+msgstr ""
+
+msgid "Save documentation version"
+msgstr ""
+
+msgid "Confirm authority list"
+msgstr ""
+
+msgid "Confirm readiness for UE"
+msgstr ""
+
+msgid "Revoke readiness"
+msgstr ""
+
+msgid "Review note"
+msgstr ""
+
+msgid "Review history"
+msgstr ""
+
+msgid "Authority list confirmed"
+msgstr ""
+
+msgid "Submission readiness revoked"
+msgstr ""
+
+msgid "Invalidated"
+msgstr ""
+
+msgid "Summary / due"
+msgstr ""
+
+msgid "Recorded by"
+msgstr ""
+
+msgid "A reason is required."
+msgstr ""
+
+msgid "The authority has been saved."
+msgstr ""
+
+msgid "The authority could not be saved."
+msgstr ""
+
+msgid "Add a new case to change the authority."
+msgstr ""
+
+msgid "Authority case updated: {0}. Changes: {1}"
+msgstr ""
+
+msgid "The authority case has been saved."
+msgstr ""
+
+msgid "The authority case could not be saved. Check the entered data."
+msgstr ""
+
+msgid "Select accessible documents from this project."
+msgstr ""
+
+msgid "A response document is required."
+msgstr ""
+
+msgid "{0}: {1} ({2})."
+msgstr ""
+
+msgid "The procedure event has been recorded."
+msgstr ""
+
+msgid "The event could not be saved. Check the entered data."
+msgstr ""
+
+msgid "Invalid review action."
+msgstr ""
+
+msgid "Enter a documentation version (up to 100 characters)."
+msgstr ""
+
+msgid "DGD documentation version changed to {0}. Opinions require review."
+msgstr ""
+
+msgid "Resolve the outstanding requirements before confirming."
+msgstr ""
+
+msgid "The project review has been recorded."
+msgstr ""
+
+msgid "Select a valid event from this case."
+msgstr ""
+
+msgid "Enter the documentation version."
+msgstr ""
+
+msgid "The response must have a document belonging to this project."
+msgstr ""
+
+msgid "Confirm against the current DGD documentation version."
+msgstr ""
+
+msgid "Use the documentation version recorded on the response."
+msgstr ""
+
+msgid "The procedure has changed. Reload the page before saving."
+msgstr ""
+
+msgid "Procedure history"
+msgstr ""
+
+msgid "Completed"
+msgstr ""
+
+msgid "Notes"
+msgstr ""
+
+msgid "Date"
+msgstr ""
+
+msgid "Event"
+msgstr ""
+
+msgid "Documents"
+msgstr ""
+
+msgid "Linked documents"
+msgstr ""
+
+msgid "The related event must match the event type."
+msgstr ""
+
+msgid "{0}: {1}."
+msgstr ""
+
+msgid "Overdue"
+msgstr ""
+
+msgid "Edit event"
+msgstr ""
+
+msgid "Procedure event updated: {0}. Changes: {1}"
+msgstr ""
+
+msgid "This event type is required by a linked event."
+msgstr ""
+
+msgid "Add deadline to my calendar"
+msgstr ""
+
+msgid "Remove calendar link"
+msgstr ""
+
+msgid "Open calendar"
+msgstr ""
+
+msgid "The calendar link has been updated."
+msgstr ""
+
+msgid "Edit this deadline in the authority procedure."
+msgstr ""
+
+msgid "Authority case added: {0}"
+msgstr ""
+
+msgid "Authority case deleted: {0}"
+msgstr ""
+
+msgid "The authority case has been deleted."
+msgstr ""
+
+msgid "Only a case without recorded events can be deleted."
+msgstr ""
+
+msgid "Delete case"
+msgstr ""
+
+msgid "Are you sure you want to delete this case?"
+msgstr ""
+
+msgid "Not required: reason (the case is then excluded from the review)"
+msgstr ""
+
+msgid "The due date cannot be before the event date."
+msgstr ""
+
+msgid "The event cannot be dated before the related event."
+msgstr ""
+
+msgid "The procedure has changed since the form was opened. Check the current data and save again."
+msgstr ""
+
+msgid "The document is linked to a procedure event and cannot be deleted."
+msgstr ""
+
+msgid "The contact is used as an authority in a project and cannot be deleted."
+msgstr ""
+
+msgid "The project has authority procedures and cannot be deleted."
+msgstr ""
+
+msgid "Documents changed since confirmation. Check the response again."
+msgstr ""
+
+msgid "Opinions confirmed: {0} of {1}"
+msgstr ""
+
+msgid "Not required: {0}"
+msgstr ""
+
+msgid "Missing: {0}"
+msgstr ""
+
+msgid "Responses or supplements are still outstanding."
+msgstr ""
+
+msgid "An authority contact is not available."
+msgstr ""
+
+msgid "All opinions are confirmed. Awaiting confirmation of readiness."
+msgstr ""

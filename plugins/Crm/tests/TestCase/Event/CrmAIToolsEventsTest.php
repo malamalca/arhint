@@ -34,7 +34,7 @@ class CrmAIToolsEventsTest extends TestCase
         parent::setUp();
         $this->listener = new CrmAIToolsEvents();
 
-        $authService = $this->createMock(AuthorizationServiceInterface::class);
+        $authService = $this->createStub(AuthorizationServiceInterface::class);
         $authService->method('applyScope')
             ->willReturnCallback(fn($identity, $action, $resource) => $resource);
         $authService->method('can')

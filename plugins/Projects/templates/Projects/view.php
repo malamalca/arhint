@@ -38,6 +38,15 @@ $projectView = [
             'title' => __d('projects', 'Add'),
             'visible' => $this->getCurrentUser()->hasRole('editor'),
             'submenu' => [
+                'authority' => [
+                    'title' => __d('projects', 'Add authority'),
+                    'visible' => $this->getCurrentUser()->hasRole('editor'),
+                    'url' => [
+                        'controller' => 'ProjectsAuthorities',
+                        'action' => 'editCase',
+                        '?' => ['project' => $project->id],
+                    ],
+                ],
                 'log' => [
                     'title' => __d('projects', 'Add Log'),
                     'visible' => $this->getCurrentUser()->hasRole('editor'),
@@ -101,6 +110,12 @@ $projectView = [
         ],
         'tabs' => ['lines' => [
             'pre' => '<div class="row view-panel"><div class="col s12"><ul class="tabs">',
+            'authorities' => sprintf(
+                '<li class="tab col"><a href="%1$s" target="_self"%3$s>%2$s</a></li>',
+                $this->Url->build([$project->id, '?' => ['tab' => 'authorities']]),
+                __d('projects', 'Conditions and opinions'),
+                $this->getRequest()->getQuery('tab') === 'authorities' ? ' class="active"' : '',
+            ),
             'milestones' => sprintf(
                 '<li class="tab col"><a href="%1$s" target="_self"%3$s>%2$s</a></li>',
                 $this->Url->build([$project->id, '?' => ['tab' => 'milestones']]),
@@ -135,6 +150,17 @@ $activeTab = $this->getRequest()->getQuery('tab', 'milestones');
 $this->set('tab', $activeTab);
 
 switch ($activeTab) {
+    case 'authorities':
+        $this->Lil->insertIntoArray($projectView['panels'], [
+            'authorities' => [
+                'lines' => [$this->element('Projects.authorities_list', [
+                    'cases' => $authorityCases,
+                    'summary' => $authoritySummary,
+                    'reviews' => $authorityReviews,
+                ])],
+            ],
+        ], ['before' => 'tabs_end']);
+        break;
     case 'milestones':
         // milestones tab panel
         $milestonesPanel = [

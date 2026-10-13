@@ -126,7 +126,16 @@ class BaseDocumentsController extends AppController
 
         $currentCounter = $document->documents_counter->id;
 
-        $this->set(compact('document', 'counters', 'links', 'currentCounter'));
+        // AI analysis is queued for documents only (see DocumentAiIndexer).
+        $aiAnalysis = $this->documentsScope === 'Documents'
+            ? TableRegistry::getTableLocator()->get('LogsAnalysis')
+                ->find()
+                ->where(['LogsAnalysis.event_id' => $id])
+                ->orderBy(['LogsAnalysis.created' => 'DESC'])
+                ->first()
+            : null;
+
+        $this->set(compact('document', 'counters', 'links', 'currentCounter', 'aiAnalysis'));
     }
 
     /**

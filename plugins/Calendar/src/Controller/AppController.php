@@ -5,6 +5,7 @@ namespace Calendar\Controller;
 
 use App\AppPluginsEnum;
 use App\Controller\AppController as BaseController;
+use Cake\Event\Event;
 use Cake\Event\EventInterface;
 use Cake\Http\Exception\UnauthorizedException;
 
@@ -22,6 +23,11 @@ class AppController extends BaseController
 
         if ($this->hasCurrentUser() && !$this->getCurrentUser()->hasAccess(AppPluginsEnum::Calendar)) {
             throw new UnauthorizedException(__d('calendar', 'No Access'));
+        }
+        if ($this->hasCurrentUser()) {
+            $this->getEventManager()->dispatch(new Event('Calendar.Events.beforeRead', $this, [
+                'userId' => $this->getCurrentUser()->id,
+            ]));
         }
     }
 }

@@ -224,6 +224,49 @@ if (!empty($document->attachments)) {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
+// AI ANALYSIS
+if (!empty($aiAnalysis)) {
+    $aiList = function (?string $json): string {
+        $items = $json === null ? [] : (json_decode($json, true) ?: []);
+        $items = array_filter(array_map(
+            fn($item) => is_scalar($item) ? (string)$item : json_encode($item, JSON_UNESCAPED_UNICODE),
+            (array)$items,
+        ), fn($item) => $item !== '');
+        if ($items === []) {
+            return '';
+        }
+
+        return '<ul>' . implode('', array_map(fn($item) => '<li>' . h($item) . '</li>', $items)) . '</ul>';
+    };
+
+    $priorities = [
+        1 => __d('documents', 'High'),
+        2 => __d('documents', 'Medium'),
+        3 => __d('documents', 'Low'),
+    ];
+
+    $aiHtml = '<div id="document-ai-analysis">';
+    $aiHtml .= sprintf(
+        '<p class="light">%s%s</p>',
+        h(__d('documents', 'Analysed on {0}', $aiAnalysis->created?->i18nFormat('dd.MM.yyyy HH:mm') ?? '')),
+        isset($priorities[$aiAnalysis->priority])
+            ? ' &middot; ' . h(__d('documents', 'Priority: {0}', $priorities[$aiAnalysis->priority]))
+            : '',
+    );
+    $aiHtml .= '<p>' . nl2br(h((string)$aiAnalysis->summary)) . '</p>';
+    foreach (['risks' => __d('documents', 'Risks'), 'blockers' => __d('documents', 'Blockers')] as $field => $label) {
+        $list = $aiList($aiAnalysis->{$field});
+        if ($list !== '') {
+            $aiHtml .= sprintf('<h4>%s</h4>%s', h($label), $list);
+        }
+    }
+    $aiHtml .= '</div>';
+
+    $invoiceView['panels']['ai_title'] = sprintf('<h3>%s</h3>', __d('documents', 'AI analysis'));
+    $invoiceView['panels']['ai'] = $aiHtml;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////
 // LOGS
 if (!empty($document->logs)) {
     $invoiceView['panels']['logs_title'] = sprintf('<h3>%s</h3>', __d('documents', 'Logs'));

@@ -113,6 +113,39 @@ class DocumentsControllerTest extends TestCase
     }
 
     /**
+     * Test view shows the latest AI analysis of a document
+     *
+     * @return void
+     */
+    public function testViewShowsAiAnalysis()
+    {
+        $documentId = 'd0d59a31-6de7-4eb4-8230-ca09113a7fe6';
+        // logs_analysis has no fixture, so keep the test database clean by hand.
+        $table = TableRegistry::getTableLocator()->get('LogsAnalysis');
+        $table->deleteAll(['event_id' => $documentId]);
+
+        try {
+            $table->saveOrFail($table->newEntity([
+                'event_id' => $documentId,
+                'summary' => 'Contract extension request',
+                'risks' => json_encode(['Deadline is tight']),
+                'blockers' => json_encode(['Missing signature']),
+                'priority' => 1,
+            ]));
+
+            $this->login(USER_ADMIN);
+            $this->get('/documents/documents/view/' . $documentId);
+            $this->assertResponseOk();
+            $this->assertResponseContains('document-ai-analysis');
+            $this->assertResponseContains('Contract extension request');
+            $this->assertResponseContains('Deadline is tight');
+            $this->assertResponseContains('Missing signature');
+        } finally {
+            $table->deleteAll(['event_id' => $documentId]);
+        }
+    }
+
+    /**
      * Test add method
      *
      * * ..\..\vendor\bin\phpunit --filter testAddIssued tests\TestCase\Controller\DocumentsControllerTest.php

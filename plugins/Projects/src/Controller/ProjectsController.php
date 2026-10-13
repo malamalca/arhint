@@ -6,6 +6,7 @@ namespace Projects\Controller;
 use Cake\Http\Response;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Hash;
+use Projects\Lib\AuthorityWorkflow;
 use Projects\Lib\ProjectsFuncs;
 
 /**
@@ -190,6 +191,15 @@ class ProjectsController extends AppController
             ->setOption('serialize', ['project']);
 
         $this->set(compact('project', 'logs', 'users', 'projectsStatuses', 'workDuration', 'milestones'));
+
+        if ($this->getRequest()->getQuery('tab') === 'authorities') {
+            $workflow = new AuthorityWorkflow();
+            $authorityCases = $workflow->cases($project->id);
+            $authorityReviews = $this->fetchTable('Projects.ProjectsAuthorityReviews')->find()
+                ->where(['project_id' => $project->id])->contain(['Users'])->orderBy(['sequence'])->all()->toList();
+            $authoritySummary = $workflow->summary($project, $authorityCases, $authorityReviews);
+            $this->set(compact('authorityCases', 'authorityReviews', 'authoritySummary'));
+        }
     }
 
     /**

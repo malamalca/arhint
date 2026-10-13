@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Calendar\Controller;
 
+use Cake\Event\Event;
 use Cake\Http\Response;
 
 /**
@@ -76,6 +77,13 @@ class EventsController extends AppController
         }
 
         $this->Authorization->authorize($event);
+
+        $source = $id ? $this->getEventManager()->dispatch(new Event('Calendar.Events.editSource', $this, [
+            'eventId' => $event->id,
+        ]))->getResult() : null;
+        if ($source) {
+            return $this->redirect($source);
+        }
 
         if ($this->request->is(['patch', 'post', 'put'])) {
             if ($this->getRequest()->getData('delete') == 'delete') {

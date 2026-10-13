@@ -10,7 +10,10 @@ use Cake\Event\EventListenerInterface;
 use Cake\ORM\Query\SelectQuery;
 use Cake\ORM\TableRegistry;
 use Cake\Routing\Router;
+use Crm\Model\Table\ContactsTable;
+use Documents\Model\Table\DocumentsTable;
 use Projects\Lib\ProjectsSidebar;
+use Projects\Model\Table\ProjectsTable;
 use Throwable;
 
 class ProjectsEvents implements EventListenerInterface
@@ -30,7 +33,48 @@ class ProjectsEvents implements EventListenerInterface
             'App.Form.Crm.Adremas.edit' => 'addProjectToAdremas',
             'App.Index.Crm.Adremas.index' => 'addProjectToAdremas',
             'Model.afterSave' => 'logProjectDocument',
+            'Model.beforeDelete' => 'protectAuthorityRecords',
         ];
+    }
+
+    /**
+     * Procedure history references documents, contacts and projects with restricting foreign keys.
+     * Refuse the delete with a message instead of failing on the database constraint.
+     *
+     * @param \Cake\Event\Event $event Event object.
+     * @param \Cake\Datasource\EntityInterface $entity Entity about to be deleted.
+     * @param \ArrayObject $options Delete options.
+     * @return void
+     */
+    public function protectAuthorityRecords(Event $event, EntityInterface $entity, ArrayObject $options): void
+    {
+        $table = $event->getSubject();
+        $locator = TableRegistry::getTableLocator();
+        $message = null;
+        if ($table instanceof DocumentsTable) {
+            if ($locator->get('Projects.ProjectsAuthorityEventDocuments')->exists(['document_id' => $entity->id])) {
+                $message = __d('projects', 'The document is linked to a procedure event and cannot be deleted.');
+            }
+        } elseif ($table instanceof ContactsTable) {
+            if ($locator->get('Projects.ProjectsAuthorityCases')->exists(['contact_id' => $entity->id])) {
+                $message = __d('projects', 'The contact is used as an authority in a project and cannot be deleted.');
+            }
+        } elseif ($table instanceof ProjectsTable) {
+            if (
+                $locator->get('Projects.ProjectsAuthorityCases')->exists(['project_id' => $entity->id]) ||
+                $locator->get('Projects.ProjectsAuthorityReviews')->exists(['project_id' => $entity->id])
+            ) {
+                $message = __d(
+                    'projects',
+                    'The project has authority procedures and cannot be deleted.',
+                );
+            }
+        }
+        if ($message !== null) {
+            Router::getRequest()?->getFlash()->error($message);
+            $event->stopPropagation();
+            $event->setResult(false);
+        }
     }
 
     /**

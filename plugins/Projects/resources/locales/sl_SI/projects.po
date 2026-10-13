@@ -779,3 +779,397 @@ msgstr "{0} zaključenih {1}"
 
 #~ msgid "Total"
 #~ msgstr "Skupaj"
+
+# Pogoji in mnenja
+msgid "Conditions and opinions"
+msgstr "Pogoji in mnenja"
+
+msgid "Not determined"
+msgstr "Ni določeno"
+
+msgid "Required"
+msgstr "Potrebno"
+
+msgid "Not required"
+msgstr "Ni potrebno"
+
+msgid "Application submitted"
+msgstr "Vloga oddana"
+
+msgid "Conditions received"
+msgstr "Pogoji prejeti"
+
+msgid "Opinion received"
+msgstr "Mnenje prejeto"
+
+msgid "Supplement requested"
+msgstr "Zahteva za dopolnitev"
+
+msgid "Supplement submitted"
+msgstr "Dopolnitev oddana"
+
+msgid "Other response"
+msgstr "Drug odgovor"
+
+msgid "Suitability confirmed"
+msgstr "Ustreznost potrjena"
+
+msgid "Suitability revoked"
+msgstr "Ustreznost preklicana"
+
+msgid "Event invalidated"
+msgstr "Dogodek razveljavljen"
+
+msgid "Not submitted"
+msgstr "Ni oddano"
+
+msgid "Waiting for response"
+msgstr "Čakamo odgovor"
+
+msgid "Supplement required"
+msgstr "Potrebna dopolnitev"
+
+msgid "Received / under review"
+msgstr "Prejeto / v pregledu"
+
+msgid "Review required"
+msgstr "Potreben ponovni pregled"
+
+msgid "Authority"
+msgstr "Soglasodajalec"
+
+msgid "Authority register"
+msgstr "Imenik soglasodajalcev"
+
+msgid "Add authority"
+msgstr "Dodaj soglasodajalca"
+
+msgid "Edit authority"
+msgstr "Uredi soglasodajalca"
+
+msgid "Contact"
+msgstr "Kontakt"
+
+msgid "Inactive"
+msgstr "Neaktiven"
+
+msgid "Add authority case"
+msgstr "Dodaj soglasodajalca projektu"
+
+msgid "Edit authority case"
+msgstr "Uredi zadevo soglasodajalca"
+
+msgid "Case title / area"
+msgstr "Naziv zadeve / področje"
+
+msgid "Project conditions"
+msgstr "Projektni pogoji"
+
+msgid "Opinion"
+msgstr "Mnenje"
+
+msgid "Reason conditions are not required"
+msgstr "Razlog, zakaj pogoji niso potrebni"
+
+msgid "Reason opinion is not required"
+msgstr "Razlog, zakaj mnenje ni potrebno"
+
+msgid "Responsible person"
+msgstr "Odgovorna oseba"
+
+msgid "Case reference"
+msgstr "Številka zadeve"
+
+msgid "Next step"
+msgstr "Naslednji korak"
+
+msgid "Back to project"
+msgstr "Nazaj na projekt"
+
+msgid "Record procedure event"
+msgstr "Evidentiraj dogodek postopka"
+
+msgid "Phase"
+msgstr "Faza"
+
+msgid "Event type"
+msgstr "Vrsta dogodka"
+
+msgid "Submission / receipt date"
+msgstr "Datum oddaje / prejema"
+
+msgid "Related event"
+msgstr "Povezani dogodek"
+
+msgid "Documentation version"
+msgstr "Različica dokumentacije"
+
+msgid "Next check / supplement due"
+msgstr "Naslednje preverjanje / rok dopolnitve"
+
+msgid "Summary / next step / reason"
+msgstr "Povzetek / naslednji korak / razlog"
+
+msgid "Application / response documents"
+msgstr "Dokumenti vloge / odgovora"
+
+msgid "Proof of submission"
+msgstr "Dokazilo o oddaji"
+
+msgid "Submitted documentation"
+msgstr "Oddana dokumentacija"
+
+msgid "Record an actual submission or response. This form does not send an application."
+msgstr "Evidentirajte opravljeno oddajo ali prejeti odgovor. Ta obrazec ne pošlje vloge."
+
+msgid "For supplements, approvals and invalidations, select the related event. Early DPP opinions can be confirmed for DGD."
+msgstr "Pri dopolnitvah, potrditvah in razveljavitvah izberite povezani dogodek. Zgodnje mnenje iz DPP lahko potrdite za DGD."
+
+msgid "Ready for submission to UE"
+msgstr "Pripravljeno za oddajo na UE"
+
+msgid "Opinions collected"
+msgstr "Mnenja zbrana"
+
+msgid "Opinions outstanding"
+msgstr "Mnenja še niso zbrana"
+
+msgid "{0} of {1} required opinions confirmed."
+msgstr "Potrjenih {0} od {1} zahtevanih mnenj."
+
+msgid "Missing opinions: {0}"
+msgstr "Manjkajoča mnenja: {0}"
+
+msgid "Determine the phase requirements and confirm the authority list."
+msgstr "Določite potrebnost posameznih faz in potrdite seznam soglasodajalcev."
+
+msgid "There are unresolved submissions or supplement requests."
+msgstr "Obstajajo nerešene vloge ali zahteve za dopolnitev."
+
+msgid "The previous readiness confirmation is no longer active."
+msgstr "Prejšnja potrditev pripravljenosti ni več veljavna."
+
+msgid "No authority cases recorded."
+msgstr "Soglasodajalci na projektu še niso evidentirani."
+
+msgid "Current DGD documentation version: {0}"
+msgstr "Trenutna različica dokumentacije DGD: {0}"
+
+msgid "DGD documentation version"
+msgstr "Različica dokumentacije DGD"
+
+msgid "Save documentation version"
+msgstr "Shrani različico dokumentacije"
+
+msgid "Confirm authority list"
+msgstr "Potrdi seznam soglasodajalcev"
+
+msgid "Confirm readiness for UE"
+msgstr "Potrdi pripravljenost za UE"
+
+msgid "Revoke readiness"
+msgstr "Prekliči pripravljenost"
+
+msgid "Review note"
+msgstr "Opomba pregleda"
+
+msgid "Review history"
+msgstr "Zgodovina potrditev"
+
+msgid "Authority list confirmed"
+msgstr "Seznam soglasodajalcev potrjen"
+
+msgid "Submission readiness revoked"
+msgstr "Pripravljenost za oddajo preklicana"
+
+msgid "Invalidated"
+msgstr "Razveljavljeno"
+
+msgid "Summary / due"
+msgstr "Povzetek / rok"
+
+msgid "Recorded by"
+msgstr "Evidentiral"
+
+msgid "A reason is required."
+msgstr "Vnesite razlog."
+
+msgid "The authority has been saved."
+msgstr "Soglasodajalec je shranjen."
+
+msgid "The authority could not be saved."
+msgstr "Soglasodajalca ni bilo mogoče shraniti."
+
+msgid "Add a new case to change the authority."
+msgstr "Za drugega soglasodajalca dodajte novo zadevo."
+
+msgid "Authority case updated: {0}. Changes: {1}"
+msgstr "Zadeva soglasodajalca posodobljena: {0}. Spremembe: {1}"
+
+msgid "The authority case has been saved."
+msgstr "Zadeva soglasodajalca je shranjena."
+
+msgid "The authority case could not be saved. Check the entered data."
+msgstr "Zadeve soglasodajalca ni bilo mogoče shraniti. Preverite vnesene podatke."
+
+msgid "Select accessible documents from this project."
+msgstr "Izberite dostopne dokumente tega projekta."
+
+msgid "A response document is required."
+msgstr "Dodajte dokument prejetega odgovora."
+
+msgid "{0}: {1} ({2})."
+msgstr "{0}: {1} ({2})."
+
+msgid "The procedure event has been recorded."
+msgstr "Dogodek postopka je evidentiran."
+
+msgid "The event could not be saved. Check the entered data."
+msgstr "Dogodka ni bilo mogoče shraniti. Preverite vnesene podatke."
+
+msgid "Invalid review action."
+msgstr "Neveljavno dejanje potrditve."
+
+msgid "Enter a documentation version (up to 100 characters)."
+msgstr "Vnesite različico dokumentacije (do 100 znakov)."
+
+msgid "DGD documentation version changed to {0}. Opinions require review."
+msgstr "Različica dokumentacije DGD je spremenjena v {0}. Mnenja zahtevajo ponovni pregled."
+
+msgid "Resolve the outstanding requirements before confirming."
+msgstr "Pred potrditvijo razrešite odprte zahteve."
+
+msgid "The project review has been recorded."
+msgstr "Pregled projekta je evidentiran."
+
+msgid "Select a valid event from this case."
+msgstr "Izberite veljaven dogodek te zadeve."
+
+msgid "Enter the documentation version."
+msgstr "Vnesite različico dokumentacije."
+
+msgid "The response must have a document belonging to this project."
+msgstr "Odgovor mora imeti dokument, ki pripada temu projektu."
+
+msgid "Confirm against the current DGD documentation version."
+msgstr "Potrdite ustreznost za trenutno različico dokumentacije DGD."
+
+msgid "Use the documentation version recorded on the response."
+msgstr "Uporabite različico dokumentacije, evidentirano pri odgovoru."
+
+msgid "The procedure has changed. Reload the page before saving."
+msgstr "Postopek se je spremenil. Pred shranjevanjem ponovno naložite stran."
+
+msgid "Procedure history"
+msgstr "Zgodovina postopka"
+
+msgid "Completed"
+msgstr "Zaključeno"
+
+msgid "Notes"
+msgstr "Opombe"
+
+msgid "Date"
+msgstr "Datum"
+
+msgid "Event"
+msgstr "Dogodek"
+
+msgid "Documents"
+msgstr "Dokumenti"
+
+msgid "Linked documents"
+msgstr "Povezani dokumenti"
+
+msgid "The related event must match the event type."
+msgstr "Povezani dogodek mora ustrezati izbrani vrsti dogodka."
+
+msgid "{0}: {1}."
+msgstr "{0}: {1}."
+
+msgid "Overdue"
+msgstr "Rok je potekel"
+
+msgid "Edit event"
+msgstr "Uredi dogodek"
+
+msgid "Procedure event updated: {0}. Changes: {1}"
+msgstr "Dogodek postopka posodobljen: {0}. Spremembe: {1}"
+
+msgid "This event type is required by a linked event."
+msgstr "Povezani dogodek zahteva to vrsto dogodka."
+
+msgid "Add deadline to my calendar"
+msgstr "Dodaj rok v moj koledar"
+
+msgid "Remove calendar link"
+msgstr "Odstrani povezavo s koledarjem"
+
+msgid "Open calendar"
+msgstr "Odpri koledar"
+
+msgid "The calendar link has been updated."
+msgstr "Povezava s koledarjem je posodobljena."
+
+msgid "Edit this deadline in the authority procedure."
+msgstr "Ta rok uredite v postopku soglasodajalca."
+
+msgid "Authority case added: {0}"
+msgstr "Zadeva soglasodajalca dodana: {0}"
+
+msgid "Authority case deleted: {0}"
+msgstr "Zadeva soglasodajalca izbrisana: {0}"
+
+msgid "The authority case has been deleted."
+msgstr "Zadeva soglasodajalca je izbrisana."
+
+msgid "Only a case without recorded events can be deleted."
+msgstr "Izbrisati je mogoče samo zadevo brez evidentiranih dogodkov."
+
+msgid "Delete case"
+msgstr "Izbriši zadevo"
+
+msgid "Are you sure you want to delete this case?"
+msgstr "Ali res želite izbrisati to zadevo?"
+
+msgid "Not required: reason (the case is then excluded from the review)"
+msgstr "Ni potrebno: razlog (zadeva se nato izključi iz pregleda)"
+
+msgid "The due date cannot be before the event date."
+msgstr "Rok ne more biti pred datumom dogodka."
+
+msgid "The event cannot be dated before the related event."
+msgstr "Dogodek ne more biti datiran pred povezanim dogodkom."
+
+msgid "The procedure has changed since the form was opened. Check the current data and save again."
+msgstr "Postopek se je spremenil, odkar je bil obrazec odprt. Preverite trenutne podatke in shranite znova."
+
+msgid "The document is linked to a procedure event and cannot be deleted."
+msgstr "Dokument je povezan z dogodkom postopka in ga ni mogoče izbrisati."
+
+msgid "The contact is used as an authority in a project and cannot be deleted."
+msgstr "Kontakt je uporabljen kot soglasodajalec na projektu in ga ni mogoče izbrisati."
+
+msgid "The project has authority procedures and cannot be deleted."
+msgstr "Projekt ima postopke soglasodajalcev in ga ni mogoče izbrisati."
+
+msgid "Documents changed since confirmation. Check the response again."
+msgstr "Dokumenti so se po potrditvi spremenili. Ponovno preverite odgovor."
+
+msgid "Opinions confirmed: {0} of {1}"
+msgstr "Potrjena mnenja: {0} od {1}"
+
+msgid "Not required: {0}"
+msgstr "Ni potrebno: {0}"
+
+msgid "Missing: {0}"
+msgstr "Manjka: {0}"
+
+msgid "Responses or supplements are still outstanding."
+msgstr "Odgovori ali dopolnitve so še odprti."
+
+msgid "An authority contact is not available."
+msgstr "Kontakt soglasodajalca ni na voljo."
+
+msgid "All opinions are confirmed. Awaiting confirmation of readiness."
+msgstr "Vsa mnenja so potrjena. Čaka potrditev pripravljenosti."

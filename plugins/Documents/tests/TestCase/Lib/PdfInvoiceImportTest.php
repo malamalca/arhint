@@ -25,7 +25,7 @@ class PdfInvoiceImportTest extends TestCase
      */
     private function importerReturning(string $completion): PdfInvoiceImport
     {
-        $assistant = $this->createMock(AIAssistant::class);
+        $assistant = $this->createStub(AIAssistant::class);
         $assistant->method('complete')->willReturn($completion);
 
         return new PdfInvoiceImport($assistant);
@@ -131,7 +131,7 @@ class PdfInvoiceImportTest extends TestCase
      */
     public function testConvertAiException(): void
     {
-        $assistant = $this->createMock(AIAssistant::class);
+        $assistant = $this->createStub(AIAssistant::class);
         $assistant->method('complete')->willThrowException(new Exception('connection refused'));
         $importer = new PdfInvoiceImport($assistant);
 

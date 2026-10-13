@@ -97,7 +97,7 @@ class InvoiceImportFormTest extends TestCase
      */
     private function formReturning(ServerRequest $request, string $completion): InvoiceImportForm
     {
-        $assistant = $this->createMock(AIAssistant::class);
+        $assistant = $this->createStub(AIAssistant::class);
         $assistant->method('complete')->willReturn($completion);
 
         return new InvoiceImportForm($request, new PdfInvoiceImport($assistant));

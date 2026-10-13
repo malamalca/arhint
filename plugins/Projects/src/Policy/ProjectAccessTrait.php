@@ -26,7 +26,7 @@ trait ProjectAccessTrait
         if ($project instanceof Project) {
             $projectId = $project->id;
 
-            if (!$project->owner_id == $user->company_id) {
+            if ($project->owner_id !== $user->company_id) {
                 return false;
             }
         } else {

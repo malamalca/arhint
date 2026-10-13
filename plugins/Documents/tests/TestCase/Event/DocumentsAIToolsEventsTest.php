@@ -61,7 +61,7 @@ class DocumentsAIToolsEventsTest extends TestCase
         });
         $this->listener = new DocumentsAIToolsEvents();
 
-        $authService = $this->createMock(AuthorizationServiceInterface::class);
+        $authService = $this->createStub(AuthorizationServiceInterface::class);
         $authService->method('applyScope')
             ->willReturnCallback(fn($identity, $action, $resource) => $resource);
         $authService->method('can')
