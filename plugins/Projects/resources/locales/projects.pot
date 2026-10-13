@@ -1067,3 +1067,9 @@ msgstr ""
 
 msgid "All opinions have been received. Awaiting confirmation of readiness."
 msgstr ""
+
+msgid "Drag to change the order"
+msgstr ""
+
+msgid "The order could not be saved."
+msgstr ""

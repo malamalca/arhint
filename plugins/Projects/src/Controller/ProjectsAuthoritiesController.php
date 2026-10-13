@@ -5,6 +5,7 @@ namespace Projects\Controller;
 
 use Cake\Database\Driver\Sqlite;
 use Cake\Datasource\EntityInterface;
+use Cake\Event\EventInterface;
 use Cake\Http\Exception\BadRequestException;
 use Cake\Http\Response;
 use Cake\I18n\Date;
@@ -22,6 +23,18 @@ use Projects\Lib\StaleSnapshotException;
  */
 class ProjectsAuthoritiesController extends AppController
 {
+    /**
+     * @param \Cake\Event\EventInterface $event Event object.
+     * @return void
+     */
+    public function beforeFilter(EventInterface $event): void
+    {
+        parent::beforeFilter($event);
+
+        // Reordering is posted by script, without form tokens; it is still POST-only and authorized.
+        $this->FormProtection->setConfig('unlockedActions', ['sortCases']);
+    }
+
     /**
      * Project procedures. Authorities are companies from the shared CRM.
      *
@@ -71,6 +84,11 @@ class ProjectsAuthoritiesController extends AppController
                     function () use ($project, $table, $case, $changes, $isNew): void {
                         $this->lockProject($project->id);
                         $this->checkSnapshot($this->summary($this->fetchTable('Projects.Projects')->get($project->id)));
+                        if ($isNew) {
+                            $last = $table->find()->where(['project_id' => $project->id])
+                                ->orderBy(['sort_order' => 'DESC'])->first();
+                            $case->sort_order = ($last->sort_order ?? 0) + 1;
+                        }
                         $table->saveOrFail($case);
                         if ($isNew) {
                             $this->logProcedure($project->id, __d(
@@ -148,6 +166,38 @@ class ProjectsAuthoritiesController extends AppController
         $this->Flash->error(__d('projects', 'Only a case without recorded events can be deleted.'));
 
         return $this->redirect(['action' => 'view', $case->id]);
+    }
+
+    /**
+     * Store the manual order of the cases of a project. POST only, called by the drag and drop list.
+     *
+     * @param string $id Project ID.
+     * @return \Cake\Http\Response
+     */
+    public function sortCases(string $id): Response
+    {
+        $this->getRequest()->allowMethod(['post']);
+        $project = $this->project($id, 'authorities');
+        $order = array_values(array_unique(array_filter(
+            (array)$this->getRequest()->getData('order'),
+            'is_string',
+        )));
+        $table = $this->fetchTable('Projects.ProjectsAuthorityCases');
+        $table->getConnection()->transactional(function () use ($project, $table, $order): void {
+            $this->lockProject($project->id);
+            $existing = $table->find()->where(['project_id' => $project->id])
+                ->orderBy(['sort_order' => 'ASC', 'title' => 'ASC', 'id' => 'ASC'])
+                ->all()->extract('id')->toList();
+            if (array_diff($order, $existing)) {
+                throw new BadRequestException('Unknown case in the requested order.');
+            }
+            // Cases added meanwhile keep their relative order after the listed ones.
+            foreach (array_merge($order, array_values(array_diff($existing, $order))) as $position => $caseId) {
+                $table->updateAll(['sort_order' => $position + 1], ['id' => $caseId, 'project_id' => $project->id]);
+            }
+        });
+
+        return $this->getResponse()->withType('json')->withStringBody((string)json_encode(['ok' => true]));
     }
 
     /**

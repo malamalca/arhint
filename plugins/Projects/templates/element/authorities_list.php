@@ -12,10 +12,14 @@ $controller = 'ProjectsAuthorities';
 $canReview = $this->getCurrentUser()->hasRole('admin');
 $today = Date::today()->format('Y-m-d');
 $states = AuthorityWorkflow::states();
+$canSort = $this->getCurrentUser()->hasRole('editor') && count($cases) > 1;
 $rows = [];
 foreach ($cases as $case) {
     $phases = $summary['rows'][$case->id];
-    $columns = ['authority' => $this->Html->link($case->title, [
+    $handle = $canSort ?
+        '<span class="authority-handle" title="' . h(__d('projects', 'Drag to change the order')) . '">&#8942;</span>' :
+        '';
+    $columns = ['authority' => $handle . $this->Html->link($case->title, [
         'controller' => $controller, 'action' => 'view', $case->id,
     ])];
     $lastEvent = $phases['DGD']['last'];
@@ -64,7 +68,8 @@ foreach ($cases as $case) {
             '</strong></div>';
     }
     $columns['request'] = $requestHtml;
-    $rows[] = ['columns' => $columns];
+    $rowParams = $canSort ? ['params' => ['data-case-id' => $case->id, 'draggable' => 'true']] : [];
+    $rows[] = ['columns' => $columns] + $rowParams;
 }
 
 $notes = [];
@@ -91,7 +96,11 @@ if ($cases) {
         </div>
     <?php endif; ?>
     <?= $this->Lil->table([
-        'params' => ['class' => 'striped', 'id' => 'projects-authorities'],
+        'params' => ['class' => 'striped', 'id' => 'projects-authorities'] + ($canSort ? [
+            'data-sort-url' => $this->Url->build([
+                'controller' => $controller, 'action' => 'sortCases', $project->id,
+            ]),
+        ] : []),
         'head' => ['rows' => [['columns' => [
             'authority' => __d('projects', 'Authority'),
             'status' => __d('projects', 'Status'),
@@ -103,6 +112,99 @@ if ($cases) {
     ]) ?>
     <?php if (!$cases) : ?>
         <p><?= h(__d('projects', 'No authority cases recorded.')) ?></p>
+    <?php endif; ?>
+    <?php if ($canSort) : ?>
+        <?php
+        $sortError = json_encode(
+            __d('projects', 'The order could not be saved.'),
+            JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT,
+        );
+        ?>
+        <script>
+        (function() {
+            var table = document.getElementById('projects-authorities');
+            if (!table || !table.dataset.sortUrl) {
+                return;
+            }
+            var body = table.tBodies[0];
+            var errorText = <?= $sortError ?>;
+            var dragged = null;
+            var before = [];
+            function rows() {
+                return Array.prototype.slice.call(body.rows);
+            }
+            function restore() {
+                before.forEach(function(row) {
+                    body.appendChild(row);
+                });
+            }
+            function save() {
+                var token = document.querySelector('meta[name="csrfToken"]');
+                var data = rows().map(function(row) {
+                    return 'order[]=' + encodeURIComponent(row.dataset.caseId);
+                }).join('&');
+                fetch(table.dataset.sortUrl, {
+                    method: 'POST',
+                    credentials: 'same-origin',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'X-CSRF-Token': token ? token.getAttribute('content') : ''
+                    },
+                    body: data
+                }).then(function(response) {
+                    if (!response.ok) {
+                        throw new Error(response.status);
+                    }
+                }).catch(function() {
+                    restore();
+                    if (window.M && M.toast) {
+                        M.toast({html: errorText});
+                    } else {
+                        alert(errorText);
+                    }
+                });
+            }
+            body.addEventListener('dragstart', function(event) {
+                dragged = event.target.closest ? event.target.closest('tr') : null;
+                if (!dragged) {
+                    return;
+                }
+                before = rows();
+                dragged.classList.add('authority-dragging');
+                event.dataTransfer.effectAllowed = 'move';
+                event.dataTransfer.setData('text/plain', dragged.dataset.caseId);
+            });
+            body.addEventListener('dragover', function(event) {
+                if (!dragged) {
+                    return;
+                }
+                event.preventDefault();
+                var row = event.target.closest('tr');
+                if (!row || row === dragged) {
+                    return;
+                }
+                var box = row.getBoundingClientRect();
+                body.insertBefore(dragged, event.clientY > box.top + box.height / 2 ? row.nextSibling : row);
+            });
+            body.addEventListener('drop', function(event) {
+                event.preventDefault();
+            });
+            body.addEventListener('dragend', function() {
+                if (!dragged) {
+                    return;
+                }
+                dragged.classList.remove('authority-dragging');
+                dragged = null;
+                var changed = rows().some(function(row, index) {
+                    return row !== before[index];
+                });
+                if (changed) {
+                    save();
+                }
+            });
+        })();
+        </script>
     <?php endif; ?>
     <?php if ($canReview) : ?>
         <?php

@@ -40,6 +40,10 @@ Vsaka odprta zahteva za dopolnitev (brez oddane dopolnitve) ima samostojen stolp
 
 Za prejete pogoje oziroma mnenje se v ustreznem stolpcu pokaže datum izdaje prvega povezanega dokumenta na zelenem ozadju. Datum ostane viden tudi po potrditvi ustreznosti in po poznejših dogodkih, dokler odgovora ne razveljavite. Datum je povezava na dokument; kljukice ni. Če dokument nima datuma, povezava prikaže pomišljaj.
 
+## Vrstni red soglasodajalcev
+
+Vrstice v tabeli povlečete z ročajem (⋮) pred nazivom na želeno mesto; vrstni red se shrani sam za cel projekt. Novi soglasodajalec se doda na konec. Urejanje vrstnega reda ne razveljavi potrditve pripravljenosti. Povleci in spusti deluje z miško; na zaslonih na dotik ni na voljo.
+
 ## Pripravljenost za UE
 
 Potrjevanja seznama soglasodajalcev in Opombe pregleda ni. Administrator lahko potrdi pripravljenost za UE, ko so mnenja vseh dodanih soglasodajalcev (razen tistih z razlogom *Ni potrebno*) prejeta in ni odprtih vlog oziroma dopolnitev. Šteje samo mnenje; projektni pogoji pripravljenosti ne pogojujejo. Prazen seznam ne pomeni pripravljenosti; če nobeden soglasodajalec ni potreben, dodajte zadevo z razlogom *Ni potrebno*.

@@ -81,7 +81,11 @@ class AuthorityWorkflow
                 ]),
                 'Attachments',
             ]]]])
-            ->orderBy(['ProjectsAuthorityCases.title' => 'ASC', 'ProjectsAuthorityCases.id' => 'ASC'])
+            ->orderBy([
+                'ProjectsAuthorityCases.sort_order' => 'ASC',
+                'ProjectsAuthorityCases.title' => 'ASC',
+                'ProjectsAuthorityCases.id' => 'ASC',
+            ])
             ->all()->toList();
     }
 
@@ -283,7 +287,9 @@ class AuthorityWorkflow
         $exempt = 0;
         foreach ($cases as $case) {
             $data = $case->toArray();
+            // The display order is not part of the procedure: reordering must not withdraw a confirmation.
             unset($data['events'], $data['authority'], $data['user'], $data['created'], $data['modified']);
+            unset($data['sort_order']);
             $data['contact_available'] = $case->authority !== null;
             $list[$case->id] = $data;
             foreach ($case->events ?? [] as $event) {

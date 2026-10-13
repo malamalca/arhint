@@ -44,15 +44,16 @@ class ProjectsAuthoritiesControllerTest extends TestCase
     }
 
     /**
+     * @param string $title Case title.
      * @return string
      */
-    private function createCase(): string
+    private function createCase(string $title = 'Elektro'): string
     {
         $cases = $this->getTableLocator()->get('Projects.ProjectsAuthorityCases');
         $case = $cases->newEmptyEntity();
         $case->project_id = self::PROJECT;
         $case->contact_id = COMPANY_FIRST;
-        $case->title = 'Elektro';
+        $case->title = $title;
         $case->revision = Text::uuid();
         $cases->saveOrFail($case);
 
@@ -719,5 +720,71 @@ class ProjectsAuthoritiesControllerTest extends TestCase
             ->where(['descript LIKE' => '%Changed note%'])->firstOrFail();
         $this->assertStringNotContainsString('user_id', $log->descript);
         $this->assertStringNotContainsString('sequence', $log->descript);
+    }
+
+    /**
+     * @return array<string>
+     */
+    private function caseOrder(): array
+    {
+        $workflow = new AuthorityWorkflow();
+
+        return array_map(fn($case) => $case->id, $workflow->cases(self::PROJECT));
+    }
+
+    /**
+     * Manual order is stored per project, new cases go last, and the order is not part of the procedure.
+     *
+     * @return void
+     */
+    public function testCasesCanBeReorderedByDragAndDrop(): void
+    {
+        $a = $this->createCase('A');
+        $b = $this->createCase('B');
+        $c = $this->createCase('C');
+        $this->assertSame([$a, $b, $c], $this->caseOrder());
+        $snapshot = $this->summary()['snapshotHash'];
+        $url = '/projects/projects-authorities/sort-cases/' . self::PROJECT;
+        $this->post($url, ['order' => [$c, $a, $b]]);
+        $this->assertResponseOk();
+        $this->assertContentType('application/json');
+        $this->assertSame([$c, $a, $b], $this->caseOrder());
+        $this->assertSame($snapshot, $this->summary()['snapshotHash']);
+        // An unlisted case keeps its relative order after the listed ones.
+        $this->post($url, ['order' => [$b]]);
+        $this->assertResponseOk();
+        $this->assertSame([$b, $c, $a], $this->caseOrder());
+        // A new case is appended even when its title sorts first.
+        $this->post('/projects/projects-authorities/edit-case?project=' . self::PROJECT, [
+            'contact_id' => COMPANY_FIRST, 'title' => 'AAA', 'snapshot_hash' => $this->summary()['snapshotHash'],
+        ]);
+        $this->assertResponseCode(302);
+        $order = $this->caseOrder();
+        $this->assertCount(4, $order);
+        $this->assertSame([$b, $c, $a], array_slice($order, 0, 3));
+        $this->get('/projects/projects/view/' . self::PROJECT . '?tab=authorities');
+        $this->assertResponseOk();
+        $this->assertResponseContains('data-case-id="' . $b . '"');
+        $this->assertResponseContains('draggable="true"');
+        $this->assertResponseContains('sort-cases/' . self::PROJECT);
+    }
+
+    /**
+     * @return void
+     */
+    public function testReorderRejectsForeignCasesWrongMethodAndUnauthorizedUsers(): void
+    {
+        $a = $this->createCase('A');
+        $b = $this->createCase('B');
+        $url = '/projects/projects-authorities/sort-cases/' . self::PROJECT;
+        $this->post($url, ['order' => [$b, Text::uuid()]]);
+        $this->assertResponseCode(400);
+        $this->assertSame([$a, $b], $this->caseOrder());
+        $this->get($url);
+        $this->assertResponseCode(405);
+        $this->session(['Auth' => $this->getTableLocator()->get('Users')->get(USER_COMMON)]);
+        $this->post($url, ['order' => [$b, $a]]);
+        $this->assertResponseCode(403);
+        $this->assertSame([$a, $b], $this->caseOrder());
     }
 }

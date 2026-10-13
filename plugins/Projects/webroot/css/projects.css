@@ -165,6 +165,17 @@ textarea#project-descript {
     transform: scale(0.75);
 }
 
+.authority-handle {
+    cursor: grab;
+    color: #80868b;
+    margin-right: 0.5em;
+    user-select: none;
+}
+
+.authority-dragging {
+    opacity: 0.4;
+}
+
 .authority-summary {
     margin-bottom: 1em;
 }
