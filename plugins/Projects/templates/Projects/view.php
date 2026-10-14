@@ -46,6 +46,7 @@ $projectView = [
                         'action' => 'editCase',
                         '?' => ['project' => $project->id],
                     ],
+                    'params' => ['id' => 'add-projects-authority'],
                 ],
                 'log' => [
                     'title' => __d('projects', 'Add Log'),
@@ -283,6 +284,15 @@ echo $this->Lil->panels($projectView, 'Projects.Projects.view');
             $(this).modalPopup({
                 title: "<?= __d('projects', 'Add Log') ?>",
                 onOpen: function(popup) { $("#projects-logs-descript", popup).focus(); }
+            });
+        });
+
+        $("#add-projects-authority").each(function() {
+            $(this).modalPopup({
+                title: "<?= __d('projects', 'Add authority') ?>",
+                processSubmit: true,
+                onJson: function() { window.location.reload(); },
+                onOpen: function(popup) { $("#authority-contact-title", popup).focus(); }
             });
         });
 

@@ -5,6 +5,8 @@ echo $this->element('Projects.authority_form', [
     'summary' => $summary,
     'title' => $case->isNew() ? __d('projects', 'Add authority case') : __d('projects', 'Edit authority case'),
     'formEvent' => 'Projects.ProjectsAuthorities.editCase',
+    // The form can open in a popup above a page that already has fields with the same names.
+    'formOptions' => ['idPrefix' => 'authority-case'],
     'fields' => [
         'contact_id' => ['type' => 'hidden', 'id' => 'authority-contact-id'],
         'contact_title' => [
@@ -28,6 +30,11 @@ echo $this->element('Projects.authority_form', [
 $(document).ready(function() {
     var contactInput = document.getElementById('authority-contact-title');
     var contactId = document.getElementById('authority-contact-id');
+    // A popup can run this block more than once for the same form.
+    if (!contactInput || contactInput.dataset.authorityInit) {
+        return;
+    }
+    contactInput.dataset.authorityInit = '1';
     var contactUrl = <?= json_encode($this->Url->build([
         'plugin' => 'Crm', 'controller' => 'Contacts', 'action' => 'autocomplete', '?' => ['kind' => 'C'],
     ]), JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) ?>;
@@ -48,7 +55,7 @@ $(document).ready(function() {
         onAutocomplete: function(entries) {
             if (entries.length === 1) {
                 contactId.value = entries[0].id;
-                var titleInput = document.getElementById('title');
+                var titleInput = contactInput.form.querySelector('[name="title"]');
                 if (titleInput && titleInput.value.trim() === '') {
                     titleInput.value = contactInput.value;
                     M.updateTextFields();

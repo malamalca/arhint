@@ -24,13 +24,24 @@ use Sabre\DAVACL;
  */
 function exception_error_handler(int $errno, string $errstr, string $errfile, int $errline): void
 {
+    // Errors excluded from error reporting (deprecations) are not exceptions.
+    if (!(error_reporting() & $errno)) {
+        return;
+    }
     throw new ErrorException($errstr, 0, $errno, $errfile, $errline);
 }
+
+// Deprecations of the DAV libraries must neither break nor pollute protocol responses.
+$errorLevel = E_ALL & ~E_DEPRECATED & ~E_USER_DEPRECATED;
+error_reporting($errorLevel);
 set_error_handler('exception_error_handler');
 
 // Files we need
 require dirname(__DIR__) . '/vendor/autoload.php';
 require dirname(__DIR__) . '/config/bootstrap.php';
+
+// The application bootstrap resets the error level from its configuration.
+error_reporting($errorLevel);
 
 // Backends
 $authBackend = new ArhintBasicAuth();

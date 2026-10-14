@@ -12,7 +12,9 @@ $controller = 'ProjectsAuthorities';
 $canReview = $this->getCurrentUser()->hasRole('admin');
 $today = Date::today()->format('Y-m-d');
 $states = AuthorityWorkflow::states();
-$canSort = $this->getCurrentUser()->hasRole('editor') && count($cases) > 1;
+$canEdit = $this->getCurrentUser()->hasRole('editor');
+$canSort = $canEdit && count($cases) > 1;
+$addEventLabel = __d('projects', 'Record procedure event');
 $rows = [];
 foreach ($cases as $case) {
     $phases = $summary['rows'][$case->id];
@@ -68,6 +70,15 @@ foreach ($cases as $case) {
             '</strong></div>';
     }
     $columns['request'] = $requestHtml;
+    if ($canEdit) {
+        $columns['actions'] = ['html' => $this->Html->link('+', [
+            'controller' => $controller, 'action' => 'event', $case->id,
+        ], [
+            'class' => 'btn-small tonal btn-add-authority-event',
+            'title' => $addEventLabel,
+            'data-title' => $case->title . ' · ' . $addEventLabel,
+        ]), 'params' => ['class' => 'right-align']];
+    }
     $rowParams = $canSort ? ['params' => ['data-case-id' => $case->id, 'draggable' => 'true']] : [];
     $rows[] = ['columns' => $columns] + $rowParams;
 }
@@ -107,11 +118,25 @@ if ($cases) {
             'conditions' => ['html' => __d('projects', 'Project conditions'), 'params' => ['class' => 'center-align']],
             'opinion' => ['html' => __d('projects', 'Opinion'), 'params' => ['class' => 'center-align']],
             'request' => __d('projects', 'Supplement requested'),
-        ]]]],
+        ] + ($canEdit ? ['actions' => ''] : [])]]],
         'body' => ['rows' => $rows],
     ]) ?>
     <?php if (!$cases) : ?>
         <p><?= h(__d('projects', 'No authority cases recorded.')) ?></p>
+    <?php endif; ?>
+    <?php if ($canEdit && $cases) : ?>
+        <script>
+        $(document).ready(function() {
+            $('#projects-authorities .btn-add-authority-event').each(function() {
+                $(this).modalPopup({
+                    title: $(this).data('title'),
+                    processSubmit: true,
+                    onJson: function() { window.location.reload(); },
+                    onOpen: function(popup) { $('#authority-event-kind', popup).focus(); }
+                });
+            });
+        });
+        </script>
     <?php endif; ?>
     <?php if ($canSort) : ?>
         <?php

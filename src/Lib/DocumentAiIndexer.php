@@ -24,13 +24,24 @@ class DocumentAiIndexer
      * @param \Cake\Datasource\EntityInterface $document The saved document.
      * @param array<int, string> $attachmentIds Ids of the attachments whose text is analysed.
      * @param bool $replace Replace the previous analysis of the document in the vector database.
+     * @param string|null $fallbackUserId User to run the analysis as when the document has no owner.
      * @return bool False when the document cannot be analysed or the job could not be queued.
      */
-    public function queue(EntityInterface $document, array $attachmentIds, bool $replace = false): bool
-    {
-        $userId = (string)$document->get('user_id');
+    public function queue(
+        EntityInterface $document,
+        array $attachmentIds,
+        bool $replace = false,
+        ?string $fallbackUserId = null,
+    ): bool {
+        // Imported documents have no user; the person asking for the analysis stands in for it.
+        $userId = (string)$document->get('user_id') ?: (string)$fallbackUserId;
         $documentId = (string)$document->get('id');
         if ($userId === '' || $documentId === '') {
+            Log::warning('AI analysis of a document was not queued: the document has no user.', [
+                'scope' => ['ai'],
+                'document_id' => $documentId,
+            ]);
+
             return false;
         }
 
@@ -78,15 +89,21 @@ class DocumentAiIndexer
      * All attachments of the document are analysed together with its data.
      *
      * @param string $documentId Document id.
+     * @param string|null $fallbackUserId User to run the analysis as when the document has no owner.
      * @return bool False when the document does not exist or the job could not be queued.
      */
-    public function requeue(string $documentId): bool
+    public function requeue(string $documentId, ?string $fallbackUserId = null): bool
     {
         $document = TableRegistry::getTableLocator()->get('Documents.Documents')
             ->find()
             ->where(['Documents.id' => $documentId])
             ->first();
         if ($document === null) {
+            Log::warning('AI analysis was not queued: the document does not exist.', [
+                'scope' => ['ai'],
+                'document_id' => $documentId,
+            ]);
+
             return false;
         }
 
@@ -97,6 +114,6 @@ class DocumentAiIndexer
             ->extract('id')
             ->toList();
 
-        return $this->queue($document, $attachmentIds, true);
+        return $this->queue($document, $attachmentIds, true, $fallbackUserId);
     }
 }

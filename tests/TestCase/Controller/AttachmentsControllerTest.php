@@ -241,6 +241,31 @@ class AttachmentsControllerTest extends TestCase
     }
 
     /**
+     * Imported documents have no user: the person asking for the analysis runs it.
+     *
+     * @return void
+     * @uses \App\Controller\AttachmentsController::reanalyze()
+     */
+    public function testReanalyzeDocumentWithoutUser(): void
+    {
+        $documentId = 'd0d59a31-6de7-4eb4-8230-ca09113a7fe6';
+        TableRegistry::getTableLocator()->get('Attachments')->updateAll(
+            ['model' => 'Document', 'foreign_id' => $documentId],
+            ['id' => self::ATTACH_ID],
+        );
+        TableRegistry::getTableLocator()->get('Documents.Documents')->updateAll(
+            ['user_id' => null],
+            ['id' => $documentId],
+        );
+
+        $this->login(USER_ADMIN);
+        $this->post('/attachments/reanalyze/' . self::ATTACH_ID . '?redirect=/documents/documents/view/' . $documentId);
+
+        $this->assertRedirect('/documents/documents/view/' . $documentId);
+        $this->assertFlashMessage('The AI analysis has been queued. The result will be visible shortly.');
+    }
+
+    /**
      * The redirect address must stay on this site.
      *
      * @return void

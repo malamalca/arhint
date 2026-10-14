@@ -63,6 +63,7 @@ class ProjectsAuthoritiesController extends AppController
         $project = $this->project($projectId, 'authorities');
         $case->project_id = $project->id;
         $summary = $this->summary($project);
+        $popup = $this->getRequest()->is('ajax');
         if ($this->getRequest()->is(['post', 'put', 'patch'])) {
             $previousContact = $case->contact_id;
             $table->patchEntity($case, $this->getRequest()->getData());
@@ -108,11 +109,26 @@ class ProjectsAuthoritiesController extends AppController
                 );
                 $this->Flash->success(__d('projects', 'The authority case has been saved.'));
 
+                if ($popup) {
+                    // The popup closes itself and reloads the page, which shows the message above.
+                    return $this->getResponse()->withType('application/json')
+                        ->withStringBody((string)json_encode(['success' => true, 'id' => $case->id]));
+                }
+
                 return $this->back($project->id);
             } catch (PersistenceFailedException $exception) {
-                $this->Flash->error(__d('projects', 'The authority case could not be saved. Check the entered data.'));
+                if (!$popup) {
+                    $this->Flash->error(
+                        __d('projects', 'The authority case could not be saved. Check the entered data.'),
+                    );
+                }
             } catch (StaleSnapshotException $exception) {
-                $this->Flash->error($exception->getMessage());
+                // A popup has no flash area: its form lists the entity errors instead.
+                if ($popup) {
+                    $case->setError('snapshot_hash', $exception->getMessage());
+                } else {
+                    $this->Flash->error($exception->getMessage());
+                }
             }
         }
         $contact = $case->contact_id ? $this->fetchTable('Crm.Contacts')->find()->where([
@@ -288,6 +304,7 @@ class ProjectsAuthoritiesController extends AppController
             fn($value) => $value !== '' && $value !== null,
         ));
         $documents = $this->documentOptions($project);
+        $popup = $this->getRequest()->is('ajax');
         if ($this->getRequest()->is(['post', 'put', 'patch'])) {
             $table->patchEntity($event, $this->getRequest()->getData());
             $changes = $this->changes($event);
@@ -366,11 +383,24 @@ class ProjectsAuthoritiesController extends AppController
                 });
                 $this->Flash->success(__d('projects', 'The procedure event has been recorded.'));
 
+                if ($popup) {
+                    // The popup closes itself and reloads the page, which shows the message above.
+                    return $this->getResponse()->withType('application/json')
+                        ->withStringBody((string)json_encode(['success' => true, 'id' => $event->id]));
+                }
+
                 return $this->redirect(['action' => 'view', $case->id]);
             } catch (PersistenceFailedException $exception) {
-                $this->Flash->error(__d('projects', 'The event could not be saved. Check the entered data.'));
+                if (!$popup) {
+                    $this->Flash->error(__d('projects', 'The event could not be saved. Check the entered data.'));
+                }
             } catch (StaleSnapshotException $exception) {
-                $this->Flash->error($exception->getMessage());
+                // A popup has no flash area: its form lists the entity errors instead.
+                if ($popup) {
+                    $event->setError('snapshot_hash', $exception->getMessage());
+                } else {
+                    $this->Flash->error($exception->getMessage());
+                }
             }
         }
         $parents = [];

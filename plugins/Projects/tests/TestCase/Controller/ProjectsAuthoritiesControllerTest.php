@@ -320,7 +320,7 @@ class ProjectsAuthoritiesControllerTest extends TestCase
         libxml_use_internal_errors($previous);
         $xpath = new DOMXPath($document);
         $headers = $xpath->query('//table[@id="projects-authorities"]/thead/tr/th');
-        $this->assertSame(5, $headers->length);
+        $this->assertSame(6, $headers->length);
         $cell = $xpath->query('//table[@id="projects-authorities"]/tbody/tr/td[4]')->item(0);
         $this->assertNotNull($cell);
         $link = $xpath->query('.//a', $cell)->item(0);
@@ -786,5 +786,90 @@ class ProjectsAuthoritiesControllerTest extends TestCase
         $this->post($url, ['order' => [$b, $a]]);
         $this->assertResponseCode(403);
         $this->assertSame([$a, $b], $this->caseOrder());
+    }
+
+    /**
+     * "Add authority" opens in a popup: bare form, JSON on success (the page then reloads), errors in the form.
+     *
+     * @return void
+     */
+    public function testAuthorityCaseFormWorksInAPopup(): void
+    {
+        $url = '/projects/projects-authorities/edit-case?project=' . self::PROJECT;
+        $ajax = ['headers' => ['X-Requested-With' => 'XMLHttpRequest']];
+        $this->configRequest($ajax);
+        $this->get($url);
+        $this->assertResponseOk();
+        $this->assertResponseNotContains('<html');
+        $this->assertResponseNotContains('Back to project');
+        $this->assertResponseNotContains('Nazaj na projekt');
+        $this->assertResponseContains('id="authority-case-title"');
+        $this->assertResponseContains('authority-contact-title');
+        $cases = $this->getTableLocator()->get('Projects.ProjectsAuthorityCases');
+        $this->configRequest($ajax);
+        $this->post($url, ['contact_id' => COMPANY_FIRST, 'title' => '', 'snapshot_hash' => $this->summary()['snapshotHash']]);
+        $this->assertResponseOk();
+        $this->assertContentType('text/html');
+        $this->assertResponseNotContains('<html');
+        $this->assertSame(0, $cases->find()->count());
+        $this->configRequest($ajax);
+        $this->post($url, ['contact_id' => COMPANY_FIRST, 'title' => 'Elektro', 'snapshot_hash' => 'stale']);
+        $this->assertResponseOk();
+        $this->assertResponseContains('Postopek se je spremenil, odkar je bil obrazec odprt.');
+        $this->assertSame(0, $cases->find()->count());
+        $this->configRequest($ajax);
+        $this->post($url, [
+            'contact_id' => COMPANY_FIRST, 'title' => 'Elektro', 'snapshot_hash' => $this->summary()['snapshotHash'],
+        ]);
+        $this->assertResponseOk();
+        $this->assertContentType('application/json');
+        $body = json_decode((string)$this->_response->getBody(), true);
+        $this->assertTrue($body['success']);
+        $this->assertSame(1, $cases->find()->count());
+        $this->assertSame($body['id'], $cases->find()->firstOrFail()->id);
+    }
+
+    /**
+     * Every case row has a [+] button that opens the event form of that case in a popup.
+     *
+     * @return void
+     */
+    public function testEveryRowHasAddEventButtonAndEventFormWorksInAPopup(): void
+    {
+        $id = $this->createCase('A');
+        $other = $this->createCase('B');
+        $this->get('/projects/projects/view/' . self::PROJECT . '?tab=authorities');
+        $this->assertResponseOk();
+        $this->assertResponseContains('/projects/projects-authorities/event/' . $id);
+        $this->assertResponseContains('/projects/projects-authorities/event/' . $other);
+        $this->assertSame(2, substr_count((string)$this->_response->getBody(), 'btn-add-authority-event"'));
+        $url = '/projects/projects-authorities/event/' . $id;
+        $ajax = ['headers' => ['X-Requested-With' => 'XMLHttpRequest']];
+        $this->configRequest($ajax);
+        $this->get($url);
+        $this->assertResponseOk();
+        $this->assertResponseNotContains('<html');
+        $this->assertResponseNotContains('Nazaj na projekt');
+        $this->assertResponseContains('id="authority-event-kind"');
+        $events = $this->getTableLocator()->get('Projects.ProjectsAuthorityEvents');
+        $this->configRequest($ajax);
+        $this->post($url, ['kind' => 'request', 'event_date' => '2026-10-13', 'snapshot_hash' => $this->summary()['snapshotHash']]);
+        $this->assertResponseOk();
+        $this->assertResponseNotContains('<html');
+        $this->assertSame(0, $events->find()->where(['case_id' => $id])->count());
+        $this->configRequest($ajax);
+        $this->post($url, ['kind' => 'submission', 'event_date' => '2026-10-13', 'snapshot_hash' => 'stale']);
+        $this->assertResponseOk();
+        $this->assertResponseContains('Postopek se je spremenil, odkar je bil obrazec odprt.');
+        $this->assertSame(0, $events->find()->where(['case_id' => $id])->count());
+        $this->configRequest($ajax);
+        $this->post($url, [
+            'kind' => 'submission', 'event_date' => '2026-10-13', 'snapshot_hash' => $this->summary()['snapshotHash'],
+        ]);
+        $this->assertResponseOk();
+        $this->assertContentType('application/json');
+        $this->assertTrue(json_decode((string)$this->_response->getBody(), true)['success']);
+        $this->assertSame(1, $events->find()->where(['case_id' => $id])->count());
+        $this->assertSame(0, $events->find()->where(['case_id' => $other])->count());
     }
 }

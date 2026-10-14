@@ -12,6 +12,8 @@ echo $this->element('Projects.authority_form', [
     'summary' => $summary,
     'title' => $formTitle,
     'formEvent' => 'Projects.ProjectsAuthorities.event',
+    // The form can open in a popup above a page that already has fields with the same names.
+    'formOptions' => ['idPrefix' => 'authority-event'],
     'fields' => [
         'kind' => ['label' => __d('projects', 'Event type'), 'options' => AuthorityWorkflow::kinds()],
         'event_date' => ['label' => __d('projects', 'Submission / receipt date'), 'type' => 'date'],
@@ -30,11 +32,16 @@ echo $this->element('Projects.authority_form', [
 ?>
 <script>
 $(document).ready(function() {
-    var kind = document.getElementById('kind');
-    var reason = document.getElementById('descript');
-    var parent = document.getElementById('parent-id');
-    var parentLabel = document.querySelector('label[for="parent-id"]');
+    var kind = document.getElementById('authority-event-kind');
+    var reason = document.getElementById('authority-event-descript');
+    var parent = document.getElementById('authority-event-parent-id');
+    var parentLabel = document.querySelector('label[for="authority-event-parent-id"]');
     var parentEvents = <?= json_encode($parentEvents, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) ?>;
+    // A popup can run this block more than once for the same form.
+    if (!kind || kind.dataset.authorityInit) {
+        return;
+    }
+    kind.dataset.authorityInit = '1';
     var originalOptions = Array.from(parent.options).map(function(option) {
         return {value: option.value, text: option.text};
     });
@@ -68,6 +75,7 @@ $(document).ready(function() {
         }
     }
     kind.addEventListener('change', updateRequirements);
-    updateRequirements();
+    // Deferred: a popup initialises all its selects right after this block has run.
+    setTimeout(updateRequirements, 0);
 });
 </script>

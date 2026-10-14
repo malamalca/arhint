@@ -163,7 +163,7 @@ class AttachmentsController extends AppController
 
         if (
             $attachment->model === 'Document'
-            && (new DocumentAiIndexer())->requeue((string)$attachment->foreign_id)
+            && (new DocumentAiIndexer())->requeue((string)$attachment->foreign_id, (string)$this->getCurrentUser()->id)
         ) {
             $this->Flash->success(__('The AI analysis has been queued. The result will be visible shortly.'));
         } else {

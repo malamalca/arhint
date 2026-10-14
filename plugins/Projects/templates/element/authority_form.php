@@ -14,7 +14,7 @@ if ($entity->hasErrors()) {
     echo '</ul></div>';
 }
 $lines = [
-    'start' => ['method' => 'create', 'parameters' => [$entity]],
+    'start' => ['method' => 'create', 'parameters' => [$entity, $formOptions ?? []]],
 ];
 if (isset($fields['contact_id'])) {
     $lines['unlock_contact'] = ['method' => 'unlockField', 'parameters' => ['contact_id']];
@@ -42,6 +42,9 @@ echo $this->Lil->form([
         'lines' => $lines,
     ],
 ], $formEvent);
-echo $this->Html->link(__d('projects', 'Back to project'), [
-    'controller' => 'Projects', 'action' => 'view', $project->id, '?' => ['tab' => 'authorities'],
-], ['class' => 'btn-small tonal']);
+// A popup is closed instead of navigating away from the page below it.
+if (!$this->getRequest()->is('ajax')) {
+    echo $this->Html->link(__d('projects', 'Back to project'), [
+        'controller' => 'Projects', 'action' => 'view', $project->id, '?' => ['tab' => 'authorities'],
+    ], ['class' => 'btn-small tonal']);
+}
