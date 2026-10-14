@@ -28,7 +28,7 @@
         "phpoffice/phpspreadsheet": "*",
         "phpoffice/phpword": "^0.18.2",
         "sabre/dav": "~4.6.0",
-        "sabre/vobject": "4.5",
+        "sabre/vobject": "^4.5",
         "symfony/http-client": "*",
         "syncroton/syncroton": "dev-master",
         "tecnickcom/tcpdf": "^6.11",

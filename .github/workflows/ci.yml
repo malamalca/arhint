@@ -13,7 +13,7 @@ env:
 
 jobs:
   testsuite:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     strategy:
       fail-fast: false
       matrix:
@@ -21,11 +21,11 @@ jobs:
 
     steps:
     - name: Setup Node.js 24
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@v5
       with:
         node-version: 24
 
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
 
     - name: Setup MySQL
       uses: mirromutth/mysql-action@v1.1
@@ -52,7 +52,7 @@ jobs:
       run: echo "date=$(date +'%Y-%m')" >> $GITHUB_OUTPUT
 
     - name: Cache composer dependencies
-      uses: actions/cache@v4
+      uses: actions/cache@v5
       with:
         path: ${{ steps.composer-cache.outputs.dir }}
         key: ${{ runner.os }}-composer-${{ steps.key-date.outputs.date }}-${{ hashFiles('composer.json') }}
@@ -74,22 +74,22 @@ jobs:
       run: |
         export CODECOVERAGE=1 && php -dpcov.enabled=1 -dpcov.directory=. vendor/bin/phpunit --exclude-group live --coverage-clover=coverage.xml
     - name: Submit code coverage
-      uses: codecov/codecov-action@v4
+      uses: codecov/codecov-action@v5
       with:
         token: ${{ secrets.CODECOV_TOKEN }} # required
 
 
   cs-stan:
     name: Coding Standard & Static Analysis
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
 
     steps:
     - name: Setup Node.js 24
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@v5
       with:
         node-version: 24
 
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
 
     - name: Setup PHP
       uses: shivammathur/setup-php@v2
@@ -108,7 +108,7 @@ jobs:
       run: echo "date=$(date +'%Y-%m')" >> $GITHUB_OUTPUT
 
     - name: Cache composer dependencies
-      uses: actions/cache@v4
+      uses: actions/cache@v5
       with:
         path: ${{ steps.composer-cache.outputs.dir }}
         key: ${{ runner.os }}-composer-${{ steps.key-date.outputs.date }}-${{ hashFiles('composer.json') }}

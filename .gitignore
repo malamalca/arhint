@@ -10,6 +10,7 @@
 schema-dump-default.lock
 arhint4.code-workspace
 test*.*
+!plugins/Documents/tests/TestCase/Controller/data/testInvoice_eslog20.xml
 
 !/uploads/Documents/.gitkeep
 !/uploads/Invoices/.gitkeep
