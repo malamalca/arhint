@@ -71,7 +71,7 @@
                     'VrstaBesedila' => 'ZZZ',
                     'Besedilo' => [
                         'Tekst1' => 'TIP_DOKUMENTA',
-                        'Tekst2' => $docTypes[$invoice->doc_type ?? ''],
+                        'Tekst2' => $docTypes[$invoice->doc_type ?? ''] ?? '',
                     ],
                 ],
                 2 => [
@@ -149,7 +149,7 @@
                     'BancniRacun' => [
                         'StevilkaBancnegaRacuna' => $client->iban,
                         'NazivBanke1' => '',
-                        'BIC' => str_pad($client->bic, 11, 'X'),
+                        'BIC' => str_pad((string)$client->bic, 11, 'X'),
                     ],
                 ],
 

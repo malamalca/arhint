@@ -41,7 +41,7 @@ jobs:
         php-version: ${{ matrix.php-version }}
         extensions: mbstring, intl, apcu
         coverage: pcov
-        ini-values: session.save_path=/tmp
+        ini-values: session.save_path=/tmp, apc.enable_cli=1
 
     - name: Get composer cache directory
       id: composer-cache
