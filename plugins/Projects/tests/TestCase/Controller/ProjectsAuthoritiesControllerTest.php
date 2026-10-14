@@ -941,4 +941,24 @@ class ProjectsAuthoritiesControllerTest extends TestCase
         $this->postEvent($id, ['kind' => 'submission']);
         $this->assertSame('waiting', $this->summary()['rows'][$id]['status']);
     }
+
+    /**
+     * Conditions recorded without choosing the related event still end the wait for the answer.
+     *
+     * @return void
+     */
+    public function testResponseWithoutRelatedEventIsLinkedToTheOpenApplication(): void
+    {
+        $id = $this->createCase();
+        $events = $this->getTableLocator()->get('Projects.ProjectsAuthorityEvents');
+        $this->getTableLocator()->get('Documents.Documents')->updateAll(['project_id' => self::PROJECT], ['id' => self::DOCUMENT]);
+        $this->postEvent($id, ['kind' => 'submission']);
+        $submission = $events->find()->where(['case_id' => $id])->firstOrFail();
+        $this->assertSame('waiting', $this->summary()['rows'][$id]['status']);
+        $this->postEvent($id, ['kind' => 'conditions', 'document_ids' => [self::DOCUMENT]]);
+        $this->assertResponseCode(302);
+        $conditions = $events->find()->where(['case_id' => $id, 'kind' => 'conditions'])->firstOrFail();
+        $this->assertSame($submission->id, $conditions->parent_id);
+        $this->assertSame('followup', $this->summary()['rows'][$id]['status']);
+    }
 }

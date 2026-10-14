@@ -4,7 +4,9 @@ declare(strict_types=1);
 namespace Projects\Lib;
 
 use Cake\Datasource\EntityInterface;
+use Cake\ORM\Entity;
 use Cake\ORM\TableRegistry;
+use DateTimeInterface;
 
 /**
  * Derive procedure state from immutable events, not editable status fields.
@@ -222,21 +224,24 @@ class AuthorityWorkflow
      * A received opinion completes the procedure; a new submission or request reopens it
      * until it is answered again.
      *
+     * Events are read in the order in which things happened (their date), then in the order
+     * in which they were recorded, so a late entry of an earlier application cannot reopen the case.
+     *
      * @param \Cake\Datasource\EntityInterface $case Case with events.
      * @param string $phase DPP (conditions) or DGD (opinion).
      * @return array<string, mixed>
      */
     public function phase(EntityInterface $case, string $phase): array
     {
+        $effective = $this->effectiveEvents($case->events ?? []);
+        $last = $effective ? $effective[array_key_last($effective)] : null;
+        $expectedKind = $phase === 'DPP' ? 'conditions' : 'opinion';
         $pending = [];
         $requests = [];
         $received = null;
-        $last = null;
-        $expectedKind = $phase === 'DPP' ? 'conditions' : 'opinion';
-        foreach ($this->effectiveEvents($case->events ?? []) as $event) {
-            $last = $event;
+        foreach ($this->chronological($effective) as $event) {
             if (in_array($event->kind, ['conditions', 'opinion'], true)) {
-                unset($pending[(string)$event->parent_id]);
+                $this->answer($pending, $event);
                 if ($event->kind === $expectedKind) {
                     $received = $event;
                 }
@@ -249,12 +254,12 @@ class AuthorityWorkflow
                     $pending[$event->id] = $event;
                     break;
                 case 'request':
-                    unset($pending[(string)$event->parent_id]);
+                    $this->answer($pending, $event);
                     $requests[$event->id] = $event;
                     break;
                 case 'other':
                     // Any answer ends the wait; it only completes nothing by itself.
-                    unset($pending[(string)$event->parent_id]);
+                    $this->answer($pending, $event);
                     break;
             }
         }
@@ -267,6 +272,74 @@ class AuthorityWorkflow
         }
 
         return compact('state', 'last', 'pending', 'requests', 'received');
+    }
+
+    /**
+     * The open application a new response without an explicit related event refers to.
+     *
+     * Conditions arrive before opinions, so they answer the oldest open application and
+     * every other response answers the latest one.
+     *
+     * @param array<\Cake\Datasource\EntityInterface> $events Events of the case in sequence order.
+     * @param string $kind Kind of the new response.
+     * @return string|null Event ID, or null if nothing is open.
+     */
+    public function defaultParent(array $events, string $kind): ?string
+    {
+        $pending = $this->phase(new Entity(['events' => $events]), 'DGD')['pending'];
+
+        return $this->pendingKey($pending, $kind);
+    }
+
+    /**
+     * Close the application a response answers: the related one, or else the one it most likely refers to.
+     *
+     * @param array<string, \Cake\Datasource\EntityInterface> $pending Open applications.
+     * @param \Cake\Datasource\EntityInterface $response Response event.
+     * @return void
+     */
+    private function answer(array &$pending, EntityInterface $response): void
+    {
+        $key = $response->parent_id ? (string)$response->parent_id : $this->pendingKey($pending, $response->kind);
+        if ($key !== null) {
+            unset($pending[$key]);
+        }
+    }
+
+    /**
+     * @param array<string, \Cake\Datasource\EntityInterface> $pending Open applications in order.
+     * @param string $kind Kind of the response.
+     * @return string|null
+     */
+    private function pendingKey(array $pending, string $kind): ?string
+    {
+        if (!$pending) {
+            return null;
+        }
+
+        return (string)($kind === 'conditions' ? array_key_first($pending) : array_key_last($pending));
+    }
+
+    /**
+     * Sort by event date, keeping the recorded order of events on the same day.
+     *
+     * @param array<\Cake\Datasource\EntityInterface> $events Events in recorded order.
+     * @return array<\Cake\Datasource\EntityInterface>
+     */
+    private function chronological(array $events): array
+    {
+        $day = function (EntityInterface $event): string {
+            $date = $event->event_date;
+
+            return $date instanceof DateTimeInterface ? $date->format('Y-m-d') : substr((string)$date, 0, 10);
+        };
+        $indexed = [];
+        foreach (array_values($events) as $position => $event) {
+            $indexed[] = [$day($event), $position, $event];
+        }
+        usort($indexed, fn(array $a, array $b): int => [$a[0], $a[1]] <=> [$b[0], $b[1]]);
+
+        return array_column($indexed, 2);
     }
 
     /**

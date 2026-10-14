@@ -346,6 +346,13 @@ class ProjectsAuthoritiesController extends AppController
                             ->orderBy(['sequence' => 'DESC'])->first();
                         $event->sequence = ($last->sequence ?? 0) + 1;
                     }
+                    // A response without a chosen related event answers the open application it belongs to.
+                    if (
+                        !$editing && !$event->parent_id
+                        && in_array($event->kind, ['conditions', 'opinion', 'request', 'other'], true)
+                    ) {
+                        $event->parent_id = $workflow->defaultParent($case->events, (string)$event->kind);
+                    }
                     $this->validateEvent($event, $case, $workflow);
                     $allowed = $this->documentOptions($freshProject);
                     $links = [];

@@ -279,4 +279,62 @@ class AuthorityWorkflowTest extends TestCase
             $status([$this->event('c1', 'conditions'), $this->event('o1', 'opinion')]),
         );
     }
+
+    /**
+     * @param string $id Event identifier.
+     * @param string $kind Event kind.
+     * @param string $date Event date.
+     * @param string|null $parent Parent ID.
+     * @return \Cake\ORM\Entity
+     */
+    private function dated(string $id, string $kind, string $date, ?string $parent = null): Entity
+    {
+        $event = $this->event($id, $kind, $parent);
+        $event->event_date = $date;
+
+        return $event;
+    }
+
+    /**
+     * A response recorded without a related event answers the open application.
+     *
+     * @return void
+     */
+    public function testResponseWithoutRelatedEventAnswersTheOpenApplication(): void
+    {
+        $events = [$this->event('s1', 'submission'), $this->event('c1', 'conditions')];
+        $state = $this->workflow->phase($this->case($events), 'DPP');
+        $this->assertEmpty($state['pending']);
+        $this->assertSame('complete', $state['state']);
+        $summary = $this->workflow->summary($this->project(), [$this->case($events)], []);
+        $this->assertSame('followup', $summary['rows']['case']['status']);
+        // Conditions answer the oldest open application, an opinion the latest one.
+        $open = [$this->event('s1', 'submission'), $this->event('s2', 'submission')];
+        $this->assertSame('s1', $this->workflow->defaultParent($open, 'conditions'));
+        $this->assertSame('s2', $this->workflow->defaultParent($open, 'opinion'));
+        $this->assertNull($this->workflow->defaultParent([], 'opinion'));
+        $events = array_merge($open, [$this->event('c1', 'conditions')]);
+        $this->assertSame(['s2'], array_keys($this->workflow->phase($this->case($events), 'DGD')['pending']));
+    }
+
+    /**
+     * The order of events follows their dates, not the order of data entry.
+     *
+     * @return void
+     */
+    public function testLateEntryOfAnEarlierApplicationDoesNotReopenTheCase(): void
+    {
+        $events = [
+            $this->dated('c1', 'conditions', '2026-10-09'),
+            $this->dated('s1', 'submission', '2026-10-01'),
+        ];
+        $state = $this->workflow->phase($this->case($events), 'DPP');
+        $this->assertSame('complete', $state['state']);
+        $this->assertEmpty($state['pending']);
+        $summary = $this->workflow->summary($this->project(), [$this->case($events)], []);
+        $this->assertSame('followup', $summary['rows']['case']['status']);
+        // A later application does open the case again.
+        $events[] = $this->dated('s2', 'submission', '2026-10-15');
+        $this->assertSame('waiting', $this->workflow->phase($this->case($events), 'DGD')['state']);
+    }
 }

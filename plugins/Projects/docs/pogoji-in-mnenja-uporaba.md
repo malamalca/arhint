@@ -40,6 +40,8 @@ Tabela uporablja enako glavo in širino kot druge tabele v zavihkih. Prikaže so
 
 Vsaka odprta zahteva za dopolnitev (brez oddane dopolnitve) ima samostojen stolpec. Povezava **Rok: dd.mm.yyyy** odpre prvi povezani dokument. Pretečen rok je poudarjen z barvo. Rok druge vrste zadnjega dogodka se prikaže pod nazivom soglasodajalca. Ko novi zadnji dogodek nima roka, prejšnji rok ni več prikazan.
 
+Stanje se izračuna iz zgodovine ob vsakem prikazu, zato se po dodanem, urejenem ali izbrisanem dogodku posodobi takoj. Dogodki se berejo po datumu (pri istem datumu po vrstnem redu vnosa); poznejši vnos zgodnejše vloge zadeve zato ne odpre znova. Odgovor (pogoji, mnenje, zahteva, drug odgovor), pri katerem ne izberete povezanega dogodka, se ob vnosu poveže z odprto vlogo: pogoji z najstarejšo, ostali z najnovejšo.
+
 Ko so projektni pogoji prejeti in vloga za mnenje še ni oddana, je stanje zadeve *Sledi vloga za mnenje*.
 
 Za prejete pogoje oziroma mnenje se v ustreznem stolpcu pokaže datum izdaje prvega povezanega dokumenta na zelenem ozadju. Datum ostane viden tudi po potrditvi ustreznosti in po poznejših dogodkih, dokler odgovora ne razveljavite. Datum je povezava na dokument; kljukice ni. Če dokument nima datuma, povezava prikaže pomišljaj.
