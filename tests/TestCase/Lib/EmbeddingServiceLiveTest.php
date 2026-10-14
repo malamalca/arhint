@@ -6,10 +6,9 @@ namespace App\Test\TestCase\Lib;
 use App\Lib\EmbeddingService;
 use Cake\Core\Configure;
 use Cake\TestSuite\TestCase;
+use PHPUnit\Framework\Attributes\Group;
 
-/**
- * @group live
- */
+#[Group('live')]
 class EmbeddingServiceLiveTest extends TestCase
 {
     private const DEFAULT_LIVE_URL = 'http://127.0.0.1:8000/embed';

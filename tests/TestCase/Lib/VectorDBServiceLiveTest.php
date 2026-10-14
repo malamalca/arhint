@@ -7,10 +7,9 @@ use App\Lib\VectorDBService;
 use Cake\Core\Configure;
 use Cake\TestSuite\TestCase;
 use Exception;
+use PHPUnit\Framework\Attributes\Group;
 
-/**
- * @group live
- */
+#[Group('live')]
 class VectorDBServiceLiveTest extends TestCase
 {
     private const DEFAULT_HOST = '192.168.88.30:8001';

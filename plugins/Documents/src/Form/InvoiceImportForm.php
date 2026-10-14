@@ -264,7 +264,7 @@ class InvoiceImportForm extends Form
      * @param array<string, mixed> $data Form data including uploaded file.
      * @return bool True on success (parsed and stored), false on failure (see {@see $aiError}).
      */
-    protected function _execute(array $data): bool
+    protected function process(array $data): bool
     {
         $this->aiError = null;
 

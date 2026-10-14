@@ -72,7 +72,7 @@ class EmailForm extends Form
      * @param array<array-key, mixed> $data Post data.
      * @return bool
      */
-    protected function _execute(array $data): bool
+    protected function process(array $data): bool
     {
         $filter = (array)$this->request->getQuery();
 

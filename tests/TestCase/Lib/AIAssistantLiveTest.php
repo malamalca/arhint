@@ -10,11 +10,10 @@ use ArrayObject;
 use Cake\Event\Event;
 use Cake\Event\EventManager;
 use Cake\TestSuite\TestCase;
-use ReflectionClass;
+use PHPUnit\Framework\Attributes\Group;
+use reflectionclass;
 
-/**
- * @group live
- */
+#[Group('live')]
 class AIAssistantLiveTest extends TestCase
 {
     private const DEFAULT_LIVE_URL = 'http://192.168.68.58:8080/v1/chat/completions';

@@ -12,10 +12,9 @@ use Cake\TestSuite\TestCase;
 use Interop\Queue\Context;
 use Interop\Queue\Message as QueueMessage;
 use Interop\Queue\Processor;
+use PHPUnit\Framework\Attributes\Group;
 
-/**
- * @group live
- */
+#[Group('live')]
 class AiProcessLogJobLiveTest extends TestCase
 {
     private const DEFAULT_AI_LIVE_URL = 'http://192.168.68.58:8080/v1/chat/completions';
