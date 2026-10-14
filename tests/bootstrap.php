@@ -1,8 +1,10 @@
 <?php
 declare(strict_types=1);
 
+use Cake\Cache\Cache;
 use Cake\Chronos\Chronos;
 use Cake\Core\Configure;
+use Cake\I18n\I18n;
 use Cake\TestSuite\ConnectionHelper;
 use Migrations\TestSuite\Migrator;
 
@@ -17,9 +19,9 @@ require dirname(__DIR__) . '/vendor/autoload.php';
 require dirname(__DIR__) . '/config/bootstrap.php';
 
 // Test translations must not create or clear cache files used by the web application.
-\Cake\Cache\Cache::drop('_cake_translations_');
-\Cake\Cache\Cache::setConfig('_cake_translations_', ['className' => 'Null']);
-\Cake\I18n\I18n::clear();
+Cache::drop('_cake_translations_');
+Cache::setConfig('_cake_translations_', ['className' => 'Null']);
+I18n::clear();
 
 $_SERVER['PHP_SELF'] = '/';
 

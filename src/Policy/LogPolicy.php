@@ -83,7 +83,7 @@ class LogPolicy
         // For other models, try to load the parent entity and check ownership
         try {
             $parts = explode('.', $model, 2);
-            $plugin = $parts[0] ?? null;
+            $plugin = isset($parts[1]) ? $parts[0] : null;
             $tableName = $parts[1] ?? $parts[0];
 
             // Try plural form first (CakePHP convention)

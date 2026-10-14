@@ -60,8 +60,8 @@ jobs:
     - name: Composer Install
       run: composer install --no-interaction
 
-    - name: Install Ghostscript
-      run: sudo apt-get install -y ghostscript
+    - name: Install Ghostscript and Poppler
+      run: sudo apt-get install -y ghostscript poppler-utils
 
     - name: Execute post install cmd
       run: composer run-script post-install-cmd --no-interaction
