@@ -45,13 +45,25 @@ class DocumentsEvents implements EventListenerInterface
     }
 
     /**
+     * Event listener: sets the invoice html with the tax confirmation block as the event result.
+     *
+     * @param \Cake\Event\Event $event Event object, subject is the invoice.
+     * @param string $html Invoice html.
+     * @return void
+     */
+    public function showTaxBlock(Event $event, string $html): void
+    {
+        $event->setResult($this->addTaxBlock($event, $html));
+    }
+
+    /**
      * Add tax confirmation block (QR, ZOI, EOR) to the invoice html before it is converted to PDF.
      *
      * @param \Cake\Event\Event $event Event object, subject is the invoice.
      * @param string $html Invoice html.
      * @return string
      */
-    public function showTaxBlock(Event $event, string $html): string
+    public function addTaxBlock(Event $event, string $html): string
     {
         $invoice = $event->getSubject();
         if (!$invoice instanceof Invoice || empty($invoice->id)) {

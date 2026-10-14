@@ -39,7 +39,7 @@ jobs:
       uses: shivammathur/setup-php@v2
       with:
         php-version: ${{ matrix.php-version }}
-        extensions: mbstring, intl
+        extensions: mbstring, intl, apcu
         coverage: pcov
         ini-values: session.save_path=/tmp
 

@@ -133,18 +133,29 @@ class InvoicesTaxConfirmationTest extends TestCase
         $events = new DocumentsEvents();
 
         $this->confirm(null);
-        $this->assertSame($html, $events->showTaxBlock(new Event('x', $invoice), $html));
+        $this->assertSame($html, $events->addTaxBlock(new Event('x', $invoice), $html));
 
         $Confirmations = TableRegistry::getTableLocator()->get('Documents.InvoicesTaxConfirmations');
         $confirmation = $Confirmations->findForInvoice(self::INVOICE_ISSUED);
         $confirmation->eor = 'eor-1234';
         $Confirmations->saveOrFail($confirmation);
 
-        $result = $events->showTaxBlock(new Event('x', $invoice), $html);
+        $result = $events->addTaxBlock(new Event('x', $invoice), $html);
         $this->assertStringContainsString('data:image/png;base64,', $result);
         $this->assertStringContainsString('34905bcff14b381039af2e9d7eee54bb', $result);
         $this->assertStringContainsString('eor-1234', $result);
         $this->assertStringEndsWith('</body></html>', $result);
+    }
+
+    public function testShowTaxBlockListenerSetsEventResult(): void
+    {
+        $html = '<html><body><p>Invoice</p></body></html>';
+        $this->confirm(null);
+        $event = new Event('Documents.Invoices.Export.Html', new Invoice(['id' => self::INVOICE_ISSUED]), [$html]);
+
+        (new DocumentsEvents())->showTaxBlock($event, $html);
+
+        $this->assertSame($html, $event->getResult());
     }
 
     public function testQrBlockIsPlacedAboveFooter(): void
@@ -152,7 +163,7 @@ class InvoicesTaxConfirmationTest extends TestCase
         $this->confirm('eor-1234');
         $html = '<body><div id="content">x</div><div id="footer1">footer</div></body>';
 
-        $result = (new DocumentsEvents())->showTaxBlock(
+        $result = (new DocumentsEvents())->addTaxBlock(
             new Event('x', new Invoice(['id' => self::INVOICE_ISSUED])),
             $html,
         );
@@ -167,7 +178,7 @@ class InvoicesTaxConfirmationTest extends TestCase
         $html = '<body><div id="content"><div id="tax-block-slot" style="float: right; width: 28%;"></div>' .
             '<table class="basics"></table></div><div id="footer1">footer</div></body>';
 
-        $result = (new DocumentsEvents())->showTaxBlock(
+        $result = (new DocumentsEvents())->addTaxBlock(
             new Event('x', new Invoice(['id' => self::INVOICE_ISSUED])),
             $html,
         );
