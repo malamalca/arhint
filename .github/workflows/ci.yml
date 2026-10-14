@@ -61,7 +61,7 @@ jobs:
       run: composer install --no-interaction
 
     - name: Install Ghostscript and Poppler
-      run: sudo apt-get install -y ghostscript poppler-utils
+      run: sudo apt-get update && sudo apt-get install -y ghostscript poppler-utils
 
     - name: Execute post install cmd
       run: composer run-script post-install-cmd --no-interaction
