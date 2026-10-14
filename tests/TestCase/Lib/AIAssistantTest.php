@@ -372,4 +372,22 @@ class AIAssistantTest extends TestCase
         $this->assertSame('Done.', $assistant->getResponse('Loop forever'));
         $this->assertCount(11, $assistant->requests);
     }
+
+    /**
+     * Every instruction whose answer is shown to a person asks for Slovenian.
+     *
+     * @return void
+     */
+    public function testInstructionsRequireSlovenian(): void
+    {
+        $this->assertStringContainsString('Slovenian', AIAssistant::SYSTEM_PROMPT);
+        $this->assertStringContainsString('Slovenian', AIAssistant::LANGUAGE_RULE);
+        $this->assertSame(0, substr_count(sprintf(AIAssistant::SYSTEM_PROMPT, 'now', 'user', 'tools'), '%'));
+
+        $job = (string)file_get_contents(dirname(__DIR__, 3) . '/src/Job/AiProcessLogJob.php');
+        $this->assertStringContainsString('AIAssistant::LANGUAGE_RULE', $job);
+        $this->assertStringContainsString('must be in', $job);
+        $search = (string)file_get_contents(dirname(__DIR__, 3) . '/src/Lib/VectorDBSearchTool.php');
+        $this->assertStringContainsString('AIAssistant::LANGUAGE_RULE', $search);
+    }
 }

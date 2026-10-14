@@ -235,10 +235,23 @@ class ProjectsAuthoritiesController extends AppController
         $summary = $this->summary($project, $cases);
         $effectiveIds = array_map(fn($event) => $event->id, $workflow->effectiveEvents($case->events));
         $selectableIds = array_map(fn($event) => $event->id, $workflow->selectableEvents($case->events));
+        $referenced = array_filter(array_map(fn($event) => $event->parent_id, $case->events));
+        $deletableIds = array_values(array_diff(
+            array_map(fn($event) => $event->id, $case->events),
+            $referenced,
+        ));
         $calendarLink = $this->fetchTable('Projects.ProjectsAuthorityCalendarLinks')->find()->where([
             'case_id' => $id, 'calendar_id' => $this->getCurrentUser()->id,
         ])->first();
-        $this->set(compact('project', 'case', 'summary', 'effectiveIds', 'selectableIds', 'calendarLink'));
+        $this->set(compact(
+            'project',
+            'case',
+            'summary',
+            'effectiveIds',
+            'selectableIds',
+            'deletableIds',
+            'calendarLink',
+        ));
     }
 
     /**
@@ -328,7 +341,10 @@ class ProjectsAuthoritiesController extends AppController
                     $this->checkSnapshot($this->summary($freshProject));
                     $editing = !$event->isNew();
                     if (!$editing) {
-                        $event->sequence = count($case->events) + 1;
+                        // Deleted events leave gaps, so the next number follows the highest one.
+                        $last = $table->find()->where(['case_id' => $case->id])
+                            ->orderBy(['sequence' => 'DESC'])->first();
+                        $event->sequence = ($last->sequence ?? 0) + 1;
                     }
                     $this->validateEvent($event, $case, $workflow);
                     $allowed = $this->documentOptions($freshProject);
@@ -425,6 +441,51 @@ class ProjectsAuthoritiesController extends AppController
         ));
 
         return null;
+    }
+
+    /**
+     * Delete an event that no other event refers to. POST only.
+     *
+     * @param string $id Event ID.
+     * @return \Cake\Http\Response|null
+     */
+    public function deleteEvent(string $id): ?Response
+    {
+        $this->getRequest()->allowMethod(['post', 'delete']);
+        $table = $this->fetchTable('Projects.ProjectsAuthorityEvents');
+        $event = $table->get($id, contain: ['Cases']);
+        $project = $this->project($event->case->project_id, 'authorities');
+        $deleted = false;
+        $table->getConnection()->transactional(function () use ($project, $table, $event, &$deleted): void {
+            $this->lockProject($project->id);
+            if ($table->exists(['parent_id' => $event->id])) {
+                return;
+            }
+            $this->fetchTable('Projects.ProjectsAuthorityEventDocuments')->deleteAll(['event_id' => $event->id]);
+            $table->deleteOrFail($event);
+            $this->logProcedure($project->id, __d(
+                'projects',
+                'Procedure event deleted: {0}. Event: {1}',
+                $event->case->title,
+                $this->describe([
+                    'kind' => $event->kind,
+                    'event_date' => $event->event_date,
+                    'date_due' => $event->date_due,
+                    'descript' => $event->descript,
+                ]),
+            ), $event->case_id);
+            $deleted = true;
+        });
+        if ($deleted) {
+            $this->Flash->success(__d('projects', 'The procedure event has been deleted.'));
+        } else {
+            $this->Flash->error(__d(
+                'projects',
+                'An event with related events cannot be deleted. Delete the related events first.',
+            ));
+        }
+
+        return $this->redirect(['action' => 'view', $event->case_id]);
     }
 
     /**

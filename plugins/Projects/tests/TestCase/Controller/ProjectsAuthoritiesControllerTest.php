@@ -872,4 +872,73 @@ class ProjectsAuthoritiesControllerTest extends TestCase
         $this->assertSame(1, $events->find()->where(['case_id' => $id])->count());
         $this->assertSame(0, $events->find()->where(['case_id' => $other])->count());
     }
+
+    /**
+     * An event can be deleted unless other events refer to it; numbering stays unique afterwards.
+     *
+     * @return void
+     */
+    public function testEventCanBeDeletedUnlessReferencedByAnotherEvent(): void
+    {
+        $id = $this->createCase();
+        $events = $this->getTableLocator()->get('Projects.ProjectsAuthorityEvents');
+        $this->getTableLocator()->get('Documents.Documents')->updateAll(['project_id' => self::PROJECT], ['id' => self::DOCUMENT]);
+        $this->postEvent($id, ['kind' => 'submission']);
+        $submission = $events->find()->where(['case_id' => $id])->firstOrFail();
+        $this->postEvent($id, ['kind' => 'opinion', 'parent_id' => $submission->id, 'document_ids' => [self::DOCUMENT]]);
+        $this->assertResponseCode(302);
+        $opinion = $events->find()->where(['case_id' => $id, 'kind' => 'opinion'])->firstOrFail();
+        $this->postEvent($id, ['kind' => 'other']);
+        $this->assertResponseCode(302);
+        $this->get('/projects/projects-authorities/view/' . $id);
+        $this->assertResponseContains('delete-event/' . $opinion->id);
+        $this->assertResponseNotContains('delete-event/' . $submission->id);
+        $this->get('/projects/projects-authorities/delete-event/' . $opinion->id);
+        $this->assertResponseCode(405);
+        // The submission is referred to by the opinion.
+        $this->post('/projects/projects-authorities/delete-event/' . $submission->id);
+        $this->assertRedirectContains('/projects/projects-authorities/view/' . $id);
+        $this->assertTrue($events->exists(['id' => $submission->id]));
+        $this->assertTrue($this->summary()['collected']);
+        $this->post('/projects/projects-authorities/delete-event/' . $opinion->id);
+        $this->assertRedirectContains('/projects/projects-authorities/view/' . $id);
+        $this->assertFalse($events->exists(['id' => $opinion->id]));
+        $this->assertSame(0, $this->getTableLocator()->get('Projects.ProjectsAuthorityEventDocuments')->find()->count());
+        $this->assertFalse($this->summary()['collected']);
+        $log = $this->getTableLocator()->get('Logs')->find()->where(['descript LIKE' => '%izbrisan%'])->first();
+        $this->assertNotNull($log);
+        // The submission can go now; a new event takes the next free number.
+        $this->post('/projects/projects-authorities/delete-event/' . $submission->id);
+        $this->assertFalse($events->exists(['id' => $submission->id]));
+        $this->postEvent($id, ['kind' => 'submission']);
+        $this->assertResponseCode(302);
+        // Numbers 1 and 2 are gone, 3 is taken: counting the events would reuse 3.
+        $this->assertSame(
+            [3, 4],
+            $events->find()->where(['case_id' => $id])->orderBy(['sequence'])->all()->extract('sequence')->toList(),
+        );
+        // No access to another company's project.
+        $this->session(['Auth' => $this->getTableLocator()->get('Users')->get(USER_COMMON)]);
+        $again = $events->find()->where(['case_id' => $id])->firstOrFail();
+        $this->post('/projects/projects-authorities/delete-event/' . $again->id);
+        $this->assertResponseCode(403);
+    }
+
+    /**
+     * Received conditions without an application for the opinion show a follow-up status.
+     *
+     * @return void
+     */
+    public function testReceivedConditionsShowFollowUpStatus(): void
+    {
+        $id = $this->createCase();
+        $this->getTableLocator()->get('Documents.Documents')->updateAll(['project_id' => self::PROJECT], ['id' => self::DOCUMENT]);
+        $this->postEvent($id, ['kind' => 'conditions', 'document_ids' => [self::DOCUMENT]]);
+        $this->assertResponseCode(302);
+        $this->assertSame('followup', $this->summary()['rows'][$id]['status']);
+        $this->get('/projects/projects/view/' . self::PROJECT . '?tab=authorities');
+        $this->assertResponseContains('Sledi vloga za mnenje');
+        $this->postEvent($id, ['kind' => 'submission']);
+        $this->assertSame('waiting', $this->summary()['rows'][$id]['status']);
+    }
 }

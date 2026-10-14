@@ -96,7 +96,13 @@ class ProjectsAuthorityEventsTable extends Table
             'projects',
             'This event type is required by a linked event.',
         )]);
-        $rules->addDelete(fn() => false, 'appendOnly');
+        // The history stays consistent: an event that others refer to cannot disappear.
+        $rules->addDelete(function ($entity) {
+            return !$this->exists(['parent_id' => $entity->id]);
+        }, 'hasRelatedEvents', ['errorField' => 'id', 'message' => __d(
+            'projects',
+            'An event with related events cannot be deleted. Delete the related events first.',
+        )]);
 
         return $rules;
     }

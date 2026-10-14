@@ -28,6 +28,26 @@ foreach ($case->events as $event) {
             ]) . '<br>';
         }
     }
+    $eventActions = '';
+    if ($this->getCurrentUser()->hasRole('editor')) {
+        if (in_array($event->id, $effectiveIds, true)) {
+            $eventActions .= $this->Html->link(
+                __d('projects', 'Edit'),
+                ['action' => 'editEvent', $event->id],
+                ['class' => 'btn-small tonal'],
+            );
+        }
+        if (in_array($event->id, $deletableIds, true)) {
+            $eventActions .= ' ' . $this->Form->postLink(
+                __d('projects', 'Delete'),
+                ['action' => 'deleteEvent', $event->id],
+                [
+                    'class' => 'btn-small tonal',
+                    'confirm' => __d('projects', 'Are you sure you want to delete this event?'),
+                ],
+            );
+        }
+    }
     $rows[] = ['columns' => [
         'date' => h((string)$event->event_date),
         'kind' => h($event->sequence . '. ' . AuthorityWorkflow::kinds()[$event->kind]) .
@@ -35,12 +55,7 @@ foreach ($case->events as $event) {
         'details' => nl2br(h($event->descript ?? '')) . '<br>' . h((string)$event->date_due),
         'documents' => $documents,
         'author' => h($event->user->name ?? '') . '<br>' . h((string)$event->created),
-        'edit' => $this->getCurrentUser()->hasRole('editor') && in_array($event->id, $effectiveIds, true) ?
-            $this->Html->link(
-                __d('projects', 'Edit'),
-                ['action' => 'editEvent', $event->id],
-                ['class' => 'btn-small tonal'],
-            ) : '',
+        'edit' => $eventActions,
     ]];
 }
 if ($this->getCurrentUser()->hasRole('editor') && !$case->events) {

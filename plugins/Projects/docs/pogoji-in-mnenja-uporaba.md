@@ -16,6 +16,8 @@ Nastavitev potrebnosti projektnih pogojev in mnenj ni. Vsak dodani soglasodajale
 
 Na zadevi v zgornjem meniju izberite **Evidentiraj dogodek postopka**. Dogodek ni vezan na fazo ali različico dokumentacije.
 
+Dogodek izbrišete z gumbom **Briši** v zgodovini zadeve. Izbrisati je mogoče samo dogodek, na katerega se ne sklicuje noben drug dogodek (povezana dopolnitev, mnenje ali razveljavitev); najprej izbrišite povezane. Brisanje se zapiše v projektni dnevnik in umakne potrditev pripravljenosti za UE. Številke dogodkov se po brisanju ne preštevilčijo.
+
 Obstoječi veljavni dogodek uredite z gumbom **Uredi** v zgodovini. Popravite lahko datum, rok, povzetek, povezani dogodek in dokumente. Spremembe se zapišejo v projektni dnevnik; prvotni avtor in vrstni red ostaneta ohranjena. Sprememba vrste je dovoljena, če ne razveljavi pravil povezanih dogodkov.
 
 Vnesite vrsto dogodka, datum oddaje oziroma prejema, po potrebi povezani dogodek, rok in povzetek. V enem polju **Povezani dokumenti** lahko izberete več dokumentov projekta.
@@ -37,6 +39,8 @@ Nad tabelo je po potrebi kratko opozorilo (odprti odgovori ali dopolnitve, nedos
 Tabela uporablja enako glavo in širino kot druge tabele v zavihkih. Prikaže soglasodajalca, stanje (Ni oddano, Čakamo odgovor, Potrebna dopolnitev, Zaključeno, Ni potrebno), projektne pogoje, mnenje in zahtevo za dopolnitev. Stolpca Naslednji korak in Odgovorna oseba sta skrita.
 
 Vsaka odprta zahteva za dopolnitev (brez oddane dopolnitve) ima samostojen stolpec. Povezava **Rok: dd.mm.yyyy** odpre prvi povezani dokument. Pretečen rok je poudarjen z barvo. Rok druge vrste zadnjega dogodka se prikaže pod nazivom soglasodajalca. Ko novi zadnji dogodek nima roka, prejšnji rok ni več prikazan.
+
+Ko so projektni pogoji prejeti in vloga za mnenje še ni oddana, je stanje zadeve *Sledi vloga za mnenje*.
 
 Za prejete pogoje oziroma mnenje se v ustreznem stolpcu pokaže datum izdaje prvega povezanega dokumenta na zelenem ozadju. Datum ostane viden tudi po potrditvi ustreznosti in po poznejših dogodkih, dokler odgovora ne razveljavite. Datum je povezava na dokument; kljukice ni. Če dokument nima datuma, povezava prikaže pomišljaj.
 

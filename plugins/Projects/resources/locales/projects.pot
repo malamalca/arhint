@@ -1073,3 +1073,18 @@ msgstr ""
 
 msgid "The order could not be saved."
 msgstr ""
+
+msgid "Are you sure you want to delete this event?"
+msgstr ""
+
+msgid "The procedure event has been deleted."
+msgstr ""
+
+msgid "Procedure event deleted: {0}. Event: {1}"
+msgstr ""
+
+msgid "An event with related events cannot be deleted. Delete the related events first."
+msgstr ""
+
+msgid "Application for opinion follows"
+msgstr ""

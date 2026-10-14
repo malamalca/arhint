@@ -37,6 +37,7 @@ class AuthorityWorkflow
             'waiting' => __d('projects', 'Waiting for response'),
             'supplement' => __d('projects', 'Supplement required'),
             'complete' => __d('projects', 'Completed'),
+            'followup' => __d('projects', 'Application for opinion follows'),
             'exempt' => __d('projects', 'Not required'),
         ];
     }
@@ -303,6 +304,10 @@ class AuthorityWorkflow
             $dgd = $this->phase($case, 'DGD');
             $isExempt = self::isExempt($case);
             $status = $isExempt ? 'exempt' : $dgd['state'];
+            // Conditions are in, nothing has been submitted for the opinion yet.
+            if ($status === 'unsubmitted' && $dpp['received']) {
+                $status = 'followup';
+            }
             $rows[$case->id] = ['DPP' => $dpp, 'DGD' => $dgd, 'status' => $status];
             if ($isExempt) {
                 $exempt++;

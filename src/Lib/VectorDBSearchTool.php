@@ -98,7 +98,8 @@ class VectorDBSearchTool
         $messages = [
             ['role' => 'system', 'content' => 'You are a project intelligence analyst. '
                 . "Answer the user's question using ONLY the provided log context. "
-                . 'Be concise, factual, and highlight risks or blockers if present.'],
+                . 'Be concise, factual, and highlight risks or blockers if present. '
+                . AIAssistant::LANGUAGE_RULE],
             ['role' => 'user', 'content' => "Question: $userQuestion\n\nLog Context:\n$vectorContext"],
         ];
 

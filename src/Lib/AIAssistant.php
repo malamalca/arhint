@@ -33,7 +33,16 @@ class AIAssistant
     // Tool results (e.g. text of an attachment) and tool call arguments of earlier turns are cut to
     // this size, so that they do not fill the context of the model in the following turns.
     private const MAX_OLD_TOOL_MESSAGE_CHARS = 1500;
-    private const EMPTY_REPLY_NUDGE = 'Your previous reply was empty. Reply now with a short plain-text answer.';
+    private const EMPTY_REPLY_NUDGE = 'Your previous reply was empty. '
+        . 'Reply now with a short plain-text answer in Slovenian.';
+
+    /**
+     * Language rule appended to every instruction whose answer a person reads.
+     * Identifiers, tool and argument names and fixed JSON values stay as specified.
+     */
+    public const LANGUAGE_RULE = 'Write all text meant for the user in Slovenian (slovenščina), '
+        . 'whatever language the question, documents or logs are written in. '
+        . 'Keep tool names, argument names, JSON keys and fixed values exactly as specified.';
 
     // Fallback endpoint for the local provider when the user has no configured 'url'.
     private const DEFAULT_LOCAL_URL = 'http://192.168.68.58:8080/v1/chat/completions';
@@ -58,7 +67,10 @@ class AIAssistant
 
         "When the user asks for help, determine which tool is most appropriate and provide a response.\n" .
         "Always respond with valid JSON when calling a tool. Do not include explanations.\n" .
-        "If no tool is needed, answer normally.\n";
+        "If no tool is needed, answer normally.\n" .
+        "\n" .
+        'Language: always write your replies to the user in Slovenian (slovenščina), whatever language the ' .
+        "question is written in. Tool names, argument names and the JSON structure must stay unchanged.\n";
 
     /**
      * List of tools available to the AI assistant. This can be populated by listening to the 'AIAssistant.tools' event.
@@ -287,7 +299,8 @@ class AIAssistant
                     $systemContent = 'You are an assistant for a business management system. '
                         . 'Proceed with great speed and accuracy. Do not show UUIDs in your responses. '
                         . 'Current date and time: ' . date('Y-m-d H:i:s') . '. '
-                        . 'Current user ID: ' . (string)($this->currentUser?->get('id') ?? '') . '.';
+                        . 'Current user ID: ' . (string)($this->currentUser?->get('id') ?? '') . '. '
+                        . self::LANGUAGE_RULE;
                 }
                 if ($summary !== null && $summary !== '') {
                     $systemContent .= "\n\nConversation context: " . $summary;

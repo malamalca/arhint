@@ -1161,3 +1161,18 @@ msgstr "Povlecite za spremembo vrstnega reda"
 
 msgid "The order could not be saved."
 msgstr "Vrstnega reda ni bilo mogoče shraniti."
+
+msgid "Are you sure you want to delete this event?"
+msgstr "Ali res želite izbrisati ta dogodek?"
+
+msgid "The procedure event has been deleted."
+msgstr "Dogodek postopka je izbrisan."
+
+msgid "Procedure event deleted: {0}. Event: {1}"
+msgstr "Dogodek postopka izbrisan: {0}. Dogodek: {1}"
+
+msgid "An event with related events cannot be deleted. Delete the related events first."
+msgstr "Dogodka s povezanimi dogodki ni mogoče izbrisati. Najprej izbrišite povezane dogodke."
+
+msgid "Application for opinion follows"
+msgstr "Sledi vloga za mnenje"

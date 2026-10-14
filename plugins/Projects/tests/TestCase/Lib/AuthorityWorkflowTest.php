@@ -259,4 +259,24 @@ class AuthorityWorkflowTest extends TestCase
         $this->assertSame('response', $state['received']->id);
         $this->assertSame('o1', $state['last']->id);
     }
+
+    /**
+     * @return void
+     */
+    public function testStatusFollowsTheProcedure(): void
+    {
+        $project = $this->project();
+        $status = fn(array $events): string => $this->workflow
+            ->summary($project, [$this->case($events)], [])['rows']['case']['status'];
+        $this->assertSame('unsubmitted', $status([]));
+        $this->assertSame('followup', $status([$this->event('s1', 'submission'), $this->event('c1', 'conditions', 's1')]));
+        $this->assertSame(
+            'waiting',
+            $status([$this->event('s1', 'submission'), $this->event('c1', 'conditions', 's1'), $this->event('s2', 'submission')]),
+        );
+        $this->assertSame(
+            'complete',
+            $status([$this->event('c1', 'conditions'), $this->event('o1', 'opinion')]),
+        );
+    }
 }
