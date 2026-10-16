@@ -22,6 +22,7 @@ echo $this->element('Projects.authority_form', [
             'empty' => true, 'class' => 'no-autoinit',
         ],
         'date_due' => ['label' => __d('projects', 'Next check / supplement due'), 'type' => 'date'],
+        'date_valid' => ['label' => __d('projects', 'Valid until (conditions / opinion)'), 'type' => 'date'],
         'descript' => ['label' => __d('projects', 'Summary / next step / reason'), 'type' => 'textarea'],
         'document_ids' => [
             'label' => __d('projects', 'Linked documents'), 'options' => $documents,

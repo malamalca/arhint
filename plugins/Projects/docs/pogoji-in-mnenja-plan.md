@@ -8,7 +8,7 @@ Status: prva faza implementirana; nadaljnje faze so načrtovane
 
 ## 1. Namen in odločitev
 
-Ročno tabelo soglasodajalcev v opisu projekta nadomestimo s strukturirano evidenco postopkov v vtičniku **Projects**, dostopno prek novega zavihka **Pogoji in mnenja**.
+Ročno tabelo soglasodajalcev v opisu projekta nadomestimo s strukturirano evidenco postopkov v vtičniku **Projects**, dostopno prek novega zavihka **Postopki**.
 
 Evidenca mora odgovoriti na vprašanja:
 

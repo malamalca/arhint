@@ -114,14 +114,14 @@ $projectView = [
             'authorities' => sprintf(
                 '<li class="tab col"><a href="%1$s" target="_self"%3$s>%2$s</a></li>',
                 $this->Url->build([$project->id, '?' => ['tab' => 'authorities']]),
-                __d('projects', 'Conditions and opinions'),
-                $this->getRequest()->getQuery('tab') === 'authorities' ? ' class="active"' : '',
+                __d('projects', 'Procedures'),
+                !$this->getRequest()->getQuery('tab') || $this->getRequest()->getQuery('tab') === 'authorities' ? ' class="active"' : '',
             ),
             'milestones' => sprintf(
                 '<li class="tab col"><a href="%1$s" target="_self"%3$s>%2$s</a></li>',
                 $this->Url->build([$project->id, '?' => ['tab' => 'milestones']]),
                 __d('projects', 'Milestones'),
-                !$this->getRequest()->getQuery('tab') || $this->getRequest()->getQuery('tab') == 'milestones' ? ' class="active"' : '',
+                $this->getRequest()->getQuery('tab') == 'milestones' ? ' class="active"' : '',
             ),
             'logs' => sprintf(
                 '<li class="tab col"><a href="%1$s" target="_self"%3$s>%2$s</a></li>',
@@ -147,7 +147,7 @@ $projectView = [
     ],
 ];
 
-$activeTab = $this->getRequest()->getQuery('tab', 'milestones');
+$activeTab = $this->getRequest()->getQuery('tab', 'authorities');
 $this->set('tab', $activeTab);
 
 switch ($activeTab) {

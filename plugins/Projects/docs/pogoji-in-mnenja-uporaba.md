@@ -1,6 +1,6 @@
 # Pogoji in mnenja — uporaba
 
-Na projektu odprite zavihek **Pogoji in mnenja**. Soglasodajalci so obstoječa podjetja iz Kontaktov; izbirate jih z autocomplete.
+Na projektu odprite zavihek **Postopki**. Soglasodajalci so obstoječa podjetja iz Kontaktov; izbirate jih z autocomplete.
 
 ## Dodajanje soglasodajalca
 
@@ -20,14 +20,14 @@ Dogodek izbrišete z gumbom **Briši** v zgodovini zadeve. Izbrisati je mogoče 
 
 Obstoječi veljavni dogodek uredite z gumbom **Uredi** v zgodovini. Popravite lahko datum, rok, povzetek, povezani dogodek in dokumente. Spremembe se zapišejo v projektni dnevnik; prvotni avtor in vrstni red ostaneta ohranjena. Sprememba vrste je dovoljena, če ne razveljavi pravil povezanih dogodkov.
 
-Vnesite vrsto dogodka, datum oddaje oziroma prejema, po potrebi povezani dogodek, rok in povzetek. V enem polju **Povezani dokumenti** lahko izberete več dokumentov projekta.
+Vnesite vrsto dogodka, datum oddaje oziroma prejema, po potrebi povezani dogodek, rok in povzetek. Pri prejetih pogojih in mnenju lahko v polju **Velja do** vpišete zadnji dan veljavnosti; datum ne sme biti pred datumom prejema. V enem polju **Povezani dokumenti** lahko izberete več dokumentov projekta.
 
 - Vloga oddana lahko ostane brez dokumenta.
 - Pogoji prejeti, mnenje prejeto in zahteva za dopolnitev zahtevajo dokument odgovora.
 - Dopolnitev oddana se poveže z zahtevo za dopolnitev.
 - Razveljavitev se poveže z dogodkom, ki ga razveljavlja (tudi z drugo razveljavitvijo). Razveljavitev razveljavitve povrne prvotni dogodek in odvisne dogodke.
 - Drug odgovor, povezan z vlogo ali dopolnitvijo, konča čakanje na odgovor, vendar sam ničesar ne zaključi: mnenje mora še vedno prispeti.
-- Prejeto mnenje zaključi postopek pri soglasodajalcu; potrditve mnenja ni. Postopek ponovno odprete z novo vlogo ali zahtevo (npr. ker je mnenje poteklo): zadeva je spet *Čakamo odgovor*, dokler ne prispe novo mnenje. Prejeto mnenje lahko tudi razveljavite.
+- Prejeto mnenje zaključi postopek pri soglasodajalcu in odgovori na vse vloge, vnesene pred njim (tudi če imajo poznejši datum); potrditve mnenja ni. Postopek ponovno odprete z novo vlogo ali zahtevo (npr. ker je mnenje poteklo): zadeva je spet *Čakamo odgovor*, dokler ne prispe novo mnenje. Prejeto mnenje lahko tudi razveljavite.
 - Rok ne sme biti pred datumom dogodka, dogodek pa ne pred povezanim dogodkom.
 
 Izbirnik ponuja povezane dogodke glede na njihovo vrsto. Povezave niso omejene po nekdanjih fazah DPP/DGD. Obrazec samo evidentira dejanje; vloge ne pošilja.
@@ -36,15 +36,17 @@ Izbirnik ponuja povezane dogodke glede na njihovo vrsto. Povezave niso omejene p
 
 Nad tabelo je po potrebi kratko opozorilo (odprti odgovori ali dopolnitve, nedostopen kontakt) in stanje pripravljenosti. Stanje posamezne zadeve je razvidno iz stolpca Status.
 
-Tabela uporablja enako glavo in širino kot druge tabele v zavihkih. Prikaže soglasodajalca, stanje (Ni oddano, Čakamo odgovor, Potrebna dopolnitev, Zaključeno, Ni potrebno), projektne pogoje, mnenje in zahtevo za dopolnitev. Stolpca Naslednji korak in Odgovorna oseba sta skrita.
+Tabela uporablja enako glavo in širino kot druge tabele v zavihkih. Prikaže soglasodajalca, stanje (Ni oddano, Čakamo odgovor, Potrebna dopolnitev, Pogoji prejeti, Mnenje prejeto, Veljavnost potekla, Ni potrebno), projektne pogoje, mnenje in zahtevo za dopolnitev. Stolpca Naslednji korak in Odgovorna oseba sta skrita.
 
 Vsaka odprta zahteva za dopolnitev (brez oddane dopolnitve) ima samostojen stolpec. Povezava **Rok: dd.mm.yyyy** odpre prvi povezani dokument. Pretečen rok je poudarjen z barvo. Rok druge vrste zadnjega dogodka se prikaže pod nazivom soglasodajalca. Ko novi zadnji dogodek nima roka, prejšnji rok ni več prikazan.
 
 Stanje se izračuna iz zgodovine ob vsakem prikazu, zato se po dodanem, urejenem ali izbrisanem dogodku posodobi takoj. Dogodki se berejo po datumu (pri istem datumu po vrstnem redu vnosa); poznejši vnos zgodnejše vloge zadeve zato ne odpre znova. Odgovor (pogoji, mnenje, zahteva, drug odgovor), pri katerem ne izberete povezanega dogodka, se ob vnosu poveže z odprto vlogo: pogoji z najstarejšo, ostali z najnovejšo.
 
-Ko so projektni pogoji prejeti in vloga za mnenje še ni oddana, je stanje zadeve *Sledi vloga za mnenje*.
+Ko so projektni pogoji prejeti in za mnenje ni odprte vloge, je stanje zadeve *Pogoji prejeti*; ko je prejeto mnenje, je stanje *Mnenje prejeto*.
 
-Za prejete pogoje oziroma mnenje se v ustreznem stolpcu pokaže datum izdaje prvega povezanega dokumenta na zelenem ozadju. Datum ostane viden tudi po potrditvi ustreznosti in po poznejših dogodkih, dokler odgovora ne razveljavite. Datum je povezava na dokument; kljukice ni. Če dokument nima datuma, povezava prikaže pomišljaj.
+**Veljavnost.** Če je pri prejetih pogojih ali mnenju vpisan datum *Velja do* in je ta pretekel, je stanje zadeve *Veljavnost potekla* (rdeče), datum veljavnosti v stolpcu pa je rdeč. Mnenje s pretečeno veljavnostjo ne šteje med prejeta mnenja za pripravljenost za UE. Za podaljšanje evidentirajte novo vlogo oziroma novo mnenje z novim datumom veljavnosti.
+
+Za prejete pogoje oziroma mnenje se v ustreznem stolpcu pokaže datum izdaje prvega povezanega dokumenta na zelenem ozadju (pod njim *Velja do*, rdeče, če je veljavnost pretekla). Datum ostane viden tudi po potrditvi ustreznosti in po poznejših dogodkih, dokler odgovora ne razveljavite. Datum je povezava na dokument; kljukice ni. Če dokument nima datuma, povezava prikaže pomišljaj.
 
 ## Vrstni red soglasodajalcev
 

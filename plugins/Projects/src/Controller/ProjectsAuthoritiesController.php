@@ -478,6 +478,7 @@ class ProjectsAuthoritiesController extends AppController
                     'kind' => $event->kind,
                     'event_date' => $event->event_date,
                     'date_due' => $event->date_due,
+                    'date_valid' => $event->date_valid,
                     'descript' => $event->descript,
                 ]),
             ), $event->case_id);

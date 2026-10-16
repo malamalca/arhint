@@ -155,6 +155,12 @@ textarea#project-descript {
     color: #137333;
 }
 
+.authority-receipt:has(.expired) {
+    border-left-color: #b3261e;
+    background-color: #fce8e6;
+    color: #b3261e;
+}
+
 .authority-receipt a {
     color: inherit;
     text-decoration: underline;
@@ -185,6 +191,21 @@ textarea#project-descript {
 }
 
 .authority-status-supplement {
+    color: #b3261e;
+    font-weight: bold;
+}
+
+.authority-status-expired {
+    color: #b3261e;
+    font-weight: bold;
+}
+
+.authority-validity {
+    margin-top: 0.25em;
+    font-size: 0.85em;
+}
+
+.authority-validity.expired {
     color: #b3261e;
     font-weight: bold;
 }

@@ -41,10 +41,11 @@ class DocumentsUpnQr
             'namen_placila' => mb_substr($invoice->title ?? '', 0, 42),
             'rok_placila' => $invoice->dat_expire?->i18nFormat('dd.MM.yyyy') ?? '',
             'iban_prejemnika' => $invoice->issuer->iban,
+            // SI: prefix, two digit model and up to 22 characters of content (26 in total)
             'referenca_prejemnika' => mb_substr(
                 ($invoice->pmt_type ?? '') . ($invoice->pmt_module ?? '') . ($invoice->pmt_ref ?? ''),
                 0,
-                22,
+                SiReference::MAX_LENGTH,
             ),
             'ime_prejemnika' => mb_substr($invoice->issuer->title ?? '', 0, 33),
             'ulica_prejemnika' => mb_substr($invoice->issuer->street ?? '', 0, 33),

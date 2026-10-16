@@ -43,6 +43,11 @@ class AuthorityWorkflowTest extends TestCase
      */
     private function case(array $events): Entity
     {
+        // Events are numbered in the order in which they were recorded.
+        foreach (array_values($events) as $position => $event) {
+            $event->sequence ??= $position + 1;
+        }
+
         return new Entity([
             'id' => 'case', 'project_id' => 'project', 'title' => 'Elektro', 'revision' => 'r1',
             'exempt_reason' => null, 'events' => $events,

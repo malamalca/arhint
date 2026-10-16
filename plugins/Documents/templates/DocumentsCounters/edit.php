@@ -1,5 +1,6 @@
 <?php
 use Cake\Core\Configure;
+use Documents\Lib\SiReference;
 
 $attachedHeader = false;
 if (!empty($counter->header) && substr($counter->header, 0, 2) == '{"') {
@@ -142,6 +143,43 @@ $counter_edit = [
                     ],
                 ],
             ],
+            'pmt_mod' => [
+                'method' => 'control',
+                'parameters' => [
+                    'field' => 'pmt_mod',
+                    'options' => [
+                        'type' => 'text',
+                        'size' => 2,
+                        'label' => __d('documents', 'Reference Model') . ':',
+                        'default' => SiReference::MODEL_DEFAULT,
+                    ],
+                ],
+            ],
+            'pmt_mod_hint' => sprintf(
+                '<div class="helper-text">%s</div>',
+                __d(
+                    'documents',
+                    'Model of the generated reference: 12 (with check digit), 00, '
+                    . 'or RF for a creditor reference by ISO 11649.',
+                ),
+            ),
+            'pmt_ref' => [
+                'method' => 'control',
+                'parameters' => [
+                    'field' => 'pmt_ref',
+                    'options' => [
+                        'label' => __d('documents', 'Reference Template') . ':',
+                    ],
+                ],
+            ],
+            'pmt_ref_hint' => sprintf(
+                '<div class="helper-text">%s</div>',
+                __d(
+                    'documents',
+                    'Use [[no]], [[year]], [[month]] templates. '
+                    . 'Leave empty to use the year of issue and the document no.',
+                ),
+            ),
             'fs_pmt_end' => '</fieldset>',
 
             'fs_tax_start' => '<fieldset id="tax-confirmation">',

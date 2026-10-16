@@ -410,9 +410,9 @@ class InvoicesControllerTest extends TestCase
             'dat_expire' => '2015-02-16',
             'dat_approval' => null,
             'total' => 146.4,
-            'pmt_type' => 'OTHR',
-            'pmt_module' => 'SI12',
-            'pmt_ref' => '1234',
+            'pmt_type' => 'SI',
+            'pmt_module' => '12',
+            'pmt_ref' => '0000002026023',
             'invoices_taxes' => [
                 [
                     'id' => 1,
@@ -464,9 +464,9 @@ class InvoicesControllerTest extends TestCase
             'dat_expire' => '2015-02-16',
             'dat_approval' => null,
             'total' => 132.95,
-            'pmt_type' => 'OTHR',
-            'pmt_module' => 'SI12',
-            'pmt_ref' => '1234',
+            'pmt_type' => 'SI',
+            'pmt_module' => '12',
+            'pmt_ref' => '0000002026023',
             'invoices_taxes' => [
                 /*
                 // delete this item
@@ -542,8 +542,8 @@ class InvoicesControllerTest extends TestCase
             'dat_service' => '2015-02-08',
             'dat_expire' => '2015-02-16',
             'dat_approval' => null,
-            'pmt_type' => 'OTHR',
-            'pmt_module' => 'SI00',
+            'pmt_type' => 'SI',
+            'pmt_module' => '00',
             'pmt_ref' => '01',
             'invoices_items' => [
                 // edit items price
@@ -617,8 +617,8 @@ class InvoicesControllerTest extends TestCase
             'dat_service' => '2015-02-08',
             'dat_expire' => '2015-02-16',
             'dat_approval' => null,
-            'pmt_type' => 'OTHR',
-            'pmt_module' => 'SI00',
+            'pmt_type' => 'SI',
+            'pmt_module' => '00',
             'pmt_ref' => '01',
             'invoices_items' => [
                 // delete this item
@@ -1142,5 +1142,49 @@ class InvoicesControllerTest extends TestCase
                 unlink($pdfPath);
             }
         }
+    }
+
+    /**
+     * Test that payment reference fields are not edited on issued documents
+     *
+     * @return void
+     */
+    public function testEditPaymentReferenceFields()
+    {
+        $this->login(USER_ADMIN);
+
+        // a new issued document gets its reference from the counter on save
+        $this->get('/documents/invoices/edit?counter=1d53bc5b-de2d-4e85-b13b-81b39a97fc89');
+        $this->assertResponseOk();
+        $this->assertResponseNotContains('name="pmt_type"');
+        $this->assertResponseNotContains('name="pmt_module"');
+        $this->assertResponseNotContains('name="pmt_ref"');
+
+        // a saved issued document shows the reference it has
+        $this->get('/documents/invoices/edit/d0d59a31-6de7-4eb4-8230-ca09113a7fe6');
+        $this->assertResponseOk();
+        $this->assertResponseNotContains('name="pmt_ref"');
+        $this->assertResponseContains('SI00 01');
+
+        // a received document keeps the fields, its reference is the issuer\'s
+        $this->get('/documents/invoices/edit?counter=1d53bc5b-de2d-4e85-b13b-81b39a97fc88');
+        $this->assertResponseOk();
+        $this->assertResponseContains('name="pmt_type"');
+        $this->assertResponseContains('name="pmt_module"');
+        $this->assertResponseContains('name="pmt_ref"');
+    }
+
+    /**
+     * Test that the document view shows the payment reference
+     *
+     * @return void
+     */
+    public function testViewShowsPaymentReference()
+    {
+        $this->login(USER_ADMIN);
+
+        $this->get('/documents/invoices/view/d0d59a31-6de7-4eb4-8230-ca09113a7fe6');
+        $this->assertResponseOk();
+        $this->assertResponseContains('SI00 01');
     }
 }

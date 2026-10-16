@@ -43,7 +43,7 @@ class InvoicesFixture extends TestFixture
             'pmt_sepa_type' => 'OTHR',
             'pmt_type' => 'SI',
             'pmt_module' => '12',
-            'pmt_ref' => '1234',
+            'pmt_ref' => '0000002015129',
 
             'location' => 'Ljubljana',
             'created' => '2015-02-08 06:34:20',

@@ -925,6 +925,69 @@ class ProjectsAuthoritiesControllerTest extends TestCase
     }
 
     /**
+     * An opinion closes every application recorded before it, not only the one it is linked to.
+     *
+     * @return void
+     */
+    public function testOpinionAnswersEarlierApplications(): void
+    {
+        $id = $this->createCase();
+        $this->getTableLocator()->get('Documents.Documents')->updateAll(['project_id' => self::PROJECT], ['id' => self::DOCUMENT]);
+        $this->postEvent($id, ['kind' => 'submission', 'event_date' => '2026-09-01']);
+        $this->postEvent($id, ['kind' => 'submission', 'event_date' => '2026-10-13']);
+        $this->postEvent($id, [
+            'kind' => 'opinion', 'event_date' => '2026-10-13', 'document_ids' => [self::DOCUMENT],
+        ]);
+        $this->assertResponseCode(302);
+        $summary = $this->summary();
+        $this->assertSame('complete', $summary['rows'][$id]['status']);
+        $this->assertSame(1, $summary['complete']);
+        $this->get('/projects/projects/view/' . self::PROJECT . '?tab=authorities');
+        $this->assertResponseContains('Mnenje prejeto');
+        $this->assertResponseNotContains('Čakamo odgovor');
+        // A later application reopens the case.
+        $this->postEvent($id, ['kind' => 'submission', 'event_date' => '2026-10-14']);
+        $this->assertSame('waiting', $this->summary()['rows'][$id]['status']);
+    }
+
+    /**
+     * Received conditions and opinions can expire, which is shown in red and withdraws the opinion.
+     *
+     * @return void
+     */
+    public function testExpiredValidityIsShown(): void
+    {
+        $id = $this->createCase();
+        $this->getTableLocator()->get('Documents.Documents')->updateAll(['project_id' => self::PROJECT], ['id' => self::DOCUMENT]);
+        $this->postEvent($id, ['kind' => 'submission', 'event_date' => '2026-01-10']);
+        $this->postEvent($id, [
+            'kind' => 'opinion', 'event_date' => '2026-01-20', 'date_valid' => '2026-01-01',
+            'document_ids' => [self::DOCUMENT],
+        ]);
+        $this->assertResponseOk();
+        $this->postEvent($id, [
+            'kind' => 'opinion', 'event_date' => '2026-01-20', 'date_valid' => '2999-01-01',
+            'document_ids' => [self::DOCUMENT],
+        ]);
+        $this->assertResponseCode(302);
+
+        $this->assertSame('complete', $this->summary()['rows'][$id]['status']);
+        $event = $this->getTableLocator()->get('Projects.ProjectsAuthorityEvents')
+            ->find()->where(['case_id' => $id, 'kind' => 'opinion'])->firstOrFail();
+        $this->get('/projects/projects/view/' . self::PROJECT . '?tab=authorities');
+        $this->assertResponseContains('Velja do');
+        $this->getTableLocator()->get('Projects.ProjectsAuthorityEvents')
+            ->updateAll(['date_valid' => '2026-02-01'], ['id' => $event->id]);
+        $summary = $this->summary();
+        $this->assertSame('expired', $summary['rows'][$id]['status']);
+        $this->assertSame(0, $summary['complete']);
+        $this->assertFalse($summary['collected']);
+        $this->get('/projects/projects/view/' . self::PROJECT . '?tab=authorities');
+        $this->assertResponseContains('Veljavnost potekla');
+        $this->assertResponseContains('authority-status-expired');
+    }
+
+    /**
      * Received conditions without an application for the opinion show a follow-up status.
      *
      * @return void
@@ -937,7 +1000,7 @@ class ProjectsAuthoritiesControllerTest extends TestCase
         $this->assertResponseCode(302);
         $this->assertSame('followup', $this->summary()['rows'][$id]['status']);
         $this->get('/projects/projects/view/' . self::PROJECT . '?tab=authorities');
-        $this->assertResponseContains('Sledi vloga za mnenje');
+        $this->assertResponseContains('Pogoji prejeti');
         $this->postEvent($id, ['kind' => 'submission']);
         $this->assertSame('waiting', $this->summary()['rows'][$id]['status']);
     }

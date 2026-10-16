@@ -15,6 +15,7 @@ class ProjectsAuthorityEvent extends Entity
         'event_date' => true,
         'parent_id' => true,
         'date_due' => true,
+        'date_valid' => true,
         'descript' => true,
     ];
 }

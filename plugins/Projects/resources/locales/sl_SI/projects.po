@@ -784,6 +784,9 @@ msgstr "{0} zaključenih {1}"
 msgid "Conditions and opinions"
 msgstr "Pogoji in mnenja"
 
+msgid "Procedures"
+msgstr "Postopki"
+
 msgid "Not determined"
 msgstr "Ni določeno"
 
@@ -1176,3 +1179,15 @@ msgstr "Dogodka s povezanimi dogodki ni mogoče izbrisati. Najprej izbrišite po
 
 msgid "Application for opinion follows"
 msgstr "Sledi vloga za mnenje"
+
+msgid "Validity expired"
+msgstr "Veljavnost potekla"
+
+msgid "Valid until"
+msgstr "Velja do"
+
+msgid "Valid until (conditions / opinion)"
+msgstr "Velja do (pogoji / mnenje)"
+
+msgid "The validity date cannot be before the event date."
+msgstr "Datum veljavnosti ne sme biti pred datumom dogodka."

@@ -1131,9 +1131,6 @@ msgstr ""
 msgid "Reference"
 msgstr ""
 
-#: ./plugins/Documents/templates/Invoices/edit.php:463
-msgid "Use 'OTHR' for unknown payment type. Use prefix and two numers for module (eg SI00)."
-msgstr ""
 
 #: ./plugins/Documents/templates/Invoices/export_eracuni.php:22
 msgid "EXPORT: eRačuni"
@@ -1566,3 +1563,102 @@ msgstr ""
 msgid "TOTAL"
 msgstr ""
 
+#: ./plugins/Documents/src/Model/Table/InvoicesTable.php:160
+msgid "Payment reference type must be SI or RF."
+msgstr ""
+
+#: ./plugins/Documents/src/Model/Table/InvoicesTable.php:177
+msgid "Unknown payment reference model."
+msgstr ""
+
+#: ./plugins/Documents/src/Model/Table/InvoicesTable.php:199
+msgid "Payment reference model is missing or unknown."
+msgstr ""
+
+#: ./plugins/Documents/src/Model/Table/InvoicesTable.php:274
+msgid "Model 99 is used without a reference."
+msgstr ""
+
+#: ./plugins/Documents/src/Model/Table/InvoicesTable.php:275
+msgid "Reference may only contain digits and up to two hyphens."
+msgstr ""
+
+#: ./plugins/Documents/src/Model/Table/InvoicesTable.php:276
+msgid "Reference is limited to {0} characters."
+msgstr ""
+
+#: ./plugins/Documents/src/Model/Table/InvoicesTable.php:279
+msgid "Reference is limited to {0} digits."
+msgstr ""
+
+#: ./plugins/Documents/src/Model/Table/InvoicesTable.php:282
+msgid "Number of reference parts does not match the model."
+msgstr ""
+
+#: ./plugins/Documents/src/Model/Table/InvoicesTable.php:285
+msgid "Reference part is limited to {0} digits, model 12 requires exactly {1}."
+msgstr ""
+
+#: ./plugins/Documents/src/Model/Table/InvoicesTable.php:290
+msgid "Second and third reference part are written without leading zeros."
+msgstr ""
+
+#: ./plugins/Documents/src/Model/Table/InvoicesTable.php:292
+msgid "Reference check digit is not correct."
+msgstr ""
+
+#: ./plugins/Documents/src/Model/Table/InvoicesTable.php:293
+msgid "Invalid reference for the selected model."
+msgstr ""
+
+#: ./plugins/Documents/src/Model/Table/DocumentsCountersTable.php:64
+msgid "Use digits, hyphens and [[no]], [[year]], [[month]] templates."
+msgstr ""
+
+#: ./plugins/Documents/templates/DocumentsCounters/edit.php:153
+msgid "Reference Model"
+msgstr ""
+
+#: ./plugins/Documents/templates/DocumentsCounters/edit.php:171
+msgid "Reference Template"
+msgstr ""
+
+#: ./plugins/Documents/templates/DocumentsCounters/edit.php:179
+msgid "Use [[no]], [[year]], [[month]] templates. Leave empty to use the year of issue and the document no."
+msgstr ""
+
+#: ./plugins/Documents/templates/Invoices/edit.php:470
+msgid "Type is SI or RF, module is the two digit reference model (eg 12). Leave the reference empty to generate it from the document number."
+msgstr ""
+
+#: ./plugins/Documents/src/Model/Table/InvoicesTable.php:168
+msgid "Reference check digits must be two digits."
+msgstr ""
+
+#: ./plugins/Documents/src/Model/Table/InvoicesTable.php:306
+msgid "RF reference may only contain digits and letters."
+msgstr ""
+
+#: ./plugins/Documents/src/Model/Table/InvoicesTable.php:307
+msgid "RF reference is limited to {0} characters."
+msgstr ""
+
+#: ./plugins/Documents/src/Model/Table/InvoicesTable.php:310
+msgid "RF reference check digits are not correct."
+msgstr ""
+
+#: ./plugins/Documents/src/Model/Table/InvoicesTable.php:311
+msgid "Invalid RF reference."
+msgstr ""
+
+#: ./plugins/Documents/src/Model/Table/DocumentsCountersTable.php:59
+msgid "Only reference models 00, 12 and RF can be generated."
+msgstr ""
+
+#: ./plugins/Documents/templates/DocumentsCounters/edit.php:162
+msgid "Model of the generated reference: 12 (with check digit), 00, or RF for a creditor reference by ISO 11649."
+msgstr ""
+
+#: ./plugins/Documents/templates/Invoices/edit.php:496
+msgid "The reference is generated from the document number when the document is saved."
+msgstr ""

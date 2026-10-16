@@ -15,6 +15,8 @@ use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
 use Cake\Routing\Router;
 use Cake\Validation\Validator;
+use Documents\Lib\RfReference;
+use Documents\Lib\SiReference;
 use Documents\Model\Entity\Invoice;
 use Throwable;
 
@@ -153,10 +155,161 @@ class InvoicesTable extends Table
             ->allowEmptyString('total')
 
             ->allowEmptyString('pmt_type')
+            ->add('pmt_type', 'knownType', [
+                'rule' => fn($value) => in_array(strtoupper((string)$value), ['SI', 'RF'], true),
+                'message' => __d('documents', 'Payment reference type must be SI or RF.'),
+            ])
             ->allowEmptyString('pmt_module')
-            ->allowEmptyString('pmt_ref');
+            ->add('pmt_module', 'knownModel', [
+                'rule' => function ($value, $context) {
+                    if ($this->isRfReference($context)) {
+                        return preg_match('/^\d{2}$/', trim((string)$value)) === 1
+                            ? true
+                            : __d('documents', 'Reference check digits must be two digits.');
+                    }
+
+                    if (!$this->isSiReference($context)) {
+                        return true;
+                    }
+
+                    return SiReference::normalizeModel((string)$value) !== null
+                        ? true
+                        : __d('documents', 'Unknown payment reference model.');
+                },
+            ])
+            ->allowEmptyString('pmt_ref')
+            ->add('pmt_ref', 'validReference', [
+                'rule' => function ($value, $context) {
+                    if ($this->isRfReference($context)) {
+                        $error = RfReference::validateContent(
+                            (string)($context['data']['pmt_module'] ?? ''),
+                            (string)$value,
+                            !$this->isReceivedDocument($context),
+                        );
+
+                        return $error === null ? true : $this->rfReferenceErrorMessage($error);
+                    }
+
+                    if (!$this->isSiReference($context)) {
+                        return true;
+                    }
+
+                    $model = SiReference::normalizeModel((string)($context['data']['pmt_module'] ?? ''));
+                    if ($model === null) {
+                        return __d('documents', 'Payment reference model is missing or unknown.');
+                    }
+
+                    // a reference of a received document is the issuer's, so its check
+                    // digits are not verified and cannot keep the document from being saved
+                    $error = SiReference::validateContent(
+                        $model,
+                        (string)$value,
+                        !$this->isReceivedDocument($context),
+                    );
+
+                    return $error === null ? true : $this->referenceErrorMessage($error);
+                },
+            ]);
 
         return $validator;
+    }
+
+    /**
+     * Type of the validated payment reference (SI, RF or empty).
+     *
+     * @param array<string, mixed> $context Validation context.
+     * @return string
+     */
+    protected function referenceType(array $context): string
+    {
+        $data = (array)($context['data'] ?? []);
+
+        return strtoupper(trim((string)($data['pmt_type'] ?? '')));
+    }
+
+    /**
+     * Checks if validated payment data is a Slovenian reference (SI).
+     *
+     * @param array<string, mixed> $context Validation context.
+     * @return bool
+     */
+    protected function isSiReference(array $context): bool
+    {
+        return $this->referenceType($context) === SiReference::PREFIX;
+    }
+
+    /**
+     * Checks if validated payment data is a creditor reference by ISO 11649 (RF).
+     *
+     * @param array<string, mixed> $context Validation context.
+     * @return bool
+     */
+    protected function isRfReference(array $context): bool
+    {
+        return $this->referenceType($context) === RfReference::PREFIX;
+    }
+
+    /**
+     * Checks if the validated document belongs to a counter of received documents.
+     *
+     * @param array<string, mixed> $context Validation context.
+     * @return bool
+     */
+    protected function isReceivedDocument(array $context): bool
+    {
+        $entity = $context['entity'] ?? null;
+
+        return $entity instanceof Invoice && ($entity->documents_counter->direction ?? null) === 'received';
+    }
+
+    /**
+     * Error message for a broken rule of the Slovenian reference (SI).
+     *
+     * @param string $error One of the \Documents\Lib\SiReference ERROR_* constants.
+     * @return string
+     */
+    protected function referenceErrorMessage(string $error): string
+    {
+        return match ($error) {
+            SiReference::ERROR_NOT_EMPTY => __d('documents', 'Model 99 is used without a reference.'),
+            SiReference::ERROR_CHARS => __d('documents', 'Reference may only contain digits and up to two hyphens.'),
+            SiReference::ERROR_LENGTH => __d('documents', 'Reference is limited to {0} characters.', [
+                SiReference::MAX_CONTENT_LENGTH,
+            ]),
+            SiReference::ERROR_DIGITS => __d('documents', 'Reference is limited to {0} digits.', [
+                SiReference::MAX_CONTENT_DIGITS,
+            ]),
+            SiReference::ERROR_PARTS => __d('documents', 'Number of reference parts does not match the model.'),
+            SiReference::ERROR_PART_LENGTH => __d(
+                'documents',
+                'Reference part is limited to {0} digits, model 12 requires exactly {1}.',
+                [SiReference::MAX_PART_DIGITS, SiReference::MODEL_12_DIGITS],
+            ),
+            SiReference::ERROR_LEADING_ZEROS => __d(
+                'documents',
+                'Second and third reference part are written without leading zeros.',
+            ),
+            SiReference::ERROR_CHECK_DIGIT => __d('documents', 'Reference check digit is not correct.'),
+            default => __d('documents', 'Invalid reference for the selected model.'),
+        };
+    }
+
+    /**
+     * Error message for a broken rule of the creditor reference by ISO 11649 (RF).
+     *
+     * @param string $error One of the \Documents\Lib\RfReference ERROR_* constants.
+     * @return string
+     */
+    protected function rfReferenceErrorMessage(string $error): string
+    {
+        return match ($error) {
+            RfReference::ERROR_CHARS => __d('documents', 'RF reference may only contain digits and letters.'),
+            RfReference::ERROR_LENGTH => __d('documents', 'RF reference is limited to {0} characters.', [
+                RfReference::MAX_CONTENT_LENGTH,
+            ]),
+            RfReference::ERROR_CHECK_DIGITS => __d('documents', 'RF reference check digits are not correct.'),
+            default => __d('documents', 'Invalid RF reference.'),
+        };
     }
 
     /**

@@ -43,6 +43,7 @@ class ProjectsAuthorityEventsTable extends Table
             ->date('event_date')->requirePresence('event_date', 'create')->notEmptyDate('event_date')
             ->uuid('parent_id')->allowEmptyString('parent_id')
             ->date('date_due')->allowEmptyDate('date_due')
+            ->date('date_valid')->allowEmptyDate('date_valid')
             ->scalar('descript')->allowEmptyString('descript');
     }
 
@@ -71,6 +72,12 @@ class ProjectsAuthorityEventsTable extends Table
         }, 'dueAfterEvent', ['errorField' => 'date_due', 'message' => __d(
             'projects',
             'The due date cannot be before the event date.',
+        )]);
+        $rules->add(function ($entity) {
+            return !$entity->date_valid || self::day($entity->date_valid) >= self::day($entity->event_date);
+        }, 'validAfterEvent', ['errorField' => 'date_valid', 'message' => __d(
+            'projects',
+            'The validity date cannot be before the event date.',
         )]);
         $rules->add(function ($entity) {
             if (!$entity->parent_id) {

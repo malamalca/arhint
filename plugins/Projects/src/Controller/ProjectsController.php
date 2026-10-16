@@ -192,7 +192,7 @@ class ProjectsController extends AppController
 
         $this->set(compact('project', 'logs', 'users', 'projectsStatuses', 'workDuration', 'milestones'));
 
-        if ($this->getRequest()->getQuery('tab') === 'authorities') {
+        if ($this->getRequest()->getQuery('tab', 'authorities') === 'authorities') {
             $workflow = new AuthorityWorkflow();
             $authorityCases = $workflow->cases($project->id);
             $authorityReviews = $this->fetchTable('Projects.ProjectsAuthorityReviews')->find()

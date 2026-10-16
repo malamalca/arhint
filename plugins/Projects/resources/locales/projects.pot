@@ -696,6 +696,9 @@ msgstr ""
 msgid "Conditions and opinions"
 msgstr ""
 
+msgid "Procedures"
+msgstr ""
+
 msgid "Not determined"
 msgstr ""
 
@@ -1087,4 +1090,16 @@ msgid "An event with related events cannot be deleted. Delete the related events
 msgstr ""
 
 msgid "Application for opinion follows"
+msgstr ""
+
+msgid "Validity expired"
+msgstr ""
+
+msgid "Valid until"
+msgstr ""
+
+msgid "Valid until (conditions / opinion)"
+msgstr ""
+
+msgid "The validity date cannot be before the event date."
 msgstr ""

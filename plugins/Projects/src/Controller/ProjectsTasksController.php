@@ -126,6 +126,7 @@ class ProjectsTasksController extends AppController
                     'controller' => 'Projects',
                     'action' => 'view',
                     $projectsTask->project_id,
+                    '?' => ['tab' => 'milestones'],
                 ]));
             } else {
                 if ($isJson) {

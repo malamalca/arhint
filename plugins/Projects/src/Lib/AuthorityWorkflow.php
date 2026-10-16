@@ -4,9 +4,9 @@ declare(strict_types=1);
 namespace Projects\Lib;
 
 use Cake\Datasource\EntityInterface;
+use Cake\I18n\Date;
 use Cake\ORM\Entity;
 use Cake\ORM\TableRegistry;
-use DateTimeInterface;
 
 /**
  * Derive procedure state from immutable events, not editable status fields.
@@ -38,8 +38,9 @@ class AuthorityWorkflow
             'unsubmitted' => __d('projects', 'Not submitted'),
             'waiting' => __d('projects', 'Waiting for response'),
             'supplement' => __d('projects', 'Supplement required'),
-            'complete' => __d('projects', 'Completed'),
-            'followup' => __d('projects', 'Application for opinion follows'),
+            'complete' => __d('projects', 'Opinion received'),
+            'followup' => __d('projects', 'Conditions received'),
+            'expired' => __d('projects', 'Validity expired'),
             'exempt' => __d('projects', 'Not required'),
         ];
     }
@@ -221,6 +222,22 @@ class AuthorityWorkflow
     }
 
     /**
+     * Received conditions or an opinion whose last day of validity has passed.
+     *
+     * @param \Cake\Datasource\EntityInterface|null $response Received conditions or opinion.
+     * @return bool
+     */
+    public static function isExpired(?EntityInterface $response): bool
+    {
+        $valid = $response?->date_valid;
+        if (!$valid) {
+            return false;
+        }
+
+        return self::day($valid) < Date::today()->format('Y-m-d');
+    }
+
+    /**
      * A received opinion completes the procedure; a new submission or request reopens it
      * until it is answered again.
      *
@@ -262,6 +279,14 @@ class AuthorityWorkflow
                     $this->answer($pending, $event);
                     break;
             }
+        }
+        // An opinion answers every application recorded before it, even one dated later than the
+        // opinion itself (a response is often entered after the application, with the document's older date).
+        if ($received && $expectedKind === 'opinion') {
+            $pending = array_filter(
+                $pending,
+                fn($event) => (int)$event->sequence > (int)$received->sequence,
+            );
         }
         $state = $received ? 'complete' : 'unsubmitted';
         if ($pending) {
@@ -321,6 +346,17 @@ class AuthorityWorkflow
     }
 
     /**
+     * @param mixed $date Date object or ISO date string.
+     * @return string Y-m-d
+     */
+    private static function day(mixed $date): string
+    {
+        // Cake's Date is not a DateTimeInterface and its string form is localized.
+        return is_object($date) && method_exists($date, 'format') ?
+            $date->format('Y-m-d') : substr((string)$date, 0, 10);
+    }
+
+    /**
      * Sort by event date, keeping the recorded order of events on the same day.
      *
      * @param array<\Cake\Datasource\EntityInterface> $events Events in recorded order.
@@ -328,11 +364,7 @@ class AuthorityWorkflow
      */
     private function chronological(array $events): array
     {
-        $day = function (EntityInterface $event): string {
-            $date = $event->event_date;
-
-            return $date instanceof DateTimeInterface ? $date->format('Y-m-d') : substr((string)$date, 0, 10);
-        };
+        $day = fn(EntityInterface $event): string => self::day($event->event_date);
         $indexed = [];
         foreach (array_values($events) as $position => $event) {
             $indexed[] = [$day($event), $position, $event];
@@ -377,9 +409,19 @@ class AuthorityWorkflow
             $dgd = $this->phase($case, 'DGD');
             $isExempt = self::isExempt($case);
             $status = $isExempt ? 'exempt' : $dgd['state'];
-            // Conditions are in, nothing has been submitted for the opinion yet.
-            if ($status === 'unsubmitted' && $dpp['received']) {
+            // Conditions answer the applications recorded before them; if nothing newer is open, they are in.
+            if (
+                !$isExempt && !$dgd['received'] && $dpp['received'] && $status !== 'supplement' && !array_filter(
+                    $dgd['pending'],
+                    fn($event) => (int)$event->sequence > (int)$dpp['received']->sequence,
+                )
+            ) {
                 $status = 'followup';
+            }
+            if ($status === 'complete' && self::isExpired($dgd['received'])) {
+                $status = 'expired';
+            } elseif ($status === 'followup' && self::isExpired($dpp['received'])) {
+                $status = 'expired';
             }
             $rows[$case->id] = ['DPP' => $dpp, 'DGD' => $dgd, 'status' => $status];
             if ($isExempt) {
@@ -390,7 +432,7 @@ class AuthorityWorkflow
                 $determined = false;
             }
             $required++;
-            if ($dgd['state'] === 'complete') {
+            if ($dgd['state'] === 'complete' && !self::isExpired($dgd['received'])) {
                 $complete++;
             } else {
                 $missing[] = $case->title;

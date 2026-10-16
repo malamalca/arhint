@@ -52,7 +52,8 @@ foreach ($case->events as $event) {
         'date' => h((string)$event->event_date),
         'kind' => h($event->sequence . '. ' . AuthorityWorkflow::kinds()[$event->kind]) .
             (!in_array($event->id, $selectableIds, true) ? '<br>' . h(__d('projects', 'Invalidated')) : ''),
-        'details' => nl2br(h($event->descript ?? '')) . '<br>' . h((string)$event->date_due),
+        'details' => nl2br(h($event->descript ?? '')) . '<br>' . h((string)$event->date_due) .
+            ($event->date_valid ? '<br>' . h(__d('projects', 'Valid until') . ': ' . $event->date_valid) : ''),
         'documents' => $documents,
         'author' => h($event->user->name ?? '') . '<br>' . h((string)$event->created),
         'edit' => $eventActions,

@@ -8,6 +8,8 @@ use Cake\I18n\DateTime;
 use Cake\ORM\Query\SelectQuery;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
+use Documents\Lib\RfReference;
+use Documents\Lib\SiReference;
 
 /**
  * DocumentsCounters Model
@@ -49,6 +51,18 @@ class DocumentsCountersTable extends Table
             ->notEmptyString('counter')
             ->allowEmptyString('title')
             ->allowEmptyString('mask')
+
+            ->allowEmptyString('pmt_mod')
+            ->add('pmt_mod', 'generatedModel', [
+                'rule' => fn($value) => SiReference::canGenerate((string)$value)
+                    || RfReference::isSelected((string)$value),
+                'message' => __d('documents', 'Only reference models 00, 12 and RF can be generated.'),
+            ])
+            ->allowEmptyString('pmt_ref')
+            ->add('pmt_ref', 'template', [
+                'rule' => fn($value) => preg_match('/^(\d|-|\[\[(year|month|no)\]\])+$/', (string)$value) === 1,
+                'message' => __d('documents', 'Use digits, hyphens and [[no]], [[year]], [[month]] templates.'),
+            ])
 
             ->allowEmptyString('template_descript')
             ->allowEmptyString('tpl_title')

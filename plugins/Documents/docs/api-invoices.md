@@ -61,7 +61,7 @@ elementi.
 | Datum izdaje | `S_DTM` `D_2005 = 137` | Privzeto današnji datum. |
 | Datum storitve | `S_DTM` `D_2005 = 35` | Privzeto datum izdaje. |
 | Datum zapadlosti | `G_SG8/S_DTM` `D_2005 = 13` | Privzeto datum izdaje + rok plačila števca (8 dni). |
-| Sklic | `G_SG1/S_RFF/C_C506` `D_1153 = PQ`, `D_1154` | Npr. `SI00123456` → model `SI00`, sklic `123456`. |
+| Sklic | `G_SG1/S_RFF/C_C506` `D_1153 = PQ`, `D_1154` | Npr. `SI00123456` → vrsta `SI`, model `00`, sklic `123456`. Mora ustrezati [pravilom sklica](sklic-si.md) (SI ali RF); brez sklica se ta ustvari iz številke računa. |
 | Kupec | `G_SG2/S_NAD` `D_3035 = BY` | `C_C080/D_3036` naziv (obvezen), `C_C059/D_3042` ulica, `D_3164` kraj, `D_3251` pošta, `D_3207` država |
 | Davčna št. kupca | `G_SG2/G_SG3/S_RFF` `D_1153 = VA`, `D_1154` | Pošlje se tudi FURS. |
 | E-pošta kupca | `G_SG2/G_SG5/S_COM/C_C076/D_3148` | |

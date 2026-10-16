@@ -2,9 +2,11 @@
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
 use Cake\Routing\Router;
+use Documents\Lib\SiReference;
 
 $client = $document->documents_counter->direction == 'issued' ? 'receiver' : 'issuer';
 $counter = $document->documents_counter;
+$pmtModule = SiReference::normalizeModel($counter->pmt_mod) ?? SiReference::MODEL_DEFAULT;
 
 if ($document->isNew()) {
     $layoutTitle = __d(
@@ -438,7 +440,7 @@ $paymentDetails = [
             'field' => 'pmt_module',
             'options' => [
                 'type' => 'text', 'size' => 2,
-                'default' => '00',
+                'default' => $pmtModule,
                 'label' => __d('documents', 'MOD') . ':',
                 'error' => [
                     'format' => __d('documents', 'Invalid format'),
@@ -453,7 +455,6 @@ $paymentDetails = [
             'field' => 'pmt_ref',
             'options' => [
                 'type' => 'text',
-                'default' => '0',
                 'label' => __d('documents', 'Reference') . ':',
                 'error' => [
                     'empty' => __d('documents', 'Blank'),
@@ -464,10 +465,38 @@ $paymentDetails = [
     'fs_payment_table_end' => '</td></tr></table>',
     'fs_payment_hint' => sprintf(
         '<div class="helper-text">%s</div>',
-        __d('documents', 'Use \'OTHR\' for unknown payment type. Use prefix and two numers for module (eg SI00).')
+        __d(
+            'documents',
+            'Type is SI or RF, module is the two digit reference model (eg 12). '
+            . 'Leave the reference empty to generate it from the document number.',
+        ),
     ),
     'fs_payment_end' => '</fieldset>',
 ];
+
+// An issued document gets its reference from the counter, so the fields are not edited;
+// an older document without a reference keeps them, otherwise it could not get one.
+if ($counter->direction == 'issued' && ($document->isNew() || !empty($document->pmt_ref))) {
+    foreach ([
+        'fs_payment_table_start',
+        'pmt_type',
+        'fs_payment_col1',
+        'pmt_module',
+        'fs_payment_col2',
+        'pmt_ref',
+        'fs_payment_table_end',
+        'fs_payment_hint',
+    ] as $paymentLine) {
+        unset($paymentDetails[$paymentLine]);
+    }
+
+    $paymentDetails['fs_payment_reference'] = sprintf(
+        '<div class="helper-text">%s</div>',
+        empty($document->pmt_ref)
+            ? __d('documents', 'The reference is generated from the document number when the document is saved.')
+            : __d('documents', 'Reference') . ': ' . h($document->paymentReference(true)),
+    );
+}
 
 $this->Lil->insertIntoArray($documentEdit['form']['lines'], $paymentDetails, ['before' => 'fs_descript_start']);
 

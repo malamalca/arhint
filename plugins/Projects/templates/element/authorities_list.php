@@ -50,7 +50,14 @@ foreach ($cases as $case) {
                 ) : '—';
                 $html = '<div class="authority-receipt"><strong>' . $this->Html->link($date, [
                     'plugin' => 'Documents', 'controller' => 'Documents', 'action' => 'view', $firstLink->document_id,
-                ], ['title' => AuthorityWorkflow::kinds()[$kind]]) . '</strong></div>';
+                ], ['title' => AuthorityWorkflow::kinds()[$kind]]) . '</strong>';
+                if ($received->date_valid) {
+                    $expired = AuthorityWorkflow::isExpired($received);
+                    $html .= '<div class="authority-validity' . ($expired ? ' expired' : '') . '">' .
+                        h($expired ? __d('projects', 'Validity expired') : __d('projects', 'Valid until')) . ': ' .
+                        h($this->Time->i18nFormat($received->date_valid, 'dd.MM.yyyy')) . '</div>';
+                }
+                $html .= '</div>';
             }
         }
         $columns[$kind] = ['html' => $html, 'params' => ['class' => 'center-align']];

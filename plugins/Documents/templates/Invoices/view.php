@@ -307,6 +307,10 @@ $invoiceView = [
                     'label' => __d('documents', 'Expiration date') . ':',
                     'text' => (string)$document->dat_expire,
                 ],
+                'reference' => empty($document->pmt_ref) ? null : [
+                    'label' => __d('documents', 'Reference') . ':',
+                    'text' => h($document->paymentReference(true)),
+                ],
                 3 => empty($document->dat_approval) ? null : [
                     'label' => __d('documents', 'Approval date') . ':',
                     'text' => (string)$document->dat_approval,

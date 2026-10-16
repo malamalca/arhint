@@ -4,8 +4,11 @@ declare(strict_types=1);
 namespace Documents\Model\Entity;
 
 use App\Lib\AISerializableInterface;
+use Cake\I18n\Date;
 use Cake\ORM\Entity;
 use Cake\ORM\TableRegistry;
+use Documents\Lib\RfReference;
+use Documents\Lib\SiReference;
 
 /**
  * Invoice Entity.
@@ -86,8 +89,141 @@ class Invoice extends Entity implements AISerializableInterface
             $this->no = (string)$DocumentsCounters->generateNo($counter->toArray());
         }
 
+        $this->generatePaymentReference($counter);
+
         // update counter
         $DocumentsCounters->updateAll(['counter' => $counter->counter + 1], ['id' => $counter->id]);
+    }
+
+    /**
+     * Payment reference of the document, built from its three payment fields.
+     *
+     * The electronic form is written without spaces and goes into the UPN QR, eSlog and
+     * SEPA. The form the reference is written in separates the type and the model from the
+     * content (SI12 0000002026023); an RF reference is written in groups of four
+     * characters (RF71 2348 231).
+     *
+     * @param bool $visual Reference in the form it is written in.
+     * @return string
+     */
+    public function paymentReference(bool $visual = false): string
+    {
+        $type = (string)$this->pmt_type . (string)$this->pmt_module;
+        $content = (string)$this->pmt_ref;
+
+        if (!$visual || $content === '') {
+            return $type . $content;
+        }
+
+        if (RfReference::isSelected($this->pmt_type)) {
+            return RfReference::visual($type . $content);
+        }
+
+        return trim($type . ' ' . $content);
+    }
+
+    /**
+     * Fills payment type, model and reference with a generated payment reference.
+     *
+     * A Slovenian reference (SI) is generated, or a creditor reference by ISO 11649 when
+     * the counter's `pmt_mod` is RF. Only issued documents with an empty reference are
+     * filled, so an imported or a hand entered reference is never overwritten. The
+     * reference is derived from the document number, which makes it the same every time it
+     * is generated for the same document.
+     *
+     * @param \Documents\Model\Entity\DocumentsCounter $counter Counter of this document.
+     * @return void
+     */
+    public function generatePaymentReference(DocumentsCounter $counter): void
+    {
+        if ($counter->direction !== 'issued' || !empty($this->pmt_ref)) {
+            return;
+        }
+
+        if (RfReference::isSelected($counter->pmt_mod)) {
+            $this->generateRfReference($counter);
+
+            return;
+        }
+
+        $this->generateSiReference($counter);
+    }
+
+    /**
+     * Fills the payment fields with a Slovenian reference (SI).
+     *
+     * @param \Documents\Model\Entity\DocumentsCounter $counter Counter of this document.
+     * @return void
+     */
+    protected function generateSiReference(DocumentsCounter $counter): void
+    {
+        $model = SiReference::normalizeModel($counter->pmt_mod) ?? SiReference::MODEL_DEFAULT;
+        $content = SiReference::generate($model, $this->paymentReferenceContent($counter, true));
+
+        if ($content === null) {
+            return;
+        }
+
+        $this->pmt_type = SiReference::PREFIX;
+        $this->pmt_module = $model;
+        $this->pmt_ref = $content;
+    }
+
+    /**
+     * Fills the payment fields with a creditor reference by ISO 11649 (RF).
+     *
+     * @param \Documents\Model\Entity\DocumentsCounter $counter Counter of this document.
+     * @return void
+     */
+    protected function generateRfReference(DocumentsCounter $counter): void
+    {
+        $content = substr(
+            $this->paymentReferenceContent($counter, false),
+            -RfReference::MAX_CONTENT_LENGTH,
+        );
+        $checkDigits = RfReference::checkDigits($content);
+
+        if ($checkDigits === null) {
+            return;
+        }
+
+        $this->pmt_type = RfReference::PREFIX;
+        $this->pmt_module = $checkDigits;
+        $this->pmt_ref = RfReference::normalizeContent($content);
+    }
+
+    /**
+     * Content the generated reference is built from.
+     *
+     * Counter's `pmt_ref` template is used when set, otherwise the document number,
+     * prefixed with the year of issue when it does not start with it already. Characters
+     * that the reference does not allow are dropped: an SI reference keeps the digits, an
+     * RF reference the digits and the letters.
+     *
+     * @param \Documents\Model\Entity\DocumentsCounter $counter Counter of this document.
+     * @param bool $digitsOnly Keep the digits only.
+     * @return string
+     */
+    protected function paymentReferenceContent(DocumentsCounter $counter, bool $digitsOnly): string
+    {
+        $no = (string)$this->no;
+        $date = $this->dat_issue ?? Date::now();
+        $year = (string)$date->i18nFormat('yyyy');
+        $drop = $digitsOnly ? '/\D/' : '/[^A-Za-z0-9]/';
+
+        if (!empty($counter->pmt_ref)) {
+            return strtoupper((string)preg_replace($drop, '', strtr($counter->pmt_ref, [
+                '[[year]]' => $year,
+                '[[month]]' => (string)$date->i18nFormat('MM'),
+                '[[no]]' => $no,
+            ])));
+        }
+
+        $content = strtoupper(
+            (string)preg_replace($drop, '', $no !== '' ? $no : (string)$this->counter),
+        );
+
+        return str_starts_with($content, $year) ? $content : $year . $content;
     }
 
     /**
