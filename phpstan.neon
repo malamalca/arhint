@@ -24,12 +24,6 @@ parameters:
         - vendor/cakephp/cakephp/src/functions.php
     excludePaths:
         - src/Console/Installer.php
-        - src/Lib/DAV/ArhintPrincipalBackend.php
-        - plugins/Crm/src/Lib/ActiveSyncContacts.php
-        - plugins/Crm/src/Lib/SabreDAVSyncContacts.php
-        - plugins/Calendar/src/Lib/SabreDAVSyncCalendars.php
-        - plugins/Tasks/src/Lib/ActiveSyncTasks.php
-        - plugins/Calendar/src/Lib/ActiveSyncCalendar.php
     paths:
         - src/
         - plugins/Calendar/src/

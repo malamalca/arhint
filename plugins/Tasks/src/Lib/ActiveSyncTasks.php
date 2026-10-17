@@ -3,9 +3,12 @@ declare(strict_types=1);
 
 namespace Tasks\Lib;
 
+use Cake\Core\Configure;
+use Cake\I18n\DateTime as CakeDateTime;
 use Cake\Log\Log;
 use Cake\ORM\TableRegistry;
 use DateTime;
+use DateTimeZone;
 use Syncroton_Backend_IContent;
 use Syncroton_Command_FolderSync;
 use Syncroton_Data_IData;
@@ -21,6 +24,7 @@ use Syncroton_Model_ISyncState;
 use Syncroton_Model_SyncCollection;
 use Syncroton_Model_Task;
 use Syncroton_Registry;
+use Tasks\Model\Entity\Task;
 use Zend_Db_Adapter_Abstract;
 
 class ActiveSyncTasks implements Syncroton_Data_IData
@@ -66,7 +70,7 @@ class ActiveSyncTasks implements Syncroton_Data_IData
      * @param \Syncroton_Model_IDevice $_device Device interface
      * @param \DateTime $_timeStamp Timestamp
      */
-    public function __construct(?Syncroton_Model_IDevice $_device = null, ?DateTime $_timeStamp = null)
+    public function __construct(Syncroton_Model_IDevice $_device, DateTime $_timeStamp)
     {
         $this->_device = $_device;
         $this->_timeStamp = $_timeStamp;
@@ -83,6 +87,67 @@ class ActiveSyncTasks implements Syncroton_Data_IData
     }
 
     /**
+     * Fetches a task belonging to the current owner.
+     *
+     * @param string $serverId Task id.
+     * @throws \Syncroton_Exception_NotFound
+     * @return \Tasks\Model\Entity\Task
+     */
+    protected function fetchTask(string $serverId): Task
+    {
+        /** @var \Tasks\Model\Table\TasksTable $Tasks */
+        $Tasks = TableRegistry::getTableLocator()->get('Tasks.Tasks');
+        /** @var \Tasks\Model\Entity\Task|null $task */
+        $task = $Tasks->find()
+            ->where([
+                'Tasks.id' => $serverId,
+                'Tasks.owner_id IS' => $this->_ownerId,
+            ])
+            ->first();
+
+        if ($task === null) {
+            throw new Syncroton_Exception_NotFound(sprintf('entry %s not found', $serverId));
+        }
+
+        return $task;
+    }
+
+    /**
+     * Converts an UTC timestamp coming from ActiveSync into the string format
+     * used by the datetime columns of the application.
+     *
+     * The ORM writes datetimes as wall clock time of App.defaultTimezone, so
+     * timestamps from Syncroton (always UTC) have to be converted before they
+     * are compared against a column value.
+     *
+     * @param \DateTime $timeStamp UTC timestamp.
+     * @return string
+     */
+    protected function toDbTime(DateTime $timeStamp): string
+    {
+        $converted = clone $timeStamp;
+        $converted->setTimezone(
+            new DateTimeZone(Configure::read('App.defaultTimezone', date_default_timezone_get())),
+        );
+
+        return $converted->format('Y-m-d H:i:s');
+    }
+
+    /**
+     * Converts an UTC timestamp coming from ActiveSync into an entity value
+     * carrying the application timezone, so it gets stored the same way as a
+     * timestamp written by the web interface.
+     *
+     * @param \DateTime $timeStamp UTC timestamp.
+     * @return \Cake\I18n\DateTime
+     */
+    protected function toAppTime(DateTime $timeStamp): CakeDateTime
+    {
+        return (new CakeDateTime($timeStamp))
+            ->setTimezone(Configure::read('App.defaultTimezone', date_default_timezone_get()));
+    }
+
+    /**
      * Returns Syncroton_Model_Task from Tasks\Task entity.
      *
      * @param \Syncroton_Model_SyncCollection $collection Task entry.
@@ -91,28 +156,25 @@ class ActiveSyncTasks implements Syncroton_Data_IData
      */
     public function getEntry(Syncroton_Model_SyncCollection $collection, $serverId): bool|Syncroton_Model_Task
     {
-        /** @var \Tasks\Model\Table\TasksTable $Tasks */
-        $Tasks = TableRegistry::getTableLocator()->get('Tasks.Tasks');
-        $task = $Tasks->get($serverId);
-        if (!$task->owner_id == $this->_ownerId) {
-            return false;
-        }
-
-        if (empty($task)) {
-            throw new Syncroton_Exception_NotFound("entry $serverId not found in folder {$collection->collectionId}");
-        }
+        $task = $this->fetchTask($serverId);
 
         ////////////////////////////////////////////////////////////////////////////////////////////
         $entry = new Syncroton_Model_Task();
-        $entry->subject = $task->title;
-        $entry->importance = $task->priority;
+        $entry->subject = (string)$task->title;
+        $entry->importance = (int)$task->priority;
 
         $entry->body = new Syncroton_Model_EmailBody();
-        $entry->body->data = $task->descript;
+        $entry->body->type = Syncroton_Model_EmailBody::TYPE_PLAINTEXT;
+        $entry->body->data = (string)$task->descript;
 
+        // Complete is sent on every change, DateCompleted only together with
+        // Complete = 1, so reopening a task clears it on the client as well.
         if (!empty($task->completed)) {
             $entry->complete = 1;
-            $entry->dateCompleted = new DateTime($task->completed->setTimezone('UTC')->toDateTimeString(), new \DateTimeZone('UTC'));
+            $entry->dateCompleted = new DateTime(
+                $task->completed->setTimezone('UTC')->format('Y-m-d H:i:s'),
+                new DateTimeZone('UTC'),
+            );
         } else {
             $entry->complete = 0;
         }
@@ -139,20 +201,20 @@ class ActiveSyncTasks implements Syncroton_Data_IData
         $task->user_id = $this->_userId;
         $task->tasker_id = $this->_userId;
 
-        $task->title = $_entry->subject;
-        $task->priority = $_entry->importance;
-
-        if ($_entry->complete === 0) {
-            $task->completed = null;
-        } elseif ($_entry->complete === 1) {
-            if (!empty($_entry->dateCompleted)) {
-                $task->completed = $_entry->dateCompleted;
-            } else {
-                $task->completed = new \Cake\I18n\DateTime();
-            }
+        $task->title = $_entry->subject ?? null;
+        if (isset($_entry->importance)) {
+            $task->priority = (int)$_entry->importance;
         }
 
-        $task->descript = $_entry->body->data;
+        if (isset($_entry->complete) && $_entry->complete === 1) {
+            $task->completed = !empty($_entry->dateCompleted) ?
+                $this->toAppTime($_entry->dateCompleted) :
+                new CakeDateTime();
+        } else {
+            $task->completed = null;
+        }
+
+        $task->descript = isset($_entry->body) ? $_entry->body->data : null;
 
         if (!$Tasks->save($task)) {
             Log::write('debug', 'Error creating Task ' . $task->title);
@@ -173,36 +235,31 @@ class ActiveSyncTasks implements Syncroton_Data_IData
      */
     public function updateEntry($_folderId, $_serverId, Syncroton_Model_IEntry $_entry): bool|string
     {
-        $folderId = $_folderId instanceof Syncroton_Model_IFolder ? $_folderId->serverId : $_folderId;
-
         $Tasks = TableRegistry::getTableLocator()->get('Tasks.Tasks');
-        $task = $Tasks->get($_serverId);
-        if (empty($task)) {
-            $task = $Tasks->newEmptyEntity();
-            $task->id = $_serverId;
-            $task->folder_id = $folderId;
-            $task->owner_id = $this->_ownerId;
-            $task->user_id = $this->_userId;
-            $task->tasker_id = $this->_userId;
+        $task = $this->fetchTask($_serverId);
+
+        // Clients are allowed to omit unchanged elements, so only apply what
+        // was actually sent instead of wiping the rest of the task.
+        if (isset($_entry->subject)) {
+            $task->title = $_entry->subject;
         }
-        if (!$task->owner_id == $this->_ownerId) {
-            throw new Syncroton_Exception_NotFound(sprintf('entry %s not found', $_serverId));
+        if (isset($_entry->importance)) {
+            $task->priority = (int)$_entry->importance;
         }
 
-        $task->title = $_entry->subject;
-        $task->priority = $_entry->importance;
-
-        if ($_entry->complete === 0) {
-            $task->completed = null;
-        } elseif ($_entry->complete === 1) {
-            if (!empty($_entry->dateCompleted)) {
-                $task->completed = $_entry->dateCompleted;
+        if (isset($_entry->complete)) {
+            if ($_entry->complete === 0) {
+                $task->completed = null;
+            } elseif (!empty($_entry->dateCompleted)) {
+                $task->completed = $this->toAppTime($_entry->dateCompleted);
             } elseif (empty($task->completed)) {
-                $task->completed = new \Cake\I18n\DateTime();
+                $task->completed = new CakeDateTime();
             }
         }
 
-        $task->descript = $_entry->body->data;
+        if (isset($_entry->body)) {
+            $task->descript = $_entry->body->data ?? null;
+        }
 
         ////////////////////////////////////////////////////////////////////////////////////////////
         if (!$Tasks->save($task)) {
@@ -219,16 +276,13 @@ class ActiveSyncTasks implements Syncroton_Data_IData
      * @see \Syncroton_Data_IData::deleteEntry()
      * @param string $_folderId Folder id
      * @param string $_serverId Server id
-     * @param unknown_type $_collectionData Collection data
+     * @param mixed $_collectionData Collection data
      * @return bool
      */
     public function deleteEntry($_folderId, $_serverId, $_collectionData): bool
     {
         $Tasks = TableRegistry::getTableLocator()->get('Tasks.Tasks');
-        $task = $Tasks->get($_serverId);
-        if (!$task->owner_id == $this->_ownerId) {
-            throw new Syncroton_Exception_NotFound("entry $serverId not found");
-        }
+        $task = $this->fetchTask($_serverId);
 
         $result = $Tasks->delete($task);
 
@@ -244,11 +298,13 @@ class ActiveSyncTasks implements Syncroton_Data_IData
      */
     public function getFolder(string $id): Syncroton_Model_Folder
     {
-        $TasksFolder = TableRegistry::getTableLocator()->get('Tasks.TasksFolders');
-        $folder = $TasksFolder->get($id);
+        $TasksFolders = TableRegistry::getTableLocator()->get('Tasks.TasksFolders');
+        $folder = $TasksFolders->find()
+            ->where(['TasksFolders.id' => $id])
+            ->first();
 
-        if (!$folder) {
-            throw new Syncroton_Exception_NotFound('Folder not found');
+        if ($folder === null) {
+            throw new Syncroton_Exception_NotFound("folder $id not found");
         }
 
         return new Syncroton_Model_Folder([
@@ -297,13 +353,7 @@ class ActiveSyncTasks implements Syncroton_Data_IData
 
         $TasksFolders = TableRegistry::getTableLocator()->get('Tasks.TasksFolders');
         $folder = $TasksFolders->get($folderId);
-        if (empty($folder)) {
-            $folder = $TasksFolders->newEmptyEntity();
-            $folder->id = $folderId;
-            $folder->owner_id = $this->_ownerId;
-        }
-
-        if (!$folder->owner_id == $this->_ownerId) {
+        if ($folder->owner_id !== $this->_ownerId) {
             throw new Syncroton_Exception_NotFound("folder $folderId not found");
         }
 
@@ -328,7 +378,7 @@ class ActiveSyncTasks implements Syncroton_Data_IData
 
         $TasksFolders = TableRegistry::getTableLocator()->get('Tasks.TasksFolders');
         $folder = $TasksFolders->get($folderId);
-        if (!$folder->owner_id == $this->_ownerId) {
+        if ($folder->owner_id !== $this->_ownerId) {
             throw new Syncroton_Exception_NotFound(sprintf('folder %s not found', $_folderId));
         }
 
@@ -400,12 +450,13 @@ class ActiveSyncTasks implements Syncroton_Data_IData
             ->select(['id', 'title'])
             ->where([
                 'owner_id' => $this->_ownerId,
-                'modified >' => $startTimeStamp->format('Y-m-d H:i:s'),
+                'modified >' => $this->toDbTime($startTimeStamp),
             ]);
 
-        if ($endTimeStamp instanceof DateTime) {
-            $query->where(['modified <' => $endTimeStamp->format('Y-m-d H:i:s')]);
-        }
+        // Inclusive: the columns have second precision, so an exclusive upper
+        // bound drops a change made during the very second of the snapshot,
+        // which the next sync window no longer covers either.
+        $query->where(['modified <=' => $this->toDbTime($endTimeStamp)]);
 
         $folders = $query->all();
 
@@ -443,7 +494,7 @@ class ActiveSyncTasks implements Syncroton_Data_IData
                 'OR' => ['tasker_id' => $this->_userId, 'tasker_id IS' => null],
                 'folder_id' => $folderId,
             ])
-            ->toArray()
+            ->toArray(),
         );
 
         return $ids;
@@ -463,7 +514,7 @@ class ActiveSyncTasks implements Syncroton_Data_IData
         $_folderId,
         DateTime $_startTimeStamp,
         ?DateTime $_endTimeStamp = null,
-        $filterType = null
+        $filterType = null,
     ): array {
         $folderId = $_folderId instanceof Syncroton_Model_IFolder ? $_folderId->id : $_folderId;
 
@@ -475,11 +526,12 @@ class ActiveSyncTasks implements Syncroton_Data_IData
             ->where([
                 'OR' => ['tasker_id' => $this->_userId, 'tasker_id IS' => null],
                 'folder_id' => $folderId,
-                'modified >' => $_startTimeStamp->format('Y-m-d H:i:s'),
+                'modified >' => $this->toDbTime($_startTimeStamp),
             ]);
 
         if ($_endTimeStamp instanceof DateTime) {
-            $query->where(['modified <' => $_endTimeStamp->format('Y-m-d H:i:s')]);
+            // Inclusive, see getChangedFolders().
+            $query->where(['modified <=' => $this->toDbTime($_endTimeStamp)]);
         }
 
         $ids = array_keys($query->toArray());
@@ -501,7 +553,7 @@ class ActiveSyncTasks implements Syncroton_Data_IData
     public function getCountOfChanges(
         Syncroton_Backend_IContent $contentBackend,
         Syncroton_Model_IFolder $folder,
-        Syncroton_Model_ISyncState $syncState
+        Syncroton_Model_ISyncState $syncState,
     ): int {
         $allClientEntries = $contentBackend->getFolderState($this->_device, $folder);
         $allServerEntries = $this->getServerEntries($folder->serverId, $folder->lastfiltertype);
@@ -512,7 +564,7 @@ class ActiveSyncTasks implements Syncroton_Data_IData
             $folder->serverId,
             $syncState->lastsync,
             null,
-            $folder->lastfiltertype
+            $folder->lastfiltertype,
         );
 
         return count($addedEntries) + count($deletedEntries) + count($changedEntries);
@@ -522,7 +574,7 @@ class ActiveSyncTasks implements Syncroton_Data_IData
      * getFileReference
      *
      * @see \Syncroton_Data_IData::getFileReference()
-     * @param unknown_type $fileReference File reference
+     * @param mixed $fileReference File reference
      * @return \Syncroton_Model_FileReference
      * @throw \Syncroton_Exception_NotFound
      */
@@ -543,7 +595,7 @@ class ActiveSyncTasks implements Syncroton_Data_IData
     public function hasChanges(
         Syncroton_Backend_IContent $contentBackend,
         Syncroton_Model_IFolder $folder,
-        Syncroton_Model_ISyncState $syncState
+        Syncroton_Model_ISyncState $syncState,
     ): bool {
         return (bool)$this->getCountOfChanges($contentBackend, $folder, $syncState);
     }

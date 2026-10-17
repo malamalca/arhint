@@ -3,13 +3,20 @@ declare(strict_types=1);
 
 namespace Crm\Lib;
 
+use Cake\Core\Configure;
 use Cake\Log\Log;
 use Cake\ORM\TableRegistry;
+use Crm\Model\Entity\Contact;
 use DateTime;
+use DateTimeZone;
+use RuntimeException;
 use Syncroton_Backend_IContent;
 use Syncroton_Command_FolderSync;
 use Syncroton_Data_IData;
+use Syncroton_Exception_NotFound;
+use Syncroton_Exception_UnexpectedValue;
 use Syncroton_Model_Contact;
+use Syncroton_Model_FileReference;
 use Syncroton_Model_Folder;
 use Syncroton_Model_IDevice;
 use Syncroton_Model_IEntry;
@@ -17,6 +24,7 @@ use Syncroton_Model_IFolder;
 use Syncroton_Model_ISyncState;
 use Syncroton_Model_SyncCollection;
 use Syncroton_Registry;
+use Zend_Db_Adapter_Abstract;
 
 class ActiveSyncContacts implements Syncroton_Data_IData
 {
@@ -44,9 +52,9 @@ class ActiveSyncContacts implements Syncroton_Data_IData
      */
     protected DateTime $_timeStamp;
 
-    private ?Syncroton_Model_IDevice $_device;
+    private Syncroton_Model_IDevice $_device;
     private ?string $_ownerId;
-    private \Zend_Db_Adapter_Pdo_Mysql $_db;
+    private Zend_Db_Adapter_Abstract $_db;
     private string $_tablePrefix;
 
     /**
@@ -55,7 +63,7 @@ class ActiveSyncContacts implements Syncroton_Data_IData
      * @param \Syncroton_Model_IDevice $_device Device.
      * @param \DateTime $_timeStamp Timestamp.
      */
-    public function __construct(?Syncroton_Model_IDevice $_device = null, ?DateTime $_timeStamp = null)
+    public function __construct(Syncroton_Model_IDevice $_device, DateTime $_timeStamp)
     {
         $this->_device = $_device;
         $this->_timeStamp = $_timeStamp;
@@ -74,7 +82,7 @@ class ActiveSyncContacts implements Syncroton_Data_IData
      * return one folder identified by id
      *
      * @param string  $id Folder id.
-     * @throws \Crm\Lib\Syncroton_Exception_NotFound
+     * @throws \Syncroton_Exception_NotFound
      * @return \Syncroton_Model_Folder
      */
     public function getFolder(string $id): Syncroton_Model_Folder
@@ -192,7 +200,7 @@ class ActiveSyncContacts implements Syncroton_Data_IData
 
         if (!$Contacts->save($c)) {
             Log::write('debug', 'ActiveSyncContacts: Failed to save contact. . ' . print_r($c->getErrors(), true));
-            throw new \RuntimeException('ActiveSyncContacts: Failed to save contact.');
+            throw new RuntimeException('ActiveSyncContacts: Failed to save contact.');
         }
 
         return (string)$c->id;
@@ -209,7 +217,7 @@ class ActiveSyncContacts implements Syncroton_Data_IData
     public function deleteEntry($_folderId, $_serverId, $_collectionData): bool
     {
         $Contacts = TableRegistry::getTableLocator()->get('Crm.Contacts');
-        $contact = $Contacts->get($_serverId);
+        $contact = $this->fetchContact($_serverId);
         $result = $Contacts->delete($contact);
 
         return (bool)$result;
@@ -264,6 +272,27 @@ class ActiveSyncContacts implements Syncroton_Data_IData
     }
 
     /**
+     * Converts an UTC timestamp coming from ActiveSync into the string format
+     * used by the datetime columns of the application.
+     *
+     * The ORM writes datetimes as wall clock time of App.defaultTimezone, so
+     * timestamps from Syncroton (always UTC) have to be converted before they
+     * are compared against a column value.
+     *
+     * @param \DateTime $timeStamp UTC timestamp.
+     * @return string
+     */
+    protected function toDbTime(DateTime $timeStamp): string
+    {
+        $converted = clone $timeStamp;
+        $converted->setTimezone(
+            new DateTimeZone(Configure::read('App.defaultTimezone', date_default_timezone_get())),
+        );
+
+        return $converted->format('Y-m-d H:i:s');
+    }
+
+    /**
      * getChangedEntries
      *
      * @param string $_folderId Folder id
@@ -276,7 +305,7 @@ class ActiveSyncContacts implements Syncroton_Data_IData
         $_folderId,
         DateTime $_startTimeStamp,
         ?DateTime $_endTimeStamp = null,
-        $filterType = null
+        $filterType = null,
     ): array {
         //$folderId = $_folderId instanceof Syncroton_Model_IFolder ? $_folderId->id : $_folderId;
 
@@ -289,11 +318,14 @@ class ActiveSyncContacts implements Syncroton_Data_IData
                 'owner_id' => $this->_ownerId,
                 'kind' => 'T',
                 'syncable' => true,
-                'modified >' => $_startTimeStamp->format('Y-m-d H:i:s'),
+                'modified >' => $this->toDbTime($_startTimeStamp),
             ]);
 
         if ($_endTimeStamp instanceof DateTime) {
-            $query->where(['modified <' => $_endTimeStamp->format('Y-m-d H:i:s')]);
+            // Inclusive: the columns have second precision, so an exclusive
+            // upper bound drops a change made during the very second of the
+            // snapshot, which the next sync window no longer covers either.
+            $query->where(['modified <=' => $this->toDbTime($_endTimeStamp)]);
         }
 
         $ids = array_keys($query->toArray());
@@ -363,7 +395,7 @@ class ActiveSyncContacts implements Syncroton_Data_IData
     public function getCountOfChanges(
         Syncroton_Backend_IContent $contentBackend,
         Syncroton_Model_IFolder $folder,
-        Syncroton_Model_ISyncState $syncState
+        Syncroton_Model_ISyncState $syncState,
     ): int {
         $allClientEntries = $contentBackend->getFolderState($this->_device, $folder);
         $allServerEntries = $this->getServerEntries($folder->serverId, $folder->lastfiltertype);
@@ -374,7 +406,7 @@ class ActiveSyncContacts implements Syncroton_Data_IData
             $folder->serverId,
             $syncState->lastsync,
             null,
-            $folder->lastfiltertype
+            $folder->lastfiltertype,
         );
 
         return count($addedEntries) + count($deletedEntries) + count($changedEntries);
@@ -384,12 +416,40 @@ class ActiveSyncContacts implements Syncroton_Data_IData
      * getFileReference
      *
      * @param string $fileReference File reference
-     * @return void
-     * @throw \Syncroton_Exception_NotFound
+     * @throws \Syncroton_Exception_NotFound
+     * @return \Syncroton_Model_FileReference
      */
-    public function getFileReference($fileReference): void
+    public function getFileReference($fileReference): Syncroton_Model_FileReference
     {
         throw new Syncroton_Exception_NotFound('filereference not found');
+    }
+
+    /**
+     * Fetches a contact belonging to the current owner.
+     *
+     * @param string $serverId Contact id.
+     * @param array $contain Associations to load.
+     * @throws \Syncroton_Exception_NotFound
+     * @return \Crm\Model\Entity\Contact
+     */
+    protected function fetchContact(string $serverId, array $contain = []): Contact
+    {
+        /** @var \Crm\Model\Table\ContactsTable $Contacts */
+        $Contacts = TableRegistry::getTableLocator()->get('Crm.Contacts');
+        /** @var \Crm\Model\Entity\Contact|null $contact */
+        $contact = $Contacts->find()
+            ->where([
+                'Contacts.id' => $serverId,
+                'Contacts.owner_id IS' => $this->_ownerId,
+            ])
+            ->contain($contain)
+            ->first();
+
+        if ($contact === null) {
+            throw new Syncroton_Exception_NotFound(sprintf('entry %s not found', $serverId));
+        }
+
+        return $contact;
     }
 
     /**
@@ -397,22 +457,15 @@ class ActiveSyncContacts implements Syncroton_Data_IData
      *
      * @param \Syncroton_Model_SyncCollection $collection Collection
      * @param string $serverId Server id
+     * @throws \Syncroton_Exception_NotFound
      * @return \Syncroton_Model_IEntry
      */
     public function getEntry(Syncroton_Model_SyncCollection $collection, $serverId): Syncroton_Model_IEntry
     {
-        $Contacts = TableRegistry::getTableLocator()->get('Crm.Contacts');
-        $c = $Contacts->get(
+        $c = $this->fetchContact(
             $serverId,
-            contain: ['Companies', 'ContactsPhones', 'ContactsAddresses', 'ContactsEmails']
+            ['Companies', 'ContactsPhones', 'ContactsAddresses', 'ContactsEmails'],
         );
-        if (!$c->owner_id == $this->_ownerId) {
-            return false;
-        }
-
-        if ($c === false) {
-            throw new Syncroton_Exception_NotFound("entry $serverId not found in folder {$collection->collectionId}");
-        }
 
         $entry = new Syncroton_Model_Contact();
         $entry->firstName = $c->name;
@@ -460,7 +513,7 @@ class ActiveSyncContacts implements Syncroton_Data_IData
     public function hasChanges(
         Syncroton_Backend_IContent $contentBackend,
         Syncroton_Model_IFolder $folder,
-        Syncroton_Model_ISyncState $syncState
+        Syncroton_Model_ISyncState $syncState,
     ): bool {
         return (bool)$this->getCountOfChanges($contentBackend, $folder, $syncState);
     }
@@ -489,15 +542,7 @@ class ActiveSyncContacts implements Syncroton_Data_IData
     public function updateEntry($_folderId, $_serverId, Syncroton_Model_IEntry $_entry): bool|string
     {
         $Contacts = TableRegistry::getTableLocator()->get('Crm.Contacts');
-        $c = $Contacts->get($_serverId, contain: ['ContactsPhones', 'ContactsAddresses', 'ContactsEmails']);
-        if (empty($c)) {
-            $c = $Contacts->newEmptyEntity();
-            $c->id = $_serverId;
-            $c->owner_id = $this->_ownerId;
-        }
-        if (!$c->owner_id == $this->_ownerId) {
-            return false;
-        }
+        $c = $this->fetchContact($_serverId, ['ContactsPhones', 'ContactsAddresses', 'ContactsEmails']);
 
         $c->name = $_entry->firstName;
         $c->surname = $_entry->lastName;

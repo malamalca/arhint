@@ -105,6 +105,7 @@ class SabreDAVSyncCalendars extends AbstractBackend implements SyncSupport
             ->all();
 
         $results = [];
+        /** @var \Calendar\Model\Entity\Event $event */
         foreach ($events as $event) {
             $icalData = $this->eventToVCalendar($event)->serialize();
             $results[] = [
@@ -132,6 +133,7 @@ class SabreDAVSyncCalendars extends AbstractBackend implements SyncSupport
         $id = $this->uriToId($objectUri);
 
         $EventsTable = TableRegistry::getTableLocator()->get('Calendar.Events');
+        /** @var \Calendar\Model\Entity\Event|null $event */
         $event = $EventsTable->find()
             ->select()
             ->where(['id' => $id, 'calendar_id' => $calendarId])
@@ -172,6 +174,7 @@ class SabreDAVSyncCalendars extends AbstractBackend implements SyncSupport
             ->all();
 
         $results = [];
+        /** @var \Calendar\Model\Entity\Event $event */
         foreach ($events as $event) {
             $icalData = $this->eventToVCalendar($event)->serialize();
             $results[] = [

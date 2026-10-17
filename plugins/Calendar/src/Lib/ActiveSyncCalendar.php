@@ -8,6 +8,7 @@ use Cake\I18n\DateTime as CakeDateTime;
 use Cake\Log\Log;
 use Cake\ORM\TableRegistry;
 use DateTime;
+use DateTimeZone;
 use Syncroton_Backend_IContent;
 use Syncroton_Command_FolderSync;
 use Syncroton_Data_IData;
@@ -73,7 +74,7 @@ class ActiveSyncCalendar implements Syncroton_Data_IData
      * @param \Syncroton_Model_IDevice $_device Device interface
      * @param \DateTime $_timeStamp Timestamp
      */
-    public function __construct(?Syncroton_Model_IDevice $_device = null, ?DateTime $_timeStamp = null)
+    public function __construct(Syncroton_Model_IDevice $_device, DateTime $_timeStamp)
     {
         $this->_device = $_device;
         $this->_timeStamp = $_timeStamp;
@@ -185,11 +186,6 @@ class ActiveSyncCalendar implements Syncroton_Data_IData
 
         $EventsTable = TableRegistry::getTableLocator()->get('Calendar.Events');
         $event = $EventsTable->get($_serverId);
-        if (empty($event)) {
-            $event = $EventsTable->newEmptyEntity();
-            $event->id = $_serverId;
-            $event->calendar_id = $this->_userId;
-        }
 
         $event->title = $_entry->subject;
         $event->location = $_entry->location;
@@ -228,7 +224,7 @@ class ActiveSyncCalendar implements Syncroton_Data_IData
         $EventsTable = TableRegistry::getTableLocator()->get('Calendar.Events');
         $event = $EventsTable->get($_serverId);
         if (!$event->calendar_id == $this->_userId) {
-            throw new Syncroton_Exception_NotFound("entry $serverId not found");
+            throw new Syncroton_Exception_NotFound(sprintf('entry %s not found', $_serverId));
         }
 
         $result = $EventsTable->delete($event);
@@ -368,12 +364,33 @@ class ActiveSyncCalendar implements Syncroton_Data_IData
                 'calendar_id' => $this->_userId,
                 //'folder_id' => $folderId,
             ])
-            ->toArray()
+            ->toArray(),
         );
 
         //Log::write('debug', 'getServerEntries: ' . print_r($ids, true));
 
         return $ids;
+    }
+
+    /**
+     * Converts an UTC timestamp coming from ActiveSync into the string format
+     * used by the datetime columns of the application.
+     *
+     * The ORM writes datetimes as wall clock time of App.defaultTimezone, so
+     * timestamps from Syncroton (always UTC) have to be converted before they
+     * are compared against a column value.
+     *
+     * @param \DateTime $timeStamp UTC timestamp.
+     * @return string
+     */
+    protected function toDbTime(DateTime $timeStamp): string
+    {
+        $converted = clone $timeStamp;
+        $converted->setTimezone(
+            new DateTimeZone(Configure::read('App.defaultTimezone', date_default_timezone_get())),
+        );
+
+        return $converted->format('Y-m-d H:i:s');
     }
 
     /**
@@ -390,7 +407,7 @@ class ActiveSyncCalendar implements Syncroton_Data_IData
         $_folderId,
         DateTime $_startTimeStamp,
         ?DateTime $_endTimeStamp = null,
-        $filterType = null
+        $filterType = null,
     ): array {
         //$folderId = $_folderId instanceof Syncroton_Model_IFolder ? $_folderId->id : $_folderId;
 
@@ -402,11 +419,14 @@ class ActiveSyncCalendar implements Syncroton_Data_IData
             ->where([
                 'calendar_id' => $this->_userId,
                 //'folder_id' => $folderId,
-                'modified >' => $_startTimeStamp->format('Y-m-d H:i:s'),
+                'modified >' => $this->toDbTime($_startTimeStamp),
             ]);
 
         if ($_endTimeStamp instanceof DateTime) {
-            $query->where(['modified <' => $_endTimeStamp->format('Y-m-d H:i:s')]);
+            // Inclusive: the columns have second precision, so an exclusive
+            // upper bound drops a change made during the very second of the
+            // snapshot, which the next sync window no longer covers either.
+            $query->where(['modified <=' => $this->toDbTime($_endTimeStamp)]);
         }
 
         $ids = array_keys($query->toArray());
@@ -428,7 +448,7 @@ class ActiveSyncCalendar implements Syncroton_Data_IData
     public function getCountOfChanges(
         Syncroton_Backend_IContent $contentBackend,
         Syncroton_Model_IFolder $folder,
-        Syncroton_Model_ISyncState $syncState
+        Syncroton_Model_ISyncState $syncState,
     ): int {
         $allClientEntries = $contentBackend->getFolderState($this->_device, $folder);
         $allServerEntries = $this->getServerEntries($folder->serverId, $folder->lastfiltertype);
@@ -439,7 +459,7 @@ class ActiveSyncCalendar implements Syncroton_Data_IData
             $folder->serverId,
             $syncState->lastsync,
             null,
-            $folder->lastfiltertype
+            $folder->lastfiltertype,
         );
 
         return count($addedEntries) + count($deletedEntries) + count($changedEntries);
@@ -470,7 +490,7 @@ class ActiveSyncCalendar implements Syncroton_Data_IData
     public function hasChanges(
         Syncroton_Backend_IContent $contentBackend,
         Syncroton_Model_IFolder $folder,
-        Syncroton_Model_ISyncState $syncState
+        Syncroton_Model_ISyncState $syncState,
     ): bool {
         return (bool)$this->getCountOfChanges($contentBackend, $folder, $syncState);
     }

@@ -102,7 +102,12 @@ class ProjectsMilestonesController extends AppController
             $this->Flash->error(__d('projects', 'The projects milestone could not be deleted. Please, try again.'));
         }
 
-        return $this->redirect(['controller' => 'Projects', 'action' => 'view', $projectsMilestone->project_id, '?' => ['tab' => 'milestones']]);
+        return $this->redirect([
+            'controller' => 'Projects',
+            'action' => 'view',
+            $projectsMilestone->project_id,
+            '?' => ['tab' => 'milestones'],
+        ]);
     }
 
     /**
@@ -126,7 +131,12 @@ class ProjectsMilestonesController extends AppController
             $this->Flash->error(__d('projects', 'The projects milestone could not be closed. Please, try again.'));
         }
 
-        return $this->redirect(['controller' => 'Projects', 'action' => 'view', $projectsMilestone->project_id, '?' => ['tab' => 'milestones']]);
+        return $this->redirect([
+            'controller' => 'Projects',
+            'action' => 'view',
+            $projectsMilestone->project_id,
+            '?' => ['tab' => 'milestones'],
+        ]);
     }
 
     /**
@@ -150,7 +160,12 @@ class ProjectsMilestonesController extends AppController
             $this->Flash->error(__d('projects', 'The projects milestone could not be reopened. Please, try again.'));
         }
 
-        return $this->redirect(['controller' => 'Projects', 'action' => 'view', $projectsMilestone->project_id, '?' => ['tab' => 'milestones']]);
+        return $this->redirect([
+            'controller' => 'Projects',
+            'action' => 'view',
+            $projectsMilestone->project_id,
+            '?' => ['tab' => 'milestones'],
+        ]);
     }
 
     /**

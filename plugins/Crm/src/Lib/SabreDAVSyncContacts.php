@@ -137,14 +137,16 @@ class SabreDAVSyncContacts extends AbstractBackend implements SyncSupport
             ->all();
 
         $results = [];
+        /** @var \Crm\Model\Entity\Contact $contact */
         foreach ($contacts as $contact) {
             $card = $this->contactToCard($contact);
+            $modified = $contact->modified?->setTimezone('UTC')?->toUnixString();
 
             $row = [
                 'uri' => $contact->id,
                 'size' => strlen($card->serialize()),
-                'etag' => '"' . md5($contact->id . $contact->modified->setTimezone('UTC')->toUnixString()) . '"',
-                'lastmodifed' => $contact->modified->setTimezone('UTC')->toUnixString(),
+                'etag' => '"' . md5($contact->id . ($modified ?? '')) . '"',
+                'lastmodifed' => $modified,
             ];
             $results[] = $row;
         }
@@ -167,6 +169,7 @@ class SabreDAVSyncContacts extends AbstractBackend implements SyncSupport
     public function getCard($addressBookId, $cardUri): array
     {
         $ContactsTable = TableRegistry::getTableLocator()->get('Crm.Contacts');
+        /** @var \Crm\Model\Entity\Contact|null $contact */
         $contact = $ContactsTable->find()
             ->select()
             ->contain(['ContactsEmails', 'ContactsPhones'])
@@ -177,9 +180,11 @@ class SabreDAVSyncContacts extends AbstractBackend implements SyncSupport
             return [];
         }
 
+        $modified = $contact->modified?->setTimezone('UTC')?->toUnixString();
+
         $result['uri'] = $contact->id;
-        $result['etag'] = '"' . md5($contact->id . $contact->modified->setTimezone('UTC')->toUnixString()) . '"';
-        $result['lastmodified'] = (int)$contact->modified->setTimezone('UTC')->toUnixString();
+        $result['etag'] = '"' . md5($contact->id . ($modified ?? '')) . '"';
+        $result['lastmodified'] = (int)($modified ?? 0);
         $result['carddata'] = $this->contactToCard($contact)->serialize();
         $result['size'] = strlen($result['carddata']);
 
@@ -209,11 +214,14 @@ class SabreDAVSyncContacts extends AbstractBackend implements SyncSupport
 
         $results = [];
 
+        /** @var \Crm\Model\Entity\Contact $contact */
         foreach ($contacts as $contact) {
+            $modified = $contact->modified?->setTimezone('UTC')?->toUnixString();
+
             $result = [];
             $result['uri'] = $contact->id;
-            $result['etag'] = '"' . md5($contact->id . $contact->modified->setTimezone('UTC')->toUnixString()) . '"';
-            $result['lastmodified'] = (int)$contact->modified->setTimezone('UTC')->toUnixString();
+            $result['etag'] = '"' . md5($contact->id . ($modified ?? '')) . '"';
+            $result['lastmodified'] = (int)($modified ?? 0);
             $result['carddata'] = $this->contactToCard($contact)->serialize();
             $result['size'] = strlen($result['carddata']);
 
@@ -301,7 +309,8 @@ class SabreDAVSyncContacts extends AbstractBackend implements SyncSupport
         }
 
         if ($ContactsTable->save($contact, ['associated' => ['ContactsPhones', 'ContactsEmails']])) {
-            $etag = '"' . md5($contact->id . $contact->modified->setTimezone('UTC')->toUnixString()) . '"';
+            $modified = $contact->modified?->setTimezone('UTC')?->toUnixString();
+            $etag = '"' . md5($contact->id . ($modified ?? '')) . '"';
 
             return $etag;
         }
@@ -434,7 +443,8 @@ class SabreDAVSyncContacts extends AbstractBackend implements SyncSupport
         }
 
         if ($ContactsTable->save($contact, ['associated' => ['ContactsPhones', 'ContactsEmails']])) {
-            $etag = '"' . md5($contact->id . $contact->modified->setTimezone('UTC')->toUnixString()) . '"';
+            $modified = $contact->modified?->setTimezone('UTC')?->toUnixString();
+            $etag = '"' . md5($contact->id . ($modified ?? '')) . '"';
 
             return $etag;
         }
@@ -457,6 +467,10 @@ class SabreDAVSyncContacts extends AbstractBackend implements SyncSupport
             ->select()
             ->where(['id' => $cardUri])
             ->first();
+
+        if ($contact === null) {
+            return false;
+        }
 
         return $ContactsTable->delete($contact);
     }
