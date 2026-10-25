@@ -1103,3 +1103,120 @@ msgstr ""
 
 msgid "The validity date cannot be before the event date."
 msgstr ""
+
+msgid "Knowledge base"
+msgstr ""
+
+msgid "version {0}"
+msgstr ""
+
+msgid "History"
+msgstr ""
+
+msgid "Knowledge base history"
+msgstr ""
+
+msgid "Version"
+msgstr ""
+
+msgid "Time"
+msgstr ""
+
+msgid "Source"
+msgstr ""
+
+msgid "Change"
+msgstr ""
+
+msgid "Changes"
+msgstr ""
+
+msgid "Changes in version {0}"
+msgstr ""
+
+msgid "No changes."
+msgstr ""
+
+msgid "Automatic update"
+msgstr ""
+
+msgid "Conversation"
+msgstr ""
+
+msgid "Manual edit"
+msgstr ""
+
+msgid "Conversion"
+msgstr ""
+
+msgid "Assistant"
+msgstr ""
+
+msgid "Return to a version"
+msgstr ""
+
+msgid "Return to this version"
+msgstr ""
+
+msgid "Return the knowledge base to version {0}?"
+msgstr ""
+
+msgid "The knowledge base was returned to version {0}."
+msgstr ""
+
+msgid "The knowledge base cannot be returned to this version."
+msgstr ""
+
+msgid "The knowledge base cannot be emptied, the text was not changed."
+msgstr ""
+
+msgid "The knowledge base was changed in the meantime. Your text is kept in the form; check the history before saving it again."
+msgstr ""
+
+msgid "Knowledge base in Markdown. Do not delete the <!-- kb:... --> comments, they mark the sections and items. The table of contents and the changelog are generated and cannot be edited by hand."
+msgstr ""
+
+msgid "Undo"
+msgstr ""
+
+msgid "Knowledge base changed"
+msgstr ""
+
+msgid "Request failed. Please try again."
+msgstr ""
+
+msgid "Queue worker is not running. Start it with: bin/cake queue worker"
+msgstr ""
+
+msgid "Conversation with AI about the project"
+msgstr ""
+
+msgid "Ask about the project or tell the AI what to change in the knowledge base..."
+msgstr ""
+
+msgid "Send"
+msgstr ""
+
+msgid "Clear conversation"
+msgstr ""
+
+msgid "Empty message."
+msgstr ""
+
+msgid "The AI assistant is not configured for your account."
+msgstr ""
+
+msgid "The change cannot be undone."
+msgstr ""
+
+msgid "Add to my calendar"
+msgstr ""
+
+msgid "Remove from my calendar"
+msgstr ""
+
+msgid "The deadline cannot be added to the calendar."
+msgstr ""
+
+msgid "Edit this deadline in the knowledge base of the project."
+msgstr ""

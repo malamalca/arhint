@@ -59,6 +59,9 @@ class HeartBeatCommand extends Command
             }
         }
 
+        // Once per run, after the e-mails, for work that is not tied to a user and may take long.
+        EventManager::instance()->dispatch(new Event('App.HeartBeat.hourlyRun', $this, ['io' => $io]));
+
         return 1;
     }
 }

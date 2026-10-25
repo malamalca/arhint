@@ -20,6 +20,9 @@ use Cake\ORM\Entity;
  * @property string $ico
  * @property string $colorize
  * @property bool $active
+ * @property int $kb_version
+ * @property \Cake\I18n\DateTime|null $kb_synced
+ * @property int $kb_format
  * @property \Cake\I18n\DateTime $created
  * @property \Cake\I18n\DateTime $modified
  *

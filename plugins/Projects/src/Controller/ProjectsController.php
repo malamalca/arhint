@@ -6,8 +6,13 @@ namespace Projects\Controller;
 use Cake\Http\Response;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Hash;
+use InvalidArgumentException;
 use Projects\Lib\AuthorityWorkflow;
+use Projects\Lib\KnowledgeBase\KbDiff;
+use Projects\Lib\KnowledgeBase\KbService;
+use Projects\Lib\KnowledgeBase\StaleKnowledgeBaseException;
 use Projects\Lib\ProjectsFuncs;
+use Projects\Model\Entity\Project;
 
 /**
  * Projects Controller
@@ -221,7 +226,21 @@ class ProjectsController extends AppController
         $this->Authorization->authorize($project);
 
         if ($this->getRequest()->is(['patch', 'post', 'put'])) {
-            $project = $this->Projects->patchEntity($project, $this->getRequest()->getData());
+            // The description is the knowledge base; it is saved by KbService, not as a plain field.
+            $data = (array)$this->getRequest()->getData();
+            $markdown = array_key_exists('descript', $data) ? (string)$data['descript'] : null;
+            $expectedVersion = ($data['kb_version'] ?? '') === '' ? null : (int)$data['kb_version'];
+            unset($data['descript'], $data['kb_version']);
+
+            $isNew = $project->isNew();
+            $project = $this->Projects->patchEntity($project, $data);
+
+            if (!$isNew && $markdown !== null && !$this->saveKnowledgeBase($project, $markdown, $expectedVersion)) {
+                $this->set('projectStatuses', $this->projectStatuses());
+                $this->set(compact('project'));
+
+                return null;
+            }
 
             $icoFile = $this->getRequest()->getData('ico_file');
             if ($icoFile) {
@@ -236,6 +255,9 @@ class ProjectsController extends AppController
             }
 
             if ($this->Projects->save($project)) {
+                if ($isNew && $markdown !== null) {
+                    $this->saveKnowledgeBase($project, $markdown, null);
+                }
                 $this->Flash->success(__d('projects', 'The project has been saved.'));
                 $redirect = $this->getRequest()->getData('referer', ['action' => 'view', $project->id]);
 
@@ -244,13 +266,144 @@ class ProjectsController extends AppController
             $this->Flash->error(__d('projects', 'The project could not be saved. Please, try again.'));
         }
 
-        $projectStatuses = $this->Authorization->applyScope($this->Projects->ProjectsStatuses->find('list'), 'index')
-            ->orderBy(['title'])
-            ->toArray();
-
-        $this->set(compact('project', 'projectStatuses'));
+        $this->set('projectStatuses', $this->projectStatuses());
+        $this->set(compact('project'));
 
         return null;
+    }
+
+    /**
+     * Save the description field as the knowledge base of the project.
+     *
+     * @param \Projects\Model\Entity\Project $project Saved project; on failure it shows the submitted text.
+     * @param string $markdown Submitted text.
+     * @param int|null $expectedVersion Version of the knowledge base the form was rendered from.
+     * @return bool False when the text was refused and the form has to be shown again.
+     */
+    private function saveKnowledgeBase(Project $project, string $markdown, ?int $expectedVersion): bool
+    {
+        if (trim($markdown) === '') {
+            if ((int)$project->kb_format === 1) {
+                $this->Flash->error(__d('projects', 'The knowledge base cannot be emptied, the text was not changed.'));
+            }
+
+            return true;
+        }
+
+        try {
+            (new KbService())->saveManual(
+                (string)$project->id,
+                $markdown,
+                $expectedVersion,
+                (string)$this->getCurrentUser()->get('id'),
+            );
+        } catch (StaleKnowledgeBaseException) {
+            $this->Flash->error(__d(
+                'projects',
+                'The knowledge base was changed in the meantime. Your text is kept in the form; check the history before saving it again.',
+            ));
+            // Saving again replaces what was written meanwhile, so the form carries the current version.
+            // The form helper takes values from the request before the entity.
+            $this->setRequest($this->getRequest()->withData(
+                'kb_version',
+                (int)$this->Projects->get($project->id)->kb_version,
+            ));
+
+            return false;
+        }
+
+        // The form can be shown again (e.g. a field of the project is invalid), and then it has to match the stored text.
+        $stored = $this->Projects->get($project->id);
+        foreach (['descript', 'kb_version', 'kb_format'] as $field) {
+            $project->set($field, $stored->get($field), ['guard' => false]);
+            $project->setDirty($field, false);
+        }
+        $this->setRequest($this->getRequest()
+            ->withData('kb_version', (int)$stored->kb_version)
+            ->withData('descript', $stored->descript));
+
+        return true;
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    private function projectStatuses(): array
+    {
+        return $this->Authorization->applyScope($this->Projects->ProjectsStatuses->find('list'), 'index')
+            ->orderBy(['title'])
+            ->toArray();
+    }
+
+    /**
+     * History of the knowledge base.
+     *
+     * With `version` in the query the changes made by that version are shown.
+     *
+     * @param string|null $id Project id.
+     * @return \Cake\Http\Response|null|void
+     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
+     */
+    public function history(?string $id = null)
+    {
+        $project = $this->Projects->get($id);
+        $this->Authorization->authorize($project, 'knowledgeBase');
+
+        $revisionsTable = $this->fetchTable('Projects.ProjectsKbRevisions');
+        $revisions = $revisionsTable->find()
+            ->select(['id', 'project_id', 'user_id', 'version', 'source', 'summary', 'created'])
+            ->contain(['Users' => fn($query) => $query->select(['id', 'name'])])
+            ->where(['ProjectsKbRevisions.project_id' => $project->id])
+            ->orderBy(['ProjectsKbRevisions.version' => 'DESC'])
+            ->limit(200)
+            ->all();
+
+        $diff = null;
+        $version = $this->getRequest()->getQuery('version');
+        if (is_numeric($version)) {
+            $pair = $revisionsTable->find()
+                ->select(['version', 'descript'])
+                ->where([
+                    'ProjectsKbRevisions.project_id' => $project->id,
+                    'ProjectsKbRevisions.version IN' => [(int)$version - 1, (int)$version],
+                ])
+                ->all()
+                ->combine('version', 'descript')
+                ->toArray();
+            if (isset($pair[(int)$version])) {
+                $diff = (new KbDiff())->diff($pair[(int)$version - 1] ?? null, (string)$pair[(int)$version]);
+            }
+        }
+
+        $this->set(compact('project', 'revisions', 'diff', 'version'));
+    }
+
+    /**
+     * Return to the state of an earlier revision.
+     *
+     * @param string|null $id Revision id.
+     * @return \Cake\Http\Response
+     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
+     */
+    public function revert(?string $id = null): ?Response
+    {
+        $this->getRequest()->allowMethod(['post']);
+
+        $revision = $this->fetchTable('Projects.ProjectsKbRevisions')->get($id);
+        $project = $this->Projects->get($revision->project_id);
+        $this->Authorization->authorize($project, 'knowledgeBase');
+
+        try {
+            $userId = (string)$this->getCurrentUser()->get('id');
+            (new KbService())->revert((string)$project->id, (string)$revision->id, $userId);
+            $this->Flash->success(
+                __d('projects', 'The knowledge base was returned to version {0}.', $revision->version),
+            );
+        } catch (InvalidArgumentException) {
+            $this->Flash->error(__d('projects', 'The knowledge base cannot be returned to this version.'));
+        }
+
+        return $this->redirect(['action' => 'history', $project->id]);
     }
 
     /**

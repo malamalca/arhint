@@ -130,12 +130,38 @@ class AIAssistant
     private ?object $aiConfig;
 
     /**
+     * What the assistant is used for, given by the caller (e.g. the project of a knowledge base conversation).
+     * Listeners of the tool events read it to offer and bind tools that only make sense in that use.
+     *
+     * @var array<string, mixed>
+     */
+    private array $context = [];
+
+    /**
+     * Names of the tools the assistant may use, null for all of them.
+     *
+     * @var array<int, string>|null
+     */
+    private ?array $allowedTools = null;
+
+    /**
+     * Text added to the system prompt, whichever way tools are called.
+     *
+     * @var string|null
+     */
+    private ?string $promptAddendum = null;
+
+    /**
      * Constructor to initialize the AIAssistant with available tools.
      * Tools can be added by listening to the 'AIAssistant.tools' event and modifying the provided tools list.
+     *
+     * @param \App\Model\Entity\User|null $currentUser The current user.
+     * @param array<string, mixed> $context Use of the assistant, available to listeners as getContext().
      */
-    public function __construct(?User $currentUser = null)
+    public function __construct(?User $currentUser = null, array $context = [])
     {
         $this->currentUser = $currentUser;
+        $this->context = $context;
 
         $aiConfig = $currentUser?->getProperty('ai_assistant');
         $this->aiConfig = is_object($aiConfig) ? $aiConfig : null;
@@ -152,6 +178,61 @@ class AIAssistant
         EventManager::instance()->dispatch($event);
 
         $this->tools = $toolsList->getArrayCopy();
+    }
+
+    /**
+     * The context the assistant was created with.
+     *
+     * @return array<string, mixed>
+     */
+    public function getContext(): array
+    {
+        return $this->context;
+    }
+
+    /**
+     * Limit the assistant to the named tools; others are neither offered nor executed.
+     *
+     * @param array<int, string> $names Tool names.
+     * @return void
+     */
+    public function restrictTools(array $names): void
+    {
+        $this->allowedTools = $names;
+        $this->tools = array_values(array_filter(
+            $this->tools,
+            fn(AITool $tool): bool => in_array($tool->name, $names, true),
+        ));
+    }
+
+    /**
+     * Add instructions to the system prompt, whether it is the default or the prompt for native tool calls.
+     *
+     * @param string $text Instructions.
+     * @return void
+     */
+    public function setPromptAddendum(string $text): void
+    {
+        $this->promptAddendum = $text;
+    }
+
+    /**
+     * Execute a tool through the event; a tool outside the allowed ones is refused.
+     *
+     * @param string $tool Tool name.
+     * @param array<mixed> $arguments Arguments.
+     * @return mixed Result of the tool.
+     */
+    private function runTool(string $tool, array $arguments): mixed
+    {
+        if ($this->allowedTools !== null && !in_array($tool, $this->allowedTools, true)) {
+            return ['error' => "Tool $tool is not available here."];
+        }
+
+        $event = new Event('App.AIAssistant.executeTool', $this, [$tool, $arguments, $this->currentUser]);
+        EventManager::instance()->dispatch($event);
+
+        return $event->getResult();
     }
 
     /**
@@ -302,6 +383,9 @@ class AIAssistant
                         . 'Current user ID: ' . (string)($this->currentUser?->get('id') ?? '') . '. '
                         . self::LANGUAGE_RULE;
                 }
+                if ($this->promptAddendum !== null) {
+                    $systemContent .= "\n\n" . $this->promptAddendum;
+                }
                 if ($summary !== null && $summary !== '') {
                     $systemContent .= "\n\nConversation context: " . $summary;
                 }
@@ -361,6 +445,9 @@ class AIAssistant
                         (string)($this->currentUser?->get('id') ?? ''),
                         implode("\n", $promptTools),
                     );
+                }
+                if ($this->promptAddendum !== null) {
+                    $systemPrompt .= "\n" . $this->promptAddendum;
                 }
                 $data = [
                     'messages' => array_merge(
@@ -432,14 +519,7 @@ class AIAssistant
                     );
 
                     try {
-                        $event = new Event(
-                            'App.AIAssistant.executeTool',
-                            $this,
-                            [$tool, $arguments, $this->currentUser],
-                        );
-                        EventManager::instance()->dispatch($event);
-
-                        $result = $event->getResult();
+                        $result = $this->runTool((string)$tool, (array)$arguments);
                         if (is_array($result) && isset($result['redirect_url'])) {
                             $this->redirectUrl = $result['redirect_url'];
                         }
@@ -521,14 +601,7 @@ class AIAssistant
                     );
 
                     try {
-                        $event = new Event(
-                            'App.AIAssistant.executeTool',
-                            $this,
-                            [$tool, $arguments, $this->currentUser],
-                        );
-                        EventManager::instance()->dispatch($event);
-
-                        $result = $event->getResult();
+                        $result = $this->runTool((string)$tool, (array)$arguments);
                         if (is_array($result) && isset($result['redirect_url'])) {
                             $this->redirectUrl = $result['redirect_url'];
                         }

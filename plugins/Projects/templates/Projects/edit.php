@@ -27,6 +27,11 @@ $editForm = [
                 'method' => 'hidden',
                 'parameters' => ['owner_id'],
             ],
+            // Version of the knowledge base this form was rendered from; a newer one is not overwritten.
+            'kb_version' => [
+                'method' => 'hidden',
+                'parameters' => ['kb_version'],
+            ],
             'referer' => [
                 'method' => 'hidden',
                 'parameters' => ['referer', ['default' => Router::url($this->getRequest()->referer(), true)]],
@@ -67,6 +72,13 @@ $editForm = [
                     ],
                 ],
             ],
+            'descript_help' => (int)$project->kb_format !== 1 ? null : '<p class="small">' . h(__d(
+                'projects',
+                'Knowledge base in Markdown. Do not delete the <!-- kb:... --> comments, they mark the sections and items. The table of contents and the changelog are generated and cannot be edited by hand.',
+            )) . ' ' . $this->Html->link(
+                __d('projects', 'History'),
+                ['action' => 'history', $project->id],
+            ) . '</p>',
             'status' => empty($projectStatuses) ? null : [
                 'method' => 'control',
                 'parameters' => [

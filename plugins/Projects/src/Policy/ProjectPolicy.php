@@ -25,6 +25,30 @@ class ProjectPolicy
     }
 
     /**
+     * Reading the history of the knowledge base and returning to an earlier state is open to all project members.
+     *
+     * @param \App\Model\Entity\User $user User.
+     * @param \Projects\Model\Entity\Project $project Project.
+     * @return bool
+     */
+    public function canKnowledgeBase(User $user, Project $project): bool
+    {
+        return $this->canAccess($project, $user);
+    }
+
+    /**
+     * Deadlines of the knowledge base go to the personal calendar of a project member who uses the calendar.
+     *
+     * @param \App\Model\Entity\User $user User.
+     * @param \Projects\Model\Entity\Project $project Project.
+     * @return bool
+     */
+    public function canKnowledgeBaseCalendar(User $user, Project $project): bool
+    {
+        return $user->hasAccess(AppPluginsEnum::Calendar) && $this->canAccess($project, $user);
+    }
+
+    /**
      * Procedure editing follows the existing editor role and project membership.
      *
      * @param \App\Model\Entity\User $user User.

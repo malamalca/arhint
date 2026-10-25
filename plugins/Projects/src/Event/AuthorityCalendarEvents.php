@@ -41,9 +41,12 @@ class AuthorityCalendarEvents implements EventListenerInterface
         $link = TableRegistry::getTableLocator()->get('Projects.ProjectsAuthorityCalendarLinks')->find()
             ->where(['event_id' => $eventId])->first();
 
-        $event->setResult($link ? [
-            'plugin' => 'Projects', 'controller' => 'ProjectsAuthorities', 'action' => 'view', $link->case_id,
-        ] : null);
+        // Other sources of managed entries answer the same event, so only a match gives a result.
+        if ($link) {
+            $event->setResult([
+                'plugin' => 'Projects', 'controller' => 'ProjectsAuthorities', 'action' => 'view', $link->case_id,
+            ]);
+        }
     }
 
     /**

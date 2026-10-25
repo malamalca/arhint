@@ -1191,3 +1191,120 @@ msgstr "Velja do (pogoji / mnenje)"
 
 msgid "The validity date cannot be before the event date."
 msgstr "Datum veljavnosti ne sme biti pred datumom dogodka."
+
+msgid "Knowledge base"
+msgstr "Knowledge base"
+
+msgid "version {0}"
+msgstr "verzija {0}"
+
+msgid "History"
+msgstr "Zgodovina"
+
+msgid "Knowledge base history"
+msgstr "Zgodovina knowledge base"
+
+msgid "Version"
+msgstr "Verzija"
+
+msgid "Time"
+msgstr "Čas"
+
+msgid "Source"
+msgstr "Vir"
+
+msgid "Change"
+msgstr "Sprememba"
+
+msgid "Changes"
+msgstr "Spremembe"
+
+msgid "Changes in version {0}"
+msgstr "Spremembe v verziji {0}"
+
+msgid "No changes."
+msgstr "Brez sprememb."
+
+msgid "Automatic update"
+msgstr "Samodejna posodobitev"
+
+msgid "Conversation"
+msgstr "Pogovor"
+
+msgid "Manual edit"
+msgstr "Ročna sprememba"
+
+msgid "Conversion"
+msgstr "Pretvorba"
+
+msgid "Assistant"
+msgstr "Asistent"
+
+msgid "Return to a version"
+msgstr "Vrnitev na verzijo"
+
+msgid "Return to this version"
+msgstr "Vrni to stanje"
+
+msgid "Return the knowledge base to version {0}?"
+msgstr "Vrnem knowledge base na verzijo {0}?"
+
+msgid "The knowledge base was returned to version {0}."
+msgstr "Knowledge base je vrnjen na verzijo {0}."
+
+msgid "The knowledge base cannot be returned to this version."
+msgstr "Knowledge base ni mogoče vrniti na to verzijo."
+
+msgid "The knowledge base cannot be emptied, the text was not changed."
+msgstr "Knowledge base ni mogoče izprazniti, besedilo ni bilo spremenjeno."
+
+msgid "The knowledge base was changed in the meantime. Your text is kept in the form; check the history before saving it again."
+msgstr "Knowledge base je bil medtem spremenjen. Vaše besedilo je ohranjeno v obrazcu; pred ponovnim shranjevanjem preglejte zgodovino."
+
+msgid "Knowledge base in Markdown. Do not delete the <!-- kb:... --> comments, they mark the sections and items. The table of contents and the changelog are generated and cannot be edited by hand."
+msgstr "Knowledge base v Markdownu. Ne brišite komentarjev <!-- kb:... -->, ki označujejo poglavja in elemente. Kazalo in changelog se generirata in ju ni mogoče urejati ročno."
+
+msgid "Undo"
+msgstr "Razveljavi"
+
+msgid "Knowledge base changed"
+msgstr "Knowledge base je spremenjen"
+
+msgid "Request failed. Please try again."
+msgstr "Zahteva ni uspela. Poskusite znova."
+
+msgid "Queue worker is not running. Start it with: bin/cake queue worker"
+msgstr "Delavec čakalne vrste ne teče. Zaženite ga z: bin/cake queue worker"
+
+msgid "Conversation with AI about the project"
+msgstr "Pogovor z AI o projektu"
+
+msgid "Ask about the project or tell the AI what to change in the knowledge base..."
+msgstr "Vprašajte o projektu ali povejte AI, kaj naj spremeni v knowledge base..."
+
+msgid "Send"
+msgstr "Pošlji"
+
+msgid "Clear conversation"
+msgstr "Počisti pogovor"
+
+msgid "Empty message."
+msgstr "Prazno sporočilo."
+
+msgid "The AI assistant is not configured for your account."
+msgstr "AI asistent ni nastavljen za vaš račun."
+
+msgid "The change cannot be undone."
+msgstr "Spremembe ni mogoče razveljaviti."
+
+msgid "Add to my calendar"
+msgstr "Dodaj v moj koledar"
+
+msgid "Remove from my calendar"
+msgstr "Odstrani iz mojega koledarja"
+
+msgid "The deadline cannot be added to the calendar."
+msgstr "Roka ni mogoče dodati v koledar."
+
+msgid "Edit this deadline in the knowledge base of the project."
+msgstr "Ta rok uredite v knowledge base projekta."

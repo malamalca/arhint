@@ -10,6 +10,8 @@ use Cake\Event\Event;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\TestCase;
 use Projects\Event\ProjectsAIToolsEvents;
+use Projects\Lib\KnowledgeBase\KbDocument;
+use Projects\Lib\KnowledgeBase\KbService;
 
 /**
  * Projects\Event\ProjectsAIToolsEvents Test Case
@@ -24,6 +26,7 @@ class ProjectsAIToolsEventsTest extends TestCase
         'plugin.Projects.ProjectsTasks',
         'plugin.Projects.ProjectsWorkhours',
         'plugin.Projects.ProjectsUsers',
+        'plugin.Projects.ProjectsKbRevisions',
     ];
 
     protected ProjectsAIToolsEvents $listener;
@@ -588,5 +591,33 @@ class ProjectsAIToolsEventsTest extends TestCase
         $project = $table->get(self::PROJECT_1);
 
         $this->assertSame('Opis projekta', $project->toAIArray()['descript']);
+    }
+
+    public function testUpdateProjectOfKnowledgeBaseAppendsNoteAndRefusesReplace(): void
+    {
+        $table = TableRegistry::getTableLocator()->get('Projects.Projects');
+        $table->updateAll(['descript' => 'Opis', 'kb_format' => 0], ['id' => self::PROJECT_1]);
+        (new KbService())->migrateLegacy(self::PROJECT_1);
+
+        $args = ['id' => self::PROJECT_1, 'descript' => 'Prva opomba', 'mode' => 'append'];
+        $event = $this->makeEvent('Projects.update_project', $args);
+        $this->listener->aiAssistantExecuteTool($event, 'Projects.update_project', $args);
+        $this->assertArrayNotHasKey('error', $event->getResult());
+
+        $args = ['id' => self::PROJECT_1, 'descript' => 'Druga opomba', 'mode' => 'append'];
+        $event = $this->makeEvent('Projects.update_project', $args);
+        $this->listener->aiAssistantExecuteTool($event, 'Projects.update_project', $args);
+        $this->assertArrayNotHasKey('error', $event->getResult());
+
+        $doc = KbDocument::parse((string)$table->get(self::PROJECT_1)->descript);
+        $this->assertSame('Opis', $doc->text('description'));
+        $this->assertSame("Prva opomba
+Druga opomba", $doc->text('notes'));
+
+        $args = ['id' => self::PROJECT_1, 'descript' => 'Prepis', 'mode' => 'replace'];
+        $event = $this->makeEvent('Projects.update_project', $args);
+        $this->listener->aiAssistantExecuteTool($event, 'Projects.update_project', $args);
+        $this->assertArrayHasKey('error', $event->getResult());
+        $this->assertSame($doc->text('notes'), KbDocument::parse((string)$table->get(self::PROJECT_1)->descript)->text('notes'));
     }
 }

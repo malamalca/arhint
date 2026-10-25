@@ -16,6 +16,9 @@ use Cake\Routing\Exception\MissingRouteException;
 use Cake\Routing\Router;
 use Exception;
 use Projects\Lib\AuthorityWorkflow;
+use Projects\Lib\KnowledgeBase\KbOperationApplier;
+use Projects\Lib\KnowledgeBase\KbService;
+use Projects\Lib\KnowledgeBase\StaleKnowledgeBaseException;
 use Projects\Model\Table\ProjectsTasksCommentsTable;
 
 class ProjectsAIToolsEvents implements EventListenerInterface
@@ -463,6 +466,42 @@ class ProjectsAIToolsEvents implements EventListenerInterface
         $mode = strtolower((string)($arguments['mode'] ?? 'replace'));
         if (!in_array($mode, ['replace', 'append'], true)) {
             $event->setResult(['error' => 'mode must be "replace" or "append".']);
+
+            return;
+        }
+
+        // The description of a converted project is its knowledge base, which a text must not overwrite.
+        if ((int)$project->kb_format === 1) {
+            if ($mode === 'replace') {
+                $event->setResult(['error' => 'The description is a knowledge base with sections; use mode "append" '
+                    . 'to add a note to it.']);
+
+                return;
+            }
+
+            try {
+                $write = (new KbService())->apply(
+                    (string)$project->id,
+                    [['op' => 'append_section', 'section' => 'notes', 'text' => $descript]],
+                    KbOperationApplier::TOOL,
+                    (string)$currentUser->get('id'),
+                    summary: 'dodana opomba (AI asistent)',
+                );
+            } catch (StaleKnowledgeBaseException) {
+                $event->setResult(['error' => 'The knowledge base was changed in the meantime, try again.']);
+
+                return;
+            }
+
+            $event->setResult($write->revision === null
+                ? ['error' => 'Failed to update project.', 'errors' => $write->result->rejected]
+                : [
+                    'id' => $project->id,
+                    'no' => $project->no,
+                    'title' => $project->title,
+                    'descript_length' => mb_strlen($descript),
+                    'view_url' => $this->projectViewUrl((string)$project->id),
+                ]);
 
             return;
         }

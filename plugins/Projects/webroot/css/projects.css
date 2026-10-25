@@ -213,3 +213,82 @@ textarea#project-descript {
 .authority-status-exempt {
     color: #5f6368;
 }
+
+/* Conversation with the AI about the knowledge base */
+#ProjectKbChat {
+    margin-top: 16px;
+}
+
+#ProjectKbChat summary {
+    cursor: pointer;
+    font-weight: bold;
+}
+
+#ProjectKbChat .kb-chat-messages {
+    max-height: 420px;
+    overflow-y: auto;
+    margin: 8px 0;
+}
+
+#ProjectKbChat .kb-chat-message {
+    margin: 6px 0;
+}
+
+#ProjectKbChat .kb-chat-message__body {
+    display: inline-block;
+    max-width: 90%;
+    padding: 6px 10px;
+    border-radius: 8px;
+    background: #f0f0f0;
+}
+
+#ProjectKbChat .kb-chat-message--user {
+    text-align: right;
+}
+
+#ProjectKbChat .kb-chat-message--user .kb-chat-message__body {
+    background: #dbeafe;
+    text-align: left;
+    white-space: pre-wrap;
+}
+
+#ProjectKbChat .kb-chat-message--error .kb-chat-message__body {
+    background: #fee2e2;
+}
+
+#ProjectKbChat .kb-chat-message--changes .kb-chat-message__body {
+    background: #e6ffed;
+}
+
+#ProjectKbChat .kb-chat-message--changes ul {
+    margin: 4px 0 8px 18px;
+}
+
+#ProjectKbChat .kb-chat-message__body p:first-child {
+    margin-top: 0;
+}
+
+#ProjectKbChat .kb-chat-message__body p:last-child {
+    margin-bottom: 0;
+}
+
+#ProjectKbChat textarea {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+#ProjectKbChat .kb-chat-actions {
+    margin-top: 6px;
+}
+
+/* Deadline of the knowledge base in the personal calendar */
+#ProjectKbContent a.kb-calendar {
+    margin-left: 8px;
+    font-size: 0.85em;
+    white-space: nowrap;
+}
+
+#ProjectKbContent a.kb-calendar.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+}

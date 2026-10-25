@@ -2,12 +2,59 @@
 
 use Cake\Routing\Router;
 use League\CommonMark\GithubFlavoredMarkdownConverter;
+use Projects\Lib\KnowledgeBase\KbCalendar;
+use Projects\Lib\KnowledgeBase\KbDocument;
+use Projects\Lib\KnowledgeBase\KbRenderer;
 use Projects\Lib\ProjectsFuncs;
 
 $converter = new GithubFlavoredMarkdownConverter([
     'html_input' => 'strip',
     'allow_unsafe_links' => false,
 ]);
+
+// Deadlines of the knowledge base can be added to the personal calendar of users who use the calendar.
+$kbLinked = (new KbCalendar())->linksFor($project, $this->getCurrentUser());
+$kbCalendarData = '';
+if ($kbLinked !== null) {
+    $this->Html->script('Projects.projects-kb-calendar.js', ['block' => 'script']);
+    $kbCalendarData = ' data-calendar-url="' . h(Router::url([
+        'plugin' => 'Projects', 'controller' => 'ProjectsKnowledge', 'action' => 'calendar', $project->id,
+    ])) . '"'
+        . ' data-text-add="' . h(__d('projects', 'Add to my calendar')) . '"'
+        . ' data-text-remove="' . h(__d('projects', 'Remove from my calendar')) . '"'
+        . ' data-text-error="' . h(__d('projects', 'Request failed. Please try again.')) . '"';
+}
+
+// Conversation with the AI about the knowledge base; only for users who have the AI assistant set up.
+$kbChat = null;
+$aiConfig = $this->getCurrentUser()->getProperty('ai_assistant');
+if ($aiConfig && !empty($aiConfig->provider) && $aiConfig->provider !== 'none') {
+    $kbUrl = fn(string $action): string => Router::url([
+        'plugin' => 'Projects', 'controller' => 'ProjectsKnowledge', 'action' => $action, $project->id,
+    ]);
+    $this->Html->script('Projects.projects-kb-chat.js', ['block' => 'script']);
+    $kbChat = '<details id="ProjectKbChat" class="kb-chat"'
+        . ' data-chat-url="' . h($kbUrl('chat')) . '"'
+        . ' data-chat-status-url="' . h($kbUrl('chatStatus')) . '"'
+        . ' data-clear-url="' . h($kbUrl('clearChat')) . '"'
+        . ' data-undo-url="' . h($kbUrl('undo')) . '"'
+        . ' data-worker-status-url="' . h(Router::url(['plugin' => false, 'controller' => 'Ai', 'action' => 'workerStatus'])) . '"'
+        . ' data-text-undo="' . h(__d('projects', 'Undo')) . '"'
+        . ' data-text-changed="' . h(__d('projects', 'Knowledge base changed')) . '"'
+        . ' data-text-error="' . h(__d('projects', 'Request failed. Please try again.')) . '"'
+        . ' data-text-worker="' . h(__d('projects', 'Queue worker is not running. Start it with: bin/cake queue worker')) . '"'
+        . ' data-text-version="' . h(__d('projects', 'version {0}', '{0}')) . '">'
+        . '<summary>' . h(__d('projects', 'Conversation with AI about the project')) . '</summary>'
+        . '<div id="ProjectKbChatMessages" class="kb-chat-messages"></div>'
+        . '<form id="ProjectKbChatForm">'
+        . '<textarea id="ProjectKbChatInput" rows="2" placeholder="'
+        . h(__d('projects', 'Ask about the project or tell the AI what to change in the knowledge base...'))
+        . '"></textarea>'
+        . '<div class="kb-chat-actions"><button type="submit" id="ProjectKbChatSend" class="btn filled">'
+        . h(__d('projects', 'Send')) . '</button> '
+        . '<a href="#" id="ProjectKbChatClear" class="btn-small">' . h(__d('projects', 'Clear conversation')) . '</a>'
+        . '</div></form></details>';
+}
 
 $projectView = [
     'title_for_layout' => $this->Html->image(
@@ -101,13 +148,33 @@ $projectView = [
                 ],
             ],
         ],
-        'descript' => empty($project->descript) ? null : [
+        'descript' => empty($project->descript) && !$kbChat ? null : [
             'params' => ['id' => 'ProjectDescriptPanel'],
             'lines' => [
                 0 => [
-                    'text' => (string)$converter->convert($project->descript),
+                    'text' => '<div class="small" id="ProjectKbHeader"'
+                        . ((int)$project->kb_format === 1 ? '' : ' style="display: none;"') . '>'
+                        . h(__d('projects', 'Knowledge base')) . ' · '
+                        . '<span id="ProjectKbVersion">' . h(__d('projects', 'version {0}', $project->kb_version))
+                        . '</span>'
+                        . ' · <span id="ProjectKbModified">'
+                        . ($project->modified ? h($project->modified->i18nFormat('dd.MM.yyyy HH:mm')) : '') . '</span>'
+                        . ' · ' . $this->Html->link(
+                            __d('projects', 'History'),
+                            ['action' => 'history', $project->id],
+                        ) . '</div>',
+                ],
+                1 => [
+                    'text' => '<div id="ProjectKbContent"' . $kbCalendarData . '>' . (
+                        (int)$project->kb_format === 1
+                            ? (new KbRenderer())->render(KbDocument::parse((string)$project->descript), $kbLinked)
+                            : (empty($project->descript) ? '' : (string)$converter->convert($project->descript))
+                    ) . '</div>',
                 ],
             ],
+        ],
+        'kb_chat' => !$kbChat ? null : [
+            'lines' => [$kbChat],
         ],
         'tabs' => ['lines' => [
             'pre' => '<div class="row view-panel"><div class="col s12"><ul class="tabs">',
