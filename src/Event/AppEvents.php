@@ -256,7 +256,13 @@ class AppEvents implements EventListenerInterface
 
             // Index new documents (and the text of their attachments) in the vector database.
             if ($event->getSubject() instanceof DocumentsTable && $entity->isNew()) {
-                (new DocumentAiIndexer())->queue($entity, $savedAttachmentIds);
+                // Imported documents have no owner; the logged-in user stands in for it.
+                $identity = Router::getRequest()?->getAttribute('identity');
+                (new DocumentAiIndexer())->queue(
+                    $entity,
+                    $savedAttachmentIds,
+                    fallbackUserId: $identity ? (string)$identity->getIdentifier() : null,
+                );
             }
         }
 

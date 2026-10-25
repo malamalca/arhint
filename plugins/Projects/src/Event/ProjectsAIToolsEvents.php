@@ -15,6 +15,7 @@ use Cake\ORM\TableRegistry;
 use Cake\Routing\Exception\MissingRouteException;
 use Cake\Routing\Router;
 use Exception;
+use Projects\Lib\AuthorityWorkflow;
 use Projects\Model\Table\ProjectsTasksCommentsTable;
 
 class ProjectsAIToolsEvents implements EventListenerInterface
@@ -78,7 +79,9 @@ class ProjectsAIToolsEvents implements EventListenerInterface
                 'id' => ['type' => 'string', 'description' => 'UUID of the project to retrieve.'],
             ],
             description: 'Fetches full details of a single project including description, status, '
-                . 'team members, and milestones with task counts. Includes a view_url field; '
+                . 'team members, milestones with task counts, and the authority procedures '
+                . '(authorities: required conditions and opinions per authority, their status, validity, '
+                . 'open supplement requests, deadlines and the event history). Includes a view_url field; '
                 . 'always render no as a markdown link: [no](view_url).',
         ));
 
@@ -417,6 +420,11 @@ class ProjectsAIToolsEvents implements EventListenerInterface
         }
 
         $project->view_url = $this->projectViewUrl((string)$project->id);
+
+        $workflow = new AuthorityWorkflow();
+        $reviews = TableRegistry::getTableLocator()->get('Projects.ProjectsAuthorityReviews')->find()
+            ->where(['project_id' => $project->id])->contain(['Users'])->orderBy(['sequence'])->all()->toList();
+        $project->authorities = $workflow->toAIArray($project, $workflow->cases((string)$project->id), $reviews);
 
         $event->setResult($project);
     }

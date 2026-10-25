@@ -29,6 +29,60 @@ class AIAssistantTest extends TestCase
         $this->assertSame('User message 12', $storedHistory[8]['content']);
     }
 
+    /**
+     * @param int $count Number of tool calls requested by one assistant message.
+     * @return array<int, array<string, mixed>>
+     */
+    private function toolBatch(int $count): array
+    {
+        $toolCalls = [];
+        $responses = [];
+        for ($index = 1; $index <= $count; $index++) {
+            $toolCalls[] = ['id' => 'call_' . $index, 'type' => 'function', 'function' => ['name' => 'x', 'arguments' => '{}']];
+            $responses[] = ['role' => 'tool', 'tool_call_id' => 'call_' . $index, 'content' => '{}'];
+        }
+
+        return array_merge(
+            [['role' => 'user', 'content' => 'Analyse'], ['role' => 'assistant', 'content' => '', 'tool_calls' => $toolCalls]],
+            $responses,
+        );
+    }
+
+    public function testToolBatchLargerThanHistoryWindowKeepsAssistantMessage(): void
+    {
+        $assistant = new AIAssistant();
+        $reflection = new ReflectionClass($assistant);
+        $append = $reflection->getMethod('appendConversationMessage');
+        foreach ($this->toolBatch(10) as $message) {
+            $append->invoke($assistant, $message);
+        }
+
+        $history = array_values(array_filter(
+            $assistant->getHistory(),
+            fn(array $message): bool => !str_starts_with((string)$message['content'], 'Conversation summary: '),
+        ));
+        $this->assertSame('assistant', $history[0]['role']);
+        $this->assertCount(10, $history[0]['tool_calls']);
+        $this->assertCount(11, $history);
+        $this->assertSame('tool', $history[10]['role']);
+    }
+
+    public function testSetHistoryDropsOrphanedToolMessages(): void
+    {
+        $assistant = new AIAssistant();
+        $assistant->setHistory([
+            ['role' => 'tool', 'tool_call_id' => 'call_1', 'content' => '{}'],
+            ['role' => 'tool', 'tool_call_id' => 'call_2', 'content' => '{}'],
+            ['role' => 'user', 'content' => 'Hello'],
+            ['role' => 'assistant', 'content' => 'Calling', 'tool_calls' => [['id' => 'call_9', 'type' => 'function']]],
+            ['role' => 'user', 'content' => 'Again'],
+        ]);
+
+        $history = $assistant->getHistory();
+        $this->assertSame(['user', 'assistant', 'user'], array_column($history, 'role'));
+        $this->assertArrayNotHasKey('tool_calls', $history[1]);
+    }
+
     public function testNativeToolCallsEnabledForOpenAIByDefault(): void
     {
         $user = new User();

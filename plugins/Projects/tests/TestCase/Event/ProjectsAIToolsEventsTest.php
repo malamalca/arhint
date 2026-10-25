@@ -160,6 +160,9 @@ class ProjectsAIToolsEventsTest extends TestCase
         $this->assertEquals('First Project Title', $result->title);
         $this->assertNotEmpty($result->view_url);
         $this->assertStringContainsString('/projects/view/' . self::PROJECT_1, $result->view_url);
+        $authorities = $result->toAIArray()['authorities'];
+        $this->assertSame(0, $authorities['required_cases']);
+        $this->assertSame([], $authorities['cases']);
     }
 
     public function testGetProjectNotFound(): void

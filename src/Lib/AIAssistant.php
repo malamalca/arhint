@@ -271,7 +271,7 @@ class AIAssistant
         while (true) {
             if ($nativeToolCalls) {
                 $summary = null;
-                $historyWithoutSummary = $this->conversationHistory;
+                $historyWithoutSummary = $this->dropInvalidToolMessages($this->conversationHistory);
                 if ($this->provider === 'openai') {
                     // Strip the rolling summary from conversation history (it is stored as a fake assistant
                     // message for serialization purposes) and inject it into the system prompt instead,
@@ -679,7 +679,8 @@ class AIAssistant
             $normalized[] = $normalizedMessage;
         }
 
-        return $normalized;
+        // A history stored by an earlier version may contain orphaned tool messages.
+        return $this->dropInvalidToolMessages($normalized);
     }
 
     /**
@@ -731,14 +732,20 @@ class AIAssistant
             return;
         }
 
-        $overflowCount = count($messages) - self::MAX_HISTORY_MESSAGES;
-        $overflowMessages = array_slice($messages, 0, $overflowCount);
-        $recentMessages = array_slice($messages, -self::MAX_HISTORY_MESSAGES);
+        // Never cut between an assistant(tool_calls) message and its tool responses: one assistant
+        // message can request more tools than the window holds (up to MAX_TOOL_CALLS), and dropping
+        // the assistant message would leave orphaned tool messages that the API rejects with HTTP 400.
+        // Move the cut back to the owning assistant message, so the window may grow for such a batch.
+        $cut = count($messages) - self::MAX_HISTORY_MESSAGES;
+        while ($cut > 0 && ($messages[$cut]['role'] ?? '') === 'tool') {
+            $cut--;
+        }
+        $overflowMessages = array_slice($messages, 0, $cut);
+        $recentMessages = array_slice($messages, $cut);
 
-        // Ensure no orphaned 'tool' messages remain at the head of recentMessages.
-        // This happens when the overflow cut falls between an assistant(tool_calls) message and its
-        // paired tool-response messages. Collect all tool_call IDs that are present in recentMessages
-        // and drop any tool message whose ID is not among them.
+        // Drop tool messages whose assistant(tool_calls) message is not in the window. A batch whose
+        // responses are still being appended is incomplete here, so it is validated only when a request
+        // is built (see dropInvalidToolMessages()).
         $seenToolCallIds = [];
         foreach ($recentMessages as $msg) {
             if (($msg['role'] ?? '') === 'assistant' && !empty($msg['tool_calls']) && is_array($msg['tool_calls'])) {
@@ -762,6 +769,67 @@ class AIAssistant
             [['role' => 'assistant', 'content' => self::HISTORY_SUMMARY_PREFIX . $summaryText]],
             $recentMessages,
         );
+    }
+
+    /**
+     * Remove tool messages the chat API would reject.
+     *
+     * A tool message is valid only directly after the assistant(tool_calls) message that requested it,
+     * and an assistant message with tool_calls is valid only when every call has a tool response.
+     * Orphaned tool messages are dropped; an incomplete assistant message loses its tool_calls and is
+     * kept as plain text, or dropped when it has no text.
+     *
+     * @param array<int, array<string, mixed>> $messages
+     * @return array<int, array<string, mixed>>
+     */
+    private function dropInvalidToolMessages(array $messages): array
+    {
+        $result = [];
+        $count = count($messages);
+
+        for ($i = 0; $i < $count; $i++) {
+            $message = $messages[$i];
+            $role = $message['role'] ?? '';
+
+            if ($role === 'tool') {
+                // Not consumed by a preceding assistant(tool_calls) message below.
+                continue;
+            }
+
+            if ($role !== 'assistant' || empty($message['tool_calls']) || !is_array($message['tool_calls'])) {
+                $result[] = $message;
+                continue;
+            }
+
+            $expectedIds = [];
+            foreach ($message['tool_calls'] as $toolCall) {
+                if (isset($toolCall['id'])) {
+                    $expectedIds[(string)$toolCall['id']] = true;
+                }
+            }
+
+            $responses = [];
+            while ($i + 1 < $count && ($messages[$i + 1]['role'] ?? '') === 'tool') {
+                $i++;
+                $toolCallId = (string)($messages[$i]['tool_call_id'] ?? '');
+                if (isset($expectedIds[$toolCallId]) && !isset($responses[$toolCallId])) {
+                    $responses[$toolCallId] = $messages[$i];
+                }
+            }
+
+            if ($expectedIds !== [] && count($responses) === count($expectedIds)) {
+                $result[] = $message;
+                array_push($result, ...array_values($responses));
+                continue;
+            }
+
+            unset($message['tool_calls']);
+            if (trim((string)($message['content'] ?? '')) !== '') {
+                $result[] = $message;
+            }
+        }
+
+        return $result;
     }
 
     /**

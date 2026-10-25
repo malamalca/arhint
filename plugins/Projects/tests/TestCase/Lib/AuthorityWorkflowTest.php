@@ -342,4 +342,35 @@ class AuthorityWorkflowTest extends TestCase
         $events[] = $this->dated('s2', 'submission', '2026-10-15');
         $this->assertSame('waiting', $this->workflow->phase($this->case($events), 'DGD')['state']);
     }
+
+    /**
+     * The AI assistant gets the same state, deadlines and documents as the project view.
+     *
+     * @return void
+     */
+    public function testToAIArrayDescribesConditionsOpinionAndOpenRequests(): void
+    {
+        $conditions = $this->withDocument($this->dated('c1', 'conditions', '2026-10-05'));
+        $conditions->date_valid = '2020-01-01';
+        $request = $this->dated('r1', 'request', '2026-10-10');
+        $request->date_due = '2020-02-01';
+        $events = [$this->dated('s1', 'submission', '2026-10-01'), $conditions, $request];
+
+        $data = $this->workflow->toAIArray($this->project(), [$this->case($events)], []);
+
+        $this->assertSame(1, $data['required_cases']);
+        $this->assertSame(['Elektro'], $data['missing']);
+        $this->assertFalse($data['ready_for_submission']);
+        $this->assertTrue($data['responses_outstanding']);
+        $case = $data['cases'][0];
+        $this->assertSame('supplement', $case['status']);
+        $this->assertSame('2026-10-05', $case['conditions']['date']);
+        $this->assertTrue($case['conditions']['expired']);
+        $this->assertSame('Opinion', $case['conditions']['documents'][0]['title']);
+        $this->assertNull($case['opinion']);
+        $this->assertCount(1, $case['open_supplement_requests']);
+        $this->assertTrue($case['open_supplement_requests'][0]['overdue']);
+        $this->assertCount(3, $case['events']);
+        $this->assertNotFalse(json_encode($data, JSON_THROW_ON_ERROR));
+    }
 }

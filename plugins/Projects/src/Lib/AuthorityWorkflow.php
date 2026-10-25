@@ -474,6 +474,149 @@ class AuthorityWorkflow
     }
 
     /**
+     * Describe the authority cases of a project (conditions, opinions, deadlines) in plain scalars.
+     *
+     * The state is derived exactly as in the project view, so the AI assistant reports what users see.
+     *
+     * @param \Cake\Datasource\EntityInterface $project Project.
+     * @param array<\Cake\Datasource\EntityInterface> $cases Cases with events, as loaded by cases().
+     * @param array<\Cake\Datasource\EntityInterface> $reviews Reviews ordered by creation.
+     * @return array<string, mixed>
+     */
+    public function toAIArray(EntityInterface $project, array $cases, array $reviews): array
+    {
+        $summary = $this->summary($project, $cases, $reviews);
+        $states = self::states();
+        $kinds = self::kinds();
+        $today = Date::today()->format('Y-m-d');
+        $date = fn(mixed $value): ?string => $value ? self::day($value) : null;
+        $response = function (?EntityInterface $event, string $kind) use ($date): ?array {
+            if (!$event || $event->kind !== $kind) {
+                return null;
+            }
+
+            return [
+                'event_id' => $event->id,
+                'date' => $date($event->event_date),
+                'valid_until' => $date($event->date_valid),
+                'expired' => self::isExpired($event),
+                'documents' => $this->documentsToAIArray($event),
+            ];
+        };
+
+        $caseList = [];
+        foreach ($cases as $case) {
+            $row = $summary['rows'][$case->id];
+            $effective = $this->effectiveEvents($case->events ?? []);
+            $effectiveIds = array_flip(array_map(fn($event) => (string)$event->id, $effective));
+            $last = $row['DGD']['last'];
+
+            $events = [];
+            foreach ($case->events ?? [] as $event) {
+                $events[] = [
+                    'id' => $event->id,
+                    'kind' => $event->kind,
+                    'kind_label' => $kinds[$event->kind] ?? $event->kind,
+                    'event_date' => $date($event->event_date),
+                    'date_due' => $date($event->date_due),
+                    'date_valid' => $date($event->date_valid),
+                    'parent_id' => $event->parent_id,
+                    'descript' => $event->descript,
+                    // An invalidated event, or one that depends on it, no longer counts.
+                    'effective' => $event->kind !== 'void' && isset($effectiveIds[(string)$event->id]),
+                    'documents' => $this->documentsToAIArray($event),
+                ];
+            }
+
+            $requests = [];
+            foreach ($row['DGD']['requests'] as $request) {
+                $due = $date($request->date_due);
+                $requests[] = [
+                    'event_id' => $request->id,
+                    'event_date' => $date($request->event_date),
+                    'date_due' => $due,
+                    'overdue' => $due !== null && $due < $today,
+                    'descript' => $request->descript,
+                ];
+            }
+
+            $nextDue = null;
+            if ($last && $last->date_due && $last->kind !== 'request') {
+                $due = $date($last->date_due);
+                $nextDue = [
+                    'kind' => $last->kind,
+                    'kind_label' => $kinds[$last->kind] ?? $last->kind,
+                    'date_due' => $due,
+                    'overdue' => $due < $today,
+                ];
+            }
+
+            $caseList[] = [
+                'id' => $case->id,
+                'title' => $case->title,
+                'reference' => $case->reference,
+                'descript' => $case->descript,
+                'authority' => $case->authority?->title,
+                'authority_available' => $case->authority !== null,
+                'responsible' => $case->user?->name,
+                'exempt_reason' => self::isExempt($case) ? $case->exempt_reason : null,
+                'status' => $row['status'],
+                'status_label' => $states[$row['status']] ?? $row['status'],
+                'conditions' => $response($row['DPP']['received'], 'conditions'),
+                'opinion' => $response($row['DGD']['received'], 'opinion'),
+                'open_supplement_requests' => $requests,
+                'awaiting_response_since' => array_values(array_map(
+                    fn($event) => $date($event->event_date),
+                    $row['DGD']['pending'],
+                )),
+                'next_due' => $nextDue,
+                'events' => $events,
+            ];
+        }
+
+        $review = $summary['readyReview'];
+
+        return [
+            'required_cases' => $summary['required'],
+            'complete_cases' => $summary['complete'],
+            'exempt_cases' => $summary['exempt'],
+            'missing' => $summary['missing'],
+            'authority_contact_missing' => !$summary['determined'],
+            'responses_outstanding' => $summary['blocked'],
+            'all_opinions_received' => $summary['collected'],
+            'ready_for_submission' => $summary['ready'],
+            'readiness_confirmed' => $review && $review->kind === 'ready' ? [
+                'date' => (string)$review->created,
+                'by' => $review->user?->name,
+            ] : null,
+            'cases' => $caseList,
+        ];
+    }
+
+    /**
+     * @param \Cake\Datasource\EntityInterface $event Event with its document links.
+     * @return array<int, array<string, mixed>>
+     */
+    private function documentsToAIArray(EntityInterface $event): array
+    {
+        $documents = [];
+        foreach ($event->event_documents ?? [] as $link) {
+            if (!$link->document) {
+                continue;
+            }
+            $documents[] = [
+                'id' => $link->document_id,
+                'role' => $link->role,
+                'no' => $link->document->no,
+                'title' => $link->document->title,
+                'dat_issue' => $link->document->dat_issue ? self::day($link->document->dat_issue) : null,
+            ];
+        }
+
+        return $documents;
+    }
+
+    /**
      * @param mixed $value Snapshot value.
      * @return string
      */
