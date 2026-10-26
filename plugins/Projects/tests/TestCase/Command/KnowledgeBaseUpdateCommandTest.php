@@ -3,9 +3,12 @@ declare(strict_types=1);
 
 namespace Projects\Test\TestCase\Command;
 
+use Cake\Console\ConsoleIo;
 use Cake\Console\TestSuite\ConsoleIntegrationTestTrait;
+use Cake\Console\TestSuite\StubConsoleOutput;
 use Cake\Core\Configure;
 use Cake\Event\Event;
+use Cake\Log\Log;
 use Cake\TestSuite\TestCase;
 use Projects\Event\KnowledgeBaseEvents;
 
@@ -82,6 +85,30 @@ class KnowledgeBaseUpdateCommandTest extends TestCase
         }
         $listener->hourlyRun(new Event('App.HeartBeat.hourlyRun', $this));
         $this->assertFileDoesNotExist(TMP . 'projects_knowledge_base.lock');
+    }
+
+    /**
+     * The heartbeat is run by cron, which mails everything that is printed.
+     *
+     * @return void
+     */
+    public function testHeartbeatListenerPrintsNothingAndSwitchesOffConsoleLogging(): void
+    {
+        Configure::write('Projects.KnowledgeBase.enabled', true);
+        $out = new StubConsoleOutput();
+        $err = new StubConsoleOutput();
+        $io = new ConsoleIo($out, $err);
+        $io->setLoggers(true);
+        $this->assertContains('stdout', Log::configured());
+
+        (new KnowledgeBaseEvents())->hourlyRun(new Event('App.HeartBeat.hourlyRun', $this, ['io' => $io]));
+
+        $this->assertNotContains('stdout', Log::configured());
+        $this->assertNotContains('stderr', Log::configured());
+        $this->assertSame([], $out->messages());
+        $this->assertSame([], $err->messages());
+
+        Configure::write('Projects.KnowledgeBase.enabled', false);
     }
 
     /**
