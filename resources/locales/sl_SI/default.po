@@ -618,3 +618,18 @@ msgstr "Odjava"
 
 #~ msgid "Group name"
 #~ msgstr "Naziv"
+
+msgid "Your account has been created"
+msgstr "Vaš uporabniški račun je ustvarjen"
+
+msgid "Hello {0},"
+msgstr "Pozdravljeni, {0},"
+
+msgid "An account has been created for you."
+msgstr "Za vas je bil ustvarjen uporabniški račun."
+
+msgid "Please follow this url to set your password:"
+msgstr "Geslo nastavite na naslovu:"
+
+msgid "After that you can log in at:"
+msgstr "Nato se lahko prijavite na:"

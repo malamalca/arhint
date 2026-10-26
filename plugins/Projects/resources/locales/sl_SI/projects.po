@@ -1329,3 +1329,51 @@ msgstr "Ponovna izdelava"
 
 msgid "The AI conversation is not on for your company."
 msgstr "Pogovor z AI ni vklopljen za vaše podjetje."
+
+msgid "Create a new user"
+msgstr "Ustvari novega uporabnika"
+
+msgid "Name"
+msgstr "Ime"
+
+msgid "Email"
+msgstr "E-pošta"
+
+msgid "Privileges"
+msgstr "Pravice"
+
+msgid "Editor"
+msgstr "Urejevalec"
+
+msgid "Reader"
+msgstr "Bralec"
+
+msgid "Document counters"
+msgstr "Števci dokumentov"
+
+msgid "The new user gets access to this project and to the Projects and Documents plugins, and receives an email with login instructions."
+msgstr "Novi uporabnik dobi dostop do tega projekta ter do pluginov Projekti in Dokumenti in prejme e-pošto z navodili za prijavo."
+
+msgid "The user could not be created. Please, try again."
+msgstr "Uporabnika ni bilo mogoče ustvariti. Poskusite znova."
+
+msgid "The user has been created and an email with login instructions has been sent."
+msgstr "Uporabnik je ustvarjen, e-pošta z navodili za prijavo pa poslana."
+
+msgid "The user has been created, but the email with login instructions could not be sent."
+msgstr "Uporabnik je ustvarjen, vendar e-pošte z navodili za prijavo ni bilo mogoče poslati."
+
+msgid "Group Admin"
+msgstr "Vodja skupine"
+
+msgid "Resend login instructions"
+msgstr "Ponovno pošlji navodila"
+
+msgid "A new password link will be sent to {0}. Continue?"
+msgstr "Nova povezava za nastavitev gesla bo poslana uporabniku {0}. Nadaljujem?"
+
+msgid "The login instructions have been sent."
+msgstr "Navodila za prijavo so poslana."
+
+msgid "The login instructions could not be sent."
+msgstr "Navodil za prijavo ni bilo mogoče poslati."

@@ -8,11 +8,13 @@ use Authentication\PasswordHasher\PasswordHasherFactory;
 use Cake\Core\Configure;
 use Cake\Datasource\QueryInterface;
 use Cake\Http\ServerRequest;
+use Cake\Log\Log;
 use Cake\Mailer\Mailer;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
 use Cake\Validation\Validator;
+use Exception;
 
 /**
  * Users Model
@@ -276,6 +278,33 @@ class UsersTable extends Table
         $ret = $email->send();
 
         return (bool)$ret;
+    }
+
+    /**
+     * Sends email with login instructions to a newly created user.
+     *
+     * @param \App\Model\Entity\User $user User entity with reset key set.
+     * @return bool
+     */
+    public function sendWelcomeEmail(User $user): bool
+    {
+        $email = new Mailer('default');
+        $email->setFrom([Configure::read('App.fromEmail.from') => Configure::read('App.fromEmail.name')]);
+        $email->setTo($user->email);
+        $email->setSubject(__('Your account has been created'));
+
+        $email->viewBuilder()->setTemplate('welcome');
+        $email->setEmailFormat('text');
+        $email->setViewVars(['user' => $user]);
+        $email->viewBuilder()->addHelper('Html');
+
+        try {
+            return (bool)$email->send();
+        } catch (Exception $e) {
+            Log::error('Welcome email could not be sent: ' . $e->getMessage());
+
+            return false;
+        }
     }
 
     /**

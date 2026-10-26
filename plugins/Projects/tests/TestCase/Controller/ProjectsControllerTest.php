@@ -3,7 +3,9 @@ declare(strict_types=1);
 
 namespace Projects\Test\TestCase\Controller;
 
+use App\AppPluginsEnum;
 use Cake\ORM\TableRegistry;
+use Cake\TestSuite\EmailTrait;
 use Cake\TestSuite\IntegrationTestTrait;
 use Cake\TestSuite\TestCase;
 
@@ -12,6 +14,7 @@ use Cake\TestSuite\TestCase;
  */
 class ProjectsControllerTest extends TestCase
 {
+    use EmailTrait;
     use IntegrationTestTrait;
 
     /**
@@ -23,6 +26,7 @@ class ProjectsControllerTest extends TestCase
         'app.Users',
         'Projects' => 'plugin.Projects.Projects',
         'ProjectsUsers' => 'plugin.Projects.ProjectsUsers',
+        'plugin.Documents.DocumentsCounters',
     ];
 
     /**
@@ -162,6 +166,215 @@ class ProjectsControllerTest extends TestCase
 
         $this->post('/projects/projects/user/4dd53305-9715-4be4-b169-20defe113d2a', $data);
         $this->assertRedirect(['action' => 'view', '4dd53305-9715-4be4-b169-20defe113d2a', '?' => ['tab' => 'users']]);
+    }
+
+    /**
+     * Test creating a new user from the project user form
+     *
+     * @return void
+     */
+    public function testUserCreateNew()
+    {
+        $this->login(USER_ADMIN);
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+
+        $projectId = '4dd53305-9715-4be4-b169-20defe113d2a';
+        $this->post('/projects/projects/user/' . $projectId, [
+            'project_id' => $projectId,
+            'new_user' => '1',
+            'new_name' => 'New Person',
+            'new_email' => 'new.person@example.com',
+            'new_privileges' => '10',
+        ]);
+        $this->assertRedirect(['action' => 'view', $projectId, '?' => ['tab' => 'users']]);
+
+        $user = TableRegistry::getTableLocator()->get('Users')->find()
+            ->where(['email' => 'new.person@example.com'])
+            ->firstOrFail();
+        $this->assertTrue($user->hasAccess(AppPluginsEnum::Projects));
+        $this->assertNotEmpty($user->reset_key);
+        $this->assertTrue(TableRegistry::getTableLocator()->get('Projects.ProjectsUsers')
+            ->hasAccess($projectId, $user->id));
+
+        $this->assertMailSentTo('new.person@example.com');
+        $this->assertMailContains($user->reset_key);
+    }
+
+    /**
+     * Test that a new user is linked only to the chosen counters of the company
+     *
+     * @return void
+     */
+    public function testUserCreateNewWithCounters()
+    {
+        $this->login(USER_ADMIN);
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+
+        $projectId = '4dd53305-9715-4be4-b169-20defe113d2a';
+        $this->post('/projects/projects/user/' . $projectId, [
+            'project_id' => $projectId,
+            'new_user' => '1',
+            'new_name' => 'Counter Person',
+            'new_email' => 'counter.person@example.com',
+            'new_privileges' => '15',
+            'new_counters' => [
+                '1d53bc5b-de2d-4e85-b13b-81b39a97fc88', // own company
+                '1d53bc5b-de2d-4e85-b13b-81b39a97fc89', // another company
+            ],
+        ]);
+        $this->assertRedirect(['action' => 'view', $projectId, '?' => ['tab' => 'users']]);
+
+        $user = TableRegistry::getTableLocator()->get('Users')->find()
+            ->where(['email' => 'counter.person@example.com'])
+            ->firstOrFail();
+        $this->assertTrue($user->hasAccess(AppPluginsEnum::Documents));
+
+        $links = TableRegistry::getTableLocator()
+            ->get('CountersUsersCheck', ['table' => 'documents_counters_users'])
+            ->find()
+            ->where(['user_id' => $user->id])
+            ->all();
+        $this->assertCount(1, $links);
+        $this->assertSame('1d53bc5b-de2d-4e85-b13b-81b39a97fc88', $links->first()->counter_id);
+    }
+
+    /**
+     * Test creating a new user with an already used email
+     *
+     * @return void
+     */
+    public function testUserCreateNewDuplicateEmail()
+    {
+        $this->login(USER_ADMIN);
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+
+        $existing = TableRegistry::getTableLocator()->get('Users')->get(USER_COMMON);
+        $this->post('/projects/projects/user/4dd53305-9715-4be4-b169-20defe113d2a', [
+            'project_id' => '4dd53305-9715-4be4-b169-20defe113d2a',
+            'new_user' => '1',
+            'new_name' => 'Duplicate',
+            'new_email' => $existing->email,
+        ]);
+        $this->assertResponseOk();
+        $this->assertNoMailSent();
+    }
+
+    /**
+     * Test that assigning an existing user adds the missing plugin access bits and keeps the others
+     *
+     * @return void
+     */
+    public function testUserExistingGetsPluginAccess()
+    {
+        $usersTable = TableRegistry::getTableLocator()->get('Users');
+        $user = $usersTable->get(USER_COMMON);
+        $calendarBit = 1 << AppPluginsEnum::Calendar->getOrdinal();
+        $user->access = $calendarBit;
+        $usersTable->saveOrFail($user);
+
+        $this->login(USER_ADMIN);
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+
+        $projectId = '4dd53305-9715-4be4-b169-20defe113d2a';
+        $this->post('/projects/projects/user/' . $projectId, ['project_id' => $projectId, 'user_id' => USER_COMMON]);
+        $this->assertRedirect(['action' => 'view', $projectId, '?' => ['tab' => 'users']]);
+
+        $user = $usersTable->get(USER_COMMON);
+        $this->assertTrue($user->hasAccess(AppPluginsEnum::Projects));
+        $this->assertTrue($user->hasAccess(AppPluginsEnum::Documents));
+        $this->assertTrue($user->hasAccess(AppPluginsEnum::Calendar));
+        $this->assertFalse($user->hasAccess(AppPluginsEnum::Crm));
+        $this->assertNoMailSent();
+    }
+
+    /**
+     * Test that a new user can be created as group admin
+     *
+     * @return void
+     */
+    public function testUserCreateNewGroupAdmin()
+    {
+        $this->login(USER_ADMIN);
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+
+        $projectId = '4dd53305-9715-4be4-b169-20defe113d2a';
+        $this->post('/projects/projects/user/' . $projectId, [
+            'project_id' => $projectId,
+            'new_user' => '1',
+            'new_name' => 'Group Admin',
+            'new_email' => 'group.admin@example.com',
+            'new_privileges' => '7',
+        ]);
+        $this->assertRedirect(['action' => 'view', $projectId, '?' => ['tab' => 'users']]);
+
+        $user = TableRegistry::getTableLocator()->get('Users')->find()
+            ->where(['email' => 'group.admin@example.com'])
+            ->firstOrFail();
+        $this->assertSame(7, $user->privileges);
+    }
+
+    /**
+     * Test resending login instructions
+     *
+     * @return void
+     */
+    public function testResendInstructions()
+    {
+        $projectId = '4dd53305-9715-4be4-b169-20defe113d2a';
+        $projectsUsersTable = TableRegistry::getTableLocator()->get('ProjectsUsers');
+        $projectsUsersTable->saveOrFail($projectsUsersTable->newEntity(['project_id' => $projectId, 'user_id' => USER_COMMON]));
+
+        $this->login(USER_ADMIN);
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+
+        $url = '/projects/projects/resendInstructions/' . $projectId . '/' . USER_COMMON;
+
+        $this->get($url);
+        $this->assertResponseError();
+
+        $this->post($url);
+        $this->assertRedirect(['action' => 'view', $projectId, '?' => ['tab' => 'users']]);
+        $user = TableRegistry::getTableLocator()->get('Users')->get(USER_COMMON);
+        $this->assertNotEmpty($user->reset_key);
+        $this->assertMailSentTo($user->email);
+        $this->assertMailContains($user->reset_key);
+    }
+
+    /**
+     * Test resending instructions to a user that is not on the project
+     *
+     * @return void
+     */
+    public function testResendInstructionsNotLinked()
+    {
+        $this->login(USER_ADMIN);
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+
+        $this->post('/projects/projects/resendInstructions/4dd53305-9715-4be4-b169-20defe113d2a/' . USER_COMMON);
+        $this->assertNoMailSent();
+    }
+
+    /**
+     * Test resending instructions by a common user
+     *
+     * @return void
+     */
+    public function testResendInstructionsCommonUser()
+    {
+        $this->login(USER_COMMON);
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+
+        $this->post('/projects/projects/resendInstructions/4dd53305-9715-4be4-b169-20defe113d2a/' . USER_COMMON);
+        $this->assertResponseError();
+        $this->assertNoMailSent();
     }
 
     /**

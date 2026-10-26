@@ -380,7 +380,8 @@ class ProjectsKnowledgeControllerTest extends TestCase
         unlink($marker);
 
         $this->get('/projects/projects/view/' . self::PROJECT);
-        $this->assertResponseContains('id="ProjectKbRegenerate"');
+        $this->assertResponseNotContains('id="ProjectKbRegenerate"');
+        $this->assertResponseNotContains('id="ProjectKbRegenerating"');
     }
 
     /**

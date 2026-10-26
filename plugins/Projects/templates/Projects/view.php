@@ -27,20 +27,14 @@ if ($kbLinked !== null) {
         . ' data-text-error="' . h(__d('projects', 'Request failed. Please try again.')) . '"';
 }
 
-// Administrators can have the knowledge base made again from all the events of the project.
+// While a regeneration of the knowledge base is running, administrators are told so.
 $kbRegenerate = '';
-if ($this->getCurrentUser()->can('edit', $project)) {
-    $kbRegenerate = KnowledgeBaseRegenerateJob::isPending((string)$project->id)
-        ? '<div class="small" id="ProjectKbRegenerating">'
-            . h(__d('projects', 'The knowledge base is being made again from all the events.')) . '</div>'
-        : '<div class="small" id="ProjectKbRegenerate">' . $this->Form->postLink(
-            __d('projects', 'Make the knowledge base again from all events'),
-            ['plugin' => 'Projects', 'controller' => 'ProjectsKnowledge', 'action' => 'regenerate', $project->id],
-            ['confirm' => __d(
-                'projects',
-                'The summary, warnings, deadlines and other sections will be made again from all the events of the project. The description, the notes and the changelog stay, and the current state can be returned to from the history. It can take a long time. Continue?',
-            )],
-        ) . '</div>';
+if (
+    $this->getCurrentUser()->can('edit', $project)
+    && KnowledgeBaseRegenerateJob::isPending((string)$project->id)
+) {
+    $kbRegenerate = '<div class="small" id="ProjectKbRegenerating">'
+        . h(__d('projects', 'The knowledge base is being made again from all the events.')) . '</div>';
 }
 
 // Conversation with the AI about the knowledge base; only for users who have the AI assistant set up.
@@ -357,7 +351,11 @@ switch ($activeTab) {
             foreach ($project->users as $user) {
                 $table['table']['body']['rows'][] = ['columns' => [
                     'user' => h($user->name),
-                    'actions' => $this->Lil->deleteLink(['action' => 'deleteUser', $project->id, $user->id]),
+                    'actions' => $this->Form->postLink(
+                        __d('projects', 'Resend login instructions'),
+                        ['action' => 'resendInstructions', $project->id, $user->id],
+                        ['confirm' => __d('projects', 'A new password link will be sent to {0}. Continue?', $user->name)],
+                    ) . ' ' . $this->Lil->deleteLink(['action' => 'deleteUser', $project->id, $user->id]),
                 ]];
             }
         }

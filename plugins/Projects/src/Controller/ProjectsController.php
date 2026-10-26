@@ -3,6 +3,9 @@ declare(strict_types=1);
 
 namespace Projects\Controller;
 
+use App\AppPluginsEnum;
+use App\Model\Entity\User;
+use Cake\Core\Plugin;
 use Cake\Http\Response;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Hash;
@@ -435,38 +438,234 @@ class ProjectsController extends AppController
             $projectsUser->project_id = $projectId;
         }
 
-        if ($this->getRequest()->is(['patch', 'post', 'put'])) {
-            $projectsUser = $ProjectsUsersTable->patchEntity($projectsUser, $this->getRequest()->getData());
-
-            if ($ProjectsUsersTable->save($projectsUser)) {
-                $this->Flash->success(__d('projects', 'The project user has been saved.'));
-                $redirect = $this->getRequest()->getData('redirect', null);
-                if (!empty($redirect)) {
-                    return $this->redirect(base64_decode($redirect));
-                }
-
-                return $this->redirect(['action' => 'view', $project->id, '?' => ['tab' => 'users']]);
-            }
-            $this->Flash->error(__d('projects', 'The project user could not be saved. Please, try again.'));
-        }
-
         /** @var \App\Model\Table\UsersTable $UsersTable */
         $UsersTable = TableRegistry::getTableLocator()->get('App.Users');
-        $users = $UsersTable->fetchForCompany($this->getCurrentUser()->get('company_id'));
+        $companyId = (string)$this->getCurrentUser()->get('company_id');
+        $newUser = $UsersTable->newEmptyEntity();
+        $counters = $this->fetchCounters($companyId);
+
+        if ($this->getRequest()->is(['patch', 'post', 'put'])) {
+            $data = $this->getRequest()->getData();
+
+            if (!empty($data['new_user'])) {
+                $newUser = $this->createUserForProject($project, $data, $counters);
+                if ($newUser->getErrors() === [] && !$newUser->isNew()) {
+                    return $this->redirect(['action' => 'view', $project->id, '?' => ['tab' => 'users']]);
+                }
+            } else {
+                $projectsUser = $ProjectsUsersTable->patchEntity($projectsUser, $data);
+
+                if ($ProjectsUsersTable->save($projectsUser)) {
+                    $this->grantPluginAccess((string)$projectsUser->user_id, $companyId);
+                    $this->Flash->success(__d('projects', 'The project user has been saved.'));
+                    $redirect = $this->getRequest()->getData('redirect', null);
+                    if (!empty($redirect)) {
+                        return $this->redirect(base64_decode($redirect));
+                    }
+
+                    return $this->redirect(['action' => 'view', $project->id, '?' => ['tab' => 'users']]);
+                }
+                $this->Flash->error(__d('projects', 'The project user could not be saved. Please, try again.'));
+            }
+        }
+
+        $users = $UsersTable->fetchForCompany($companyId);
         foreach ($users as $i => $user) {
             if ($user->hasRole('admin')) {
                 unset($users[$i]);
             }
         }
-        if (count($users) == 0) {
-            $this->Flash->error(__d('projects', 'No users found.'));
 
-            return $this->redirect(['action' => 'view', $project->id, '?' => ['tab' => 'users']]);
-        }
-
-        $this->set(compact('projectsUser', 'users'));
+        $this->set(compact('projectsUser', 'users', 'newUser', 'counters'));
 
         return null;
+    }
+
+    /**
+     * Access bits for the plugins every project user needs: Projects and Documents (when loaded).
+     *
+     * @return int
+     */
+    protected function projectsAccessBits(): int
+    {
+        $access = 1 << AppPluginsEnum::Projects->getOrdinal();
+        if (Plugin::isLoaded('Documents')) {
+            $access |= 1 << AppPluginsEnum::Documents->getOrdinal();
+        }
+
+        return $access;
+    }
+
+    /**
+     * Add the missing Projects and Documents plugin access bits to an existing user of the company.
+     * Existing bits are kept; document counters are not changed.
+     *
+     * @param string $userId User id.
+     * @param string $companyId Company id of the current user.
+     * @return void
+     */
+    protected function grantPluginAccess(string $userId, string $companyId): void
+    {
+        /** @var \App\Model\Table\UsersTable $UsersTable */
+        $UsersTable = TableRegistry::getTableLocator()->get('App.Users');
+        /** @var \App\Model\Entity\User|null $user */
+        $user = $UsersTable->find()->where(['id' => $userId, 'company_id' => $companyId])->first();
+        if (!$user) {
+            return;
+        }
+
+        $access = (int)$user->access | $this->projectsAccessBits();
+        if ($access !== (int)$user->access) {
+            $user->access = $access;
+            $UsersTable->save($user);
+        }
+    }
+
+    /**
+     * Send the login instructions again to a project user, with a new password reset key.
+     *
+     * @param string $projectId Project id.
+     * @param string $userId User id.
+     * @return \Cake\Http\Response|null
+     */
+    public function resendInstructions(string $projectId, string $userId): ?Response
+    {
+        $this->getRequest()->allowMethod(['post']);
+        $project = $this->Projects->get($projectId);
+        $this->Authorization->authorize($project, 'user');
+
+        /** @var \App\Model\Table\UsersTable $UsersTable */
+        $UsersTable = TableRegistry::getTableLocator()->get('App.Users');
+        /** @var \App\Model\Entity\User|null $user */
+        $user = $UsersTable->find()
+            ->where(['Users.id' => $userId, 'Users.company_id' => $this->getCurrentUser()->get('company_id')])
+            ->first();
+        /** @var \Projects\Model\Table\ProjectsUsersTable $ProjectsUsersTable */
+        $ProjectsUsersTable = TableRegistry::getTableLocator()->get('Projects.ProjectsUsers');
+        $linked = $ProjectsUsersTable->hasAccess($projectId, $userId);
+
+        if (!$user || !$linked) {
+            $this->Flash->error(__d('projects', 'No link found.'));
+        } else {
+            $user->reset_key = bin2hex(random_bytes(16));
+            if ($UsersTable->save($user) && $UsersTable->sendWelcomeEmail($user)) {
+                $this->Flash->success(__d('projects', 'The login instructions have been sent.'));
+            } else {
+                $this->Flash->error(__d('projects', 'The login instructions could not be sent.'));
+            }
+        }
+
+        return $this->redirect(['action' => 'view', $project->id, '?' => ['tab' => 'users']]);
+    }
+
+    /**
+     * Fetch active document counters of the company for the multiselect.
+     *
+     * @param string $companyId Company id.
+     * @return array<string, string> Counter titles indexed by counter id.
+     */
+    protected function fetchCounters(string $companyId): array
+    {
+        if (!Plugin::isLoaded('Documents')) {
+            return [];
+        }
+
+        /** @var array<string, string> $counters */
+        $counters = TableRegistry::getTableLocator()->get('Documents.DocumentsCounters')
+            ->find('list', keyField: 'id', valueField: 'title')
+            ->where(['DocumentsCounters.owner_id' => $companyId, 'DocumentsCounters.active' => true])
+            ->orderBy(['DocumentsCounters.title'])
+            ->toArray();
+
+        return $counters;
+    }
+
+    /**
+     * Create a new user with access to the project, the Projects and Documents plugins and chosen
+     * document counters, then send the login instructions by email.
+     *
+     * Returned entity has no errors and is not new when the user was saved.
+     *
+     * @param \Projects\Model\Entity\Project $project Project the user is given access to.
+     * @param array<string, mixed> $data Submitted form data.
+     * @param array<string, string> $counters Counters the user may choose from, indexed by id.
+     * @return \App\Model\Entity\User
+     */
+    protected function createUserForProject(Project $project, array $data, array $counters): User
+    {
+        /** @var \App\Model\Table\UsersTable $UsersTable */
+        $UsersTable = TableRegistry::getTableLocator()->get('App.Users');
+        $ProjectsUsersTable = TableRegistry::getTableLocator()->get('Projects.ProjectsUsers');
+
+        $privileges = (int)($data['new_privileges'] ?? 10);
+        $user = $UsersTable->newEntity([
+            'company_id' => $this->getCurrentUser()->get('company_id'),
+            'name' => trim((string)($data['new_name'] ?? '')),
+            'email' => trim((string)($data['new_email'] ?? '')),
+            'username' => trim((string)($data['new_email'] ?? '')),
+            'privileges' => in_array($privileges, [7, 10, 15], true) ? $privileges : 10,
+            'access' => $this->projectsAccessBits(),
+            'active' => true,
+            'reset_key' => bin2hex(random_bytes(16)),
+        ]);
+
+        if ($user->getErrors() !== []) {
+            $this->Flash->error(__d('projects', 'The user could not be created. Please, try again.'));
+
+            return $user;
+        }
+
+        $counterIds = array_values(array_intersect(
+            array_map('strval', (array)($data['new_counters'] ?? [])),
+            array_map('strval', array_keys($counters)),
+        ));
+
+        $saved = $UsersTable->getConnection()->transactional(
+            function () use ($UsersTable, $ProjectsUsersTable, $user, $project, $counterIds) {
+                if (!$UsersTable->save($user)) {
+                    return false;
+                }
+
+                $projectsUser = $ProjectsUsersTable->newEntity(['project_id' => $project->id, 'user_id' => $user->id]);
+                if (!$ProjectsUsersTable->save($projectsUser)) {
+                    return false;
+                }
+
+                if ($counterIds) {
+                    $CountersUsers = TableRegistry::getTableLocator()
+                        ->get('DocumentsCountersUsers', ['table' => 'documents_counters_users']);
+                    foreach ($counterIds as $counterId) {
+                        $link = $CountersUsers->newEntity(['counter_id' => $counterId, 'user_id' => $user->id]);
+                        if (!$CountersUsers->save($link)) {
+                            return false;
+                        }
+                    }
+                }
+
+                return true;
+            },
+        );
+
+        if (!$saved) {
+            $user->setNew(true);
+            $this->Flash->error(__d('projects', 'The user could not be created. Please, try again.'));
+
+            return $user;
+        }
+
+        if ($UsersTable->sendWelcomeEmail($user)) {
+            $this->Flash->success(__d(
+                'projects',
+                'The user has been created and an email with login instructions has been sent.',
+            ));
+        } else {
+            $this->Flash->warning(__d(
+                'projects',
+                'The user has been created, but the email with login instructions could not be sent.',
+            ));
+        }
+
+        return $user;
     }
 
     /**
