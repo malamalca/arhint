@@ -140,10 +140,10 @@ class ProjectsDashboard
         $title = h(__d('projects', 'Add Log'));
 
         return '<a href="' . h($url) . '" class="add-projects-log" title="' . $title . '" aria-label="' . $title . '" '
-            . 'style="margin-left: auto; flex: none; display: flex; align-items: center; justify-content: center; '
-            . 'width: 28px; height: 28px; border-radius: 50%; color: inherit; text-decoration: none; '
-            . 'border: solid 1px color-mix(in srgb, currentColor 40%, transparent);">'
-            . '<i class="material-icons" style="font-size: 20px;">add</i></a>';
+            . 'style="margin: -.25rem -.5rem 0 auto; flex: none; align-self: flex-start; display: flex; '
+            . 'align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 50%; '
+            . 'color: inherit; opacity: .55; text-decoration: none;">'
+            . '<i class="material-icons" style="font-size: 18px;">add</i></a>';
     }
 
     /**
