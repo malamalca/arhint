@@ -69,10 +69,21 @@ class ProjectsDashboardTest extends TestCase
         $this->assertStringNotContainsString('<script>', $html);
         $this->assertStringContainsString('1 odprtih opozoril', $html);
         $this->assertStringContainsString('1 odprtih vprašanj', $html);
-        // badges show the icon and the number, the text is only in the tooltip, and they come first in the body
+        // badges show the icon and the number, the text is only in the tooltip, and they follow the status
+        // in the header
         $this->assertStringContainsString('title="1 odprtih opozoril"', $html);
         $this->assertStringNotContainsString('>1 odprtih opozoril<', $html);
+        // status, warnings and questions are the same pill, the warnings have a light yellow background
+        $this->assertSame(3, substr_count($html, 'padding: 1px 8px; border-radius: 10px; font-size: .75rem;'));
+        $this->assertSame(1, substr_count($html, '#ffd600'));
+        $this->assertLessThan(strpos($html, 'title="1 odprtih opozoril"'), strpos($html, 'V teku'));
         $this->assertLessThan(strpos($html, 'Gradnja poteka'), strpos($html, 'title="1 odprtih opozoril"'));
+        $this->assertLessThan(strpos($html, 'class="add-projects-log"'), strpos($html, 'title="1 odprtih vprašanj"'));
+        $this->assertStringContainsString('projects-overview-header', substr(
+            $html,
+            0,
+            (int)strpos($html, 'title="1 odprtih opozoril"'),
+        ));
         $this->assertStringContainsString('Dopolnitev vloge', $html);
         $this->assertStringNotContainsString('Poznejši rok', $html);
         $this->assertStringNotContainsString('Opravljen rok', $html);

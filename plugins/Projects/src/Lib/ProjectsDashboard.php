@@ -69,11 +69,14 @@ class ProjectsDashboard
             ? KbDocument::parse((string)$project->descript)
             : null;
 
-        // The status (e.g. DGD) sits in the same column as the number and the title, so all three line up.
-        $chip = $status === '' ? '' : '<div style="margin-top: .25rem;"><span class="chip" style="height: auto; '
-            . 'margin: 0; padding: 1px 8px; font-size: .7rem; line-height: 1.4; border-radius: 10px; '
-            . 'background: var(--md-sys-color-surface); color: var(--md-sys-color-on-surface);">'
-            . h($status) . '</span></div>';
+        // The status (e.g. DGD) sits in the same column as the number and the title, so all three line up;
+        // the badges with open warnings and questions follow the status.
+        $chip = $status === '' ? '' : self::pill(h($status));
+        $chips = $chip . ($knowledge ? self::badges($knowledge) : '');
+        if ($chips !== '') {
+            $chips = '<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-start; '
+                . 'gap: .375rem; margin-top: .25rem;">' . $chips . '</div>';
+        }
 
         // The header is a light tone of the inverse of the color of the project (made from its number when it has
         // none), so it stands out from the color of the initials in the avatar.
@@ -87,14 +90,12 @@ class ProjectsDashboard
             . '" alt="" class="project-avatar" style="height: 40px; width: 40px; flex: none;" />'
             . '<div style="min-width: 0;"><div class="small">' . h($project->no) . '</div>'
             . '<a href="' . h($url) . '" style="color: inherit;"><b>' . h($project->title) . '</b></a>'
-            . $chip . '</div>' . self::addLogButton($project) . '</div>';
+            . $chips . '</div>' . self::addLogButton($project) . '</div>';
 
-        // The body reads from the most important to the least: what is going on, what needs attention,
-        // what is due. Activity and the last log are pinned to the bottom of the card, so they line up
+        // The body reads from the most important to the least: what is going on, what is due. Activity and the last log are pinned to the bottom of the card, so they line up
         // across cards of different height.
         $body = '';
         if ($knowledge) {
-            $body .= self::badges($knowledge);
             $state = self::plain($knowledge->text(KbDocument::STATUS), KbDocument::STATUS_MAX_CHARS);
             $title = $state === '' ? '' : ' title="' . h(__d('projects', 'Project status')) . '"';
             // projects whose status was not made yet show the summary
@@ -135,6 +136,31 @@ class ProjectsDashboard
     {
         return 'display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: ' . $lines
             . '; overflow: hidden;';
+    }
+
+    /**
+     * A small pill of the header of the card (status, open warnings, open questions); all of them look the same
+     * except for the background. Sizes are set explicitly so a pill keeps the size of its content wherever
+     * the card is shown.
+     *
+     * @param string $html Html content of the pill.
+     * @param string $title Tooltip, also the accessible name.
+     * @param string $background Css background of the pill.
+     * @return string
+     */
+    private static function pill(
+        string $html,
+        string $title = '',
+        string $background = 'var(--md-sys-color-surface)',
+    ): string {
+        $attributes = $title === '' ? '' : ' title="' . h($title) . '" aria-label="' . h($title) . '"';
+
+        return '<span' . $attributes . ' style="display: inline-flex; flex: none; width: auto; '
+            . 'align-items: center; justify-content: flex-start; gap: 3px; height: auto; margin: 0; '
+            . 'padding: 1px 8px; border-radius: 10px; font-size: .75rem; line-height: 1.4; '
+            . 'color: var(--md-sys-color-on-surface); '
+            . 'border: solid 1px var(--md-sys-color-outline-variant); background: ' . $background . ';">'
+            . $html . '</span>';
     }
 
     /**
@@ -195,10 +221,10 @@ class ProjectsDashboard
     }
 
     /**
-     * Badges with the number of open warnings and open questions of the knowledge base, the first thing in the body.
+     * Badges with the number of open warnings and open questions of the knowledge base, shown in the header next to the status.
      *
      * @param \Projects\Lib\KnowledgeBase\KbDocument $knowledge Knowledge base.
-     * @return string Empty when nothing is open.
+     * @return string Badges without a wrapper, empty when nothing is open.
      */
     private static function badges(KbDocument $knowledge): string
     {
@@ -210,6 +236,8 @@ class ProjectsDashboard
                 'warning_amber',
                 (int)$counts['warnings'],
                 __d('projects', '{0} open warnings', $counts['warnings']),
+                // light yellow, in light and dark theme alike
+                'color-mix(in srgb, #ffd600 28%, var(--md-sys-color-surface))',
             ];
         }
         if (!empty($counts['open_questions'])) {
@@ -217,26 +245,22 @@ class ProjectsDashboard
                 'help_outline',
                 (int)$counts['open_questions'],
                 __d('projects', '{0} open questions', $counts['open_questions']),
+                'var(--md-sys-color-surface)',
             ];
         }
 
-        // Only the icon and the number are shown, the text is in the tooltip. Sizes are set explicitly so the
-        // badges keep the size of their content wherever the card is shown.
+        // Only the icon and the number are shown, the text is in the tooltip.
         $html = '';
-        foreach ($badges as [$icon, $count, $text]) {
-            $html .= '<span title="' . h($text) . '" aria-label="' . h($text) . '" style="display: inline-flex; '
-                . 'flex: none; width: auto; align-items: center; justify-content: flex-start; gap: 3px; '
-                . 'padding: 1px 8px 1px 5px; border-radius: 10px; font-size: .75rem; line-height: 1.4; '
-                . 'border: solid 1px var(--md-sys-color-outline-variant); '
-                . 'background: var(--md-sys-color-surface);">'
-                . '<i class="material-icons" style="font-size: 14px; width: 14px; height: 14px; '
-                . 'line-height: 14px; flex: none;">' . $icon . '</i>' . $count . '</span>';
+        foreach ($badges as [$icon, $count, $text, $background]) {
+            $html .= self::pill(
+                '<i class="material-icons" style="font-size: 14px; width: 14px; height: 14px; '
+                . 'line-height: 14px; flex: none;">' . $icon . '</i>' . $count,
+                $text,
+                $background,
+            );
         }
 
-        return $html === ''
-            ? ''
-            : '<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-start; '
-                . 'gap: .375rem;">' . $html . '</div>';
+        return $html;
     }
 
     /**
