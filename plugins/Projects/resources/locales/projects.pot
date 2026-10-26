@@ -1220,3 +1220,21 @@ msgstr ""
 
 msgid "Edit this deadline in the knowledge base of the project."
 msgstr ""
+
+msgid "Make the knowledge base again from all events"
+msgstr ""
+
+msgid "The summary, warnings, deadlines and other sections will be made again from all the events of the project. The description, the notes and the changelog stay, and the current state can be returned to from the history. It can take a long time. Continue?"
+msgstr ""
+
+msgid "The knowledge base is being made again from all the events."
+msgstr ""
+
+msgid "The knowledge base is already being made again."
+msgstr ""
+
+msgid "The knowledge base is being made again. The result appears as a new version in the history."
+msgstr ""
+
+msgid "Regeneration"
+msgstr ""

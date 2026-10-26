@@ -36,10 +36,16 @@ class KbEventCollector
      * @param \DateTimeInterface|null $since Events modified before this are not looked at (minus a slack); all when empty.
      * @param int $limit Number of events to return.
      * @param bool $more Output: whether more pending events remain.
+     * @param bool $ignoreHandled Return the events that were dealt with before as well (for a new generation).
      * @return array<int, \Projects\Lib\KnowledgeBase\KbEvent>
      */
-    public function collect(string $projectId, ?DateTimeInterface $since, int $limit, bool &$more = false): array
-    {
+    public function collect(
+        string $projectId,
+        ?DateTimeInterface $since,
+        int $limit,
+        bool &$more = false,
+        bool $ignoreHandled = false,
+    ): array {
         $since = $since === null ? null : DateTime::parse($since)->modify(self::SLACK);
 
         $events = array_merge(
@@ -51,7 +57,7 @@ class KbEventCollector
             $this->documents($projectId, $since),
         );
 
-        $handled = $this->handled($projectId);
+        $handled = $ignoreHandled ? [] : $this->handled($projectId);
         $events = array_values(array_filter($events, fn(KbEvent $event): bool => !isset($handled[$event->key()])));
         usort($events, fn(KbEvent $a, KbEvent $b): int => [$a->time, $a->id] <=> [$b->time, $b->id]);
 

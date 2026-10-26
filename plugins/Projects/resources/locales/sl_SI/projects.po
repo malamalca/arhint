@@ -1308,3 +1308,21 @@ msgstr "Roka ni mogoče dodati v koledar."
 
 msgid "Edit this deadline in the knowledge base of the project."
 msgstr "Ta rok uredite v knowledge base projekta."
+
+msgid "Make the knowledge base again from all events"
+msgstr "Ponovno izdelaj knowledge base iz vseh dogodkov"
+
+msgid "The summary, warnings, deadlines and other sections will be made again from all the events of the project. The description, the notes and the changelog stay, and the current state can be returned to from the history. It can take a long time. Continue?"
+msgstr "Povzetek, opozorila, roki in druga poglavja bodo ponovno izdelani iz vseh dogodkov projekta. Opis, opombe in changelog ostanejo, trenutno stanje pa je mogoče vrniti iz zgodovine. Lahko traja dolgo. Nadaljujem?"
+
+msgid "The knowledge base is being made again from all the events."
+msgstr "Knowledge base se ponovno izdeluje iz vseh dogodkov."
+
+msgid "The knowledge base is already being made again."
+msgstr "Knowledge base se že ponovno izdeluje."
+
+msgid "The knowledge base is being made again. The result appears as a new version in the history."
+msgstr "Knowledge base se ponovno izdeluje. Rezultat se prikaže kot nova verzija v zgodovini."
+
+msgid "Regeneration"
+msgstr "Ponovna izdelava"

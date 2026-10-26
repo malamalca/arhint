@@ -164,6 +164,51 @@ class KbService
     }
 
     /**
+     * Replace everything the AI maintains with a freshly generated knowledge base.
+     *
+     * What belongs to the users stays as it is at this moment: the description, the notes and the changelog.
+     * Summary, warnings, deadlines, parties, procedures, decisions, open questions and documents come from
+     * `$generated`. The previous state remains in the history and can be returned to. The events that the
+     * generation was made from are marked as dealt with by the caller.
+     *
+     * @param string $projectId Project id.
+     * @param \Projects\Lib\KnowledgeBase\KbDocument $generated Knowledge base made from all the events of the project.
+     * @param string|null $userId User who asked for it, empty for a run without one.
+     * @param string $summary What the changelog says.
+     * @return \Projects\Model\Entity\ProjectsKbRevision
+     * @throws \Projects\Lib\KnowledgeBase\StaleKnowledgeBaseException When it was changed while this was written.
+     */
+    public function replaceGenerated(
+        string $projectId,
+        KbDocument $generated,
+        ?string $userId,
+        string $summary,
+    ): ProjectsKbRevision {
+        return $this->projects()->getConnection()->transactional(
+            function () use ($projectId, $generated, $userId, $summary): ProjectsKbRevision {
+                $project = $this->freshProject($projectId, null);
+                [$current, $version] = $this->ensureFormat($project, $userId);
+
+                $new = $generated;
+                foreach (['description', 'notes'] as $section) {
+                    $new->setText($section, $current->text($section));
+                }
+                $new->setChangelog($current->changelog());
+
+                return $this->write(
+                    $project,
+                    $new,
+                    $version,
+                    KbOperationApplier::REGENERATE,
+                    $userId,
+                    $summary,
+                    null,
+                );
+            },
+        );
+    }
+
+    /**
      * Restore the content of an earlier revision as a new revision. The changelog is kept.
      *
      * @param string $projectId Project id.
@@ -349,7 +394,11 @@ class KbService
     private function actor(string $source, ?string $userId): string
     {
         if ($userId === null || $userId === '') {
-            return $source === KbOperationApplier::BATCH ? 'AI (paket)' : 'AI';
+            return match ($source) {
+                KbOperationApplier::BATCH => 'AI (paket)',
+                KbOperationApplier::REGENERATE => 'AI (regeneracija)',
+                default => 'AI',
+            };
         }
 
         if (!isset($this->userNames[$userId])) {
@@ -363,6 +412,7 @@ class KbService
         return $this->userNames[$userId] . match ($source) {
             KbOperationApplier::CHAT, KbOperationApplier::TOOL => ' (pogovor)',
             KbOperationApplier::REVERT => ' (razveljavitev)',
+            KbOperationApplier::REGENERATE => ' (regeneracija)',
             default => '',
         };
     }

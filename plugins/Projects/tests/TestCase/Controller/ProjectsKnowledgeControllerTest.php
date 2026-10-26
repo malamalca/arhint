@@ -7,6 +7,7 @@ use Cake\ORM\TableRegistry;
 use Cake\Queue\TestSuite\QueueTrait;
 use Cake\TestSuite\IntegrationTestTrait;
 use Cake\TestSuite\TestCase;
+use Projects\Job\KnowledgeBaseRegenerateJob;
 use Projects\Lib\KnowledgeBase\KbDocument;
 use Projects\Lib\KnowledgeBase\KbOperationApplier;
 use Projects\Lib\KnowledgeBase\KbService;
@@ -325,5 +326,49 @@ class ProjectsKnowledgeControllerTest extends TestCase
         $this->post(self::BASE . 'calendar/' . self::PROJECT, ['item_id' => $item]);
         $this->assertResponseError();
         $this->assertSame(0, TableRegistry::getTableLocator()->get('Projects.ProjectsKbCalendarLinks')->find()->count());
+    }
+
+    /**
+     * @return void
+     */
+    public function testAdministratorCanQueueRegenerationOnlyOnce(): void
+    {
+        $marker = KnowledgeBaseRegenerateJob::markerFile(self::PROJECT);
+        if (file_exists($marker)) {
+            unlink($marker);
+        }
+        $this->login(USER_ADMIN);
+        $this->enableSecurityToken();
+
+        $this->post(self::BASE . 'regenerate/' . self::PROJECT);
+        $this->assertRedirect(['controller' => 'Projects', 'action' => 'view', self::PROJECT]);
+        $this->assertJobQueuedTimes('Projects\Job\KnowledgeBaseRegenerateJob', 1);
+        $this->assertFileExists($marker);
+
+        $this->post(self::BASE . 'regenerate/' . self::PROJECT);
+        $this->assertJobQueuedTimes('Projects\Job\KnowledgeBaseRegenerateJob', 1);
+
+        $this->get('/projects/projects/view/' . self::PROJECT);
+        $this->assertResponseContains('id="ProjectKbRegenerating"');
+        unlink($marker);
+
+        $this->get('/projects/projects/view/' . self::PROJECT);
+        $this->assertResponseContains('id="ProjectKbRegenerate"');
+    }
+
+    /**
+     * @return void
+     */
+    public function testRegenerationNeedsAdministratorAndPost(): void
+    {
+        $this->enableSecurityToken();
+        $this->login(USER_COMMON);
+        $this->post(self::BASE . 'regenerate/' . self::PROJECT);
+        $this->assertResponseError();
+
+        $this->login(USER_ADMIN);
+        $this->get(self::BASE . 'regenerate/' . self::PROJECT);
+        $this->assertResponseError();
+        $this->assertNoJobsQueued();
     }
 }

@@ -18,6 +18,7 @@ class KbOperationApplier
     public const CHAT = 'chat';
     public const MANUAL = 'manual';
     public const BACKFILL = 'backfill';
+    public const REGENERATE = 'regenerate';
     public const TOOL = 'tool';
     public const REVERT = 'revert';
 

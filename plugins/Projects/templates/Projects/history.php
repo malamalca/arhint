@@ -16,6 +16,7 @@ $sources = [
     'backfill' => __d('projects', 'Conversion'),
     'tool' => __d('projects', 'Assistant'),
     'revert' => __d('projects', 'Return to a version'),
+    'regenerate' => __d('projects', 'Regeneration'),
 ];
 
 $latest = null;

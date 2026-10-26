@@ -25,6 +25,9 @@ class KbUpdater
 
     public const MAX_ATTEMPTS = 3;
 
+    /** Time a regeneration may take before it is given up, in seconds. */
+    public const REGENERATE_SECONDS = 21600;
+
     /**
      * @param \Projects\Lib\KnowledgeBase\KbAiClientInterface $ai AI client.
      * @param \Projects\Lib\KnowledgeBase\KbService $service Writer of the knowledge base.
@@ -200,6 +203,114 @@ class KbUpdater
         if (!$dryRun && !$more && $failures === 0) {
             $this->markSynced($project, $runStart);
         }
+    }
+
+    /**
+     * Make the knowledge base of a project again from all of its events.
+     *
+     * Everything is made in memory, starting from an empty knowledge base and giving the events to the model oldest
+     * first. Only when every chunk was answered is the result written, in one revision, in place of what the AI
+     * maintains (summary, warnings, deadlines, parties, procedures, decisions, questions, documents). The description,
+     * the notes and the changelog stay. An unreachable model or an unusable answer therefore changes nothing.
+     * Afterwards all the events count as dealt with, so the regular update only looks at what happens next.
+     *
+     * @param \Projects\Model\Entity\Project $project Project.
+     * @param \Projects\Lib\KnowledgeBase\KbUpdateReport $report Report to add to.
+     * @param bool $dryRun Make the knowledge base and report on it, write nothing.
+     * @param string|null $userId User who asked for it.
+     * @param int $deadline Unix time after which no further chunk is started; the run is then given up.
+     * @return bool Whether a knowledge base was made (and written, unless dry run).
+     * @throws \Projects\Lib\KnowledgeBase\KbAiException When the model cannot be reached.
+     * @throws \Projects\Lib\KnowledgeBase\StaleKnowledgeBaseException When people keep changing the knowledge base.
+     */
+    public function regenerate(
+        Project $project,
+        KbUpdateReport $report,
+        bool $dryRun = false,
+        ?string $userId = null,
+        int $deadline = PHP_INT_MAX,
+    ): bool {
+        $runStart = DateTime::now();
+        $more = false;
+        $events = $this->collector->collect((string)$project->id, null, PHP_INT_MAX, $more, true);
+        if ($events === []) {
+            $report->note(sprintf('%s: no events, nothing to make the knowledge base from.', $project->no));
+
+            return false;
+        }
+
+        $report->projects++;
+        $generated = KbDocument::empty();
+        $applier = new KbOperationApplier();
+        $chunks = $this->chunks($events);
+        foreach ($chunks as $index => $chunk) {
+            if (time() >= $deadline) {
+                $report->stopped = 'time limit, nothing was changed';
+
+                return false;
+            }
+
+            // The answer is asked for once more when it is unusable; one bad chunk would spoil the whole result.
+            $answer = $this->ask($generated, $chunk) ?? $this->ask($generated, $chunk);
+            if ($answer === null) {
+                $report->failed += count($chunk);
+                $report->stopped = sprintf(
+                    'no usable answer for part %d of %d, nothing was changed',
+                    $index + 1,
+                    count($chunks),
+                );
+
+                return false;
+            }
+
+            $result = $applier->apply($generated, array_values($answer['operations']), KbOperationApplier::BATCH);
+            $report->events += count($chunk);
+            $report->note(sprintf(
+                '%s: part %d of %d, %d events → %d operations applied, %d rejected',
+                $project->no,
+                $index + 1,
+                count($chunks),
+                count($chunk),
+                $result->applied,
+                count($result->rejected),
+            ));
+        }
+
+        if ($dryRun) {
+            $open = $generated->openCounts();
+            $report->note(sprintf(
+                '%s: would be written: %d open warnings, %d open deadlines, %d open questions.',
+                $project->no,
+                $open['warnings'],
+                $open['deadlines'],
+                $open['open_questions'],
+            ));
+
+            return true;
+        }
+
+        $summary = sprintf('ponovno izdelan iz %d dogodkov', count($events));
+        $attempt = 0;
+        while (true) {
+            try {
+                $write = function () use ($project, $generated, $userId, $summary, $events, $runStart): void {
+                    $revision = $this->service->replaceGenerated((string)$project->id, $generated, $userId, $summary);
+
+                    $this->fetchTable('Projects.ProjectsKbSources')->deleteAll(['project_id' => $project->id]);
+                    $this->mark($project, $events, ProjectsKbSource::APPLIED, (string)$revision->id);
+                    $this->markSynced($project, $runStart);
+                };
+                $this->table()->getConnection()->transactional($write);
+                break;
+            } catch (StaleKnowledgeBaseException $e) {
+                if (++$attempt >= 2) {
+                    throw $e;
+                }
+            }
+        }
+        $report->revisions++;
+
+        return true;
     }
 
     /**

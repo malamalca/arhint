@@ -4,6 +4,7 @@ use Cake\Routing\Router;
 use League\CommonMark\GithubFlavoredMarkdownConverter;
 use Projects\Lib\KnowledgeBase\KbCalendar;
 use Projects\Lib\KnowledgeBase\KbDocument;
+use Projects\Job\KnowledgeBaseRegenerateJob;
 use Projects\Lib\KnowledgeBase\KbRenderer;
 use Projects\Lib\ProjectsFuncs;
 
@@ -23,6 +24,22 @@ if ($kbLinked !== null) {
         . ' data-text-add="' . h(__d('projects', 'Add to my calendar')) . '"'
         . ' data-text-remove="' . h(__d('projects', 'Remove from my calendar')) . '"'
         . ' data-text-error="' . h(__d('projects', 'Request failed. Please try again.')) . '"';
+}
+
+// Administrators can have the knowledge base made again from all the events of the project.
+$kbRegenerate = '';
+if ($this->getCurrentUser()->can('edit', $project)) {
+    $kbRegenerate = KnowledgeBaseRegenerateJob::isPending((string)$project->id)
+        ? '<div class="small" id="ProjectKbRegenerating">'
+            . h(__d('projects', 'The knowledge base is being made again from all the events.')) . '</div>'
+        : '<div class="small" id="ProjectKbRegenerate">' . $this->Form->postLink(
+            __d('projects', 'Make the knowledge base again from all events'),
+            ['plugin' => 'Projects', 'controller' => 'ProjectsKnowledge', 'action' => 'regenerate', $project->id],
+            ['confirm' => __d(
+                'projects',
+                'The summary, warnings, deadlines and other sections will be made again from all the events of the project. The description, the notes and the changelog stay, and the current state can be returned to from the history. It can take a long time. Continue?',
+            )],
+        ) . '</div>';
 }
 
 // Conversation with the AI about the knowledge base; only for users who have the AI assistant set up.
@@ -148,7 +165,7 @@ $projectView = [
                 ],
             ],
         ],
-        'descript' => empty($project->descript) && !$kbChat ? null : [
+        'descript' => empty($project->descript) && !$kbChat && $kbRegenerate === '' ? null : [
             'params' => ['id' => 'ProjectDescriptPanel'],
             'lines' => [
                 0 => [
@@ -171,6 +188,7 @@ $projectView = [
                             : (empty($project->descript) ? '' : (string)$converter->convert($project->descript))
                     ) . '</div>',
                 ],
+                2 => $kbRegenerate,
             ],
         ],
         'kb_chat' => !$kbChat ? null : [

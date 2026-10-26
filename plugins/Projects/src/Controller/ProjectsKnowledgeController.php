@@ -8,6 +8,7 @@ use Cake\Http\Response;
 use Cake\Queue\QueueManager;
 use Cake\Utility\Text;
 use InvalidArgumentException;
+use Projects\Job\KnowledgeBaseRegenerateJob;
 use Projects\Lib\KnowledgeBase\KbCalendar;
 use Projects\Lib\KnowledgeBase\KbDocument;
 use Projects\Lib\KnowledgeBase\KbRenderer;
@@ -177,6 +178,34 @@ class ProjectsKnowledgeController extends AppController
             ),
             'kb_version' => (int)$stored->kb_version,
         ]);
+    }
+
+    /**
+     * Queue the making of the knowledge base again from all the events of the project (administrators).
+     *
+     * @param string|null $projectId Project id.
+     * @return \Cake\Http\Response|null
+     */
+    public function regenerate(?string $projectId = null): ?Response
+    {
+        $this->request->allowMethod('post');
+        $project = $this->loadProject($projectId, 'edit');
+
+        if (KnowledgeBaseRegenerateJob::isPending((string)$project->id)) {
+            $this->Flash->error(__d('projects', 'The knowledge base is already being made again.'));
+        } else {
+            touch(KnowledgeBaseRegenerateJob::markerFile((string)$project->id));
+            QueueManager::push('Projects.KnowledgeBaseRegenerate', [
+                'project_id' => (string)$project->id,
+                'user_id' => (string)$this->getCurrentUser()->get('id'),
+            ]);
+            $this->Flash->success(__d(
+                'projects',
+                'The knowledge base is being made again. The result appears as a new version in the history.',
+            ));
+        }
+
+        return $this->redirect(['controller' => 'Projects', 'action' => 'view', $project->id]);
     }
 
     /**
