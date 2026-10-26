@@ -31,6 +31,61 @@ class ProjectsFuncs
     }
 
     /**
+     * Color of a project: the one set on the project, or a color made from the number of the project when it
+     * has none (empty, invalid or black, which is what the color input of the form submits by default).
+     *
+     * The hue is the number of the project times the golden angle, so consecutive numbers get colors that are
+     * far apart; saturation and lightness are fixed so every generated color reads well on a light background.
+     *
+     * @param \Projects\Model\Entity\Project $project Project
+     * @return string Color as #rrggbb.
+     */
+    public static function colorFor(Project $project): string
+    {
+        // The color input of the form submits black when no color was picked, so black counts as not set.
+        $color = (string)$project->colorize;
+        if (preg_match('/^#[0-9a-f]{6}$/i', $color) === 1 && strtolower($color) !== '#000000') {
+            return $color;
+        }
+
+        $digits = substr((string)preg_replace('/\D/', '', (string)$project->no), -9);
+        $seed = $digits !== '' ? (int)$digits : crc32((string)$project->title);
+
+        return self::hsl(fmod($seed * 137.508, 360), 0.55, 0.42);
+    }
+
+    /**
+     * Convert a color from HSL to #rrggbb.
+     *
+     * @param float $hue Hue in degrees, 0 to 360.
+     * @param float $saturation Saturation, 0 to 1.
+     * @param float $lightness Lightness, 0 to 1.
+     * @return string
+     */
+    private static function hsl(float $hue, float $saturation, float $lightness): string
+    {
+        $chroma = (1 - abs(2 * $lightness - 1)) * $saturation;
+        $x = $chroma * (1 - abs(fmod($hue / 60, 2) - 1));
+        $m = $lightness - $chroma / 2;
+
+        [$red, $green, $blue] = match ((int)floor($hue / 60) % 6) {
+            0 => [$chroma, $x, 0],
+            1 => [$x, $chroma, 0],
+            2 => [0, $chroma, $x],
+            3 => [0, $x, $chroma],
+            4 => [$x, 0, $chroma],
+            default => [$chroma, 0, $x],
+        };
+
+        return sprintf(
+            '#%02x%02x%02x',
+            (int)round(($red + $m) * 255),
+            (int)round(($green + $m) * 255),
+            (int)round(($blue + $m) * 255),
+        );
+    }
+
+    /**
      * Return thumbnail image for specified project
      *
      * @param \Projects\Model\Entity\Project $project Project
@@ -50,7 +105,7 @@ class ProjectsFuncs
             imagealphablending($newImage, true);
             imagesavealpha($newImage, true);
 
-            $textColor = empty($project->colorize) ? '#ffffff' : $project->colorize;
+            $textColor = self::colorFor($project);
             $textColor = (int)imagecolorallocatealpha(
                 $newImage,
                 min(255, max(0, (int)hexdec(substr($textColor, 1, 2)))),

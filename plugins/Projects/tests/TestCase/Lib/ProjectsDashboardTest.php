@@ -173,7 +173,7 @@ class ProjectsDashboardTest extends TestCase
         $project->colorize = 'red;" onload="x';
         $html = ProjectsDashboard::card($project, '', new Date('2026-11-01'));
         $this->assertStringNotContainsString('onload', $html);
-        $this->assertStringContainsString('var(--md-sys-color-secondary) 14%', $html);
+        $this->assertMatchesRegularExpression('/color-mix\(in srgb, #[0-9a-f]{6} 14%/', $html);
     }
 
     /**

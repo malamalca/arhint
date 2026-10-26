@@ -75,11 +75,9 @@ class ProjectsDashboard
             . 'background: var(--md-sys-color-surface); color: var(--md-sys-color-on-surface);">'
             . h($status) . '</span></div>';
 
-        // The header is a light tone of the inverse of the color of the project, so it stands out from the color of
-        // the initials in the avatar; a neutral one when the project has no color.
-        $accent = preg_match('/^#[0-9a-f]{6}$/i', (string)$project->colorize) === 1
-            ? self::inverse((string)$project->colorize)
-            : 'var(--md-sys-color-secondary)';
+        // The header is a light tone of the inverse of the color of the project (made from its number when it has
+        // none), so it stands out from the color of the initials in the avatar.
+        $accent = self::inverse(ProjectsFuncs::colorFor($project));
 
         $head = '<div class="projects-overview-header" style="display: flex; gap: .75rem; align-items: center; '
             . 'padding: .75rem 1rem; color: var(--md-sys-color-on-surface); '
