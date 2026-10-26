@@ -128,38 +128,49 @@ class PagesController extends AppController
         $session->delete('AIAssistant.history');
         $session->delete('AIAssistant.pendingJobId');
 
-        $FormHelper = new FormHelper(new View());
+        $aiPanel = null;
         $aiConfig = $this->hasCurrentUser() ? $this->getCurrentUser()->getProperty('ai_assistant') : null;
-        if (!$aiConfig || empty($aiConfig->provider)) {
-            $formAi =
-                '<div class="ai-assistant-warning">' .
-                '<p>' . __('AI assistant is not configured for your account.') . '</p>' .
-                '<p>' . __('To enable it, add an <code>ai_assistant</code> to your user profile:') . '</p>' .
-                '<pre>{"provider": "openai", "api_key": "sk-...", "model": "gpt-4o"}</pre>' .
-                '<p>' . __('For a local/custom provider, use:') . '</p>' .
-                '<pre>{"provider": "local", "url": "http://...", "model": "model-name"}</pre>' .
-                '</div>';
-        } elseif (!(new AIAssistant($this->getCurrentUser()))->isAvailable()) {
-            $formAi =
-                '<div class="ai-assistant-warning">' .
-                '<p>' . __('AI assistant host is currently not available.') . '</p>' .
-                '</div>';
-        } else {
-            $formAi =
-                '<div id="AIAssistantMessages" class="ai-assistant-messages"></div>' .
-                $FormHelper->create(
-                    null,
-                    ['url' => ['controller' => 'Ai', 'action' => 'chat'], 'id' => 'AIAssistantForm'],
-                ) .
-                $FormHelper->textarea(
-                    'message',
-                    ['id' => 'AIAssistantInput', 'placeholder' => __('Ask your AI assistant...'), 'rows' => 2],
-                ) .
-                '<div class="ai-assistant-actions">' .
-                $FormHelper->button(__('Send'), ['id' => 'AIAssistantSend']) .
-                ' <a href="#" id="AIAssistantClear" class="btn-small">' . __('Clear') . '</a>' .
-                '</div>' .
-                $FormHelper->end();
+        // Without a configured provider the assistant is not available to the user, so no panel is shown.
+        if ($aiConfig && !empty($aiConfig->provider)) {
+            if (!(new AIAssistant($this->getCurrentUser()))->isAvailable()) {
+                $formAi =
+                    '<div class="ai-assistant-warning">' .
+                    '<p>' . __('AI assistant host is currently not available.') . '</p>' .
+                    '</div>';
+            } else {
+                $FormHelper = new FormHelper(new View());
+                $formAi =
+                    '<div id="AIAssistantMessages" class="ai-assistant-messages"></div>' .
+                    $FormHelper->create(
+                        null,
+                        ['url' => ['controller' => 'Ai', 'action' => 'chat'], 'id' => 'AIAssistantForm'],
+                    ) .
+                    $FormHelper->textarea(
+                        'message',
+                        ['id' => 'AIAssistantInput', 'placeholder' => __('Ask your AI assistant...'), 'rows' => 2],
+                    ) .
+                    '<div class="ai-assistant-actions">' .
+                    $FormHelper->button(__('Send'), ['id' => 'AIAssistantSend']) .
+                    ' <a href="#" id="AIAssistantClear" class="btn-small">' . __('Clear') . '</a>' .
+                    '</div>' .
+                    $FormHelper->end();
+            }
+
+            $aiPanel = [
+                'params' => [
+                    'class' => 'dashboard-panel',
+                    'id' => 'DashboardAIAssistant',
+                    'data-chat-url' => Router::url(['controller' => 'Ai', 'action' => 'chat']),
+                    'data-chat-status-url' => Router::url(['controller' => 'Ai', 'action' => 'chatStatus']),
+                    'data-clear-url' => Router::url(['controller' => 'Ai', 'action' => 'clearHistory']),
+                    'data-worker-status-url' => Router::url(['controller' => 'Ai', 'action' => 'workerStatus']),
+                ],
+                'lines' => [
+                    '<h5>' . __('AI Assistant') . '</h5>',
+                    '<p>' . __('Ask your AI assistant to help you with various tasks.') . '</p>',
+                    '<p>' . $formAi . '</p>',
+                ],
+            ];
         }
 
         $dashboardPanels = [
@@ -193,23 +204,7 @@ class PagesController extends AppController
                     ],
                 ],
             ],
-            'panels' => [
-                'ai-assistant' => [
-                    'params' => [
-                        'class' => 'dashboard-panel',
-                        'id' => 'DashboardAIAssistant',
-                        'data-chat-url' => Router::url(['controller' => 'Ai', 'action' => 'chat']),
-                        'data-chat-status-url' => Router::url(['controller' => 'Ai', 'action' => 'chatStatus']),
-                        'data-clear-url' => Router::url(['controller' => 'Ai', 'action' => 'clearHistory']),
-                        'data-worker-status-url' => Router::url(['controller' => 'Ai', 'action' => 'workerStatus']),
-                    ],
-                    'lines' => [
-                        '<h5>' . __('AI Assistant') . '</h5>',
-                        '<p>' . __('Ask your AI assistant to help you with various tasks.') . '</p>',
-                        '<p>' . $formAi . '</p>',
-                    ],
-                ],
-            ],
+            'panels' => $aiPanel ? ['ai-assistant' => $aiPanel] : [],
         ];
 
         $event = new Event('App.dashboard', $this, ['panels' => new ArrayObject($dashboardPanels)]);
