@@ -69,6 +69,10 @@ class ProjectsDashboardTest extends TestCase
         $this->assertStringNotContainsString('<script>', $html);
         $this->assertStringContainsString('1 odprtih opozoril', $html);
         $this->assertStringContainsString('1 odprtih vprašanj', $html);
+        // badges show the icon and the number, the text is only in the tooltip, and they come first in the body
+        $this->assertStringContainsString('title="1 odprtih opozoril"', $html);
+        $this->assertStringNotContainsString('>1 odprtih opozoril<', $html);
+        $this->assertLessThan(strpos($html, 'Gradnja poteka'), strpos($html, 'title="1 odprtih opozoril"'));
         $this->assertStringContainsString('Dopolnitev vloge', $html);
         $this->assertStringNotContainsString('Poznejši rok', $html);
         $this->assertStringNotContainsString('Opravljen rok', $html);

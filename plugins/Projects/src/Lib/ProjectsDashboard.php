@@ -94,6 +94,7 @@ class ProjectsDashboard
         // across cards of different height.
         $body = '';
         if ($knowledge) {
+            $body .= self::badges($knowledge);
             $state = self::plain($knowledge->text(KbDocument::STATUS), KbDocument::STATUS_MAX_CHARS);
             $title = $state === '' ? '' : ' title="' . h(__d('projects', 'Project status')) . '"';
             // projects whose status was not made yet show the summary
@@ -102,7 +103,7 @@ class ProjectsDashboard
                 $body .= '<p' . $title . ' style="margin: 0; font-size: .9rem; line-height: 1.45; '
                     . self::clamp(4) . '">' . h($lead) . '</p>';
             }
-            $body .= self::badges($knowledge) . self::deadlines($knowledge, $today);
+            $body .= self::deadlines($knowledge, $today);
         }
 
         $meta = ProjectsActivity::html($project, $today, $weeks);
@@ -194,7 +195,7 @@ class ProjectsDashboard
     }
 
     /**
-     * Badges with the number of open warnings and open questions of the knowledge base.
+     * Badges with the number of open warnings and open questions of the knowledge base, the first thing in the body.
      *
      * @param \Projects\Lib\KnowledgeBase\KbDocument $knowledge Knowledge base.
      * @return string Empty when nothing is open.
@@ -205,22 +206,37 @@ class ProjectsDashboard
 
         $badges = [];
         if (!empty($counts['warnings'])) {
-            $badges[] = ['warning_amber', __d('projects', '{0} open warnings', $counts['warnings'])];
+            $badges[] = [
+                'warning_amber',
+                (int)$counts['warnings'],
+                __d('projects', '{0} open warnings', $counts['warnings']),
+            ];
         }
         if (!empty($counts['open_questions'])) {
-            $badges[] = ['help_outline', __d('projects', '{0} open questions', $counts['open_questions'])];
+            $badges[] = [
+                'help_outline',
+                (int)$counts['open_questions'],
+                __d('projects', '{0} open questions', $counts['open_questions']),
+            ];
         }
 
+        // Only the icon and the number are shown, the text is in the tooltip. Sizes are set explicitly so the
+        // badges keep the size of their content wherever the card is shown.
         $html = '';
-        foreach ($badges as [$icon, $text]) {
-            $html .= '<span class="small" style="display: inline-flex; align-items: center; gap: .25rem; '
-                . 'padding: 1px 8px 1px 5px; border-radius: 10px; '
+        foreach ($badges as [$icon, $count, $text]) {
+            $html .= '<span title="' . h($text) . '" aria-label="' . h($text) . '" style="display: inline-flex; '
+                . 'flex: none; width: auto; align-items: center; justify-content: flex-start; gap: 3px; '
+                . 'padding: 1px 8px 1px 5px; border-radius: 10px; font-size: .75rem; line-height: 1.4; '
                 . 'border: solid 1px var(--md-sys-color-outline-variant); '
                 . 'background: var(--md-sys-color-surface);">'
-                . '<i class="material-icons" style="font-size: 14px;">' . $icon . '</i>' . h($text) . '</span>';
+                . '<i class="material-icons" style="font-size: 14px; width: 14px; height: 14px; '
+                . 'line-height: 14px; flex: none;">' . $icon . '</i>' . $count . '</span>';
         }
 
-        return $html === '' ? '' : '<div style="display: flex; flex-wrap: wrap; gap: .375rem;">' . $html . '</div>';
+        return $html === ''
+            ? ''
+            : '<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-start; '
+                . 'gap: .375rem;">' . $html . '</div>';
     }
 
     /**
