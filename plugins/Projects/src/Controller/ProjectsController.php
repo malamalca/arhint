@@ -9,6 +9,7 @@ use Cake\Core\Plugin;
 use Cake\Http\Response;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Hash;
+use Cake\Utility\Text;
 use InvalidArgumentException;
 use Projects\Lib\AuthorityWorkflow;
 use Projects\Lib\KnowledgeBase\KbDiff;
@@ -633,13 +634,14 @@ class ProjectsController extends AppController
                 }
 
                 if ($counterIds) {
-                    $CountersUsers = TableRegistry::getTableLocator()
-                        ->get('DocumentsCountersUsers', ['table' => 'documents_counters_users']);
+                    // The join table has no table class and fallback classes are disabled for web requests.
                     foreach ($counterIds as $counterId) {
-                        $link = $CountersUsers->newEntity(['counter_id' => $counterId, 'user_id' => $user->id]);
-                        if (!$CountersUsers->save($link)) {
-                            return false;
-                        }
+                        $UsersTable->getConnection()
+                            ->insertQuery()
+                            ->insert(['id', 'counter_id', 'user_id'])
+                            ->into('documents_counters_users')
+                            ->values(['id' => Text::uuid(), 'counter_id' => $counterId, 'user_id' => $user->id])
+                            ->execute();
                     }
                 }
 
