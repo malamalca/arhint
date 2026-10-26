@@ -79,6 +79,26 @@ class ProjectsDashboardTest extends TestCase
     /**
      * @return void
      */
+    public function testCardHeaderHasButtonForAddingLogInPopup(): void
+    {
+        $html = ProjectsDashboard::card($this->project(), '', new Date('2026-11-01'));
+
+        $this->assertStringContainsString('class="add-projects-log"', $html);
+        $url = Router::url([
+            'plugin' => 'Projects',
+            'controller' => 'ProjectsLogs',
+            'action' => 'edit',
+            '?' => ['project' => '4dd53305-9715-4be4-b169-20defe113d2a'],
+        ]);
+        $this->assertStringContainsString('href="' . $url . '"', $html);
+        $this->assertStringContainsString('>add</i>', $html);
+        $this->assertStringContainsString('modalPopup', ProjectsDashboard::script());
+        $this->assertStringContainsString('.add-projects-log', ProjectsDashboard::script());
+    }
+
+    /**
+     * @return void
+     */
     public function testStatusReplacesSummaryExcerpt(): void
     {
         $doc = KbDocument::empty();

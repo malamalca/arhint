@@ -87,7 +87,7 @@ class ProjectsDashboard
             . '" alt="" class="project-avatar" style="height: 40px; width: 40px; flex: none;" />'
             . '<div style="min-width: 0;"><div class="small">' . h($project->no) . '</div>'
             . '<a href="' . h($url) . '" style="color: inherit;"><b>' . h($project->title) . '</b></a>'
-            . $chip . '</div></div>';
+            . $chip . '</div>' . self::addLogButton($project) . '</div>';
 
         $body = '';
 
@@ -120,6 +120,52 @@ class ProjectsDashboard
             . 'border-radius: var(--md-sys-shape-corner-medium);">'
             . $head . '<div style="flex: 1; padding: .25rem 1rem 1rem;">' . $body . '</div>'
             . ProjectsActivity::footer($project, $today) . '</div>';
+    }
+
+    /**
+     * Button [+] in the header of the card that opens the form for a new log of the project in a popup.
+     *
+     * @param \Projects\Model\Entity\Project $project Project.
+     * @return string
+     * @see \Projects\Lib\ProjectsDashboard::script()
+     */
+    private static function addLogButton(Project $project): string
+    {
+        $url = Router::url([
+            'plugin' => 'Projects',
+            'controller' => 'ProjectsLogs',
+            'action' => 'edit',
+            '?' => ['project' => $project->id],
+        ]);
+        $title = h(__d('projects', 'Add Log'));
+
+        return '<a href="' . h($url) . '" class="add-projects-log" title="' . $title . '" aria-label="' . $title . '" '
+            . 'style="margin-left: auto; flex: none; display: flex; align-items: center; justify-content: center; '
+            . 'width: 28px; height: 28px; border-radius: 50%; color: inherit; text-decoration: none; '
+            . 'border: solid 1px color-mix(in srgb, currentColor 40%, transparent);">'
+            . '<i class="material-icons" style="font-size: 20px;">add</i></a>';
+    }
+
+    /**
+     * Javascript that opens the form for a new log in a popup when the [+] button of a card is clicked.
+     *
+     * The dashboard is reloaded after the log was saved so the card shows the new log and activity.
+     *
+     * @return string
+     */
+    public static function script(): string
+    {
+        $title = json_encode(__d('projects', 'Add Log'), JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
+
+        return '<script type="text/javascript">$(document).ready(function() {'
+            . '$(".projects-overview-card .add-projects-log").each(function() {'
+            . '$(this).modalPopup({title: ' . $title . ', processSubmit: true,'
+            . 'onOpen: function(popup) { $("#projects-logs-descript", popup).focus(); },'
+            . 'onHtml: function(data, popup) { popup.dialog.close(); window.location.reload(); },'
+            . 'onBeforeSubmit: function(data, popup) {'
+            . '$("#projects-logs-descript", $(data)).html(tinyMCE.get("projects-logs-descript").getContent());'
+            . 'return data; }});'
+            . '});});</script>';
     }
 
     /**

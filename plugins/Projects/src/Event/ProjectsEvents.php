@@ -327,9 +327,7 @@ class ProjectsEvents implements EventListenerInterface
                         Date::today(),
                     ),
                 ),
-                '<p style="margin: 0 1rem 1rem;">' . '<a href="' . h(Router::url([
-                    'plugin' => 'Projects', 'controller' => 'Projects', 'action' => 'index',
-                ])) . '">' . h(__d('projects', 'All Projects')) . '</a></p>',
+                ProjectsDashboard::script(),
             ],
         ];
 

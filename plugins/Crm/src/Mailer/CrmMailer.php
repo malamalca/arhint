@@ -39,6 +39,7 @@ class CrmMailer extends ArhintMailer
             ->setEmailFormat('both')
             ->viewBuilder()
                 ->setTemplate('Crm.dopis')
+                ->setLayout('plain')
                 ->addHelper('Html');
 
         $atts = [];
@@ -70,6 +71,7 @@ class CrmMailer extends ArhintMailer
             ->setEmailFormat('both')
             ->viewBuilder()
                 ->setTemplate('Crm.slo_mnenja')
+                ->setLayout('plain')
                 ->addHelper('Html');
 
         // excel attachment
@@ -134,6 +136,7 @@ class CrmMailer extends ArhintMailer
             ->setEmailFormat('both')
             ->viewBuilder()
                 ->setTemplate('Crm.slo_pogoji')
+                ->setLayout('plain')
                 ->addHelper('Html');
 
         // excel attachment

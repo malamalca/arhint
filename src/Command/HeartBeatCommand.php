@@ -50,7 +50,11 @@ class HeartBeatCommand extends Command
                     ->setFrom([Configure::read('App.fromEmail.from') => Configure::read('App.fromEmail.name')])
                     ->setTo($user->email)
                     ->setSubject(__('Intranet Report'))
-                    ->setViewVars(['user' => $user, 'panels' => $emailPanels])
+                    ->setViewVars([
+                        'user' => $user,
+                        'panels' => $emailPanels,
+                        'emailTitle' => __('Intranet Report'),
+                    ])
                     ->viewBuilder()
                         ->setTemplate('hourly')
                         ->addHelpers(['App.Lil']);
