@@ -125,8 +125,7 @@ class ProjectsActivity
             default => __d('projects', '{0} days ago', $days),
         };
 
-        $html = '<div class="projects-activity" style="display: flex; align-items: center; gap: .5rem; '
-            . 'margin-top: .5rem;">'
+        $html = '<div class="projects-activity" style="display: flex; align-items: center; gap: .5rem;">'
             . '<span style="width: .6rem; height: .6rem; border-radius: 50%; flex: none; background: '
             . $color . ';"></span>'
             . '<span class="small" style="flex: 1; min-width: 0;">' . h(__d('projects', 'Last change')) . ': '

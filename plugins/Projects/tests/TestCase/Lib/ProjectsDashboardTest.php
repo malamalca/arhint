@@ -108,7 +108,7 @@ class ProjectsDashboardTest extends TestCase
 
         $html = ProjectsDashboard::card($project, '', new Date('2026-11-01'));
 
-        $this->assertStringContainsString('<b>Čakamo na gradbeno dovoljenje.</b>', $html);
+        $this->assertStringContainsString('>Čakamo na gradbeno dovoljenje.</p>', $html);
         $this->assertStringNotContainsString('Dolg povzetek', $html);
     }
 

@@ -89,37 +89,51 @@ class ProjectsDashboard
             . '<a href="' . h($url) . '" style="color: inherit;"><b>' . h($project->title) . '</b></a>'
             . $chip . '</div>' . self::addLogButton($project) . '</div>';
 
+        // The body reads from the most important to the least: what is going on, what needs attention,
+        // what is due. Activity and the last log are pinned to the bottom of the card, so they line up
+        // across cards of different height.
         $body = '';
-
         if ($knowledge) {
             $state = self::plain($knowledge->text(KbDocument::STATUS), KbDocument::STATUS_MAX_CHARS);
-            if ($state !== '') {
-                $body .= '<p style="margin: .5rem 0;" title="' . h(__d('projects', 'Project status')) . '"><b>'
-                    . h($state) . '</b></p>';
-            } else {
-                // projects whose status was not made yet
-                $summary = self::plain($knowledge->text('summary'), self::SUMMARY_CHARS);
-                if ($summary !== '') {
-                    $body .= '<p style="margin: .5rem 0;">' . h($summary) . '</p>';
-                }
+            $title = $state === '' ? '' : ' title="' . h(__d('projects', 'Project status')) . '"';
+            // projects whose status was not made yet show the summary
+            $lead = $state !== '' ? $state : self::plain($knowledge->text('summary'), self::SUMMARY_CHARS);
+            if ($lead !== '') {
+                $body .= '<p' . $title . ' style="margin: 0; font-size: .9rem; line-height: 1.45; '
+                    . self::clamp(4) . '">' . h($lead) . '</p>';
             }
-            $body .= self::indicators($knowledge, $today);
+            $body .= self::badges($knowledge) . self::deadlines($knowledge, $today);
         }
 
-        $body .= ProjectsActivity::html($project, $today, $weeks);
-
+        $meta = ProjectsActivity::html($project, $today, $weeks);
         if ($project->last_log) {
-            $body .= '<div class="small" style="margin-top: .25rem; opacity: .8;">'
-                . h($project->last_log->created->i18nFormat('d. MMM y')) . ' &ndash; '
-                . h(self::plain((string)$project->last_log->descript, self::LOG_CHARS)) . '</div>';
+            $meta .= '<div class="small" style="opacity: .8; ' . self::clamp(2) . '">'
+                . '<span style="opacity: .8;">' . h($project->last_log->created->i18nFormat('d. MMM y')) . '</span>'
+                . ' &ndash; ' . h(self::plain((string)$project->last_log->descript, self::LOG_CHARS)) . '</div>';
         }
 
         return '<div class="projects-overview-card" style="display: flex; flex-direction: column; '
             . 'overflow: hidden; border: solid 1px var(--md-sys-color-outline-variant); '
             . 'background: color-mix(in srgb, var(--md-sys-color-on-surface) 4%, var(--md-sys-color-surface)); '
             . 'border-radius: var(--md-sys-shape-corner-medium);">'
-            . $head . '<div style="flex: 1; padding: .25rem 1rem 1rem;">' . $body . '</div>'
+            . $head . '<div style="flex: 1; display: flex; flex-direction: column; gap: .75rem; '
+            . 'padding: .875rem 1rem 1rem;">' . $body
+            . '<div class="projects-overview-meta" style="margin-top: auto; padding-top: .625rem; '
+            . 'border-top: solid 1px var(--md-sys-color-outline-variant); display: flex; '
+            . 'flex-direction: column; gap: .375rem;">' . $meta . '</div></div>'
             . ProjectsActivity::footer($project, $today) . '</div>';
+    }
+
+    /**
+     * Style that cuts a text to the number of lines.
+     *
+     * @param int $lines Number of lines.
+     * @return string
+     */
+    private static function clamp(int $lines): string
+    {
+        return 'display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: ' . $lines
+            . '; overflow: hidden;';
     }
 
     /**
@@ -180,28 +194,44 @@ class ProjectsDashboard
     }
 
     /**
-     * Open warnings, open questions and the nearest open deadline of the knowledge base.
+     * Badges with the number of open warnings and open questions of the knowledge base.
+     *
+     * @param \Projects\Lib\KnowledgeBase\KbDocument $knowledge Knowledge base.
+     * @return string Empty when nothing is open.
+     */
+    private static function badges(KbDocument $knowledge): string
+    {
+        $counts = $knowledge->openCounts();
+
+        $badges = [];
+        if (!empty($counts['warnings'])) {
+            $badges[] = ['warning_amber', __d('projects', '{0} open warnings', $counts['warnings'])];
+        }
+        if (!empty($counts['open_questions'])) {
+            $badges[] = ['help_outline', __d('projects', '{0} open questions', $counts['open_questions'])];
+        }
+
+        $html = '';
+        foreach ($badges as [$icon, $text]) {
+            $html .= '<span class="small" style="display: inline-flex; align-items: center; gap: .25rem; '
+                . 'padding: 1px 8px 1px 5px; border-radius: 10px; '
+                . 'border: solid 1px var(--md-sys-color-outline-variant); '
+                . 'background: var(--md-sys-color-surface);">'
+                . '<i class="material-icons" style="font-size: 14px;">' . $icon . '</i>' . h($text) . '</span>';
+        }
+
+        return $html === '' ? '' : '<div style="display: flex; flex-wrap: wrap; gap: .375rem;">' . $html . '</div>';
+    }
+
+    /**
+     * Lines with the open deadlines of the knowledge base that are overdue or close.
      *
      * @param \Projects\Lib\KnowledgeBase\KbDocument $knowledge Knowledge base.
      * @param \Cake\I18n\Date $today Current day.
      * @return string
      */
-    private static function indicators(KbDocument $knowledge, Date $today): string
+    private static function deadlines(KbDocument $knowledge, Date $today): string
     {
-        $counts = $knowledge->openCounts();
-        $html = '';
-
-        $parts = [];
-        if (!empty($counts['warnings'])) {
-            $parts[] = h(__d('projects', '{0} open warnings', $counts['warnings']));
-        }
-        if (!empty($counts['open_questions'])) {
-            $parts[] = h(__d('projects', '{0} open questions', $counts['open_questions']));
-        }
-        if ($parts) {
-            $html .= '<div class="small" style="margin-top: .5rem;">' . implode(' &middot; ', $parts) . '</div>';
-        }
-
         // Deadlines further away than a month are not shown on the card; overdue ones are.
         $horizon = $today->addMonths(1)->format('Y-m-d');
         $deadlines = array_filter(
@@ -217,6 +247,8 @@ class ProjectsDashboard
             $deadlines,
             fn(KbItem $item): bool => self::daysUntil((string)$item->date, $today) <= $soon,
         );
+
+        $html = '';
         foreach ($urgent ?: array_slice($deadlines, 0, 1) as $i => $item) {
             if ($i >= self::MAX_DEADLINES) {
                 break;
@@ -224,7 +256,9 @@ class ProjectsDashboard
             $html .= self::deadline($item, $today, $urgent !== []);
         }
 
-        return $html;
+        return $html === ''
+            ? ''
+            : '<div style="display: flex; flex-direction: column; gap: .375rem;">' . $html . '</div>';
     }
 
     /**
@@ -254,9 +288,13 @@ class ProjectsDashboard
             }) . ')';
         }
 
-        return '<div class="small projects-overview-deadline" style="margin-top: .25rem;' . $style . '">'
-            . h($urgent ? __d('projects', 'Deadline') : __d('projects', 'Next deadline')) . ': <b>' . h($date) . '</b>'
-            . $when . ' &ndash; ' . h(self::plain($item->text, self::LOG_CHARS)) . '</div>';
+        $label = h($urgent ? __d('projects', 'Deadline') : __d('projects', 'Next deadline'));
+
+        return '<div class="small projects-overview-deadline" title="' . $label . '" style="display: flex; '
+            . 'gap: .375rem; align-items: flex-start;' . $style . '">'
+            . '<i class="material-icons" style="font-size: 14px; flex: none; margin-top: 2px;">event</i>'
+            . '<span style="min-width: 0;"><b>' . h($date) . '</b>' . $when . ' &ndash; '
+            . h(self::plain($item->text, self::LOG_CHARS)) . '</span></div>';
     }
 
     /**
