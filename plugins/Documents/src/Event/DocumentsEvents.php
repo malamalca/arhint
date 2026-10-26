@@ -4,20 +4,16 @@ declare(strict_types=1);
 namespace Documents\Event;
 
 use App\Model\Table\AttachmentsTable;
-use App\View\Helper\ArhintHelper;
 use ArrayObject;
 use Cake\Datasource\EntityInterface;
 use Cake\Event\Event;
 use Cake\Event\EventListenerInterface;
-use Cake\Event\EventManager;
 use Cake\I18n\DateTime;
 use Cake\ORM\TableRegistry;
 use Cake\Routing\Router;
-use Cake\View\View;
 use Documents\Lib\DocumentsSidebar;
 use Documents\Lib\FursXml;
 use Documents\Model\Entity\Invoice;
-use Exception;
 use Malamalca\FiscalPHP\FiscalQr;
 use Throwable;
 
@@ -33,7 +29,6 @@ class DocumentsEvents implements EventListenerInterface
         return [
             //'Controller.initialize' => 'enableClientEditing',
             'App.HeartBeat.hourlyEmail' => 'hourlyEmail',
-            'App.dashboard' => 'dashboardPanels',
             'View.beforeRender' => 'addScripts',
             'App.Sidebar.beforeRender' => 'modifySidebar',
             'App.Panels.Crm.Contacts.view' => 'showDocumentsTable',
@@ -170,66 +165,6 @@ class DocumentsEvents implements EventListenerInterface
         }
 
         $event->setResult(['panels' => $panels] + $event->getData());
-    }
-
-    /**
-     * Dashboard panels
-     *
-     * @param \Cake\Event\Event $event Event object.
-     * @param \ArrayObject $panels Panels data.
-     * @return void
-     */
-    public function dashboardPanels(Event $event, ArrayObject $panels): void
-    {
-        /** @var \App\Controller\AppController $controller */
-        $controller = $event->getSubject();
-
-        $DocumentsTable = TableRegistry::getTableLocator()->get('Documents.Documents');
-        $newDocumentsQuery = $controller->Authorization->applyScope($DocumentsTable->find(), 'index')
-            ->select(['id', 'no', 'dat_issue', 'title', 'project_id'])
-            ->orderBy(['Documents.created DESC'])
-            ->limit(6);
-
-        $event = new Event('Documents.Dashboard.queryDocuments', $controller, [$newDocumentsQuery]);
-        EventManager::instance()->dispatch($event);
-
-        try {
-            $newDocuments = $newDocumentsQuery->all();
-        } catch (Exception $e) {
-            return;
-        }
-
-        if (!$newDocuments->isEmpty()) {
-            $panels['panels']['documents'] = [
-                'params' => ['class' => 'dashboard-panel'],
-                'lines' => [
-                    '<h5>' . __d('documents', 'Last 6 documents') . '</h5>',
-                ],
-            ];
-
-            $ArhintHelper = new ArhintHelper(new View());
-
-            foreach ($newDocuments as $document) {
-                $panels['panels']['documents']['lines'][] = sprintf(
-                    '<div style="clear: both; height: 46px; margin-bottom: 10px; overflow: hidden;">' .
-                        '<span style="display: block; width: 80px; float: left;">%5$s</span> ' .
-                        '<div class="project">%3$s</div>' .
-                        '<a href="%4$s"><span class="title">%1$s</span></a> %2$s</div>',
-                    h($document->title),
-                    h($document->no),
-                    $document->project ? h($document->project->title) : '-',
-                    Router::url([
-                        'plugin' => 'Documents',
-                        'controller' => 'Documents',
-                        'action' => 'view',
-                        $document->id,
-                    ], true),
-                    $document->dat_issue ? $ArhintHelper->calendarDay($document->dat_issue) : '',
-                );
-            }
-        }
-
-        $event->setResult(['panels' => $panels]);
     }
 
     /**

@@ -1377,3 +1377,57 @@ msgstr "Navodila za prijavo so poslana."
 
 msgid "The login instructions could not be sent."
 msgstr "Navodil za prijavo ni bilo mogoče poslati."
+
+msgid "{0} open warnings"
+msgstr "{0} odprtih opozoril"
+
+msgid "{0} open questions"
+msgstr "{0} odprtih vprašanj"
+
+msgid "Next deadline"
+msgstr "Naslednji rok"
+
+msgid "Project status"
+msgstr "Stanje projekta"
+
+msgid "Last change"
+msgstr "Zadnja sprememba"
+
+msgid "no entries yet"
+msgstr "še brez zapisov"
+
+msgid "today"
+msgstr "danes"
+
+msgid "yesterday"
+msgstr "včeraj"
+
+msgid "{0} days ago"
+msgstr "pred {0} dnevi"
+
+msgid "Dormant"
+msgstr "V mirovanju"
+
+msgid "nothing has changed for {0} days"
+msgstr "že {0} dni brez sprememb"
+
+msgid "Entries per week in the last {0} weeks"
+msgstr "Zapisi po tednih v zadnjih {0} tednih"
+
+msgid "Deadline"
+msgstr "Rok"
+
+msgid "{0} days overdue"
+msgstr "zamuja {0} dni"
+
+msgid "1 day overdue"
+msgstr "zamuja 1 dan"
+
+msgid "due today"
+msgstr "rok je danes"
+
+msgid "due tomorrow"
+msgstr "rok je jutri"
+
+msgid "in {0} days"
+msgstr "čez {0} dni"

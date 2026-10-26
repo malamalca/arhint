@@ -326,6 +326,122 @@ class KbUpdater
     }
 
     /**
+     * Write the status of active projects from their current knowledge base, without reading any events.
+     *
+     * Projects that have a status already are left alone unless `all` is set; projects without any knowledge
+     * base content are skipped, because there is nothing to base the status on. A status that is too long is
+     * asked for once more, after that it is left empty and reported.
+     *
+     * @param array{project?: string, all?: bool, maxSeconds?: int, dryRun?: bool} $options `project` limits the run
+     *   to one project (id or number), also when it is not active; `all` replaces the existing statuses too;
+     *   `maxSeconds` is the time after which no new project is started.
+     * @return \Projects\Lib\KnowledgeBase\KbUpdateReport
+     */
+    public function statuses(array $options = []): KbUpdateReport
+    {
+        $report = new KbUpdateReport();
+        $started = time();
+        $maxSeconds = (int)($options['maxSeconds'] ?? 2400);
+        $all = !empty($options['all']);
+        $dryRun = !empty($options['dryRun']);
+
+        $found = 0;
+        foreach ($this->candidates($options['project'] ?? null) as $project) {
+            $found++;
+            if (time() - $started >= $maxSeconds) {
+                $report->stopped = 'time limit';
+                break;
+            }
+
+            try {
+                $this->statusOfProject($project, $all, $dryRun, $report);
+            } catch (KbAiException $e) {
+                $report->stopped = 'AI not available: ' . $e->getMessage();
+                break;
+            } catch (StaleKnowledgeBaseException) {
+                $report->note(sprintf('%s: the knowledge base is being changed, left for the next run.', $project->no));
+            }
+        }
+
+        if ($found === 0 && isset($options['project'])) {
+            $report->note('No such project, or the AI features are not on for its company.');
+        }
+
+        return $report;
+    }
+
+    /**
+     * Write the status of one project.
+     *
+     * @param \Projects\Model\Entity\Project $project Project.
+     * @param bool $all Replace an existing status too.
+     * @param bool $dryRun Show the status, write nothing.
+     * @param \Projects\Lib\KnowledgeBase\KbUpdateReport $report Report to add to.
+     * @return void
+     * @throws \Projects\Lib\KnowledgeBase\KbAiException When the model cannot be reached.
+     * @throws \Projects\Lib\KnowledgeBase\StaleKnowledgeBaseException When people keep changing the knowledge base.
+     */
+    private function statusOfProject(Project $project, bool $all, bool $dryRun, KbUpdateReport $report): void
+    {
+        if ((int)$project->kb_format !== 1) {
+            $report->note(sprintf('%s: no knowledge base yet, skipped.', $project->no));
+
+            return;
+        }
+
+        $doc = $this->service->document($project);
+        if (!$all && $doc->text(KbDocument::STATUS) !== '') {
+            $report->note(sprintf('%s: has a status already, skipped.', $project->no));
+
+            return;
+        }
+        $texts = array_filter(['summary', 'procedures', 'decisions'], fn(string $id): bool => $doc->text($id) !== '');
+        $hasContent = $texts !== [] || array_sum($doc->openCounts()) > 0;
+        if (!$hasContent) {
+            $report->note(sprintf('%s: knowledge base is empty, skipped.', $project->no));
+
+            return;
+        }
+
+        $report->projects++;
+        $applier = new KbOperationApplier();
+        $problem = null;
+        for ($attempt = 0; $attempt < 2; $attempt++) {
+            $answer = $this->ai->json(
+                $this->prompt->statusSystem(),
+                $this->prompt->statusRequest($doc, DateTime::now(), $problem),
+            );
+            $text = $answer['status'] ?? null;
+            $operations = [['op' => 'set_section', 'section' => KbDocument::STATUS, 'text' => $text]];
+
+            $check = clone $doc;
+            $result = $applier->apply($check, $operations, KbOperationApplier::BATCH);
+            if ($result->rejected === []) {
+                break;
+            }
+            $problem = implode('; ', $result->rejected);
+        }
+
+        if ($result->rejected !== []) {
+            $report->failed++;
+            $report->note(sprintf('%s: no usable status (%s)', $project->no, $problem));
+
+            return;
+        }
+
+        $status = $check->text(KbDocument::STATUS);
+        if ($dryRun) {
+            $report->note(sprintf('%s: %s', $project->no, $status));
+
+            return;
+        }
+
+        $write = $this->write($project, $operations, 'stanje projekta');
+        $report->revisions += $write->revision === null ? 0 : 1;
+        $report->note(sprintf('%s: %s', $project->no, $status));
+    }
+
+    /**
      * Ask the model about a chunk of events.
      *
      * @param \Projects\Lib\KnowledgeBase\KbDocument $doc Current state.

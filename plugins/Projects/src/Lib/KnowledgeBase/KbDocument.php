@@ -20,10 +20,15 @@ class KbDocument
 
     public const TOC = 'toc';
     public const CHANGELOG = 'changelog';
+    public const STATUS = 'status';
+
+    /** Longest status of the project, in characters; it is shown on the cards of the dashboard. */
+    public const STATUS_MAX_CHARS = 180;
 
     /** Section id => heading. The order is the order in the document. */
     public const SECTIONS = [
         'toc' => 'Kazalo',
+        'status' => 'Stanje',
         'summary' => 'Povzetek',
         'description' => 'Opis projekta',
         'warnings' => 'Opozorila',
@@ -52,7 +57,9 @@ class KbDocument
     ];
 
     /** Sections holding free markdown. */
-    public const TEXT_SECTIONS = ['summary', 'description', 'parties', 'procedures', 'decisions', 'documents', 'notes'];
+    public const TEXT_SECTIONS = [
+        'status', 'summary', 'description', 'parties', 'procedures', 'decisions', 'documents', 'notes',
+    ];
 
     private const SEVERITY_MARKERS = ['high' => '🔴', 'medium' => '🟡', 'low' => '🟢'];
     private const STATUS_MARKERS = [

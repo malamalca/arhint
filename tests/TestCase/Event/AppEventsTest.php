@@ -53,19 +53,19 @@ class AppEventsTest extends TestCase
     // -------------------------------------------------------------------------
 
     /**
-     * implementedEvents() maps exactly the expected 5 events.
+     * implementedEvents() maps exactly the expected 4 events.
      */
     public function testImplementedEvents(): void
     {
         $events = $this->appEvents->implementedEvents();
 
         $this->assertIsArray($events);
-        $this->assertArrayHasKey('App.dashboard', $events);
+        $this->assertArrayNotHasKey('App.dashboard', $events);
         $this->assertArrayHasKey('Model.beforeMarshal', $events);
         $this->assertArrayHasKey('Model.afterSave', $events);
         $this->assertArrayHasKey('App.Form.Documents.Invoices.edit', $events);
         $this->assertArrayHasKey('App.Form.Documents.Documents.edit', $events);
-        $this->assertCount(5, $events);
+        $this->assertCount(4, $events);
     }
 
     /**
@@ -75,7 +75,6 @@ class AppEventsTest extends TestCase
     {
         $events = $this->appEvents->implementedEvents();
 
-        $this->assertEquals('dashboardPanels', $events['App.dashboard']);
         $this->assertEquals('marshalDurationAndAttachments', $events['Model.beforeMarshal']);
         $this->assertEquals('updateModelAttachments', $events['Model.afterSave']);
         $this->assertEquals('addAttachmentFormLines', $events['App.Form.Documents.Invoices.edit']);

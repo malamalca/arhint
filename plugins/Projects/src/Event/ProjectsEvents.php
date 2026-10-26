@@ -3,21 +3,27 @@ declare(strict_types=1);
 
 namespace Projects\Event;
 
+use App\AppPluginsEnum;
 use ArrayObject;
 use Cake\Datasource\EntityInterface;
 use Cake\Event\Event;
 use Cake\Event\EventListenerInterface;
+use Cake\I18n\Date;
 use Cake\ORM\Query\SelectQuery;
 use Cake\ORM\TableRegistry;
 use Cake\Routing\Router;
 use Crm\Model\Table\ContactsTable;
 use Documents\Model\Table\DocumentsTable;
+use Projects\Lib\ProjectsActivity;
+use Projects\Lib\ProjectsDashboard;
 use Projects\Lib\ProjectsSidebar;
 use Projects\Model\Table\ProjectsTable;
 use Throwable;
 
 class ProjectsEvents implements EventListenerInterface
 {
+    private const DASHBOARD_PROJECTS = 12;
+
     /**
      * Return implemented events array.
      *
@@ -28,7 +34,7 @@ class ProjectsEvents implements EventListenerInterface
         return [
             'View.beforeRender' => 'addScripts',
             'App.Sidebar.beforeRender' => 'modifySidebar',
-            'Documents.Dashboard.queryDocuments' => 'filterDashboardDocuments',
+            'App.dashboard' => 'dashboardPanels',
             'Documents.Documents.indexQuery' => 'filterDashboardDocuments',
             'App.Form.Crm.Adremas.edit' => 'addProjectToAdremas',
             'App.Index.Crm.Adremas.index' => 'addProjectToAdremas',
@@ -272,6 +278,62 @@ class ProjectsEvents implements EventListenerInterface
                 );
             }
         }
+    }
+
+    /**
+     * Dashboard panel with cards of the active projects the user has access to.
+     *
+     * @param \Cake\Event\Event $event Event object.
+     * @param \ArrayObject $panels Panels data.
+     * @return void
+     */
+    public function dashboardPanels(Event $event, ArrayObject $panels): void
+    {
+        /** @var \App\Controller\AppController $controller */
+        $controller = $event->getSubject();
+        if (!$controller->hasCurrentUser() || !$controller->getCurrentUser()->hasAccess(AppPluginsEnum::Projects)) {
+            return;
+        }
+
+        /** @var \Projects\Model\Table\ProjectsTable $ProjectsTable */
+        $ProjectsTable = TableRegistry::getTableLocator()->get('Projects.Projects');
+
+        $projects = $controller->Authorization->applyScope($ProjectsTable->find(), 'index')
+            ->contain(['LastLog'])
+            ->where(['Projects.active' => true])
+            ->orderBy(['LastLog.created' => 'DESC', 'Projects.no' => 'DESC'])
+            ->limit(self::DASHBOARD_PROJECTS)
+            ->all();
+
+        if ($projects->isEmpty()) {
+            return;
+        }
+
+        $statuses = $controller->Authorization->applyScope($ProjectsTable->ProjectsStatuses->find('list'), 'index')
+            ->cache('Projects.ProjectsStatuses.' . $controller->getCurrentUser()->get('company_id'))
+            ->orderBy(['title'])
+            ->toArray();
+
+        $panels['panels']['projects'] = [
+            'params' => ['class' => 'dashboard-panel'],
+            'lines' => [
+                '<h5>' . h(__d('projects', 'Projects')) . '</h5>',
+                ProjectsDashboard::cards(
+                    $projects,
+                    $statuses,
+                    null,
+                    ProjectsActivity::weekly(
+                        array_map(fn($project): string => (string)$project->id, $projects->toList()),
+                        Date::today(),
+                    ),
+                ),
+                '<p style="margin: 0 1rem 1rem;">' . '<a href="' . h(Router::url([
+                    'plugin' => 'Projects', 'controller' => 'Projects', 'action' => 'index',
+                ])) . '">' . h(__d('projects', 'All Projects')) . '</a></p>',
+            ],
+        ];
+
+        $event->setResult(['panels' => $panels]);
     }
 
     /**

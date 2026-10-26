@@ -23,6 +23,49 @@ class KbOperationApplierTest extends TestCase
     /**
      * @return void
      */
+    public function testStatusIsOneShortLineThatIsReplacedNotAppended(): void
+    {
+        $doc = KbDocument::empty();
+
+        $result = $this->applier->apply($doc, [
+            ['op' => 'set_section', 'section' => 'status', 'text' => "  Čakamo na\n gradbeno   dovoljenje.  "],
+        ], KbOperationApplier::BATCH);
+        $this->assertSame(1, $result->applied);
+        $this->assertSame('Čakamo na gradbeno dovoljenje.', $doc->text('status'));
+
+        $result = $this->applier->apply($doc, [
+            ['op' => 'set_section', 'section' => 'status', 'text' => str_repeat('x', 181)],
+            ['op' => 'set_section', 'section' => 'status', 'text' => '  '],
+            ['op' => 'append_section', 'section' => 'status', 'text' => 'še'],
+        ], KbOperationApplier::BATCH);
+        $this->assertSame(0, $result->applied);
+        $this->assertCount(3, $result->rejected);
+        $this->assertStringContainsString('predolgo', $result->rejected[0]);
+        $this->assertSame('Čakamo na gradbeno dovoljenje.', $doc->text('status'));
+
+        $result = $this->applier->apply($doc, [
+            ['op' => 'set_section', 'section' => 'status', 'text' => str_repeat('č', 180)],
+        ], KbOperationApplier::BATCH);
+        $this->assertSame(1, $result->applied);
+    }
+
+    /**
+     * @return void
+     */
+    public function testStatusSurvivesRoundTrip(): void
+    {
+        $doc = KbDocument::empty();
+        $doc->setText('status', 'Projekt čaka na soglasje.');
+
+        $parsed = KbDocument::parse($doc->toMarkdown());
+
+        $this->assertSame('Projekt čaka na soglasje.', $parsed->text('status'));
+        $this->assertStringContainsString('## Stanje', $parsed->toDisplayMarkdown());
+    }
+
+    /**
+     * @return void
+     */
     public function testAddUpdateAndResolveItems(): void
     {
         $doc = KbDocument::empty();

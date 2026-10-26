@@ -31,7 +31,7 @@ class KbOperationApplier
     private const MAX_BATCH_SET_SECTION = 8;
 
     /** What the batch run may do. */
-    private const BATCH_SET_SECTIONS = ['summary', 'parties', 'procedures'];
+    private const BATCH_SET_SECTIONS = ['status', 'summary', 'parties', 'procedures'];
     private const BATCH_APPEND_SECTIONS = ['summary', 'parties', 'procedures', 'decisions', 'documents'];
     private const BATCH_OPERATIONS = ['set_section', 'append_section', 'add_item', 'update_item', 'resolve_item'];
 
@@ -115,7 +115,11 @@ class KbOperationApplier
         if ($source === self::BATCH && !in_array($section, self::BATCH_SET_SECTIONS, true)) {
             throw new InvalidArgumentException("poglavja '$section' paketna obdelava ne sme zamenjati");
         }
-        $doc->setText($section, $this->body($op, true));
+        $text = $this->body($op, true);
+        if ($section === KbDocument::STATUS) {
+            $text = $this->statusText($text);
+        }
+        $doc->setText($section, $text);
 
         return sprintf('posodobljeno poglavje %s', KbDocument::SECTIONS[$section]);
     }
@@ -129,6 +133,9 @@ class KbOperationApplier
     private function appendSection(KbDocument $doc, array $op, string $source): string
     {
         $section = $this->textSection($op);
+        if ($section === KbDocument::STATUS) {
+            throw new InvalidArgumentException('stanja ni mogoče dopolnjevati, zamenjaj ga (set_section)');
+        }
         if ($source === self::BATCH && !in_array($section, self::BATCH_APPEND_SECTIONS, true)) {
             throw new InvalidArgumentException("v poglavje '$section' paketna obdelava ne sme dodajati");
         }
@@ -276,6 +283,29 @@ class KbOperationApplier
         }
         if (mb_strlen($text) > self::MAX_TEXT) {
             throw new InvalidArgumentException('besedilo je predolgo');
+        }
+
+        return $text;
+    }
+
+    /**
+     * The status of the project: one line of text no longer than KbDocument::STATUS_MAX_CHARS.
+     *
+     * @param string $text Proposed status.
+     * @return string
+     */
+    private function statusText(string $text): string
+    {
+        $text = trim((string)preg_replace('/\s+/u', ' ', $text));
+        if ($text === '') {
+            throw new InvalidArgumentException('stanje je prazno');
+        }
+        if (mb_strlen($text) > KbDocument::STATUS_MAX_CHARS) {
+            throw new InvalidArgumentException(sprintf(
+                'stanje je predolgo (%d znakov, največ %d)',
+                mb_strlen($text),
+                KbDocument::STATUS_MAX_CHARS,
+            ));
         }
 
         return $text;

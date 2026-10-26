@@ -96,6 +96,120 @@ class KbUpdaterTest extends TestCase
     }
 
     /**
+     * @param string $status Status in the knowledge base, empty for none.
+     * @return void
+     */
+    private function knowledgeBase(string $status = ''): void
+    {
+        $doc = KbDocument::empty();
+        $doc->setText('summary', 'Gradnja poteka po načrtu.');
+        $doc->addItem('warnings', 'Manjka PGD', ['severity' => 'high']);
+        $doc->setText('status', $status);
+        $this->getTableLocator()->get('Projects.Projects')->updateAll(
+            ['descript' => $doc->toMarkdown(), 'kb_format' => 1, 'kb_version' => 1],
+            ['id' => self::PROJECT],
+        );
+    }
+
+    /**
+     * @return void
+     */
+    public function testStatusesWritesStatusFromKnowledgeBase(): void
+    {
+        $this->knowledgeBase();
+        $ai = new FakeKbAiClient([['status' => "Čakamo na PGD.\n"]]);
+
+        $report = (new KbUpdater($ai))->statuses(['project' => '2022-01']);
+
+        $this->assertSame(1, $report->projects);
+        $this->assertSame(1, $report->revisions);
+        $this->assertSame(0, $report->failed);
+        $doc = KbDocument::parse($this->project()->descript);
+        $this->assertSame('Čakamo na PGD.', $doc->text('status'));
+        $this->assertSame('Manjka PGD', $doc->items('warnings')[0]->text);
+        $this->assertStringContainsString('Manjka PGD', $ai->requests[0]['user']);
+        $this->assertStringContainsString('180', $ai->requests[0]['system']);
+    }
+
+    /**
+     * @return void
+     */
+    public function testStatusesLeavesExistingStatusUnlessAll(): void
+    {
+        $this->knowledgeBase('Staro stanje.');
+        $ai = new FakeKbAiClient([['status' => 'Novo stanje.']]);
+
+        $report = (new KbUpdater($ai))->statuses(['project' => '2022-01']);
+        $this->assertSame(0, $report->projects);
+        $this->assertSame([], $ai->requests);
+        $this->assertSame('Staro stanje.', KbDocument::parse($this->project()->descript)->text('status'));
+
+        $report = (new KbUpdater($ai))->statuses(['project' => '2022-01', 'all' => true]);
+        $this->assertSame(1, $report->revisions);
+        $this->assertSame('Novo stanje.', KbDocument::parse($this->project()->descript)->text('status'));
+    }
+
+    /**
+     * @return void
+     */
+    public function testStatusesAsksAgainWhenTooLongAndGivesUp(): void
+    {
+        $this->knowledgeBase();
+        $ai = new FakeKbAiClient([['status' => str_repeat('a', 200)], ['status' => 'Kratko stanje.']]);
+        $report = (new KbUpdater($ai))->statuses(['project' => '2022-01']);
+        $this->assertSame(1, $report->revisions);
+        $this->assertCount(2, $ai->requests);
+        $this->assertStringContainsString('predolgo', $ai->requests[1]['user']);
+
+        $this->knowledgeBase();
+        $ai = new FakeKbAiClient([['status' => str_repeat('a', 200)]]);
+        $report = (new KbUpdater($ai))->statuses(['project' => '2022-01']);
+        $this->assertSame(1, $report->failed);
+        $this->assertSame(0, $report->revisions);
+        $this->assertSame('', KbDocument::parse($this->project()->descript)->text('status'));
+    }
+
+    /**
+     * @return void
+     */
+    public function testStatusesDryRunAndEmptyKnowledgeBaseWriteNothing(): void
+    {
+        $this->knowledgeBase();
+        $ai = new FakeKbAiClient([['status' => 'Predlog.']]);
+        $report = (new KbUpdater($ai))->statuses(['project' => '2022-01', 'dryRun' => true]);
+        $this->assertSame(0, $report->revisions);
+        $this->assertContains('2022-01: Predlog.', $report->messages);
+        $this->assertSame('', KbDocument::parse($this->project()->descript)->text('status'));
+
+        $this->getTableLocator()->get('Projects.Projects')->updateAll(
+            ['descript' => KbDocument::empty()->toMarkdown(), 'kb_format' => 1],
+            ['id' => self::PROJECT],
+        );
+        $ai = new FakeKbAiClient([['status' => 'Ne bi smelo biti.']]);
+        $report = (new KbUpdater($ai))->statuses(['project' => '2022-01']);
+        $this->assertSame([], $ai->requests);
+        $this->assertSame(0, $report->projects);
+    }
+
+    /**
+     * @return void
+     */
+    public function testBatchUpdateMaySetStatus(): void
+    {
+        $this->knowledgeBase();
+        $this->log('Dovoljenje je izdano');
+        $ai = new FakeKbAiClient([[
+            'changes_summary' => 'Stanje',
+            'operations' => [['op' => 'set_section', 'section' => 'status', 'text' => 'Dovoljenje je izdano.']],
+        ]]);
+
+        (new KbUpdater($ai))->run(['project' => '2022-01']);
+
+        $this->assertSame('Dovoljenje je izdano.', KbDocument::parse($this->project()->descript)->text('status'));
+        $this->assertStringContainsString('status', $ai->requests[0]['system']);
+    }
+
+    /**
      * @return void
      */
     public function testConvertsProjectAndAppliesOperations(): void

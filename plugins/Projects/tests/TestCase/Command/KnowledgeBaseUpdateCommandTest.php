@@ -61,6 +61,30 @@ class KnowledgeBaseUpdateCommandTest extends TestCase
     /**
      * @return void
      */
+    public function testStatusCommandReportsWithoutKnowledgeBase(): void
+    {
+        $this->exec('knowledge_base status --dry-run --project 2022-01');
+
+        $this->assertExitSuccess();
+        $this->assertOutputContains('2022-01: no knowledge base yet, skipped.');
+        $this->assertOutputContains('0 statuses made, 0 written, 0 without a usable answer.');
+    }
+
+    /**
+     * @return void
+     */
+    public function testStatusCommandHelpListsOptions(): void
+    {
+        $this->exec('knowledge_base status --help');
+
+        $this->assertExitSuccess();
+        $this->assertOutputContains('--all');
+        $this->assertOutputContains('--dry-run');
+    }
+
+    /**
+     * @return void
+     */
     public function testHelpListsOptions(): void
     {
         $this->exec('knowledge_base update --help');

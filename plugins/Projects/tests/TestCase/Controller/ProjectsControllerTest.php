@@ -4,10 +4,12 @@ declare(strict_types=1);
 namespace Projects\Test\TestCase\Controller;
 
 use App\AppPluginsEnum;
+use Cake\I18n\DateTime;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\EmailTrait;
 use Cake\TestSuite\IntegrationTestTrait;
 use Cake\TestSuite\TestCase;
+use Cake\Utility\Text;
 
 /**
  * Projects\Controller\ProjectsController Test Case
@@ -27,6 +29,7 @@ class ProjectsControllerTest extends TestCase
         'Projects' => 'plugin.Projects.Projects',
         'ProjectsUsers' => 'plugin.Projects.ProjectsUsers',
         'plugin.Documents.DocumentsCounters',
+        'app.Logs',
     ];
 
     /**
@@ -53,6 +56,65 @@ class ProjectsControllerTest extends TestCase
 
         $this->get('/projects/projects/index');
         $this->assertResponseOk();
+    }
+
+    /**
+     * Test that the dashboard shows project cards and no longer the last documents
+     *
+     * @return void
+     */
+    public function testDashboardShowsProjectCards()
+    {
+        $this->login(USER_ADMIN);
+
+        $this->get('/');
+        $this->assertResponseOk();
+        $this->assertResponseContains('projects-overview-card');
+        $this->assertResponseContains('projects-activity');
+        $this->assertResponseContains('First Project Title');
+        $this->assertResponseNotContains('INBOX');
+        $this->assertResponseNotContains('Zadnjih 6 dokumentov');
+    }
+
+    /**
+     * Test that dashboard cards are ordered by the last change, projects without entries last
+     *
+     * @return void
+     */
+    public function testDashboardOrdersProjectsByActivity()
+    {
+        $first = '4dd53305-9715-4be4-b169-20defe113d2a';
+        $second = '4dd53305-9715-4be4-b169-20defe113d2b';
+        $logs = TableRegistry::getTableLocator()->get('App.Logs');
+        $logs->deleteAll([]);
+        $addLog = function (string $projectId, string $created) use ($logs): void {
+            $log = $logs->newEntity([
+                'id' => Text::uuid(),
+                'model' => 'Project',
+                'foreign_id' => $projectId,
+                'user_id' => USER_ADMIN,
+                'action' => 'Comment',
+                'descript' => 'Zapis',
+            ]);
+            $log->created = new DateTime($created);
+            $log->modified = new DateTime($created);
+            $logs->saveOrFail($log, ['checkRules' => false]);
+        };
+        $this->login(USER_ADMIN);
+
+        // the older project had the more recent change
+        $addLog($first, '2026-01-01 10:00:00');
+        $addLog($second, '2026-10-01 10:00:00');
+        $this->get('/');
+        $this->assertResponseOk();
+        $body = (string)$this->_response->getBody();
+        $this->assertLessThan(strpos($body, 'First Project Title'), strpos($body, 'Second Project Title'));
+
+        // a project without entries comes after the ones with entries
+        $logs->deleteAll(['foreign_id' => $second]);
+        $this->get('/');
+        $body = (string)$this->_response->getBody();
+        $this->assertLessThan(strpos($body, 'Second Project Title'), strpos($body, 'First Project Title'));
     }
 
     /**
