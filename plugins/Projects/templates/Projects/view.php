@@ -6,6 +6,7 @@ use Projects\Lib\KnowledgeBase\KbCalendar;
 use Projects\Lib\KnowledgeBase\KbDocument;
 use Projects\Job\KnowledgeBaseRegenerateJob;
 use Projects\Lib\KnowledgeBase\KbRenderer;
+use Projects\Lib\KnowledgeBase\KbSettings;
 use Projects\Lib\ProjectsFuncs;
 
 $converter = new GithubFlavoredMarkdownConverter([
@@ -45,7 +46,10 @@ if ($this->getCurrentUser()->can('edit', $project)) {
 // Conversation with the AI about the knowledge base; only for users who have the AI assistant set up.
 $kbChat = null;
 $aiConfig = $this->getCurrentUser()->getProperty('ai_assistant');
-if ($aiConfig && !empty($aiConfig->provider) && $aiConfig->provider !== 'none') {
+if (
+    $aiConfig && !empty($aiConfig->provider) && $aiConfig->provider !== 'none'
+    && KbSettings::companyAllowed((string)$project->owner_id)
+) {
     $kbUrl = fn(string $action): string => Router::url([
         'plugin' => 'Projects', 'controller' => 'ProjectsKnowledge', 'action' => $action, $project->id,
     ]);

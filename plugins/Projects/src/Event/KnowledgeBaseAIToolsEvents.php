@@ -14,6 +14,7 @@ use Projects\Lib\KnowledgeBase\KbDocument;
 use Projects\Lib\KnowledgeBase\KbOperationApplier;
 use Projects\Lib\KnowledgeBase\KbPrompt;
 use Projects\Lib\KnowledgeBase\KbService;
+use Projects\Lib\KnowledgeBase\KbSettings;
 use Projects\Lib\KnowledgeBase\StaleKnowledgeBaseException;
 use Throwable;
 
@@ -120,6 +121,11 @@ class KnowledgeBaseAIToolsEvents implements EventListenerInterface
             $project = TableRegistry::getTableLocator()->get('Projects.Projects')->get($projectId);
             if (!$user->can('knowledgeBase', $project)) {
                 $event->setResult(['error' => 'You do not have access to this project.']);
+
+                return;
+            }
+            if (!KbSettings::companyAllowed((string)$project->owner_id)) {
+                $event->setResult(['error' => 'The AI features are not on for the company of this project.']);
 
                 return;
             }

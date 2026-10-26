@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Projects\Test\TestCase\Controller;
 
+use Cake\Core\Configure;
 use Cake\ORM\TableRegistry;
 use Cake\Queue\TestSuite\QueueTrait;
 use Cake\TestSuite\IntegrationTestTrait;
@@ -326,6 +327,32 @@ class ProjectsKnowledgeControllerTest extends TestCase
         $this->post(self::BASE . 'calendar/' . self::PROJECT, ['item_id' => $item]);
         $this->assertResponseError();
         $this->assertSame(0, TableRegistry::getTableLocator()->get('Projects.ProjectsKbCalendarLinks')->find()->count());
+    }
+
+    /**
+     * @return void
+     */
+    public function testConversationIsOnlyForTheListedCompanies(): void
+    {
+        $before = Configure::read('Projects.KnowledgeBase.companies');
+        Configure::write('Projects.KnowledgeBase.companies', ['11111111-2222-4333-8444-555555555555']);
+        try {
+            $this->login(USER_ADMIN);
+
+            $this->post(self::BASE . 'chat/' . self::PROJECT, ['message' => 'Kaj je odprto?']);
+            $this->assertArrayHasKey('error', $this->body());
+            $this->assertNoJobsQueued();
+
+            $this->get('/projects/projects/view/' . self::PROJECT);
+            $this->assertResponseOk();
+            $this->assertResponseNotContains('id="ProjectKbChat"');
+
+            Configure::write('Projects.KnowledgeBase.companies', [COMPANY_FIRST]);
+            $this->get('/projects/projects/view/' . self::PROJECT);
+            $this->assertResponseContains('id="ProjectKbChat"');
+        } finally {
+            Configure::write('Projects.KnowledgeBase.companies', $before);
+        }
     }
 
     /**

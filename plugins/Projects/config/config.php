@@ -17,6 +17,9 @@ return [
             'enabled' => false,
             // System-wide AI of the periodic update: provider "local" or "openai"; empty url/model = defaults.
             'ai' => ['provider' => 'local', 'url' => '', 'model' => '', 'api_key' => '', 'timeout' => 180],
+            // Ids of the companies (projects.owner_id) the AI features are for: the periodic update, the
+            // regeneration and the conversation. Empty = every company.
+            'companies' => [],
             'hourlyProjects' => 5,
             'maxEvents' => 60,
             'maxSeconds' => 2400,

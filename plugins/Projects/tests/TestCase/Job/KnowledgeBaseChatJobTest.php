@@ -5,6 +5,7 @@ namespace Projects\Test\TestCase\Job;
 
 use App\Lib\AIAssistant;
 use App\Model\Entity\User;
+use Cake\Core\Configure;
 use Cake\Core\ContainerInterface;
 use Cake\ORM\TableRegistry;
 use Cake\Queue\Job\Message;
@@ -186,6 +187,26 @@ class KnowledgeBaseChatJobTest extends TestCase
 
         $target = TableRegistry::getTableLocator()->get('Projects.ProjectsKbRevisions')->get($result['undo_revision_id']);
         $this->assertSame($before->kb_version, $target->version);
+    }
+
+    /**
+     * @return void
+     */
+    public function testCompanyThatIsNotListedGetsNoAnswer(): void
+    {
+        $before = Configure::read('Projects.KnowledgeBase.companies');
+        Configure::write('Projects.KnowledgeBase.companies', ['11111111-2222-4333-8444-555555555555']);
+        try {
+            $outcome = $this->job(fn(string $message): string => 'Ne bi smelo priti sem.')
+                ->execute($this->message($this->arguments()));
+        } finally {
+            Configure::write('Projects.KnowledgeBase.companies', $before);
+        }
+
+        $this->assertSame(Processor::REJECT, $outcome);
+        $result = $this->readResult();
+        $this->assertSame('error', $result['status']);
+        $this->assertArrayNotHasKey('response', $result);
     }
 
     /**

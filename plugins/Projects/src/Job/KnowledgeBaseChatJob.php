@@ -19,6 +19,7 @@ use Projects\Lib\KnowledgeBase\KbDocument;
 use Projects\Lib\KnowledgeBase\KbPrompt;
 use Projects\Lib\KnowledgeBase\KbRenderer;
 use Projects\Lib\KnowledgeBase\KbService;
+use Projects\Lib\KnowledgeBase\KbSettings;
 use RuntimeException;
 use Throwable;
 
@@ -65,6 +66,9 @@ class KnowledgeBaseChatJob implements JobInterface
             $project = TableRegistry::getTableLocator()->get('Projects.Projects')->get($projectId);
             if (!$user->can('knowledgeBase', $project)) {
                 throw new RuntimeException('No access to the project.');
+            }
+            if (!KbSettings::companyAllowed((string)$project->owner_id)) {
+                throw new RuntimeException('The AI conversation is not on for the company of the project.');
             }
 
             $service = new KbService();

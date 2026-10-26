@@ -7,6 +7,7 @@ use App\Lib\AIAssistant;
 use App\Model\Entity\User;
 use ArrayObject;
 use Authorization\AuthorizationServiceInterface;
+use Cake\Core\Configure;
 use Cake\Event\Event;
 use Cake\Event\EventManager;
 use Cake\ORM\TableRegistry;
@@ -197,6 +198,32 @@ class KnowledgeBaseAIToolsEventsTest extends TestCase
 
         $this->assertArrayHasKey('error', $result);
         $this->assertSame(0, TableRegistry::getTableLocator()->get('Projects.Projects')->get(self::PROJECT)->kb_version);
+    }
+
+    /**
+     * @return void
+     */
+    public function testToolsAreRefusedForACompanyThatIsNotListed(): void
+    {
+        $before = Configure::read('Projects.KnowledgeBase.companies');
+        Configure::write('Projects.KnowledgeBase.companies', ['11111111-2222-4333-8444-555555555555']);
+        try {
+            $assistant = $this->assistant($this->context());
+
+            $read = $this->callTool('Projects.kb_read', [], $assistant);
+            $apply = $this->callTool('Projects.kb_apply', [
+                'operations' => [['op' => 'add_item', 'section' => 'warnings', 'text' => 'X']],
+            ], $assistant);
+
+            $this->assertArrayHasKey('error', $read);
+            $this->assertArrayHasKey('error', $apply);
+            $this->assertSame(
+                0,
+                TableRegistry::getTableLocator()->get('Projects.Projects')->get(self::PROJECT)->kb_version,
+            );
+        } finally {
+            Configure::write('Projects.KnowledgeBase.companies', $before);
+        }
     }
 
     /**

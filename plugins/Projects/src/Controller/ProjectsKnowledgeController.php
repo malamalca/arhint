@@ -13,6 +13,7 @@ use Projects\Lib\KnowledgeBase\KbCalendar;
 use Projects\Lib\KnowledgeBase\KbDocument;
 use Projects\Lib\KnowledgeBase\KbRenderer;
 use Projects\Lib\KnowledgeBase\KbService;
+use Projects\Lib\KnowledgeBase\KbSettings;
 use Projects\Model\Entity\Project;
 
 /**
@@ -48,6 +49,10 @@ class ProjectsKnowledgeController extends AppController
     {
         $this->request->allowMethod('post');
         $project = $this->loadProject($projectId);
+
+        if (!KbSettings::companyAllowed((string)$project->owner_id)) {
+            return $this->json(['error' => __d('projects', 'The AI conversation is not on for your company.')]);
+        }
 
         $message = trim((string)$this->request->getData('message'));
         if ($message === '') {

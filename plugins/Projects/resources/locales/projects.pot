@@ -1238,3 +1238,6 @@ msgstr ""
 
 msgid "Regeneration"
 msgstr ""
+
+msgid "The AI conversation is not on for your company."
+msgstr ""

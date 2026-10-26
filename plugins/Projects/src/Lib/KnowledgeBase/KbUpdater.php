@@ -78,7 +78,9 @@ class KbUpdater
         $maxSeconds = (int)($options['maxSeconds'] ?? 2400);
         $dryRun = !empty($options['dryRun']);
 
+        $found = 0;
         foreach ($this->candidates($options['project'] ?? null) as $project) {
+            $found++;
             if ($report->projects >= $maxProjects) {
                 break;
             }
@@ -95,6 +97,10 @@ class KbUpdater
             } catch (StaleKnowledgeBaseException) {
                 $report->note(sprintf('%s: the knowledge base is being changed, left for the next run.', $project->no));
             }
+        }
+
+        if ($found === 0 && isset($options['project'])) {
+            $report->note('No such project, or the AI features are not on for its company.');
         }
 
         if ($report->messages !== [] || $report->stopped !== null) {
@@ -230,6 +236,12 @@ class KbUpdater
         ?string $userId = null,
         int $deadline = PHP_INT_MAX,
     ): bool {
+        if (!KbSettings::companyAllowed((string)$project->owner_id)) {
+            $report->note(sprintf('%s: the AI features are not on for the company of the project.', $project->no));
+
+            return false;
+        }
+
         $runStart = DateTime::now();
         $more = false;
         $events = $this->collector->collect((string)$project->id, null, PHP_INT_MAX, $more, true);
@@ -459,6 +471,10 @@ class KbUpdater
     private function candidates(?string $selector = null): iterable
     {
         $query = $this->table()->find();
+        $companies = KbSettings::companies();
+        if ($companies !== []) {
+            $query->where(['Projects.owner_id IN' => $companies]);
+        }
         if ($selector !== null) {
             $query->where(['OR' => ['Projects.id' => $selector, 'Projects.no' => $selector]]);
         } else {
