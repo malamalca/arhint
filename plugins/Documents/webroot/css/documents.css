@@ -237,3 +237,8 @@ div.workflow-actions {
 #travel-order-expenses-table {
     max-width: 700px;
 }
+
+/* AI ANALYSIS on the document view: as wide as the attachments and logs tables */
+#document-ai-analysis {
+    max-width: 700px;
+}

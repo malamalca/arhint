@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Projects\Lib\KnowledgeBase;
 
+use Cake\Core\Plugin;
 use Cake\Datasource\EntityInterface;
 use Cake\I18n\DateTime;
 use Cake\ORM\Locator\LocatorAwareTrait;
@@ -14,7 +15,8 @@ use Projects\Model\Entity\ProjectsKbSource;
  * Finds what happened in a project since the knowledge base was last brought up to date.
  *
  * Sources: log entries (manual entries, saved e-mails, documents and invoices assigned to the project), events
- * of the authority procedures, tasks, comments of tasks and milestones. An event is pending until a row of
+ * of the authority procedures, tasks, comments of tasks, milestones, and the documents, invoices and travel orders
+ * of the project that no log entry links to (older ones and those assigned without a log). An event is pending until a row of
  * `projects_kb_sources` with the same source, id and modification time says it was applied or skipped.
  */
 class KbEventCollector
@@ -46,6 +48,7 @@ class KbEventCollector
             $this->tasks($projectId, $since),
             $this->taskComments($projectId, $since),
             $this->milestones($projectId, $since),
+            $this->documents($projectId, $since),
         );
 
         $handled = $this->handled($projectId);
@@ -197,6 +200,204 @@ class KbEventCollector
         }
 
         return $events;
+    }
+
+    /**
+     * Documents, invoices and travel orders of the project that no log entry of the project links to.
+     *
+     * Those with a log reach the model through the log (who assigned it, when, and its AI summary), so they are
+     * not given twice. The rest is what the project folder holds without a log: documents assigned before the logs
+     * were written, or without the project being set in a save that could write one.
+     *
+     * @param string $projectId Project id.
+     * @param \Cake\I18n\DateTime|null $since Lower bound of the modification time.
+     * @return array<int, \Projects\Lib\KnowledgeBase\KbEvent>
+     */
+    private function documents(string $projectId, ?DateTime $since): array
+    {
+        if (!Plugin::isLoaded('Documents')) {
+            return [];
+        }
+
+        $logged = $this->loggedDocumentIds($projectId);
+        $sources = [
+            'Document' => ['Documents.Documents', []],
+            'Invoice' => ['Documents.Invoices', ['DocumentsCounters']],
+            'TravelOrder' => ['Documents.TravelOrders', []],
+        ];
+
+        $rows = [];
+        foreach ($sources as $model => [$tableName, $contain]) {
+            $table = $this->fetchTable($tableName);
+            $alias = $table->getAlias();
+            $query = $table->find()->contain($contain)->where([$alias . '.project_id' => $projectId]);
+            if ($since !== null) {
+                $query->where(['OR' => [$alias . '.modified >' => $since, $alias . '.created >' => $since]]);
+            }
+            foreach ($query->all() as $row) {
+                if (!isset($logged[strtolower((string)$row->id)])) {
+                    $rows[] = [$model, $row];
+                }
+            }
+        }
+        if ($rows === []) {
+            return [];
+        }
+
+        $summaries = $this->analysisSummaries(array_map(fn(array $item): string => (string)$item[1]->id, $rows));
+        $names = $this->userNames(array_map(
+            fn(array $item): mixed => $item[1]->get('user_id') ?? $item[1]->get('entered_by_id'),
+            $rows,
+        ));
+
+        $events = [];
+        foreach ($rows as [$model, $row]) {
+            $text = match ($model) {
+                'Invoice' => $this->invoiceText($row),
+                'TravelOrder' => $this->travelOrderText($row),
+                default => $this->documentText($row),
+            };
+            $userId = (string)($row->get('user_id') ?? $row->get('entered_by_id'));
+            if (isset($names[$userId])) {
+                $text .= ', vnesel ' . $names[$userId];
+            }
+            $text .= '.';
+            if (trim((string)$row->get('descript')) !== '') {
+                $text .= ' ' . $this->limit(self::plainText((string)$row->get('descript')));
+            }
+            if (isset($summaries[(string)$row->id])) {
+                $text .= "\nPovzetek (AI): " . $summaries[(string)$row->id];
+            }
+
+            $events[] = new KbEvent(
+                $model,
+                (string)$row->id,
+                $this->modified($row),
+                $this->time($row->created ?? $row->modified),
+                $text,
+            );
+        }
+
+        return $events;
+    }
+
+    /**
+     * @param \Cake\Datasource\EntityInterface $row Document.
+     * @return string
+     */
+    private function documentText(EntityInterface $row): string
+    {
+        $parts = [trim(sprintf('Dokument %s »%s«', $row->get('no'), $row->get('title')))];
+        $this->addDate($parts, 'datum izdaje', $row->get('dat_issue'));
+        if (trim((string)$row->get('location')) !== '') {
+            $parts[] = 'kraj ' . $row->get('location');
+        }
+        if ((int)$row->get('attachments_count') > 0) {
+            $parts[] = 'priponk: ' . (int)$row->get('attachments_count');
+        }
+
+        return implode(', ', $parts);
+    }
+
+    /**
+     * @param \Cake\Datasource\EntityInterface $row Invoice.
+     * @return string
+     */
+    private function invoiceText(EntityInterface $row): string
+    {
+        $direction = $row->get('documents_counter')?->get('direction');
+        $kind = match ($direction) {
+            'issued' => 'Izdan račun',
+            'received' => 'Prejet račun',
+            default => 'Račun',
+        };
+
+        $parts = [trim(sprintf('%s %s »%s«', $kind, $row->get('no'), $row->get('title')))];
+        $this->addDate($parts, 'datum izdaje', $row->get('dat_issue'));
+        $this->addDate($parts, 'zapade', $row->get('dat_expire'));
+        if ($row->get('total') !== null) {
+            $parts[] = 'znesek z davkom ' . number_format((float)$row->get('total'), 2, ',', '.');
+        }
+
+        return implode(', ', $parts);
+    }
+
+    /**
+     * @param \Cake\Datasource\EntityInterface $row Travel order.
+     * @return string
+     */
+    private function travelOrderText(EntityInterface $row): string
+    {
+        $parts = [trim(sprintf('Potni nalog %s »%s«', $row->get('no'), $row->get('title')))];
+        $this->addDate($parts, 'datum izdaje', $row->get('dat_issue'));
+        if (trim((string)$row->get('taskee')) !== '') {
+            $parts[] = 'namen ' . $row->get('taskee');
+        }
+        $this->addDate($parts, 'odhod', $row->get('departure'));
+        $this->addDate($parts, 'prihod', $row->get('arrival'));
+        if ($row->get('total') !== null) {
+            $parts[] = 'znesek ' . number_format((float)$row->get('total'), 2, ',', '.');
+        }
+        if (trim((string)$row->get('status')) !== '') {
+            $parts[] = 'stanje ' . $row->get('status');
+        }
+
+        return implode(', ', $parts);
+    }
+
+    /**
+     * @param array<int, string> $parts Parts of a text, added to.
+     * @param string $label What the date is.
+     * @param mixed $date Date, if any.
+     * @return void
+     */
+    private function addDate(array &$parts, string $label, mixed $date): void
+    {
+        if ($date instanceof DateTimeInterface) {
+            $parts[] = $label . ' ' . $date->format('d.m.Y');
+        }
+    }
+
+    /**
+     * Ids that the log entries of the project link to, in any form of link: `…/view/<id>`.
+     *
+     * @param string $projectId Project id.
+     * @return array<string, true> Lower case ids.
+     */
+    private function loggedDocumentIds(string $projectId): array
+    {
+        $ids = [];
+        $logs = $this->fetchTable('App.Logs')->find()
+            ->select(['descript'])
+            ->where(['Logs.model' => 'Project', 'Logs.foreign_id' => $projectId, 'Logs.descript LIKE' => '%/view/%']);
+        foreach ($logs as $log) {
+            preg_match_all('/\/view\/([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})/i', (string)$log->descript, $matches);
+            foreach ($matches[1] as $id) {
+                $ids[strtolower($id)] = true;
+            }
+        }
+
+        return $ids;
+    }
+
+    /**
+     * The latest AI summary of each document, from the analysis of the document and its attachments.
+     *
+     * @param array<int, string> $ids Document ids.
+     * @return array<string, string> Summary by document id.
+     */
+    private function analysisSummaries(array $ids): array
+    {
+        $summaries = [];
+        $rows = $this->fetchTable('LogsAnalysis')->find()
+            ->select(['event_id', 'summary'])
+            ->where(['event_id IN' => $ids, 'summary IS NOT' => null])
+            ->orderBy(['created' => 'ASC']);
+        foreach ($rows as $row) {
+            $summaries[(string)$row->event_id] = (string)$row->summary;
+        }
+
+        return $summaries;
     }
 
     /**

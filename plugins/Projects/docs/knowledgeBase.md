@@ -290,6 +290,11 @@ Pogovor uporablja AI nastavitve prijavljenega uporabnika (kot obstoječi asisten
 
 Po vsaki fazi: `vendor/bin/phpunit` (ciljni testi vtičnika), `phpcs`, `phpstan`/`psalm` po projektni nastavitvi; prevodi v `resources/locales/sl_SI/projects.po`.
 
+**Popravki po prvih zagonih (26. 10. 2026)**:
+- Viri dogodkov: `KbEventCollector` zdaj bere tudi dokumente, račune (izdane in prejete) in potne naloge projekta (`project_id`), ki jih noben log projekta ne omenja (starejše in dodeljene brez loga). Tisti z logom pridejo prek loga, da niso podvojeni. Besedilo vsebuje številko, naslov, datume, znesek, število priponk in zadnji AI povzetek (`logs_analysis`); sprememba vrstice (`modified`) jo ponovno uvrsti v obdelavo. Test: `KbEventCollectorDocumentsTest`.
+- Migracija `20261026070000_MakeKnowledgeBaseColumnsUtf8mb4`: starejše baze imajo `projects` v `utf8` (3 bajti) in zapis emojijev (oznake 🔴🟡🟢, AI besedila) ni uspel (`SQLSTATE 1366`). Stolpec `projects.descript` in tabela `projects_kb_revisions` postaneta `utf8mb4`; ostali del tabele `projects` se ne spremeni. Pred ponovnim zagonom posodobitve je treba zagnati `bin/cake migrations migrate -p Projects`. Prejšnji zagon je padel znotraj transakcije, zato ni pustil sledi.
+- Pogled dokumenta (`plugins/Documents/webroot/css/documents.css`): AI analiza je omejena na 700 px, kot priponke in logi.
+
 ## 12. Odprta vprašanja za kasneje
 
 - Ali naj tudi splošni AI asistent (ne samo pogovor v projektu) sme pisati v bazo prek `Projects.kb_apply`?

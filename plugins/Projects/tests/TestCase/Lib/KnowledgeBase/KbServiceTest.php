@@ -276,4 +276,23 @@ class KbServiceTest extends TestCase
         $this->assertFalse($this->service->migrateLegacy(self::PROJECT));
         $this->assertSame(1, $this->project()->kb_version);
     }
+
+    /**
+     * Markers and AI texts are four-byte characters; the column has to hold them (see the utf8mb4 migration).
+     *
+     * @return void
+     */
+    public function testFourByteCharactersSurviveStorage(): void
+    {
+        $this->service->apply(self::PROJECT, [
+            ['op' => 'add_item', 'section' => 'warnings', 'severity' => 'high', 'text' => 'Pozor 🔴 rok 🟡'],
+            ['op' => 'set_section', 'section' => 'summary', 'text' => 'Vse 🟢 v redu'],
+        ], KbOperationApplier::BATCH);
+
+        $doc = KbDocument::parse((string)$this->project()->descript);
+
+        $this->assertSame('Pozor 🔴 rok 🟡', $doc->items('warnings')[0]->text);
+        $this->assertSame('Vse 🟢 v redu', $doc->text('summary'));
+        $this->assertStringContainsString('🔴', (string)$this->project()->descript);
+    }
 }

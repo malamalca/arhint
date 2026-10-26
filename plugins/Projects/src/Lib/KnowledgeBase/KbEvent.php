@@ -9,7 +9,8 @@ namespace Projects\Lib\KnowledgeBase;
 class KbEvent
 {
     /**
-     * @param string $model Kind of the source: Log, AuthorityEvent, Task, TaskComment or Milestone.
+     * @param string $model Kind of the source: Log, AuthorityEvent, Task, TaskComment, Milestone,
+     *   Document, Invoice or TravelOrder.
      * @param string $id Id of the source row.
      * @param string $modified Modification time of the source row (Y-m-d H:i:s); the key of the event together with the id.
      * @param string $time When it happened (Y-m-d H:i:s), the order of the events.
@@ -37,6 +38,9 @@ class KbEvent
             'Task' => 'task',
             'TaskComment' => 'task_comment',
             'Milestone' => 'milestone',
+            'Document' => 'document',
+            'Invoice' => 'invoice',
+            'TravelOrder' => 'travel_order',
             default => strtolower($this->model),
         } . ':' . $this->id;
     }
