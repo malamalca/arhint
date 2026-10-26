@@ -303,6 +303,7 @@ class ProjectsController extends AppController
         } catch (StaleKnowledgeBaseException) {
             $this->Flash->error(__d(
                 'projects',
+                // phpcs:ignore Generic.Files.LineLength.TooLong
                 'The knowledge base was changed in the meantime. Your text is kept in the form; check the history before saving it again.',
             ));
             // Saving again replaces what was written meanwhile, so the form carries the current version.

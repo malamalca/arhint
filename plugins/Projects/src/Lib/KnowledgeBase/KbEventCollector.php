@@ -377,7 +377,11 @@ class KbEventCollector
             ->select(['descript'])
             ->where(['Logs.model' => 'Project', 'Logs.foreign_id' => $projectId, 'Logs.descript LIKE' => '%/view/%']);
         foreach ($logs as $log) {
-            preg_match_all('/\/view\/([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})/i', (string)$log->descript, $matches);
+            preg_match_all(
+                '/\/view\/([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})/i',
+                (string)$log->descript,
+                $matches,
+            );
             foreach ($matches[1] as $id) {
                 $ids[strtolower($id)] = true;
             }

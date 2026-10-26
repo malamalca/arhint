@@ -166,7 +166,7 @@ class ProjectsFuncs
             imagefilledrectangle($newImage, 0, 0, $thumbSize, $thumbSize, $transparent);
             imagecopyresampled($newImage, $im, 0, 0, $cropX, $cropY, $newWidth, $newHeight, $width, $height);
 
-            if (!empty($project->colorize)) {
+            if (preg_match('/^#[0-9a-f]{6}$/i', (string)$project->colorize) === 1) {
                 imagefilter(
                     $newImage,
                     IMG_FILTER_COLORIZE,
