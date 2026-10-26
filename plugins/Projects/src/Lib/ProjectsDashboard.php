@@ -69,18 +69,29 @@ class ProjectsDashboard
             ? KbDocument::parse((string)$project->descript)
             : null;
 
-        $head = '<div style="display: flex; gap: .75rem; align-items: center;">'
+        // The status (e.g. DGD) sits in the same column as the number and the title, so all three line up.
+        $chip = $status === '' ? '' : '<div style="margin-top: .25rem;"><span class="chip" style="height: auto; '
+            . 'margin: 0; padding: 1px 8px; font-size: .7rem; line-height: 1.4; border-radius: 10px; '
+            . 'background: var(--md-sys-color-surface); color: var(--md-sys-color-on-surface);">'
+            . h($status) . '</span></div>';
+
+        // The header is a light tone of the inverse of the color of the project, so it stands out from the color of
+        // the initials in the avatar; a neutral one when the project has no color.
+        $accent = preg_match('/^#[0-9a-f]{6}$/i', (string)$project->colorize) === 1
+            ? self::inverse((string)$project->colorize)
+            : 'var(--md-sys-color-secondary)';
+
+        $head = '<div class="projects-overview-header" style="display: flex; gap: .75rem; align-items: center; '
+            . 'padding: .75rem 1rem; color: var(--md-sys-color-on-surface); '
+            . 'border-bottom: solid 1px color-mix(in srgb, ' . $accent . ' 25%, var(--md-sys-color-surface)); '
+            . 'background: color-mix(in srgb, ' . $accent . ' 14%, var(--md-sys-color-surface));">'
             . '<img src="data:image/png;base64,' . base64_encode((string)ProjectsFuncs::thumb($project, 40))
             . '" alt="" class="project-avatar" style="height: 40px; width: 40px; flex: none;" />'
             . '<div style="min-width: 0;"><div class="small">' . h($project->no) . '</div>'
-            . '<a href="' . h($url) . '"><b>' . h($project->title) . '</b></a></div></div>';
+            . '<a href="' . h($url) . '" style="color: inherit;"><b>' . h($project->title) . '</b></a>'
+            . $chip . '</div></div>';
 
         $body = '';
-        if ($status !== '') {
-            $body .= '<div style="margin-top: .5rem;"><span class="chip" style="height: auto; margin: 0; '
-                . 'padding: 1px 8px; font-size: .7rem; line-height: 1.4; border-radius: 10px;">'
-                . h($status) . '</span></div>';
-        }
 
         if ($knowledge) {
             $state = self::plain($knowledge->text(KbDocument::STATUS), KbDocument::STATUS_MAX_CHARS);
@@ -107,9 +118,21 @@ class ProjectsDashboard
 
         return '<div class="projects-overview-card" style="display: flex; flex-direction: column; '
             . 'overflow: hidden; border: solid 1px var(--md-sys-color-outline-variant); '
+            . 'background: color-mix(in srgb, var(--md-sys-color-on-surface) 4%, var(--md-sys-color-surface)); '
             . 'border-radius: var(--md-sys-shape-corner-medium);">'
-            . '<div style="flex: 1; padding: 1rem;">' . $head . $body . '</div>'
+            . $head . '<div style="flex: 1; padding: .25rem 1rem 1rem;">' . $body . '</div>'
             . ProjectsActivity::footer($project, $today) . '</div>';
+    }
+
+    /**
+     * The inverse of a color.
+     *
+     * @param string $hex Color as #rrggbb.
+     * @return string Color as #rrggbb.
+     */
+    private static function inverse(string $hex): string
+    {
+        return sprintf('#%06x', 0xFFFFFF - (int)hexdec(substr($hex, 1)));
     }
 
     /**
@@ -135,9 +158,11 @@ class ProjectsDashboard
             $html .= '<div class="small" style="margin-top: .5rem;">' . implode(' &middot; ', $parts) . '</div>';
         }
 
+        // Deadlines further away than a month are not shown on the card; overdue ones are.
+        $horizon = $today->addMonths(1)->format('Y-m-d');
         $deadlines = array_filter(
             $knowledge->items('deadlines'),
-            fn(KbItem $item): bool => $item->isOpen() && !empty($item->date),
+            fn(KbItem $item): bool => $item->isOpen() && !empty($item->date) && (string)$item->date <= $horizon,
         );
         usort($deadlines, fn(KbItem $a, KbItem $b): int => strcmp((string)$a->date, (string)$b->date));
 

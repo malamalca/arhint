@@ -60,6 +60,11 @@ class ProjectsDashboardTest extends TestCase
         $this->assertStringContainsString('2026-01', $html);
         $this->assertStringContainsString('Hiša &lt;b&gt;Novak&lt;/b&gt;', $html);
         $this->assertStringContainsString('V teku', $html);
+        // the header holds the avatar, the number, the title and the status, in this order
+        $this->assertStringContainsString('projects-overview-header', $html);
+        $this->assertLessThan(strpos($html, '2026-01'), strpos($html, 'project-avatar'));
+        $this->assertLessThan(strpos($html, 'V teku'), strpos($html, 'Hiša'));
+        $this->assertLessThan(strpos($html, 'Gradnja poteka'), strpos($html, 'V teku'));
         $this->assertStringContainsString('Gradnja poteka po načrtu.', $html);
         $this->assertStringNotContainsString('<script>', $html);
         $this->assertStringContainsString('1 odprtih opozoril', $html);
@@ -115,6 +120,27 @@ class ProjectsDashboardTest extends TestCase
     /**
      * @return void
      */
+    public function testDeadlinesBeyondAMonthAreNotShown(): void
+    {
+        $doc = KbDocument::empty();
+        $doc->addItem('deadlines', 'Rok čez mesec in dan', ['date' => '2026-12-02']);
+        $project = new Project(['id' => '4dd53305-9715-4be4-b169-20defe113d2a', 'no' => '1', 'title' => 'P', 'descript' => $doc->toMarkdown()]);
+
+        $html = ProjectsDashboard::card($project, '', new Date('2026-11-01'));
+        $this->assertStringNotContainsString('Rok čez mesec in dan', $html);
+        $this->assertStringNotContainsString('projects-overview-deadline', $html);
+
+        // exactly a month ahead is still shown, as the nearest deadline
+        $doc->addItem('deadlines', 'Rok čez mesec', ['date' => '2026-12-01']);
+        $project->descript = $doc->toMarkdown();
+        $html = ProjectsDashboard::card($project, '', new Date('2026-11-01'));
+        $this->assertStringContainsString('Rok čez mesec', $html);
+        $this->assertStringNotContainsString('Rok čez mesec in dan', $html);
+    }
+
+    /**
+     * @return void
+     */
     public function testDeadlineDueTodayAndConfiguredLimit(): void
     {
         $doc = KbDocument::empty();
@@ -131,6 +157,23 @@ class ProjectsDashboardTest extends TestCase
         Configure::delete('Projects.Dashboard.deadlineDays');
         $this->assertStringContainsString('Danes', $html);
         $this->assertStringNotContainsString('Čez dva dni', $html);
+    }
+
+    /**
+     * @return void
+     */
+    public function testHeaderIsTintedWithInverseColorOfProject(): void
+    {
+        $project = new Project(['id' => '4dd53305-9715-4be4-b169-20defe113d2a', 'no' => '1', 'title' => 'P', 'colorize' => '#336699']);
+        $html = ProjectsDashboard::card($project, '', new Date('2026-11-01'));
+        $this->assertStringContainsString('color-mix(in srgb, #cc9966 14%', $html);
+        $this->assertStringNotContainsString('#336699', $html);
+
+        // anything that is not a hex color must not reach the style attribute
+        $project->colorize = 'red;" onload="x';
+        $html = ProjectsDashboard::card($project, '', new Date('2026-11-01'));
+        $this->assertStringNotContainsString('onload', $html);
+        $this->assertStringContainsString('var(--md-sys-color-secondary) 14%', $html);
     }
 
     /**
