@@ -73,13 +73,14 @@ class ProjectsLogsController extends AppController
                 || $this->getRequest()->is('json');
 
             if ($logsTable->save($log)) {
-                if ($this->getRequest()->is('json')) {
-                    header('Content-Type: text/html');
-
+                // popup forms (modalPopup.js) post via XHR and expect the saved log as html instead of a redirect
+                if ($this->getRequest()->is('json') || ($this->getRequest()->is('ajax') && !$isJson)) {
                     $user = TableRegistry::getTableLocator()->get('Users')->get($log->user_id);
-                    $this->set(compact('log', 'user'));
                     $projectsLog = $log; // alias for template compatibility
-                    die((string)$this->render('/element/projects_log'));
+                    $this->set(compact('log', 'projectsLog', 'user'));
+                    $this->viewBuilder()->disableAutoLayout();
+
+                    return $this->render('/element/projects_log')->withType('html');
                 }
 
                 if ($isJson) {

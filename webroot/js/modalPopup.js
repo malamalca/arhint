@@ -90,7 +90,8 @@ jQuery.fn.modalPopup = function(p_options) {
         }
         $.ajax({
             type: "POST",
-            url: $("form", $this.dialog).prop("action"),
+            // attr() because form.action is shadowed by an input named "action" (e.g. in the project log form)
+            url: $("form", $this.dialog).attr("action") || $this.options.url,
             data: submitData.serialize(),
             success: function(data, status, xhr) {
                 let json = $this.isJson(data);

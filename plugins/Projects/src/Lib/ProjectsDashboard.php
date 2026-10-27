@@ -202,9 +202,11 @@ class ProjectsDashboard
             . '$(".projects-overview-card .add-projects-log").each(function() {'
             . '$(this).modalPopup({title: ' . $title . ', processSubmit: true,'
             . 'onOpen: function(popup) { $("#projects-logs-descript", popup).focus(); },'
-            . 'onHtml: function(data, popup) { popup.dialog.close(); window.location.reload(); },'
+            . 'onHtml: function(data, popup) {'
+            . 'if (!$("#projects-logs-descript", popup.dialog).length) { popup.dialog.close(); window.location.reload(); }'
+            . '},'
             . 'onBeforeSubmit: function(data, popup) {'
-            . '$("#projects-logs-descript", $(data)).html(tinyMCE.get("projects-logs-descript").getContent());'
+            . 'if (window.tinymce) { tinymce.triggerSave(); }'
             . 'return data; }});'
             . '});});</script>';
     }
