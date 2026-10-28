@@ -117,7 +117,7 @@ class TasksController extends AppController
                 Cache::delete('Tasks.' . $this->getCurrentUser()->id . '.OpenTasks');
 
                 if ($isJson) {
-                    return $this->response
+                    return $this->getResponse()
                         ->withType('application/json')
                         ->withStringBody((string)json_encode(['success' => true, 'id' => $task->id]));
                 }
@@ -127,7 +127,7 @@ class TasksController extends AppController
                 return $this->redirect(['action' => 'index']);
             } else {
                 if ($isJson) {
-                    return $this->response
+                    return $this->getResponse()
                         ->withStatus(422)
                         ->withType('application/json')
                         ->withStringBody((string)json_encode(['success' => false, 'errors' => $task->getErrors()]));

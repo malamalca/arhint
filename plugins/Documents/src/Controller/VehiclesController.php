@@ -84,7 +84,7 @@ class VehiclesController extends AppController
      */
     public function delete(?string $id = null): ?Response
     {
-        $this->request->allowMethod(['post', 'delete', 'get']);
+        $this->getRequest()->allowMethod(['post', 'delete', 'get']);
         $vehicle = $this->Vehicles->get($id);
         $this->Authorization->authorize($vehicle);
         if ($this->Vehicles->delete($vehicle)) {

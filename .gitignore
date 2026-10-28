@@ -65,3 +65,5 @@ nbproject/*
 # yarn
 yarn-debug.log
 yarn-error.log
+# Shared invoice import fixture
+!/plugins/Documents/tests/TestCase/Controller/data/testInvoice_eslog20.xml

@@ -37,7 +37,6 @@ class AIAssistantLiveTest extends TestCase
         $assistant = new AIAssistant();
         $reflection = new ReflectionClass($assistant);
         $method = $reflection->getMethod('doRequest');
-        $method->setAccessible(true);
 
         $response = $method->invoke($assistant, [
             'messages' => [

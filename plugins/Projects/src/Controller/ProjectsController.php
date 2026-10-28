@@ -122,7 +122,7 @@ class ProjectsController extends AppController
                 }
         }
 
-        $response = $this->response;
+        $response = $this->getResponse();
         $response = $response->withStringBody($imageData);
         $response = $response->withType('png');
 

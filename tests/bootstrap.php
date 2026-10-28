@@ -14,6 +14,10 @@ use Migrations\TestSuite\Migrator;
  * Add additional configuration/setup your application needs when running
  * unit tests in this file.
  */
+if (extension_loaded('apcu')) {
+    ini_set('apc.enable_cli', '1');
+}
+
 require dirname(__DIR__) . '/vendor/autoload.php';
 
 require dirname(__DIR__) . '/config/bootstrap.php';

@@ -48,7 +48,7 @@ class InvoicesExport
      * Find documents for expodrt
      *
      * @param array<string, mixed> $filter Array of options
-     * @return \Cake\ORM\Query\SelectQuery
+     * @return \Cake\ORM\Query\SelectQuery<\Cake\Datasource\EntityInterface>
      */
     public function find(array $filter): SelectQuery
     {

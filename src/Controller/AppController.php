@@ -65,8 +65,8 @@ class AppController extends Controller
             $this->currentUser = $user->getOriginalData();
         }
 
-        $this->response->setTypeMap('aht', ['text/html']);
-        $this->response->setTypeMap('txt', ['text/plain']);
+        $this->getResponse()->setTypeMap('aht', ['text/html']);
+        $this->getResponse()->setTypeMap('txt', ['text/plain']);
     }
 
     /**
@@ -77,13 +77,13 @@ class AppController extends Controller
      */
     public function beforeRender(EventInterface $event): void
     {
-        if ($this->request->is('ajax')) {
+        if ($this->getRequest()->is('ajax')) {
             $this->viewBuilder()->setClassName('Ajax');
         }
-        if ($this->request->is('json')) {
+        if ($this->getRequest()->is('json')) {
             $this->viewBuilder()->setClassName('Json');
         }
-        if ($this->request->is('aht')) {
+        if ($this->getRequest()->is('aht')) {
             $this->viewBuilder()->setClassName('Aht');
         }
 

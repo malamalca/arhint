@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" colors="true" processIsolation="false" stopOnFailure="false" bootstrap="tests/bootstrap.php" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.3/phpunit.xsd" cacheDirectory=".phpunit.cache">
+  <coverage/>
+  <php>
+    <ini name="memory_limit" value="-1"/>
+    <ini name="apc.enable_cli" value="1"/>
+  </php>
+  <testsuites>
+    <testsuite name="app">
+      <directory>tests/TestCase/</directory>
+      <exclude>tests/TestCase/Controller/AiControllerTest.php</exclude>
+      <exclude>tests/TestCase/Job/AiProcessLogJobLiveTest.php</exclude>
+      <exclude>tests/TestCase/Job/AiProcessLogJobTest.php</exclude>
+      <exclude>tests/TestCase/Lib/AIAssistantLiveTest.php</exclude>
+      <exclude>tests/TestCase/Lib/AIAssistantTest.php</exclude>
+      <exclude>tests/TestCase/Lib/EmbeddingServiceLiveTest.php</exclude>
+      <exclude>tests/TestCase/Lib/LilPdfFactoryTest.php</exclude>
+      <directory>plugins/Crm/tests/TestCase/</directory>
+      <exclude>plugins/Crm/tests/TestCase/Event/CrmAIToolsEventsTest.php</exclude>
+      <directory>plugins/Expenses/tests/TestCase/</directory>
+      <directory>plugins/Documents/tests/TestCase/</directory>
+      <exclude>plugins/Documents/tests/TestCase/Event/DocumentsAIToolsEventsTest.php</exclude>
+      <directory>plugins/Projects/tests/TestCase/</directory>
+      <exclude>plugins/Projects/tests/TestCase/Event/ProjectsAIToolsEventsTest.php</exclude>
+      <directory>plugins/Tasks/tests/TestCase/</directory>
+      <directory>plugins/Calendar/tests/TestCase/</directory>
+    </testsuite>
+  </testsuites>
+  <extensions>
+    <bootstrap class="Cake\TestSuite\Fixture\Extension\PHPUnitExtension"/>
+  </extensions>
+  <source>
+    <include>
+      <directory suffix=".php">src/</directory>
+      <directory suffix=".php">plugins/Crm/src/</directory>
+      <directory suffix=".php">plugins/Expenses/src/</directory>
+      <directory suffix=".php">plugins/Documents/src/</directory>
+      <directory suffix=".php">plugins/Projects/src/</directory>
+      <directory suffix=".php">plugins/Tasks/src/</directory>
+      <directory suffix=".php">plugins/Calendar/src/</directory>
+    </include>
+    <exclude>
+      <file>src/Console/Installer.php</file>
+    </exclude>
+  </source>
+</phpunit>

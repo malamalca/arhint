@@ -46,7 +46,7 @@ class FursXml
      */
     public static function localTime(DateTimeInterface $date): DateTime
     {
-        return DateTime::createFromInterface($date)->setTimezone(new DateTimeZone(self::TIMEZONE));
+        return DateTime::instance($date)->setTimezone(new DateTimeZone(self::TIMEZONE));
     }
 
     /**

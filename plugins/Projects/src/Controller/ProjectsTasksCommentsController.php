@@ -29,12 +29,12 @@ class ProjectsTasksCommentsController extends AppController
         }
         $this->Authorization->authorize($taskComment);
 
-        if ($this->request->is(['patch', 'post', 'put'])) {
-            $taskComment = $this->ProjectsTasksComments->patchEntity($taskComment, $this->request->getData());
+        if ($this->getRequest()->is(['patch', 'post', 'put'])) {
+            $taskComment = $this->ProjectsTasksComments->patchEntity($taskComment, $this->getRequest()->getData());
             if ($this->ProjectsTasksComments->save($taskComment)) {
                 $this->Flash->success(__d('projects', 'The projects tasks comment has been saved.'));
 
-                $redirectUrl = $this->request->getData('referer', [
+                $redirectUrl = $this->getRequest()->getData('referer', [
                     'controller' => 'ProjectsTasks',
                     'action' => 'view',
                     $taskComment->task_id,
@@ -70,7 +70,7 @@ class ProjectsTasksCommentsController extends AppController
             $this->Flash->error(__d('projects', 'The projects tasks comment could not be deleted. Please, try again.'));
         }
 
-        $redirectUrl = $this->request->getQuery('redirect', [
+        $redirectUrl = $this->getRequest()->getQuery('redirect', [
             'controller' => 'ProjectsTasks',
             'action' => 'view',
             $projectsTasksComment->task_id,

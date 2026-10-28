@@ -67,9 +67,9 @@ class ContactsLogsController extends AppController
 
         $this->Authorization->Authorize($contactsLog);
 
-        if ($this->request->is(['patch', 'post', 'put'])) {
+        if ($this->getRequest()->is(['patch', 'post', 'put'])) {
             /** @var \Crm\Model\Entity\ContactsLog $contactsLog */
-            $contactsLog = $this->ContactsLogs->patchEntity($contactsLog, $this->request->getData());
+            $contactsLog = $this->ContactsLogs->patchEntity($contactsLog, $this->getRequest()->getData());
 
             if ($this->ContactsLogs->save($contactsLog)) {
                 if ($this->getRequest()->is('ajax')) {
@@ -113,7 +113,7 @@ class ContactsLogsController extends AppController
      */
     public function delete(?string $id = null): ?Response
     {
-        $this->request->allowMethod(['post', 'delete', 'get']);
+        $this->getRequest()->allowMethod(['post', 'delete', 'get']);
 
         /** @var \Crm\Model\Entity\ContactsLog $contactsLog */
         $contactsLog = $this->ContactsLogs->get($id);

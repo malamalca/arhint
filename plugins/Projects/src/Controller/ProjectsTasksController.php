@@ -92,12 +92,12 @@ class ProjectsTasksController extends AppController
         } else {
             $projectsTask = $this->ProjectsTasks->newEmptyEntity();
             $projectsTask->user_id = $this->getCurrentUser()->get('id');
-            $projectsTask->project_id = $this->request->getQuery('project');
+            $projectsTask->project_id = $this->getRequest()->getQuery('project');
         }
 
         $this->Authorization->authorize($projectsTask);
 
-        if ($this->request->is(['patch', 'post', 'put'])) {
+        if ($this->getRequest()->is(['patch', 'post', 'put'])) {
             $requestData = $this->getRequest()->getData();
             // CakePHP does not auto-parse raw JSON bodies; decode manually if needed
             if (
@@ -115,7 +115,7 @@ class ProjectsTasksController extends AppController
 
             if ($this->ProjectsTasks->save($projectsTask, ['auditUserId' => $this->getCurrentUser()->get('id')])) {
                 if ($isJson) {
-                    return $this->response
+                    return $this->getResponse()
                         ->withType('application/json')
                         ->withStringBody((string)json_encode(['success' => true, 'id' => $projectsTask->id]));
                 }
@@ -130,7 +130,7 @@ class ProjectsTasksController extends AppController
                 ]));
             } else {
                 if ($isJson) {
-                    return $this->response
+                    return $this->getResponse()
                         ->withStatus(422)
                         ->withType('application/json')
                         ->withStringBody((string)json_encode([
@@ -199,7 +199,7 @@ class ProjectsTasksController extends AppController
      */
     public function delete(?string $id = null): ?Response
     {
-        $this->request->allowMethod(['post', 'delete', 'get']);
+        $this->getRequest()->allowMethod(['post', 'delete', 'get']);
         $projectsTask = $this->ProjectsTasks->get($id);
         $this->Authorization->authorize($projectsTask);
         if ($this->ProjectsTasks->delete($projectsTask)) {

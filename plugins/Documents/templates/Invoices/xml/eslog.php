@@ -149,7 +149,11 @@
                     'BancniRacun' => [
                         'StevilkaBancnegaRacuna' => $client->iban,
                         'NazivBanke1' => '',
+<<<<<<< Updated upstream
                         'BIC' => str_pad((string)$client->bic, 11, 'X'),
+=======
+                        'BIC' => str_pad($client->bic ?? '', 11, 'X'),
+>>>>>>> Stashed changes
                     ],
                 ],
 

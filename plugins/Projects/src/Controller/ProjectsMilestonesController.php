@@ -54,7 +54,7 @@ class ProjectsMilestonesController extends AppController
 
         $this->Authorization->Authorize($projectsMilestone);
 
-        if ($this->request->is(['patch', 'post', 'put'])) {
+        if ($this->getRequest()->is(['patch', 'post', 'put'])) {
             $requestData = $this->getRequest()->getData();
 
             $projectsMilestone = $this->ProjectsMilestones->patchEntity($projectsMilestone, $requestData);
@@ -92,7 +92,7 @@ class ProjectsMilestonesController extends AppController
      */
     public function delete(?string $id = null): ?Response
     {
-        $this->request->allowMethod(['post', 'delete', 'get']);
+        $this->getRequest()->allowMethod(['post', 'delete', 'get']);
         $projectsMilestone = $this->ProjectsMilestones->get($id);
         $this->Authorization->Authorize($projectsMilestone);
 
@@ -119,7 +119,7 @@ class ProjectsMilestonesController extends AppController
      */
     public function close(?string $id = null): ?Response
     {
-        $this->request->allowMethod(['post', 'delete', 'get']);
+        $this->getRequest()->allowMethod(['post', 'delete', 'get']);
         $projectsMilestone = $this->ProjectsMilestones->get($id);
         $this->Authorization->Authorize($projectsMilestone, 'edit');
 
@@ -148,7 +148,7 @@ class ProjectsMilestonesController extends AppController
      */
     public function reopen(?string $id = null): ?Response
     {
-        $this->request->allowMethod(['post', 'delete', 'get']);
+        $this->getRequest()->allowMethod(['post', 'delete', 'get']);
         $projectsMilestone = $this->ProjectsMilestones->get($id);
         $this->Authorization->Authorize($projectsMilestone, 'edit');
 

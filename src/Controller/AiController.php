@@ -33,16 +33,16 @@ class AiController extends AppController
     public function chat(): Response
     {
         $this->Authorization->skipAuthorization();
-        $this->request->allowMethod('post');
+        $this->getRequest()->allowMethod('post');
 
-        $userInput = trim((string)$this->request->getData('message'));
+        $userInput = trim((string)$this->getRequest()->getData('message'));
         if ($userInput === '') {
-            return $this->response
+            return $this->getResponse()
                 ->withType('application/json')
                 ->withStringBody((string)json_encode(['error' => 'Empty message', 'job_id' => null]));
         }
 
-        $session = $this->request->getSession();
+        $session = $this->getRequest()->getSession();
         $history = $session->read('AIAssistant.history') ?? [];
         $userId = $this->getCurrentUser()->get('id');
 
@@ -52,7 +52,7 @@ class AiController extends AppController
         if ($pendingJobId !== '') {
             $existingResult = TMP . 'ai_jobs' . DS . $pendingJobId . '_result.json';
             if (!file_exists($existingResult)) {
-                return $this->response
+                return $this->getResponse()
                     ->withType('application/json')
                     ->withStringBody((string)json_encode([
                         'job_id' => $pendingJobId,
@@ -79,7 +79,7 @@ class AiController extends AppController
             'job_id' => $jobId,
         ]);
 
-        return $this->response
+        return $this->getResponse()
             ->withType('application/json')
             ->withStringBody((string)json_encode(['job_id' => $jobId, 'status' => 'pending']));
     }
@@ -92,13 +92,13 @@ class AiController extends AppController
     public function chatStatus(): Response
     {
         $this->Authorization->skipAuthorization();
-        $this->request->allowMethod('get');
+        $this->getRequest()->allowMethod('get');
 
-        $jobId = (string)$this->request->getQuery('job_id');
+        $jobId = (string)$this->getRequest()->getQuery('job_id');
 
         // Validate UUID format to prevent path traversal.
         if (!preg_match('/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i', $jobId)) {
-            return $this->response
+            return $this->getResponse()
                 ->withStatus(400)
                 ->withType('application/json')
                 ->withStringBody((string)json_encode(['error' => 'Invalid job ID']));
@@ -107,7 +107,7 @@ class AiController extends AppController
         $resultFile = TMP . 'ai_jobs' . DS . $jobId . '_result.json';
 
         if (!file_exists($resultFile)) {
-            return $this->response
+            return $this->getResponse()
                 ->withType('application/json')
                 ->withStringBody((string)json_encode(['status' => 'pending']));
         }
@@ -115,7 +115,7 @@ class AiController extends AppController
         $result = json_decode((string)file_get_contents($resultFile), true);
 
         if (!is_array($result) || ($result['user_id'] ?? null) !== $this->getCurrentUser()->get('id')) {
-            return $this->response
+            return $this->getResponse()
                 ->withStatus(403)
                 ->withType('application/json')
                 ->withStringBody((string)json_encode(['error' => 'Forbidden']));
@@ -124,13 +124,13 @@ class AiController extends AppController
         unlink($resultFile);
 
         // Clear the pending flag so a new job can be submitted.
-        $this->request->getSession()->delete('AIAssistant.pendingJobId');
+        $this->getRequest()->getSession()->delete('AIAssistant.pendingJobId');
 
         if (!empty($result['history'])) {
-            $this->request->getSession()->write('AIAssistant.history', $result['history']);
+            $this->getRequest()->getSession()->write('AIAssistant.history', $result['history']);
         }
 
-        return $this->response
+        return $this->getResponse()
             ->withType('application/json')
             ->withStringBody((string)json_encode([
                 'status' => $result['status'],
@@ -148,12 +148,12 @@ class AiController extends AppController
     public function workerStatus(): Response
     {
         $this->Authorization->skipAuthorization();
-        $this->request->allowMethod('get');
+        $this->getRequest()->allowMethod('get');
 
         $heartbeat = TMP . 'ai_jobs' . DS . 'worker_heartbeat';
         $running = file_exists($heartbeat) && (time() - (int)filemtime($heartbeat)) < 2100;
 
-        return $this->response
+        return $this->getResponse()
             ->withType('application/json')
             ->withStringBody((string)json_encode(['running' => $running]));
     }
@@ -164,13 +164,13 @@ class AiController extends AppController
     public function clearHistory(): Response
     {
         $this->Authorization->skipAuthorization();
-        $this->request->allowMethod('post');
+        $this->getRequest()->allowMethod('post');
 
-        $session = $this->request->getSession();
+        $session = $this->getRequest()->getSession();
         $session->delete('AIAssistant.history');
         $session->delete('AIAssistant.pendingJobId');
 
-        return $this->response
+        return $this->getResponse()
             ->withType('application/json')
             ->withStringBody((string)json_encode(['cleared' => true]));
     }

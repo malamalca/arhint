@@ -92,7 +92,7 @@ class InvoiceImportFormTest extends TestCase
      * Build an InvoiceImportForm whose AI conversion returns the given canned completion.
      *
      * @param \Cake\Http\ServerRequest $request Request.
-     * @param string $completion The text the mocked assistant returns.
+     * @param string $completion The text the stubbed assistant returns.
      * @return \Documents\Form\InvoiceImportForm
      */
     private function formReturning(ServerRequest $request, string $completion): InvoiceImportForm

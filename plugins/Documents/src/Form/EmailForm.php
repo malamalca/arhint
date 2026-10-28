@@ -146,9 +146,16 @@ class EmailForm extends Form
 
                 foreach ($docAttachments as $attachment) {
                     /** @var \App\Model\Entity\Attachment $attachment */
+<<<<<<< Updated upstream
                     if ($attachment->filename === null) {
                         continue;
                     }
+=======
+                    if ($attachment->filename === null || $attachment->filename === '') {
+                        continue;
+                    }
+
+>>>>>>> Stashed changes
                     $attachments[$attachment->filename] = [
                         'file' => $attachment->getFilePath(),
                     ];

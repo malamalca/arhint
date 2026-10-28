@@ -156,7 +156,7 @@ class ContactsController extends AppController
 
             if (!$contact->getErrors() && $this->Contacts->save($contact)) {
                 if ($this->getRequest()->is('ajax')) {
-                    return $this->response
+                    return $this->getResponse()
                         ->withType('application/json')
                         ->withStringBody((string)json_encode($contact));
                 }
@@ -246,7 +246,7 @@ class ContactsController extends AppController
                 $this->Authorization->skipAuthorization();
             }
 
-            $response = $this->response
+            $response = $this->getResponse()
                 ->withType('application/json')
                 ->withStringBody((string)json_encode($data));
 
@@ -333,7 +333,7 @@ class ContactsController extends AppController
                 $this->Authorization->skipAuthorization();
             }
 
-            $response = $this->response
+            $response = $this->getResponse()
                 ->withType('application/json')
                 ->withStringBody((string)json_encode($data));
 
@@ -445,7 +445,7 @@ class ContactsController extends AppController
                 $data = $c;
             }
 
-            $response = $this->response
+            $response = $this->getResponse()
                 ->withType('application/json')
                 ->withStringBody((string)json_encode($data));
 

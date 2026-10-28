@@ -52,7 +52,7 @@ class BaseDocumentsController extends AppController
         }
 
         // post from external program like LilScan
-        if (in_array($this->getRequest()->getParam('action'), ['edit']) && $this->request->hasHeader('Lil-Scan')) {
+        if (in_array($this->getRequest()->getParam('action'), ['edit']) && $this->getRequest()->hasHeader('Lil-Scan')) {
             $this->FormProtection->setConfig('validate', false);
         }
     }
@@ -295,7 +295,7 @@ class BaseDocumentsController extends AppController
 
                 /** Return digest for signing */
                 if ($this->getRequest()->is('ajax')) {
-                    return $this->response->withType('application/json')->withStringBody((string)json_encode([
+                    return $this->getResponse()->withType('application/json')->withStringBody((string)json_encode([
                         'digest' => $digest,
                     ], JSON_UNESCAPED_SLASHES));
                 }

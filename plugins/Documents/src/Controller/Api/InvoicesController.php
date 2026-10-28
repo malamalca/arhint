@@ -347,7 +347,7 @@ class InvoicesController extends Controller
      */
     private function error(int $status, string $code, string $message, array $extra = []): Response
     {
-        return $this->response
+        return $this->getResponse()
             ->withType('json')
             ->withStatus($status)
             ->withStringBody((string)json_encode(['error' => $code, 'message' => $message] + $extra));

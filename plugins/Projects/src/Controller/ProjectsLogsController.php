@@ -56,7 +56,7 @@ class ProjectsLogsController extends AppController
 
         $this->Authorization->Authorize($log);
 
-        if ($this->request->is(['patch', 'post', 'put'])) {
+        if ($this->getRequest()->is(['patch', 'post', 'put'])) {
             $requestData = $this->getRequest()->getData();
             // CakePHP does not auto-parse raw JSON bodies; decode manually if needed
             if (
@@ -84,7 +84,7 @@ class ProjectsLogsController extends AppController
                 }
 
                 if ($isJson) {
-                    return $this->response
+                    return $this->getResponse()
                         ->withType('application/json')
                         ->withStringBody((string)json_encode(['success' => true, 'id' => $log->id]));
                 }
@@ -104,7 +104,7 @@ class ProjectsLogsController extends AppController
                 return $this->redirect($redirect);
             } else {
                 if ($isJson) {
-                    return $this->response
+                    return $this->getResponse()
                         ->withStatus(422)
                         ->withType('application/json')
                         ->withStringBody(
@@ -133,7 +133,7 @@ class ProjectsLogsController extends AppController
      */
     public function delete(?string $id = null): ?Response
     {
-        $this->request->allowMethod(['post', 'delete', 'get']);
+        $this->getRequest()->allowMethod(['post', 'delete', 'get']);
 
         $logsTable = TableRegistry::getTableLocator()->get('App.Logs');
         /** @var \App\Model\Entity\Log $log */

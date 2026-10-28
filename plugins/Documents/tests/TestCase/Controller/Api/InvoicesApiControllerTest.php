@@ -350,7 +350,15 @@ class InvoicesApiControllerTest extends TestCase
     {
         $this->auth();
 
-        $this->post(self::URL . '?counter=' . self::COUNTER_ISSUED, str_replace('22.0', '13.0', $this->xml()));
+        $xml = new \SimpleXMLElement($this->xml());
+        $xml->registerXPathNamespace('eslog', 'urn:eslog:2.00');
+        $rates = $xml->xpath('//eslog:D_5278');
+        $this->assertNotEmpty($rates);
+        foreach ($rates as $rate) {
+            $rate[0] = '13.0';
+        }
+
+        $this->post(self::URL . '?counter=' . self::COUNTER_ISSUED, $xml->asXML());
 
         $this->assertResponseCode(422);
         $body = json_decode((string)$this->_response->getBody(), true);

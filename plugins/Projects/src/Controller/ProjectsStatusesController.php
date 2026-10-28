@@ -47,8 +47,8 @@ class ProjectsStatusesController extends AppController
 
         $this->Authorization->authorize($projectsStatus);
 
-        if ($this->request->is(['patch', 'post', 'put'])) {
-            $projectsStatus = $this->ProjectsStatuses->patchEntity($projectsStatus, $this->request->getData());
+        if ($this->getRequest()->is(['patch', 'post', 'put'])) {
+            $projectsStatus = $this->ProjectsStatuses->patchEntity($projectsStatus, $this->getRequest()->getData());
             if ($this->ProjectsStatuses->save($projectsStatus)) {
                 Cache::delete('Projects.ProjectsStatuses.' . $projectsStatus->owner_id);
 
@@ -72,7 +72,7 @@ class ProjectsStatusesController extends AppController
      */
     public function delete(?string $id = null): ?Response
     {
-        $this->request->allowMethod(['post', 'delete', 'get']);
+        $this->getRequest()->allowMethod(['post', 'delete', 'get']);
         $projectsStatus = $this->ProjectsStatuses->get($id);
         $this->Authorization->authorize($projectsStatus);
         if ($this->ProjectsStatuses->delete($projectsStatus)) {

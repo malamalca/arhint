@@ -48,7 +48,7 @@ class BookingRuleFiltersController extends AppController
                 $this->Flash->success(__d('expenses', 'The filter has been saved.'));
 
                 if ($this->getRequest()->is('ajax')) {
-                    return $this->response
+                    return $this->getResponse()
                         ->withType('application/json')
                         ->withStringBody(json_encode(['success' => true]) ?: '{}');
                 }

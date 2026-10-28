@@ -66,7 +66,7 @@ class AdremasController extends AppController
             /** @var \Crm\Model\Entity\Adrema $adrema */
             $adrema = $this->Adremas->patchEntity($adrema, $this->getRequest()->getData());
             if ($adrema->kind === 'labels') {
-                $adrema->kind_type = $this->request->getData('kind_type_label');
+                $adrema->kind_type = $this->getRequest()->getData('kind_type_label');
             }
 
             if ($this->Adremas->save($adrema)) {
@@ -124,14 +124,14 @@ class AdremasController extends AppController
         $adrema = $this->Adremas->get($id, contain: ['Attachments', 'FormAttachments']);
         $this->Authorization->authorize($adrema);
 
-        if ($this->request->getQuery('tab', 'addresses') === 'addresses') {
+        if ($this->getRequest()->getQuery('tab', 'addresses') === 'addresses') {
             $this->set('addresses', TableRegistry::getTableLocator()->get('Crm.AdremasContacts')
                 ->find()
                 ->where(['adrema_id' => $adrema->id])
                 ->contain(['Contacts', 'ContactsAddresses', 'ContactsEmails'])
                 ->all());
         }
-        if ($this->request->getQuery('tab') === 'logs') {
+        if ($this->getRequest()->getQuery('tab') === 'logs') {
             $this->set('logs', $this->paginate(
                 TableRegistry::getTableLocator()->get('App.Logs')->find()->where([
                     'model' => 'Adrema',

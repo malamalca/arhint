@@ -102,7 +102,7 @@ class PagesController extends AppController
         }
 
         $fileContents = (string)file_get_contents(constant('TMP') . $fileName . '.pdf');
-        $result = $this->response->withStringBody($fileContents);
+        $result = $this->getResponse()->withStringBody($fileContents);
         $result = $result->withType('pdf');
 
         if ($this->getRequest()->getParam('_ext') == 'pdf') {

@@ -78,7 +78,7 @@ class ExpensesController extends AppController
                     ->all();
                 $this->set(compact('expenses'));
 
-                $this->response = $this->response->withType('application/json');
+                $this->response = $this->getResponse()->withType('application/json');
             } else {
                 $this->Authorization->skipAuthorization();
             }
@@ -146,7 +146,7 @@ class ExpensesController extends AppController
                 }
 
                 if ($this->getRequest()->is('ajax')) {
-                    return $this->response->withType('application/json')->withStringBody((string)json_encode($expense));
+                    return $this->getResponse()->withType('application/json')->withStringBody((string)json_encode($expense));
                 }
 
                 //$this->Flash->success(__d('expenses', 'The expense has been saved.'));

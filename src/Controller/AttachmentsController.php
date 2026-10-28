@@ -61,7 +61,7 @@ class AttachmentsController extends AppController
 
         $this->Authorization->authorize($attachment);
 
-        $response = $this->response->withFile(
+        $response = $this->getResponse()->withFile(
             $attachment->getFilePath(),
             ['name' => $attachment->filename, 'download' => (bool)$forceDownload],
         );
@@ -99,14 +99,14 @@ class AttachmentsController extends AppController
 
         $this->Authorization->authorize($attachment);
 
-        if ($this->request->is(['patch', 'post', 'put'])) {
+        if ($this->getRequest()->is(['patch', 'post', 'put'])) {
             $uploadedFiles = [];
             $uploadedFile = $this->getRequest()->getData('filename');
             if (!empty($uploadedFile) && !$uploadedFile->getError()) {
                 $uploadedFiles[$uploadedFile->getClientFilename()] = $uploadedFile;
             }
 
-            $attachment = $this->Attachments->patchEntity($attachment, $this->request->getData());
+            $attachment = $this->Attachments->patchEntity($attachment, $this->getRequest()->getData());
             if ($this->Attachments->save($attachment, ['uploadedFilename' => $uploadedFiles])) {
                 $this->Flash->success(__('The attachment has been saved.'));
 
@@ -128,7 +128,7 @@ class AttachmentsController extends AppController
      */
     public function delete(?string $id = null): ?Response
     {
-        $this->request->allowMethod(['post', 'delete', 'get']);
+        $this->getRequest()->allowMethod(['post', 'delete', 'get']);
         $attachment = $this->Attachments->get($id);
 
         $this->Authorization->authorize($attachment);

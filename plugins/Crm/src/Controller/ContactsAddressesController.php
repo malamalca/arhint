@@ -118,7 +118,7 @@ class ContactsAddressesController extends AppController
                 ];
             }
 
-            $response = $this->response
+            $response = $this->getResponse()
                 ->withType('application/json')
                 ->withStringBody((string)json_encode($data));
 
@@ -152,7 +152,7 @@ class ContactsAddressesController extends AppController
                     ];
                 }
             }
-            $response = $this->response
+            $response = $this->getResponse()
                 ->withType('application/json')
                 ->withStringBody((string)json_encode($data));
 

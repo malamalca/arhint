@@ -407,7 +407,7 @@ class UsersController extends AppController
             $imageData = file_get_contents(constant('WWW_ROOT') . 'img' . DS . 'avatar.png');
         }
 
-        $response = $this->response
+        $response = $this->getResponse()
             ->withStringBody((string)$imageData)
             ->withType('png')
             ->withCache('-1 day', '+30 days');

@@ -4,10 +4,9 @@ declare(strict_types=1);
 namespace Documents\Lib;
 
 use Cake\ORM\TableRegistry;
-use KrivArt\QrCode\Ecl;
-use KrivArt\QrCode\Output\Gif;
-use KrivArt\QrCode\QrCode;
-use KrivArt\QrCode\QrSegment;
+use Endroid\QrCode\Encoding\Encoding;
+use Endroid\QrCode\ErrorCorrectionLevel;
+use Endroid\QrCode\QrCode;
 
 class DocumentsUpnQr
 {
@@ -61,35 +60,15 @@ class DocumentsUpnQr
         // Combine data to single string
         $qrString = implode($qrDelim, $qrData);
 
-        // Convert data to ISO 8859-2 charset
-        $qrString = (string)iconv('UTF-8', 'ISO-8859-2', $qrString);
-
-        // Get byte array of all characters
-        $qrString = unpack('C*', $qrString);
-        if (!is_array($qrString)) {
-            return '';
-        }
-
-        //require dirname(__FILE__) . DS . 'qrcodegen.php';
-
-        $eci = QrSegment::makeEci(4);
-        $segs = QrSegment::makeBytes($qrString);
-
-        $finalQr = QrCode::encodeSegments(
-            [$eci, $segs],
-            new Ecl(Ecl::MEDIUM),
-            15, // min qr version
-            15, // max qr version
-            -1, // mask auto
-            false, // boost ecc
+        // Endroid accepts UTF-8 and converts the payload to ISO-8859-2 with ECI 4.
+        $qrCode = new QrCode(
+            data: $qrString,
+            encoding: new Encoding('ISO-8859-2'),
+            errorCorrectionLevel: ErrorCorrectionLevel::Medium,
+            size: 77,
+            margin: 0,
         );
 
-        $qrPng = new Gif($finalQr, 77, 77, 0); // default 512x512
-
-        ob_start();
-        $qrPng->output();
-        $result = (string)ob_get_clean();
-
-        return $result;
+        return (new UpnQrGifWriter())->write($qrCode)->getString();
     }
 }
