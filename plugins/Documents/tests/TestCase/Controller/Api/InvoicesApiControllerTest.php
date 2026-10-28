@@ -11,6 +11,7 @@ use Documents\Lib\FursClient;
 use Documents\Model\Table\TaxCertificatesTable;
 use Documents\Test\TestCase\FakeFursClient;
 use Documents\Test\TestCase\FursTestCertificateTrait;
+use SimpleXMLElement;
 
 /**
  * POST /documents/api/invoices
@@ -350,7 +351,7 @@ class InvoicesApiControllerTest extends TestCase
     {
         $this->auth();
 
-        $xml = new \SimpleXMLElement($this->xml());
+        $xml = new SimpleXMLElement($this->xml());
         $xml->registerXPathNamespace('eslog', 'urn:eslog:2.00');
         $rates = $xml->xpath('//eslog:D_5278');
         $this->assertNotEmpty($rates);

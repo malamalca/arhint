@@ -79,7 +79,9 @@ class PaymentsController extends AppController
             ]);
             if ($this->Payments->save($payment)) {
                 if ($this->getRequest()->is('ajax')) {
-                    return $this->getResponse()->withType('application/json')->withStringBody((string)json_encode($payment));
+                    return $this->getResponse()
+                        ->withType('application/json')
+                        ->withStringBody((string)json_encode($payment));
                 }
 
                 $this->Flash->success(__d('expenses', 'The payment has been saved.'));

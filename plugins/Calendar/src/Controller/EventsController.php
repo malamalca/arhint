@@ -78,7 +78,6 @@ class EventsController extends AppController
 
         $this->Authorization->authorize($event);
 
-<<<<<<< Updated upstream
         $source = $id ? $this->getEventManager()->dispatch(new Event('Calendar.Events.editSource', $this, [
             'eventId' => $event->id,
         ]))->getResult() : null;
@@ -86,10 +85,7 @@ class EventsController extends AppController
             return $this->redirect($source);
         }
 
-        if ($this->request->is(['patch', 'post', 'put'])) {
-=======
         if ($this->getRequest()->is(['patch', 'post', 'put'])) {
->>>>>>> Stashed changes
             if ($this->getRequest()->getData('delete') == 'delete') {
                 if ($this->Events->delete($event)) {
                     $this->Flash->success(__d('calendar', 'The event has been deleted.'));

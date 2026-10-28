@@ -504,7 +504,7 @@ return [
 
     'Queue' => [
         'default' => [
-            'url' => 'file://' . TMP . 'queue',
+            'url' => 'file:///' . ltrim(str_replace('\\', '/', TMP), '/') . 'queue',
             'queue' => 'default',
         ],
     ],

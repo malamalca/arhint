@@ -146,7 +146,9 @@ class ExpensesController extends AppController
                 }
 
                 if ($this->getRequest()->is('ajax')) {
-                    return $this->getResponse()->withType('application/json')->withStringBody((string)json_encode($expense));
+                    return $this->getResponse()
+                        ->withType('application/json')
+                        ->withStringBody((string)json_encode($expense));
                 }
 
                 //$this->Flash->success(__d('expenses', 'The expense has been saved.'));
