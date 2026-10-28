@@ -78,8 +78,8 @@
                 .bar {
                     width: 100%;
                     height: 8px;
-                    background-color: #f0f0f0;
-                    border: solid 1px #ccc;
+                    background-color: var(--md-sys-color-surface-container);
+                    border: solid 1px var(--md-sys-color-outline-variant);
                     margin-bottom: 0.1rem;
 
                     .completed {
@@ -91,14 +91,14 @@
                 .labels {
                     display: flex;
                     justify-content: space-between;
-                    color: #333;
+                    color: var(--md-sys-color-on-surface);
                     margin-bottom: 0.2rem;
 
                     span {
                         font-size: 0.9rem;
 
                         a {
-                            color: #333;
+                            color: var(--md-sys-color-on-surface);
                             text-decoration: none;
 
                             &:hover {

@@ -9191,9 +9191,9 @@ div#panel-index div#panel-filter {
   align-items: center;
   gap: 0.4rem;
   position: relative;
-  background-color: #f0f0f0;
+  background-color: var(--md-sys-color-surface-container);
   margin-top: 1rem;
-  border: solid 1px #ccc;
+  border: solid 1px var(--md-sys-color-outline-variant);
   height: 4rem;
   border-top-left-radius: 4px;
   border-top-right-radius: 4px;
@@ -9206,16 +9206,16 @@ div#panel-index div#panel-filter div#panel-counters a {
   margin-right: 1rem;
   padding: 0.5rem 0.3rem;
   text-decoration: none;
-  color: #666;
+  color: var(--md-sys-color-on-surface-variant);
   font-weight: normal;
 }
 div#panel-index div#panel-filter div#panel-counters a.active {
   font-weight: bold;
-  color: #333;
+  color: var(--md-sys-color-on-surface);
 }
 div#panel-index div#panel-filter div#panel-counters a.active span.badge {
   font-weight: normal;
-  color: #333;
+  color: var(--md-sys-color-on-surface);
 }
 div#panel-index div#panel-filter div#panel-counters a span.badge {
   float: none;
@@ -9228,7 +9228,8 @@ div#panel-index div#panel-filter div#panel-counters a span.badge {
   margin: 0;
   margin-left: 0.5rem;
   padding: 0 0.4rem;
-  background-color: #ccc;
+  background-color: var(--md-sys-color-surface-container-highest);
+  color: var(--md-sys-color-on-surface);
   border-radius: 0.8rem;
   font-size: 90%;
 }
@@ -9283,7 +9284,7 @@ div#panel-index div#panel-list div.panel-row {
   flex-direction: row;
   align-items: center;
   gap: 0.4rem;
-  border: solid 1px #ccc;
+  border: solid 1px var(--md-sys-color-outline-variant);
   border-top: 0;
   padding: 0.4rem 0.5rem;
   height: 4rem;
@@ -9331,7 +9332,7 @@ div#panel-index div#panel-list div.panel-row div.title a {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  color: #000;
+  color: var(--md-sys-color-on-surface);
   text-decoration: none;
 }
 div#panel-index div#panel-list div.panel-row div.title a:hover {
@@ -9341,13 +9342,13 @@ div#panel-index div#panel-list div.panel-row div.details {
   height: 1rem;
   font-size: 0.8rem;
   font-weight: normal;
-  color: #666;
+  color: var(--md-sys-color-on-surface-variant);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 div#panel-index div#panel-list div.panel-row div.details a {
-  color: #666;
+  color: var(--md-sys-color-on-surface-variant);
   text-decoration: none;
 }
 div#panel-index div#panel-list div.panel-row div.details a:hover {
@@ -9361,6 +9362,65 @@ div#panel-index div#panel-list div.panel-row div.details img {
   margin-bottom: 0.3rem;
   color: #888;
   filter: brightness(0) saturate(100%) invert(62%) sepia(0%) saturate(2641%) hue-rotate(333deg) brightness(86%) contrast(96%);
+}
+div#panel-index div#panel-list div.panel-row > div:not(.checkbox):not(.status):not(.title) {
+  flex: 0 0 auto;
+  padding-left: 1rem;
+  font-size: 0.9rem;
+  color: var(--md-sys-color-on-surface-variant);
+  white-space: nowrap;
+}
+div#panel-index div#panel-list div.panel-row > div:not(.checkbox):not(.status):not(.title) a {
+  color: var(--md-sys-color-on-surface-variant);
+  text-decoration: none;
+}
+div#panel-index div#panel-list div.panel-row > div:not(.checkbox):not(.status):not(.title) a:hover {
+  text-decoration: underline;
+}
+div#panel-index div#panel-list div.panel-row > div:not(.checkbox):not(.status):not(.title) a.active {
+  font-weight: bold;
+  color: var(--md-sys-color-on-surface);
+}
+div#panel-index div#panel-list div.panel-row div.total {
+  font-family: monospace;
+  font-size: 0.95rem;
+  text-align: right;
+  color: var(--md-sys-color-on-surface);
+  min-width: 12rem;
+}
+div#panel-index div#panel-list div.panel-row.waiting_approval {
+  background-color: color-mix(in srgb, var(--md-sys-color-error-container) 40%, var(--md-sys-color-surface));
+  border-left: 3px solid #e88;
+}
+div#panel-index div#panel-list div.panel-row.draft {
+  background-color: color-mix(in srgb, var(--md-sys-color-error-container) 40%, var(--md-sys-color-surface));
+  border-left: 3px solid #e88;
+}
+div#panel-index div#panel-footer {
+  background-color: var(--md-sys-color-surface-container);
+  margin-bottom: 1rem;
+  border: solid 1px var(--md-sys-color-outline-variant);
+  border-top: 0;
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  padding-left: 1rem;
+}
+div#panel-index div#panel-footer ul li {
+  padding: 0;
+}
+div#panel-index div#panel-footer ul li.active {
+  border-radius: 4px;
+}
+div#panel-index div#panel-footer ul li a {
+  color: var(--md-sys-color-on-surface) !important;
+  width: 100%;
+  padding-left: 0.5rem !important;
+  padding-right: 0.5rem !important;
+}
+div#panel-index div#panel-footer ul li a:hover {
+  background-color: var(--md-sys-color-surface-container-highest) !important;
 }
 div#panel-index div#panel-list div.panel-row.task-row {
   height: auto;
@@ -9384,67 +9444,8 @@ div#panel-index div#panel-list div.panel-row.task-row div.details a {
   display: inline;
 }
 div#panel-index div#panel-list div.panel-row.task-row.done > div.title > a {
-  color: #999;
+  color: var(--md-sys-color-outline);
   text-decoration: line-through;
-}
-div#panel-index div#panel-list div.panel-row > div:not(.checkbox):not(.status):not(.title) {
-  flex: 0 0 auto;
-  padding-left: 1rem;
-  font-size: 0.9rem;
-  color: #444;
-  white-space: nowrap;
-}
-div#panel-index div#panel-list div.panel-row > div:not(.checkbox):not(.status):not(.title) a {
-  color: #444;
-  text-decoration: none;
-}
-div#panel-index div#panel-list div.panel-row > div:not(.checkbox):not(.status):not(.title) a:hover {
-  text-decoration: underline;
-}
-div#panel-index div#panel-list div.panel-row > div:not(.checkbox):not(.status):not(.title) a.active {
-  font-weight: bold;
-  color: #000;
-}
-div#panel-index div#panel-list div.panel-row div.total {
-  font-family: monospace;
-  font-size: 0.95rem;
-  text-align: right;
-  color: #222;
-  min-width: 12rem;
-}
-div#panel-index div#panel-list div.panel-row.waiting_approval {
-  background-color: #fff0f0;
-  border-left: 3px solid #e88;
-}
-div#panel-index div#panel-list div.panel-row.draft {
-  background-color: #fff0f0;
-  border-left: 3px solid #e88;
-}
-div#panel-index div#panel-footer {
-  background-color: #f0f0f0;
-  margin-bottom: 1rem;
-  border: solid 1px #ccc;
-  border-top: 0;
-  border-bottom-left-radius: 4px;
-  border-bottom-right-radius: 4px;
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
-  padding-left: 1rem;
-}
-div#panel-index div#panel-footer ul li {
-  padding: 0;
-}
-div#panel-index div#panel-footer ul li.active {
-  border-radius: 4px;
-}
-div#panel-index div#panel-footer ul li a {
-  color: #333 !important;
-  width: 100%;
-  padding-left: 0.5rem !important;
-  padding-right: 0.5rem !important;
-}
-div#panel-index div#panel-footer ul li a:hover {
-  background-color: #ddd !important;
 }
 
 table.LogsTable {
@@ -9698,9 +9699,9 @@ table.LogsTable tbody td {
   align-items: center;
   gap: 0.4rem;
   position: relative;
-  background-color: #f0f0f0;
+  background-color: var(--md-sys-color-surface-container);
   margin-top: 1rem;
-  border: solid 1px #ccc;
+  border: solid 1px var(--md-sys-color-outline-variant);
   height: 4rem;
   border-top-left-radius: 4px;
   border-top-right-radius: 4px;
@@ -9713,16 +9714,16 @@ table.LogsTable tbody td {
   margin-right: 1rem;
   padding: 0.5rem 0.3rem;
   text-decoration: none;
-  color: #666;
+  color: var(--md-sys-color-on-surface-variant);
   font-weight: normal;
 }
 #projects-milestones div#panel-filter div#panel-counters a.active {
   font-weight: bold;
-  color: #333;
+  color: var(--md-sys-color-on-surface);
 }
 #projects-milestones div#panel-filter div#panel-counters a.active span.badge {
   font-weight: normal;
-  color: #333;
+  color: var(--md-sys-color-on-surface);
 }
 #projects-milestones div#panel-filter div#panel-counters a span.badge {
   float: none;
@@ -9735,7 +9736,8 @@ table.LogsTable tbody td {
   margin: 0;
   margin-left: 0.5rem;
   padding: 0 0.4rem;
-  background-color: #ccc;
+  background-color: var(--md-sys-color-surface-container-highest);
+  color: var(--md-sys-color-on-surface);
   border-radius: 0.8rem;
   font-size: 90%;
 }
@@ -9790,7 +9792,7 @@ table.LogsTable tbody td {
   flex-direction: row;
   align-items: center;
   gap: 0.4rem;
-  border: solid 1px #ccc;
+  border: solid 1px var(--md-sys-color-outline-variant);
   border-top: 0;
   padding: 0.4rem 0.5rem;
   height: 4rem;
@@ -9838,7 +9840,7 @@ table.LogsTable tbody td {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  color: #000;
+  color: var(--md-sys-color-on-surface);
   text-decoration: none;
 }
 #projects-milestones div#panel-list div.panel-row div.title a:hover {
@@ -9848,13 +9850,13 @@ table.LogsTable tbody td {
   height: 1rem;
   font-size: 0.8rem;
   font-weight: normal;
-  color: #666;
+  color: var(--md-sys-color-on-surface-variant);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 #projects-milestones div#panel-list div.panel-row div.details a {
-  color: #666;
+  color: var(--md-sys-color-on-surface-variant);
   text-decoration: none;
 }
 #projects-milestones div#panel-list div.panel-row div.details a:hover {
@@ -9873,11 +9875,11 @@ table.LogsTable tbody td {
   flex: 0 0 auto;
   padding-left: 1rem;
   font-size: 0.9rem;
-  color: #444;
+  color: var(--md-sys-color-on-surface-variant);
   white-space: nowrap;
 }
 #projects-milestones div#panel-list div.panel-row > div:not(.checkbox):not(.status):not(.title) a {
-  color: #444;
+  color: var(--md-sys-color-on-surface-variant);
   text-decoration: none;
 }
 #projects-milestones div#panel-list div.panel-row > div:not(.checkbox):not(.status):not(.title) a:hover {
@@ -9885,27 +9887,27 @@ table.LogsTable tbody td {
 }
 #projects-milestones div#panel-list div.panel-row > div:not(.checkbox):not(.status):not(.title) a.active {
   font-weight: bold;
-  color: #000;
+  color: var(--md-sys-color-on-surface);
 }
 #projects-milestones div#panel-list div.panel-row div.total {
   font-family: monospace;
   font-size: 0.95rem;
   text-align: right;
-  color: #222;
+  color: var(--md-sys-color-on-surface);
   min-width: 12rem;
 }
 #projects-milestones div#panel-list div.panel-row.waiting_approval {
-  background-color: #fff0f0;
+  background-color: color-mix(in srgb, var(--md-sys-color-error-container) 40%, var(--md-sys-color-surface));
   border-left: 3px solid #e88;
 }
 #projects-milestones div#panel-list div.panel-row.draft {
-  background-color: #fff0f0;
+  background-color: color-mix(in srgb, var(--md-sys-color-error-container) 40%, var(--md-sys-color-surface));
   border-left: 3px solid #e88;
 }
 #projects-milestones div#panel-footer {
-  background-color: #f0f0f0;
+  background-color: var(--md-sys-color-surface-container);
   margin-bottom: 1rem;
-  border: solid 1px #ccc;
+  border: solid 1px var(--md-sys-color-outline-variant);
   border-top: 0;
   border-bottom-left-radius: 4px;
   border-bottom-right-radius: 4px;
@@ -9920,13 +9922,13 @@ table.LogsTable tbody td {
   border-radius: 4px;
 }
 #projects-milestones div#panel-footer ul li a {
-  color: #333 !important;
+  color: var(--md-sys-color-on-surface) !important;
   width: 100%;
   padding-left: 0.5rem !important;
   padding-right: 0.5rem !important;
 }
 #projects-milestones div#panel-footer ul li a:hover {
-  background-color: #ddd !important;
+  background-color: var(--md-sys-color-surface-container-highest) !important;
 }
 #projects-milestones {
   max-width: 750px;
@@ -9977,8 +9979,8 @@ table.LogsTable tbody td {
 #projects-milestones #panel-list .panel-row:has(.milestone-progress) .milestone-progress .bar {
   width: 100%;
   height: 8px;
-  background-color: #f0f0f0;
-  border: solid 1px #ccc;
+  background-color: var(--md-sys-color-surface-container);
+  border: solid 1px var(--md-sys-color-outline-variant);
   margin-bottom: 0.1rem;
 }
 #projects-milestones #panel-list .panel-row:has(.milestone-progress) .milestone-progress .bar .completed {
@@ -9988,14 +9990,14 @@ table.LogsTable tbody td {
 #projects-milestones #panel-list .panel-row:has(.milestone-progress) .milestone-progress .labels {
   display: flex;
   justify-content: space-between;
-  color: #333;
+  color: var(--md-sys-color-on-surface);
   margin-bottom: 0.2rem;
 }
 #projects-milestones #panel-list .panel-row:has(.milestone-progress) .milestone-progress .labels span {
   font-size: 0.9rem;
 }
 #projects-milestones #panel-list .panel-row:has(.milestone-progress) .milestone-progress .labels span a {
-  color: #333;
+  color: var(--md-sys-color-on-surface);
   text-decoration: none;
 }
 #projects-milestones #panel-list .panel-row:has(.milestone-progress) .milestone-progress .labels span a:hover {

@@ -14,7 +14,7 @@
     margin-top: 0px;
 }
 .lil-tasks-folder a {
-    color: black;
+    color: var(--md-sys-color-on-surface);
 
     font-family: Arial, sans-serif;
     font-size: 32px;
@@ -48,7 +48,7 @@ a.lil-task-tick img {
 }
 
 .lil-task-item a {
-    color: black;
+    color: var(--md-sys-color-on-surface);
     font-family: Arial, sans-serif;
     font-weight: normal;
     font-size: 16px;
@@ -65,13 +65,13 @@ a.lil-task-tick img {
 .lil-task-item div.userdue {
     font-weight: normal;
     font-size: 12px;
-    color: #606060;
+    color: var(--md-sys-color-on-surface-variant);
 }
 
 .lil-task-item div.descript {
     font-weight: normal;
     font-size: 12px;
-    color: #606060;
+    color: var(--md-sys-color-on-surface-variant);
     clear: both;
     padding-left: 50px;
 }
@@ -119,11 +119,11 @@ div.lil-task-swipe-actions a.lil-task-swipe-delete {
     text-align: center;
     vertical-align: middle;
 
-    background-color: #f0f0f0;
+    background-color: var(--md-sys-color-surface-container);
 }
 div.lil-tasks-folder div.lil-task-swipe-actions a.lil-task-swipe-edit {
     display: none;
-    background-color: #e0e0e0;
+    background-color: var(--md-sys-color-surface-container-highest);
 }
 div.lil-task-swipe-actions a.lil-task-swipe-edit {
     display: none;

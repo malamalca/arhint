@@ -38,16 +38,16 @@ div.calendar-day div.day-bg {
     z-index: -1;
 }
 div.calendar-day.sunday div.day-bg {
-    background-color: #f0f0f0;
+    background-color: var(--md-sys-color-surface-container);
     border-right: solid 1px #e0e0e0;
 }
 
 div.calendar-day.saturday div.day-bg {
-    background-color: #f0f0f0;
+    background-color: var(--md-sys-color-surface-container);
 }
 
 div.calendar-day.today div.day-bg {
-    background-color: #ffcdd2;
+    background-color: color-mix(in srgb, var(--md-sys-color-error-container) 70%, var(--md-sys-color-surface));
 }
 
 div.calendar-day > div.day-no {
