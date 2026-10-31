@@ -150,15 +150,15 @@ class TaxPremisesController extends AppController
         $this->getRequest()->allowMethod(['post']);
         $this->Authorization->skipAuthorization();
 
-        /** @var \Documents\Model\Table\TaxCertificatesTable $TaxCertificates */
-        $TaxCertificates = TableRegistry::getTableLocator()->get('Documents.TaxCertificates');
-        $client = $TaxCertificates->clientForUser((string)$this->getCurrentUser()->get('id'));
+        try {
+            /** @var \Documents\Model\Table\TaxCertificatesTable $TaxCertificates */
+            $TaxCertificates = TableRegistry::getTableLocator()->get('Documents.TaxCertificates');
+            $client = $TaxCertificates->clientForUser((string)$this->getCurrentUser()->get('id'));
 
-        if (!$client) {
-            $this->Flash->error(__d('documents', 'Please upload your tax certificate first.'));
-        } else {
-            $message = 'arhim-' . bin2hex(random_bytes(4));
-            try {
+            if (!$client) {
+                $this->Flash->error(__d('documents', 'Please upload your tax certificate first.'));
+            } else {
+                $message = 'arhim-' . bin2hex(random_bytes(4));
                 $response = $client->echo($message);
                 if ($response === $message) {
                     $this->Flash->success(__d('documents', 'Certificate is accepted by the tax authority.'));
@@ -166,10 +166,10 @@ class TaxPremisesController extends AppController
                     Log::error('FURS echo mismatch: sent "' . $message . '", received "' . $response . '"', 'furs');
                     $this->Flash->error(__d('documents', 'Unexpected echo response') . ': ' . $response);
                 }
-            } catch (Throwable $e) {
-                Log::error('FURS echo error: ' . $e->getMessage(), 'furs');
-                $this->Flash->error(__d('documents', 'Certificate check failed') . ': ' . $e->getMessage());
             }
+        } catch (Throwable $e) {
+            Log::error('FURS echo error: ' . $e::class . ': ' . $e->getMessage() . "\n" . $e->getTraceAsString(), 'furs');
+            $this->Flash->error(__d('documents', 'Certificate check failed') . ': ' . $e->getMessage());
         }
 
         return $this->redirect(['action' => 'certificate']);

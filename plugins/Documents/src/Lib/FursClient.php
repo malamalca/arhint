@@ -8,7 +8,6 @@ use Cake\Log\Log;
 use DOMXPath;
 use Exception;
 use Malamalca\FiscalPHP\FiscalSign;
-use Malamalca\FiscalPHP\FiscalSoap;
 use Malamalca\FiscalPHP\FiscalUtils;
 use RuntimeException;
 use Throwable;
@@ -130,15 +129,28 @@ class FursClient
      */
     public function echo(string $message): string
     {
-        $response = $this->send('sendEcho', $message);
-        if ($response === '') {
-            throw new RuntimeException(
-                'FURS did not return a valid echo response [FURS ' .
-                (Configure::read('Documents.furs.production') ? 'production' : 'test') . ': ' . self::url() . ']',
-            );
+        $raw = $this->send('echoRaw', $message);
+
+        try {
+            $doc = FiscalUtils::parseXml($raw);
+            $xpath = new DOMXPath($doc);
+            $xpath->registerNamespace('soap', FursXml::NS_SOAP);
+            $xpath->registerNamespace('fu', FursXml::NS_FU);
+            $echo = $xpath->query('/soap:Envelope/soap:Body/fu:EchoResponse');
+            if ($echo !== false && $echo->length === 1) {
+                return trim((string)$echo->item(0)?->textContent);
+            }
+        } catch (Exception) {
+            // not xml, reported below
         }
 
-        return $response;
+        $error = self::parseResponse($raw)['error'];
+        Log::error('FURS echo response: ' . mb_substr(self::toUtf8($raw), 0, 2000), 'furs');
+
+        throw new RuntimeException(
+            'FURS did not return a valid echo response' . ($error ? ': ' . $error : '') .
+            ' [FURS ' . (Configure::read('Documents.furs.production') ? 'production' : 'test') . ': ' . self::url() . ']',
+        );
     }
 
     /**
@@ -159,7 +171,7 @@ class FursClient
 
         $ca = $this->caBundle();
         try {
-            $soap = (new FiscalSoap())
+            $soap = (new FursSoap())
                 ->setUrl(self::url())
                 ->setTimeout((int)Configure::read('Documents.furs.timeout', 30) * 1000)
                 ->setP12($this->p12File)
