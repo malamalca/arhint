@@ -187,6 +187,9 @@ class TaxPremisesController extends AppController
                 (is_writable(LOGS) ? 'does not exist, directory writable' : 'directory NOT writable'),
         );
 
+        $details[] = 'Log engines: ' . implode(', ', Log::configured()) . '; files in ' . LOGS . ': ' .
+            implode(', ', array_map('basename', glob(LOGS . '*') ?: []));
+
         $checkResult = ['ok' => $ok, 'text' => date('Y-m-d H:i:s') . "\n" . implode("\n", $details)];
         $certificate = $TaxCertificates->findForUser($userId) ?? $TaxCertificates->newEmptyEntity();
         $this->set(compact('certificate', 'checkResult'));
