@@ -103,7 +103,7 @@ echo $this->Form->postLink(
     [
         'class' => 'btn filled',
         'escape' => false,
-        'title' => __d('documents', 'Check network connection to FURS servers (no certificate needed)'),
+        'title' => __d('documents', 'Check connection to FURS servers (network and echo with your certificate)'),
     ],
 );
 if (!$certificate->isNew() && !empty($certificate->p12)) {

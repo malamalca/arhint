@@ -124,12 +124,14 @@ class FursClient
      * Send echo request. A successful round trip proves the certificate is accepted by FURS (mutual TLS).
      *
      * @param string $message Message FURS sends back.
+     * @param bool|null $production Environment; null for the configured one.
      * @return string Echo response.
      * @throws \Exception On transport errors or when FURS does not answer with an echo.
      */
-    public function echo(string $message): string
+    public function echo(string $message, ?bool $production = null): string
     {
-        $raw = $this->send('echoRaw', $message);
+        $production ??= (bool)Configure::read('Documents.furs.production');
+        $raw = $this->send('echoRaw', $message, $production);
 
         try {
             $doc = FiscalUtils::parseXml($raw);
@@ -149,7 +151,7 @@ class FursClient
 
         throw new RuntimeException(
             'FURS did not return a valid echo response' . ($error ? ': ' . $error : '') .
-            ' [FURS ' . (Configure::read('Documents.furs.production') ? 'production' : 'test') . ': ' . self::url() . ']',
+            ' [FURS ' . ($production ? 'production' : 'test') . ': ' . self::url($production) . ']',
         );
     }
 
@@ -158,11 +160,12 @@ class FursClient
      *
      * @param string $method FiscalSoap method.
      * @param string $signedXml Signed xml (or message for echo).
+     * @param bool|null $production Environment; null for the configured one.
      * @return string
      */
-    private function send(string $method, string $signedXml): string
+    private function send(string $method, string $signedXml, ?bool $production = null): string
     {
-        $production = (bool)Configure::read('Documents.furs.production');
+        $production ??= (bool)Configure::read('Documents.furs.production');
         if ($production && $this->isTestCertificate()) {
             throw new RuntimeException(
                 'The FURS test certificate (DavPotRacTEST) cannot be used with the production service.',
@@ -172,7 +175,7 @@ class FursClient
         $ca = self::caBundle();
         try {
             $soap = (new FursSoap())
-                ->setUrl(self::url())
+                ->setUrl(self::url($production))
                 ->setTimeout((int)Configure::read('Documents.furs.timeout', 30) * 1000)
                 ->setP12($this->p12File)
                 ->setPassword($this->password)
@@ -180,7 +183,7 @@ class FursClient
 
             return (string)$soap->{$method}($signedXml);
         } catch (Exception $e) {
-            $message = $e->getMessage() . ' [FURS ' . ($production ? 'production' : 'test') . ': ' . self::url() . ']';
+            $message = $e->getMessage() . ' [FURS ' . ($production ? 'production' : 'test') . ': ' . self::url($production) . ']';
             // an unaccepted client certificate shows up as a TLS failure, not as a FURS error message
             if (preg_match('/bad record mac|handshake failure|certificate|alert/i', $e->getMessage())) {
                 $message .= ' The FURS server probably rejected the client certificate: use a test certificate with ' .
@@ -348,11 +351,12 @@ class FursClient
     /**
      * FURS service url.
      *
+     * @param bool|null $production Environment; null for the configured one.
      * @return string
      */
-    public static function url(): string
+    public static function url(?bool $production = null): string
     {
-        $key = Configure::read('Documents.furs.production') ? 'production' : 'test';
+        $key = ($production ?? Configure::read('Documents.furs.production')) ? 'production' : 'test';
 
         return (string)Configure::read('Documents.furs.urls.' . $key);
     }

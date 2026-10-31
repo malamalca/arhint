@@ -199,7 +199,7 @@ class TaxPremisesController extends AppController
     }
 
     /**
-     * Network check of both FURS environments (no certificate needed).
+     * Ping both FURS environments: network level check, then an echo request with the user's certificate.
      *
      * @return \Cake\Http\Response|null
      */
@@ -208,22 +208,60 @@ class TaxPremisesController extends AppController
         $this->getRequest()->allowMethod(['post']);
         $this->Authorization->skipAuthorization();
 
-        $ok = true;
-        $details = [date('Y-m-d H:i:s')];
-        foreach (['test', 'production'] as $env) {
-            $url = (string)Configure::read('Documents.furs.urls.' . $env);
-            $result = FursClient::ping($url);
-            $ok = $ok && $result['ok'];
-            $details[] = '== ' . $env . ' ' . $url . ' => ' . ($result['ok'] ? 'OK' : 'FAILED');
-            array_push($details, ...$result['lines']);
-        }
-
         /** @var \Documents\Model\Table\TaxCertificatesTable $TaxCertificates */
         $TaxCertificates = TableRegistry::getTableLocator()->get('Documents.TaxCertificates');
         $userId = (string)$this->getCurrentUser()->get('id');
+
+        $ok = true;
+        $details = [date('Y-m-d H:i:s')];
+        try {
+            $client = $TaxCertificates->clientForUser($userId);
+            $isTestCertificate = $client?->isTestCertificate();
+        } catch (Throwable $e) {
+            $client = null;
+            $isTestCertificate = null;
+            $details[] = 'Certificate: ' . $e->getMessage();
+        }
+        if ($client) {
+            $details[] = 'Certificate: ' . ($isTestCertificate ? 'test (DavPotRacTEST)' : 'production');
+        } else {
+            $details[] = 'Certificate: not available, echo is skipped';
+        }
+
+        foreach (['test' => false, 'production' => true] as $env => $production) {
+            $url = FursClient::url($production);
+            $result = FursClient::ping($url);
+            $details[] = '== ' . $env . ' ' . $url . ' => network ' . ($result['ok'] ? 'OK' : 'FAILED');
+            array_push($details, ...$result['lines']);
+            $ok = $ok && $result['ok'];
+
+            if (!$client) {
+                continue;
+            }
+            if ($production && $isTestCertificate) {
+                $details[] = 'Echo: skipped, test certificate cannot be used with the production service.';
+                continue;
+            }
+            $message = 'arhim-' . bin2hex(random_bytes(4));
+            try {
+                $start = microtime(true);
+                $response = $client->echo($message, $production);
+                $echoOk = $response === $message;
+                $details[] = sprintf(
+                    'Echo with certificate: %s in %d ms',
+                    $echoOk ? 'OK' : 'unexpected response "' . $response . '"',
+                    (microtime(true) - $start) * 1000,
+                );
+            } catch (Throwable $e) {
+                $echoOk = false;
+                $details[] = 'Echo with certificate: FAILED: ' . $e->getMessage();
+                Log::error('FURS ping (' . $env . ') echo error: ' . $e->getMessage(), 'furs');
+            }
+            $ok = $ok && $echoOk;
+        }
+
         $certificate = $TaxCertificates->findForUser($userId) ?? $TaxCertificates->newEmptyEntity();
-        $checkResult = ['ok' => $ok, 'text' => implode("
-", $details)];
+        $checkResult = ['ok' => $ok, 'text' => implode("\n", $details)];
         $this->set(compact('certificate', 'checkResult'));
 
         return $this->render('certificate');
