@@ -7,6 +7,7 @@ use Cake\Core\Configure;
 use Cake\Http\Response;
 use Cake\Log\Log;
 use Cake\ORM\TableRegistry;
+use Documents\Lib\FursClient;
 use Documents\Lib\FursXml;
 use Throwable;
 
@@ -192,6 +193,37 @@ class TaxPremisesController extends AppController
 
         $checkResult = ['ok' => $ok, 'text' => date('Y-m-d H:i:s') . "\n" . implode("\n", $details)];
         $certificate = $TaxCertificates->findForUser($userId) ?? $TaxCertificates->newEmptyEntity();
+        $this->set(compact('certificate', 'checkResult'));
+
+        return $this->render('certificate');
+    }
+
+    /**
+     * Network check of both FURS environments (no certificate needed).
+     *
+     * @return \Cake\Http\Response|null
+     */
+    public function pingFurs(): ?Response
+    {
+        $this->getRequest()->allowMethod(['post']);
+        $this->Authorization->skipAuthorization();
+
+        $ok = true;
+        $details = [date('Y-m-d H:i:s')];
+        foreach (['test', 'production'] as $env) {
+            $url = (string)Configure::read('Documents.furs.urls.' . $env);
+            $result = FursClient::ping($url);
+            $ok = $ok && $result['ok'];
+            $details[] = '== ' . $env . ' ' . $url . ' => ' . ($result['ok'] ? 'OK' : 'FAILED');
+            array_push($details, ...$result['lines']);
+        }
+
+        /** @var \Documents\Model\Table\TaxCertificatesTable $TaxCertificates */
+        $TaxCertificates = TableRegistry::getTableLocator()->get('Documents.TaxCertificates');
+        $userId = (string)$this->getCurrentUser()->get('id');
+        $certificate = $TaxCertificates->findForUser($userId) ?? $TaxCertificates->newEmptyEntity();
+        $checkResult = ['ok' => $ok, 'text' => implode("
+", $details)];
         $this->set(compact('certificate', 'checkResult'));
 
         return $this->render('certificate');

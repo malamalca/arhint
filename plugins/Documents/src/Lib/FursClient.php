@@ -169,7 +169,7 @@ class FursClient
             );
         }
 
-        $ca = $this->caBundle();
+        $ca = self::caBundle();
         try {
             $soap = (new FursSoap())
                 ->setUrl(self::url())
@@ -192,6 +192,75 @@ class FursClient
         } finally {
             unlink($ca);
         }
+    }
+
+    /**
+     * Network level check of a FURS service without a certificate: DNS, TCP connect and TLS/HTTP answer.
+     *
+     * Tells apart "server cannot reach FURS" from "FURS firewall rejects this server" from "FURS is up".
+     *
+     * @param string $url Service url.
+     * @return array{ok: bool, lines: array<string>}
+     */
+    public static function ping(string $url): array
+    {
+        $lines = [];
+        $ok = false;
+        $host = (string)parse_url($url, PHP_URL_HOST);
+        $port = (int)(parse_url($url, PHP_URL_PORT) ?: 443);
+
+        $ip = gethostbyname($host);
+        if ($ip === $host) {
+            return ['ok' => false, 'lines' => ['DNS: cannot resolve ' . $host]];
+        }
+        $lines[] = 'DNS: ' . $host . ' -> ' . $ip;
+
+        $start = microtime(true);
+        $socket = @fsockopen($ip, $port, $errno, $errstr, 5);
+        if ($socket === false) {
+            return ['ok' => false, 'lines' => array_merge($lines, ['TCP ' . $port . ': failed (' . $errno . ' ' . $errstr . ')'])];
+        }
+        fclose($socket);
+        $lines[] = sprintf('TCP %d: connected in %d ms', $port, (microtime(true) - $start) * 1000);
+
+        $ca = self::caBundle();
+        try {
+            $conn = curl_init($url);
+            curl_setopt_array($conn, [
+                CURLOPT_CONNECTTIMEOUT => 5,
+                CURLOPT_TIMEOUT => 10,
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_SSLVERSION => CURL_SSLVERSION_TLSv1_2,
+                CURLOPT_SSL_VERIFYHOST => 2,
+                CURLOPT_SSL_VERIFYPEER => true,
+                CURLOPT_CAINFO => $ca,
+            ]);
+            $start = microtime(true);
+            $body = curl_exec($conn);
+            $ms = (int)((microtime(true) - $start) * 1000);
+            if ($body === false) {
+                // no client certificate is sent, so a handshake failure here still means the server is reachable
+                $lines[] = 'TLS/HTTP: ' . curl_error($conn) . ' (' . $ms . ' ms)';
+                if (preg_match('/bad record mac|handshake failure|alert/i', curl_error($conn))) {
+                    $lines[] = 'Server answered but requires a client certificate: expected for this check.';
+                }
+                $ok = curl_errno($conn) !== CURLE_SSL_CACERT && curl_errno($conn) !== CURLE_COULDNT_CONNECT;
+            } else {
+                $text = trim((string)preg_replace('/\s+/', ' ', strip_tags(self::toUtf8((string)$body))));
+                $lines[] = 'TLS/HTTP: status ' . curl_getinfo($conn, CURLINFO_HTTP_CODE) . ' in ' . $ms . ' ms';
+                if ($text !== '') {
+                    $lines[] = 'Response: ' . mb_substr($text, 0, 200);
+                }
+                $ok = !str_contains($text, 'Request Rejected');
+                if (!$ok) {
+                    $lines[] = 'FURS firewall rejects requests from this server (IP not allowed).';
+                }
+            }
+        } finally {
+            unlink($ca);
+        }
+
+        return ['ok' => $ok, 'lines' => $lines];
     }
 
     /**
@@ -293,7 +362,7 @@ class FursClient
      *
      * @return string
      */
-    private function caBundle(): string
+    private static function caBundle(): string
     {
         $bundle = '';
         foreach ((array)Configure::read('Documents.furs.caFiles') as $caFile) {

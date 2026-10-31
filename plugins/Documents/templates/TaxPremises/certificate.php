@@ -96,6 +96,16 @@ $certificateEdit = [
 echo $this->Lil->form($certificateEdit, 'Documents.TaxPremises.certificate');
 
 // outside of the upload form, since postLink creates its own form
+
+echo $this->Form->postLink(
+    '<i class="material-icons left">wifi_tethering</i>' . h(__d('documents', 'Ping FURS')),
+    ['action' => 'pingFurs'],
+    [
+        'class' => 'btn filled',
+        'escape' => false,
+        'title' => __d('documents', 'Check network connection to FURS servers (no certificate needed)'),
+    ],
+);
 if (!$certificate->isNew() && !empty($certificate->p12)) {
     echo $this->Form->postLink(
         '<i class="material-icons left">network_check</i>' . h(__d('documents', 'Check certificate')),
