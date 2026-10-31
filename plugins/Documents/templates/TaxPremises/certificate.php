@@ -13,6 +13,15 @@ if (!$certificate->isNew() && !empty($certificate->p12)) {
     $status = sprintf('<p class="error"><strong>%s</strong></p>', h(__d('documents', 'Certificate is not uploaded.')));
 }
 
+if (!empty($checkResult)) {
+    $status .= sprintf(
+        '<p class="%s"><strong>%s</strong></p><textarea readonly rows="6" style="width:100%%;font-family:monospace">%s</textarea>',
+        $checkResult['ok'] ? 'success' : 'error',
+        h($checkResult['ok'] ? __d('documents', 'Check passed.') : __d('documents', 'Check failed.')),
+        h($checkResult['text']),
+    );
+}
+
 $certificateEdit = [
     'title_for_layout' => __d('documents', 'Tax Certificate'),
     'form' => [
@@ -22,7 +31,7 @@ $certificateEdit = [
         'lines' => [
             'form_start' => [
                 'method' => 'create',
-                'parameters' => ['model' => $certificate, ['type' => 'file']],
+                'parameters' => ['model' => $certificate, ['type' => 'file', 'url' => ['action' => 'certificate']]],
             ],
             'status' => $status,
             'info' => sprintf(

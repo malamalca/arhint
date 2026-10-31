@@ -150,29 +150,48 @@ class TaxPremisesController extends AppController
         $this->getRequest()->allowMethod(['post']);
         $this->Authorization->skipAuthorization();
 
+        /** @var \Documents\Model\Table\TaxCertificatesTable $TaxCertificates */
+        $TaxCertificates = TableRegistry::getTableLocator()->get('Documents.TaxCertificates');
+        $userId = (string)$this->getCurrentUser()->get('id');
+
+        $ok = false;
+        $details = [];
         try {
-            /** @var \Documents\Model\Table\TaxCertificatesTable $TaxCertificates */
-            $TaxCertificates = TableRegistry::getTableLocator()->get('Documents.TaxCertificates');
-            $client = $TaxCertificates->clientForUser((string)$this->getCurrentUser()->get('id'));
+            $client = $TaxCertificates->clientForUser($userId);
 
             if (!$client) {
-                $this->Flash->error(__d('documents', 'Please upload your tax certificate first.'));
+                $details[] = __d('documents', 'Please upload your tax certificate first.');
             } else {
                 $message = 'arhim-' . bin2hex(random_bytes(4));
                 $response = $client->echo($message);
                 if ($response === $message) {
-                    $this->Flash->success(__d('documents', 'Certificate is accepted by the tax authority.'));
+                    $ok = true;
+                    $details[] = __d('documents', 'Certificate is accepted by the tax authority.');
                 } else {
+                    $details[] = __d('documents', 'Unexpected echo response') . ': ' . $response;
                     Log::error('FURS echo mismatch: sent "' . $message . '", received "' . $response . '"', 'furs');
-                    $this->Flash->error(__d('documents', 'Unexpected echo response') . ': ' . $response);
                 }
             }
         } catch (Throwable $e) {
+            $details[] = __d('documents', 'Certificate check failed') . ': ' . $e->getMessage();
             Log::error('FURS echo error: ' . $e::class . ': ' . $e->getMessage() . "\n" . $e->getTraceAsString(), 'furs');
-            $this->Flash->error(__d('documents', 'Certificate check failed') . ': ' . $e->getMessage());
         }
 
-        return $this->redirect(['action' => 'certificate']);
+        // the log can be silently unwritable (e.g. owned by another user), so show where it goes
+        $logFile = LOGS . 'error.log';
+        $details[] = sprintf(
+            'Log: %s (%s)',
+            $logFile,
+            is_file($logFile) ?
+                (is_writable($logFile) ? 'writable' : 'NOT writable by ' . get_current_user()) :
+                (is_writable(LOGS) ? 'does not exist, directory writable' : 'directory NOT writable'),
+        );
+
+        $checkResult = ['ok' => $ok, 'text' => date('Y-m-d H:i:s') . "\n" . implode("\n", $details)];
+        $certificate = $TaxCertificates->findForUser($userId) ?? $TaxCertificates->newEmptyEntity();
+        $this->set(compact('certificate', 'checkResult'));
+
+        return $this->render('certificate');
     }
 
     /**
