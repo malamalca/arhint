@@ -7,6 +7,8 @@ use Cake\Core\BasePlugin;
 use Cake\Core\Configure;
 use Cake\Core\PluginApplicationInterface;
 use Cake\Event\EventManagerInterface;
+use Cake\Log\Engine\FileLog;
+use Cake\Log\Log;
 use Cake\Routing\RouteBuilder;
 use Cake\Utility\Hash;
 use Documents\Event\DocumentsAIToolsEvents;
@@ -35,6 +37,17 @@ class DocumentsPlugin extends BasePlugin
                 'Documents',
                 Hash::merge((array)Configure::read('Documents'), (array)$defaults['Documents']),
             );
+        }
+
+        // dedicated FURS log, independent of how the host application configures its error log
+        if (!in_array('furs', Log::configured(), true)) {
+            Log::setConfig('furs', [
+                'className' => FileLog::class,
+                'path' => LOGS,
+                'file' => 'furs',
+                'scopes' => ['furs'],
+                'levels' => ['notice', 'info', 'debug', 'warning', 'error', 'critical', 'alert', 'emergency'],
+            ]);
         }
     }
 
