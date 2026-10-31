@@ -1,4 +1,18 @@
 <?php
+if (!$certificate->isNew() && !empty($certificate->p12)) {
+    $validTo = $certificate->valid_to;
+    $expired = $validTo !== null && $validTo->isPast();
+    $status = sprintf(
+        '<p class="%s"><strong>%s</strong>%s%s</p>',
+        $expired ? 'error' : 'success',
+        h($expired ? __d('documents', 'Certificate is uploaded but expired.') : __d('documents', 'Certificate is uploaded.')),
+        $validTo ? ' ' . h(__d('documents', 'Valid to') . ': ' . $validTo->format('d.m.Y')) : '',
+        $certificate->tax_no ? ' ' . h(__d('documents', 'Operator Tax Number') . ': ' . $certificate->tax_no) : '',
+    );
+} else {
+    $status = sprintf('<p class="error"><strong>%s</strong></p>', h(__d('documents', 'Certificate is not uploaded.')));
+}
+
 $certificateEdit = [
     'title_for_layout' => __d('documents', 'Tax Certificate'),
     'form' => [
@@ -10,6 +24,7 @@ $certificateEdit = [
                 'method' => 'create',
                 'parameters' => ['model' => $certificate, ['type' => 'file']],
             ],
+            'status' => $status,
             'info' => sprintf(
                 '<p class="light">%s</p>',
                 h(__d(
@@ -70,3 +85,16 @@ $certificateEdit = [
 ];
 
 echo $this->Lil->form($certificateEdit, 'Documents.TaxPremises.certificate');
+
+// outside of the upload form, since postLink creates its own form
+if (!$certificate->isNew() && !empty($certificate->p12)) {
+    echo $this->Form->postLink(
+        '<i class="material-icons left">network_check</i>' . h(__d('documents', 'Check certificate')),
+        ['action' => 'testCertificate'],
+        [
+            'class' => 'btn filled',
+            'escape' => false,
+            'title' => __d('documents', 'Send echo request to the tax authority to verify the certificate'),
+        ],
+    );
+}

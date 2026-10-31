@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Documents\Model\Table;
 
+use Cake\Log\Log;
 use Cake\ORM\Query\SelectQuery;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
@@ -112,11 +113,15 @@ class TaxPremisesTable extends Table
     {
         $taxNo = FursXml::normalizeTaxNo($issuerTaxNo);
         if ($taxNo === null) {
+            Log::error('FURS premise error: company tax number is missing or invalid.', 'furs');
+
             return __d('documents', 'Company tax number is missing or invalid.');
         }
 
         $signed = $client->sign(FursXml::premise($premise, $taxNo), 'fu:BusinessPremiseRequest');
         if ($signed === null) {
+            Log::error('FURS premise error: request could not be signed.', 'furs');
+
             return __d('documents', 'Request could not be signed. Check certificate and password.');
         }
         $premise->last_request = $signed;
@@ -124,6 +129,7 @@ class TaxPremisesTable extends Table
         try {
             $response = $client->sendPremise($signed);
         } catch (Throwable $e) {
+            Log::error('FURS premise request error: ' . $e->getMessage(), 'furs');
             $this->save($premise);
 
             return $e->getMessage();
@@ -133,6 +139,8 @@ class TaxPremisesTable extends Table
         $result = FursClient::parseResponse($response);
         if ($result['ok']) {
             $premise->active = !$premise->closed;
+        } else {
+            Log::error('FURS premise error: ' . $result['error'], 'furs');
         }
         $this->save($premise);
 

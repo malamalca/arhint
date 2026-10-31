@@ -122,10 +122,30 @@ class FursClient
     }
 
     /**
+     * Send echo request. A successful round trip proves the certificate is accepted by FURS (mutual TLS).
+     *
+     * @param string $message Message FURS sends back.
+     * @return string Echo response.
+     * @throws \Exception On transport errors or when FURS does not answer with an echo.
+     */
+    public function echo(string $message): string
+    {
+        $response = $this->send('sendEcho', $message);
+        if ($response === '') {
+            throw new RuntimeException(
+                'FURS did not return a valid echo response [FURS ' .
+                (Configure::read('Documents.furs.production') ? 'production' : 'test') . ': ' . self::url() . ']',
+            );
+        }
+
+        return $response;
+    }
+
+    /**
      * Send request to FURS.
      *
      * @param string $method FiscalSoap method.
-     * @param string $signedXml Signed xml.
+     * @param string $signedXml Signed xml (or message for echo).
      * @return string
      */
     private function send(string $method, string $signedXml): string

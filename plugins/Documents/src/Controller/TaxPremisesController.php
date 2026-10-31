@@ -5,8 +5,10 @@ namespace Documents\Controller;
 
 use Cake\Core\Configure;
 use Cake\Http\Response;
+use Cake\Log\Log;
 use Cake\ORM\TableRegistry;
 use Documents\Lib\FursXml;
+use Throwable;
 
 /**
  * TaxPremises Controller - business premises used for FURS tax confirmation of invoices.
@@ -136,6 +138,41 @@ class TaxPremisesController extends AppController
         }
 
         return $this->redirect(['action' => 'index']);
+    }
+
+    /**
+     * Check the current user's certificate by sending an echo request to FURS.
+     *
+     * @return \Cake\Http\Response|null
+     */
+    public function testCertificate(): ?Response
+    {
+        $this->getRequest()->allowMethod(['post']);
+        $this->Authorization->skipAuthorization();
+
+        /** @var \Documents\Model\Table\TaxCertificatesTable $TaxCertificates */
+        $TaxCertificates = TableRegistry::getTableLocator()->get('Documents.TaxCertificates');
+        $client = $TaxCertificates->clientForUser((string)$this->getCurrentUser()->get('id'));
+
+        if (!$client) {
+            $this->Flash->error(__d('documents', 'Please upload your tax certificate first.'));
+        } else {
+            $message = 'arhim-' . bin2hex(random_bytes(4));
+            try {
+                $response = $client->echo($message);
+                if ($response === $message) {
+                    $this->Flash->success(__d('documents', 'Certificate is accepted by the tax authority.'));
+                } else {
+                    Log::error('FURS echo mismatch: sent "' . $message . '", received "' . $response . '"', 'furs');
+                    $this->Flash->error(__d('documents', 'Unexpected echo response') . ': ' . $response);
+                }
+            } catch (Throwable $e) {
+                Log::error('FURS echo error: ' . $e->getMessage(), 'furs');
+                $this->Flash->error(__d('documents', 'Certificate check failed') . ': ' . $e->getMessage());
+            }
+        }
+
+        return $this->redirect(['action' => 'certificate']);
     }
 
     /**
