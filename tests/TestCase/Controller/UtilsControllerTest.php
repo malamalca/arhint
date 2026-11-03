@@ -89,6 +89,27 @@ class UtilsControllerTest extends TestCase
     }
 
     // -------------------------------------------------------------------------
+    // pdfSignImages
+    // -------------------------------------------------------------------------
+
+    /**
+     * Test pdfSignImages GET renders the editor page
+     *
+     * @return void
+     * @uses \App\Controller\UtilsController::pdfSignImages()
+     */
+    public function testPdfSignImagesGet(): void
+    {
+        $this->login(USER_ADMIN);
+        $this->get('/utils/pdf-sign-images');
+        $this->assertResponseCode(200);
+        $this->assertResponseContains('id="pdf-sign-images"');
+        $this->assertResponseContains('pdfSignImages.js');
+        $this->assertResponseContains('id="psi-sign"');
+        $this->assertResponseContains('data-signer="http://localhost:8082"');
+    }
+
+    // -------------------------------------------------------------------------
     // pdfMerge
     // -------------------------------------------------------------------------
 
@@ -284,48 +305,6 @@ class UtilsControllerTest extends TestCase
 
         if (file_exists(TMP . 'sample2p.zip')) {
             unlink(TMP . 'sample2p.zip');
-        }
-    }
-
-    // -------------------------------------------------------------------------
-    // pdfSignClient
-    // -------------------------------------------------------------------------
-
-    /**
-     * Test pdfSignClient with a non-existent file returns 400
-     *
-     * @return void
-     * @uses \App\Controller\UtilsController::pdfSignClient()
-     */
-    public function testPdfSignClientNotFound(): void
-    {
-        $this->login(USER_ADMIN);
-        $this->get('/utils/pdf-sign-client/nonexistent');
-        $this->assertResponseCode(400);
-    }
-
-    /**
-     * Test pdfSignClient with an existing sign-folder file returns 200
-     *
-     * @return void
-     * @uses \App\Controller\UtilsController::pdfSignClient()
-     */
-    public function testPdfSignClientFound(): void
-    {
-        $this->login(USER_ADMIN);
-        // Place a temporary PDF into the sign folder
-        $signDir = TMP . 'sign' . DS;
-        if (!is_dir($signDir)) {
-            mkdir($signDir, 0755, true);
-        }
-        $testName = 'testfile';
-        copy($this->resourcesPath . 'sample.pdf', $signDir . $testName . '.pdf');
-
-        $this->get('/utils/pdf-sign-client/' . $testName);
-        $this->assertResponseCode(200);
-
-        if (file_exists($signDir . $testName . '.pdf')) {
-            unlink($signDir . $testName . '.pdf');
         }
     }
 }

@@ -18,10 +18,10 @@
         'menu' => [
             'sign' => [
                 'title' => __('PDF Sign'),
-                'active' => $this->getRequest()->getParam('action') == 'pdfSign',
+                'active' => $this->getRequest()->getParam('action') == 'pdfSignImages',
                 'visible' => true,
                 'url' => [
-                    'action' => 'pdfSign',
+                    'action' => 'pdfSignImages',
                 ],
             ],
             'merge' => [

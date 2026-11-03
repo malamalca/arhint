@@ -74,7 +74,7 @@ use Cake\Routing\Router;
                             <?= $this->Html->link(__('Settings'), ['plugin' => false, 'controller' => 'Users', 'action' => 'properties']) ?>
                         </li>
                         <li class="<?= $isUtils ? 'active' : '' ?>">
-                            <?= $this->Html->link(__('Utils'), ['plugin' => false, 'controller' => 'Utils', 'action' => 'pdfSign']) ?>
+                            <?= $this->Html->link(__('Utils'), ['plugin' => false, 'controller' => 'Utils', 'action' => 'pdfSignImages']) ?>
                         </li>
                         <li><?= $this->Html->link(__('Logout'), ['plugin' => false, 'controller' => 'Users', 'action' => 'logout']) ?></li>
                     </ul>
