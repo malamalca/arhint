@@ -105,9 +105,38 @@ jQuery.fn.InvoiceItemEditor = function (pOptions) {
 
         var elem = $('input.invoices-item-descript', rowClone).get(0);
 
-        M.Autocomplete.init(elem, $this.InvoicesItemAutocomplete);
+        $this.initDescriptAutocomplete(elem);
 
         return false;
+    }
+
+    // Initializes the autocomplete on the description input and makes sure that
+    // the quantity field is always the next tab stop (Materialize autocomplete
+    // injects focusable <ul>/<li> elements right after the input).
+    this.initDescriptAutocomplete = function (elem) {
+        if (!elem) {
+            return;
+        }
+
+        var autocomplete = M.Autocomplete.init(elem, $this.InvoicesItemAutocomplete);
+
+        elem.addEventListener('keydown', function (e) {
+            if (e.key !== 'Tab' || e.shiftKey || e.ctrlKey || e.altKey || e.metaKey) {
+                return;
+            }
+
+            var qty = $('input.invoices-item-qty', $(elem).closest('tr')).get(0);
+            if (!qty) {
+                return;
+            }
+
+            e.preventDefault();
+            if (autocomplete && typeof autocomplete.close === 'function') {
+                autocomplete.close();
+            }
+            qty.focus();
+            qty.select();
+        });
     }
 
     this.onRemoveButtonClick = function () {
@@ -134,10 +163,10 @@ jQuery.fn.InvoiceItemEditor = function (pOptions) {
 
         // visible fields
         $('input.invoices-item-descript', row).val('');
-        $('input.invoices-item-qty', row).val('');
+        $('input.invoices-item-qty', row).val('0.00');
         $('input.invoices-item-unit', row).val('');
         $('input.invoices-item-price', row).val('');
-        $('input.invoices-item-discount', row).val('');
+        $('input.invoices-item-discount', row).val('0.00');
 
         // hide link image
         $('img.image-item-check', row).hide();
@@ -211,8 +240,9 @@ jQuery.fn.InvoiceItemEditor = function (pOptions) {
     };
 
 
-    var elem = $('input.invoices-item-descript', this).get(0);
-    M.Autocomplete.init(elem, $this.InvoicesItemAutocomplete);
+    $('input.invoices-item-descript', this).each(function () {
+        $this.initDescriptAutocomplete(this);
+    });
 
     $('input.invoices-item-qty', this).blur($this.onInputsChange);
     $('input.invoices-item-price', this).blur($this.onInputsChange);
