@@ -64,14 +64,29 @@ class ExpensesController extends AppController
         if ($this->getRequest()->is('ajax') || Configure::read('debug')) {
             $term = $this->getRequest()->getQuery('term');
             if (is_string($term) && $term != '') {
-                $expenses = $this->Authorization->applyScope($this->Expenses->find(), 'index')
-                    ->select()
-                    ->where([
-                        'OR' => [
-                            'Expenses.title LIKE' => '%' . $term . '%',
-                            'Invoices.no LIKE' => $term . '%',
-                        ],
-                    ])
+                $query = $this->Authorization->applyScope($this->Expenses->find(), 'index')
+                    ->select();
+
+                // payment reference (SI12 0000002026023, RF71 2348 231) is matched without
+                // spaces, dashes and dots, in its electronic form: type + model + content
+                $refTerm = strtoupper((string)preg_replace('/[\s\-.\/]+/', '', $term));
+                $refExpr = "UPPER(REPLACE(REPLACE(REPLACE(REPLACE(CONCAT(" .
+                    "COALESCE(Invoices.pmt_type, ''), COALESCE(Invoices.pmt_module, ''), " .
+                    "COALESCE(Invoices.pmt_ref, '')), ' ', ''), '-', ''), '.', ''), '/', ''))";
+
+                $or = [
+                    'Expenses.title LIKE' => '%' . $term . '%',
+                    'Invoices.no LIKE' => $term . '%',
+                ];
+                if ($refTerm !== '') {
+                    $or[] = $query->newExpr()->like(
+                        $query->newExpr($refExpr),
+                        '%' . addcslashes($refTerm, '%_\\') . '%'
+                    );
+                }
+
+                $expenses = $query
+                    ->where(['OR' => $or])
                     ->orderBy(['Expenses.dat_happened DESC'])
                     ->limit(20)
                     ->contain(['Invoices'])
