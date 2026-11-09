@@ -42,7 +42,12 @@ class MakeKnowledgeBaseColumnsUtf8mb4 extends BaseMigration
             'id' => ['NOT NULL', $project],
         ];
         foreach ($columns as $column => [$null, $collation]) {
-            if ($collation === null || $collation === 'utf8mb4_unicode_ci') {
+            if ($collation === null) {
+                continue;
+            }
+            // The column is utf8mb4, so the collation has to belong to that character set.
+            $collation = (string)preg_replace('/^utf8(mb3)?_/', 'utf8mb4_', $collation);
+            if ($collation === 'utf8mb4_unicode_ci') {
                 continue;
             }
             $this->execute(sprintf(

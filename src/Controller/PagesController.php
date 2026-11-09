@@ -182,7 +182,7 @@ class PagesController extends AppController
                     'url' => [
                         'plugin' => false,
                         'controller' => 'Utils',
-                        'action' => 'pdfSign',
+                        'action' => 'pdfSignImages',
                     ],
                 ],
                 'merge' => [
