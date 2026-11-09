@@ -214,19 +214,28 @@ echo $this->Lil->form($payment_edit, 'Expenses.Payments.edit');
 
     $(document).ready(function() {
 
+        // set right after an entry was picked, so the search the picking triggers
+        // does not open the menu again
+        let justSelected = false;
+
         M.Autocomplete.init(
             $("#expense-descript").get(0),
             {
                 allowUnsafeHTML: true,
                 onSearch: (text, autocomplete) => {
-                    $.get("<?= Router::url(['controller' => 'Expenses', 'action' => 'autocomplete', '_ext' => 'json'], true); ?>" + "?term=" + text).done(function(data) {
-                        if (data.length > 1 || (data.length == 1 && text != data[0].value)) {
+                    if (justSelected) {
+                        return;
+                    }
+                    $.get("<?= Router::url(['controller' => 'Expenses', 'action' => 'autocomplete', '_ext' => 'json'], true); ?>", {term: text}).done(function(data) {
+                        if (!justSelected && data.length > 0) {
                             autocomplete.setMenuItems(data);
                         }
                     });
                 },
                 onAutocomplete: (entries) => {
                     if (entries.length == 1) {
+                        justSelected = true;
+                        setTimeout(() => { justSelected = false; }, 500);
                         $("#expense-descript").val("");
                         addExpenseRow(entries[0]);
                     }
