@@ -245,7 +245,22 @@ if (!empty($aiAnalysis)) {
         3 => __d('documents', 'Low'),
     ];
 
-    $aiHtml = '<div id="document-ai-analysis">';
+    $aiHtml = '<style>'
+        . '#document-ai-analysis > summary{list-style:none;cursor:pointer;display:flex;align-items:center;'
+        . 'justify-content:space-between;padding:8px 12px;border-radius:4px;background:rgba(0,0,0,.05);'
+        . 'font-weight:500;user-select:none}'
+        . '#document-ai-analysis > summary::-webkit-details-marker{display:none}'
+        . '#document-ai-analysis > summary:hover{background:rgba(0,0,0,.09)}'
+        . '#document-ai-analysis > summary .material-icons{transition:transform .2s}'
+        . '#document-ai-analysis[open] > summary .material-icons{transform:rotate(180deg)}'
+        . '#document-ai-analysis .ai-analysis-body{padding:8px 12px 0}'
+        . '</style>';
+    $aiHtml .= '<details id="document-ai-analysis">';
+    $aiHtml .= sprintf(
+        '<summary><span>%s</span><i class="material-icons">expand_more</i></summary>',
+        h(__d('documents', 'AI analysis')),
+    );
+    $aiHtml .= '<div class="ai-analysis-body">';
     $aiHtml .= sprintf(
         '<p class="light">%s%s</p>',
         h(__d('documents', 'Analysed on {0}', $aiAnalysis->created?->i18nFormat('dd.MM.yyyy HH:mm') ?? '')),
@@ -260,9 +275,8 @@ if (!empty($aiAnalysis)) {
             $aiHtml .= sprintf('<h4>%s</h4>%s', h($label), $list);
         }
     }
-    $aiHtml .= '</div>';
+    $aiHtml .= '</div></details>';
 
-    $invoiceView['panels']['ai_title'] = sprintf('<h3>%s</h3>', __d('documents', 'AI analysis'));
     $invoiceView['panels']['ai'] = $aiHtml;
 }
 
