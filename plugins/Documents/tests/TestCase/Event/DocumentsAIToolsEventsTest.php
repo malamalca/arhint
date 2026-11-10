@@ -41,6 +41,7 @@ class DocumentsAIToolsEventsTest extends TestCase
 
     /** Fixture IDs */
     private const COUNTER_INVOICES_RECEIVED = '1d53bc5b-de2d-4e85-b13b-81b39a97fc88';
+    // Belongs to another company: tools must not create records in it.
     private const COUNTER_INVOICES_ISSUED = '1d53bc5b-de2d-4e85-b13b-81b39a97fc89';
     private const COUNTER_DOCUMENTS = '1d53bc5b-de2d-4e85-b13b-81b39a97fc90';
     private const COUNTER_TRAVEL_ORDERS = '1d53bc5b-de2d-4e85-b13b-81b39a97fc91';
@@ -92,13 +93,13 @@ class DocumentsAIToolsEventsTest extends TestCase
     // aiAssistantTools — tool registration
     // -------------------------------------------------------------------------
 
-    public function testAiAssistantToolsRegisters20Tools(): void
+    public function testAiAssistantToolsRegisters21Tools(): void
     {
         $event = new Event('App.AIAssistant.tools');
         $toolsList = new ArrayObject();
         $this->listener->aiAssistantTools($event, $toolsList);
 
-        $this->assertCount(20, $toolsList);
+        $this->assertCount(21, $toolsList);
 
         $names = array_map(fn($t) => $t->name, iterator_to_array($toolsList));
         $this->assertContains('Documents.navigate_to_document', $names);
@@ -114,6 +115,7 @@ class DocumentsAIToolsEventsTest extends TestCase
         $this->assertContains('Documents.search_documents', $names);
         $this->assertContains('Documents.get_document', $names);
         $this->assertContains('Documents.update_document', $names);
+        $this->assertContains('Documents.create_document', $names);
         $this->assertContains('Documents.read_counter_documents', $names);
         $this->assertContains('Documents.search_travel_orders', $names);
         $this->assertContains('Documents.get_travel_order', $names);
@@ -236,10 +238,87 @@ class DocumentsAIToolsEventsTest extends TestCase
         $this->assertEquals('Test Invoice', $result['title']);
     }
 
+    public function testCreateInvoiceRejectsDocumentsCounter(): void
+    {
+        $invoices = TableRegistry::getTableLocator()->get('Documents.Invoices');
+        $before = $invoices->find()->count();
+
+        $args = ['counter_id' => self::COUNTER_DOCUMENTS, 'title' => 'Offer'];
+        $event = $this->makeEvent('Documents.create_invoice', $args);
+        $this->listener->aiAssistantExecuteTool($event, 'Documents.create_invoice', $args);
+
+        $result = $event->getResult();
+        $this->assertIsArray($result);
+        $this->assertArrayHasKey('error', $result);
+        $this->assertStringContainsString('Documents.create_document', $result['error']);
+        $this->assertSame($before, $invoices->find()->count());
+    }
+
+    // -------------------------------------------------------------------------
+    // create_document
+    // -------------------------------------------------------------------------
+
+    public function testCreateDocumentCopiesSourceAndReplacesReceiver(): void
+    {
+        $args = [
+            'counter_id' => self::COUNTER_DOCUMENTS,
+            'copy_from_id' => self::DOCUMENT_ID,
+            'title' => 'Offer for a house',
+            'descript' => '<p>Location: parcel 743</p>',
+            'receiver' => ['title' => 'Matej Hlebec', 'email' => 'investor@example.com'],
+        ];
+        $event = $this->makeEvent('Documents.create_document', $args);
+        $this->listener->aiAssistantExecuteTool($event, 'Documents.create_document', $args);
+
+        $result = $event->getResult();
+        $this->assertIsArray($result);
+        $this->assertArrayNotHasKey('error', $result, json_encode($result) ?: '');
+        $this->assertSame('DOC-02', $result['no']);
+
+        $document = TableRegistry::getTableLocator()->get('Documents.Documents')
+            ->get($result['id'], contain: ['Issuers', 'Receivers']);
+        $this->assertSame(self::COUNTER_DOCUMENTS, $document->counter_id);
+        $this->assertSame('Offer for a house', $document->title);
+        $this->assertSame('<p>Location: parcel 743</p>', $document->descript);
+        $this->assertSame('Matej Hlebec', $document->receiver->title);
+        $this->assertSame('investor@example.com', $document->receiver->email);
+        $this->assertNotNull($document->issuer);
+    }
+
+    public function testCreateDocumentRejectsInvoicesCounter(): void
+    {
+        $documents = TableRegistry::getTableLocator()->get('Documents.Documents');
+        $before = $documents->find()->count();
+
+        $args = ['counter_id' => self::COUNTER_INVOICES_RECEIVED, 'title' => 'Invoice'];
+        $event = $this->makeEvent('Documents.create_document', $args);
+        $this->listener->aiAssistantExecuteTool($event, 'Documents.create_document', $args);
+
+        $result = $event->getResult();
+        $this->assertIsArray($result);
+        $this->assertStringContainsString('Documents.create_invoice', $result['error']);
+        $this->assertSame($before, $documents->find()->count());
+    }
+
+    public function testCreateInvoiceRejectsCounterOfAnotherCompany(): void
+    {
+        $invoices = TableRegistry::getTableLocator()->get('Documents.Invoices');
+        $before = $invoices->find()->count();
+
+        $args = ['counter_id' => self::COUNTER_INVOICES_ISSUED, 'title' => 'Foreign'];
+        $event = $this->makeEvent('Documents.create_invoice', $args);
+        $this->listener->aiAssistantExecuteTool($event, 'Documents.create_invoice', $args);
+
+        $result = $event->getResult();
+        $this->assertIsArray($result);
+        $this->assertArrayHasKey('error', $result);
+        $this->assertSame($before, $invoices->find()->count());
+    }
+
     public function testCreateInvoiceWithItems(): void
     {
         $args = [
-            'counter_id' => self::COUNTER_INVOICES_ISSUED,
+            'counter_id' => self::COUNTER_INVOICES_RECEIVED,
             'title' => 'Issued Invoice With Items',
             'dat_issue' => '2025-01-15',
             'items' => [

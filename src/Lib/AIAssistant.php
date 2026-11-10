@@ -44,9 +44,20 @@ class AIAssistant
         . 'whatever language the question, documents or logs are written in. '
         . 'Keep tool names, argument names, JSON keys and fixed values exactly as specified.';
 
+    /**
+     * Keeps the model from reporting a save that did not happen: a tool may fail or refuse the request.
+     */
+    public const TOOL_RESULT_RULE = 'Say that something was saved, created, changed or sent only when a tool '
+        . 'result in this conversation confirms it, and quote the number or id from that result. '
+        . 'Never invent document numbers. When a tool returns an error, tell the user it was not done and why.';
+
     // Fallback endpoint for the local provider when the user has no configured 'url'.
     private const DEFAULT_LOCAL_URL = 'http://192.168.68.58:8080/v1/chat/completions';
 
+    /**
+     * Prompt for providers without native tool calls. Arguments: 1 date and time, 2 user ID, 3 tools.
+     * The parts that change between requests come last, so the server can reuse the cached prompt prefix.
+     */
     public const SYSTEM_PROMPT = "You are an assistant for a business management system.\n" .
         "Proceed with great speed and accuracy. Do not show UUIDs in your responses.\n" .
         "\n" .
@@ -57,20 +68,31 @@ class AIAssistant
         "\"arguments\": { ... } \n" .
         "}\n" .
         "\n" .
-
-        "Available data:\n" .
-        "- Current date and time: %s\n" .
-        "- Current user ID: %s\n" .
-        "\n" .
-
-        "Available tools:\n %s\n" .
-
         "When the user asks for help, determine which tool is most appropriate and provide a response.\n" .
         "Always respond with valid JSON when calling a tool. Do not include explanations.\n" .
         "If no tool is needed, answer normally.\n" .
         "\n" .
         'Language: always write your replies to the user in Slovenian (slovenščina), whatever language the ' .
-        "question is written in. Tool names, argument names and the JSON structure must stay unchanged.\n";
+        "question is written in. Tool names, argument names and the JSON structure must stay unchanged.\n" .
+        "\n" .
+        "Available tools:\n %3\$s\n" .
+        "\n" .
+        "Available data:\n" .
+        "- Current user ID: %2\$s\n" .
+        "- Current date and time: %1\$s\n";
+
+    /**
+     * Name of the meta tool through which the model loads the parameters of tools from the catalog.
+     */
+    public const LOAD_TOOLS = 'load_tools';
+
+    /**
+     * Tools loaded in a conversation that stay offered in its following turns, most recently used last.
+     */
+    private const MAX_LOADED_TOOLS = 24;
+
+    // Length of the summary of one tool in the catalog; longer ones are cut, so set AITool::$summary.
+    public const MAX_CATALOG_SUMMARY_CHARS = 90;
 
     /**
      * List of tools available to the AI assistant. This can be populated by listening to the 'AIAssistant.tools' event.
@@ -150,6 +172,13 @@ class AIAssistant
      * @var string|null
      */
     private ?string $promptAddendum = null;
+
+    /**
+     * Names of the tools loaded in this conversation (see load_tools), most recently used last.
+     *
+     * @var array<int, string>
+     */
+    private array $loadedToolNames = [];
 
     /**
      * Constructor to initialize the AIAssistant with available tools.
@@ -236,6 +265,236 @@ class AIAssistant
     }
 
     /**
+     * Execute a tool call of the model. In catalog mode load_tools is handled here, and a tool from the
+     * catalog whose parameters the model has not loaded yet is loaded instead of run, so the model calls it
+     * again with the right arguments.
+     *
+     * @param string $tool Tool name.
+     * @param array<mixed> $arguments Arguments.
+     * @param array<int, \App\Lib\AITool> $activeTools Tools offered to the model; loaded tools are added.
+     * @param bool $catalogMode Whether the model works with the tool catalog.
+     * @return mixed Result of the tool.
+     */
+    private function executeToolCall(string $tool, array $arguments, array &$activeTools, bool $catalogMode): mixed
+    {
+        if (!$catalogMode) {
+            return $this->runTool($tool, $arguments);
+        }
+
+        if ($tool === self::LOAD_TOOLS) {
+            $names = $arguments['names'] ?? [];
+            if (is_string($names)) {
+                $names = preg_split('/[\s,]+/', $names, -1, PREG_SPLIT_NO_EMPTY) ?: [];
+            }
+
+            return $this->loadTools(array_map('strval', (array)$names), $activeTools);
+        }
+
+        $activeNames = array_map(fn(AITool $t): string => $t->name, $activeTools);
+        if (in_array($tool, $activeNames, true)) {
+            $this->rememberLoadedTools([$tool]);
+
+            return $this->runTool($tool, $arguments);
+        }
+
+        $definition = $this->findTool($tool);
+        if ($definition === null) {
+            return ['error' => "Unknown tool $tool. Use only tool names from the tool catalog. Nothing was done."];
+        }
+
+        $this->loadTools([$tool], $activeTools);
+
+        return ['error' => "Tool $tool was not loaded, so it was not run and nothing was done. "
+            . 'It is loaded now; call it again with these parameters: ' . $this->formatPromptTool($definition)];
+    }
+
+    /**
+     * Add the named catalog tools to the tools offered to the model.
+     *
+     * @param array<int, string> $names Tool names.
+     * @param array<int, \App\Lib\AITool> $activeTools Tools offered to the model.
+     * @return array<string, mixed> Result for the model.
+     */
+    private function loadTools(array $names, array &$activeTools): array
+    {
+        $loaded = [];
+        $unknown = [];
+        foreach (array_unique($names) as $name) {
+            $name = str_replace('__', '.', trim($name));
+            $definition = $this->findTool($name);
+            if ($definition === null) {
+                $unknown[] = $name;
+                continue;
+            }
+            if (!in_array($definition, $activeTools, true)) {
+                $activeTools[] = $definition;
+            }
+            $loaded[] = $name;
+        }
+        $this->rememberLoadedTools($loaded);
+
+        $result = ['loaded' => $loaded];
+        if ($unknown !== []) {
+            $result['unknown'] = $unknown;
+            $result['note'] = 'Unknown names are not in the tool catalog; such tools do not exist.';
+        }
+        if ($loaded !== []) {
+            $result['next'] = 'The loaded tools and their parameters are available now; call them.';
+        }
+
+        return $result;
+    }
+
+    /**
+     * Whether the model gets the catalog of all tools and loads their parameters on demand.
+     *
+     * Used when there are more tools than fit in one request, unless the caller set its own system prompt
+     * or the user configuration turns it off (ai_assistant.tool_catalog = false), which falls back to
+     * routing requests to modules.
+     *
+     * @return bool
+     */
+    private function useToolCatalog(): bool
+    {
+        if ($this->customSystemPrompt !== null) {
+            return false;
+        }
+        if ($this->aiConfig !== null && isset($this->aiConfig->tool_catalog) && !$this->aiConfig->tool_catalog) {
+            return false;
+        }
+        $otherTools = array_filter($this->tools, fn(AITool $t): bool => !str_starts_with($t->name, 'App.'));
+
+        return count($otherTools) > self::MAX_TOOLS_PER_REQUEST;
+    }
+
+    /**
+     * Tools offered at the start of a request in catalog mode: the load_tools meta tool, the App tools and
+     * the tools loaded or used in the conversation so far.
+     *
+     * @return array<int, \App\Lib\AITool>
+     */
+    private function initialCatalogTools(): array
+    {
+        $this->rememberLoadedTools($this->toolsUsedInHistory());
+
+        $selected = [new AITool(
+            name: self::LOAD_TOOLS,
+            arguments: [
+                'names' => [
+                    'type' => 'array',
+                    'description' => 'Exact tool names from the tool catalog.',
+                ],
+            ],
+            description: 'Loads the parameters of tools from the tool catalog, so they can be called. '
+                . 'Load every tool you need, in one call.',
+        )];
+        foreach ($this->tools as $tool) {
+            if (str_starts_with($tool->name, 'App.') || in_array($tool->name, $this->loadedToolNames, true)) {
+                $selected[] = $tool;
+            }
+        }
+
+        return $selected;
+    }
+
+    /**
+     * Names of the tools called in the conversation history.
+     *
+     * @return array<int, string>
+     */
+    private function toolsUsedInHistory(): array
+    {
+        $names = [];
+        foreach ($this->conversationHistory as $message) {
+            $role = (string)($message['role'] ?? '');
+            $content = (string)($message['content'] ?? '');
+            if ($role === 'assistant' && !empty($message['tool_calls']) && is_array($message['tool_calls'])) {
+                foreach ($message['tool_calls'] as $toolCall) {
+                    $name = str_replace('__', '.', (string)($toolCall['function']['name'] ?? ''));
+                    if ($name === self::LOAD_TOOLS) {
+                        // Tools loaded but not called yet, e.g. before the user confirmed the proposal.
+                        $arguments = json_decode((string)($toolCall['function']['arguments'] ?? ''), true);
+                        foreach ((array)($arguments['names'] ?? []) as $loadedName) {
+                            $names[] = str_replace('__', '.', (string)$loadedName);
+                        }
+                    }
+                    $names[] = $name;
+                }
+            } elseif ($role === 'user' && preg_match('/^Tool result for ([A-Za-z0-9_.-]+)/', $content, $m) === 1) {
+                $names[] = rtrim($m[1], ':.');
+            }
+        }
+
+        return array_values(array_filter(
+            array_unique($names),
+            fn(string $name): bool => $this->findTool($name) !== null,
+        ));
+    }
+
+    /**
+     * Mark tools as loaded in this conversation, most recent last, keeping at most MAX_LOADED_TOOLS.
+     *
+     * @param array<int, string> $names Tool names.
+     * @return void
+     */
+    private function rememberLoadedTools(array $names): void
+    {
+        foreach ($names as $name) {
+            if ($this->findTool($name) === null || str_starts_with($name, 'App.')) {
+                continue;
+            }
+            $this->loadedToolNames = array_values(array_diff($this->loadedToolNames, [$name]));
+            $this->loadedToolNames[] = $name;
+        }
+        $this->loadedToolNames = array_slice($this->loadedToolNames, -self::MAX_LOADED_TOOLS);
+    }
+
+    /**
+     * Find a tool by name.
+     *
+     * @param string $name Tool name.
+     * @return \App\Lib\AITool|null
+     */
+    private function findTool(string $name): ?AITool
+    {
+        foreach ($this->tools as $tool) {
+            if ($tool->name === $name) {
+                return $tool;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Catalog of all tools: one line with the name and the first sentence of the description per tool.
+     * It is the same for every request, so it belongs to the cacheable start of the prompt.
+     *
+     * @return string
+     */
+    private function buildToolCatalog(): string
+    {
+        $lines = [];
+        foreach ($this->tools as $tool) {
+            $summary = $tool->summary ?? '';
+            if ($summary === '') {
+                // First sentence; "e.g. the" does not end it, a capital letter after the period does.
+                $description = trim((string)preg_replace('/\s+/', ' ', $tool->description));
+                $summary = preg_match('/^(.+?[.!?])(?=\s+[\p{Lu}"(]|$)/u', $description, $m) === 1
+                    ? $m[1]
+                    : $description;
+            }
+            $lines[] = '- ' . $tool->name . ': ' . $this->trimText($summary, self::MAX_CATALOG_SUMMARY_CHARS);
+        }
+
+        return 'Tool catalog. Only these tools exist. To use a tool that is not loaded yet, first call '
+            . self::LOAD_TOOLS . ' with the names of all tools you need; their parameters are then available '
+            . 'and stay available for the rest of the conversation. If no tool fits a task, tell the user '
+            . 'it cannot be done instead of using an unrelated tool.' . "\n"
+            . implode("\n", $lines);
+    }
+
+    /**
      * Returns true when native tool calling should be used for the current AI config.
      * OpenAI enables native tool calls by default; other providers can enable it with
      * an explicit ai_assistant.native_tool_calls configuration property.
@@ -291,6 +550,28 @@ class AIAssistant
     }
 
     /**
+     * Names of the tools loaded in this conversation, to keep them offered in its next turn.
+     *
+     * @return array<int, string>
+     */
+    public function getLoadedTools(): array
+    {
+        return $this->loadedToolNames;
+    }
+
+    /**
+     * Restores the tools loaded in earlier turns of the conversation (e.g. from session).
+     *
+     * @param array<int, mixed> $names Tool names.
+     * @return void
+     */
+    public function setLoadedTools(array $names): void
+    {
+        $this->loadedToolNames = [];
+        $this->rememberLoadedTools(array_map('strval', array_filter($names, 'is_string')));
+    }
+
+    /**
      * Sets a custom system prompt to override the default SYSTEM_PROMPT.
      *
      * @param string $customSystemPrompt The custom system prompt to use.
@@ -339,7 +620,10 @@ class AIAssistant
         // Select tools once before the loop — calling detectModulesViaAI() on every
         // iteration wastes API calls, tokens, and time (the routing prompt is stateless
         // and always returns the same result for a given user input).
-        $activeTools = $this->selectToolsForRequest($userInput);
+        // With many tools the model gets a catalog of all of them and loads the parameters of the ones it
+        // needs (load_tools); otherwise a router picks the modules and all their tools are sent.
+        $catalogMode = $this->useToolCatalog();
+        $activeTools = $catalogMode ? $this->initialCatalogTools() : $this->selectToolsForRequest($userInput);
 
         Log::debug(
             'AI selected tools: ' . implode(', ', array_map(fn($t) => $t->name, $activeTools)),
@@ -377,17 +661,24 @@ class AIAssistant
                 if ($this->customSystemPrompt !== null) {
                     $systemContent = $this->customSystemPrompt;
                 } else {
+                    // Fixed text and the catalog first, so the server can reuse the cached prompt prefix.
                     $systemContent = 'You are an assistant for a business management system. '
                         . 'Proceed with great speed and accuracy. Do not show UUIDs in your responses. '
-                        . 'Current date and time: ' . date('Y-m-d H:i:s') . '. '
-                        . 'Current user ID: ' . (string)($this->currentUser?->get('id') ?? '') . '. '
-                        . self::LANGUAGE_RULE;
+                        . self::LANGUAGE_RULE . ' '
+                        . self::TOOL_RESULT_RULE;
+                    if ($catalogMode) {
+                        $systemContent .= "\n\n" . $this->buildToolCatalog();
+                    }
                 }
                 if ($this->promptAddendum !== null) {
                     $systemContent .= "\n\n" . $this->promptAddendum;
                 }
                 if ($summary !== null && $summary !== '') {
                     $systemContent .= "\n\nConversation context: " . $summary;
+                }
+                if ($this->customSystemPrompt === null) {
+                    $systemContent .= "\n\nCurrent user ID: " . (string)($this->currentUser?->get('id') ?? '')
+                        . '. Current date and time: ' . date('Y-m-d H:i') . '.';
                 }
                 $data = [
                     'messages' => array_merge(
@@ -435,15 +726,19 @@ class AIAssistant
                 if ($this->customSystemPrompt !== null) {
                     $systemPrompt = $this->customSystemPrompt;
                 } else {
-                    $promptTools = array_map(
+                    $promptTools = implode("\n", array_map(
                         fn($tool) => $this->formatPromptTool($tool),
                         $activeTools,
-                    );
-                    $systemPrompt = sprintf(
+                    ));
+                    if ($catalogMode) {
+                        $promptTools = $this->buildToolCatalog() . "\n\nLoaded tools (with parameters):\n"
+                            . $promptTools;
+                    }
+                    $systemPrompt = self::TOOL_RESULT_RULE . "\n" . sprintf(
                         self::SYSTEM_PROMPT,
-                        date('Y-m-d H:i:s'),
+                        date('Y-m-d H:i'),
                         (string)($this->currentUser?->get('id') ?? ''),
-                        implode("\n", $promptTools),
+                        $promptTools,
                     );
                 }
                 if ($this->promptAddendum !== null) {
@@ -505,7 +800,7 @@ class AIAssistant
 
                 foreach ($message['tool_calls'] as $toolCall) {
                     $safeName = $toolCall['function']['name'];
-                    $tool = $toolNameMap[$safeName] ?? $safeName;
+                    $tool = $toolNameMap[$safeName] ?? str_replace('__', '.', $safeName);
                     $decodedArgs = json_decode($toolCall['function']['arguments'] ?? '[]', true);
                     $arguments = is_array($decodedArgs) ? $decodedArgs : [];
 
@@ -519,7 +814,7 @@ class AIAssistant
                     );
 
                     try {
-                        $result = $this->runTool((string)$tool, (array)$arguments);
+                        $result = $this->executeToolCall((string)$tool, (array)$arguments, $activeTools, $catalogMode);
                         if (is_array($result) && isset($result['redirect_url'])) {
                             $this->redirectUrl = $result['redirect_url'];
                         }
@@ -601,7 +896,7 @@ class AIAssistant
                     );
 
                     try {
-                        $result = $this->runTool((string)$tool, (array)$arguments);
+                        $result = $this->executeToolCall((string)$tool, (array)$arguments, $activeTools, $catalogMode);
                         if (is_array($result) && isset($result['redirect_url'])) {
                             $this->redirectUrl = $result['redirect_url'];
                         }
@@ -979,7 +1274,19 @@ class AIAssistant
         // Exclude the last entry (the current user input already appended to history),
         // then take up to the 3 most recent prior turns. Slicing in two steps keeps the
         // current input out even when the history is shorter than 4 messages.
-        $priorMessages = array_slice(array_slice($historyForContext, 0, -1), -3);
+        $earlierMessages = array_slice($historyForContext, 0, -1);
+        $priorMessages = array_slice($earlierMessages, -3);
+        // A confirmation like "yes" follows tool results and a preview, which crowd the original request out
+        // of the last turns. Keep the latest real user request in the context, so its modules stay routed.
+        $hasUserRequest = array_filter($priorMessages, fn(array $msg): bool => $this->isUserRequest($msg)) !== [];
+        if (!$hasUserRequest) {
+            for ($index = count($earlierMessages) - count($priorMessages) - 1; $index >= 0; $index--) {
+                if ($this->isUserRequest($earlierMessages[$index])) {
+                    array_unshift($priorMessages, $earlierMessages[$index]);
+                    break;
+                }
+            }
+        }
         $priorContext = !empty($priorMessages) ? $this->summarizeMessages($priorMessages) : '';
 
         $detectedModules = $this->detectModulesViaAI(
@@ -1042,6 +1349,18 @@ class AIAssistant
     }
 
     /**
+     * Whether a history message is a request typed by the user, not a tool result passed as a user message.
+     *
+     * @param array<string, mixed> $message History message.
+     * @return bool
+     */
+    private function isUserRequest(array $message): bool
+    {
+        return ($message['role'] ?? '') === 'user'
+            && !str_starts_with((string)($message['content'] ?? ''), 'Tool result for ');
+    }
+
+    /**
      * Ask the AI to identify which module(s) a request targets.
      *
      * Sends a lightweight stateless prompt (no conversation history) listing the
@@ -1076,6 +1395,10 @@ class AIAssistant
             'return that module.' . "\n"
             . '- If the current request is ambiguous (e.g. "delete #3", "show details") and prior context exists, ' .
             'use the prior context to infer the module.' . "\n"
+            . '- A request often needs several modules: return every module it needs, e.g. preparing a '
+            . 'document for a new client or investor needs ["Documents", "Crm"].' . "\n"
+            . '- For a short confirmation (e.g. "yes", "da", "ok"), return the modules needed to carry out '
+            . 'what was proposed or requested in the prior context.' . "\n"
             . '- If nothing can be determined, return [].' . "\n"
             . 'Respond with ONLY a JSON array, e.g. ["Projects"] or ["Crm"] or [].' . "\n\n";
 

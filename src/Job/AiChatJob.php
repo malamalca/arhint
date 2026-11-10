@@ -62,6 +62,7 @@ class AiChatJob implements JobInterface
         $userMessage = (string)$message->getArgument('message', '');
         $history = (array)$message->getArgument('history', []);
         $jobId = (string)$message->getArgument('job_id', '');
+        $loadedTools = (array)$message->getArgument('loaded_tools', []);
 
         Log::debug(
             'AiChatJob starting',
@@ -111,6 +112,7 @@ class AiChatJob implements JobInterface
 
             $assistant = new AIAssistant($user);
             $assistant->setHistory($history);
+            $assistant->setLoadedTools($loadedTools);
 
             $response = $assistant->getResponse($userMessage);
 
@@ -132,6 +134,7 @@ class AiChatJob implements JobInterface
                 'response' => $responseHtml,
                 'redirect' => $assistant->getRedirectUrl(),
                 'history' => $assistant->getHistory(),
+                'loaded_tools' => $assistant->getLoadedTools(),
             ]));
         } catch (Throwable $e) {
             Log::error(

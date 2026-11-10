@@ -87,6 +87,8 @@ class AiControllerTest extends TestCase
         );
         // Job must have been pushed onto the queue.
         $this->assertJobQueued('App\Job\AiChatJob');
+        // The message is kept for restoring the chat window.
+        $this->assertSession([['role' => 'user', 'text' => 'What is 2+2?']], 'AIAssistant.transcript');
     }
 
     // -------------------------------------------------------------------------
@@ -148,6 +150,7 @@ class AiControllerTest extends TestCase
         $this->assertSame('done', $body['status']);
         $this->assertSame('<p>Four.</p>', $body['response']);
         $this->assertFileDoesNotExist($resultFile);
+        $this->assertSession([['role' => 'assistant', 'text' => '<p>Four.</p>']], 'AIAssistant.transcript');
     }
 
     // -------------------------------------------------------------------------
@@ -191,7 +194,10 @@ class AiControllerTest extends TestCase
     public function testClearHistoryWipesSession(): void
     {
         $this->login(USER_ADMIN);
-        $this->session(['AIAssistant' => ['history' => [['role' => 'user', 'content' => 'hi']]]]);
+        $this->session(['AIAssistant' => [
+            'history' => [['role' => 'user', 'content' => 'hi']],
+            'transcript' => [['role' => 'user', 'text' => 'hi']],
+        ]]);
 
         $this->post('/ai/clear-history');
 
@@ -199,24 +205,30 @@ class AiControllerTest extends TestCase
         $body = json_decode((string)$this->_response?->getBody(), true);
         $this->assertTrue($body['cleared']);
         $this->assertSession(null, 'AIAssistant.history');
+        $this->assertSession(null, 'AIAssistant.transcript');
     }
 
     // -------------------------------------------------------------------------
-    // GET / (dashboard) starts a new conversation
+    // GET / (dashboard) keeps the conversation, so it can be continued
     // -------------------------------------------------------------------------
 
-    public function testDashboardStartsNewConversation(): void
+    public function testDashboardKeepsConversation(): void
     {
         $this->login(USER_ADMIN);
+        $history = [['role' => 'user', 'content' => 'hi']];
+        $transcript = [['role' => 'user', 'text' => 'hi']];
+        $jobId = '3e7c2fba-1c29-4e5b-9bb2-000000000001';
         $this->session(['AIAssistant' => [
-            'history' => [['role' => 'user', 'content' => 'hi']],
-            'pendingJobId' => '3e7c2fba-1c29-4e5b-9bb2-000000000001',
+            'history' => $history,
+            'transcript' => $transcript,
+            'pendingJobId' => $jobId,
         ]]);
 
         $this->get('/');
 
         $this->assertResponseOk();
-        $this->assertSession(null, 'AIAssistant.history');
-        $this->assertSession(null, 'AIAssistant.pendingJobId');
+        $this->assertSession($history, 'AIAssistant.history');
+        $this->assertSession($transcript, 'AIAssistant.transcript');
+        $this->assertSession($jobId, 'AIAssistant.pendingJobId');
     }
 }

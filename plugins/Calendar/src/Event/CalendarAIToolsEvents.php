@@ -90,6 +90,7 @@ class CalendarAIToolsEvents implements EventListenerInterface
             description: 'Fetches full details of a single calendar event including title, date range, '
                 . 'location, body, and reminder settings. Includes a view_url field; '
                 . 'always render title as a markdown link: [title](view_url).',
+            summary: 'Full calendar event.',
         ));
 
         $toolsList->append(new AITool(

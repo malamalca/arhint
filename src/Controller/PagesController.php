@@ -122,11 +122,11 @@ class PagesController extends AppController
     {
         $this->Authorization->skipAuthorization();
 
-        // The chat window is rendered empty on every page load, so the conversation of an earlier
-        // page view must not stay in the session and leak into the new conversation.
+        // The conversation stays in the session, so returning to the dashboard continues it.
+        // The chat window is restored from the transcript; "Clear" starts a new conversation.
         $session = $this->request->getSession();
-        $session->delete('AIAssistant.history');
-        $session->delete('AIAssistant.pendingJobId');
+        $aiTranscript = (array)($session->read('AIAssistant.transcript') ?? []);
+        $aiPendingJobId = (string)$session->read('AIAssistant.pendingJobId');
 
         $aiPanel = null;
         $aiConfig = $this->hasCurrentUser() ? $this->getCurrentUser()->getProperty('ai_assistant') : null;
@@ -141,6 +141,12 @@ class PagesController extends AppController
                 $FormHelper = new FormHelper(new View());
                 $formAi =
                     '<div id="AIAssistantMessages" class="ai-assistant-messages"></div>' .
+                    '<script type="application/json" id="AIAssistantTranscript">' .
+                    json_encode(
+                        $aiTranscript,
+                        JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_INVALID_UTF8_SUBSTITUTE,
+                    ) .
+                    '</script>' .
                     $FormHelper->create(
                         null,
                         ['url' => ['controller' => 'Ai', 'action' => 'chat'], 'id' => 'AIAssistantForm'],
@@ -164,6 +170,7 @@ class PagesController extends AppController
                     'data-chat-status-url' => Router::url(['controller' => 'Ai', 'action' => 'chatStatus']),
                     'data-clear-url' => Router::url(['controller' => 'Ai', 'action' => 'clearHistory']),
                     'data-worker-status-url' => Router::url(['controller' => 'Ai', 'action' => 'workerStatus']),
+                    'data-pending-job-id' => $aiPendingJobId,
                 ],
                 'lines' => [
                     '<h5>' . __('AI Assistant') . '</h5>',

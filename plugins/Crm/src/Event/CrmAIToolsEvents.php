@@ -87,6 +87,7 @@ class CrmAIToolsEvents implements EventListenerInterface
             ],
             description: 'Fetches full details of a single CRM contact by ID, including all emails, '
                 . 'phones, addresses, and bank accounts.',
+            summary: 'Full CRM contact: emails, phones, addresses, bank accounts.',
         ));
 
         $toolsList->append(new AITool(
@@ -157,6 +158,7 @@ class CrmAIToolsEvents implements EventListenerInterface
             ],
             description: 'Creates a new CRM contact (person or company) with optional primary email, '
                 . 'phone, and address.',
+            summary: 'Creates a CRM contact (person or company).',
         ));
 
         $toolsList->append(new AITool(

@@ -130,12 +130,28 @@ The central orchestrator class. Responsible for:
 **Tool Selection Algorithm:**
 
 1. **App tools** (prefixed `App.`) are always included and don't count toward the limit
-2. If total module tools ≤ `MAX_TOOLS_PER_REQUEST`, all are sent
-3. Otherwise:
+2. If total module tools ≤ `MAX_TOOLS_PER_REQUEST`, all are sent (e.g. the knowledge base chat)
+3. Otherwise the **tool catalog** is used (default, see below)
+4. With `ai_assistant.tool_catalog = false`, or when the caller set its own system prompt, the
+   older module router is used instead:
    - Group tools by module prefix (`Crm`, `Documents`, `Projects`)
    - Send a lightweight AI routing prompt to detect which module(s) the request targets
-   - Include the **recently used module** for follow-up context (e.g., "delete #4")
+   - Include the **recently used module** and the latest user request for follow-ups (e.g., "da")
    - Fall back to keyword scoring if AI detection fails
+
+**Tool catalog and `load_tools`:**
+
+- The system prompt lists **every** tool in one line: its name and `AITool::$summary`, or the first
+  sentence of its description. The catalog is the same for every request and comes before the parts
+  that change (conversation summary, user ID, date), so llama.cpp can reuse the cached prompt prefix.
+- Only the parameters of loaded tools are sent: the `load_tools` meta tool, the App tools and the tools
+  loaded or used earlier in the conversation (at most `MAX_LOADED_TOOLS` = 24, most recent kept).
+- The model calls `load_tools(names)`; the assistant handles it itself (no event) and offers the named
+  tools from the next request on. Unknown names are reported back as tools that do not exist.
+- A catalog tool called without loading is **not run**: it is loaded and the model gets its
+  parameters with the request to call it again. A name outside the catalog returns an error.
+- Loaded tool names survive between chat requests in the session (`AIAssistant.loadedTools`, passed
+  to `AiChatJob` as `loaded_tools`), so a confirmation like "da" still has the tools of the proposal.
 
 **Native vs Prompt-Based Tool Calling:**
 
@@ -173,9 +189,13 @@ class AITool {
         public string $name,        // e.g. "Crm.search_contacts"
         public array $arguments,    // JSON Schema properties (name → {type, description})
         public string $description, // Natural language description for the model
+        public ?string $summary = null, // One sentence for the tool catalog (default: first sentence of description)
     ) {}
 }
 ```
+
+Set `summary` when the first sentence of the description does not tell the tool apart from a similar
+one, e.g. `Documents.create_invoice` (only counters of kind Invoices) vs. `Documents.create_document`.
 
 ### 3.3 `AISerializableInterface` (`src/Lib/AISerializableInterface.php`)
 
@@ -568,6 +588,7 @@ Each user's AI configuration is stored in the `properties` JSON column of the `u
 | `model` | string | `"qwen"` (local) / `"gpt-4o"` (OpenAI) | Model name sent to the API |
 | `api_key` | string | `""` | Bearer token for authenticated APIs |
 | `native_tool_calls` | boolean | auto | Force native tool calling on/off (auto = OpenAI=yes, others=no) |
+| `tool_catalog` | boolean | `true` | Tool catalog with `load_tools`; `false` falls back to the module router |
 
 ### 9.2 Application-Level Configuration (`config/app.php`)
 

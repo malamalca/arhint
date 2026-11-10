@@ -174,6 +174,26 @@ $(function () {
         });
     });
 
+    // Restore the conversation kept in the session from an earlier visit of the dashboard.
+    var transcript = [];
+    try {
+        transcript = JSON.parse($('#AIAssistantTranscript').text() || '[]') || [];
+    } catch (err) {
+        transcript = [];
+    }
+    $.each(transcript, function (i, entry) {
+        if (entry && entry.role) {
+            appendMessage(entry.role, entry.text || '');
+        }
+    });
+
+    // A reply requested before leaving the page may still be on its way; keep waiting for it.
+    var pendingJobId = $panel.data('pending-job-id');
+    if (pendingJobId) {
+        setLoading(true);
+        pollJobStatus(String(pendingJobId), 0);
+    }
+
     // Enter submits; Ctrl+Enter / Shift+Enter inserts a new line
     $input.on('keydown', function (e) {
         if (e.key === 'Enter' && !e.ctrlKey && !e.shiftKey && !e.metaKey) {

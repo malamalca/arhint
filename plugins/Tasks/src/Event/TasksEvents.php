@@ -171,12 +171,14 @@ class TasksEvents implements EventListenerInterface
                 ],
             ],
             description: 'This function retrieves tasks.',
+            summary: 'Lists to-do tasks by due date, status, folder, author or assignee.',
         ));
 
         $toolsList->append(new AITool(
             name: 'Tasks.get_folders',
             arguments: [],
             description: 'This function retrieves folders in which tasks are organized.',
+            summary: 'Lists the folders of to-do tasks.',
         ));
 
         $toolsList->append(new AITool(

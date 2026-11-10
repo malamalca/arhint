@@ -88,6 +88,7 @@ class AppAIToolsEvents implements EventListenerInterface
             description: 'Searches project intelligence logs using semantic similarity (ChromaDB) ' .
                 'and returns an AI-synthesized answer based on recent activity, risks, blockers, ' .
                 'and status updates.',
+            summary: 'Semantic search over project activity; returns a synthesized answer.',
         ));
 
         $toolsList->append(new AITool(

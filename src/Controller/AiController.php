@@ -76,8 +76,11 @@ class AiController extends AppController
             'user_id' => $userId,
             'message' => $userInput,
             'history' => $history,
+            'loaded_tools' => (array)($session->read('AIAssistant.loadedTools') ?? []),
             'job_id' => $jobId,
         ]);
+
+        $this->appendTranscript('user', $userInput);
 
         return $this->getResponse()
             ->withType('application/json')
@@ -129,6 +132,16 @@ class AiController extends AppController
         if (!empty($result['history'])) {
             $this->getRequest()->getSession()->write('AIAssistant.history', $result['history']);
         }
+        if (isset($result['loaded_tools']) && is_array($result['loaded_tools'])) {
+            $this->getRequest()->getSession()->write('AIAssistant.loadedTools', $result['loaded_tools']);
+        }
+
+        // Keep what the chat window shows, so the dashboard can restore the conversation.
+        if (($result['status'] ?? null) === 'error') {
+            $this->appendTranscript('error', (string)($result['error'] ?? __('An error occurred. Please try again.')));
+        } elseif (empty($result['redirect']) && isset($result['response'])) {
+            $this->appendTranscript('assistant', (string)$result['response']);
+        }
 
         return $this->getResponse()
             ->withType('application/json')
@@ -168,11 +181,28 @@ class AiController extends AppController
 
         $session = $this->getRequest()->getSession();
         $session->delete('AIAssistant.history');
+        $session->delete('AIAssistant.transcript');
+        $session->delete('AIAssistant.loadedTools');
         $session->delete('AIAssistant.pendingJobId');
 
         return $this->getResponse()
             ->withType('application/json')
             ->withStringBody((string)json_encode(['cleared' => true]));
+    }
+
+    /**
+     * Appends a message, as displayed in the chat window, to the session transcript.
+     *
+     * @param string $role One of user, assistant, error.
+     * @param string $text Plain text for user/error, HTML for assistant.
+     * @return void
+     */
+    private function appendTranscript(string $role, string $text): void
+    {
+        $session = $this->getRequest()->getSession();
+        $transcript = (array)($session->read('AIAssistant.transcript') ?? []);
+        $transcript[] = ['role' => $role, 'text' => $text];
+        $session->write('AIAssistant.transcript', array_slice($transcript, -200));
     }
 
     /**

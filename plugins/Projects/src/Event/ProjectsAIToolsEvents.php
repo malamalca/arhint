@@ -86,6 +86,7 @@ class ProjectsAIToolsEvents implements EventListenerInterface
                 . '(authorities: required conditions and opinions per authority, their status, validity, '
                 . 'open supplement requests, deadlines and the event history). Includes a view_url field; '
                 . 'always render no as a markdown link: [no](view_url).',
+            summary: 'Full project: status, team, milestones, authority procedures.',
         ));
 
         $toolsList->append(new AITool(
@@ -142,6 +143,7 @@ class ProjectsAIToolsEvents implements EventListenerInterface
             ],
             description: 'Fetches full details of a single project task including description, '
                 . 'milestone, assigned user, and optionally comments.',
+            summary: 'Full project task, optionally with comments.',
         ));
 
         $toolsList->append(new AITool(

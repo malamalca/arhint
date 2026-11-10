@@ -6,6 +6,8 @@ namespace App\Test\TestCase\Lib;
 use App\Lib\AIAssistant;
 use App\Lib\AITool;
 use App\Model\Entity\User;
+use Cake\Event\EventInterface;
+use Cake\Event\EventManager;
 use Cake\TestSuite\TestCase;
 use ReflectionClass;
 
@@ -264,6 +266,46 @@ class AIAssistantTest extends TestCase
         $this->assertNotContains('Crm.search_contacts', $selectedNames);
     }
 
+    public function testRoutingOfConfirmationKeepsOriginalRequestAndRoutesAllItsModules(): void
+    {
+        $assistant = new class extends AIAssistant {
+            /**
+             * @var array<int, string>
+             */
+            public array $routingPrompts = [];
+
+            protected function doRequest(array $data, int $timeoutSeconds = 180): array
+            {
+                $this->routingPrompts[] = (string)$data['messages'][0]['content'];
+
+                return ['content' => '["Documents", "Crm"]', 'finish_reason' => 'stop', 'tool_calls' => []];
+            }
+        };
+        $reflection = new ReflectionClass(AIAssistant::class);
+        $tools = [];
+        foreach (['Projects', 'Crm', 'Documents', 'Tasks', 'Calendar'] as $module) {
+            $tools[] = new AITool($module . '.search', [], 'Search');
+            $tools[] = new AITool($module . '.create', [], 'Create');
+        }
+        $reflection->getProperty('tools')->setValue($assistant, $tools);
+        $assistant->setHistory([
+            ['role' => 'user', 'content' => 'Pripravi ponudbo in dodaj investitorja Janez Novak kot kontakt'],
+            ['role' => 'assistant', 'content' => '', 'tool_calls' => [
+                ['id' => 'c1', 'type' => 'function', 'function' => ['name' => 'Documents__search', 'arguments' => '{}']],
+            ]],
+            ['role' => 'tool', 'tool_call_id' => 'c1', 'content' => '{"tool":"Documents.search","result":[]}'],
+            ['role' => 'assistant', 'content' => 'Predogled ponudbe. Naj jo shranim?'],
+            ['role' => 'user', 'content' => 'da'],
+        ]);
+
+        $selected = $reflection->getMethod('selectToolsForRequest')->invoke($assistant, 'da');
+        $names = array_map(fn(AITool $tool): string => $tool->name, $selected);
+
+        $this->assertStringContainsString('dodaj investitorja Janez Novak', $assistant->routingPrompts[0]);
+        $this->assertContains('Crm.create', $names);
+        $this->assertContains('Documents.create', $names);
+    }
+
     public function testDetectModulesViaAIParsesJsonArrayResponse(): void
     {
         $assistant = new AIAssistant();
@@ -425,6 +467,201 @@ class AIAssistantTest extends TestCase
 
         $this->assertSame('Done.', $assistant->getResponse('Loop forever'));
         $this->assertCount(11, $assistant->requests);
+    }
+
+    // -------------------------------------------------------------------------
+    // Tool catalog and load_tools
+    // -------------------------------------------------------------------------
+
+    /**
+     * Assistant with native tool calls and thirteen fake tools, whose model returns the given messages.
+     *
+     * @param array<int, array<string, mixed>> $replies Messages of the model.
+     * @return \App\Lib\AIAssistant
+     */
+    private function catalogAssistant(array $replies): AIAssistant
+    {
+        $user = new User();
+        $user->set('properties', json_encode(['ai_assistant' => ['provider' => 'openai']]));
+        $assistant = new class ($user, $replies) extends AIAssistant {
+            /**
+             * @var array<int, array<string, mixed>>
+             */
+            public array $requests = [];
+
+            /**
+             * @param \App\Model\Entity\User $user
+             * @param array<int, array<string, mixed>> $replies
+             */
+            public function __construct(User $user, private array $replies)
+            {
+                parent::__construct($user);
+            }
+
+            protected function doRequest(array $data, int $timeoutSeconds = 180): array
+            {
+                $this->requests[] = $data;
+
+                return array_shift($this->replies) + ['content' => '', 'finish_reason' => 'stop', 'tool_calls' => []];
+            }
+        };
+
+        $tools = [new AITool('App.vector_search', [], 'Searches everything.')];
+        foreach (['Fake', 'Other'] as $module) {
+            for ($index = 1; $index <= 6; $index++) {
+                $tools[] = new AITool(
+                    "$module.tool$index",
+                    ['id' => ['type' => 'string']],
+                    "Does $module thing $index. Second sentence is not in the catalog.",
+                );
+            }
+        }
+        $tools[] = new AITool('Fake.create', ['title' => ['type' => 'string']], 'Long text.', 'Creates a fake.');
+        (new ReflectionClass(AIAssistant::class))->getProperty('tools')->setValue($assistant, $tools);
+
+        return $assistant;
+    }
+
+    /**
+     * @param string $name Tool name as sent to the model.
+     * @param array<string, mixed> $arguments Arguments.
+     * @return array<string, mixed> Model message calling the tool.
+     */
+    private function callTool(string $name, array $arguments = []): array
+    {
+        return [
+            'content' => '',
+            'finish_reason' => 'tool_calls',
+            'tool_calls' => [[
+                'id' => 'call_' . uniqid(),
+                'type' => 'function',
+                'function' => ['name' => $name, 'arguments' => (string)json_encode($arguments)],
+            ]],
+        ];
+    }
+
+    /**
+     * @param array<int, string> $executed Receives names of the executed tools.
+     * @return callable
+     */
+    private function listenToTools(array &$executed): callable
+    {
+        $listener = function (EventInterface $event, string $tool) use (&$executed): void {
+            $executed[] = $tool;
+            $event->setResult(['ok' => true]);
+        };
+        EventManager::instance()->on('App.AIAssistant.executeTool', $listener);
+
+        return $listener;
+    }
+
+    /**
+     * @param array<string, mixed> $request Request sent to the model.
+     * @return array<int, string>
+     */
+    private function offeredTools(array $request): array
+    {
+        return array_map(fn(array $tool): string => $tool['function']['name'], $request['tools'] ?? []);
+    }
+
+    public function testCatalogListsAllToolsAndOffersOnlyLoadedOnes(): void
+    {
+        $assistant = $this->catalogAssistant([
+            $this->callTool('load_tools', ['names' => ['Fake.create', 'Missing.tool']]),
+            $this->callTool('Fake__create', ['title' => 'X']),
+            ['content' => 'Ustvarjeno.'],
+        ]);
+        $executed = [];
+        $listener = $this->listenToTools($executed);
+
+        try {
+            $this->assertSame('Ustvarjeno.', $assistant->getResponse('Ustvari fake'));
+        } finally {
+            EventManager::instance()->off('App.AIAssistant.executeTool', $listener);
+        }
+
+        $system = $assistant->requests[0]['messages'][0]['content'];
+        $this->assertStringContainsString('- Other.tool6: Does Other thing 6.', $system);
+        $this->assertStringNotContainsString('Second sentence', $system);
+        $this->assertStringContainsString('- Fake.create: Creates a fake.', $system);
+        $this->assertSame(['load_tools', 'App__vector_search'], $this->offeredTools($assistant->requests[0]));
+        $this->assertContains('Fake__create', $this->offeredTools($assistant->requests[1]));
+
+        // load_tools is handled by the assistant, only the real tool reaches the listeners.
+        $this->assertSame(['Fake.create'], $executed);
+        $this->assertStringContainsString('Missing.tool', (string)json_encode($assistant->requests[1]['messages']));
+        $this->assertSame(['Fake.create'], $assistant->getLoadedTools());
+
+        // The date comes after the catalog, so the start of the prompt stays the same.
+        $this->assertGreaterThan(strpos($system, 'Tool catalog'), strpos($system, 'Current date and time'));
+    }
+
+    public function testToolCalledWithoutLoadingIsLoadedButNotRun(): void
+    {
+        $assistant = $this->catalogAssistant([
+            $this->callTool('Fake__tool2', ['id' => '1']),
+            $this->callTool('Nope__tool'),
+            ['content' => 'Ni mogoče.'],
+        ]);
+        $executed = [];
+        $listener = $this->listenToTools($executed);
+
+        try {
+            $assistant->getResponse('Naredi nekaj');
+        } finally {
+            EventManager::instance()->off('App.AIAssistant.executeTool', $listener);
+        }
+
+        $this->assertSame([], $executed);
+        $this->assertContains('Fake__tool2', $this->offeredTools($assistant->requests[1]));
+        $toolMessages = array_values(array_filter(
+            $assistant->requests[2]['messages'],
+            fn(array $message): bool => $message['role'] === 'tool',
+        ));
+        $this->assertStringContainsString('was not loaded', $toolMessages[0]['content']);
+        $this->assertStringContainsString('Unknown tool', $toolMessages[1]['content']);
+    }
+
+    public function testLoadedToolsStayOfferedInNextTurn(): void
+    {
+        $assistant = $this->catalogAssistant([['content' => 'Shranjeno.']]);
+        $assistant->setLoadedTools(['Other.tool3', 'Missing.tool']);
+
+        $assistant->getResponse('da');
+
+        $this->assertContains('Other__tool3', $this->offeredTools($assistant->requests[0]));
+        $this->assertSame(['Other.tool3'], $assistant->getLoadedTools());
+    }
+
+    public function testCatalogSummaryIsShortAndKeepsAbbreviations(): void
+    {
+        $assistant = new AIAssistant();
+        $reflection = new ReflectionClass(AIAssistant::class);
+        $reflection->getProperty('tools')->setValue($assistant, [
+            new AITool('Fake.abbrev', [], 'Writes text, e.g. a summary of a document. Second sentence.'),
+            new AITool('Fake.long', [], str_repeat('Very long description ', 20) . 'end.'),
+        ]);
+
+        $catalog = (string)$reflection->getMethod('buildToolCatalog')->invoke($assistant);
+
+        $this->assertStringContainsString('- Fake.abbrev: Writes text, e.g. a summary of a document.', $catalog);
+        $this->assertStringNotContainsString('Second sentence', $catalog);
+        $this->assertSame(1, preg_match('/- Fake\.long: (.*)/', $catalog, $matches));
+        $this->assertLessThanOrEqual(AIAssistant::MAX_CATALOG_SUMMARY_CHARS, mb_strlen($matches[1] ?? ''));
+    }
+
+    public function testToolCatalogCanBeTurnedOff(): void
+    {
+        $user = new User();
+        $user->set('properties', json_encode(['ai_assistant' => ['provider' => 'openai', 'tool_catalog' => false]]));
+        $assistant = new AIAssistant($user);
+        $reflection = new ReflectionClass(AIAssistant::class);
+        $reflection->getProperty('tools')->setValue(
+            $assistant,
+            array_map(fn(int $i): AITool => new AITool("Fake.t$i", [], 'Tool.'), range(1, 12)),
+        );
+
+        $this->assertFalse($reflection->getMethod('useToolCatalog')->invoke($assistant));
     }
 
     /**
