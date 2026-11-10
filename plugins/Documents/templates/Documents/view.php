@@ -247,7 +247,7 @@ if (!empty($aiAnalysis)) {
 
     $aiHtml = '<style>'
         . '#document-ai-analysis > summary{list-style:none;cursor:pointer;display:flex;align-items:center;'
-        . 'justify-content:space-between;gap:8px;padding:10px 14px;border-radius:8px;'
+        . 'justify-content:space-between;gap:8px;padding:5px 10px;border-radius:8px;'
         . 'background:#ececef;color:#1f1f23;'
         . 'border:1px solid rgba(0,0,0,.12);box-shadow:0 1px 3px rgba(0,0,0,.15);'
         . 'font-weight:600;user-select:none;transition:box-shadow .15s,filter .15s}'
