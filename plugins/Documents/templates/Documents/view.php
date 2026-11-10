@@ -247,17 +247,27 @@ if (!empty($aiAnalysis)) {
 
     $aiHtml = '<style>'
         . '#document-ai-analysis > summary{list-style:none;cursor:pointer;display:flex;align-items:center;'
-        . 'justify-content:space-between;padding:8px 12px;border-radius:4px;background:rgba(0,0,0,.05);'
-        . 'font-weight:500;user-select:none}'
+        . 'justify-content:space-between;gap:8px;padding:10px 14px;border-radius:8px;'
+        . 'background:#ececef;color:#1f1f23;'
+        . 'border:1px solid rgba(0,0,0,.12);box-shadow:0 1px 3px rgba(0,0,0,.15);'
+        . 'font-weight:600;user-select:none;transition:box-shadow .15s,filter .15s}'
         . '#document-ai-analysis > summary::-webkit-details-marker{display:none}'
-        . '#document-ai-analysis > summary:hover{background:rgba(0,0,0,.09)}'
-        . '#document-ai-analysis > summary .material-icons{transition:transform .2s}'
-        . '#document-ai-analysis[open] > summary .material-icons{transform:rotate(180deg)}'
-        . '#document-ai-analysis .ai-analysis-body{padding:8px 12px 0}'
+        . '#document-ai-analysis > summary:hover{box-shadow:0 2px 6px rgba(0,0,0,.25);filter:brightness(.96)}'
+        . '#document-ai-analysis > summary .ai-label{display:flex;align-items:center;gap:8px}'
+        . '#document-ai-analysis > summary .ai-arrow{transition:transform .2s}'
+        . '#document-ai-analysis[open] > summary .ai-arrow{transform:rotate(180deg)}'
+        . '#document-ai-analysis{margin-bottom:24px}'
+        . '#document-ai-analysis .ai-analysis-body{padding:10px 14px 0}'
+        . '@media (prefers-color-scheme: dark){'
+        . '#document-ai-analysis > summary{background:#2c2c31;color:#e6e6ea;'
+        . 'border-color:rgba(255,255,255,.14);box-shadow:0 1px 3px rgba(0,0,0,.5)}'
+        . '#document-ai-analysis > summary:hover{filter:brightness(1.15)}'
+        . '}'
         . '</style>';
     $aiHtml .= '<details id="document-ai-analysis">';
     $aiHtml .= sprintf(
-        '<summary><span>%s</span><i class="material-icons">expand_more</i></summary>',
+        '<summary><span class="ai-label"><i class="material-icons">auto_awesome</i>%s</span>'
+            . '<i class="material-icons ai-arrow">expand_more</i></summary>',
         h(__d('documents', 'AI analysis')),
     );
     $aiHtml .= '<div class="ai-analysis-body">';
