@@ -183,7 +183,8 @@ class FursClient
 
             return (string)$soap->{$method}($signedXml);
         } catch (Exception $e) {
-            $message = $e->getMessage() . ' [FURS ' . ($production ? 'production' : 'test') . ': ' . self::url($production) . ']';
+            $message = $e->getMessage() .
+                ' [FURS ' . ($production ? 'production' : 'test') . ': ' . self::url($production) . ']';
             // an unaccepted client certificate shows up as a TLS failure, not as a FURS error message
             if (preg_match('/bad record mac|handshake failure|certificate|alert/i', $e->getMessage())) {
                 $message .= ' The FURS server probably rejected the client certificate: use a test certificate with ' .
@@ -219,9 +220,13 @@ class FursClient
         $lines[] = 'DNS: ' . $host . ' -> ' . $ip;
 
         $start = microtime(true);
+        // a failed connect is reported in the result, not as a PHP warning
+        // phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged
         $socket = @fsockopen($ip, $port, $errno, $errstr, 5);
         if ($socket === false) {
-            return ['ok' => false, 'lines' => array_merge($lines, ['TCP ' . $port . ': failed (' . $errno . ' ' . $errstr . ')'])];
+            $lines[] = 'TCP ' . $port . ': failed (' . $errno . ' ' . $errstr . ')';
+
+            return ['ok' => false, 'lines' => $lines];
         }
         fclose($socket);
         $lines[] = sprintf('TCP %d: connected in %d ms', $port, (microtime(true) - $start) * 1000);
@@ -356,7 +361,7 @@ class FursClient
      */
     public static function url(?bool $production = null): string
     {
-        $key = ($production ?? Configure::read('Documents.furs.production')) ? 'production' : 'test';
+        $key = $production ?? Configure::read('Documents.furs.production') ? 'production' : 'test';
 
         return (string)Configure::read('Documents.furs.urls.' . $key);
     }
@@ -364,7 +369,7 @@ class FursClient
     /**
      * Creates temporary PEM bundle of FURS CA certificates; caller unlinks it.
      *
-     * @return string
+     * @return non-empty-string
      */
     private static function caBundle(): string
     {

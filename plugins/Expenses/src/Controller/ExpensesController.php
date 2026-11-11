@@ -70,7 +70,7 @@ class ExpensesController extends AppController
                 // payment reference (SI12 0000002026023, RF71 2348 231) is matched without
                 // spaces, dashes and dots, in its electronic form: type + model + content
                 $refTerm = strtoupper((string)preg_replace('/[\s\-.\/]+/', '', $term));
-                $refExpr = "UPPER(REPLACE(REPLACE(REPLACE(REPLACE(CONCAT(" .
+                $refExpr = 'UPPER(REPLACE(REPLACE(REPLACE(REPLACE(CONCAT(' .
                     "COALESCE(Invoices.pmt_type, ''), COALESCE(Invoices.pmt_module, ''), " .
                     "COALESCE(Invoices.pmt_ref, '')), ' ', ''), '-', ''), '.', ''), '/', ''))";
 
@@ -81,7 +81,7 @@ class ExpensesController extends AppController
                 if ($refTerm !== '') {
                     $or[] = $query->newExpr()->like(
                         $query->newExpr($refExpr),
-                        '%' . addcslashes($refTerm, '%_\\') . '%'
+                        '%' . addcslashes($refTerm, '%_\\') . '%',
                     );
                 }
 

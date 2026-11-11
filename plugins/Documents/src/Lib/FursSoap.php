@@ -21,7 +21,10 @@ class FursSoap extends FiscalSoap
     private int $timeout = 3000;
 
     /**
-     * @inheritDoc
+     * Sets the service url.
+     *
+     * @param string $url Soap service url.
+     * @return $this
      */
     public function setUrl($url)
     {
@@ -31,7 +34,10 @@ class FursSoap extends FiscalSoap
     }
 
     /**
-     * @inheritDoc
+     * Sets the total request timeout.
+     *
+     * @param int $milliseconds Total request timeout (the connection timeout stays 3 s).
+     * @return $this
      */
     public function setTimeout($milliseconds)
     {
@@ -41,7 +47,10 @@ class FursSoap extends FiscalSoap
     }
 
     /**
-     * @inheritDoc
+     * Sets the server's CA certificate.
+     *
+     * @param string $fileName Server's public key.
+     * @return $this
      */
     public function setCert($fileName)
     {
@@ -51,7 +60,10 @@ class FursSoap extends FiscalSoap
     }
 
     /**
-     * @inheritDoc
+     * Sets the client's key store.
+     *
+     * @param string $fileName Client's key in .p12|.pfx store.
+     * @return $this
      */
     public function setP12($fileName)
     {
@@ -61,7 +73,10 @@ class FursSoap extends FiscalSoap
     }
 
     /**
-     * @inheritDoc
+     * Sets the client's private key password.
+     *
+     * @param string $password Client's private key password.
+     * @return $this
      */
     public function setPassword($password)
     {
@@ -87,9 +102,13 @@ class FursSoap extends FiscalSoap
     }
 
     /**
-     * @inheritDoc
+     * Sends a SOAP request, reporting the body of a failed response.
+     *
+     * @param string $action Soap action.
+     * @param string $xml XML body.
+     * @return string Raw response.
      */
-    protected function doRequest($action, $xml)
+    protected function doRequest($action, $xml): string
     {
         $privateKey = false;
         $ca = false;
@@ -104,8 +123,12 @@ class FursSoap extends FiscalSoap
                 throw new Exception('ERROR: Cannot parse CA Info');
             }
 
+            if ($this->serviceUrl === '') {
+                throw new Exception('ERROR: Missing service url');
+            }
+
             $conn = curl_init();
-            curl_setopt_array($conn, [
+            $options = [
                 CURLOPT_URL => $this->serviceUrl,
                 CURLOPT_CONNECTTIMEOUT_MS => 3000,
                 CURLOPT_TIMEOUT_MS => $this->timeout,
@@ -122,12 +145,15 @@ class FursSoap extends FiscalSoap
                 CURLOPT_SSL_VERIFYHOST => 2,
                 CURLOPT_SSL_VERIFYPEER => true,
                 CURLOPT_SSLCERT => $privateKey,
-                CURLOPT_SSLCERTPASSWD => $this->keyPassword,
                 CURLOPT_CAINFO => $ca,
-            ]);
+            ];
+            if ($this->keyPassword !== '') {
+                $options[CURLOPT_SSLCERTPASSWD] = $this->keyPassword;
+            }
+            curl_setopt_array($conn, $options);
 
             $response = curl_exec($conn);
-            if ($response === false) {
+            if (!is_string($response)) {
                 throw new Exception('CODECURL: ' . curl_error($conn));
             }
 

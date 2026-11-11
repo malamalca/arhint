@@ -175,7 +175,10 @@ class TaxPremisesController extends AppController
             }
         } catch (Throwable $e) {
             $details[] = __d('documents', 'Certificate check failed') . ': ' . $e->getMessage();
-            Log::error('FURS echo error: ' . $e::class . ': ' . $e->getMessage() . "\n" . $e->getTraceAsString(), 'furs');
+            Log::error(
+                'FURS echo error: ' . $e::class . ': ' . $e->getMessage() . "\n" . $e->getTraceAsString(),
+                'furs',
+            );
         }
 
         // the log can be silently unwritable (e.g. owned by another user), so show where it goes
