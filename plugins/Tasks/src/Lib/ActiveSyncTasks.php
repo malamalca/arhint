@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Tasks\Lib;
 
 use Cake\Core\Configure;
+use Cake\Datasource\EntityInterface;
 use Cake\I18n\DateTime as CakeDateTime;
 use Cake\Log\Log;
 use Cake\ORM\TableRegistry;
@@ -113,6 +114,48 @@ class ActiveSyncTasks implements Syncroton_Data_IData
     }
 
     /**
+     * Returns the id of the folder that is announced as the default task folder.
+     *
+     * ActiveSync allows exactly one folder of type FOLDERTYPE_TASK (7) per
+     * account; every other task folder has to be FOLDERTYPE_TASK_USER_CREATED
+     * (15). Clients (iOS Reminders) ignore or reject task folders when several
+     * of them claim to be the default one. The oldest folder not created by the
+     * user wins, otherwise the oldest folder.
+     *
+     * @return string|null
+     */
+    protected function getDefaultFolderId(): ?string
+    {
+        $TasksFolders = TableRegistry::getTableLocator()->get('Tasks.TasksFolders');
+        $folder = $TasksFolders->find()
+            ->select(['id'])
+            ->where(['owner_id IS' => $this->_ownerId])
+            ->orderBy(['user_created' => 'ASC', 'created' => 'ASC', 'id' => 'ASC'])
+            ->first();
+
+        return $folder?->id;
+    }
+
+    /**
+     * Builds Syncroton folder model from TasksFolder entity.
+     *
+     * @param \Cake\Datasource\EntityInterface $folder Folder entity.
+     * @param string|null $defaultFolderId Id of the default task folder.
+     * @return \Syncroton_Model_Folder
+     */
+    protected function toSyncrotonFolder(EntityInterface $folder, ?string $defaultFolderId): Syncroton_Model_Folder
+    {
+        return new Syncroton_Model_Folder([
+            'serverId' => $folder->id,
+            'displayName' => $folder->title,
+            'type' => $folder->id === $defaultFolderId ?
+                Syncroton_Command_FolderSync::FOLDERTYPE_TASK :
+                Syncroton_Command_FolderSync::FOLDERTYPE_TASK_USER_CREATED,
+            'parentId' => '0',
+        ]);
+    }
+
+    /**
      * Converts an UTC timestamp coming from ActiveSync into the string format
      * used by the datetime columns of the application.
      *
@@ -163,9 +206,15 @@ class ActiveSyncTasks implements Syncroton_Data_IData
         $entry->subject = (string)$task->title;
         $entry->importance = (int)$task->priority;
 
-        $entry->body = new Syncroton_Model_EmailBody();
-        $entry->body->type = Syncroton_Model_EmailBody::TYPE_PLAINTEXT;
-        $entry->body->data = (string)$task->descript;
+        // An empty Body (Type without Data) is not valid, so only send it when
+        // the task actually has a description.
+        $descript = (string)$task->descript;
+        if ($descript !== '') {
+            $entry->body = new Syncroton_Model_EmailBody();
+            $entry->body->type = Syncroton_Model_EmailBody::TYPE_PLAINTEXT;
+            $entry->body->data = $descript;
+            $entry->body->estimatedDataSize = (string)strlen($descript);
+        }
 
         // Complete is sent on every change, DateCompleted only together with
         // Complete = 1, so reopening a task clears it on the client as well.
@@ -300,19 +349,17 @@ class ActiveSyncTasks implements Syncroton_Data_IData
     {
         $TasksFolders = TableRegistry::getTableLocator()->get('Tasks.TasksFolders');
         $folder = $TasksFolders->find()
-            ->where(['TasksFolders.id' => $id])
+            ->where([
+                'TasksFolders.id' => $id,
+                'TasksFolders.owner_id IS' => $this->_ownerId,
+            ])
             ->first();
 
         if ($folder === null) {
             throw new Syncroton_Exception_NotFound("folder $id not found");
         }
 
-        return new Syncroton_Model_Folder([
-            'serverId' => $folder->id,
-            'displayName' => $folder->title,
-            'type' => Syncroton_Command_FolderSync::FOLDERTYPE_TASK,
-            'parentId' => '0',
-        ]);
+        return $this->toSyncrotonFolder($folder, $this->getDefaultFolderId());
     }
 
     /**
@@ -416,19 +463,13 @@ class ActiveSyncTasks implements Syncroton_Data_IData
         $query
             ->select(['id', 'title'])
             ->where([
-                'owner_id' => $this->_ownerId,
+                'owner_id IS' => $this->_ownerId,
             ]);
         $folders = $query->all();
 
+        $defaultFolderId = $this->getDefaultFolderId();
         foreach ($folders as $folder) {
-            $result[$folder->id] = new Syncroton_Model_Folder([
-                'serverId' => $folder->id,
-                'displayName' => $folder->title,
-                'type' => $folder->user_created ?
-                    Syncroton_Command_FolderSync::FOLDERTYPE_TASK_USER_CREATED :
-                    Syncroton_Command_FolderSync::FOLDERTYPE_TASK,
-                'parentId' => '0',
-            ]);
+            $result[$folder->id] = $this->toSyncrotonFolder($folder, $defaultFolderId);
         }
 
         return $result;
@@ -449,7 +490,7 @@ class ActiveSyncTasks implements Syncroton_Data_IData
         $query
             ->select(['id', 'title'])
             ->where([
-                'owner_id' => $this->_ownerId,
+                'owner_id IS' => $this->_ownerId,
                 'modified >' => $this->toDbTime($startTimeStamp),
             ]);
 
@@ -463,13 +504,9 @@ class ActiveSyncTasks implements Syncroton_Data_IData
         //Log::write('debug', 'Get changed folders: ' . print_r($folders->toArray(), true));
 
         $result = [];
+        $defaultFolderId = $this->getDefaultFolderId();
         foreach ($folders as $folder) {
-            $result[$folder->id] = new Syncroton_Model_Folder([
-                'serverId' => $folder->id,
-                'displayName' => $folder->title,
-                'type' => Syncroton_Command_FolderSync::FOLDERTYPE_TASK,
-                'parentId' => '0',
-            ]);
+            $result[$folder->id] = $this->toSyncrotonFolder($folder, $defaultFolderId);
         }
 
         return $result;
