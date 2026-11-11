@@ -228,18 +228,38 @@ class TaxPremisesController extends AppController
             $details[] = 'Certificate: not available, echo is skipped';
         }
 
-        foreach (['test' => false, 'production' => true] as $env => $production) {
+        $configured = (bool)Configure::read('Documents.furs.production');
+        $details[] = 'Configured environment: ' . ($configured ? 'production' : 'test') .
+            ' (Documents.furs.production); the other environment is checked for information only.';
+
+        // configured environment first; only its result decides the overall outcome
+        $envs = $configured ? ['production' => true, 'test' => false] : ['test' => false, 'production' => true];
+        foreach ($envs as $env => $production) {
+            $decisive = $production === $configured;
             $url = FursClient::url($production);
             $result = FursClient::ping($url);
-            $details[] = '== ' . $env . ' ' . $url . ' => network ' . ($result['ok'] ? 'OK' : 'FAILED');
+            $details[] = '== ' . $env . ($decisive ? '' : ' (info only)') . ' ' . $url .
+                ' => network ' . ($result['ok'] ? 'OK' : 'FAILED');
             array_push($details, ...$result['lines']);
-            $ok = $ok && $result['ok'];
+            if ($decisive) {
+                $ok = $ok && $result['ok'];
+            }
 
             if (!$client) {
                 continue;
             }
             if ($production && $isTestCertificate) {
                 $details[] = 'Echo: skipped, test certificate cannot be used with the production service.';
+                if ($decisive) {
+                    $ok = false;
+                }
+                continue;
+            }
+            if (!$production && $isTestCertificate === false) {
+                $details[] = 'Echo: skipped, the test service accepts only test certificates (DavPotRacTEST).';
+                if ($decisive) {
+                    $ok = false;
+                }
                 continue;
             }
             $message = 'arhim-' . bin2hex(random_bytes(4));
@@ -257,7 +277,9 @@ class TaxPremisesController extends AppController
                 $details[] = 'Echo with certificate: FAILED: ' . $e->getMessage();
                 Log::error('FURS ping (' . $env . ') echo error: ' . $e->getMessage(), 'furs');
             }
-            $ok = $ok && $echoOk;
+            if ($decisive) {
+                $ok = $ok && $echoOk;
+            }
         }
 
         $certificate = $TaxCertificates->findForUser($userId) ?? $TaxCertificates->newEmptyEntity();

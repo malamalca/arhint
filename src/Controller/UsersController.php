@@ -342,7 +342,7 @@ class UsersController extends AppController
         if ($provider === 'openai') {
             return [
                 'provider' => 'openai',
-                'model' => 'gpt-5-mini',
+                'model' => 'gpt-5.6-terra',
                 'api_key' => (string)($requestData['ai_api_key'] ?? ''),
                 'native_tool_calls' => true,
             ];

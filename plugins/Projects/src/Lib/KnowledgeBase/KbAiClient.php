@@ -102,7 +102,7 @@ class KbAiClient implements KbAiClientInterface
             'url' => $openai
                 ? self::OPENAI_URL
                 : (string)($config['url'] ?? '' ?: self::DEFAULT_LOCAL_URL),
-            'model' => (string)($config['model'] ?? '' ?: ($openai ? 'gpt-5-mini' : 'qwen')),
+            'model' => (string)($config['model'] ?? '' ?: ($openai ? 'gpt-5.6-terra' : 'qwen')),
             'api_key' => (string)($config['api_key'] ?? ''),
             'timeout' => (int)($config['timeout'] ?? 0 ?: 180),
         ];
