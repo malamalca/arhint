@@ -1187,4 +1187,45 @@ class InvoicesControllerTest extends TestCase
         $this->assertResponseOk();
         $this->assertResponseContains('SI00 01');
     }
+
+    /**
+     * The view must not break when a linked invoice has no title.
+     *
+     * @return void
+     */
+    public function testViewWithLinkedInvoiceWithoutTitle()
+    {
+        $this->login(USER_ADMIN);
+
+        $id = 'd0d59a31-6de7-4eb4-8230-ca09113a7fe5';
+        $otherId = 'd0d59a31-6de7-4eb4-8230-ca09113a7fe6';
+        TableRegistry::getTableLocator()->get('Documents.Invoices')
+            ->updateAll(['title' => null, 'no' => 'LINK-001'], ['id' => $otherId]);
+        $this->assertNotFalse(
+            TableRegistry::getTableLocator()->get('Documents.DocumentsLinks')->two('Invoice', $id, 'Invoice', $otherId),
+        );
+
+        $this->get('/documents/invoices/view/' . $id);
+        $this->assertResponseOk();
+        $this->assertResponseContains('LINK-001');
+    }
+
+    /**
+     * The view must not raise warnings when the linked document is not an invoice (or is gone).
+     *
+     * @return void
+     */
+    public function testViewWithLinkedNonInvoiceDocument()
+    {
+        $this->login(USER_ADMIN);
+
+        $id = 'd0d59a31-6de7-4eb4-8230-ca09113a7fe5';
+        $this->assertNotFalse(
+            TableRegistry::getTableLocator()->get('Documents.DocumentsLinks')
+                ->two('Invoice', $id, 'Document', '11111111-2222-4333-8444-555555555555'),
+        );
+
+        $this->get('/documents/invoices/view/' . $id);
+        $this->assertResponseOk();
+    }
 }

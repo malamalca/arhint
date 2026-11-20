@@ -620,13 +620,19 @@ if (!empty($document->logs)) {
 if (!empty($links)) {
     $invoiceView['panels']['links_title'] = sprintf('<h3>%s</h3>', __d('documents', 'Linked Documents'));
     foreach ($links as $link) {
+        $linked = $link->linkedDocument();
+        if ($linked === null) {
+            continue;
+        }
+        $linkedDocument = $linked['document'];
         $invoiceView['panels']['links_' . $link->id] = sprintf(
             '<div>%1$s %2$s</div>',
-            '#' . $link->invoice->no . ' :: ' . $this->Html->link(
-                $link->invoice->title,
+            '#' . $linkedDocument->no . ' :: ' . $this->Html->link(
+                (string)($linkedDocument->title ?: $linkedDocument->no ?: $linkedDocument->id),
                 [
+                    'controller' => $linked['controller'],
                     'action' => 'view',
-                    $link->invoice->id,
+                    $linkedDocument->id,
                 ],
             ),
             $this->Html->link(

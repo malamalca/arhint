@@ -175,4 +175,39 @@ class InvoicesExportTest extends TestCase
         $changed = $Exporter->exportEslog20($invoice);
         $this->assertStringNotContainsString('<ds:Signature', $changed);
     }
+
+    /**
+     * Linked documents are exported as ON references carrying the number of the linked document.
+     *
+     * @return void
+     */
+    public function testEslog20ExportsLinkedDocumentsAsOrderReferences(): void
+    {
+        $Exporter = new InvoicesExport();
+        $invoice = $Exporter->find(['id' => self::INVOICE_ISSUED])->first();
+        $this->assertStringNotContainsString('<D_1153>ON</D_1153>', $Exporter->exportEslog20($invoice));
+
+        /** @var \Documents\Model\Table\InvoicesTable $Invoices */
+        $Invoices = TableRegistry::getTableLocator()->get('Documents.Invoices');
+        $other = $Invoices->get('d0d59a31-6de7-4eb4-8230-ca09113a7fe5');
+        $other->no = 'PO-4711';
+        $Invoices->saveOrFail($other);
+
+        /** @var \Documents\Model\Table\DocumentsLinksTable $Links */
+        $Links = TableRegistry::getTableLocator()->get('Documents.DocumentsLinks');
+        $this->assertNotFalse($Links->two('Invoice', self::INVOICE_ISSUED, 'Invoice', $other->id));
+
+        $xml = $Exporter->exportEslog20($invoice);
+        $this->assertStringContainsString('<D_1153>ON</D_1153>', $xml);
+        $this->assertStringContainsString('<D_1154>PO-4711</D_1154>', $xml);
+        // the invoice's own number is not exported as a reference to itself
+        $this->assertSame(1, substr_count($xml, '<D_1153>ON</D_1153>'));
+        // the payment reference stays
+        $this->assertStringContainsString('<D_1153>PQ</D_1153>', $xml);
+        $this->assertSame(2, substr_count($xml, '<G_SG1>'));
+
+        // and it is seen from the other side as well
+        $otherXml = $Exporter->exportEslog20($Exporter->find(['id' => $other->id])->first());
+        $this->assertStringContainsString('<D_1154>' . $invoice->no . '</D_1154>', $otherXml);
+    }
 }

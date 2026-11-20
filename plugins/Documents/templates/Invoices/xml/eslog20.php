@@ -1,4 +1,5 @@
 <?php
+use Cake\ORM\TableRegistry;
 use Cake\Utility\Xml;
 
 $transformed = ['Invoice' => [
@@ -8,6 +9,32 @@ $transformed = ['Invoice' => [
 
 $i = 0;
 foreach ((array)$invoices as $invoice) {
+    // references: payment reference (PQ) and linked documents as purchase order references (ON)
+    $references = [
+        0 => [
+            'S_RFF' => [
+                'C_C506' => [
+                    'D_1153' => 'PQ',
+                    'D_1154' => $invoice->pmt_type . $invoice->pmt_module . $invoice->pmt_ref,
+                ],
+            ],
+        ],
+    ];
+    if (!empty($invoice->id)) {
+        /** @var \Documents\Model\Table\DocumentsLinksTable $DocumentsLinks */
+        $DocumentsLinks = TableRegistry::getTableLocator()->get('Documents.DocumentsLinks');
+        foreach ($DocumentsLinks->linkedDocumentNumbers((string)$invoice->id) as $linkedNo) {
+            $references[] = [
+                'S_RFF' => [
+                    'C_C506' => [
+                        'D_1153' => 'ON',
+                        'D_1154' => mb_substr($linkedNo, 0, 70),
+                    ],
+                ],
+            ];
+        }
+    }
+
     $transformed['Invoice']['M_INVOIC'][$i] = [
         '@Id' => 'data',
         // message header
@@ -52,15 +79,8 @@ foreach ((array)$invoices as $invoice) {
                 'D_4440' => 'urn:cen.eu:en16931:2017',
             ],
         ],
-        //payment reference
-        'G_SG1' => [
-            'S_RFF' => [
-                'C_C506' => [
-                    'D_1153' => 'PQ',
-                    'D_1154' => $invoice->pmt_type . $invoice->pmt_module . $invoice->pmt_ref,
-                ],
-            ],
-        ],
+        // payment reference and linked documents
+        'G_SG1' => $references,
 
         'G_SG2' => [
             0 => [

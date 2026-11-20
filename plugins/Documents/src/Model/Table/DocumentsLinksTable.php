@@ -171,11 +171,42 @@ class DocumentsLinksTable extends Table
         if (!empty($links)) {
             $ret = $this->find()
                 ->where(['document_id !=' => $id, 'link_id IN' => array_keys($links)])
-                ->contain([$documentScope])
+                ->contain(array_unique([$documentScope, 'Invoices', 'Documents']))
                 ->all();
         }
 
         return $ret;
+    }
+
+    /**
+     * Numbers of the documents linked to the specified document.
+     *
+     * @param string $id Document id
+     * @return array<int, string>
+     */
+    public function linkedDocumentNumbers(string $id): array
+    {
+        $linkIds = $this->find()
+            ->select(['link_id'])
+            ->where(['document_id' => $id]);
+
+        $links = $this->find()
+            ->where(['DocumentsLinks.document_id !=' => $id, 'DocumentsLinks.link_id IN' => $linkIds])
+            ->contain(['Invoices', 'Documents'])
+            ->orderBy(['DocumentsLinks.created' => 'ASC'])
+            ->all();
+
+        $numbers = [];
+        foreach ($links as $link) {
+            /** @var \Documents\Model\Entity\DocumentsLink $link */
+            $linked = $link->model === 'Document' ? $link->document : $link->invoice;
+            $no = trim((string)($linked->no ?? ''));
+            if ($no !== '') {
+                $numbers[$no] = $no;
+            }
+        }
+
+        return array_values($numbers);
     }
 
     /**
