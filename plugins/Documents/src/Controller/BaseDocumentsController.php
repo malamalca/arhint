@@ -645,7 +645,10 @@ class BaseDocumentsController extends AppController
                 $ExporterClass = '\\Documents\\Lib\\' . $this->documentsScope . 'Export';
                 /** @var \Documents\Lib\InvoicesExport|\Documents\Lib\DocumentsExport $Exporter */
                 $Exporter = new $ExporterClass();
-                $currentXml = $Exporter->export('xml', [$invoice]);
+                // load the document exactly as the signer does (including linked documents),
+                // otherwise the exported XML differs from the signed one
+                $exportDocument = $Exporter->find(['id' => $id])->first() ?? $invoice;
+                $currentXml = $Exporter->export('xml', [$exportDocument]);
 
                 // Create signature info instance and compare with current data
                 $signatureInfo = new DocumentsSignatureInfo($invoice->signed);

@@ -1228,4 +1228,46 @@ class InvoicesControllerTest extends TestCase
         $this->get('/documents/invoices/view/' . $id);
         $this->assertResponseOk();
     }
+
+    /**
+     * A signed invoice with linked documents must not be reported as modified right after signing.
+     *
+     * @return void
+     */
+    public function testCheckSignatureWithLinkedDocuments()
+    {
+        $this->login(USER_ADMIN);
+        $this->enableCsrfToken();
+        $this->enableSecurityToken();
+
+        $id = 'd0d59a31-6de7-4eb4-8230-ca09113a7fe5';
+        $otherId = 'd0d59a31-6de7-4eb4-8230-ca09113a7fe6';
+        TableRegistry::getTableLocator()->get('Documents.DocumentsLinks')->two('Invoice', $id, 'Invoice', $otherId);
+        // the eSlog 1.6 template requires a street on every document client
+        TableRegistry::getTableLocator()->get('Documents.DocumentsClients')
+            ->updateAll(['street' => 'Testna ulica 1'], ['street IS' => null]);
+
+        // sign through the real action; any certificate will do, the data digest is what is checked here
+        preg_match(
+            '#<ds:X509Certificate>([^<]+)</ds:X509Certificate>#',
+            (string)file_get_contents(dirname(__DIR__) . DS . 'Lib' . DS . 'signedInvoice.xml'),
+            $cert,
+        );
+        $this->post('/documents/invoices/sign/' . $id, [
+            'dat_sign' => '2026-11-20 12:00:00',
+            'sign_cert' => $cert[1],
+            'sign_signature' => base64_encode('signature'),
+            'sign_signature20' => base64_encode('signature20'),
+        ]);
+        $this->assertRedirect();
+
+        $signed = TableRegistry::getTableLocator()->get('Documents.Invoices')->get($id);
+        $this->assertNotEmpty($signed->signed);
+        $this->assertNotEmpty($signed->signed_eslog20);
+
+        $this->get('/documents/invoices/check-signature/' . $id);
+        $this->assertResponseOk();
+        $result = json_decode((string)$this->_response->getBody(), true);
+        $this->assertNotSame('invaliddigest', $result['status'], json_encode($result));
+    }
 }
