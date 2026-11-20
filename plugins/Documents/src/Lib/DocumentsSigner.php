@@ -317,8 +317,9 @@ class DocumentsSigner
         $signatureMethod = $this->doc->createElementNS(self::DS_NS, 'ds:SignatureMethod');
         $signatureMethodAlgorithm = $this->doc->createAttribute('Algorithm');
 
-        //$signatureMethodAlgorithm->value = 'http://www.w3.org/2000/09/xmldsig#rsa-sha1';
-        $signatureMethodAlgorithm->value = 'http://www.w3.org/2000/09/xmldsig#rsa-sha256';
+        // RSA-SHA256 is defined in the xmldsig-more namespace; the "xmldsig#" one only knows rsa-sha1,
+        // and strict validators (.NET SignedXml) reject the unknown URI.
+        $signatureMethodAlgorithm->value = 'http://www.w3.org/2001/04/xmldsig-more#rsa-sha256';
 
         $signatureMethod->appendChild($signatureMethodAlgorithm);
         $signedInfo->appendChild($signatureMethod);

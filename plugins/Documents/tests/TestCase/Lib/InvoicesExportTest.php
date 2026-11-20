@@ -160,6 +160,7 @@ class InvoicesExportTest extends TestCase
         $this->assertStringContainsString('<ds:Signature', $signedXml);
         $this->assertStringContainsString('URI="#data"', $signedXml);
         $this->assertStringContainsString('urn:eslog:2.00#Invoice', $signedXml);
+        $this->assertStringContainsString('http://www.w3.org/2001/04/xmldsig-more#rsa-sha256', $signedXml);
 
         $invoice->signed_eslog20 = $signedXml;
         $exported = (string)$Exporter->export('eslog20', [$invoice]);
