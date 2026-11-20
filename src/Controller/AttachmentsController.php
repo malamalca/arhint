@@ -161,9 +161,12 @@ class AttachmentsController extends AppController
 
         $this->Authorization->authorize($attachment);
 
-        if (
+        $indexer = new DocumentAiIndexer();
+        if ($attachment->model === 'Document' && !$indexer->isEnabledForDocument((string)$attachment->foreign_id)) {
+            $this->Flash->error(__('AI processing is not enabled for the counter of this document.'));
+        } elseif (
             $attachment->model === 'Document'
-            && (new DocumentAiIndexer())->requeue((string)$attachment->foreign_id, (string)$this->getCurrentUser()->id)
+            && $indexer->requeue((string)$attachment->foreign_id, (string)$this->getCurrentUser()->id)
         ) {
             $this->Flash->success(__('The AI analysis has been queued. The result will be visible shortly.'));
         } else {

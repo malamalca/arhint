@@ -86,6 +86,8 @@ class DocumentsCountersTable extends Table
                 'rule' => ['custom', '/^[A-Za-z0-9]*$/'],
                 'message' => __d('documents', 'Only letters and digits are allowed.'),
             ])
+            ->add('ai_processing', 'valid', ['rule' => 'boolean'])
+            ->allowEmptyString('ai_processing')
             ->add('active', 'valid', ['rule' => 'boolean'])
             ->requirePresence('active', 'create')
             ->notEmptyString('active');

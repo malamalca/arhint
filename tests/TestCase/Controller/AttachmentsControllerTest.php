@@ -25,6 +25,7 @@ class AttachmentsControllerTest extends TestCase
         'app.Attachments',
         'app.Users',
         'plugin.Documents.Documents',
+        'plugin.Documents.DocumentsCounters',
     ];
 
     private const ATTACH_ID = '3e7c2fba-1c29-4e5b-9bb2-000000000001';
@@ -232,6 +233,7 @@ class AttachmentsControllerTest extends TestCase
             ['user_id' => USER_ADMIN],
             ['id' => $documentId],
         );
+        $this->enableAiProcessing(true);
 
         $this->login(USER_ADMIN);
         $this->post('/attachments/reanalyze/' . self::ATTACH_ID . '?redirect=/documents/documents/view/' . $documentId);
@@ -257,12 +259,49 @@ class AttachmentsControllerTest extends TestCase
             ['user_id' => null],
             ['id' => $documentId],
         );
+        $this->enableAiProcessing(true);
 
         $this->login(USER_ADMIN);
         $this->post('/attachments/reanalyze/' . self::ATTACH_ID . '?redirect=/documents/documents/view/' . $documentId);
 
         $this->assertRedirect('/documents/documents/view/' . $documentId);
         $this->assertFlashMessage('The AI analysis has been queued. The result will be visible shortly.');
+    }
+
+    /**
+     * Re-analysis is refused when the counter of the document has AI processing switched off.
+     *
+     * @return void
+     * @uses \App\Controller\AttachmentsController::reanalyze()
+     */
+    public function testReanalyzeRefusedWithoutAiProcessing(): void
+    {
+        $documentId = 'd0d59a31-6de7-4eb4-8230-ca09113a7fe6';
+        TableRegistry::getTableLocator()->get('Attachments')->updateAll(
+            ['model' => 'Document', 'foreign_id' => $documentId],
+            ['id' => self::ATTACH_ID],
+        );
+        $this->enableAiProcessing(false);
+
+        $this->login(USER_ADMIN);
+        $this->post('/attachments/reanalyze/' . self::ATTACH_ID . '?redirect=/documents/documents/view/' . $documentId);
+
+        $this->assertRedirect('/documents/documents/view/' . $documentId);
+        $this->assertFlashMessage('AI processing is not enabled for the counter of this document.');
+    }
+
+    /**
+     * Switch AI processing on or off on the counter of the test document.
+     *
+     * @param bool $enabled Enabled.
+     * @return void
+     */
+    private function enableAiProcessing(bool $enabled): void
+    {
+        TableRegistry::getTableLocator()->get('Documents.DocumentsCounters')->updateAll(
+            ['ai_processing' => $enabled],
+            ['id' => '1d53bc5b-de2d-4e85-b13b-81b39a97fc90'],
+        );
     }
 
     /**

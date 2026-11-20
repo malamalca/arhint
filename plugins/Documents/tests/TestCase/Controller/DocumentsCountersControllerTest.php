@@ -135,6 +135,39 @@ class DocumentsCountersControllerTest extends TestCase
     }
 
     /**
+     * The AI processing switch of a counter is saved.
+     *
+     * @return void
+     */
+    public function testEditAiProcessing()
+    {
+        $id = '1d53bc5b-de2d-4e85-b13b-81b39a97fc90';
+        $DocumentsCounters = TableRegistry::getTableLocator()->get('Documents.DocumentsCounters');
+        $this->assertFalse($DocumentsCounters->get($id)->ai_processing);
+
+        $this->login(USER_ADMIN);
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+
+        $data = [
+            'id' => $id,
+            'kind' => 'Documents',
+            'direction' => 'issued',
+            'counter' => 1,
+            'title' => 'Issued Documents 2015',
+            'mask' => 'DOC-[[no.2]]',
+            'active' => 1,
+            'ai_processing' => 1,
+        ];
+        $this->post('/documents/documents-counters/edit/' . $id, $data);
+        $this->assertRedirect(['controller' => 'DocumentsCounters', 'action' => 'index']);
+        $this->assertTrue($DocumentsCounters->get($id)->ai_processing);
+
+        $this->post('/documents/documents-counters/edit/' . $id, ['ai_processing' => 0] + $data);
+        $this->assertFalse($DocumentsCounters->get($id)->ai_processing);
+    }
+
+    /**
      * Test delete method
      *
      * @return void

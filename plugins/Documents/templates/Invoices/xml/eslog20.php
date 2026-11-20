@@ -78,21 +78,21 @@ foreach ((array)$invoices as $invoice) {
                     'D_3251' => $invoice->buyer->zip,
                     'D_3207' => $invoice->buyer->country_code ?? 'SI',
                 ],
+                // buyer's bank account
+                'S_FII' => [
+                    'D_3035' => 'BB',
+                    'C_C078' => [
+                        'D_3194' => $invoice->buyer->iban,
+                    ],
+                ],
                 'G_SG3' => [
-                    /*0 => ['S_RFF' => [
+                    // company registration number
+                    0 => ['S_RFF' => [
                         'C_C506' => [
                             'D_1153' => '0199',
-                            'D_1154' => $document->buyer->tax_no,
+                            'D_1154' => $invoice->buyer->mat_no,
                         ],
                     ]],
-                    1 => [
-                        'S_RFF' => [
-                            'C_C506' => [
-                                'D_1153' => 'GN',
-                                'D_1154' => $document->buyer->mat_no,
-                            ],
-                        ],
-                    ],*/
                     2 => [
                         'S_RFF' => [
                             'C_C506' => [
@@ -138,18 +138,13 @@ foreach ((array)$invoices as $invoice) {
                     ],
                 ],
                 'G_SG3' => [
-                    /*0 => ['S_RFF' => [
+                    // company registration number
+                    0 => ['S_RFF' => [
                         'C_C506' => [
                             'D_1153' => '0199',
-                            'D_1154' => $invoice->issuer->tax_no,
-                        ],
-                    ]],
-                    1 => ['S_RFF' => [
-                        'C_C506' => [
-                            'D_1153' => 'GN',
                             'D_1154' => $invoice->issuer->mat_no,
                         ],
-                    ]],*/
+                    ]],
                     2 => ['S_RFF' => [
                         'C_C506' => [
                             'D_1153' => 'VA',
@@ -205,6 +200,32 @@ foreach ((array)$invoices as $invoice) {
             ],
         ],
     ];
+
+    // Optional partner data (e-mail, bank account, registration number) is left out when
+    // empty, because the eSlog 2.0 schema does not accept empty elements.
+    foreach ($transformed['Invoice']['M_INVOIC'][$i]['G_SG2'] as $partnerKey => $partner) {
+        $partnerRef = &$transformed['Invoice']['M_INVOIC'][$i]['G_SG2'][$partnerKey];
+
+        $partnerEmail = $partner['G_SG5']['S_COM']['C_C076']['D_3148'] ?? null;
+        if (isset($partner['G_SG5']) && trim((string)$partnerEmail) === '') {
+            unset($partnerRef['G_SG5']);
+        }
+
+        $partnerIban = $partner['S_FII']['C_C078']['D_3194'] ?? null;
+        if (isset($partner['S_FII']) && trim((string)$partnerIban) === '') {
+            unset($partnerRef['S_FII']);
+        }
+
+        foreach ($partner['G_SG3'] ?? [] as $refKey => $ref) {
+            if (trim((string)($ref['S_RFF']['C_C506']['D_1154'] ?? '')) === '') {
+                unset($partnerRef['G_SG3'][$refKey]);
+            }
+        }
+        if (isset($partnerRef['G_SG3']) && empty($partnerRef['G_SG3'])) {
+            unset($partnerRef['G_SG3']);
+        }
+        unset($partnerRef);
+    }
 
     ////////////////////////////////////////////////////////////////////////////////////////////
     // ITEMS

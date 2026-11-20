@@ -10,6 +10,7 @@ use Cake\Core\Configure;
 use Cake\Event\Event;
 use Cake\I18n\Date;
 use Cake\ORM\Table;
+use Cake\ORM\TableRegistry;
 use Cake\Queue\QueueManager;
 use Cake\TestSuite\TestCase;
 use Cake\View\View;
@@ -27,6 +28,12 @@ use stdClass;
  */
 class AppEventsTest extends TestCase
 {
+    protected array $fixtures = [
+        'plugin.Documents.DocumentsCounters',
+    ];
+
+    private const COUNTER_DOCUMENTS = '1d53bc5b-de2d-4e85-b13b-81b39a97fc90';
+
     protected AppEvents $appEvents;
     private ?string $queueDir = null;
 
@@ -215,9 +222,11 @@ class AppEventsTest extends TestCase
     {
         $queueDir = TMP . 'tests_queue' . DS;
         $this->configureTestQueue($queueDir);
+        $this->enableAiProcessing(true);
 
         $document = new Document([
             'id' => 'd0d59a31-6de7-4eb4-8230-ca09113a7fe6',
+            'counter_id' => self::COUNTER_DOCUMENTS,
             'user_id' => USER_ADMIN,
             'project_id' => 'p-1',
             'no' => 'P.1051',
@@ -240,6 +249,40 @@ class AppEventsTest extends TestCase
         $this->assertSame([], $data['entity']['attachment_ids']);
         $this->assertStringContainsString('No: P.1051', $data['entity']['descript']);
         $this->assertStringContainsString('Description: Opis', $data['entity']['descript']);
+    }
+
+    /**
+     * Documents of a counter without the AI processing switch are not analysed.
+     */
+    public function testNewDocumentOfCounterWithoutAiProcessingIsNotQueued(): void
+    {
+        $queueDir = TMP . 'tests_queue' . DS;
+        $this->configureTestQueue($queueDir);
+        $this->enableAiProcessing(false);
+
+        $document = new Document([
+            'id' => 'd0d59a31-6de7-4eb4-8230-ca09113a7fe6',
+            'counter_id' => self::COUNTER_DOCUMENTS,
+            'user_id' => USER_ADMIN,
+            'no' => 'P.1051',
+        ]);
+
+        $event = new Event('Model.afterSave', new DocumentsTable());
+        $this->appEvents->updateModelAttachments($event, $document, new ArrayObject());
+
+        $this->assertCount(0, $this->readQueuedMessages($queueDir));
+    }
+
+    /**
+     * Switch AI processing on or off on the documents counter.
+     *
+     * @param bool $enabled Enabled.
+     * @return void
+     */
+    private function enableAiProcessing(bool $enabled): void
+    {
+        TableRegistry::getTableLocator()->get('Documents.DocumentsCounters')
+            ->updateAll(['ai_processing' => $enabled], ['id' => self::COUNTER_DOCUMENTS]);
     }
 
     /**

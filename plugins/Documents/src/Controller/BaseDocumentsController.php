@@ -289,14 +289,24 @@ class BaseDocumentsController extends AppController
             $signer->setSignatureDatetime($signTimestamp);
             $signer->setCertificate($cert);
 
+            // invoices are signed twice: the eSlog 1.6 and the eSlog 2.0 document
+            $signer20 = null;
+            if ($this->documentsScope === 'Invoices') {
+                $signer20 = new DocumentsSigner($id, $this->documentsScope, 'eslog20');
+                $signer20->setSignatureDatetime($signTimestamp);
+                $signer20->setCertificate($cert);
+            }
+
             $signature = $this->getRequest()->getData('sign_signature');
-            if (empty($signature)) {
+            $signature20 = $this->getRequest()->getData('sign_signature20');
+            if (empty($signature) || ($signer20 !== null && empty($signature20))) {
                 $digest = $signer->getSigningHash();
 
-                /** Return digest for signing */
+                /** Return digests for signing */
                 if ($this->getRequest()->is('ajax')) {
                     return $this->getResponse()->withType('application/json')->withStringBody((string)json_encode([
                         'digest' => $digest,
+                        'digest20' => $signer20?->getSigningHash(),
                     ], JSON_UNESCAPED_SLASHES));
                 }
             } else {
@@ -304,6 +314,10 @@ class BaseDocumentsController extends AppController
 
                 $invoice = $this->{$this->documentsScope}->patchEntity($invoice, $this->getRequest()->getData());
                 $invoice->signed = $signer->getXml();
+                if ($signer20 !== null) {
+                    $signer20->setSignature((string)$signature20);
+                    $invoice->signed_eslog20 = $signer20->getXml();
+                }
 
                 if ($this->{$this->documentsScope}->save($invoice)) {
                     $this->Flash->success(__d('documents', 'The document has been signed.'));

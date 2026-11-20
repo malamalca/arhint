@@ -23,6 +23,11 @@ class DocumentsSigner
     private const XDS_NS = 'http://uri.etsi.org/01903/v1.1.1#';
 
     /**
+     * Type of the signed data reference in an eSlog 2.0 document
+     */
+    private const ESLOG20_REFERENCE_TYPE = 'urn:eslog:2.00#Invoice';
+
+    /**
      * @var \DOMDocument $doc
      */
     private DOMDocument $doc;
@@ -36,9 +41,10 @@ class DocumentsSigner
      *
      * @param string $documentId Document id.
      * @param string $documentType Document type.
+     * @param string $format XML format to sign: eslog (1.6) or eslog20.
      * @return void
      */
-    public function __construct(string $documentId, $documentType = 'Invoices')
+    public function __construct(string $documentId, $documentType = 'Invoices', string $format = 'eslog')
     {
         $ExporterClass = '\\Documents\\Lib\\' . $documentType . 'Export';
         /** @var \Documents\Lib\InvoicesExport|\Documents\Lib\DocumentsExport $Exporter */
@@ -47,12 +53,19 @@ class DocumentsSigner
         $documents = $Exporter->find(['id' => $documentId], 'Invoices');
         $document = $documents->first();
 
-        $xml = $Exporter->export('eslog', [$document]);
+        if ($format === 'eslog20') {
+            // sign the bare document, never an already signed copy
+            $xml = $Exporter->exportEslog20($document, false);
+            $referenceType = self::ESLOG20_REFERENCE_TYPE;
+        } else {
+            $xml = $Exporter->export('eslog', [$document]);
+            $referenceType = 'http://www.gzs.si/shemas/eslog/racun/1.6#Racun';
+        }
 
         $this->doc = new DOMDocument();
         if ($this->doc->loadXML($xml)) {
             $this->addSignature();
-            $this->addReferenceSha1('#data', 'http://www.gzs.si/shemas/eslog/racun/1.6#Racun');
+            $this->addReferenceSha1('#data', $referenceType);
         }
     }
 

@@ -14,7 +14,8 @@ use Throwable;
  * Queues AI analysis of documents and their attachments, so they get an event in the vector database.
  *
  * The queue job (AiProcessLogJob) reads the text of the attachments, analyses it with AI and stores
- * the result in the vector database.
+ * the result in the vector database. Only documents of counters with the "AI processing" switch
+ * (documents_counters.ai_processing) are analysed.
  */
 class DocumentAiIndexer
 {
@@ -33,6 +34,10 @@ class DocumentAiIndexer
         bool $replace = false,
         ?string $fallbackUserId = null,
     ): bool {
+        if (!$this->isEnabled((string)$document->get('counter_id'))) {
+            return false;
+        }
+
         // Imported documents have no user; the person asking for the analysis stands in for it.
         $userId = (string)$document->get('user_id') ?: (string)$fallbackUserId;
         $documentId = (string)$document->get('id');
@@ -81,6 +86,39 @@ class DocumentAiIndexer
         }
 
         return true;
+    }
+
+    /**
+     * Check if AI processing is switched on for a counter.
+     *
+     * @param string $counterId Counter id.
+     * @return bool
+     */
+    public function isEnabled(string $counterId): bool
+    {
+        if ($counterId === '') {
+            return false;
+        }
+
+        return TableRegistry::getTableLocator()->get('Documents.DocumentsCounters')
+            ->exists(['DocumentsCounters.id' => $counterId, 'DocumentsCounters.ai_processing' => true]);
+    }
+
+    /**
+     * Check if AI processing is switched on for the counter of a document.
+     *
+     * @param string $documentId Document id.
+     * @return bool
+     */
+    public function isEnabledForDocument(string $documentId): bool
+    {
+        $document = TableRegistry::getTableLocator()->get('Documents.Documents')
+            ->find()
+            ->select(['Documents.id', 'Documents.counter_id'])
+            ->where(['Documents.id' => $documentId])
+            ->first();
+
+        return $document !== null && $this->isEnabled((string)$document->get('counter_id'));
     }
 
     /**

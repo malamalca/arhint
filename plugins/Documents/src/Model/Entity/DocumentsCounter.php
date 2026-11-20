@@ -30,6 +30,7 @@ use Cake\ORM\Entity;
  * @property string|null $device_no
  * @property bool $primary
  * @property bool $active
+ * @property bool $ai_processing
  * @property \Cake\I18n\DateTime|null $created
  * @property \Cake\I18n\DateTime|null $modified
  */

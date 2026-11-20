@@ -15,6 +15,7 @@ use Cake\View\View;
 use Cake\View\XmlView;
 use Documents\Model\Entity\Invoice;
 use DOMDocument;
+use InvalidArgumentException;
 use XSLTProcessor;
 
 class InvoicesExport
@@ -188,11 +189,7 @@ class InvoicesExport
             case 'eslog20':
                 $responseHtml = '';
                 foreach ($invoices as $invoice) {
-                    $this->view->set('invoices', [0 => $invoice]);
-                    $this->view->setTemplate('generic');
-                    $this->view->setTemplate('eslog20');
-
-                    $responseHtml .= $this->view->render();
+                    $responseHtml .= $this->exportEslog20($invoice);
                 }
 
                 $result = $responseHtml;
@@ -207,6 +204,39 @@ class InvoicesExport
         }
 
         return $result;
+    }
+
+    /**
+     * Export a single invoice as eSlog 2.0 XML.
+     *
+     * With `$signed` the stored eSlog 2.0 signature is returned together with the document, but only
+     * while it still covers the current data. A document changed after signing is exported unsigned.
+     *
+     * @param \Cake\Datasource\EntityInterface|array<string, mixed>|null $invoice Invoice.
+     * @param bool $signed Return the signed document when available.
+     * @return string
+     */
+    public function exportEslog20(mixed $invoice, bool $signed = true): string
+    {
+        $this->view->set('invoices', [0 => $invoice]);
+        $this->view->setTemplate('generic');
+        $this->view->setTemplate('eslog20');
+
+        $xml = $this->view->render();
+
+        if ($signed && is_object($invoice) && !empty($invoice->signed_eslog20)) {
+            try {
+                $signatureInfo = new DocumentsSignatureInfo((string)$invoice->signed_eslog20);
+                $currentDigest = $signatureInfo->calculateDataDigest($xml);
+                if ($currentDigest !== null && $currentDigest === $signatureInfo->getSignedDataDigest()) {
+                    return $signatureInfo->getXml();
+                }
+            } catch (InvalidArgumentException) {
+                // unreadable signed XML: fall back to the unsigned document
+            }
+        }
+
+        return $xml;
     }
 
     /**

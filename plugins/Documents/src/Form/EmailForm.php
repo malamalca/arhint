@@ -109,9 +109,7 @@ class EmailForm extends Form
                 if (count($documents) == 1) {
                     // do not attach base document with received invoiced
                     if ($documents[0]->documents_counter->direction != 'received') {
-                        $attachmentName = $documents[0]->title;
-                        $attachmentName = (string)mb_ereg_replace("([^\w\s\d\-_~,;\[\]\(\).])", '', $attachmentName);
-                        $attachmentName = (string)mb_ereg_replace("([\.]{2,})", '', $attachmentName);
+                        $attachmentName = $this->sanitizeAttachmentName((string)$documents[0]->title);
 
                         $attachments[$attachmentName] = [
                             'data' => $data,
@@ -123,6 +121,24 @@ class EmailForm extends Form
                     $attachments[$attachmentName] = [
                         'data' => $data,
                         'mimetype' => 'application/pdf',
+                    ];
+                }
+
+                // eSlog 2.0 XML next to the PDF for every issued invoice
+                foreach ($documents as $doc) {
+                    if (!($doc instanceof Invoice) || $doc->documents_counter->direction == 'received') {
+                        continue;
+                    }
+
+                    $xml = $this->exporter->export('eslog20', [$doc]);
+                    if (empty($xml) || !is_string($xml)) {
+                        continue;
+                    }
+
+                    $xmlName = $this->sanitizeAttachmentName((string)$doc->title) . '.eslog20.xml';
+                    $attachments[$xmlName] = [
+                        'data' => $xml,
+                        'mimetype' => 'application/xml',
                     ];
                 }
 
@@ -181,6 +197,19 @@ class EmailForm extends Form
         }
 
         return false;
+    }
+
+    /**
+     * Strip characters that are unsafe in an attachment file name
+     *
+     * @param string $name Raw name.
+     * @return string
+     */
+    private function sanitizeAttachmentName(string $name): string
+    {
+        $name = (string)mb_ereg_replace("([^\w\s\d\-_~,;\[\]\(\).])", '', $name);
+
+        return (string)mb_ereg_replace("([\.]{2,})", '', $name);
     }
 
     /**

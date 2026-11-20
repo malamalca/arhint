@@ -373,6 +373,8 @@ Automatically analyzes activity log entries for project intelligence.
 
 **Triggered when:** A new log entry is saved (via `AppEvents::updateModelAttachments()` on `Model.afterSave`).
 
+**Documents:** new documents (and manual re-analysis from an attachment) are queued by `DocumentAiIndexer` only when their counter has *AI processes documents of this counter* checked (`documents_counters.ai_processing`, off by default).
+
 **Processing steps:**
 1. Load user and convert entity to text
 2. Call LLM directly with a system prompt requesting structured JSON:

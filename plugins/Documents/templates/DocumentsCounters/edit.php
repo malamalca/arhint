@@ -104,6 +104,24 @@ $counter_edit = [
                     ],
                 ],
             ],
+            'ai_processing' => [
+                'method' => 'control',
+                'parameters' => [
+                    'field' => 'ai_processing',
+                    'options' => [
+                        'type' => 'checkbox',
+                        'label' => __d('documents', 'AI processes documents of this counter'),
+                    ],
+                ],
+            ],
+            'ai_processing_hint' => sprintf(
+                '<div class="helper-text">%s</div>',
+                __d(
+                    'documents',
+                    'Applies to documents (not invoices). Documents and their attachments are analysed by AI '
+                    . 'only when this is checked.',
+                ),
+            ),
             'fs_basics_end' => '</fieldset>',
 
             'fs_templates_start' => '<fieldset>',

@@ -85,6 +85,14 @@ $document_preview = [
                         'method' => 'unlockField',
                         'parameters' => ['sign_signature'],
                     ],
+                    'sign_signature20' => [
+                        'method' => 'hidden',
+                        'parameters' => ['field' => 'sign_signature20', ['id' => 'signature20']],
+                    ],
+                    'sign_signature20_unlock' => [
+                        'method' => 'unlockField',
+                        'parameters' => ['sign_signature20'],
+                    ],
                     'sign_date' => [
                         'method' => 'control',
                         'parameters' => [
@@ -168,7 +176,7 @@ echo $this->Lil->panels($document_preview, 'Documents.Invoices.sign');
         alert(`${type.toUpperCase()}: ${message}`);
     }
 
-    async function sign(hash) {
+    async function signHash(hash) {
         try {
             // Send sign request to web service
             const response = await fetch(`${SERVICE_URL}/sign`, {
@@ -191,18 +199,36 @@ echo $this->Lil->panels($document_preview, 'Documents.Invoices.sign');
 
             if (data.error) {
                 showOutput('Signing Error: ' + data.error, 'error');
-                return;
+                return null;
             }
 
-            if (data.result) {
-                let formElement = $("#DocumentSign");
-                $("#signature", formElement).val(data.result);
-                formElement.off("submit");
-                formElement.submit();
-            }
+            return data.result || null;
         } catch (error) {
             showOutput('Error: ' + error.message, 'error');
+            return null;
         }
+    }
+
+    // Signs the eSlog 1.6 digest and, when the server returned one, the eSlog 2.0 digest as well.
+    async function sign(hash, hash20) {
+        const signature = await signHash(hash);
+        if (!signature) {
+            return;
+        }
+
+        let signature20 = null;
+        if (hash20) {
+            signature20 = await signHash(hash20);
+            if (!signature20) {
+                return;
+            }
+        }
+
+        let formElement = $("#DocumentSign");
+        $("#signature", formElement).val(signature);
+        $("#signature20", formElement).val(signature20 || "");
+        formElement.off("submit");
+        formElement.submit();
     }
 
     fetchCertificates();
@@ -227,7 +253,7 @@ echo $this->Lil->panels($document_preview, 'Documents.Invoices.sign');
                             showOutput('Error: ' + data.error, 'error');
                             return;
                         }
-                        sign(data.digest);
+                        sign(data.digest, data.digest20);
                     }
                 );
 

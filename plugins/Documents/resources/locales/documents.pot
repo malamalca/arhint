@@ -1662,3 +1662,11 @@ msgstr ""
 #: ./plugins/Documents/templates/Invoices/edit.php:496
 msgid "The reference is generated from the document number when the document is saved."
 msgstr ""
+
+#: plugins/Documents/templates/DocumentsCounters/edit.php
+msgid "AI processes documents of this counter"
+msgstr ""
+
+#: plugins/Documents/templates/DocumentsCounters/edit.php
+msgid "Applies to documents (not invoices). Documents and their attachments are analysed by AI only when this is checked."
+msgstr ""

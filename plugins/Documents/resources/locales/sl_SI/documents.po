@@ -2386,3 +2386,11 @@ msgstr "Model ustvarjenega sklica: 12 (s kontrolno številko), 00 ali RF za refe
 #: plugins/Documents/templates/Invoices/edit.php:496
 msgid "The reference is generated from the document number when the document is saved."
 msgstr "Sklic se ob shranjevanju ustvari iz številke dokumenta."
+
+#: plugins/Documents/templates/DocumentsCounters/edit.php
+msgid "AI processes documents of this counter"
+msgstr "AI obdeluje dokumente tega števca"
+
+#: plugins/Documents/templates/DocumentsCounters/edit.php
+msgid "Applies to documents (not invoices). Documents and their attachments are analysed by AI only when this is checked."
+msgstr "Velja za dokumente (ne za račune). AI analizira dokumente in njihove priponke samo, če je to označeno."

@@ -29,6 +29,7 @@ use Documents\Lib\SiReference;
  * @property string|null $title
  * @property string|null $descript
  * @property string|null $signed
+ * @property string|null $signed_eslog20
  * @property \Cake\I18n\Date|null $dat_sign
  * @property \Cake\I18n\Date|null $dat_issue
  * @property \Cake\I18n\Date|null $dat_service
