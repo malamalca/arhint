@@ -68,17 +68,34 @@ echo $this->Lil->form($data, 'Documents.DocumentsLinks.link');
 ?>
 <script type="text/javascript">
     $(document).ready(function() {
-        var DocumentsAutocompleteUrl = "<?php echo Router::url([
-            'plugin' => 'Documents',
-            'controller' => 'Documents',
-            'action' => 'autocomplete',
-        ], true); ?>";
+        // documents of every kind that can be linked are searched
+        var DocumentsAutocompleteUrls = [
+            "<?php echo Router::url([
+                'plugin' => 'Documents',
+                'controller' => 'Invoices',
+                'action' => 'autocomplete',
+            ], true); ?>",
+            "<?php echo Router::url([
+                'plugin' => 'Documents',
+                'controller' => 'Documents',
+                'action' => 'autocomplete',
+            ], true); ?>"
+        ];
 
         let el = $("#title").get(0);
         M.Autocomplete.init(el, {
             allowUnsafeHTML: true,
             onSearch: (text, autocomplete) => {
-                $.get(DocumentsAutocompleteUrl + "?term=" + text).done(function(data) {
+                // a failing endpoint (e.g. no access) must not hide the results of the others
+                const requests = DocumentsAutocompleteUrls.map(function(url) {
+                    return $.get(url + "?term=" + encodeURIComponent(text)).then(
+                        function(data) { return data; },
+                        function() { return []; }
+                    );
+                });
+
+                $.when.apply($, requests).done(function() {
+                    let data = [].concat.apply([], Array.prototype.slice.call(arguments));
                     if (data.length > 1 || (data.length == 1 && text != data[0].title)) {
                         autocomplete.setMenuItems(data);
                         $("#document-id").val("");

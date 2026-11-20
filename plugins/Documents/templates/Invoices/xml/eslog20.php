@@ -154,7 +154,7 @@ foreach ((array)$invoices as $invoice) {
                         'D_3194' => $invoice->issuer->iban,
                     ],
                     'C_C088' => [
-                        'D_3433' => str_pad($invoice->issuer->bic, 11, 'X'),
+                        'D_3433' => str_pad((string)$invoice->issuer->bic, 11, 'X'),
                     ],
                 ],
                 'G_SG3' => [

@@ -488,7 +488,9 @@ class BaseDocumentsController extends AppController
             if (count($documents) == 1) {
                 /** @var \Cake\Datasource\EntityInterface $first */
                 $first = reset($documents);
-                $options['filename'] = Text::slug($name ?? $first->title);
+                // the format suffix (.eslog20, .eslog, .sepa) is added again by the exporter's response
+                $baseName = preg_replace('/\.(eslog20|eslog|sepa)$/i', '', (string)$name);
+                $options['filename'] = Text::slug($baseName !== '' ? $baseName : $first->title);
             }
 
             return $Exporter->response($ext, $data, $options);
@@ -578,8 +580,12 @@ class BaseDocumentsController extends AppController
         if ($this->getRequest()->is('ajax') || Configure::read('debug')) {
             $term = $this->getRequest()->getQuery('term');
 
+            // search by the document number as well as by the title
             $conditions = [
-                $this->documentsScope . '.title LIKE' => '%' . $term . '%',
+                'OR' => [
+                    $this->documentsScope . '.no LIKE' => '%' . $term . '%',
+                    $this->documentsScope . '.title LIKE' => '%' . $term . '%',
+                ],
                 'DocumentsCounters.active' => true,
             ];
 

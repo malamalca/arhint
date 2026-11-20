@@ -1270,4 +1270,44 @@ class InvoicesControllerTest extends TestCase
         $result = json_decode((string)$this->_response->getBody(), true);
         $this->assertNotSame('invaliddigest', $result['status'], json_encode($result));
     }
+
+    /**
+     * The downloaded eSlog 2.0 file carries the format suffix only once.
+     *
+     * @return void
+     */
+    public function testExportEslog20FilenameHasFormatSuffixOnce()
+    {
+        $this->login(USER_ADMIN);
+
+        $this->get('/documents/invoices/export/d0d59a31-6de7-4eb4-8230-ca09113a7fe5/RACUN-IMP-Izola.eslog20.xml?download=1');
+        $this->assertResponseOk();
+        $this->assertHeaderContains('Content-Disposition', 'filename="RACUN-IMP-Izola.eslog20.xml"');
+    }
+
+    /**
+     * The autocomplete used by the "link documents" popup also finds documents by their number.
+     *
+     * @return void
+     */
+    public function testAutocompleteFindsDocumentByNumber()
+    {
+        $this->login(USER_ADMIN);
+        $this->configRequest(['headers' => ['X-Requested-With' => 'XMLHttpRequest']]);
+
+        $id = 'd0d59a31-6de7-4eb4-8230-ca09113a7fe5';
+        TableRegistry::getTableLocator()->get('Documents.Invoices')
+            ->updateAll(['no' => 'ZZ-777-2026', 'title' => 'Something else'], ['id' => $id]);
+        TableRegistry::getTableLocator()->get('Documents.DocumentsCounters')
+            ->updateAll(['active' => true], ['id IN' => TableRegistry::getTableLocator()
+                ->get('Documents.Invoices')->find()->select(['counter_id'])->where(['id' => $id])]);
+
+        $this->get('/documents/invoices/autocomplete?term=777-20');
+        $this->assertResponseOk();
+        $result = json_decode((string)$this->_response->getBody(), true);
+        $this->assertCount(1, $result);
+        $this->assertSame($id, $result[0]['id']);
+        $this->assertSame('ZZ-777-2026', $result[0]['no']);
+        $this->assertSame('Invoice', $result[0]['model']);
+    }
 }
