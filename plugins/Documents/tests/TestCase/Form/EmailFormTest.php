@@ -10,6 +10,7 @@ use Cake\TestSuite\EmailTrait;
 use Cake\TestSuite\TestCase;
 use Cake\TestSuite\TestEmailTransport;
 use Documents\Form\EmailForm;
+use Documents\Model\Entity\DocumentsCounter;
 use Documents\Model\Entity\Invoice;
 use Documents\Test\TestCase\Form\Stub\FakeInvoicesExport;
 
@@ -49,7 +50,7 @@ class EmailFormTest extends TestCase
             'id' => 'd0d59a31-6de7-4eb4-8230-ca09113a7fe5',
             'title' => 'RACUN 2026/001',
         ]);
-        $invoice->documents_counter = new \Documents\Model\Entity\DocumentsCounter(['direction' => $direction]);
+        $invoice->documents_counter = new DocumentsCounter(['direction' => $direction]);
 
         return $invoice;
     }

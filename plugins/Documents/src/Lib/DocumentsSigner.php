@@ -54,6 +54,9 @@ class DocumentsSigner
         $document = $documents->first();
 
         if ($format === 'eslog20') {
+            if (!($Exporter instanceof InvoicesExport)) {
+                throw new InvalidArgumentException('eSlog 2.0 can be signed for invoices only.');
+            }
             // sign the bare document, never an already signed copy
             $xml = $Exporter->exportEslog20($document, false);
             $referenceType = self::ESLOG20_REFERENCE_TYPE;
