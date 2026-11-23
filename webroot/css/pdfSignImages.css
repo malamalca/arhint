@@ -6,21 +6,6 @@
     margin-bottom: 10px;
 }
 
-#pdf-sign-images .psi-inplace {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    white-space: nowrap;
-}
-
-#pdf-sign-images .psi-inplace[hidden] {
-    display: none;
-}
-
-#pdf-sign-images .psi-inplace input {
-    margin: 0;
-}
-
 #pdf-sign-images .psi-sep {
     width: 12px;
 }
@@ -62,6 +47,11 @@
     -webkit-user-drag: none;
 }
 
+/* a certificate-signed document is frozen: the placed images must no longer move */
+#pdf-sign-images.psi-signed .psi-sig {
+    pointer-events: none;
+}
+
 #pdf-sign-images .psi-sig.selected {
     outline-color: #1976d2;
 }
@@ -91,6 +81,11 @@
     box-shadow: 0 4px 20px rgba(0, 0, 0, .4);
     width: 90%;
     max-width: 560px;
+    padding: 20px;
+}
+
+#pdf-sign-images .psi-dialog h5 {
+    margin: 0 0 16px;
 }
 
 #pdf-sign-images .psi-dialog ul {
@@ -119,5 +114,13 @@
 }
 
 #pdf-sign-images .psi-dialog-footer {
-    text-align: right;
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+}
+
+/* both footer buttons get the same footprint, whatever the label */
+#pdf-sign-images .psi-dialog-footer button {
+    min-width: 100px;
+    justify-content: center;
 }

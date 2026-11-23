@@ -29,9 +29,8 @@ function initPdfSignImages() {
         add: $('psi-add'),
         remove: $('psi-remove'),
         save: $('psi-save'),
+        saveAs: $('psi-save-as'),
         sign: $('psi-sign'),
-        inPlace: $('psi-in-place'),
-        inPlaceWrap: root.querySelector('.psi-inplace'),
     };
 
     // Chromium exposes the File System Access api in secure contexts only; elsewhere the pdf is read through
@@ -45,6 +44,7 @@ function initPdfSignImages() {
     let pdfBytes = null;
     let filename = 'document.pdf';
     let fileHandle = null;
+    let signedBytes = null;
     let pageNum = 1;
     let scale = 1;
     let pageSizes = {};
@@ -187,14 +187,12 @@ function initPdfSignImages() {
         els.pageInfo.textContent = pageNum + ' / ' + (pdfDoc ? pdfDoc.numPages : 1);
         els.prev.disabled = !pdfDoc || pageNum <= 1;
         els.next.disabled = !pdfDoc || pageNum >= pdfDoc.numPages;
-        els.remove.disabled = selected === null;
-        els.save.disabled = signatures.length === 0;
-        if (els.inPlaceWrap) {
-            els.inPlaceWrap.hidden = !fileHandle;
-            if (!fileHandle) {
-                els.inPlace.checked = false;
-            }
-        }
+        const hasOutput = signatures.length > 0 || signedBytes !== null;
+        els.remove.disabled = selected === null || signedBytes !== null;
+        els.add.disabled = signedBytes !== null;
+        els.sign.disabled = signedBytes !== null;
+        els.save.disabled = !hasOutput || !fileHandle;
+        els.saveAs.disabled = !hasOutput;
     }
 
     // ---- signature overlays -------------------------------------------------------------------------------------
@@ -436,16 +434,13 @@ function initPdfSignImages() {
     }
 
     /**
-     * Hands the finished pdf back to the user: over the original file when that is asked for and allowed,
+     * Hands the finished pdf back to the user: over the original file when inPlace is asked for and allowed,
      * otherwise through the save dialog, and as a plain download where the api is missing.
      *
      * Returns false only when the user cancelled the dialog; write errors are reported here.
      */
-    async function output(bytes) {
-        if (fileHandle && els.inPlace && els.inPlace.checked) {
-            if (!confirm(messages.overwrite)) {
-                return false;
-            }
+    async function output(bytes, inPlace) {
+        if (inPlace && fileHandle) {
             let permission = 'denied';
             try {
                 permission = await fileHandle.requestPermission({ mode: 'readwrite' });
@@ -495,11 +490,12 @@ function initPdfSignImages() {
         return true;
     }
 
-    async function save() {
+    async function save(inPlace) {
         els.save.disabled = true;
+        els.saveAs.disabled = true;
         try {
-            const doc = await buildDocument();
-            await output(await doc.save());
+            const bytes = signedBytes || await (await buildDocument()).save();
+            await output(bytes, inPlace);
         } catch (e) {
             console.error(e);
             alert(messages.saveError);
@@ -869,7 +865,10 @@ function initPdfSignImages() {
             const hex = toHex(cms).padEnd(SIG_BYTES * 2, '0');
             new TextEncoder().encodeInto(hex, bytes.subarray(open + 1));
 
-            await output(bytes);
+            signedBytes = bytes;
+            root.classList.add('psi-signed');
+            select(null);
+            alert(messages.signed);
         } catch (e) {
             console.error(e);
             alert(messages.signError + '\n' + (e && e.message ? e.message : ''));
@@ -880,7 +879,7 @@ function initPdfSignImages() {
     }
 
     function reset() {
-        if (signatures.length && !confirm(messages.discard)) {
+        if ((signatures.length || signedBytes) && !confirm(messages.discard)) {
             return;
         }
         signatures.forEach((s) => URL.revokeObjectURL(s.url));
@@ -896,6 +895,8 @@ function initPdfSignImages() {
         pdfDoc = null;
         pdfBytes = null;
         fileHandle = null;
+        signedBytes = null;
+        root.classList.remove('psi-signed');
         els.stage.querySelectorAll('.psi-sig').forEach((el) => el.remove());
         els.pdfFile.value = '';
         els.editor.hidden = true;
@@ -922,7 +923,8 @@ function initPdfSignImages() {
     });
     els.add.addEventListener('click', () => els.imageFile.click());
     els.remove.addEventListener('click', removeSelected);
-    els.save.addEventListener('click', save);
+    els.save.addEventListener('click', () => save(true));
+    els.saveAs.addEventListener('click', () => save(false));
     els.sign.addEventListener('click', signWithCertificate);
     $('psi-reset').addEventListener('click', reset);
     $('psi-zoom-in').addEventListener('click', () => setScale(scale * 1.25));

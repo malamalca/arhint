@@ -17,10 +17,10 @@ $messages = [
     'noCertificates' => __('ArhintSigner did not report any usable certificate.'),
     'rsaOnly' => __('Only certificates with an RSA key can be used for signing.'),
     'signError' => __('Error while signing the PDF.'),
-    'overwrite' => __('The signed PDF will replace the original file. Continue?'),
     'writeError' => __('The original file could not be written. Choose where to save the PDF.'),
     'writeDenied' => __('The browser did not allow writing to the original file. Choose where to save the PDF.'),
     'signerOutdated' => __('ArhintSigner returned damaged data. Update it to the latest version.'),
+    'signed' => __('The PDF is signed. Save it with Save or Save as; any further editing would break the signature.'),
 ];
 
 $markup = '
@@ -32,7 +32,7 @@ $markup = '
 
     <div class="psi-step psi-upload">
         <p>' . __('Select a PDF file you want to sign with signature images.') . '</p>
-        <button type="button" class="btn" id="psi-pick" hidden>' . __('Select PDF') . '</button>
+        <button type="button" class="btn-small" id="psi-pick" hidden>' . __('Select PDF') . '</button>
         <input type="file" id="psi-pdf-file" accept="application/pdf,.pdf">
     </div>
 
@@ -47,15 +47,13 @@ $markup = '
             <span id="psi-page-info">1 / 1</span>
             <button type="button" class="btn-small" id="psi-next" title="' . h(__('Next page')) . '">&rsaquo;</button>
             <span class="psi-sep"></span>
-            <button type="button" class="btn" id="psi-add">' . __('Add signature') . '</button>
+            <button type="button" class="btn-small" id="psi-add">' . __('Add signature') . '</button>
             <button type="button" class="btn-small" id="psi-remove" disabled>' . __('Remove signature') . '</button>
             <span class="psi-sep"></span>
-            <button type="button" class="btn" id="psi-save" disabled>' . __('Save') . '</button>
-            <button type="button" class="btn" id="psi-sign">' . __('Sign with certificate') . '</button>
-            <label class="psi-inplace" hidden>
-                <input type="checkbox" id="psi-in-place">
-                ' . __('Save over the original file') . '
-            </label>
+            <button type="button" class="btn-small" id="psi-save" disabled
+                title="' . h(__('Write over the original file')) . '">' . __('Save') . '</button>
+            <button type="button" class="btn-small" id="psi-save-as" disabled>' . __('Save as') . '</button>
+            <button type="button" class="btn-small" id="psi-sign">' . __('Sign with certificate') . '</button>
             <button type="button" class="btn-small" id="psi-reset">' . __('Another PDF') . '</button>
             <input type="file" id="psi-image-file" accept="image/*" hidden>
         </div>
@@ -69,7 +67,7 @@ $markup = '
         <ul id="psi-cert-list"></ul>
         <div class="psi-dialog-footer">
             <button type="button" class="btn-small" id="psi-cert-cancel">' . __('Cancel') . '</button>
-            <button type="button" class="btn" id="psi-cert-ok" disabled>' . __('Sign') . '</button>
+            <button type="button" class="btn-small" id="psi-cert-ok" disabled>' . __('Sign') . '</button>
         </div>
     </dialog>
 </div>';
