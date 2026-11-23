@@ -1067,6 +1067,32 @@ function initPdfSignImages() {
         els.viewport.classList.remove('psi-panning');
     }
 
+    // ---- the wheel flips pages -----------------------------------------------------------------------------
+    //
+    // Moving around inside a zoomed page is done by dragging with the middle button, so the wheel is free
+    // to turn pages; with ctrl held it zooms, as everywhere else.
+
+    let wheelAt = 0;
+
+    els.viewport.addEventListener('wheel', (ev) => {
+        if (!pdfDoc || !ev.deltaY) {
+            return;
+        }
+        ev.preventDefault();
+        if (ev.ctrlKey) {
+            setScale(scale * (ev.deltaY < 0 ? 1.25 : 1 / 1.25));
+
+            return;
+        }
+        // a free spinning wheel and a touchpad send a burst of events per gesture
+        const now = Date.now();
+        if (now - wheelAt < 200) {
+            return;
+        }
+        wheelAt = now;
+        goToPage(pageNum + (ev.deltaY > 0 ? 1 : -1), false);
+    }, { passive: false });
+
     els.viewport.addEventListener('pointerup', endPan);
     els.viewport.addEventListener('pointercancel', endPan);
     // the middle button would otherwise paste on linux or open a link in a new tab
