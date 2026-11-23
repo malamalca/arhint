@@ -18,6 +18,7 @@ function initPdfSignImages() {
         upload: root.querySelector('.psi-upload'),
         editor: root.querySelector('.psi-editor'),
         pick: $('psi-pick'),
+        pickHint: $('psi-pick-hint'),
         pdfFile: $('psi-pdf-file'),
         imageFile: $('psi-image-file'),
         viewport: $('psi-viewport'),
@@ -93,6 +94,10 @@ function initPdfSignImages() {
         updateButtons();
     }
 
+    function isAbort(e) {
+        return e && e.name === 'AbortError';
+    }
+
     async function pickPdf() {
         let handle;
         try {
@@ -101,7 +106,16 @@ function initPdfSignImages() {
                 types: [{ description: 'PDF', accept: { 'application/pdf': ['.pdf'] } }],
             });
         } catch (e) {
-            // the user closed the dialog
+            if (isAbort(e)) {
+                // the user closed the dialog
+                return;
+            }
+            // network locations are refused by the picker: open the file through the input instead,
+            // which leaves it read only, so the result has to be saved with "Save as"
+            console.error(e);
+            alert(messages.pickError);
+            els.pdfFile.click();
+
             return;
         }
 
@@ -475,8 +489,16 @@ function initPdfSignImages() {
                 types: [{ description: 'PDF', accept: { 'application/pdf': ['.pdf'] } }],
             });
         } catch (e) {
-            // the user closed the dialog
-            return false;
+            if (isAbort(e)) {
+                // the user closed the dialog
+                return false;
+            }
+            // the dialog refused the location, so the pdf goes to the downloads folder
+            console.error(e);
+            alert(messages.saveFallback);
+            download(bytes);
+
+            return true;
         }
 
         try {
@@ -907,7 +929,9 @@ function initPdfSignImages() {
 
     if (canPickFiles && els.pick) {
         els.pick.hidden = false;
-        els.pdfFile.hidden = true;
+        if (els.pickHint) {
+            els.pickHint.hidden = false;
+        }
         els.pick.addEventListener('click', pickPdf);
     }
     els.pdfFile.addEventListener('change', () => {

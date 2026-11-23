@@ -20,6 +20,11 @@ $messages = [
     'writeError' => __('The original file could not be written. Choose where to save the PDF.'),
     'writeDenied' => __('The browser did not allow writing to the original file. Choose where to save the PDF.'),
     'signerOutdated' => __('ArhintSigner returned damaged data. Update it to the latest version.'),
+    'pickError' => __(
+        'This file cannot be opened directly; files on network drives usually cannot be. '
+        . 'Select it in the field below and save the result with "Save as".',
+    ),
+    'saveFallback' => __('That location was refused, so the PDF was saved to the downloads folder.'),
     'signed' => __('The PDF is signed. Save it with Save or Save as; any further editing would break the signature.'),
 ];
 
@@ -33,6 +38,9 @@ $markup = '
     <div class="psi-step psi-upload">
         <p>' . __('Select a PDF file you want to sign with signature images.') . '</p>
         <button type="button" class="btn-small" id="psi-pick" hidden>' . __('Select PDF') . '</button>
+        <p class="psi-hint" id="psi-pick-hint" hidden>'
+            . __('A file on a network drive cannot be opened with this button. Select it here instead; '
+                . 'it can then only be saved with "Save as".') . '</p>
         <input type="file" id="psi-pdf-file" accept="application/pdf,.pdf">
     </div>
 

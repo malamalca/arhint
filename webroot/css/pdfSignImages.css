@@ -1,3 +1,9 @@
+#pdf-sign-images .psi-hint {
+    margin: 12px 0 4px;
+    font-size: .9rem;
+    opacity: .75;
+}
+
 #pdf-sign-images .psi-toolbar {
     display: flex;
     flex-wrap: wrap;
