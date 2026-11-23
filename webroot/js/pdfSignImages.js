@@ -18,6 +18,7 @@ function initPdfSignImages() {
         upload: root.querySelector('.psi-upload'),
         editor: root.querySelector('.psi-editor'),
         pick: $('psi-pick'),
+        drop: $('psi-drop'),
         pickHint: $('psi-pick-hint'),
         pdfFile: $('psi-pdf-file'),
         imageFile: $('psi-image-file'),
@@ -120,6 +121,42 @@ function initPdfSignImages() {
         }
 
         await openPdf(await handle.getFile(), handle);
+    }
+
+    function isPdf(file) {
+        return file && (file.type === 'application/pdf' || /\.pdf$/i.test(file.name));
+    }
+
+    async function dropPdf(ev) {
+        // the dataTransfer is emptied as soon as the handler yields, so everything is read up front
+        const files = ev.dataTransfer.files;
+        const dropped = files.length === 1 ? files[0] : null;
+        const items = ev.dataTransfer.items;
+        let pending = null;
+        if (dropped && items && items.length === 1 && typeof items[0].getAsFileSystemHandle === 'function') {
+            pending = items[0].getAsFileSystemHandle();
+        }
+
+        if (!isPdf(dropped)) {
+            alert(messages.notPdf);
+
+            return;
+        }
+
+        let handle = null;
+        if (pending) {
+            try {
+                handle = await pending;
+            } catch (e) {
+                // network locations are refused here as well; the plain file of the drop still works
+                console.error(e);
+            }
+            if (handle && handle.kind !== 'file') {
+                handle = null;
+            }
+        }
+
+        await openPdf(handle ? await handle.getFile() : dropped, handle);
     }
 
     async function pageSize(num) {
@@ -934,6 +971,26 @@ function initPdfSignImages() {
         }
         els.pick.addEventListener('click', pickPdf);
     }
+    if (els.drop) {
+        els.drop.addEventListener('dragover', (ev) => {
+            ev.preventDefault();
+            ev.dataTransfer.dropEffect = 'copy';
+            els.drop.classList.add('psi-dragover');
+        });
+        els.drop.addEventListener('dragleave', () => els.drop.classList.remove('psi-dragover'));
+        els.drop.addEventListener('drop', (ev) => {
+            ev.preventDefault();
+            els.drop.classList.remove('psi-dragover');
+            if (ev.dataTransfer.files.length || ev.dataTransfer.items.length) {
+                dropPdf(ev);
+            }
+        });
+    }
+
+    // a file dropped next to the zone would navigate away and take the unsaved signatures with it
+    document.addEventListener('dragover', (ev) => ev.preventDefault());
+    document.addEventListener('drop', (ev) => ev.preventDefault());
+
     els.pdfFile.addEventListener('change', () => {
         if (els.pdfFile.files.length) {
             openPdf(els.pdfFile.files[0]);
