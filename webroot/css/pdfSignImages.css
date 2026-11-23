@@ -35,6 +35,15 @@
     padding: 12px;
 }
 
+#pdf-sign-images .psi-viewport.psi-panning {
+    cursor: grabbing;
+}
+
+/* while panning the page must not take the pointer away from the viewport */
+#pdf-sign-images .psi-viewport.psi-panning * {
+    pointer-events: none;
+}
+
 #pdf-sign-images .psi-stage {
     position: relative;
     margin: 0 auto;

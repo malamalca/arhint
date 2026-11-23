@@ -1017,8 +1017,62 @@ function initPdfSignImages() {
 
     // click on the page itself deselects
     els.stage.addEventListener('pointerdown', (ev) => {
-        if (ev.target === els.stage || ev.target === els.canvas) {
+        if (ev.button === 0 && (ev.target === els.stage || ev.target === els.canvas)) {
             select(null);
+        }
+    });
+
+    // ---- panning with the middle mouse button -------------------------------------------------------------------
+
+    let pan = null;
+
+    els.viewport.addEventListener('pointerdown', (ev) => {
+        if (ev.button !== 1) {
+            return;
+        }
+        // keeps the native autoscroll of the browser out of the way
+        ev.preventDefault();
+        pan = {
+            id: ev.pointerId,
+            x: ev.clientX,
+            y: ev.clientY,
+            left: els.viewport.scrollLeft,
+            top: els.viewport.scrollTop,
+        };
+        try {
+            els.viewport.setPointerCapture(ev.pointerId);
+        } catch (e) {
+            // the pointer is gone already; panning still works through the viewport listeners
+            console.error(e);
+        }
+        els.viewport.classList.add('psi-panning');
+    });
+
+    els.viewport.addEventListener('pointermove', (ev) => {
+        if (!pan || ev.pointerId !== pan.id) {
+            return;
+        }
+        els.viewport.scrollLeft = pan.left - (ev.clientX - pan.x);
+        els.viewport.scrollTop = pan.top - (ev.clientY - pan.y);
+    });
+
+    function endPan(ev) {
+        if (!pan || ev.pointerId !== pan.id) {
+            return;
+        }
+        if (els.viewport.hasPointerCapture(pan.id)) {
+            els.viewport.releasePointerCapture(pan.id);
+        }
+        pan = null;
+        els.viewport.classList.remove('psi-panning');
+    }
+
+    els.viewport.addEventListener('pointerup', endPan);
+    els.viewport.addEventListener('pointercancel', endPan);
+    // the middle button would otherwise paste on linux or open a link in a new tab
+    els.viewport.addEventListener('auxclick', (ev) => {
+        if (ev.button === 1) {
+            ev.preventDefault();
         }
     });
 
