@@ -9,6 +9,10 @@
     background: #e6f2ff;
 }
 
+#pdf-sign-images #psi-pick {
+    margin: 8px 0;
+}
+
 #pdf-sign-images .psi-hint {
     margin: 12px 0 4px;
     font-size: .9rem;

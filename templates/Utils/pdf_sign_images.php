@@ -38,7 +38,7 @@ $markup = '
 
     <div class="psi-step psi-upload" id="psi-drop">
         <p>' . __('Select a PDF file you want to sign with signature images, or drop it here.') . '</p>
-        <button type="button" class="btn-small" id="psi-pick" hidden>' . __('Select PDF') . '</button>
+        <button type="button" class="btn filled" id="psi-pick" hidden>' . __('Select PDF') . '</button>
         <p class="psi-hint" id="psi-pick-hint" hidden>'
             . __('A file on a network drive cannot be opened with this button. Select it here instead; '
                 . 'it can then only be saved with "Save as".') . '</p>
