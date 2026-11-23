@@ -1,7 +1,6 @@
 #pdf-sign-images .psi-upload {
     border: 2px dashed transparent;
     border-radius: 4px;
-    padding: 16px;
     transition: border-color .15s, background-color .15s;
 }
 
