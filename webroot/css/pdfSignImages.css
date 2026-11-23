@@ -6,6 +6,21 @@
     margin-bottom: 10px;
 }
 
+#pdf-sign-images .psi-inplace {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    white-space: nowrap;
+}
+
+#pdf-sign-images .psi-inplace[hidden] {
+    display: none;
+}
+
+#pdf-sign-images .psi-inplace input {
+    margin: 0;
+}
+
 #pdf-sign-images .psi-sep {
     width: 12px;
 }

@@ -17,6 +17,7 @@ function initPdfSignImages() {
     const els = {
         upload: root.querySelector('.psi-upload'),
         editor: root.querySelector('.psi-editor'),
+        pick: $('psi-pick'),
         pdfFile: $('psi-pdf-file'),
         imageFile: $('psi-image-file'),
         viewport: $('psi-viewport'),
@@ -29,7 +30,13 @@ function initPdfSignImages() {
         remove: $('psi-remove'),
         save: $('psi-save'),
         sign: $('psi-sign'),
+        inPlace: $('psi-in-place'),
+        inPlaceWrap: root.querySelector('.psi-inplace'),
     };
+
+    // Chromium exposes the File System Access api in secure contexts only; elsewhere the pdf is read through
+    // a plain file input and the result is handed back as a download.
+    const canPickFiles = typeof window.showOpenFilePicker === 'function';
 
     const MIN_SIZE = 12;
 
@@ -37,6 +44,7 @@ function initPdfSignImages() {
     let pdfDoc = null;
     let pdfBytes = null;
     let filename = 'document.pdf';
+    let fileHandle = null;
     let pageNum = 1;
     let scale = 1;
     let pageSizes = {};
@@ -55,7 +63,7 @@ function initPdfSignImages() {
         return pdfjsLib;
     }
 
-    async function openPdf(file) {
+    async function openPdf(file, handle) {
         try {
             const lib = await loadPdfjs();
             const bytes = new Uint8Array(await file.arrayBuffer());
@@ -65,6 +73,7 @@ function initPdfSignImages() {
             pdfBytes = bytes;
             pdfDoc = doc;
             filename = file.name;
+            fileHandle = handle || null;
         } catch (e) {
             console.error(e);
             alert(messages.loadError);
@@ -82,6 +91,21 @@ function initPdfSignImages() {
 
         await goToPage(1, true);
         updateButtons();
+    }
+
+    async function pickPdf() {
+        let handle;
+        try {
+            [handle] = await window.showOpenFilePicker({
+                multiple: false,
+                types: [{ description: 'PDF', accept: { 'application/pdf': ['.pdf'] } }],
+            });
+        } catch (e) {
+            // the user closed the dialog
+            return;
+        }
+
+        await openPdf(await handle.getFile(), handle);
     }
 
     async function pageSize(num) {
@@ -165,6 +189,12 @@ function initPdfSignImages() {
         els.next.disabled = !pdfDoc || pageNum >= pdfDoc.numPages;
         els.remove.disabled = selected === null;
         els.save.disabled = signatures.length === 0;
+        if (els.inPlaceWrap) {
+            els.inPlaceWrap.hidden = !fileHandle;
+            if (!fileHandle) {
+                els.inPlace.checked = false;
+            }
+        }
     }
 
     // ---- signature overlays -------------------------------------------------------------------------------------
@@ -373,21 +403,103 @@ function initPdfSignImages() {
         return doc;
     }
 
+    function signedName() {
+        return filename.replace(/\.pdf$/i, '') + '_signed.pdf';
+    }
+
     function download(bytes) {
         const link = document.createElement('a');
         link.href = URL.createObjectURL(new Blob([bytes], { type: 'application/pdf' }));
-        link.download = filename.replace(/\.pdf$/i, '') + '_signed.pdf';
+        link.download = signedName();
         document.body.appendChild(link);
         link.click();
         link.remove();
         setTimeout(() => URL.revokeObjectURL(link.href), 10000);
     }
 
+    async function writeHandle(handle, bytes) {
+        // createWritable() writes to a temporary file and swaps it in on close(), so an interrupted
+        // write cannot leave the target truncated
+        const stream = await handle.createWritable();
+        try {
+            await stream.write(bytes);
+        } catch (e) {
+            try {
+                await stream.abort();
+            } catch (abortError) {
+                console.error(abortError);
+            }
+
+            throw e;
+        }
+        await stream.close();
+    }
+
+    /**
+     * Hands the finished pdf back to the user: over the original file when that is asked for and allowed,
+     * otherwise through the save dialog, and as a plain download where the api is missing.
+     *
+     * Returns false only when the user cancelled the dialog; write errors are reported here.
+     */
+    async function output(bytes) {
+        if (fileHandle && els.inPlace && els.inPlace.checked) {
+            if (!confirm(messages.overwrite)) {
+                return false;
+            }
+            let permission = 'denied';
+            try {
+                permission = await fileHandle.requestPermission({ mode: 'readwrite' });
+            } catch (e) {
+                console.error(e);
+            }
+            if (permission === 'granted') {
+                try {
+                    await writeHandle(fileHandle, bytes);
+
+                    return true;
+                } catch (e) {
+                    console.error(e);
+                    alert(messages.writeError);
+                }
+            } else {
+                alert(messages.writeDenied);
+            }
+            // fall through to the save dialog so the signed pdf is not lost
+        }
+
+        if (typeof window.showSaveFilePicker !== 'function') {
+            download(bytes);
+
+            return true;
+        }
+
+        let handle;
+        try {
+            handle = await window.showSaveFilePicker({
+                suggestedName: signedName(),
+                types: [{ description: 'PDF', accept: { 'application/pdf': ['.pdf'] } }],
+            });
+        } catch (e) {
+            // the user closed the dialog
+            return false;
+        }
+
+        try {
+            await writeHandle(handle, bytes);
+        } catch (e) {
+            console.error(e);
+            alert(messages.saveError);
+            download(bytes);
+        }
+
+        return true;
+    }
+
     async function save() {
         els.save.disabled = true;
         try {
             const doc = await buildDocument();
-            download(await doc.save());
+            await output(await doc.save());
         } catch (e) {
             console.error(e);
             alert(messages.saveError);
@@ -757,7 +869,7 @@ function initPdfSignImages() {
             const hex = toHex(cms).padEnd(SIG_BYTES * 2, '0');
             new TextEncoder().encodeInto(hex, bytes.subarray(open + 1));
 
-            download(bytes);
+            await output(bytes);
         } catch (e) {
             console.error(e);
             alert(messages.signError + '\n' + (e && e.message ? e.message : ''));
@@ -783,6 +895,7 @@ function initPdfSignImages() {
         }
         pdfDoc = null;
         pdfBytes = null;
+        fileHandle = null;
         els.stage.querySelectorAll('.psi-sig').forEach((el) => el.remove());
         els.pdfFile.value = '';
         els.editor.hidden = true;
@@ -791,6 +904,11 @@ function initPdfSignImages() {
 
     // ---- events -------------------------------------------------------------------------------------------------
 
+    if (canPickFiles && els.pick) {
+        els.pick.hidden = false;
+        els.pdfFile.hidden = true;
+        els.pick.addEventListener('click', pickPdf);
+    }
     els.pdfFile.addEventListener('change', () => {
         if (els.pdfFile.files.length) {
             openPdf(els.pdfFile.files[0]);
