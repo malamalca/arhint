@@ -10,6 +10,7 @@ use Cake\Event\EventInterface;
 use Cake\Event\EventManager;
 use Cake\TestSuite\TestCase;
 use ReflectionClass;
+use ReflectionMethod;
 
 class AIAssistantTest extends TestCase
 {
@@ -562,6 +563,21 @@ class AIAssistantTest extends TestCase
     private function offeredTools(array $request): array
     {
         return array_map(fn(array $tool): string => $tool['function']['name'], $request['tools'] ?? []);
+    }
+
+    public function testOpenAiReasoningEffortIsNoneOnlyForGpt51PlusWithTools(): void
+    {
+        $method = new ReflectionMethod(AIAssistant::class, 'withOpenAiReasoningEffort');
+        $withTools = ['messages' => [], 'tools' => [['type' => 'function']]];
+
+        $this->assertSame('none', $method->invoke(null, $withTools, 'gpt-5.6-terra')['reasoning_effort']);
+        $this->assertArrayNotHasKey('reasoning_effort', $method->invoke(null, $withTools, 'gpt-5-mini'));
+        $this->assertArrayNotHasKey('reasoning_effort', $method->invoke(null, $withTools, 'gpt-4o'));
+        $this->assertArrayNotHasKey('reasoning_effort', $method->invoke(null, ['messages' => []], 'gpt-5.6-terra'));
+        $this->assertSame(
+            'low',
+            $method->invoke(null, $withTools + ['reasoning_effort' => 'low'], 'gpt-5.6-terra')['reasoning_effort'],
+        );
     }
 
     public function testCatalogListsAllToolsAndOffersOnlyLoadedOnes(): void

@@ -1782,6 +1782,24 @@ class AIAssistant
     }
 
     /**
+     * GPT-5.1+ models (e.g. gpt-5.6-terra) reject function tools in /v1/chat/completions unless
+     * reasoning_effort is 'none'. Older models (gpt-4o, gpt-5-mini) do not accept 'none', so they
+     * are left untouched.
+     *
+     * @param array<mixed> $data Request data.
+     * @param string $model Model name.
+     * @return array<mixed>
+     */
+    protected static function withOpenAiReasoningEffort(array $data, string $model): array
+    {
+        if (!empty($data['tools']) && !isset($data['reasoning_effort']) && preg_match('/^gpt-5\.\d/', $model)) {
+            $data['reasoning_effort'] = 'none';
+        }
+
+        return $data;
+    }
+
+    /**
      * Makes the API request to the AI model and returns the response.
      * Provider, URL, model and API key are read from the user's 'ai_assistant' property.
      *
@@ -1805,6 +1823,9 @@ class AIAssistant
         }
 
         $data['model'] = $model;
+        if ($provider === 'openai') {
+            $data = self::withOpenAiReasoningEffort($data, (string)$model);
+        }
 
         $headers = ['Content-Type: application/json'];
         if ($apiKey !== '') {

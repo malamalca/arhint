@@ -229,6 +229,9 @@ textarea#project-descript {
 /* Conversation with the AI about the knowledge base */
 #ProjectKbChat {
     margin-top: 16px;
+    width: 750px;
+    max-width: 100%;
+    box-sizing: border-box;
 }
 
 #ProjectKbChat summary {
