@@ -123,9 +123,11 @@ class UtilsControllerTest extends TestCase
     {
         $this->login(USER_ADMIN);
         $this->get('/utils/pdf-merge');
-        // No POST data → action returns null; CakePHP may render (empty view) or redirect
-        // We just verify there is no server-error.
         $this->assertResponseCode(200);
+        $this->assertResponseContains('id="pdf-merge"');
+        $this->assertResponseContains('pdfTools.js');
+        $this->assertResponseContains('pdf-lib.min.js');
+        $this->assertResponseContains('value="printer"');
     }
 
     /**
@@ -236,6 +238,10 @@ class UtilsControllerTest extends TestCase
         $this->login(USER_ADMIN);
         $this->get('/utils/pdf-splice');
         $this->assertResponseCode(200);
+        $this->assertResponseContains('id="pdf-split"');
+        $this->assertResponseContains('pdfTools.js');
+        $this->assertResponseContains('class="pdft-multi"');
+        $this->assertResponseContains('class="pdft-pages"');
     }
 
     /**
@@ -278,6 +284,52 @@ class UtilsControllerTest extends TestCase
         if (file_exists(TMP . 'sample.pdf')) {
             unlink(TMP . 'sample.pdf');
         }
+    }
+
+    /**
+     * Test pdfSplice POST with a page selection returns a PDF download
+     *
+     * @return void
+     * @uses \App\Controller\UtilsController::pdfSplice()
+     */
+    public function testPdfSplicePostPageSelection(): void
+    {
+        $this->skipWithoutGhostscript();
+        $this->login(USER_ADMIN);
+        $file = $this->makeUploadedFile($this->resourcesPath . 'sample2p.pdf', 'sample2p.pdf', 'application/pdf');
+
+        $this->post('/utils/pdf-splice', [
+            'file' => $file,
+            'pages' => '2',
+            'multiPage' => 0,
+        ]);
+
+        $this->assertResponseOk();
+        $this->assertContentType('application/pdf');
+
+        if (file_exists(TMP . 'sample2p.pdf')) {
+            unlink(TMP . 'sample2p.pdf');
+        }
+    }
+
+    /**
+     * Test pdfSplice POST with an invalid page selection returns 400
+     *
+     * @return void
+     * @uses \App\Controller\UtilsController::pdfSplice()
+     */
+    public function testPdfSplicePostInvalidPageSelection(): void
+    {
+        $this->skipWithoutGhostscript();
+        $this->login(USER_ADMIN);
+        $file = $this->makeUploadedFile($this->resourcesPath . 'sample2p.pdf', 'sample2p.pdf', 'application/pdf');
+
+        $this->post('/utils/pdf-splice', [
+            'file' => $file,
+            'pages' => '1 & del',
+        ]);
+
+        $this->assertResponseCode(400);
     }
 
     /**

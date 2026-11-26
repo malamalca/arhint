@@ -127,4 +127,38 @@ class LilPdfProcessorTest extends TestCase
             unlink($file);
         }
     }
+
+    /**
+     * Test parsePageList method
+     *
+     * @return void
+     * @uses \App\Lib\LilPdfProcessor::parsePageList()
+     */
+    public function testParsePageList(): void
+    {
+        $this->assertSame([1, 2, 3, 4, 5, 15, 16], LilPdfProcessor::parsePageList('1,2,3-5,15-16'));
+        $this->assertSame([2, 3, 7], LilPdfProcessor::parsePageList(' 7 , 3, 2-3 '));
+        $this->assertNull(LilPdfProcessor::parsePageList(''));
+        $this->assertNull(LilPdfProcessor::parsePageList('5-3'));
+        $this->assertNull(LilPdfProcessor::parsePageList('0'));
+        $this->assertNull(LilPdfProcessor::parsePageList('1;x'));
+        $this->assertNull(LilPdfProcessor::parsePageList('1 & del'));
+    }
+
+    /**
+     * Test extractPageList method into a single file
+     *
+     * @return void
+     * @uses \App\Lib\LilPdfProcessor::extractPageList()
+     */
+    public function testExtractPageList(): void
+    {
+        $this->LilPdfProcessor->addFile(dirname(__FILE__) . DS . 'resources' . DS . 'sample2p.pdf');
+        $files = $this->LilPdfProcessor->extractPageList([2], false, 'sample_pagelist_test');
+        $this->assertIsArray($files);
+        $this->assertCount(1, $files);
+        $this->assertFileExists($files[0]);
+        $this->assertStringContainsString('/Type /Page', (string)file_get_contents($files[0]));
+        unlink($files[0]);
+    }
 }

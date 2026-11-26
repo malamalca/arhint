@@ -633,3 +633,57 @@ msgstr "Geslo nastavite na naslovu:"
 
 msgid "After that you can log in at:"
 msgstr "Nato se lahko prijavite na:"
+
+msgid "Drop a single PDF file."
+msgstr "Spustite eno PDF datoteko."
+
+msgid "The file could not be opened as a PDF."
+msgstr "Datoteke ni bilo mogoče odpreti kot PDF."
+
+msgid "pages"
+msgstr "str."
+
+msgid "Invalid page selection. Enter pages between 1 and {0}, e.g. 1,2,3-5."
+msgstr "Neveljaven izbor strani. Vnesite strani med 1 in {0}, npr. 1,2,3-5."
+
+msgid "Pages"
+msgstr "Strani"
+
+msgid "e.g. 1,2,3-5,15-20"
+msgstr "npr. 1,2,3-5,15-20"
+
+msgid "Separate pages and ranges with commas, e.g. 1,2,3-5,15-20. \"15-\" means from page 15 to the end; leave the field empty for all pages."
+msgstr "Strani in razpone ločite z vejicami, npr. 1,2,3-5,15-20. \"15-\" pomeni od 15. strani do konca; za vse strani pustite polje prazno."
+
+msgid "encrypted, can only be processed on the server"
+msgstr "šifrirana, obdelati jo je mogoče le na strežniku"
+
+msgid "At least one file is encrypted and cannot be merged in the browser. Upload the files and merge them on the server?"
+msgstr "Vsaj ena datoteka je šifrirana in je ni mogoče združiti v brskalniku. Naložim datoteke in jih združim na strežniku?"
+
+msgid "The file is encrypted and cannot be split in the browser. Upload it and split it on the server?"
+msgstr "Datoteka je šifrirana in je ni mogoče razrezati v brskalniku. Jo naložim in razrežem na strežniku?"
+
+msgid "Error processing pdf files."
+msgstr "Napaka pri obdelavi PDF datotek."
+
+msgid "Error while saving the PDF."
+msgstr "Napaka pri shranjevanju PDF-ja."
+
+msgid "That location was refused, so the file was saved to the downloads folder."
+msgstr "Izbrana lokacija ni bila dovoljena, zato je datoteka shranjena v mapo s prenosi."
+
+msgid "The files are merged in the browser and are not sent to the server. Drag the files in the list to change their order."
+msgstr "Datoteke se združijo v brskalniku in se ne pošljejo na strežnik. Vrstni red spremenite tako, da datoteke v seznamu povlečete."
+
+msgid "Compression and PDF/A are only available on the server, so the files are uploaded when one of them is selected."
+msgstr "Stiskanje in PDF/A sta na voljo le na strežniku, zato se datoteke naložijo, če izberete eno od možnosti."
+
+msgid "Merge"
+msgstr "Združi"
+
+msgid "Split"
+msgstr "Razreži"
+
+msgid "The file is split in the browser and is not sent to the server."
+msgstr "Datoteka se razreže v brskalniku in se ne pošlje na strežnik."

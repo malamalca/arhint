@@ -121,6 +121,112 @@ class LilPdfProcessor
     }
 
     /**
+     * Parse a page selection such as "1,2,3-5,15-20" into sorted, unique page numbers.
+     *
+     * Only closed ranges are accepted, since the page count is not known here.
+     *
+     * @param string $selection Page selection
+     * @return array<int>|null Page numbers, or null when the selection is not valid
+     */
+    public static function parsePageList(string $selection): ?array
+    {
+        $parts = array_filter(
+            preg_split('/[,;]/', (string)preg_replace('/\s+/', '', $selection)) ?: [],
+            fn($part) => $part !== '',
+        );
+        if (empty($parts)) {
+            return null;
+        }
+
+        $pages = [];
+        foreach ($parts as $part) {
+            if (!preg_match('/^(\d+)(?:-(\d+))?$/', $part, $matches)) {
+                return null;
+            }
+            $from = (int)$matches[1];
+            $to = isset($matches[2]) ? (int)$matches[2] : $from;
+            // a guard against a selection that would expand into an absurd number of pages
+            if ($from < 1 || $to < $from || $to > 100000) {
+                return null;
+            }
+            for ($page = $from; $page <= $to; $page++) {
+                $pages[$page] = $page;
+            }
+        }
+        ksort($pages);
+
+        return array_values($pages);
+    }
+
+    /**
+     * Extract an arbitrary list of pages from the PDF files in the processing list.
+     *
+     * When $multiPage is false the pages are written into a single file through Ghostscript's PageList,
+     * otherwise each page goes to a separate numbered file (e.g. basename_001.pdf).
+     *
+     * @param array<int> $pages Page numbers (1-based), as returned by parsePageList()
+     * @param bool $multiPage When true, write one file per page
+     * @param string|null $outputBasename Base name (without extension) for output files;
+     *   when null the source file's basename is used
+     * @return array<string>|false Output file paths on success, false on failure
+     */
+    public function extractPageList(array $pages, bool $multiPage = false, ?string $outputBasename = null): array|false
+    {
+        $pages = array_values(array_unique(array_map('intval', $pages)));
+        sort($pages);
+        if (empty($pages) || $pages[0] < 1) {
+            return false;
+        }
+
+        if ($multiPage) {
+            $ret = [];
+            foreach ($pages as $page) {
+                $files = $this->extractPages($page, $page, true, $outputBasename);
+                if ($files === false) {
+                    return false;
+                }
+                $ret = array_merge($ret, $files);
+            }
+
+            return $ret ?: false;
+        }
+
+        // consecutive pages are written as ranges, which keeps the command line short
+        $runs = [];
+        $start = $end = $pages[0];
+        foreach (array_slice($pages, 1) as $page) {
+            if ($page === $end + 1) {
+                $end = $page;
+            } else {
+                $runs[] = $start === $end ? (string)$start : $start . '-' . $end;
+                $start = $end = $page;
+            }
+        }
+        $runs[] = $start === $end ? (string)$start : $start . '-' . $end;
+        $pageList = implode(',', $runs);
+
+        $ret = [];
+        foreach ($this->filesList as $file) {
+            $baseName = $outputBasename ?? pathinfo(basename($file), PATHINFO_FILENAME);
+            $outputFile = TMP . $baseName . '.pdf';
+
+            // the list holds digits, commas and dashes only, so it is safe on the command line
+            $command = escapeshellarg($this->gsExecutablePath) .
+                ' -sDEVICE=pdfwrite -dBATCH -dNOPAUSE -sPageList=' . $pageList .
+                ' -sOutputFile=' . escapeshellarg($outputFile) . ' ' . escapeshellarg($file);
+
+            exec($command, $output, $returnVar);
+
+            if ($returnVar !== 0 || !file_exists($outputFile)) {
+                return false;
+            }
+            $ret[] = $outputFile;
+        }
+
+        return $ret ?: false;
+    }
+
+    /**
      * Extract pages from the PDF files in the processing list.
      *
      * When $multiPage is false, all pages from $firstPage to $lastPage are written

@@ -32,6 +32,9 @@ class UtilsController extends AppController
     /**
      * pdfMerge method
      *
+     * The pdfs are merged in the browser (webroot/js/pdfTools.js); they are posted here only for what needs
+     * Ghostscript: compression, PDF/A or encrypted files.
+     *
      * @return \Cake\Http\Response|null
      */
     public function pdfMerge(): ?Response
@@ -80,6 +83,9 @@ class UtilsController extends AppController
     /**
      * pdfSplice method
      *
+     * The pdf is split in the browser (webroot/js/pdfTools.js); it is posted here only when it is encrypted,
+     * which pdf-lib cannot handle.
+     *
      * @return \Cake\Http\Response|null
      */
     public function pdfSplice(): ?Response
@@ -94,12 +100,22 @@ class UtilsController extends AppController
 
                 $pdfProcessor = new LilPdfProcessor();
                 $pdfProcessor->addFile($file->getStream()->getMetadata('uri'));
-                $extractedFiles = $pdfProcessor->extractPages(
-                    (int)$this->getRequest()->getData('firstPage'),
-                    (int)$this->getRequest()->getData('lastPage'),
-                    $doMultiPage,
-                    $clientBasename,
-                );
+
+                $selection = trim((string)$this->getRequest()->getData('pages'));
+                if ($selection !== '') {
+                    $pages = LilPdfProcessor::parsePageList($selection);
+                    if ($pages === null) {
+                        throw new BadRequestException('Invalid page selection.');
+                    }
+                    $extractedFiles = $pdfProcessor->extractPageList($pages, $doMultiPage, $clientBasename);
+                } else {
+                    $extractedFiles = $pdfProcessor->extractPages(
+                        (int)$this->getRequest()->getData('firstPage'),
+                        (int)$this->getRequest()->getData('lastPage'),
+                        $doMultiPage,
+                        $clientBasename,
+                    );
+                }
 
                 if ($extractedFiles === false || empty($extractedFiles)) {
                     throw new Exception('Error extracting pages from PDF.');

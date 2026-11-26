@@ -1,94 +1,79 @@
 <?php
+/**
+ * @var \App\View\AppView $this
+ */
 use Cake\Routing\Router;
 
-$uploadForm = [
-    'title' => 'PDF Splice',
+$this->Html->script('/js/vendor/pdf-lib/pdf-lib.min.js', ['block' => true]);
+$this->Html->script('pdfTools.js', ['block' => true]);
+$this->Html->css('pdfTools.css', ['block' => true]);
+
+$preloader = '<div class="preloader-wrapper" style="display: none; width: 20px; height: 20px;">' .
+    '<div class="spinner-layer spinner-red-only">' .
+    '<div class="circle-clipper left"><div class="circle"></div></div>' .
+    '<div class="gap-patch"><div class="circle"></div></div>' .
+    '<div class="circle-clipper right"><div class="circle"></div></div>' .
+    '</div></div>';
+
+$markup = '
+<div id="pdf-split" class="pdft"
+    data-url="' . h(Router::url(['action' => 'pdfSplice'])) . '"
+    data-messages="' . $this->element('pdf_tools_messages') . '">
+
+    <p class="pdft-hint">' . __('The file is split in the browser and is not sent to the server.') . '</p>
+
+    <div class="upload-area pdft-drop">
+        <h1>' . __('Drag and Drop file here<br/>Or<br/>Click to select file') . '</h1>
+        <p class="pdft-info" hidden></p>
+    </div>
+    <input type="file" class="pdft-file" accept="application/pdf,.pdf" hidden>
+    <div class="progress pdft-progress"><div class="determinate" style="width: 0%"></div></div>
+
+    <div class="pdft-options" hidden>
+        ' . $this->Form->control('pages', [
+            'type' => 'text',
+            'class' => 'pdft-pages',
+            'label' => ['text' => __('Pages') . ':', 'class' => 'active'],
+            'placeholder' => __('e.g. 1,2,3-5,15-20'),
+            'autocomplete' => 'off',
+        ]) . '
+        <p class="pdft-hint">' . __('Separate pages and ranges with commas, e.g. 1,2,3-5,15-20. '
+            . '"15-" means from page 15 to the end; leave the field empty for all pages.') . '</p>
+        ' . $this->Form->control('multiPage', [
+            'type' => 'checkbox',
+            'class' => 'pdft-multi',
+            'label' => __('Split into multiple pages'),
+        ]) . '
+
+        <a class="btn filled pdft-submit"><span class="pdft-caption">' . __('Split') . '</span>' . $preloader . '</a>
+    </div>
+</div>';
+
+echo $this->Lil->form([
+    'title' => __('PDF Splice'),
     'menu' => [
         'sign' => [
             'title' => __('PDF Sign'),
-            'active' => $this->getRequest()->getParam('action') == 'pdfSignImages',
+            'active' => false,
             'visible' => true,
-            'url' => [
-                'action' => 'pdfSignImages',
-            ],
+            'url' => ['action' => 'pdfSignImages'],
         ],
         'merge' => [
             'title' => __('PDF Merge'),
-            'active' => $this->getRequest()->getParam('action') == 'pdfMerge',
+            'active' => false,
             'visible' => true,
-            'url' => [
-                'action' => 'pdfMerge',
-            ],
+            'url' => ['action' => 'pdfMerge'],
         ],
         'splice' => [
             'title' => __('PDF Splice'),
-            'active' => $this->getRequest()->getParam('action') == 'pdfSplice',
+            'active' => true,
             'visible' => true,
-            'url' => [
-                'action' => 'pdfSplice',
-            ],
+            'url' => ['action' => 'pdfSplice'],
         ],
     ],
     'form' => [
-        'defaultHelper' => $this->Form,
-        'lines' => [
-            'form_start' => [
-                'method' => 'create',
-                'parameters' => [null, ['type' => 'file']],
-            ],
-            'file' => [
-                'method' => 'control',
-                'parameters' => ['file', [
-                    'type' => 'file',
-                    'accept' => 'application/pdf',
-                    'label' => [
-                        'text' => __('PDF') . ':',
-                        'class' => 'active',
-                    ],
-                ]],
-            ],
-            'firstPage' => [
-                'method' => 'control',
-                'parameters' => ['firstPage', [
-                    'type' => 'number',
-                    'label' => [
-                        'text' => __('First Page') . ':',
-                        'class' => 'active',
-                        'default' => 0,
-                    ],
-                ]],
-            ],
-            'lastPage' => [
-                'method' => 'control',
-                'parameters' => ['lastPage', [
-                    'type' => 'number',
-                    'label' => [
-                        'text' => __('Last Page') . ':',
-                        'class' => 'active',
-                        'default' => 0,
-                    ],
-                ]],
-            ],
-            'multiplePages' => [
-                'method' => 'control',
-                'parameters' => ['multiPage', [
-                    'type' => 'checkbox',
-                    'label' => __('Split into multiple pages'),
-                ]],
-            ],
-            'submit' => [
-                'method' => 'button',
-                'parameters' => [__('Submit'), [
-                    'type' => 'submit',
-                    'id' => 'submit',
-                ]],
-            ],
-            'form_end' => [
-                'method' => 'end',
-                'parameters' => [],
-            ],
-        ],
+        'lines' => [$markup],
     ],
-];
+], 'App.Utils.PdfSplice');
 
-echo $this->Lil->form($uploadForm, 'App.Utils.PdfSign');
+echo $this->Html->meta('csrfToken', $this->getRequest()->getAttribute('csrfToken'));

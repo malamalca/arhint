@@ -1,0 +1,41 @@
+.pdft .pdft-hint {
+    margin: 8px 0 12px;
+    font-size: .9rem;
+    opacity: .75;
+}
+
+.pdft .pdft-drop {
+    cursor: pointer;
+}
+
+.pdft .pdft-list:empty {
+    display: none;
+}
+
+.pdft .pdft-item {
+    cursor: move;
+    margin-bottom: 4px;
+}
+
+.pdft .pdft-item.pdft-encrypted .name {
+    font-style: italic;
+}
+
+.pdft .pdft-info {
+    margin: 0;
+    padding: 12px;
+    font-weight: 500;
+    cursor: default;
+}
+
+.pdft .pdft-pages {
+    max-width: 420px;
+}
+
+.pdft .pdft-submit {
+    margin-top: 12px;
+}
+
+.pdft .pdft-submit.disabled {
+    pointer-events: none;
+}
